@@ -8,6 +8,8 @@ $VERSION = '0.01';
 use base qw(Exporter);
 our @EXPORT = qw(print_pod print_pods search_perlfunc_re new pod_dirs);
 
+use utf8;
+
 my $pods = {
     # perl => '5.12.0',
     # perlbook => '5.12.0',
@@ -47,7 +49,7 @@ sub print_pod {
 }
 
 sub search_perlfunc_re {
-    return 'Listado alfab�tico de funciones de Perl';
+    return 'Listado alfabético de funciones de Perl';
 }
 
 1;
@@ -72,10 +74,10 @@ POD2::ES - Spanish translation of Perl core documentation
 
 =head1 DESCRIPTION
 
-pod2es is the spanish translation project of core Perl pods. This has been (and
+pod2es is the Spanish translation project of core Perl pods. This has been (and
 currently still is) a very big work! :-) 
 
-See http://... for more details about the project. 
+See L<http://github.com/zipf/perldoc-es> for more details about the project. 
 
 Once the package has been installed, the translated documentation can be
 accessed with: 
@@ -162,27 +164,26 @@ C<POD2::*> translations without need to patch F<Pod/Perldoc.pm> every time.
 
 =back
 
-=head1 Como funciona el proyecto
+=head1 Datos sobre el proyecto
 
-You (could) put here specific spanish project localized informations. 
+Visite L<http://github.com/zipf/perldoc-es> para obtener más información.
 
 =head1 AUTHORS
 
-pod2es is a larger translation project owned by ...
+POD2::ES package is currently maintained by Joaquín Ferrero C<< explorer at joaquinferrero.com >>
+and Enrique Nell C<< blas.gordon at gmail.com >>.
 
-See L<http://...> for more details.
-
-POD2::ES package is currently maintained by Joaqu�n Ferrero and Enrique Nell.
 
 =head1 SEE ALSO
 
-L<POD2::IT>, L<POD2::FR>, L<POD2::LT>, L<perl>.
+L<POD2::PT_BR>, L<POD2::IT>, L<POD2::FR>, L<POD2::LT>, L<perl>.
 
 =head1 COPYRIGHT AND LICENCE
 
-Copyright (C) 2010
+Copyright (C) 2007-2010 by Enrique Nell, all rights reserved.
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself. 
+This program is free software; you can redistribute it and/or modify it under the terms of either: the GNU General Public License as published by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.
 
 =cut
