@@ -13,38 +13,33 @@ X<variable, nombre> X<nombre variable> X<tipo dato> X<tipo>
 Perl tiene tres estructuras de datos incorporadas al lenguaje: Los escalares, los arrays de escalares, y los arrays asociativos de escalares, también conocidos como "hashes".  Un escalar es una cadena de caracteres (de cualquier tamaño,
 limitada únicamente por la memoria disponible), un número o una referencia a algo (esto se tratará en L<perlref>).  Los arrays normales son listas ordenadas de escalares indexadas por números, empezando por 0.  Los hashes son colecciones no ordenadas de valores escalares indexadas por sus claves asociadas, que son cadenas de caracteres.
 
-A los valores se accede normalmente por su nombre, o a
-través de una referencia con nombre.
-El primer carácter del nombre nos dice a qué tipo de estructura de datos se está accediendo.  El resto del nombre indica a qué valor particular se accede.  Normalmente, este nombre es un I<identificador>,
-es decir, una palabra que comienza por una letra o carácter
-de subrayado y que contiene letras, caracteres de subrayado
-o dígitos.  En ciertos casos, puede ser una serie de identificadores separados por C<::> (o por el ligeramente arcaico C<'>); donde todos los identificadores menos el último se interpretan como nombres de paquetes que determinan el espacio de nombres en el que se buscará el identificador final (véase L<perlmod/Packages> para obtener los detalles).  También, es posible sustituir un simple identificador por una expresión que produzca una referencia al valor en tiempo de ejecución.   Ésto se describe con mayor detalle más abajo y en L<perlref>.
+A los valores se accede normalmente por su nombre, o a través de una referencia con nombre.
+El primer carácter del nombre nos dice a qué tipo de estructura de datos se está accediendo.  El resto del nombre indica a qué valor particular se accede.  Normalmente, este nombre es un I<identificador>, es decir, una palabra que comienza por una letra o carácter de subrayado y que contiene letras, caracteres de subrayado o dígitos.  En ciertos casos, puede ser una serie de identificadores separados por C<::> (o por el ligeramente arcaico C<'>); donde todos los identificadores menos el último se interpretan como nombres de paquetes que determinan el espacio de nombres en el que se buscará el identificador final (véase L<perlmod/Packages> para obtener los detalles).  También, es posible sustituir un simple identificador por una expresión que produzca una referencia al valor en tiempo de ejecución.   Ésto se describe con mayor detalle más abajo y en L<perlref>.
 X<identifier> X<identificador>
 
-Perl también tiene su propias variables incorporadas cuyos
-nombres no siguen estas reglas.  Éstas tienen extraños nombres, y por tanto no pueden colisionar accidentalmente con ninguna de sus variables normales.  Las cadenas que coinciden con las partes encerradas entre paréntesis de una expresión regular se guardan con nombres que contienen sólo dígitos después del C<$> (véase L<perlre> y L<perlop>).
+Perl también tiene su propias variables incorporadas cuyos nombres no siguen estas reglas.  Éstas tienen extraños nombres, y por tanto no pueden colisionar accidentalmente con ninguna de sus variables normales.  Las cadenas que coinciden con las partes encerradas entre paréntesis de una expresión regular se guardan con nombres que contienen sólo dígitos después del C<$> (véase L<perlre> y L<perlop>).
 Además, ciertas variables especiales que proporcionan acceso al medio interno de Perl tienen nombres que contienen caracteres de puntuación y caracteres de control.  Éstas están documentadas en L<perlvar>.
 X<variable, built-in> X<variable, primitiva>
 
 Los valores escalares se nombran siempre con '$', incluso cuando se accede a un escalar que es parte de un array o un hash.  El signo '$' funciona semánticamente como en Español la palabra "el", indicando que se espera un único valor.
 X<scalar> X<escalar>
 
-    $días		# el valor escalar único llamado "días"
-    $días[28]		# el elemento número 29 del array @días
-    $días{'Feb'}	# el valor 'Feb' del hash %días
-    $#días		# el último índice del array @días
+    $dias		# el valor escalar único llamado "dias"
+    $dias[28]		# el elemento número 29 del array @dias
+    $dias{'Feb'}	# el valor 'Feb' del hash %dias
+    $#dias		# el último índice del array @dias
 
 Los arrays enteros (y las porciones de arrays o hashes) son designados por '@', que funciona como los determinantes "estos" o "esos" del Español, indicando que se esperan múltiples valores.
 X<array>
 
-    @días		# ($días[0], $días[1],... $días[n])
-    @días[3,4,5]	# igual que ($días[3],$días[4],$días[5])
-    @días{'a','c'}	# igual que ($días{'a'},$días{'c'})
+    @dias		# ($dias[0], $dias[1],... $dias[n])
+    @dias[3,4,5]	# igual que ($dias[3],$dias[4],$dias[5])
+    @dias{'a','c'}	# igual que ($dias{'a'},$dias{'c'})
 
 Los hashes enteros se designan por '%':
 X<hash>
 
-    %días		# (clave1, valor1, clave2, valor2 ...)
+    %dias		# (clave1, valor1, clave2, valor2 ...)
 
 Además de lo anterior, las subrutinas se nombran empezando por '&', aunque ésto es opcional cuando no provoque ambigüedad, igual que el sujeto de una frase en español es a menudo redundante cuando va implícito en el verbo, como en "(yo) tengo lo que usted necesita".  Las entradas de la tabla de símbolos pueden nombrarse empezando por '*', aunque no hace falta que se preocupe por esto ahora (y quizá nunca deba hacerlo :-).
 
@@ -105,7 +100,7 @@ Para saber si una cadena dada es un número válido distinto de cero, a veces es
 
 Este método podría ser mejor porque de otro modo no podría tratar notaciones IEEE como C<Nan> o C<Infinity>.  En otras ocasiones, podría ser preferible determinar si una cadena de datos puede ser usada numéricamente llamando a la función POSIX::strtod() o inspeccionando la cadena con una expresión regular (las cuales están documentadas en L<perlre>).
 
-    warn "no dígitos"	if     /\D/;
+    warn "no dígitos"           if     /\D/;
     warn "no es número natural" unless /^\d+$/;             # rechaza -3
     warn "no es un entero"      unless /^-?\d+$/;           # rechaza +3
     warn "no es un entero"      unless /^[+-]?\d+$/;
@@ -172,7 +167,7 @@ Hexadecimal, octal o binario, representaciones en cadenas literales (por ejemplo
 También puede incrustar directamente caracteres de nueva línea dentro de sus cadenas, es decir, que puede terminar en una línea diferente de cuando empezaron.  Esto es bueno, pero si se le olvida cerrar el entrecomillado, el error no será reportado hasta que Perl encuentre otra línea que contenga el carácter de comillas, que puede estar mucho más allá en el programa.  Sustitución de variables dentro de cadenas se limita a variables escalares, arrays y porciones de array y hash.  (En otras palabras, nombres que empiezan con $ o @, seguido de una opcional expresión entre corchetes como si fuera un subíndice). El segmento de código siguiente imprime "El precio es $Z<>100".
 X <interpolation> X<interpolación>
 
-    $Precio = '$100';	# no interpolado
+    $Precio = '$100';		# no interpolado
     print "El precio es $Precio.\n";	# interpolado
 
 No hay doble interpolación en Perl, por lo que el C<$100> se deja tal como está.
@@ -190,9 +185,9 @@ X <interpolation> X<interpolación>
 
 Sin las llaves, Perl buscaría por $quien_altavoz, y el paquete C<$quien::0>.  La última sería una variable $0 en un (presumiblemente) inexistente paquete C<quien>.
 
-De hecho, un identificador dentro de estos signos, se le fuerza a ser una cadena, como a cualquier identificador dentro del subíndice de un hash.  Ninguno necesita ser entrecomillado.  En un ejemplo anterior, C<$días{'Feb'}> puede ser escrito como 
-C<$días{Feb}> y las comillas pueden ser asumidas automáticamente.  Pero cualquier otra cosa más complicada, en el subíndice, se interpretará como una expresión.  Esto significa, por ejemplo, que C<$versión{2.0}++> es
-equivalente a C<$versión{2}++>, no a C<$versión{'2.0'}++>.
+De hecho, un identificador dentro de estos signos, se le fuerza a ser una cadena, como a cualquier identificador dentro del subíndice de un hash.  Ninguno necesita ser entrecomillado.  En un ejemplo anterior, C<$dias{'Feb'}> puede ser escrito como 
+C<$dias{Feb}> y las comillas pueden ser asumidas automáticamente.  Pero cualquier otra cosa más complicada, en el subíndice, se interpretará como una expresión.  Esto significa, por ejemplo, que C<$version{2.0}++> es
+equivalente a C<$version{2}++>, no a C<$version{'2.0'}++>.
 
 =head3 Cadenas de versión
 X<version string> X<cadenas versión> X<vstring> X<v-string>
@@ -224,7 +219,7 @@ Ver L<Autocargador> para una mayor descripción de __DATA__, y ejemplos de su us
 =head3 Palabras sueltas
 X<bareword> X<palabra suelta>
 
-Una palabra que no tiene otra interpretación en la gramática será tratada como si fuera una cadena entrecomillada.  Estos son conocidos como "barewords" (palabras sueltas).  Al igual que con gestores de archivo y las etiquetas, una palabra suelta que consiste enteramente en minúsculas tiene el riesgo de llegar a un conflicto con los futuras palabras reservadas, y si utiliza el pragma C<use warnings> o la opción B<-w&>, Perl le advertirá sobre cualquiera de estas palabras.  Perl limita las palabras sueltas (como a los identificadores) a cerca de 250 caracteres.  Las futuras versiones de Perl probablemente eliminarán estas limitaciones arbitrarias.
+Una palabra que no tiene otra interpretación en la gramática será tratada como si fuera una cadena entrecomillada.  Estos son conocidos como "barewords" (palabras sueltas).  Al igual que con gestores de archivo y las etiquetas, una palabra suelta que consiste enteramente en minúsculas tiene el riesgo de llegar a un conflicto con los futuras palabras reservadas, y si utiliza el pragma C<use warnings> o la opción B<-w>, Perl le advertirá sobre cualquiera de estas palabras.  Perl limita las palabras sueltas (como a los identificadores) a cerca de 250 caracteres.  Las futuras versiones de Perl probablemente eliminarán estas limitaciones arbitrarias.
 
 Algunas personas tal vez deseen prohibir palabras sueltas por completo.  Si usted dice
 
@@ -323,8 +318,9 @@ Esto es útil para descartar algunos de los valores de retorno de una función:
 
 Lista de asignación en contexto escalar devuelve el número de elementos producidos por la expresión en el lado derecho de la asignación:
 
-    $x = (($foo,$bar) = (3,2,1));       # pone $x a 3, no 2
-    $x = (($foo,$bar) = f());           # pone $x a la cuenta de valores f()
+    
+    $x = (($foo,$bar) = (3,2,1)); # pone $x a 3, no 2
+    $x = (($foo,$bar) = f());     # pone $x al número de valores devueltos por f()
 
 Esto es útil cuando se quiere hacer una lista de asignación en un contexto booleano, porque la mayoría de funciones que devuelve una lista, devuelven una nula cuando han terminado, que cuando se asignan producen un 0, lo que se interpreta como FALSO.
 
@@ -388,7 +384,7 @@ Un array se subindexa especificando un signo dólar (C<$>), entonces el nombre d
     @miarray = (5, 50, 500, 5000);
     print "El tercer elemento es", $miarray[2], "\n";
 
-Los índices de array empiezan por 0. Un subíndice negativo devuelve un valor a partir del final.  En nuestro ejemplo, C<$miarray[-1]> habría sido 5000, y C<$miarray[-2] habría sido 500.
+Los índices de array empiezan por 0. Un subíndice negativo devuelve un valor a partir del final.  En nuestro ejemplo, C<$miarray[-1]> habría sido 5000, y C<$miarray[-2]> habría sido 500.
 
 Subíndices hash son similares, sólo que en lugar de corchetes se utilizan llaves. Por ejemplo:
 
@@ -413,8 +409,8 @@ Una manera normal de acceder a un array o un hash es en un elemento escalar cada
 
 Una porción accede a varios elementos de una lista, un array o un hash de manera simultánea utilizando una lista de subíndices.  Es más conveniente que escribir los elementos individuales como una lista de valores escalares separados.
 
-    ($el, $ella)   = @gente[0,-1];               # porción array
-    @ellos         = @gente[0 .. 3];            # porción array
+    ($el, $ella)    = @gente[0,-1];              # porción array
+    @ellos          = @gente[0 .. 3];            # porción array
     ($quien, $home) = @ENV{"USER", "HOME"};      # porción hash
     ($uid, $dir)    = (getpwnam("daemon"))[2,7]; # porción lista
 
