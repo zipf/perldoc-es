@@ -4,13 +4,16 @@ version:            0.01
 abstract:           Spanish translation of Perl core documentation
 author:
     - Enrique Nell <blas.gordon@gmail.com>
-license:            unknown
+license:            perl
 distribution_type:  module
 configure_requires:
     ExtUtils::MakeMaker:  0
 build_requires:
     ExtUtils::MakeMaker:  0
-requires:  {}
+requires:
+    POD2::Base:    0.043
+    Pod::Perldoc:  3.15
+    Test::More:    0
 no_index:
     directory:
         - t
