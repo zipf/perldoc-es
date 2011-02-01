@@ -1,5 +1,3 @@
-=encoding utf8
-
 =head1 NOMBRE
 
 perl - El intérprete del lenguaje Perl
@@ -28,13 +26,13 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
 
 =head2 General
 
-    perl		Información general (esta sección)
-    perlintro		Introducción para novatos
-    perltoc		Tabla de contenidos de la documentación
+    perl		Perl información general (esta sección)
+    perlintro		Perl introducción para principiantes
+    perltoc		Perl documentación: tabla de contenidos
 
 =head2 Seminarios
 
-    perlreftut		Introducción breve a las referencias
+    perlreftut		Perl references short introduction
     perldsc		Introducción a las estructuras de datos
     perllol		Estructuras de datos: arrays de arrays
 
@@ -155,6 +153,9 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
 
     perlhist		Registros históricos
     perldelta		Cambios desde la versión anterior
+    perl5122delta	Cambios en la versión 5.12.2
+    perl5121delta	Cambios en la versión 5.12.1
+    perl5120delta	Cambios en la versión 5.12.0
     perl5115delta	Cambios en la versión 5.11.5
     perl5114delta	Cambios en la versión 5.11.4
     perl5113delta	Cambios en la versión 5.11.3
@@ -243,11 +244,9 @@ En general, si ha ocurrido algo extraño en su programa y no está seguro de dó
 
 =head1 DESCRIPCIÓN
 
-Perl, oficialmente, significa Lenguaje práctico para la extracción e informe (I<Practical Extraction and Report Language>),
-excepto cuando no es así.
+Perl, oficialmente, significa Lenguaje práctico para la extracción e informe (I<Practical Extraction and Report Language>), excepto cuando no hace eso.
 
-Perl es un lenguaje optimizado para el escaneo de ficheros de texto, extraer información de estos ficheros de texto, e impresión de informes basados en esa información.  It's also a good language for many
-system management tasks.  El lenguaje está pensado para ser práctico (fácil de usar, eficiente, completo) en lugar de hermoso (pequeño, elegante, mínimo).
+Perl es un lenguaje optimizado para el escaneo de ficheros de texto, extraer información de estos ficheros de texto, e impresión de informes basados en esa información.  Es también un buen lenguaje para muchas tareas de gestión de sistemas.  El lenguaje está pensado para ser práctico (fácil de usar, eficiente, completo) en lugar de hermoso (pequeño, elegante, mínimo).
 
 Perl combina (en opinión del autor, de todos modos), algunas de las mejores características de B<C>, B<sed>, B<awk>, y B<sh>, así que la gente que conozca estos lenguajes no deberían tener dificultades con él.  (Historiadores del lenguaje notarán algunos vestigios de B<csh>, Pascal, e incluso BASIC-PLUS). La sintaxis de las expresiones corresponden estrechamente con la sintaxis de las expresiones del C.  A diferencia de la mayoría de los sistemas Unix, Perl no limita arbitrariamente el tamaño de sus datos - si tiene memoria, Perl puede sorber su archivo entero como una sola cadena.  La recursividad es de profundidad ilimitada.  Y las tablas utilizadas por los hashes (a veces llamadas "matrices asociativas") crecen lo que sea necesario para evitar que el rendimiento se degrade.  Perl puede utilizar sofisticadas técnicas de concordancia de patrones para escanear grandes cantidades de datos, rápidamente.  Si bien optimizados para el escaneo de texto, Perl también puede tratar con datos binarios, y puede hacer que los archivos dbm parezcan hashes.  Scripts setuid de Perl son más seguros que los programas en C a través de un mecanismo de seguimiento de flujo de datos que impide muchos agujeros de seguridad estúpidos.
 
@@ -392,7 +391,7 @@ Perl, en realidad significa Recolector de basura patológicamente ecléctico (Pa
 
 =head1 NOTAS
 
-El lema de Perl es "Hay más que una manera de hacerlo". Adivinar cuántos más se deja como un ejercicio para el lector.
+El lema de Perl es "Hay más que una manera de hacerlo". Adivinar cuántas más se deja como ejercicio para el lector.
 
-Las tres principales virtudes de un programador son pereza, impaciencia e Hibris (desmesura u orgullo exagerado en uno mismo).  Ver el libro del dromedario para ver por qué.
+Las tres principales virtudes de un programador son pereza, impaciencia e Hibris (desmesura u orgullo exagerado en uno mismo).  Ver el Libro del Camello para ver por qué.
 
