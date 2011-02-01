@@ -1,5 +1,3 @@
-=encoding utf8
-
 =head1 NOMBRE
 
 perlstyle - Guía de estilo Perl
@@ -124,10 +122,10 @@ No haga tontas contorsiones para salir de un bucle al inicio o al final, cuando 
 
     LINEA:
 	for (;;) {
-	    instrucciones;
-	  last LINEA if $foo;
+	    sentencias;
+	    last LINEA if $foo;
 	    next LINEA if /^#/;
-	    instrucciones;
+	    sentencias;
 	}
 
 =item *
@@ -156,9 +154,9 @@ Los nombres de los paquetes son, en alguna ocasión, una excepción a esta regla
 
 Puede encontrar útil usar el tamaño de caja de las letras para indicar el ámbito o naturaleza de una variable. Por ejemplo:
 
-    $ALL_CAPS_HERE   solo constantes (¡cuidado con los choques con variables perl!)
-    $Some_Caps_Here  ámbito amplio-paquete global/estático
-    $no_caps_here    ámbito para variables my() o local() en funciones
+    $TODO_MAYUSCULAS    Sólo constantes (¡cuidado con variables perl!)
+    $Algunas_Mayusculas Ámbito de paquete/estática
+    $sin_mayusculas     Ámbito de función, variables my() o local()
 
 Funciones y nombres de métodos parece que funcionan mejor con minúsculas.
 Ej., C<$obj-E<gt>como_cadena()>.
@@ -187,9 +185,9 @@ Alineé elementos correspondientes verticalmente, especialmente si es demasiado 
     $IDX = $ST_CTIME 	   if $opt_c;
     $IDX = $ST_SIZE  	   if $opt_s;
 
-    mkdir $tmpdir, 0700	or die "no puedo mkdir $tmpdir: $!";
+    mkdir $tmpdir, 0700	or die "no puedo hacer mkdir $tmpdir: $!";
     chdir($tmpdir)      or die "no puede chdir $tmpdir: $!";
-    mkdir 'tmp',   0777	or die "no puede mkdir $tmpdir/tmp: $!";
+    mkdir 'tmp',   0777	or die "no puedo hacer mkdir $tmpdir/tmp: $!";
 
 =item *
 
