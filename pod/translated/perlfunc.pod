@@ -89,8 +89,8 @@ C<binmode>, C<close>, C<closedir>, C<dbmclose>, C<dbmopen>, C<die>, C<eof>, C<fi
 
 C<pack>, C<read>, C<syscall>, C<sysread>, C<syswrite>, C<unpack>, C<vec>
 
-=item Funciones para controladores de archivo, ficheros y directorios
-X<file> X<filehandle> X<directory> X<pipe> X<link> X<symlink> X<fichero> X<controlador de archivo> X<enlace>
+=item Funciones para controladores de archivo, archivos y directorios
+X<file> X<filehandle> X<directory> X<pipe> X<link> X<symlink> X<archivo> X<controlador de archivo> X<enlace>
 
 C<chomp>, C<chop>, C<chr>, C<crypt>, C<hex>, C<index>, C<lc>, C<lcfirst>, C<length>, C<oct>, C<ord>, C<pack>, C<q//>, C<qq//>, C<reverse>, C<rindex>, C<sprintf>, C<substr>, C<tr///>, C<uc>, C<ucfirst>, C<y///>
 
@@ -105,7 +105,7 @@ C<goto>, C<last>, C<next>, C<redo>, C<return>, C<sub>, C<wantarray>
 C<break>, C<continue>, C<given>, C<when>, C<default>
 
 (Están disponibles solo si activa la característica C<"switch">.
-Ver L<feature> y L<perlsyn/"Sentencias Switch">.)
+Ver L<feature> y L<perlsyn/"Instrucciones Switch">.)
 
 =item Palabras clave relacionadas con el ámbito
 
@@ -213,7 +213,7 @@ Para más información sobre la portabilidad de estas funciones, ver L<perlport>
 
 =over 
 
-=item -X GESTOR_FICHERO
+=item -X GESTOR_ARCHIVO
 X<-r>X<-w>X<-x>X<-o>X<-R>X<-W>X<-X>X<-O>X<-e>X<-z>X<-s>X<-f>X<-d>X<-l>X<-p>
 X<-S>X<-b>X<-c>X<-t>X<-u>X<-g>X<-k>X<-T>X<-B>X<-M>X<-A>X<-C>
 
@@ -223,40 +223,40 @@ X<-S>X<-b>X<-c>X<-t>X<-u>X<-g>X<-k>X<-T>X<-B>X<-M>X<-A>X<-C>
 
 =item -X
 
-Un test de fichero, donde X es una de las letras listadas abajo.  Este operador unario toma un argumento, bien sea un nombre de fichero o un gestor de fichero o gestor de directorio, y comprueba el fichero asociado para ver si algo sobre él es cierto.  Si el argumento se omite, se prueba C<$_>, excepto para C<-t>, que prueba STDIN.
-Mientras no se diga lo contrario, se devuelve C<1> para verdadero y C<''> para falso, o el valor indefinido si el fichero no existe.  A pesar de los nombres graciosos, la precedencia es la misma que cualquier otro operador unario con nombre.  El operador puede ser cualquiera de:
+Un test de archivo, donde X es una de las letras listadas abajo.  Este operador unario toma un argumento, bien sea un nombre de archivo o un gestor de archivo o gestor de directorio, y comprueba el archivo asociado para ver si algo sobre él es cierto.  Si el argumento se omite, se prueba C<$_>, excepto para C<-t>, que prueba STDIN.
+Mientras no se diga lo contrario, se devuelve C<1> para verdadero y C<''> para falso, o el valor indefinido si el archivo no existe.  A pesar de los nombres graciosos, la precedencia es la misma que cualquier otro operador unario con nombre.  El operador puede ser cualquiera de:
 
-    -r  Fichero es leíble por el uid/gid en vigor.
-    -w  Fichero es escribible por el uid/gid en vigor.
-    -x  Fichero es ejecutable por el uid/gid en vigor.
-    -o  Fichero es propiedad del uid en vigor.
+    -r  Archivo es legible por el uid/gid en vigor.
+    -w  Archivo es escribible por el uid/gid en vigor.
+    -x  Archivo es ejecutable por el uid/gid en vigor.
+    -o  Archivo es propiedad del uid en vigor.
 
-    -R  Fichero es leíble por el uid/gid real.
-    -W  Fichero es escribible por el uid/gid real.
-    -X  Fichero es ejecutable por el uid/gid real.
-    -O  Fichero es propiedad del uid real.
+    -R  Archivo es legible por el uid/gid real.
+    -W  Archivo es escribible por el uid/gid real.
+    -X  Archivo es ejecutable por el uid/gid real.
+    -O  Archivo es propiedad del uid real.
 
-    -e  Fichero existe.
-    -z  Fichero tiene tamaño cero (está vacío).
-    -s  Fichero no tiene tamaño cero (devuelve el tamaño en bytes).
+    -e  Archivo existe.
+    -z  Archivo tiene tamaño cero (está vacío).
+    -s  Archivo no tiene tamaño cero (devuelve el tamaño en bytes).
 
-    -f  Fichero es un fichero normal.
-    -d  Fichero es un directorio.
-    -l  Fichero es un enlace simbólico.
-    -p  Fichero es una tubería con nombre (FIFO), o el gestor de fichero es una tubería.
-    -S  Fichero es un socket.
-    -b  Fichero es un archivo especial por bloques.
-    -c  Fichero es un archivo especial de caracteres.
+    -f  Archivo es un archivo normal.
+    -d  Archivo es un directorio.
+    -l  Archivo es un enlace simbólico.
+    -p  Archivo es una tubería con nombre (FIFO), o el gestor de archivo es una tubería.
+    -S  Archivo es un socket.
+    -b  Archivo es un archivo especial por bloques.
+    -c  Archivo es un archivo especial de caracteres.
     -t  Gestor está abierto a una tty.
 
-    -u  Fichero tiene puesto el bit setuid.
-    -g  Fichero tiene puesto el bit setgid.
-    -k  Fichero tiene puesto el bit sticky.
+    -u  Archivo tiene puesto el bit setuid.
+    -g  Archivo tiene puesto el bit setgid.
+    -k  Archivo tiene puesto el bit sticky.
 
-    -T  Fichero es un fichero de texto ASCII (por una suposición heurística).
-    -B  Fichero es un archivo "binario" (opuesto de -T).
+    -T  Archivo es un archivo de texto ASCII (por una suposición heurística).
+    -B  archivo es un archivo "binario" (opuesto de -T).
 
-    -M  Tiempo de arranque del script menos el tiempo de modificación del fichero, en días.
+    -M  Tiempo de arranque del script menos el tiempo de modificación del archivo, en días.
     -A  Lo mismo, para el tiempo de acceso.
     -C  Lo mismo, para el cambio de la fecha del inodo (en Unix, puede diferir en otras plataformas)
 
@@ -268,23 +268,23 @@ Ejemplo:
         #...
     }
 
-La interpretación de los operadores de permisos de fichero C<-r>, C<-R>, C<-w>, C<-W>, C<-x> y C<-X> es por defecto basado sólamente en el modo del fichero y en los uid y gid del usuario.  Puede haber otras razones por las que no pueda leer, escribir o ejecutar un fichero: por ejemplo, controles de acceso a sistemas de ficheros en red, ACL (listas de control de acceso), sistemas de ficheros de solo lectura, y formatos irreconocibles de ejecutables.  Note que el uso de seis operadores específicos para verificar si cierta operación es posible, es usualmente una equivocación, porque puede ser el inicio de bloqueos de carrera.
+La interpretación de los operadores de permisos de archivo C<-r>, C<-R>, C<-w>, C<-W>, C<-x> y C<-X> es por defecto basado sólamente en el modo del archivo y en los uid y gid del usuario.  Puede haber otras razones por las que no pueda leer, escribir o ejecutar un archivo: por ejemplo, controles de acceso a sistemas de archivos en red, ACL (listas de control de acceso), sistemas de archivos de solo lectura, y formatos irreconocibles de ejecutables.  Note que el uso de seis operadores específicos para verificar si cierta operación es posible, es usualmente una equivocación, porque puede ser el inicio de bloqueos de carrera.
 
-También note que, para el superusuario en el sistema de ficheros local, los test C<-r>, C<-R>, C<-w> y C<-W> siempre devuelven 1, y C<-x> y C<-X> devuelven 1 si cualquier bit de ejecución está puesto en el modo del fichero.  Scripts ejecutados por el superusuario pueden necesitar hacer un stat() para determinar el modo actual del fichero, o temporalmente poner su uid efectivo a otro valor.
+También note que, para el superusuario en el sistema de archivos local, los test C<-r>, C<-R>, C<-w> y C<-W> siempre devuelven 1, y C<-x> y C<-X> devuelven 1 si cualquier bit de ejecución está puesto en el modo del archivo.  Scripts ejecutados por el superusuario pueden necesitar hacer un stat() para determinar el modo actual del archivo, o temporalmente poner su uid efectivo a otro valor.
 
 Si está usando ACL, hay un pragma llamado C<filetest> que puede producir resultados más precisos que los simples bits de modo de stat().
-Cuando esté en C<use filetest 'access'> las comprobaciones de fichero mencionadas arriba comprobarán cuándo los permisos pueden (o no) ser concedidos usando la familia de llamadas del sistema access(2).  Note también que C<-x> y C<-X> pueden, bajo este pragma, devolver valores verdaderos incluso si los bits de permiso de ejecución no están puestos (ni cualquier permiso ACL extra de ejecución).  Este comportamiento tan extraño es debido a las definiciones subyacentes de las llamadas del sistema. Note también que, debido a la implementación de C<use filetest 'access'>, el gestor de fichero especial C<_> no almacenará los resultados de los test de fichero mientras este pragma esté activo.  Para más información, lea la documentación del pragma C<filetest>.
+Cuando esté en C<use filetest 'access'> las comprobaciones de archivo mencionadas arriba comprobarán cuándo los permisos pueden (o no) ser concedidos usando la familia de llamadas del sistema access(2).  Note también que C<-x> y C<-X> pueden, bajo este pragma, devolver valores verdaderos incluso si los bits de permiso de ejecución no están puestos (ni cualquier permiso ACL extra de ejecución).  Este comportamiento tan extraño es debido a las definiciones subyacentes de las llamadas del sistema. Note también que, debido a la implementación de C<use filetest 'access'>, el gestor de archivo especial C<_> no almacenará los resultados de los test de archivo mientras este pragma esté activo.  Para más información, lea la documentación del pragma C<filetest>.
 
-Note que C<-s/a/b/> no realiza una substitución negada.  Decir C<-exp($foo)> sigue funcionando como se espera que lo haga: sólo letras sueltas, por detrás de un menos, son interpretadas como test de ficheros.
+Note que C<-s/a/b/> no realiza una substitución negada.  Decir C<-exp($foo)> sigue funcionando como se espera que lo haga: sólo letras sueltas, por detrás de un menos, son interpretadas como test de archivos.
 
-Las opciones C<-T> y C<-B> funcionan como sigue.  El primer bloque (aprox.) del fichero, es examinado para buscar caracteres extraños como códigos de control o caracteres con el bit alto puesto.  Si se encuentran demasiados caracteres extraños (>30%), es un fichero C<-B>; de lo contrario es un fichero C<-T>.  También, cualquier fichero conteniendo bytes cero en el primer bloque es considerado como un fichero binario.  Si C<-T> o C<-B> se usan con un gestor de fichero, la memoria intermedia actual de IO es examinada en vez del primer bloque.  Ambos, C<-T> y C<-B>, devuelven verdadero en un fichero vacío o en un fichero en el EOF (marca de fin de fichero) cuando se analiza un gestor de fichero.  Debido a que tiene que leer el fichero para hacer el test C<-T>, en la mayoría de las ocasiones querrá usar primero C<-f>, como en C<next unless -f $fichero && -T $fichero>.
+Las opciones C<-T> y C<-B> funcionan como sigue.  El primer bloque (aprox.) del archivo, es examinado para buscar caracteres extraños como códigos de control o caracteres con el bit alto puesto.  Si se encuentran demasiados caracteres extraños (>30%), es un archivo C<-B>; de lo contrario es un archivo C<-T>.  También, cualquier archivo conteniendo bytes cero en el primer bloque es considerado como un archivo binario.  Si C<-T> o C<-B> se usan con un gestor de archivo, la memoria intermedia actual de IO es examinada en vez del primer bloque.  Ambos, C<-T> y C<-B>, devuelven verdadero en un archivo vacío o en un archivo en el EOF (marca de fin de archivo) cuando se analiza un gestor de archivo.  Debido a que tiene que leer el archivo para hacer el test C<-T>, en la mayoría de las ocasiones querrá usar primero C<-f>, como en C<next unless -f $archivo && -T $archivo>.
 
-Si a cualquiera de los test de fichero (o los operadores C<stat> o C<lstat>) se les da el gestor de fichero especial consistente en un solitario subrayado (guión bajo), entonces se usa la estructura stat del fichero del test anterior (u operador stat), ahorrando una llamada del sistema.  (Esto no funciona con  C<-t>, y necesita recordar que lstat() y C<-l> dejarán valores en la estructura stat para el enlace simbólico, no el fichero real).  (También, si la memoria intermedia de stat se rellenó con una llamada C<lstat>, C<-T> y C<-B> serán reinicializados con los resultados de C<stat _>).
+Si a cualquiera de los test de archivo (o los operadores C<stat> o C<lstat>) se les da el gestor de archivo especial consistente en un solitario subrayado (guión bajo), entonces se usa la estructura stat del archivo del test anterior (u operador stat), ahorrando una llamada del sistema.  (Esto no funciona con  C<-t>, y necesita recordar que lstat() y C<-l> dejarán valores en la estructura stat para el enlace simbólico, no el archivo real).  (También, si la memoria intermedia de stat se rellenó con una llamada C<lstat>, C<-T> y C<-B> serán reinicializados con los resultados de C<stat _>).
 Ejemplo:
 
     print "Puedo hacerlo.\n" if -r $a || -w _ || -x _;
 
-    stat($nombre_de_fichero);
+    stat($nombre_de_archivo);
     print "Leíble\n" if -r _;
     print "Escribible\n" if -w _;
     print "Ejecutable\n" if -x _;
@@ -294,7 +294,7 @@ Ejemplo:
     print "Texto\n" if -T _;
     print "Binario\n" if -B _;
 
-Como en Perl 5.9.1, una dulce forma, puramente sintáctica, puede apilar operadores de test de fichero, de forma que C<-f -w -x $fichero> es equivalente a C<-x $fichero && -w _ && -f _>. (Esto solo es fascinantemente elegante: si usa el valor devuelto de C<-f $fichero> como un argumento para otro operador de test de fichero, no ocurrirá ninguna magia especial)
+Como en Perl 5.9.1, una dulce forma, puramente sintáctica, puede apilar operadores de test de archivo, de forma que C<-f -w -x $archivo> es equivalente a C<-x $archivo && -w _ && -f _>. (Esto solo es fascinantemente elegante: si usa el valor devuelto de C<-f $archivo> como un argumento para otro operador de test de archivo, no ocurrirá ninguna magia especial)
 
 =item abs VALOR
 X<abs> X<absolute> X<absoluto>
@@ -310,7 +310,7 @@ X<accept>
 Acepta una conexión socket entrante, como lo hace la llamada del sistema accept(2).  Devuelve la dirección empaquetada si ha tenido éxito, de lo contrario, falso.
 Ver el ejemplo en L<perlipc/"Sockets: Comunicación Cliente/Servidor">.
 
-En sistemas que soportan la bandera cerrar-en-ejecución sobre ficheros, la bandera será puesta para el nuevo descriptor de fichero abierto, determinado por el valor de $^F.  Ver L<perlvar/$^F>.
+En sistemas que soportan la bandera cerrar-en-ejecución sobre archivos, la bandera será puesta para el nuevo descriptor de archivo abierto, determinado por el valor de $^F.  Ver L<perlvar/$^F>.
 
 =item alarm SEGUNDOS
 X<alarm> X<SIGALRM> X<timer> X<alarma> X<temporizador>
@@ -359,19 +359,19 @@ X<bind>
 
 Enlaza una dirección de red a un socket, como lo hace bind(2).  Devuelve verdadero si tiene éxito; de lo contrario, falso.  NOMBRE debe ser una dirección empaquetada del tipo apropiado para el socket.  Ver los ejemplos en L<perlipc/"Sockets: Comunicación Cliente/Servidor">.
 
-=item binmode GESTOR_FICHERO, CAPA
+=item binmode GESTOR_ARCHIVO, CAPA
 X<binmode> X<binary> X<text> X<DOS> X<Windows> X<binario> X<texto>
 
-=item binmode GESTOR_FICHERO
+=item binmode GESTOR_ARCHIVO
 
-Ordena que el modo de lectura o escritura para el GESTOR_FICHERO sea en "binario" o "texto" en sistemas donde las bibliotecas en tiempo de ejecución distingan entre ficheros binarios y de texto.  Si GESTOR_FICHERO es una expresión, el valor es tomado como el nombre del gestor.  Devuelve verdadero en éxito; de lo contrario devuelve C<undef> y pone C<$!> (errno).
+Ordena que el modo de lectura o escritura para el GESTOR_ARCHIVO sea en "binario" o "texto" en sistemas donde las bibliotecas en tiempo de ejecución distingan entre archivos binarios y de texto.  Si GESTOR_ARCHIVO es una expresión, el valor es tomado como el nombre del gestor.  Devuelve verdadero en éxito; de lo contrario devuelve C<undef> y pone C<$!> (errno).
 
-En algunos sistemas (en general, sistemas basados en DOS y Windows) binmode() es necesario cuando no esté trabajando con un fichero de texto.  Para una mejor portabilidad es una buena idea siempre usarlo cuando sea apropiado, y nunca usarlo cuando no sea apropiado.  También, el personal puede poner su I/O para que sea codificado en Unicode UTF-8, y no bytes.
+En algunos sistemas (en general, sistemas basados en DOS y Windows) binmode() es necesario cuando no esté trabajando con un archivo de texto.  Para una mejor portabilidad es una buena idea siempre usarlo cuando sea apropiado, y nunca usarlo cuando no sea apropiado.  También, el personal puede poner su I/O para que sea codificado en Unicode UTF-8, y no bytes.
 
 En otras palabras: indiferentemente de la plataforma, use binmode() en datos binarios, como por ejemplo imágenes.
 
-Si CAPA está presente es un único string, pero puede contener múltiples directivas. Las directivas alteran el comportamiento del gestor del fichero.
-Tiene sentido que CAPA esté presente usando binmode sobre un fichero de texto.
+Si CAPA está presente es un único string, pero puede contener múltiples directivas. Las directivas alteran el comportamiento del gestor del archivo.
+Tiene sentido que CAPA esté presente usando binmode sobre un archivo de texto.
 
 Si se omite CAPA o se especifica como C<:raw> el gestor se prepara para pasar datos binarios. Esto incluye desactivar posibles traducciones CRLF y marcarlas como bytes (como opuesto a los caracteres Unicode).
 Note que, a pesar de estar implícito en I<"Programming Perl"> (el dromedario, 3ª edición) o en otro lugar, C<:raw> I<no> es el simplemente el inverso de C<:crlf>
@@ -381,18 +381,18 @@ C<:bytes>, C<:crlf>, C<:utf8>, y cualquier otra directiva de la forma C<:...>, s
 
 I<El parámetro CAPA de la función binmode() se describe como "DISCIPLINA" en "Programming Perl, 3rd Edition".  Sin embargo, desde la publicación de este libro, conocido por muchos como "Camel III", el consenso sobre el nombre de esta funcionalidad se ha movido desde "disciplina" a "capa".  Toda documentación desde esta versión de Perl se refiere a "capas" en vez de a "disciplinas".  Ahora volvamos a la documentación normal...>
 
-Para indicar GESTOR_FICHERO como UTF-8, use C<:utf8> o C<:encoding(utf8)>.
+Para indicar GESTOR_ARCHIVO como UTF-8, use C<:utf8> o C<:encoding(utf8)>.
 C<:utf8> solo marca los datos como UTF-8 sin más comprobaciones ulteriores, mientras que C<:encoding(utf8)> comprueba que los datos sean UTF-8 válidos. Más detalles se pueden encontrar en L<PerlIO::encoding>.
 
-En general, binmode() debe ser llamada después de open() pero antes de que cualquier I/O se realice sobre el gestor.  Llamando a binmode(), normalmente vaciará cualquier dato pendiente que esté almacenado en la salida (y quizás datos pendientes a la entrada) del gestor de fichero.  Una excepción a esto es la capa C<:encoding> que cambia la codificación por defecto del gestor; ver L<open>.
+En general, binmode() debe ser llamada después de open() pero antes de que cualquier I/O se realice sobre el gestor.  Llamando a binmode(), normalmente vaciará cualquier dato pendiente que esté almacenado en la salida (y quizás datos pendientes a la entrada) del gestor de archivo.  Una excepción a esto es la capa C<:encoding> que cambia la codificación por defecto del gestor; ver L<open>.
 La capa C<:encoding> algunas veces necesita ser llamada en mitad del flujo de datos y no lo vacía.  C<:encoding> también se coloca, implícitamente, por encima de la capa C<:utf8> porque Perl, internamente, opera con caracteres Unicode codificados en UTF-8.
 
-El sistema operativo, gestores de dispositivos, bibliotecas C y Perl en tiempo de ejecución trabajan al unísono para permitirle al programador tratar un simple carácter (C<\n>) como el final de línea, independientemente de su representación externa.  En muchos sistemas operativos, la representación nativa de un fichero texto coincide con su representación interna, pero en algunas plataformas la representación externa de C<\n> se realiza con más de un carácter.
+El sistema operativo, gestores de dispositivos, bibliotecas C y Perl en tiempo de ejecución trabajan al unísono para permitirle al programador tratar un simple carácter (C<\n>) como el final de línea, independientemente de su representación externa.  En muchos sistemas operativos, la representación nativa de un archivo texto coincide con su representación interna, pero en algunas plataformas la representación externa de C<\n> se realiza con más de un carácter.
 
-Mac OS, todas las variantes de Unix y los ficheros Stream_LF sobre VMS usan un único carácter al final de cada línea en la representación externa del texto (incluso si el carácter único es un RETORNO DE CARRO en Mac OS y un AVANCE DE LÍNEA en Unix y la mayor parte de los ficheros VMS). En otros sistemas como OS/2, DOS y los distintos sabores de MS-Windows tu programa vee un C<\n> como un simple C<\cJ>, pero es almacenado en los ficheros de texto como los dos caracteres C<\cM\cJ>.  Esto significa que, si no usas binmode() en estos sistemas, las secuencias C<\cM\cJ> en disco serán convertidas a C<\n> en la entrada y cualquier C<\n> en tu programa será convertido de nuevo en C<\cM\cJ> en la salida.  Esto es lo que quiere para ficheros de texto, pero puede ser desastroso para ficheros binarios.
+Mac OS, todas las variantes de Unix y los archivos Stream_LF sobre VMS usan un único carácter al final de cada línea en la representación externa del texto (incluso si el carácter único es un RETORNO DE CARRO en Mac OS y un AVANCE DE LÍNEA en Unix y la mayor parte de los archivos VMS). En otros sistemas como OS/2, DOS y los distintos sabores de MS-Windows tu programa vee un C<\n> como un simple C<\cJ>, pero es almacenado en los archivos de texto como los dos caracteres C<\cM\cJ>.  Esto significa que, si no usas binmode() en estos sistemas, las secuencias C<\cM\cJ> en disco serán convertidas a C<\n> en la entrada y cualquier C<\n> en tu programa será convertido de nuevo en C<\cM\cJ> en la salida.  Esto es lo que quiere para archivos de texto, pero puede ser desastroso para archivos binarios.
 
-Otra consecuencia de usar binmode() (en algunos sistemas) es que las marcas especiales de fin-de-fichero serán vistas como parte del flujo de datos.
-Para los sistemas de la familia Microsoft esto significa que si sus datos binarios contienenC<\cZ>, el subsistema I/O lo considerarán como el fin del fichero, a menos que use binmode().
+Otra consecuencia de usar binmode() (en algunos sistemas) es que las marcas especiales de fin-de-archivo serán vistas como parte del flujo de datos.
+Para los sistemas de la familia Microsoft esto significa que si sus datos binarios contienenC<\cZ>, el subsistema I/O lo considerarán como el fin del archivo, a menos que use binmode().
 
 binmode() no sólo es importante para las operaciones readline() y print(), sino también cuando se usan read(), seek(), sysread(), syswrite() y tell() (ver L<perlport> para más detalles).  Ver las variables C<$/> y C<$\> en L<perlvar> para cómo poner manualmente sus secuencias de fin de línea en su entrada y salida.
 
@@ -423,18 +423,18 @@ X<caller> X<call stack> X<stack> X<stack trace> X<llamador> X<pila de llamdas> X
 Devuelve el contexto de la llamada a la subrutina actual.  En contexto escalar, devuelve el nombre del paquete del llamante si aquel I<es> un llamante, es decir, si estamos en una subrutina, C<eval> o C<require>, y el valor indefinido en otro caso.  En contexto lista, devuelve
 
     # 0         1         2
-    ($paquete, $nombre_fichero, $linea) = caller;
+    ($paquete, $nombre_archivo, $linea) = caller;
 
 Con EXPR, devuelve alguna información extra que el depurador usa para imprimir un rastreo de la pila.  El valor de EXPR indica cuántos marcos de llamada se ha de retroceder antes del actual.
 
     # 0         1         2       3           4
-    ($paquete, $fichero, $linea, $subritina, $hasargs,
+    ($paquete, $archivo, $linea, $subritina, $hasargs,
 
     #  5          6          7            8       9         10
     $wantarray, $evaltext, $is_require, $hints, $bitmask, $hinthash)
      = caller($i);
 
-Aquí, $subrutina puede ser C<(eval)> si el marco de llamada no es una llamada a una subrutina, sino un C<eval>.  En tal caso, se añaden los nuevos elementos $evaltext y C<$is_require>: C<$is_require> es verdadero si el marco es creado por una sentencia C<require> o C<use>, $evaltext contiene el texto de la sentencia C<eval EXPR>.  En particular, para una sentencia C<eval BLOQUE>, $subrutina es C<(eval)>, pero $evaltext es indefinido.  (Note también que cada sentencia C<use> crea un marco C<require> dentro de un marco C<eval EXPR>).  $subrutina puede ser también C<(unknown)> (desconocida) si esta subrutina en particular parece haber sido borrada de la tabla de símbolos.
+Aquí, $subrutina puede ser C<(eval)> si el marco de llamada no es una llamada a una subrutina, sino un C<eval>.  En tal caso, se añaden los nuevos elementos $evaltext y C<$is_require>: C<$is_require> es verdadero si el marco es creado por una instrucción C<require> o C<use>, $evaltext contiene el texto de la instrucción C<eval EXPR>.  En particular, para una instrucción C<eval BLOQUE>, $subrutina es C<(eval)>, pero $evaltext es indefinido.  (Note también que cada instrucción C<use> crea un marco C<require> dentro de un marco C<eval EXPR>).  $subrutina puede ser también C<(unknown)> (desconocida) si esta subrutina en particular parece haber sido borrada de la tabla de símbolos.
 C<$hasargs> es verdadero si una nueva instancia de C<@_> fue creada para este marco.
 C<$hints> y C<$bitmask> contienen detalles para los cuales caller fue compilado.  Los valores C<$hints> y C<$bitmask> están sujetos a cambios entre versiones de Perl y no se espera que sean utilizados para uso externo.
 
@@ -449,7 +449,7 @@ También tenga en cuenta que fijar C<@DB::args> es I<el mejor esfuerzo>, destina
 =item chdir EXPR
 X<chdir> X<cd> X<directory, change> X<directorio, cambio>
 
-=item chdir GESTOR_FICHERO
+=item chdir GESTOR_ARCHIVO
 
 =item chdir GESTOR_DIR
 
@@ -457,12 +457,12 @@ X<chdir> X<cd> X<directory, change> X<directorio, cambio>
 
 Cambia el directorio de trabajo a EXPR, si es posible. Si se omite EXPR, cambia al directorio especificado por C<$ENV{HOME}>, si está puesto; si no, cambia al directorio especificado por C<$ENV{LOGDIR}>. (Bajo VMS, la variable C<$ENV{SYS$LOGIN}> es también comprobada y usada si está puesta). Si ninguna está puesta, C<chdir> no hace nada. Devuelve verdadero si tuvo éxito, sino, falso. Ver ejemplo en C<die>.
 
-En sistemas que soportan fchdir(2), puede pasarle un gestor de fichero o un gestor de directorio como argumento.  En sistemas que no admiten fchdir(2), pasarle un gestor lanza una excepción.
+En sistemas que soportan fchdir(2), puede pasarle un gestor de archivo o un gestor de directorio como argumento.  En sistemas que no admiten fchdir(2), pasarle un gestor lanza una excepción.
 
 =item chmod LISTA
 X<chmod> X<permission> X<mode> X<permisos> X<modo>
 
-Cambia los permisos de una lista de ficheros.  El primer elemento de la lista debe ser un modo numérico, que normalmente estará en octal, y que, definitivamente, I<no> debe ser una cadena de dígitos en octal: C<0644> es correcto, C<"0644"> no lo es.  Devuelve el número de ficheros cambiados con éxito.  Ver también L</oct>, si todo lo que tiene es una cadena.
+Cambia los permisos de una lista de archivos.  El primer elemento de la lista debe ser un modo numérico, que normalmente estará en octal, y que, definitivamente, I<no> debe ser una cadena de dígitos en octal: C<0644> es correcto, C<"0644"> no lo es.  Devuelve el número de archivos cambiados con éxito.  Ver también L</oct>, si todo lo que tiene es una cadena.
 
     $cnt = chmod 0755, "foo", "bar";
     chmod 0755, @ejecutables;
@@ -532,27 +532,27 @@ Ver también L</chomp>.
 =item chown LISTA
 X<chown> X<owner> X<user> X<group> X<propietario> X<usuario> X<grupo>
 
-Cambia el propietario (y grupo) de una lista de ficheros.  Los primeros dos elementos de la lista deben ser el valor I<numérico> del uid y gid, en este orden.  Un valor de -1 en cualquier posición es interpretado en la mayoría de los sistemas como que se deja el actual valor sin cambiar.  Devuelve el número de ficheros cambiados con éxito.
+Cambia el propietario (y grupo) de una lista de archivos.  Los primeros dos elementos de la lista deben ser el valor I<numérico> del uid y gid, en este orden.  Un valor de -1 en cualquier posición es interpretado en la mayoría de los sistemas como que se deja el actual valor sin cambiar.  Devuelve el número de archivos cambiados con éxito.
 
     $num = chown $uid, $gid, 'foo', 'bar';
-    chown $uid, $gid, @ficheros;
+    chown $uid, $gid, @archivos;
 
 En sistemas que soporten fchown(2), puede pasar gestores de archivo entre los archivos.  En sistemas que no admiten fchown(2), pasarle un gestor de archivo lanza una excepción.  Gestores de archivo se deben pasar como comodines o referencias a comodines para que sean reconocidos; las palabras sueltas se consideran como nombres de archivo.
 
-Aquí hay un ejemplo que obtiene el uid numérico a partir del fichero de contraseñas:
+Aquí hay un ejemplo que obtiene el uid numérico a partir del archivo de contraseñas:
 
     print "Usuario: ";
     chomp($usuario = <STDIN>);
-    print "Ficheros: ";
+    print "Archivos: ";
     chomp($patron = <STDIN>);
 
     ($login,$pass,$uid,$gid) = getpwnam($usuario)
-        or die "$usuario no está en fichero de contraseñas";
+        or die "$usuario no está en archivo de contraseñas";
 
-    @ary = glob($patron);  # expandir los nombres de los ficheros
+    @ary = glob($patron);  # expandir los nombres de los archivos
     chown $uid, $gid, @ary;
 
-En la mayoría de los sistemas, no se le permite cambiar la propiedad del fichero a menos que sea el superusuario, aunque sí pueda cambiar el grupo a cualquiera de sus grupos secundarios.  En sistemas inseguros, estas restricciones pueden estar más relajadas, pero no es una suposición normal.
+En la mayoría de los sistemas, no se le permite cambiar la propiedad del archivo a menos que sea el superusuario, aunque sí pueda cambiar el grupo a cualquiera de sus grupos secundarios.  En sistemas inseguros, estas restricciones pueden estar más relajadas, pero no es una suposición normal.
 En sistemas POSIX, puede detectar esta condición de esta manera:
 
     use POSIX qw(sysconf _PC_CHOWN_RESTRICTED);
@@ -576,21 +576,21 @@ Tenga en cuenta que los caracteres de 128 a 255 (inclusive) son, por defecto, in
 
 Ver L<perlunicode> para más información acerca de Unicode.
 
-=item chroot NOMBRE_FICHERO
+=item chroot NOMBRE_ARCHIVO
 X<chroot> X<root>
 
 =item chroot
 
-Esta funcion trabaja como la llamada del sistema del mismo nombre: hace que el directorio indicado sea el directorio raíz de los siguientes caminos que comiencen por un C</> en su proceso y todos sus hijos.  (No cambia su actual directorio de trabajo actual, que no queda afectado). Por razones de seguridad, esta llamada está reservada al superusuario.  Si FICHERO se omite, hace un C<chroot> a C<$_>.
+Esta funcion trabaja como la llamada del sistema del mismo nombre: hace que el directorio indicado sea el directorio raíz de los siguientes caminos que comiencen por un C</> en su proceso y todos sus hijos.  (No cambia su actual directorio de trabajo actual, que no queda afectado). Por razones de seguridad, esta llamada está reservada al superusuario.  Si ARCHIVO se omite, hace un C<chroot> a C<$_>.
 
-=item close GESTOR_FICHERO
+=item close GESTOR_ARCHIVO
 X<close>
 
 =item close
 
-Cierra el fichero o tubería asociada con el gestor, limpiando los buffers IO, y cierra el descriptor del fichero en el sistema.  Devuelve verdadero si las operaciones han tenido éxito y si ningún error fue reportado por alguna capa PerlIO.  Cierra el gestor actualmente seleccionado si se omite el argumento.
+Cierra el archivo o tubería asociada con el gestor, limpiando los buffers IO, y cierra el descriptor del archivo en el sistema.  Devuelve verdadero si las operaciones han tenido éxito y si ningún error fue reportado por alguna capa PerlIO.  Cierra el gestor actualmente seleccionado si se omite el argumento.
 
-No tiene porqué cerrar el GESTOR_FICHERO si inmediatamente va a hacer otro C<open> sobre él mismo, porque C<open> lo cierra por usted.  (Ver C<open>). Sin embargo, un C<close> explícito en un fichero de entrada reinicia el contador de líneas (C<$.>), mientras que un C<close> implícito hecho por C<open>, no.
+No tiene porqué cerrar el GESTOR_ARCHIVO si inmediatamente va a hacer otro C<open> sobre él mismo, porque C<open> lo cierra por usted.  (Ver C<open>). Sin embargo, un C<close> explícito en un archivo de entrada reinicia el contador de líneas (C<$.>), mientras que un C<close> implícito hecho por C<open>, no.
 
 Si el gestor proviene de una tubería abierta, C<close> adicionalmente devolverá falso si alguna de las otras llamadas del sistema implicadas falla, o si el programa termina con un valor de estado distinto de cero.  Si el único problema fue que el programa salió distinto de cero, C<$!> se establecerá a C<0>.  El proceso de cierre de una tubería también espera por el proceso de ejecución en la tubería antes de salir -en caso de que desee ver después la salida de la tubería- e, implícitamente, pone el valor de estado de salida de ese comando en C<$?> y C<${^CHILD_ERROR_NATIVE}>.
 
@@ -607,7 +607,7 @@ Ejemplo:
     open(INPUT, 'foo')          # obtener los resultado de sort
         or die "No puedo abrir 'foo' para entrada: $!";
 
-GESTOR_FICHERO puede ser una expresión cuyo valor puede ser usado como un gestor indirecto, normalmente el nombre real del gestor.
+GESTOR_ARCHIVO puede ser una expresión cuyo valor puede ser usado como un gestor indirecto, normalmente el nombre real del gestor.
 
 =item closedir GESTOR_DIR
 X<closedir>
@@ -625,7 +625,7 @@ X<continue>
 
 =item continue
 
-C<continue> es realmente una sentencia de control de flujo en lugar de una función.  Si existe un BLOQUE C<continue> adjunto a un BLOQUE (típicamente en un C<while> o C<foreach>), siempre es ejecutado justo antes de que la condicional sea de nuevo evaluada, igual que la tercera parte de un bucle C<for> en C.  Así, puede ser usado para incrementar una variable de bucle, incluso cuando el bucle ha sido interrumpido por medio de una sentencia C<next> (por lo que es similar a la sentencia C<continue> del C).
+C<continue> es realmente una instrucción de control de flujo en lugar de una función.  Si existe un BLOQUE C<continue> adjunto a un BLOQUE (típicamente en un C<while> o C<foreach>), siempre es ejecutado justo antes de que la condicional sea de nuevo evaluada, igual que la tercera parte de un bucle C<for> en C.  Así, puede ser usado para incrementar una variable de bucle, incluso cuando el bucle ha sido interrumpido por medio de una instrucción C<next> (por lo que es similar a la instrucción C<continue> del C).
 
 C<last>, C<next> o C<redo> puede aparecer dentro de un bucle C<continue>; C<last> y C<redo> se comportarán como si se hubieran ejecutado dentro del bloque principal.  También C<next>, pero como ejecutará un bloque C<continue>, quizás se convierta en algo divertido.
 
@@ -641,7 +641,7 @@ C<last>, C<next> o C<redo> puede aparecer dentro de un bucle C<continue>; C<last
 
 La omisión de la sección C<continue> es equivalente a usar un bloque vacío, como es lógico, por lo que C<next> va directamente a comprobar la condición en la parte superior del bucle.
 
-Si la característica <C"switch"> está habilitada, C<continue> es también una función que termina el bloque C<when> (o C<default>) y cae al siguiente caso.  Ver L<feature> y L<perlsyn/"Sentencias switch"> para más información.
+Si la característica <C"switch"> está habilitada, C<continue> es también una función que termina el bloque C<when> (o C<default>) y cae al siguiente caso.  Ver L<feature> y L<perlsyn/"Instrucciones switch"> para más información.
 
 
 =item cos EXPR
@@ -698,20 +698,20 @@ X<dbmclose>
 
 [Esta función ha sido largamente supeditada por la función C<untie>].
 
-Rompe la ligadura entre un fichero DBM y un hash.
+Rompe la ligadura entre un archivo DBM y un hash.
 
 =item dbmopen HASH,DBNAME,MÁSCARA
 X<dbmopen> X<dbm> X<ndbm> X<sdbm> X<gdbm>
 
 [Esta función ha sido largamente supeditada por la función C<tie>].
 
-Liga un fichero dbm(3), ndbm(3), sdbm(3), gdbm(3), o Berkeley DB a un hash.  HASH es el nombre del hash.  (A diferencia de un C<open> normal, el primer argumento I<no> es un gestor, aunque lo parezca).  NOMBREDB es el nombre de la base de datos (sin la extensión F<.dir> o F<.pag> si las tuviera).  Si la base de datos no existe, se crea con la protección especificada por MÁSCARA (y modificada por C<umask>).  Si su sistema sólo soporta las viejas funciones DBM, sólo puede realizar una llamada C<dbmopen> en su programa.  En las viejas versiones de Perl, si el sistema no tenía ni DBM ni ndbm, llamando a C<dbmopen> producía un error fatal; ahora lo intentaría con sdbm(3).
+Liga un archivo dbm(3), ndbm(3), sdbm(3), gdbm(3), o Berkeley DB a un hash.  HASH es el nombre del hash.  (A diferencia de un C<open> normal, el primer argumento I<no> es un gestor, aunque lo parezca).  NOMBREDB es el nombre de la base de datos (sin la extensión F<.dir> o F<.pag> si las tuviera).  Si la base de datos no existe, se crea con la protección especificada por MÁSCARA (y modificada por C<umask>).  Si su sistema sólo soporta las viejas funciones DBM, sólo puede realizar una llamada C<dbmopen> en su programa.  En las viejas versiones de Perl, si el sistema no tenía ni DBM ni ndbm, llamando a C<dbmopen> producía un error fatal; ahora lo intentaría con sdbm(3).
 
-Si no tiene permiso de escritura al fichero DBM, sólo podrá leer las variables hash, pero no asignarlas.  Si quiere comprobar si puede escribir o no, use test de fichero o intente asignar una entrada hash ficticia dentro de un C<eval>, para atrapar el error.
+Si no tiene permiso de escritura al archivo DBM, sólo podrá leer las variables hash, pero no asignarlas.  Si quiere comprobar si puede escribir o no, use test de archivo o intente asignar una entrada hash ficticia dentro de un C<eval>, para atrapar el error.
 
-Note que las funciones como C<keys> y C<values> pueden devolver largas listas cuando se usan con ficheros DBM grandes.  Puede preferir usar la función C<each> para iterar sobre ficheros DBM grandes.  Ejemplo:
+Note que las funciones como C<keys> y C<values> pueden devolver largas listas cuando se usan con archivos DBM grandes.  Puede preferir usar la función C<each> para iterar sobre archivos DBM grandes.  Ejemplo:
 
-    # imprime los desplazamientos en el fichero histórico
+    # imprime los desplazamientos en el archivo histórico
     dbmopen(%HIST,'/usr/lib/news/history',0666);
     while (($key,$val) = each %HIST) {
         print $clave, ' = ', unpack('L',$valor), "\n";
@@ -724,7 +724,7 @@ Puede controlar qué biblioteca DBM usará cargando la biblioteca antes de llama
 
     use DB_File;
     dbmopen(%NS_Hist, "$ENV{HOME}/.netscape/history.db")
-        or die "No puedo abrir el fichero histórico del netscape: $!";
+        or die "No puedo abrir el archivo histórico del netscape: $!";
 
 =item defined EXPR
 X<defined> X<undef> X<undefined> X<definido> X<indefinido>
@@ -733,7 +733,7 @@ X<defined> X<undef> X<undefined> X<definido> X<indefinido>
 
 Devuelve un valor Booleano indicando si EXPR tiene un valor que no sea el valor indefinido C<undef>.  Si EXPR no está presente, se comprobará C<$_>.
 
-Muchas operaciones devuelven C<undef> para indicar un fallo, fin de fichero, error del sistema, variable no inicializada u otras condiciones excepcionales.  Esta función le permite distinguir C<undef> de otros valores.  (Un simple test Booleano no distinguirá entre C<undef>, cero, el string vacío y C<"0">, que son todos igualmente falso). Note que como C<undef> es un escalar válido, su presencia no indica I<necesariamente> una condición excepcional: C<pop> devuelve C<undef> cuando su argumento es un array vacío, I<o> cuando el elemento a devolver sea un C<undef>.
+Muchas operaciones devuelven C<undef> para indicar un fallo, fin de archivo, error del sistema, variable no inicializada u otras condiciones excepcionales.  Esta función le permite distinguir C<undef> de otros valores.  (Un simple test Booleano no distinguirá entre C<undef>, cero, el string vacío y C<"0">, que son todos igualmente falso). Note que como C<undef> es un escalar válido, su presencia no indica I<necesariamente> una condición excepcional: C<pop> devuelve C<undef> cuando su argumento es un array vacío, I<o> cuando el elemento a devolver sea un C<undef>.
 
 Puede usar también C<defined(&func)> para comprobar si la subrutina C<&func> ha sido definida.  El valor devuelto no es afectado por ninguna declaración posterior de C<&func>.  Una subrutina que no ha sido definida puede ser ejecutada: su paquete puede tener un método C<AUTOLOAD> que la hace aparecer la primera vez que es llamada; ver L<perlsub>.
 
@@ -773,7 +773,7 @@ delete() puede usarse también en lo arrays y porciones de array, pero su compor
 
 B<Queda avisa> que borrar elementos de un array mediante delete() es una funcionalidad obsoleta y es probable que sea eliminada en una futura versión de Perl.
 
-Borrando de C<%ENV> modifica el entorno.  Borrando de un hash enlazado a un fichero DBM, borra esa entrada del fichero DBM.  Borrando de un hash o array C<enlazado> no necesariamente devolverá algo; depende de la implementación del método DELETE en el paquete C<enlazado>, que puede hacer lo que quiera.
+Borrando de C<%ENV> modifica el entorno.  Borrando de un hash enlazado a un archivo DBM, borra esa entrada del archivo DBM.  Borrando de un hash o array C<enlazado> no necesariamente devolverá algo; depende de la implementación del método DELETE en el paquete C<enlazado>, que puede hacer lo que quiera.
 
 La construcción C<delete local EXPR> localiza la eliminación al actual bloque en tiempo de ejecución.  Hasta que un bloque termine, los elementos locales suprimidos, temporalmente, ya no existen.  Ver L<perlsub/"Eliminación local de elementos de tipos compuestos">.
 
@@ -844,7 +844,7 @@ Esto es útil para propagar excepciones:
     eval { ... };
     die unless $@ =~ /Expected exception/;
 
-Si la salida está vacía y C<$@> contiene una referencia a un objeto que tiene un método C<PROPAGATE>, éste método será llamado con los parámetros adicionales del fichero y número de línea.  El valor de retorno reemplaza el valor en C<$@>.  es decir, como si se ejecutara C<< $@ = eval { $@->PROPAGATE(__FILE__, __LINE__) }; >>.
+Si la salida está vacía y C<$@> contiene una referencia a un objeto que tiene un método C<PROPAGATE>, éste método será llamado con los parámetros adicionales del archivo y número de línea.  El valor de retorno reemplaza el valor en C<$@>.  es decir, como si se ejecutara C<< $@ = eval { $@->PROPAGATE(__FILE__, __LINE__) }; >>.
 
 Si C<$@> está vacío entonces se usa la cadena C<"Died">.
 
@@ -883,9 +883,9 @@ Ver también exit(), warn() y el módulo Carp.
 =item do BLOQUE
 X<do> X<block> X<bloque>
 
-No es realmente una función.  Devuelve el valor del último comando en la secuencia de comandos indicada por BLOQUE.  Cuando se encuentra acompañado por los modificadores de bucle C<while> o C<until>, ejecuta el BLOQUE una vez antes de comprobar la condición del bucle. (En otras sentencias los modificadores de bucle comprueban primero la condición).
+No es realmente una función.  Devuelve el valor del último comando en la secuencia de comandos indicada por BLOQUE.  Cuando se encuentra acompañado por los modificadores de bucle C<while> o C<until>, ejecuta el BLOQUE una vez antes de comprobar la condición del bucle. (En otras instrucciones los modificadores de bucle comprueban primero la condición).
 
-C<do BLOQUE> I<no> cuenta como un bucle, así que las sentencias de control de bucle C<next>, C<last>, o C<redo> no pueden ser usadas para dejar o reiniciar el bloque.
+C<do BLOQUE> I<no> cuenta como un bucle, así que las instrucciones de control de bucle C<next>, C<last>, o C<redo> no pueden ser usadas para dejar o reiniciar el bloque.
 Ver L<perlsyn> para estrategias alternativas.
 
 =item do SUBRUTINA(LISTA)
@@ -896,7 +896,7 @@ Esta forma de llamada de subrutina ha sido depreciada.  Ver L<perlsub>.
 =item do EXPR
 X<do>
 
-Usa el valor de EXPR como el nombre de un fichero y ejecuta los contenidos del fichero como un script Perl.
+Usa el valor de EXPR como el nombre de un archivo y ejecuta los contenidos del archivo como un script Perl.
 
     do 'stat.pl';
 
@@ -904,22 +904,22 @@ es igual que
 
     eval `cat stat.pl`;
 
-excepto que es más eficiente y conciso, mantiene el nombre del fichero en los mensajes de error, busca en los directorios @INC y actualiza C<%INC> si el fichero es encontrado.  Ver L<perlvar/Nombres predefinidos> para estas variables.  También difiere en que el código evaluado con C<do NOMBREFICHERO> no puede ver a las variables léxicas en el ámbito en que se ejecuta; C<eval STRING> sí.  Es lo mismo, sin embargo, en que vuelve a interpretar el fichero cada vez que lo llama, así que, probablemente, no querrá hacer esto dentro de un bucle.
+excepto que es más eficiente y conciso, mantiene el nombre del archivo en los mensajes de error, busca en los directorios @INC y actualiza C<%INC> si el archivo es encontrado.  Ver L<perlvar/Nombres predefinidos> para estas variables.  También difiere en que el código evaluado con C<do NOMBREARCHIVO> no puede ver a las variables léxicas en el ámbito en que se ejecuta; C<eval STRING> sí.  Es lo mismo, sin embargo, en que vuelve a interpretar el archivo cada vez que lo llama, así que, probablemente, no querrá hacer esto dentro de un bucle.
 
-Si C<do> no puede leer el fichero, devuelve undef y pone C<$!> al valor del error.  Si C<do> puede leer el fichero pero no puede compilarlo, devuelve undef y pone un mensaje de error en C<$@>.   Si el fichero se compila bien, C<do> devuelve el valor de la última expresión evaluada.
+Si C<do> no puede leer el archivo, devuelve undef y pone C<$!> al valor del error.  Si C<do> puede leer el archivo pero no puede compilarlo, devuelve undef y pone un mensaje de error en C<$@>.   Si el archivo se compila bien, C<do> devuelve el valor de la última expresión evaluada.
 
 La inclusión de bibliotecas de módulos es mejor hacerla con los operadores C<use> y C<require>, que también hacen una comprobación automática de errores y generan una excepción si existe algún problema.
 
-Puede usar C<do> para leer en un programa un fichero de configuración.  Comprobación manual de errores se puede hacer así:
+Puede usar C<do> para leer en un programa un archivo de configuración.  Comprobación manual de errores se puede hacer así:
 
-    # leer en ficheros de configuración: primero el sistema, luego el usuario
-    for $fichero ("/share/prog/defaults.rc",
+    # leer en archivos de configuración: primero el sistema, luego el usuario
+    for $archivo ("/share/prog/defaults.rc",
                "$ENV{HOME}/.someprogrc")
     {
-        unless ($return = do $fichero) {
-            warn "no puedo parsear $fichero: $@" if $@;
-            warn "no puedo hacer $fichero: $!"   unless defined $return;
-            warn "no puedo ejecutar $fichero"    unless $return;
+        unless ($return = do $archivo) {
+            warn "no puedo parsear $archivo: $@" if $@;
+            warn "no puedo hacer $archivo: $!"   unless defined $return;
+            warn "no puedo ejecutar $archivo"    unless $return;
         }
     }
 
@@ -933,7 +933,7 @@ Principalmente esto se utiliza en conjunción con el programa B<undump> (no sumi
 Piense en él como un goto entre un volcado del núcleo y una reencarnación.
 Si se omite C<ETIQUETA>, reinicia el programa desde el principio.
 
-B<ATENCIÓN>: Cualquier fichero abierto en el momento del volcado I<no> será abierto mas que cuando el programa sea reencarnado, con una muy posible confusión por parte de Perl.
+B<ATENCIÓN>: Cualquier archivo abierto en el momento del volcado I<no> será abierto mas que cuando el programa sea reencarnado, con una muy posible confusión por parte de Perl.
 
 Esta función es obsoleta desde hace mucho tiempo, en parte porque es muy difícil convertir un volcado del núcleo en un ejecutable. Y es por esto que debe invocarlo como C<CORE::dump()>, si no quiere recibir un aviso de que posiblemente ha cometido una falta ortográfica.
 
@@ -962,20 +962,20 @@ Esto imprime su entorno como el programa printenv(1), sólo que en un orden dife
 
 Ver también C<keys>, C<values> y C<sort>.
 
-=item eof GESTOR_FICHERO
-X<eof> X<end of file> X<end-of-file> X<fin de fichero>
+=item eof GESTOR_ARCHIVO
+X<eof> X<end of file> X<end-of-file> X<fin de archivo>
 
 =item eof ()
 
 =item eof
 
-Devuelve 1 si la siguiente lectura sobre GESTOR_FICHERO devolverá un fin de fichero, o si GESTOR_FICHERO no está abierto.  GESTOR_FICHERO puede ser una expresión cuyo valor da el gestor real.  (Note que esta función realmente lee un carácter y luego hace un C<ungetc>, así que no es útil en un contexto interactivo). No lea de un fichero del que se ha llegado al final (o vuelva a llamar a C<eof(GESTOR_FICHERO)> sobre él) después de haber alcanzado un fin-de-fichero.  Tipos de ficheros como por ejemplo terminales pueden perder la condición de fin-de-fichero si lo hace.
+Devuelve 1 si la siguiente lectura sobre GESTOR_ARCHIVO devolverá un fin de archivo, o si GESTOR_ARCHIVO no está abierto.  GESTOR_ARCHIVO puede ser una expresión cuyo valor da el gestor real.  (Note que esta función realmente lee un carácter y luego hace un C<ungetc>, así que no es útil en un contexto interactivo). No lea de un archivo del que se ha llegado al final (o vuelva a llamar a C<eof(GESTOR_ARCHIVO)> sobre él) después de haber alcanzado un fin-de-archivo.  Tipos de archivos como por ejemplo terminales pueden perder la condición de fin-de-archivo si lo hace.
 
-Un C<eof> sin argumento usa el último fichero leído.  Usar C<eof()> con paréntesis vacíos es diferente.  Se refiere a un pseudo fichero formado por los ficheros listados en la línea de comandos y accedidos vía el operador C<< <> >>.  Como C<< <> >> no es explícitamente abierto, como lo sería un gestor de fichero, un C<eof()> antes de que un C<< <> >> sea usado, causará que C<@ARGV> sea examinado para determinar si la entrada está disponible.   De forma semejante, un C<eof()> después de que un C<< <> >> haya devuelto un fin-de-fichero asumirá que está procesando otra lista C<@ARGV>, y si no ha puesto un nuevo C<@ARGV>, leerá la entrada desde C<STDIN>; ver L<perlop/"Operadores E/S">.
+Un C<eof> sin argumento usa el último archivo leído.  Usar C<eof()> con paréntesis vacíos es diferente.  Se refiere a un pseudo archivo formado por los archivos listados en la línea de comandos y accedidos vía el operador C<< <> >>.  Como C<< <> >> no es explícitamente abierto, como lo sería un gestor de archivo, un C<eof()> antes de que un C<< <> >> sea usado, causará que C<@ARGV> sea examinado para determinar si la entrada está disponible.   De forma semejante, un C<eof()> después de que un C<< <> >> haya devuelto un fin-de-archivo asumirá que está procesando otra lista C<@ARGV>, y si no ha puesto un nuevo C<@ARGV>, leerá la entrada desde C<STDIN>; ver L<perlop/"Operadores E/S">.
 
-En un bucle C<< while (<>) >>, C<eof> o C<eof(ARGV)> pueden usarse para detectar el fin de un fichero; C<eof()> sólo detectará el final del último fichero.  Ejemplos:
+En un bucle C<< while (<>) >>, C<eof> o C<eof(ARGV)> pueden usarse para detectar el fin de un archivo; C<eof()> sólo detectará el final del último archivo.  Ejemplos:
 
-    # reiniciar el numerado de líneas en cada fichero de entrada
+    # reiniciar el numerado de líneas en cada archivo de entrada
     while (<>) {
         next if /^\s*#/;  # salta los comentarios
         print "$.\t$_";
@@ -983,9 +983,9 @@ En un bucle C<< while (<>) >>, C<eof> o C<eof(ARGV)> pueden usarse para detectar
         close ARGV if eof;  # ¡No eof()!
     }
 
-    # inserta guiones justo antes de la última línea del último fichero
+    # inserta guiones justo antes de la última línea del último archivo
     while (<>) {
-        if (eof()) {  # chequea por el final del último fichero
+        if (eof()) {  # chequea por el final del último archivo
             print "--------------\n";
         }
         print;
@@ -1008,9 +1008,9 @@ En la segunda forma, el código dentro del BLOQUE es interpretado sólo una vez 
 
 El último punto y coma, si lo hay, puede ser omitido del valor de EXPR o dentro de BLOQUE.
 
-En ambas formas, el valor devuelto es el valor de la última expresión evaluada dentro del mini-programa; una sentencia return se puede usar también, como si fuera una subrutina.  La expresión que da el valor de retorno es evaluada en contexto vacío (void), escalar o lista, dependiendo del contexto en que se encuentre el C<eval>.  Ver L</wantarray> para saber cómo determinar el contexto de la evaluación.
+En ambas formas, el valor devuelto es el valor de la última expresión evaluada dentro del mini-programa; una instrucción return se puede usar también, como si fuera una subrutina.  La expresión que da el valor de retorno es evaluada en contexto vacío (void), escalar o lista, dependiendo del contexto en que se encuentre el C<eval>.  Ver L</wantarray> para saber cómo determinar el contexto de la evaluación.
 
-Si hay algún error de sintaxis o en tiempo de ejecución, o se ejecuta una sentencia C<die>, C<eval> devuelve un valor indefinido en contexto escalar o una lista vacía en contexto lista, y C<$@> es inicializado al mensaje de error.  Si no hay errores, se garantiza que C<$@> será una cadena vacía.  Tenga cuidado porque usar C<eval> ni silencia a Perl a la hora de imprimir avisos al STDERR, ni rellena el texto de los mensajes de aviso dentro de C<$@>.
+Si hay algún error de sintaxis o en tiempo de ejecución, o se ejecuta una instrucción C<die>, C<eval> devuelve un valor indefinido en contexto escalar o una lista vacía en contexto lista, y C<$@> es inicializado al mensaje de error.  Si no hay errores, se garantiza que C<$@> será una cadena vacía.  Tenga cuidado porque usar C<eval> ni silencia a Perl a la hora de imprimir avisos al STDERR, ni rellena el texto de los mensajes de aviso dentro de C<$@>.
 Para hacer cualquiera de estas dos cosas debe usar C<$SIG{__WARN__}>, o desactivar los avisos dentro del BLOQUE o EXPR usando S<C<no warnings 'all'>>.
 Ver L</warn>, L<perlvar>, L<warnings> y L<perllexwarn>.
 
@@ -1079,7 +1079,7 @@ La asignación a C<$@> se produce antes de la restauración de las variables loc
        die $e if defined $e
     }
 
-C<eval BLOQUE> I<no> cuenta como un bucle, así que las sentencias de control de bucle C<next>, C<last>, o C<redo> no pueden ser usadas para dejar o reiniciar el bloque.
+C<eval BLOQUE> I<no> cuenta como un bucle, así que las instrucciones de control de bucle C<next>, C<last>, o C<redo> no pueden ser usadas para dejar o reiniciar el bloque.
 
 Un C<eval ''> ejecutado dentro del paquete C<DB> no ve el usual ámbito léxico circundante, sino más bien el ámbito de la primera parte del código no-DB que le llamó. No necesita preocuparse de esto a menos que esté escribiendo un depurador Perl.
 
@@ -1090,7 +1090,7 @@ X<exec> X<execute> X<ejecutar>
 
 La función C<exec> ejecuta un comando del sistema I<y nunca regresa>; use C<system> en lugar de C<exec> si quiere que regrese.  Fallará y devolverá falso sólo si el comando no existe I<y> es ejecutado directamente en lugar de hacerlo con el shell de comandos del sistema (ver abajo).
 
-Como es un error normal usar C<exec> en lugar de C<system>, Perl le avisará si hay alguna sentencia a continuación que no sea C<die>, C<warn> o C<exit> (si C<-w> está puesto -pero usted, siempre lo tiene así, ¿verdad?-).   Si I<verdaderamente> quiere continuar un C<exec> con otra sentencia, puede usar algunas de estas formas para evitar el aviso:
+Como es un error normal usar C<exec> en lugar de C<system>, Perl le avisará si hay alguna instrucción a continuación que no sea C<die>, C<warn> o C<exit> (si C<-w> está puesto -pero usted, siempre lo tiene así, ¿verdad?-).   Si I<verdaderamente> quiere continuar un C<exec> con otra instrucción, puede usar algunas de estas formas para evitar el aviso:
 
     exec ('foo')   or print STDERR "no puedo exec foo: $!";
     { exec ('foo') }; print STDERR "no puedo exec foo: $!";
@@ -1124,7 +1124,7 @@ Usar un objeto indirecto con C<exec> o C<system> es también más seguro.  Este 
 
 La primera versión, sin el objeto indirecto, ejecuta el programa I<echo>, pasándole C<"sorpresa"> como argumento.  La segunda versión no; intentó ejecutar un programa llamado literalmente I<"echo sorpresa">, no lo encontró, y puso C<$?> a un valor distinto de cero para indicar un fallo.
 
-A partir de la versión v5.6.0, Perl intenta vaciar todos los ficheros abiertos para salida antes de ejecutar exec, pero esto puede no estar soportado en algunas plataformas (ver L<perlport>).  Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en el módulo English) o llamar el método C<autoflush()> de C<IO::Handle> en cualquiera de los gestores de archivo abiertos para evitar la pérdida de datos en la salida.
+A partir de la versión v5.6.0, Perl intenta vaciar todos los archivos abiertos para salida antes de ejecutar exec, pero esto puede no estar soportado en algunas plataformas (ver L<perlport>).  Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en el módulo English) o llamar el método C<autoflush()> de C<IO::Handle> en cualquiera de los gestores de archivo abiertos para evitar la pérdida de datos en la salida.
 
 Note que C<exec> no llamará a sus bloques C<END>, ni llamará a ningún método C<DESTROY> de sus objetos.
 
@@ -1200,7 +1200,7 @@ X<exp> X<exponential> X<antilog> X<antilogarithm> X<e> X<exponencial> X<anti log
 Devuelve I<e> (la base natural del logaritmo) a la potencia de EXPR.
 Si EXPR se omite, devuelve C<exp($_)>.
 
-=item fcntl GESTOR_FICHERO,FUNCIÓN,ESCALAR
+=item fcntl GESTOR_ARCHIVO,FUNCIÓN,ESCALAR
 X<fcntl>
 
 Implementa la función fcntl(2).  Probablemente escribirá
@@ -1219,7 +1219,7 @@ Como C<ioctl>, mapea un C<0> devuelto de la llamada del sistema en un C<"0 but t
 
 Tenga en cuenta que C<fcntl> levanta una excepción si se utiliza en una máquina que no implemente fcntl(2).  Ver el módulo Fcntl o la página de manual fcntl(2) para aprender qué funciones están disponibles en su sistema.
 
-Aquí hay un ejemplo de poner un gestor de fichero llamado C<REMOTE> a no bloqueante a nivel de sistema.  Aunque, tendrá que negociar también con C<$|>.
+Aquí hay un ejemplo de poner un gestor de archivo llamado C<REMOTE> a no bloqueante a nivel de sistema.  Aunque, tendrá que negociar también con C<$|>.
 
     use Fcntl qw(F_GETFL F_SETFL O_NONBLOCK);
 
@@ -1229,11 +1229,11 @@ Aquí hay un ejemplo de poner un gestor de fichero llamado C<REMOTE> a no bloque
     $flags = fcntl(REMOTE, F_SETFL, $flags | O_NONBLOCK)
                 or die "No puedo poner los flags para el socket: $!\n";
 
-=item fileno GESTOR_FICHERO
+=item fileno GESTOR_ARCHIVO
 X<fileno>
 
-Devuelve el descriptor de fichero para un gestor, o indefinido si el gestor no está abierto.  Esto es principalmente útil para construir bitmaps para C<select> y operaciones POSIX de bajo nivel sobre tty.
-Si el GESTOR_FICHERO es una expresión, el valor es tomado como un gestor indirecto, generalmente su nombre.
+Devuelve el descriptor de archivo para un gestor, o indefinido si el gestor no está abierto.  Esto es principalmente útil para construir bitmaps para C<select> y operaciones POSIX de bajo nivel sobre tty.
+Si el GESTOR_ARCHIVO es una expresión, el valor es tomado como un gestor indirecto, generalmente su nombre.
 
 Puede usar esto para encontrar cuándo dos gestores se refieren al mismo descriptor subyacente:
 
@@ -1244,21 +1244,21 @@ Puede usar esto para encontrar cuándo dos gestores se refieren al mismo descrip
 (Gestores conectados a objetos en memoria vía las nuevas posibilidades de C<open> pueden devolver indefinido incluso si están abiertos).
 
 
-=item flock GESTOR_FICHERO,OPERACIÓN
+=item flock GESTOR_ARCHIVO,OPERACIÓN
 X<flock> X<lock> X<locking>
 
-Llama a flock(2), o una emulación de ella, sobre GESTOR_FICHERO.  Devuelve verdadero para éxito, falso en fallo.  Produce un error fatal si se usa en una máquina que no implemente flock(2), bloqueo fcntl(2), o lockf(3).
-C<flock> es el interfaz portable de Perl de bloqueo de fichero, aunque sólo bloquea ficheros enteros, no registros.
+Llama a flock(2), o una emulación de ella, sobre GESTOR_ARCHIVO.  Devuelve verdadero para éxito, falso en fallo.  Produce un error fatal si se usa en una máquina que no implemente flock(2), bloqueo fcntl(2), o lockf(3).
+C<flock> es el interfaz portable de Perl de bloqueo de archivo, aunque sólo bloquea archivos enteros, no registros.
 
-Dos potenciales no obvias pero tradicionales semánticas de C<flock> son que espera indefinidamente hasta que el bloqueo es efectivo, y que B<meramente es un consejo>.  Tales bloqueos discrecionalmente son más flexibles, pero ofrecen pocas garantías.  Esto significa que los programas que no usen C<flock> pueden modificar ficheros bloqueados con C<flock>.  Ver L<perlport>, la documentación específica de su adaptación Perl, o sus páginas de manual locales para los detalles.  Es mejor asumir el comportamiento tradicional si está escribiendo programas portables.  (Pero si no, puede siempre sentirse libre de escribir sus propias idiosincrasias del sistema (algunas veces llamadas "features" -características-).  Adhesión servil a los requerimientos de portabilidad no debe impedirle obtener el trabajo hecho).
+Dos potenciales no obvias pero tradicionales semánticas de C<flock> son que espera indefinidamente hasta que el bloqueo es efectivo, y que B<meramente es un consejo>.  Tales bloqueos discrecionalmente son más flexibles, pero ofrecen pocas garantías.  Esto significa que los programas que no usen C<flock> pueden modificar archivos bloqueados con C<flock>.  Ver L<perlport>, la documentación específica de su adaptación Perl, o sus páginas de manual locales para los detalles.  Es mejor asumir el comportamiento tradicional si está escribiendo programas portables.  (Pero si no, puede siempre sentirse libre de escribir sus propias idiosincrasias del sistema (algunas veces llamadas "features" -características-).  Adhesión servil a los requerimientos de portabilidad no debe impedirle obtener el trabajo hecho).
 
 OPERACIÓN es una de LOCK_SH, LOCK_EX, o LOCK_UN, posiblemente combinado con LOCK_NB.  Estas constantes tienen, tradicionalmente, los valores 1, 2, 8 y 4, pero puede usar los nombres simbólicos si los importa con el módulo Fcntl, tanto de forma indivual o como un grupo usando la marca ':flock'.  LOCK_SH solicita un bloqueo compartido, LOCK_EX solicita un bloqueo exclusivo y LOCK_UN devuelve un bloqueo solicitado previamente.  Si LOCK_NB se combina a nivel de bit con 'or' con LOCK_SH o LOCK_EX entonces C<flock> regresa inmediatamente en vez de esperar por el bloqueo; compruebe el valor de estado devuelto para ver si lo ha conseguido.
 
-Para evitar la posibilidad de descoordinación, Perl ahora vacía el GESTOR_FICHERO antes de bloquearlo o desbloquearlo.
+Para evitar la posibilidad de descoordinación, Perl ahora vacía el GESTOR_ARCHIVO antes de bloquearlo o desbloquearlo.
 
-Note que la emulación integrada con lockf(3) no provee de bloqueos compartidos y requiere que el GESTOR_FICHERO sea abierto con intención de escribir en el.  Estas son las semánticas que lockf(3) implementa.  La mayor parte si no todos los sistemas implementan lockf(3) en términos de bloqueo con fcntl(2), aunque, las diferencias en la semántica no llame la atención a mucha gente.
+Note que la emulación integrada con lockf(3) no provee de bloqueos compartidos y requiere que el GESTOR_ARCHIVO sea abierto con intención de escribir en el.  Estas son las semánticas que lockf(3) implementa.  La mayor parte si no todos los sistemas implementan lockf(3) en términos de bloqueo con fcntl(2), aunque, las diferencias en la semántica no llame la atención a mucha gente.
 
-Note que la emulación de fcntl(2) de flock(3) requiere que GESTOR_FICHERO sea abierto con intención de leer para usar LOCK_SH y requiere ser abierto con intención de escribir para usar LOCK_EX.
+Note que la emulación de fcntl(2) de flock(3) requiere que GESTOR_ARCHIVO sea abierto con intención de leer para usar LOCK_SH y requiere ser abierto con intención de escribir para usar LOCK_EX.
 
 Note también que algunas versiones de C<flock> no pueden bloquear cosas sobre la red; necesitará usar un C<fcntl> más específico del sistema para hacer esto.  Si le gusta la idea, puede forzar a Perl a ignorar la función del sistema flock(2) y proveer de su propia emulación basada en fcntl(2), pasando la opción C<-Ud_flock> al programa F<Configure> cuando configure la compilación de Perl.
 
@@ -1293,9 +1293,9 @@ Ver también L<DB_File> para otros ejemplos de flock().
 =item fork
 X<fork> X<child> X<parent> X<hijo> X<padre>
 
-Hace una llamada del sistema fork(2) para crear un nuevo proceso ejecutando el mismo programa en el mismo punto.  Devuelve el pid del hijo al proceso padre, C<0> al proceso hijo, o C<undef> si no se consiguió el fork.  Descriptores de fichero (y algunas veces bloqueos en estos descriptores) son compartidos, mientras que todo lo demás es copiado.  En la mayoría de los sistemas que soportan fork(), se ha tenido gran cuidado en hacerlo extremadamente eficiente (por ejemplo, usando la tecnología copy-on-write en páginas de datos), haciendo de él el paradigma dominante de la multitarea en las últimas décadas.
+Hace una llamada del sistema fork(2) para crear un nuevo proceso ejecutando el mismo programa en el mismo punto.  Devuelve el pid del hijo al proceso padre, C<0> al proceso hijo, o C<undef> si no se consiguió el fork.  Descriptores de archivo (y algunas veces bloqueos en estos descriptores) son compartidos, mientras que todo lo demás es copiado.  En la mayoría de los sistemas que soportan fork(), se ha tenido gran cuidado en hacerlo extremadamente eficiente (por ejemplo, usando la tecnología copy-on-write en páginas de datos), haciendo de él el paradigma dominante de la multitarea en las últimas décadas.
 
-A partir de la versión v5.6.0, Perl intentará vaciar todos los ficheros abiertos para salida antes de crear un proceso hijo, pero esto puede no estar soportado en algunas plataformas (ver L<perlport>).  Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en English) o llamar el método C<autoflush()> de C<IO::Handle> en cualquiera de los gestores de archivo abiertos para evitar duplicación de salida.
+A partir de la versión v5.6.0, Perl intentará vaciar todos los archivos abiertos para salida antes de crear un proceso hijo, pero esto puede no estar soportado en algunas plataformas (ver L<perlport>).  Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en English) o llamar el método C<autoflush()> de C<IO::Handle> en cualquiera de los gestores de archivo abiertos para evitar duplicación de salida.
 
 Si usted hace un C<fork> sin luego esperar a sus hijos, irá acumulando zombies.  En algunos sistemas, puede evitar esto poniendo C<$SIG{CHLD}> a C<"IGNORE">.  Ver también L<perlipc> para más ejemplos de fork y borrado de hijos moribundos.
 
@@ -1323,18 +1323,18 @@ Ver L<perlform> para más detalles y ejemplos.
 X<formline>
 
 Esta es una función interna usada por C<format>, aunque también puede llamarla.  Formatea (ver L<perlform>) una lista de valores de acuerdo a los contenidos de CUADRO, colocando la salida en el acumulador de salida de format, C<$^A> (o C<$ACCUMULATOR> en English).
-Finalmente, cuando se hace un C<write>, los contenidos de C<$^A> se escriben al gestor de fichero.  Puede también leer C<$^A> y volver a ponerla otra vez a C<"">.  Note que un formato típicamente hace un C<formline> por línea del formato, pero a la misma función C<formline> no le preocupa cuántos avances de línea están incluidos en el CUADRO.  Esto significa que los tokens C<~> y C<~~> tratan al CUADRO entero como una única línea.
+Finalmente, cuando se hace un C<write>, los contenidos de C<$^A> se escriben al gestor de archivo.  Puede también leer C<$^A> y volver a ponerla otra vez a C<"">.  Note que un formato típicamente hace un C<formline> por línea del formato, pero a la misma función C<formline> no le preocupa cuántos avances de línea están incluidos en el CUADRO.  Esto significa que los tokens C<~> y C<~~> tratan al CUADRO entero como una única línea.
 Puede por eso necesitar usar múltiples formlines para implementar un único registro format, como lo hace el propio compilador de C<format>.
 
 Tenga cuidado si pone dobles comillas alrededor del cuadro, porque un carácter C<@> puede ser tomado como el comienzo del nombre de un array.
 C<formline> siempre devuelve verdadero.  Ver L<perlform> para otros ejemplos.
 
-=item getc GESTOR_FICHERO
-X<getc> X<getchar> X<character> X<file, read> X<fichero, lectura> X<carácter>
+=item getc GESTOR_ARCHIVO
+X<getc> X<getchar> X<character> X<file, read> X<archivo, lectura> X<carácter>
 
 =item getc
 
-Devuelve el siguiente carácter desde el fichero de entrada asociado a GESTOR_FICHERO, o el valor indefinido al final del fichero, o si ocurrió un error (en este último caso, se actualiza C<$!>).  Si GESTOR_FICHERO se omite, se lee desde STDIN.  Esto no es particularmente eficiente.  Sin embargo, esto no puede ser usado para extraer caracteres sueltos sin esperar a que el usuario pulse la tecla de I<Enter>.  Para esto, intente algo como esto:
+Devuelve el siguiente carácter desde el archivo de entrada asociado a GESTOR_ARCHIVO, o el valor indefinido al final del archivo, o si ocurrió un error (en este último caso, se actualiza C<$!>).  Si GESTOR_ARCHIVO se omite, se lee desde STDIN.  Esto no es particularmente eficiente.  Sin embargo, esto no puede ser usado para extraer caracteres sueltos sin esperar a que el usuario pulse la tecla de I<Enter>.  Para esto, intente algo como esto:
 
     if ($BSD_STYLE) {
         system "stty cbreak </dev/tty >/dev/tty 2>&1";
@@ -1360,7 +1360,7 @@ La función C<POSIX::getattr> puede hacer esto de forma más portable en sistema
 =item getlogin
 X<getlogin> X<login>
 
-Implementa la función de la librería C del mismo nombre, que en la mayoría de los sistemas devuelve el login actual desde F</etc/utmp>, si existe.  Si devuelve la cadena vacía, utilice C<getpwuid>.
+Implementa la función de la biblioteca C del mismo nombre, que en la mayoría de los sistemas devuelve el login actual desde F</etc/utmp>, si existe.  Si devuelve la cadena vacía, utilice C<getpwuid>.
 
     $login = getlogin || getpwuid($<) || "Kilroy";
 
@@ -1486,7 +1486,7 @@ En contexto escalar, obtiene el nombre, a menos que la función fuera localizar 
     $name  = getgrent();
     #etc.
 
-En I<getpw*()> los campos $cuota, $comentario y $expiracion son casos especiales en el sentido que en muchos sistemas no están soportados.  Si la $cuota no está soportada, es un escalar vacío.  Si está soportada, usualmente codifica la cuota de disco.  Si el campo $comentario no está soportado, es un escalar vacío.  Si está soportado usualmente codifica algún comentario administrativo sobre el usuario.  En algunos sistemas el campo $cuota puede ser $cambio o $edad, campos que tienen que ver con la caducidad de la contraseña.  En algunos sistemas el campo $comentario puede ser $clase.  El campo $expira, si está presente, codifica el periodo de expiración de la cuenta o de la contraseña.  Para la disponibilidad y el significado exacto de estos campos en su sistema, por favor consulte la documentación de su getpwnam(3) y su fichero F<pwd.h>.  Puede también encontrar dentro de Perl que es lo que significan sus campos $cuota, $comentario y $expira usando el módulo C<Config> y los valores C<d_pwquota>, C<d_pwage>, C<d_pwchange>, C<d_pwcomment> y C<d_pwexpire>.  Ficheros de contraseñas shadow sólo están soportados si el proveedor los ha implementado con la intuitiva moda de que llamando a las rutinas regulares de la biblioteca C se obtiene las versiones shadow si está corriendo con bajos privilegios o si existe la función shadow(3) tal como se encuentra en System V (esto incluye Solaris y Linux). Los sistemas que implementen un sistema de contraseñas shadow propietario es impropable que sean soportados.
+En I<getpw*()> los campos $cuota, $comentario y $expiracion son casos especiales en el sentido que en muchos sistemas no están soportados.  Si la $cuota no está soportada, es un escalar vacío.  Si está soportada, usualmente codifica la cuota de disco.  Si el campo $comentario no está soportado, es un escalar vacío.  Si está soportado usualmente codifica algún comentario administrativo sobre el usuario.  En algunos sistemas el campo $cuota puede ser $cambio o $edad, campos que tienen que ver con la caducidad de la contraseña.  En algunos sistemas el campo $comentario puede ser $clase.  El campo $expira, si está presente, codifica el periodo de expiración de la cuenta o de la contraseña.  Para la disponibilidad y el significado exacto de estos campos en su sistema, por favor consulte la documentación de su getpwnam(3) y su archivo F<pwd.h>.  Puede también encontrar dentro de Perl que es lo que significan sus campos $cuota, $comentario y $expira usando el módulo C<Config> y los valores C<d_pwquota>, C<d_pwage>, C<d_pwchange>, C<d_pwcomment> y C<d_pwexpire>.  Archivos de contraseñas shadow sólo están soportados si el proveedor los ha implementado con la intuitiva moda de que llamando a las rutinas regulares de la biblioteca C se obtiene las versiones shadow si está corriendo con bajos privilegios o si existe la función shadow(3) tal como se encuentra en System V (esto incluye Solaris y Linux). Los sistemas que implementen un sistema de contraseñas shadow propietario es impropable que sean soportados.
 
 El valor de $miembros  devuelto por I<getgr*()> es una lista separada por espacios de los nombres de login de los miembros del grupo.
 
@@ -1517,7 +1517,7 @@ Si está cansado de recordar qué elemento de la lista devuelta contiene qué va
 
    use File::stat;
    use User::pwent;
-   $is_his = (stat($fichero)->uid == pwent($loquesea)->uid);
+   $is_his = (stat($archivo)->uid == pwent($loquesea)->uid);
 
 Incluso aunque parezcan los mismos métodos (uid), no lo son, porque un objeto C<File::stat> es diferente de un objeto C<User::pwent>.
 
@@ -1555,15 +1555,15 @@ Un ejemplo para comprobar si el algoritmo de Nagle está activado en un socket:
 
 
 =item glob EXPR
-X<glob> X<wildcard> X<filename, expansion> X<expand> X<fichero, expansión> X<comodín> X<expandir>
+X<glob> X<wildcard> X<filename, expansion> X<expand> X<archivo, expansión> X<comodín> X<expandir>
 
 =item glob
 
-En contecto lista, devuelve una (posiblemente vacía) lista de la expansión de nombres de fichero del valor de EXPR como si el shell estandar Unix F</bin/csh> lo hiciera. En contexto escalar, glob itera a través de la expansión de nombres de fichero, devolviendo undef cuando se agote la lista. Esto es la función interna que implementa el operador C<< <*.c> >>, pero puede usarla directamente. Si la EXPR se omite, se usa C<$_>.  El operador C<< <*.c> >> se discute con más detalle en L<perlop/"Operadores I/O">.
+En contecto lista, devuelve una (posiblemente vacía) lista de la expansión de nombres de archivo del valor de EXPR como si el shell estandar Unix F</bin/csh> lo hiciera. En contexto escalar, glob itera a través de la expansión de nombres de archivo, devolviendo undef cuando se agote la lista. Esto es la función interna que implementa el operador C<< <*.c> >>, pero puede usarla directamente. Si la EXPR se omite, se usa C<$_>.  El operador C<< <*.c> >> se discute con más detalle en L<perlop/"Operadores I/O">.
 
 Tenga en cuenta que C<glob> divide sus argumentos por los espacios en blanco y trata a cada segmento como patrones independientes.  En este sentido, C<glob("*.c *.h")> coincide con todos los archivos con una extensión F<.c> o F<.h>.  La expresión C<glob(".* *")> coincide con todos los archivos en el directorio de trabajo actual.
 
-Si los únicos caracteres comodín en C<glob> son llaves, no se coincidirá con ningún fichero, pero, potencialmente, se devuelven muchas cadenas.  Por ejemplo, esto produce nueve cadenas, una por cada par de frutas y colores:
+Si los únicos caracteres comodín en C<glob> son llaves, no se coincidirá con ningún archivo, pero, potencialmente, se devuelven muchas cadenas.  Por ejemplo, esto produce nueve cadenas, una por cada par de frutas y colores:
 
     @muchos =  glob "{manzana,tomate,cereza}={verde,amarilla,roja}";
 
@@ -1587,7 +1587,7 @@ X<goto> X<jump> X<jmp>
 
 =item goto &NOMBRE
 
-La forma C<goto-ETIQUETA> busca la sentencia etiquetada con ETIQUETA y continua la ejecución desde allí. No se puede utilizar para salir de un bloque o una subrutina pasada a C<sort>.  Puede ser utilizada para ir a casi cualquier sitio que esté dentro del ámbito dinámico, incluyendo fuera de las subrutinas, pero es usualmente mucho mejor usar otras construcciones como C<last> o C<die>.
+La forma C<goto-ETIQUETA> busca la instrucción etiquetada con ETIQUETA y continua la ejecución desde allí. No se puede utilizar para salir de un bloque o una subrutina pasada a C<sort>.  Puede ser utilizada para ir a casi cualquier sitio que esté dentro del ámbito dinámico, incluyendo fuera de las subrutinas, pero es usualmente mucho mejor usar otras construcciones como C<last> o C<die>.
 El autor de Perl nunca ha sentido la necesidad de usar esta forma de C<goto> (en Perl, desde luego. C es otra historia).  (La diferencia con C es que no ofrece bucles nominales combinados con control de bucles.  Perl sí, y esto reemplaza a la mayor parte de los usos estructurados de C<goto> en otros lenguajes).
 
 La forma C<goto>-EXPR espera un nombre de etiqueta, cuyo ámbito será resuelto dinámicamente.  Esto permite crear C<goto> calculados como en FORTRAN, pero no está necesariamente recomendado si usted está optimizando, durante el mantenimiento:
@@ -1657,14 +1657,14 @@ X<int> X<integer> X<truncate> X<trunc> X<floor> X<truncar> X<trunca> X<entero>
 Devuelve la parte entera de EXPR.  Si se omite EXPR, se usa C<$_>.
 No debe usar esta función para redondear: primero, porque trunca hacia C<0> y segundo, porque las representaciones máquina de números en punto flotante puede producir, algunas veces, resultados dispares.  Por ejemplo, C<int(-6.725/0.025)> produce -268 en vez del valor correcto -269; esto es porque el valor realmente es -268.99999999999994315658.  Usualmente, las funciones C<sprintf>, C<printf>, o C<POSIX::floor> y C<POSIX::ceil> le servirán mejor que int().
 
-=item ioctl GESTOR_FICHERO,FUNCIÓN,ESCALAR
+=item ioctl GESTOR_ARCHIVO,FUNCIÓN,ESCALAR
 X<ioctl>
 
 Implementa la función ioctl(2).  Probablemente primero querrá escribir
 
     require "sys/ioctl.ph";  # probablemente en $Config{archlib}/sys/ioctl.ph
 
-para obtener las correctas definiciones de la función.  Si F<sys/ioctl.ph> no existe o no tiene las definiciones correctas, tendrá que incorporar las suyas propias, basadas en sus ficheros de cabecera C como las de F<< <sys/ioctl.h> >>.
+para obtener las correctas definiciones de la función.  Si F<sys/ioctl.ph> no existe o no tiene las definiciones correctas, tendrá que incorporar las suyas propias, basadas en sus archivos de cabecera C como las de F<< <sys/ioctl.h> >>.
 (Existe un script Perl llamado B<h2ph> que viene con el kit Perl que puede ayudarle en esto, pero no es nada trivial). ESCALAR será leído o escrito dependiendo de la FUNCIÓN; un puntero C al valor de la cadena ESCALAR será pasado como tercer argumento de la actual llamada C<ioctl>.  (Si ESCALAR no tiene un valor string sino que tiene un valor numérico, este valor será el que se pase, en lugar de un puntero al valor del string.  Para garantizar este último comportamiento, añada un C<0> al escalar antes de usarlo). Las funciones C<pack> y C<unpack> pueden ser necesarias para manipular los valores de las estructuras usadas por C<ioctl>.
 
 El valor devuelto de C<ioctl> (y C<fcntl>) es como sigue:
@@ -1755,7 +1755,7 @@ X<last> X<break>
 
 =item last
 
-El comando C<last> es como la sentencia C<break> del C (usada en bucles); inmediatamente sale del bucle en cuestión.  Si la ETIQUETA se omite, el comando se refiere al bucle más interior en que se encuentre.  El bloque C<continue>, si está, no es ejecutado:
+El comando C<last> es como la instrucción C<break> del C (usada en bucles); inmediatamente sale del bucle en cuestión.  Si la ETIQUETA se omite, el comando se refiere al bucle más interior en que se encuentre.  El bloque C<continue>, si está, no es ejecutado:
 
     LINE: while (<STDIN>) {
         last LINE if /^$/;  # salir cuando se termine la cabecera
@@ -1848,7 +1848,7 @@ Al igual que todas las operaciones Perl, de caracteres, length() normalmente tra
 =item link ARCHIVO_VIEJO,ARCHIVO_NUEVO
 X<link>
 
-Crea un nuevo nombre de fichero enlazado con el nombre del fichero antiguo.  Devuelve verdadero en caso de éxito, o falso en caso contrario.
+Crea un nuevo nombre de archivo enlazado con el nombre del archivo antiguo.  Devuelve verdadero en caso de éxito, o falso en caso contrario.
 
 =item listen SOCKET,TAMAÑO_COLA
 X<listen>
@@ -1998,20 +1998,20 @@ o para forzar a un constructor de un hash anónimo use C<+{>:
 
 para obtener una lista de hashes anónimos, cada uno con sólo una entrada cada uno.
 
-=item mkdir FICHERO,MÁSCARA
+=item mkdir ARCHIVO,MÁSCARA
 X<mkdir> X<md> X<directory, create> X<directorio, crear>
 
-=item mkdir FICHERO
+=item mkdir ARCHIVO
 
 =item mkdir
 
-Crea el directorio especificado por el nombre de FICHERO, con permisos especificados por la MÁSCARA (y modificada por C<umask>).  Si tiene éxito, devuelve verdadero, en caso contrario devuelve falso y asigna C<$!> (errno).
-Si se omite, por defecto MÁSCARA es 0777. Si se omite, por defecto FICHERO se toma desde <$_>.
+Crea el directorio especificado por el nombre de ARCHIVO, con permisos especificados por la MÁSCARA (y modificada por C<umask>).  Si tiene éxito, devuelve verdadero, en caso contrario devuelve falso y asigna C<$!> (errno).
+Si se omite, por defecto MÁSCARA es 0777. Si se omite, por defecto ARCHIVO se toma desde <$_>.
 
 En general, es mejor crear directorios con una MÁSCARA permisiva y dejar que el usuario lo modifique que con su C<umask>, que suministrar una MÁSCARA restrictiva y no darle al usuario una forma de ser más permisivo.
-Las excepciones a esta regla son cuando el fichero o directorio debe mantenerse privados (archivos de correo, por ejemplo).  La entrada perlfunc(1) sobre C<umask> discute la elección de la máscara con más detalles.
+Las excepciones a esta regla son cuando el archivo o directorio debe mantenerse privados (archivos de correo, por ejemplo).  La entrada perlfunc(1) sobre C<umask> discute la elección de la máscara con más detalles.
 
-Tenga en cuenta que de acuerdo con POSIX 1.003.1-1996, el nombre de fichero puede tener cualquier número de barras inclinadas.  Algunos sistemas operativos y de sistemas de ficheros no interpretan esto de forma correcta, por lo que Perl automáticamente elimina todas las barras inclinadas finales para tener a todo el mundo feliz.
+Tenga en cuenta que de acuerdo con POSIX 1.003.1-1996, el nombre de archivo puede tener cualquier número de barras inclinadas.  Algunos sistemas operativos y de sistemas de archivos no interpretan esto de forma correcta, por lo que Perl automáticamente elimina todas las barras inclinadas finales para tener a todo el mundo feliz.
 
 Para, recursivamente, crear una estructura de directorios, mire la función C<mkpath> del módulo L<File::Path>.
 
@@ -2097,27 +2097,27 @@ Interpreta EXPR como una cadena en octal y devuelve el valor correspondiente.  (
 
 Si se omite EXPR, se usa C<$_>.   Para hacer lo contrario (producir un número en octal), use sprintf() o printf():
 
-    $dec_perms = (stat("fichero"))[2] & 07777;
+    $dec_perms = (stat("archivo"))[2] & 07777;
     $oct_perm_str = sprintf "%o", $permisos;
 
-La función oct() es de uso común cuando una cadena como C<644> tiene que ser convertida en un modo de fichero, por ejemplo.  Aunque Perl convierte automáticamente las cadenas en números según sea necesario, esta conversión automática asume que es en base 10.
+La función oct() es de uso común cuando una cadena como C<644> tiene que ser convertida en un modo de archivo, por ejemplo.  Aunque Perl convierte automáticamente las cadenas en números según sea necesario, esta conversión automática asume que es en base 10.
 
 El espacio en blanco que le rodea es ignorado sin avisar, como también cualquier otro carácter que no sea un dígito, como un punto decimal (C<oct> sólo maneja números enteros no negativos, no enteros negativos o en punto flotante).
 
-=item open GESTOR_FICHERO,EXPR
-X<open> X<pipe> X<file, open> X<fopen> X<fichero, open>
+=item open GESTOR_ARCHIVO,EXPR
+X<open> X<pipe> X<file, open> X<fopen> X<archivo, open>
 
-=item open GESTOR_FICHERO,MODO,EXPR
+=item open GESTOR_ARCHIVO,MODO,EXPR
 
-=item open GESTOR_FICHERO,MODO,EXPR,LISTA
+=item open GESTOR_ARCHIVO,MODO,EXPR,LISTA
 
-=item open GESTOR_FICHERO,MODO,REFERENCIA
+=item open GESTOR_ARCHIVO,MODO,REFERENCIA
 
-=item open GESTOR_FICHERO
+=item open GESTOR_ARCHIVO
 
-Abre el archivo cuyo nombre viene dado por EXPR, y lo asocia con GESTOR_FICHERO.
+Abre el archivo cuyo nombre viene dado por EXPR, y lo asocia con GESTOR_ARCHIVO.
 
-Ejemplos sencillos para abrir un fichero en modo lectura:
+Ejemplos sencillos para abrir un archivo en modo lectura:
 
     open(my $fh, '<', "entrada.txt") or die $!;
 
@@ -2127,21 +2127,21 @@ y para escritura:
 
 (Lo siguiente es una referencia general a open(): para una introducción más suave puede considerar L<perlopentut>).
 
-Si GESTOR_FICHERO es un variable escalar indefinida (o elemento de un array o hash) la variable es asignada a una referencia a un nuevo gestor de fichero anónimo; de lo contrario, si GESTOR_FICHERO es una expresión, su valor se utiliza como el nombre del gestor de archivo real buscado.  (Esto se considera una referencia simbólica, por lo que C<use strict 'refs'> I<no> debe estar activada).
+Si GESTOR_ARCHIVO es un variable escalar indefinida (o elemento de un array o hash) la variable es asignada a una referencia a un nuevo gestor de archivo anónimo; de lo contrario, si GESTOR_ARCHIVO es una expresión, su valor se utiliza como el nombre del gestor de archivo real buscado.  (Esto se considera una referencia simbólica, por lo que C<use strict 'refs'> I<no> debe estar activada).
 
-Si EXPR se omite, la variable escalar del mismo nombre que el GESTOR_FICHERO contiene el nombre del fichero.  (Note que las variables léxicas -las declaradas con C<my>- no servirán para este propósito; así que si está usando C<my>, especifique EXPR en su llamada a open).
+Si EXPR se omite, la variable escalar del mismo nombre que el GESTOR_ARCHIVO contiene el nombre del archivo.  (Note que las variables léxicas -las declaradas con C<my>- no servirán para este propósito; así que si está usando C<my>, especifique EXPR en su llamada a open).
 
-Si se especifican tres o más argumentos entonces el modo de apertura y el nombre del fichero están separados. Si MODO es C<< '<' >> o nada, el archivo se abre para lectura.  Si MODO es C<< '>' >>, el archivo es truncado y abierto para salida, siendo creado si es necesario.  Si MODO es C<<< '>>' >>>, el archivo se abre en modo añadir, y de nuevo, será creado si es necesario.
+Si se especifican tres o más argumentos entonces el modo de apertura y el nombre del archivo están separados. Si MODO es C<< '<' >> o nada, el archivo se abre para lectura.  Si MODO es C<< '>' >>, el archivo es truncado y abierto para salida, siendo creado si es necesario.  Si MODO es C<<< '>>' >>>, el archivo se abre en modo añadir, y de nuevo, será creado si es necesario.
 
-Puede poner un C<'+'> en frente de C<< '>' >> o C<< '<' >> para indicar que desea tanto acceder al fichero en lectura como en escritura; C<< '+<' >> casi siempre es lo preferido para la lectura/escritura de actualizaciones -el modo C<< '+>' >> primero borraría el fichero-.  Por lo general, no puede utilizar el modo de lectura y escritura para la actualización de ficheros de texto, ya que tienen registros de longitud variable.  Ver la opción B<-i> en L<perlrun> para una mejor aproximación.  El archivo se crea con permisos de C<0666> modificados por el valor de C<umask> del proceso.
+Puede poner un C<'+'> en frente de C<< '>' >> o C<< '<' >> para indicar que desea tanto acceder al archivo en lectura como en escritura; C<< '+<' >> casi siempre es lo preferido para la lectura/escritura de actualizaciones -el modo C<< '+>' >> primero borraría el archivo-.  Por lo general, no puede utilizar el modo de lectura y escritura para la actualización de archivos de texto, ya que tienen registros de longitud variable.  Ver la opción B<-i> en L<perlrun> para una mejor aproximación.  El archivo se crea con permisos de C<0666> modificados por el valor de C<umask> del proceso.
 
 Estos prefijos se corresponden con los modos de la función fopen(3) de C<'r'>, C<'r+'>, C<'w'>, C<'w+'>, C<'a'> y C<'a+'>.
 
-En la forme de dos argumentos (y un argumento) de la llamada, el modo y el nombre del fichero debe ser concatenados (en ese orden), opcionalmente separados por espacios.  Puede omitir el modo en estos formatos cuando el modo sea C<< '<' >>.
+En la forme de dos argumentos (y un argumento) de la llamada, el modo y el nombre del archivo debe ser concatenados (en ese orden), opcionalmente separados por espacios.  Puede omitir el modo en estos formatos cuando el modo sea C<< '<' >>.
 
-Si el nombre del fichero empieza por C<'|'>, el nombre del fichero es interpretado como un comando a quien le entubamos nuestra salida, y si el nombre del fichero termina con un C<'|'>, el nombre del fichero es interpretado como un comando que entuba su salida hacia nosotros.  Ver L<perlipc/"Usando open() por IPC"> para más ejemplos de sobre esto.  (No se le permite hacer un C<open> a un comando que entube tanto en la entrada I<como> en la salida, pero véase L<IPC::Open2>, L<IPC::Open3>, y L<perlipc/"Comunicación bidireccional con otro proceso"> para alternativas sobre esto).
+Si el nombre del archivo empieza por C<'|'>, el nombre del archivo es interpretado como un comando a quien le entubamos nuestra salida, y si el nombre del archivo termina con un C<'|'>, el nombre del archivo es interpretado como un comando que entuba su salida hacia nosotros.  Ver L<perlipc/"Usando open() por IPC"> para más ejemplos de sobre esto.  (No se le permite hacer un C<open> a un comando que entube tanto en la entrada I<como> en la salida, pero véase L<IPC::Open2>, L<IPC::Open3>, y L<perlipc/"Comunicación bidireccional con otro proceso"> para alternativas sobre esto).
 
-Para tres o más argumentos, cuando MODO es C<'|-'>, el nombre del fichero se interpreta como un comando cuya salida va a ser entubada, y si MODO es <'-|'>, el nombre del fichero es interpretado como un comando que entuba la salida hacia nosotros.  En la forma de dos argumentos (y un argumento), debe sustituir el guión (C<'-'>) con el comando.
+Para tres o más argumentos, cuando MODO es C<'|-'>, el nombre del archivo se interpreta como un comando cuya salida va a ser entubada, y si MODO es <'-|'>, el nombre del archivo es interpretado como un comando que entuba la salida hacia nosotros.  En la forma de dos argumentos (y un argumento), debe sustituir el guión (C<'-'>) con el comando.
 Ver L<perlipc/"Usando open() por IPC"> para más ejemplos de sobre esto.
 (No se le permite hacer un C<open> a un comando que entube tanto en la entrada I<como> en la salida, pero véase L<IPC::Open2>, L<IPC::Open3>, y L<perlipc/"Comunicación bidireccional"> para alternativas sobre esto).
 
@@ -2151,10 +2151,10 @@ En la forma de dos argumentos (y de un argumento), abriendo C<< '<-' >> o C<'-'>
 
 Puede usar la forma de tres argumentos de open() para especificar capas  E/S (algunas veces referidas como "disciplinas") para aplicar al gestor que afecta al modo en que la entrada y salida son procesadas (véase L<open> y L<PerlIO> para más detalles). Por ejemplo:
 
-  open(my $fh, "<:encoding(UTF-8)", "fichero")
-    || die "no puedo abrir fichero codificado en UTF-8: $!";
+  open(my $fh, "<:encoding(UTF-8)", "archivo")
+    || die "no puedo abrir archivo codificado en UTF-8: $!";
 
-abre el fichero codificado en UTF-8 que contiene caracteres Unicode; ver L<perluniintro>. Tenga en cuenta que si las capas se especifican en la forma de tres argumentos, entonces las capas por defecto almacenadas en ${^OPEN} (ver L<perlvar>; normalmente fijados por el pragma B<open> o la opción B<-CioD>) son ignoradas.
+abre el archivo codificado en UTF-8 que contiene caracteres Unicode; ver L<perluniintro>. Tenga en cuenta que si las capas se especifican en la forma de tres argumentos, entonces las capas por defecto almacenadas en ${^OPEN} (ver L<perlvar>; normalmente fijados por el pragma B<open> o la opción B<-CioD>) son ignoradas.
 
 open() devuelve un valor distinto de cero en caso de éxito, indefinido en otro caso.  Si el C<open> contiene una tubería, el valor de retorno pasa a ser el pid del subproceso.
 
@@ -2172,7 +2172,7 @@ Desde v5.8.0, Perl ha sido construido para que use PerlIO por defecto.  A menos 
 
     open($fh, '>', \$variable) || ..
 
-Para (re)abrir C<STDOUT> o C<STDERR> como un fichero en memoria, primero, cierrelos:
+Para (re)abrir C<STDOUT> o C<STDERR> como un archivo en memoria, primero, cierrelos:
 
     close STDOUT;
     open STDOUT, '>', \$variable or die "No puedo abrir STDOUT: $!";
@@ -2201,22 +2201,22 @@ Ejemplos generales:
     open(EXTRACT, "|sort >Tmp$$")            # $$ es nuestro proceso id
         or die "No puedo iniciar sort: $!";
 
-    # ficheros en memoria
+    # archivos en memoria
     open(MEMORIA,'>', \$var)
-        or die "No puedo abrir el fichero en memoria: $!";
+        or die "No puedo abrir el archivo en memoria: $!";
     print MEMORIA "foo!\n";              # la salida aparecerá en $var
 
-    # procesa la lista de ficheros pasados como argumentos junto con cualquier fichero a incluir
+    # procesa la lista de archivos pasados como argumentos junto con cualquier archivo a incluir
 
-    foreach $fichero (@ARGV) {
-        procesa($fichero, 'fh00');
+    foreach $archivo (@ARGV) {
+        procesa($archivo, 'fh00');
     }
 
     sub procesa {
-        my($fichero, $entrada) = @_;
+        my($archivo, $entrada) = @_;
         $entrada++;    # esto es un incremento de cadena
-        unless (open($entrada, $fichero)) {
-            print STDERR "No puedo abrir $fichero: $!\n";
+        unless (open($entrada, $archivo)) {
+            print STDERR "No puedo abrir $archivo: $!\n";
             return;
         }
 
@@ -2232,7 +2232,7 @@ Ejemplos generales:
 
 Ver L<perliol> para información detallada sobre PerlIO.
 
-Puede también, en la tradición de Bourne shell, especificar una EXPR comenzando con C<< '>&' >>, en cuyo caso el resto de la cadena se interpreta como el nombre de un gestor de archivo (o descriptor de fichero, si es numérico) para que sea duplicado (con C<dup(2)> ) y luego abierto.  Puede usar C<&> después de C<< > >>, C<<< >> >>>, C<< < >>, C<< +> >>, C<<< +>> >>>, y C<< +< >>.
+Puede también, en la tradición de Bourne shell, especificar una EXPR comenzando con C<< '>&' >>, en cuyo caso el resto de la cadena se interpreta como el nombre de un gestor de archivo (o descriptor de archivo, si es numérico) para que sea duplicado (con C<dup(2)> ) y luego abierto.  Puede usar C<&> después de C<< > >>, C<<< >> >>>, C<< < >>, C<< +> >>, C<<< +>> >>>, y C<< +< >>.
 El modo que especifique debe coincidir con el modo del gestor de archivo original.
 (Duplicar un gestor de archivo no tiene en cuenta cualquier contenido existente de los buffers de E/S). Si utiliza la forma de tres arg. entonces puede pasar un número, el nombre de un gestor de archivo o la normal "referencia a un glob".
 
@@ -2275,7 +2275,7 @@ o
 
     open(FH, ">>&=OLDFH")
 
-Ser parco en gestores de archivo también es útil (además de ser parsimoniosos), por ejemplo cuando algo depende de descriptores de fichero, como por ejemplo, el uso del bloqueo flock().  Si hace sólo C<< open(A, '>>&B') >>, el gestor de archivo A no tendrá el mismo descriptor de archivo que B, y por lo tanto flock(A) no hará un flock(B), y viceversa.  Pero con C<< open(A, '>>&=B') >> los gestores de archivo de compartirán el mismo descriptor de fichero.
+Ser parco en gestores de archivo también es útil (además de ser parsimoniosos), por ejemplo cuando algo depende de descriptores de archivo, como por ejemplo, el uso del bloqueo flock().  Si hace sólo C<< open(A, '>>&B') >>, el gestor de archivo A no tendrá el mismo descriptor de archivo que B, y por lo tanto flock(A) no hará un flock(B), y viceversa.  Pero con C<< open(A, '>>&=B') >> los gestores de archivo de compartirán el mismo descriptor de archivo.
 
 Tenga en cuenta que si está usando Perls más viejos que v5.8.0, Perl usará las bibliotecas estándar C de fdopen() para ejecutar la funcionalidad de "=".
 En muchos sistemas Unix fdopen() falla cuando los descriptores de archivo exceden de un valor determinado, por lo general 255.  Para Perls v5.8.0 y posteriores, PerlIO suele ser el predeterminado.
@@ -2292,10 +2292,10 @@ Las siguientes tripletas son, más o menos equivalentes:
     open(FOO, '|-') || exec 'tr', '[a-z]', '[A-Z]';
     open(FOO, '|-', "tr", '[a-z]', '[A-Z]');
 
-    open(FOO, "cat -n '$fichero'|");
-    open(FOO, '-|', "cat -n '$fichero'");
-    open(FOO, '-|') || exec 'cat', '-n', $fichero;
-    open(FOO, '-|', "cat", '-n', $fichero);
+    open(FOO, "cat -n '$archivo'|");
+    open(FOO, '-|', "cat -n '$archivo'");
+    open(FOO, '-|') || exec 'cat', '-n', $archivo;
+    open(FOO, '-|', "cat", '-n', $archivo);
 
 El último ejemplo de cada bloque muestra la tubería como "forma de lista", que todavía no está soportado en todas las plataformas.  Una buena regla general es que si la plataforma tiene un verdadero C<fork()> (en otras palabras, si su plataforma es Unix), puede utilizar la forma de lista.
 
@@ -2303,35 +2303,35 @@ Ver L<perlipc/"Aperturas seguras de tuberías"> para más ejemplos sobre esto.
 
 Empezando con v5.6.0, Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (véase L <perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier identificador abierto.
 
-En sistemas que apoyan la bandera close-on-exec en ficheros, esta bandera se establecerá para el descriptor de fichero abierto recientemente según lo determinado por el valor de $^F.  Ver L<perlvar/$^F>.
+En sistemas que apoyan la bandera close-on-exec en archivos, esta bandera se establecerá para el descriptor de archivo abierto recientemente según lo determinado por el valor de $^F.  Ver L<perlvar/$^F>.
 
 Cerrando cualquier gestor de archivo entubado hace que el proceso padre espere que el hijo termine, y devuelva el valor de estado en C<$?> y en C<${^CHILD_ERROR_NATIVE}>.
 
-El nombre del fichero pasado a las formas de dos argumentos (o de un argumento) de open() terminará con los espacios en blanco iniciales y finales eliminados, y la normal redirección de los caracteres activada.  Esta propiedad, conocida como "open() mágico", a menudo se puede utilizar con buenos resultados.  Un usuario podría especificar un nombre de fichero de F<"rsh cat fichero |">, o usted puede cambiar ciertos nombres de fichero, según lo que necesite:
+El nombre del archivo pasado a las formas de dos argumentos (o de un argumento) de open() terminará con los espacios en blanco iniciales y finales eliminados, y la normal redirección de los caracteres activada.  Esta propiedad, conocida como "open() mágico", a menudo se puede utilizar con buenos resultados.  Un usuario podría especificar un nombre de archivo de F<"rsh cat archivo |">, o usted puede cambiar ciertos nombres de archivo, según lo que necesite:
 
-    $fichero =~ s/(.*\.gz)\s*$/gzip -dc < $1|/;
-    open(FH, $fichero) or die "No puedo abrir $fichero: $!";
+    $archivo =~ s/(.*\.gz)\s*$/gzip -dc < $1|/;
+    open(FH, $archivo) or die "No puedo abrir $archivo: $!";
 
-Use la forma de 3 argumentos para abrir un fichero con una cantidad arbitraria de caracteres extraños en él,
+Use la forma de 3 argumentos para abrir un archivo con una cantidad arbitraria de caracteres extraños en él,
 
-    open(FOO, '<', $fichero);
+    open(FOO, '<', $archivo);
 
 de lo contrario es necesario proteger los espacios en blanco iniciales y finales:
 
-    $fichero =~ s#^(\s)#./$1#;
-    open(FOO, "< $fichero\0");
+    $archivo =~ s#^(\s)#./$1#;
+    open(FOO, "< $archivo\0");
 
 (esto quizás no funcione en algunos sistemas de archivos extraños).  Uno debe elegir escrupulosamente entre la I<magia> y la forma de 3 argumentos de open():
 
     open IN, $ARGV[0];
 
-permitirá al usuario especificar un argumento de la forma C<"rsh cat fichero |">, pero no funcionará en un nombre de fichero que tenga un espacio al final, mientras que
+permitirá al usuario especificar un argumento de la forma C<"rsh cat archivo |">, pero no funcionará en un nombre de archivo que tenga un espacio al final, mientras que
 
     open IN, '<', $ARGV[0];
 
 tendrá exactamente las restricciones contrarias.
 
-Si busca un "auténtico" C<open> como en C (ver C<open(2)> en su sistema), entonces debe usar la función C<sysopen>, que no supone tal magia (pero puede utilizar sutilmente diferentes modos de fichero que el open() de Perl, que es asignado a la función en C fopen()).  Esta es otra manera de proteger los nombres de archivo de la interpretación.  Por ejemplo:
+Si busca un "auténtico" C<open> como en C (ver C<open(2)> en su sistema), entonces debe usar la función C<sysopen>, que no supone tal magia (pero puede utilizar sutilmente diferentes modos de archivo que el open() de Perl, que es asignado a la función en C fopen()).  Esta es otra manera de proteger los nombres de archivo de la interpretación.  Por ejemplo:
 
     use IO::Handle;
     sysopen(HANDLE, $ruta, O_RDWR|O_CREAT|O_EXCL)
@@ -2339,16 +2339,16 @@ Si busca un "auténtico" C<open> como en C (ver C<open(2)> en su sistema), enton
     $anterior_fh = select(HANDLE); $| = 1; select($anterior_fh);
     print HANDLE "algo $$\n";
     seek(HANDLE, 0, 0);
-    print "El fichero contiene: ", <HANDLE>;
+    print "El archivo contiene: ", <HANDLE>;
 
 Utilizando el constructor del paquete C<IO::Handle> (o una de sus subclases, como C<IO::File> o C<IO::Socket>), puede generar gestores de archivo anónimos que tienen el ámbito de cualquiera de las variables que contengan referencias a ellas, y se cierran automáticamente cuando salgan del ámbito de aplicación:
 
     use IO::File;
     #...
-    sub leer_mifichero {
+    sub leer_miarchivo {
         my $TODO = shift;
         my $handle = IO::File->new;
-        open($handle, "mifichero") or die "mifichero: $!";
+        open($handle, "miarchivo") or die "miarchivo: $!";
         $primero = <$handle>
             or return ();     # Cerrado automáticamente aquí.
         mung $primero or die "mung falló";  # O aquí.
@@ -2767,7 +2767,7 @@ C<x> y C<X> aceptan el modificar C<!> para actuar como comando de alineamiento: 
 
 puede tener que usar la plantilla C<c x![d] d c[2]>.  Esto supone que los dobles deben estar alineados con el tamaño de un doble.
 
-Para los comandos de alineación, un C<contador> de 0 es equivalente a un C<contador> de 1; ambos son sentencias no efectivas.
+Para los comandos de alineación, un C<contador> de 0 es equivalente a un C<contador> de 1; ambos son instrucciones no efectivas.
 
 =item *
 
@@ -2862,7 +2862,7 @@ X<package> X<module> X<namespace> X<version> X<paquete> X<módulo> X<espacio de 
 
 Declara que la compilación está en el espacio de nombres indicado.  El alcance de la declaración del paquete es desde la misma declaración hasta el final del bloque que lo engloba, un archivo o eval (lo mismo que el operador C<my>).
 Todos los identificadores dinámicos no cualificados estarán en este espacio de nombres.
-Una sentencia package afecta sólo a las variables dinámicas, incluyendo las que haya usado con C<local>, pero I<no> a las variables léxicas, que se crean con C<my> (u C<our> (o C <state>)).  Normalmente será la primera declaración en un archivo incluido por medio de un C<require> o C<use>.  Usted puede cambiar en un paquete en más de un lugar, ya que esto sólo determina qué tabla de símbolos por defecto será utilizada por el compilador para el resto de ese bloque.  Puede hacer referencia a los identificadores de otros paquetes distintos del actual anteponiendo el identificador con el nombre del paquete y un dos puntos doble, como en C<$AlgunPaquete::var> o C<EstePaquete::CONTROLADOR_ENTRADA>.  Si el nombre del paquete se omite, se asume que es C<main>.  Es decir, C<$::sail> es equivalente a C<$main::sail> (y también a C<$main'sail>, algo que se puede ver en código muy antiguo, escrito en su mayoría en Perl 4).
+Una instrucción package afecta sólo a las variables dinámicas, incluyendo las que haya usado con C<local>, pero I<no> a las variables léxicas, que se crean con C<my> (u C<our> (o C <state>)).  Normalmente será la primera declaración en un archivo incluido por medio de un C<require> o C<use>.  Usted puede cambiar en un paquete en más de un lugar, ya que esto sólo determina qué tabla de símbolos por defecto será utilizada por el compilador para el resto de ese bloque.  Puede hacer referencia a los identificadores de otros paquetes distintos del actual anteponiendo el identificador con el nombre del paquete y un dos puntos doble, como en C<$AlgunPaquete::var> o C<EstePaquete::CONTROLADOR_ENTRADA>.  Si el nombre del paquete se omite, se asume que es C<main>.  Es decir, C<$::sail> es equivalente a C<$main::sail> (y también a C<$main'sail>, algo que se puede ver en código muy antiguo, escrito en su mayoría en Perl 4).
 
 Si se indica VERSIÓN, C<package> inicializa la variable C<$VERSION> en el espacio de nombres indicado a un objeto L<version> con la VERSIÓN indicada.  VERSIÓN debe ser un número de versión al estilo "estricto", según lo define el módulo L<version>: un número decimal positivo (entero o decimal) sin exponentes o una v-cadena con una 'v' precedente con al menos tres componentes.  Debe ajustar el valor de C<$VERSION> solo una vez por paquete.
 
@@ -2894,7 +2894,7 @@ X<pos> X<match, position> X<coincidencia, posición>
 
 Devuelve el desplazamiento donde la última búsqueda C<m//g> terminó para la variable en cuestión (C<$_> es usada cuando no se especifica la variable).  Tenga en cuenta que 0 es un desplazamiento válido de la coincidencia.  C<undef> indica que la posición de búsqueda se restablece (generalmente debido a un fallo de coincidencia, pero también puede ser porque aún no ha sido ejecutada la coincidencia sobre el escalar). C<pos> accede directamente a la ubicación utilizada por el motor de expresiones regulares para almacenar el desplazamiento, por lo que asignar a C<pos> cambiará ese desplazamiento, por lo que también influirá en la aserción de ancho cero C<\G> en las expresiones regulares. Debido a que una coincidencia C<m//gc> fallida no reinicia el desplazamiento, el retorno de C<pos> no cambiará en ese caso.  Ver L<perlre> y L<perlop>.
 
-=item print GESTOR_FICHERO LISTA
+=item print GESTOR_ARCHIVO LISTA
 X<print>
 
 =item print LISTA
@@ -2902,22 +2902,22 @@ X<print>
 =item print
 
 Imprime una cadena o una lista de cadenas.  Devuelve verdadero si tuvo éxito.
-GESTOR_FICHERO puede ser una variable escalar conteniendo el nombre o una referencia al gestor de archivo, introduciendo así un nivel de indirección.  (NOTA: Si GESTOR_FICHERO es una variable y el siguiente símbolo es un término, puede ser mal interpretado como un operador a menos que se interponga un C<+> o poner entre paréntesis los argumentos). GESTOR_FICHERO, si se omite, se imprime en la salida estándar por defecto, o al canal de salida seleccionado la última vez, ver L</select>.  Si la LISTA también se omite, se imprime C<$_> al actual controlador de salida seleccionado.
+GESTOR_ARCHIVO puede ser una variable escalar conteniendo el nombre o una referencia al gestor de archivo, introduciendo así un nivel de indirección.  (NOTA: Si GESTOR_ARCHIVO es una variable y el siguiente símbolo es un término, puede ser mal interpretado como un operador a menos que se interponga un C<+> o poner entre paréntesis los argumentos). GESTOR_ARCHIVO, si se omite, se imprime en la salida estándar por defecto, o al canal de salida seleccionado la última vez, ver L</select>.  Si la LISTA también se omite, se imprime C<$_> al actual controlador de salida seleccionado.
 Para configurar el controlador de salida predeterminada a otro valor distinto de STDOUT, use el operador select.  El valor actual de C<$,> (si lo tiene) se imprime entre cada elemento de la lista.  El valor actual de C<$\> (si lo tiene) se imprime después de que toda la lista haya sido impresa.  Debido a que print toma una LISTA, cualquier cosa en la LISTA se evalúa en contexto de lista, y cualquier subrutina que llame tendrá una o más de sus expresiones evaluadas en contexto de lista.  También tenga cuidado de no seguir la palabra clave print con un paréntesis de apertura a menos que desee que el correspondiente paréntesis de cierre ponga fin a los argumentos de la impresión; poner paréntesis alrededor de todos los argumentos (o interponer un C<+>, pero esto no parece tan bonito).
 
-Tenga en cuenta que si usted está almacenando el GESTOR_FICHERO en un array, o si está usando cualquier otra expresión más compleja que una variable escalar para recuperarlo, tendrá que utilizar un bloque que retorne el valor del gestor de archivo:
+Tenga en cuenta que si usted está almacenando el GESTOR_ARCHIVO en un array, o si está usando cualquier otra expresión más compleja que una variable escalar para recuperarlo, tendrá que utilizar un bloque que retorne el valor del gestor de archivo:
 
-    print { $ficheros[$i] } "cosas\n";
+    print { $archivos[$i] } "cosas\n";
     print { $OK ? STDOUT : STDERR } "cosas\n";
 
 Imprimir a una tubería o socket cerrados generará una señal SIGPIPE.  Ver L<perlipc> para más información sobre el manejo de señales.
 
-=item printf GESTOR_FICHERO FORMATO, LISTA
+=item printf GESTOR_ARCHIVO FORMATO, LISTA
 X<printf>
 
 =item printf FORMATO, LISTA
 
-Equivalente a C<print GESTOR_FICHERO sprintf(FORMATO, LISTA)>, excepto que C<$\> (el separador de registro a la salida) no es añadida.  El primer argumento de la lista se interpreta como el formato para C<printf>. Ver C<sprintf> para una explicación del argumento formato.  Si C<use locale> está activo, y POSIX::setlocale() ha sido llamada, el carácter utilizado para el separador decimal en números formateados en punto flotante se ve afectado por la configuración regional de LC_NUMERIC.  Ver L<perllocale> y L<POSIX>.
+Equivalente a C<print GESTOR_ARCHIVO sprintf(FORMATO, LISTA)>, excepto que C<$\> (el separador de registro a la salida) no es añadida.  El primer argumento de la lista se interpreta como el formato para C<printf>. Ver C<sprintf> para una explicación del argumento formato.  Si C<use locale> está activo, y POSIX::setlocale() ha sido llamada, el carácter utilizado para el separador decimal en números formateados en punto flotante se ve afectado por la configuración regional de LC_NUMERIC.  Ver L<perllocale> y L<POSIX>.
 
 No caiga en la trampa de utilizar un C<printf> cuando un simple C<print> valdría.  El C<print> es más eficiente y menos propenso a errores.
 
@@ -2964,26 +2964,26 @@ Si se omite EXPR, se usa C<$_>.
 
 quotemeta (y C<\Q> ... C<\E>) son útiles cuando se interpolan cadenas en expresiones regulares, porque por defecto una variable interpolada será considerada una mini expresión regular. Por ejemplo:
 
-    my $sentencia = 'El rápido zorro marrón saltó sobre el perezoso perro';
+    my $instruccion = 'El rápido zorro marrón saltó sobre el perezoso perro';
     my $subcadena = 'rápido.*?zorro';
-    $sentencia =~ s{$subcadena}{gran lobo malo};
+    $instruccion =~ s{$subcadena}{gran lobo malo};
 
-Hará que C<$sentencia> se convierta en C<'El gran lobo malo saltó sobre ...'>.
+Hará que C<$instruccion> se convierta en C<'El gran lobo malo saltó sobre ...'>.
 
 De otra forma:
 
-    my $sentencia = 'El rápido zorro marrón saltó sobre el perezoso perro';
+    my $instruccion = 'El rápido zorro marrón saltó sobre el perezoso perro';
     my $subcadena = 'rápido.*?zorro';
-    $sentencia =~ s{\Q$subcadena\E}{gran lobo malo};
+    $instruccion =~ s{\Q$subcadena\E}{gran lobo malo};
 
 o:
 
-    my $sentencia = 'El rápido zorro marrón saltó sobre el perezoso perro';
+    my $instruccion = 'El rápido zorro marrón saltó sobre el perezoso perro';
     my $subcadena = 'rápido.*?zorro';
     my $subcadena_escapada = quotemeta($subcadena);
-    $sentencia =~ s{$subcadena_escapada}{gran lobo malo};
+    $instruccion =~ s{$subcadena_escapada}{gran lobo malo};
 
-Ambas dejará la sentencia como estaba. Normalmente, deben ser usados quotemeta() o C<\Q> al aceptar cadenas de entrada provenientes del usuario.
+Ambas dejará la instrucción como estaba. Normalmente, deben ser usados quotemeta() o C<\Q> al aceptar cadenas de entrada provenientes del usuario.
 
 =item rand EXPR
 X<rand> X<random> X<aleatorio>
@@ -3001,12 +3001,12 @@ devuelve un número entero aleatorio entre C<0> y C<9>, inclusive.
 
 (Nota: si su función rand devuelve constantemente números demasiado grandes o demasiado pequeños, entonces su versión de Perl fue, probablemente, compilada con un número incorrecto de RANDBITS).
 
-=item read GESTOR_FICHERO,ESCALAR,LONGITUD,DESPLAZAMIENTO
-X<read> X<file, read> X<fichero, leer>
+=item read GESTOR_ARCHIVO,ESCALAR,LONGITUD,DESPLAZAMIENTO
+X<read> X<file, read> X<archivo, leer>
 
-=item read GESTOR_FICHERO,ESCALAR,LONGITUD
+=item read GESTOR_ARCHIVO,ESCALAR,LONGITUD
 
-Intento de leer LONGITUD I<caracteres> de datos en la variable ESCALAR del GESTOR_FICHERO especificado.  Devuelve el número de caracteres actualmente leídos, C<0> al final del fichero, o undef si hubo un error (en este último caso se actualiza el valor de C<$!>).  ESCALAR crecerá o se reducirá de manera que el último carácter leído es el último carácter del escalar después de la lectura.
+Intento de leer LONGITUD I<caracteres> de datos en la variable ESCALAR del GESTOR_ARCHIVO especificado.  Devuelve el número de caracteres actualmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso se actualiza el valor de C<$!>).  ESCALAR crecerá o se reducirá de manera que el último carácter leído es el último carácter del escalar después de la lectura.
 
 Un DESPLAZAMIENTO puede ser especificado para colocar los datos leídos en algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
 
@@ -3020,7 +3020,7 @@ X<readdir>
 Devuelve la siguiente entrada de directorio de un directorio abierto con C<opendir>.
 Si se usa en contexto de lista, devuelve el resto de las entradas en el directorio.  Si no hay más entradas, devuelve el valor indefinido en el contexto escalar y la lista vacía en el contexto de lista.
 
-Si está planeando hacer test de ficheros de los valores retornados por un C<readdir>, más le vale anteponer el directorio en cuestión.  De lo contrario, porque no hicimos un C<chdir> antes, se estará probando en un archivo incorrecto.
+Si está planeando hacer test de archivos de los valores retornados por un C<readdir>, más le vale anteponer el directorio en cuestión.  De lo contrario, porque no hicimos un C<chdir> antes, se estará probando en un archivo incorrecto.
 
     opendir(my $dh, $algun_dir) || die "no puedo opendir $algun_dir: $!";
     @dots = grep { /^\./ && -f "$algun_dir/$_" } readdir($dh);
@@ -3039,9 +3039,9 @@ A partir de Perl 5.11.2 puede usar un simple C<readdir> en un bucle C<while>, qu
 =item readline
 X<readline> X<gets> X<fgets>
 
-Lee del gestor de archivo cuyo typeglob esté contenido en EXPR (o desde *ARGV si se omite EXPR).  En contexto escalar, cada llamada lee y devuelve la siguiente línea hasta que se alcance el final del fichero, en cuyo caso la ulterior llamada devuelve C<undef>.  En contexto de lista, lee hasta el final de fichero y devuelve una lista de líneas.  Note que la noción de "línea" usada aquí es según tenga definido C<$/> o C<$INPUT_RECORD_SEPARATOR>.  Ver L<perlvar/"$/">.
+Lee del gestor de archivo cuyo typeglob esté contenido en EXPR (o desde *ARGV si se omite EXPR).  En contexto escalar, cada llamada lee y devuelve la siguiente línea hasta que se alcance el final del archivo, en cuyo caso la ulterior llamada devuelve C<undef>.  En contexto de lista, lee hasta el final de archivo y devuelve una lista de líneas.  Note que la noción de "línea" usada aquí es según tenga definido C<$/> o C<$INPUT_RECORD_SEPARATOR>.  Ver L<perlvar/"$/">.
 
-Cuando C<$/> tenga un valor de C<undef>, cuando C<readline> esté en contexto escalar (es decir, modo de absorción completa de fichero), y cuando se esté leyendo un fichero vacío, devuelve C<''> la primera vez, seguido a continuación de C<undef>.
+Cuando C<$/> tenga un valor de C<undef>, cuando C<readline> esté en contexto escalar (es decir, modo de absorción completa de archivo), y cuando se esté leyendo un archivo vacío, devuelve C<''> la primera vez, seguido a continuación de C<undef>.
 
 Esto es la función interna que implementa el operador C<< <EXPR> >>, pero puede usarla directamente.  El operador C<< <EXPR> >> se discute con más detalle en L<perlop/"Operadores E/S">.
 
@@ -3187,32 +3187,32 @@ Especificando VERSIÓN como un literal de la forma v5.6.1, debe, generalmente, e
     require 5.6.1;      # ídem
     require 5.006_001;  # idem; preferido para mantener la compatibilidad
 
-De lo contrario, C<require> demanda que un archivo de biblioteca sea incluido si no se hubiera incluido ya.  El archivo es incluido a través del mecanismo do FICHERO, que es esencialmente lo mismo que una variedad de C<eval> con la advertencia de que las variables léxicas en la secuencia de comandos del programa serán invisibles para el código incluido.  Tiene una semántica similar a la subrutina siguiente:
+De lo contrario, C<require> demanda que un archivo de biblioteca sea incluido si no se hubiera incluido ya.  El archivo es incluido a través del mecanismo do ARCHIVO, que es esencialmente lo mismo que una variedad de C<eval> con la advertencia de que las variables léxicas en la secuencia de comandos del programa serán invisibles para el código incluido.  Tiene una semántica similar a la subrutina siguiente:
 
     sub require {
-       my ($nombrefichero) = @_;
-       if (exists $INC{$nombrefichero}) {
-           return 1 if $INC{$nombrefichero};
+       my ($nombrearchivo) = @_;
+       if (exists $INC{$nombrearchivo}) {
+           return 1 if $INC{$nombrearchivo};
            die "Falló la compilación en require";
        }
-       my ($realnombrefichero,$resultado);
+       my ($realnombrearchivo,$resultado);
        ITER: {
            foreach $prefijo (@INC) {
-               $realnombrefichero = "$prefijo/$nombrefichero";
-               if (-f $realnombrefichero) {
-                   $INC{$nombrefichero} = $realnombrefichero;
-                   $resultado = do $realnombrefichero;
+               $realnombrearchivo = "$prefijo/$nombrearchivo";
+               if (-f $realnombrearchivo) {
+                   $INC{$nombrearchivo} = $realnombrearchivo;
+                   $resultado = do $realnombrearchivo;
                    last ITER;
                }
            }
-           die "No encuentro $nombrefichero en \@INC";
+           die "No encuentro $nombrearchivo en \@INC";
        }
        if ($@) {
-           $INC{$nombrefichero} = undef;
+           $INC{$nombrearchivo} = undef;
            die $@;
        } elsif (!$resultado) {
-           delete $INC{$nombrefichero};
-           die "$nombrefichero no devolvió un valor verdadero";
+           delete $INC{$nombrearchivo};
+           die "$nombrearchivo no devolvió un valor verdadero";
        } else {
            return $resultado;
        }
@@ -3220,9 +3220,9 @@ De lo contrario, C<require> demanda que un archivo de biblioteca sea incluido si
 
 Tenga en cuenta que el archivo no será incluido dos veces con el mismo nombre especificado.
 
-El archivo debe devolver verdadero como última sentencia para indicar una ejecución exitosa de cualquier código de inicialización, por lo que es habitual a tal efecto que un archivo termine con un C<1;> a menos que esté seguro de que devolverá cierto, de otra manera.  Pero es mejor sólo para poner C<1;>, en caso de que añada más sentencias.
+El archivo debe devolver verdadero como última instrucción para indicar una ejecución exitosa de cualquier código de inicialización, por lo que es habitual a tal efecto que un archivo termine con un C<1;> a menos que esté seguro de que devolverá cierto, de otra manera.  Pero es mejor sólo para poner C<1;>, en caso de que añada más instrucciones.
 
-Si EXPR es una simple palabra, el require asume una extensión "F<.pm>" y le reemplaza "F<::>" con "F</>" en el nombre del fichero, para que sea fácil cargar módulos estándar.  Esta forma de cargar módulos no tiene el riesgo de alterar el espacio de nombres propio.
+Si EXPR es una simple palabra, el require asume una extensión "F<.pm>" y le reemplaza "F<::>" con "F</>" en el nombre del archivo, para que sea fácil cargar módulos estándar.  Esta forma de cargar módulos no tiene el riesgo de alterar el espacio de nombres propio.
 
 En otras palabras, si intenta esto:
 
@@ -3245,13 +3245,13 @@ Ahora que sabe cómo C<require> busca archivos con un argumento simple, hay una 
 
 También puede insertar enganches en la facilidad import, poniendo código Perl directamente en el array C<@INC>.  Hay tres formas de enganches: referencias a subrutinas, referencias a arrays y objetos bendecidos.
 
-Referencias a subrutinas son el caso más simple.  Cuando el sistema de inclusión recorre C<@INC> y se encuentra con una subrutina, esta subrutina es llamada con dos parámetros; el primero, una referencia a sí mismo; y el segundo, el nombre del fichero que se incluirá (por ejemplo, "F<Foo/Bar.pm>").  La subrutina debe devolver, o nada, o bien una lista de hasta tres valores en el orden siguiente:
+Referencias a subrutinas son el caso más simple.  Cuando el sistema de inclusión recorre C<@INC> y se encuentra con una subrutina, esta subrutina es llamada con dos parámetros; el primero, una referencia a sí mismo; y el segundo, el nombre del archivo que se incluirá (por ejemplo, "F<Foo/Bar.pm>").  La subrutina debe devolver, o nada, o bien una lista de hasta tres valores en el orden siguiente:
 
 =over
 
 =item 1
 
-Un gestor de fichero, desde el cual, el fichero será leído.  
+Un gestor de archivo, desde el cual, el archivo será leído.  
 
 =item 2
 
@@ -3273,7 +3273,7 @@ En otras palabras, puede escribir:
 
     push @INC, \&mi_sub;
     sub mi_sub {
-        my ($coderef, $fichero) = @_;  # $coderef is \&mi_sub
+        my ($coderef, $archivo) = @_;  # $coderef is \&mi_sub
         ...
     }
 
@@ -3281,7 +3281,7 @@ o:
 
     push @INC, [ \&mi_sub, $x, $y, ... ];
     sub mi_sub {
-        my ($arrayref, $fichero) = @_;
+        my ($arrayref, $archivo) = @_;
         # Recupera $x, $y, ...
         my @parametros = @$arrayref[1..$#$arrayref];
         ...
@@ -3293,7 +3293,7 @@ Si el enganche es un objeto, debe proporcionar un método INC que será llamado 
     package Foo;
     sub new { ... }
     sub Foo::INC {
-        my ($self, $fichero) = @_;
+        my ($self, $archivo) = @_;
         ...
     }
 
@@ -3324,9 +3324,9 @@ X<return>
 
 =item return
 
-Regresa de una subrutina, C<eval> o C<do FICHERO>, con el valor indicado en EXPR.  Evaluación de EXPR puede estar en contextos lista, escalar, o contexto vacío, dependiendo de cómo el valor de retorno será utilizado, y el contexto puede variar de una ejecución a la siguiente (ver C<wantarray>).  Si no se indica EXPR, devuelve una lista vacía en contexto de lista, el valor indefinido en el contexto escalar, y (por supuesto) nada en absoluto en el contexto vacío.
+Regresa de una subrutina, C<eval> o C<do ARCHIVO>, con el valor indicado en EXPR.  Evaluación de EXPR puede estar en contextos lista, escalar, o contexto vacío, dependiendo de cómo el valor de retorno será utilizado, y el contexto puede variar de una ejecución a la siguiente (ver C<wantarray>).  Si no se indica EXPR, devuelve una lista vacía en contexto de lista, el valor indefinido en el contexto escalar, y (por supuesto) nada en absoluto en el contexto vacío.
 
-(En ausencia de un C<return> explícito, una subrutina, eval, o do FICHERO, automáticamente devuelve el valor de la última expresión evaluada).
+(En ausencia de un C<return> explícito, una subrutina, eval, o do ARCHIVO, automáticamente devuelve el valor de la última expresión evaluada).
 
 =item reverse LISTA
 X<reverse> X<rev> X<invert> X<invertir>
@@ -3374,7 +3374,7 @@ Para eliminar un árbol de directorio recursivamente (C<rm -rf> en Unix) mire la
 
 El operador de sustitución.  See L<perlop/"Operadores Regexp">.
 
-=item say GESTOR_FICHERO LISTA
+=item say GESTOR_ARCHIVO LISTA
 X<say>
 
 =item say LISTA
@@ -3408,30 +3408,30 @@ es el equivalente moral de estos dos:
 
 Ver L<perlop> para más detalles en operadores unarios y el operador coma.
 
-=item seek GESTOR_FICHERO,POSICIÓN,DESDE
+=item seek GESTOR_ARCHIVO,POSICIÓN,DESDE
 X<seek> X<fseek> X<filehandle, position> X<gestor de archivo, posición>
 
-Establece la posición de GESTOR_FICHERO, igual que la llamada C<fseek> de C<stdio>.
-GESTOR_FICHERO puede ser una expresión cuyo valor da el nombre del gestor de archivo.  Los valores de DONDE son C<0> para poner la nueva posición I<en bytes> a POSICIÓN, C<1> para poner la posición actual más POSICIÓN, y C<2> para ponerlo a EOF más POSICIÓN (normalmente negativo).  Para DONDE puede usar las constantes C<SEEK_SET>,
-C<SEEK_CUR>, y C<SEEK_END> (inicio de fichero, posición actual, y fin de fichero) desde el módulo Fcntl.  Devuelve C<1> en caso de éxito; de otra manera, C<0>.
+Establece la posición de GESTOR_ARCHIVO, igual que la llamada C<fseek> de C<stdio>.
+GESTOR_ARCHIVO puede ser una expresión cuyo valor da el nombre del gestor de archivo.  Los valores de DONDE son C<0> para poner la nueva posición I<en bytes> a POSICIÓN, C<1> para poner la posición actual más POSICIÓN, y C<2> para ponerlo a EOF más POSICIÓN (normalmente negativo).  Para DONDE puede usar las constantes C<SEEK_SET>,
+C<SEEK_CUR>, y C<SEEK_END> (inicio de archivo, posición actual, y fin de archivo) desde el módulo Fcntl.  Devuelve C<1> en caso de éxito; de otra manera, C<0>.
 
-Nota sobre lo de I<en bytes>: incluso si el gestor de fichero se ha puesto para operar en caracteres (por ejemplo usando la capa de open C<:encoding(utf8)>), tell() devolverá desplazamientos en bytes, no en caracteres (porque implementando esto convertirían en lentas a seek() y tell()).
+Nota sobre lo de I<en bytes>: incluso si el gestor de archivo se ha puesto para operar en caracteres (por ejemplo usando la capa de open C<:encoding(utf8)>), tell() devolverá desplazamientos en bytes, no en caracteres (porque implementando esto convertirían en lentas a seek() y tell()).
 
-Si desea posicionar el fichero para las funciones C<sysread> o C<syswrite>, no utilice C<seek>, porque hace impredecible y no portátil la posición de lectura/escritura del fichero a causa del efecto del buffer del fichero.  Use en su lugar C<sysseek>.
+Si desea posicionar el archivo para las funciones C<sysread> o C<syswrite>, no utilice C<seek>, porque hace impredecible y no portátil la posición de lectura/escritura del archivo a causa del efecto del buffer del archivo.  Use en su lugar C<sysseek>.
 
 Debido a las normas y rigores de la norma ANSI C, en algunos sistemas tendrá que hacer una búsqueda cada vez que alterne entre la lectura y la escritura.  Entre otras cosas, esto puede tener el efecto de llamar a los clearerr(3) de stdio.
-Un DONDE de C<1> (C<SEEK_CUR>) es útil para no mover la posición del fichero:
+Un DONDE de C<1> (C<SEEK_CUR>) es útil para no mover la posición del archivo:
 
     seek(TEST,0,1);
 
-Esto también es útil para aplicaciones que emulen C<tail -f>.  Una vez que llegue al EOF en lectura y si se echa a dormir por un tiempo, (probablemente) tendrá que tocarlo con un ficticio seek() para restablecer las cosas.  El C<seek> no cambia la posición, pero I<borra> la condición de final de fichero en el gestor de archivo, para que el próximo C<< <FILE> >> haga que Perl intente de nuevo leer algo.  (Esperamos).
+Esto también es útil para aplicaciones que emulen C<tail -f>.  Una vez que llegue al EOF en lectura y si se echa a dormir por un tiempo, (probablemente) tendrá que tocarlo con un ficticio seek() para restablecer las cosas.  El C<seek> no cambia la posición, pero I<borra> la condición de final de archivo en el gestor de archivo, para que el próximo C<< <FILE> >> haga que Perl intente de nuevo leer algo.  (Esperamos).
 
 Si eso no funciona (algunas implementaciones de E/S son particularmente irritables), puede que tenga que hacer algo como esto:
 
     for (;;) {
         for ($curpos = tell(FILE); $_ = <FILE>;
              $curpos = tell(FILE)) {
-            # buscar por algo y ponerlo en el fichero
+            # buscar por algo y ponerlo en el archivo
         }
         sleep($por_un_rato);
         seek(FILE, $curpos, 0);
@@ -3442,19 +3442,19 @@ X<seekdir>
 
 Establece la posición actual de la rutina C<readdir> en GESTOR_DIR.  POS debe ser un valor devuelto por C<telldir>.  C<seekdir> también tiene las mismas advertencias sobre la posible compactación del directorio como la correspondiente rutina del sistema.
 
-=item select GESTOR_FICHERO
+=item select GESTOR_ARCHIVO
 X<select> X<filehandle, default>
 
 =item select
 
-Devuelve el gestor de archivo seleccionado.  Si se indica un GESTOR_FICHERO, se establece un nuevo gestor de archivo predeterminado para la salida.  Esto tiene dos efectos: primero, un C<write> o un C<print> sin un gestor de archivo será por defecto este GESTOR_FICHERO.  En segundo lugar, las referencias a variables relacionadas con la salida se referirán a este canal de salida.  Por ejemplo, si tiene que fijar la parte superior del formato de un formulario para más de un canal de salida, puede hacer lo siguiente:
+Devuelve el gestor de archivo seleccionado.  Si se indica un GESTOR_ARCHIVO, se establece un nuevo gestor de archivo predeterminado para la salida.  Esto tiene dos efectos: primero, un C<write> o un C<print> sin un gestor de archivo será por defecto este GESTOR_ARCHIVO.  En segundo lugar, las referencias a variables relacionadas con la salida se referirán a este canal de salida.  Por ejemplo, si tiene que fijar la parte superior del formato de un formulario para más de un canal de salida, puede hacer lo siguiente:
 
     select(INFORME1);
     $^ = 'informe1_top';
     select(INFORME2);
     $^ = 'informe2_top';
 
-GESTOR_FICHERO puede ser una expresión cuyo valor da el nombre del gestor de archivo real.  Por lo tanto:
+GESTOR_ARCHIVO puede ser una expresión cuyo valor da el nombre del gestor de archivo real.  Por lo tanto:
 
     $oldfh = select(STDERR); $| = 1; select($oldfh);
 
@@ -3506,7 +3506,7 @@ Tenga en cuenta que cuando C<select> es reiniciado después de señales (por eje
 
 En caso de error, C<select> se comporta como select(2): devuelve -1 y actualiza C<$!>.
 
-En algunos sistemas Unix, select(2) puede informar de un descriptor de fichero socket como "listo para leer" cuando no hay datos disponibles, y por lo tanto una lectura posterior produce un bloqueo. Esto puede evitarse si siempre utiliza O_NONBLOCK en el socket. Ver select(2) y fcntl(2) para más detalles.
+En algunos sistemas Unix, select(2) puede informar de un descriptor de archivo socket como "listo para leer" cuando no hay datos disponibles, y por lo tanto una lectura posterior produce un bloqueo. Esto puede evitarse si siempre utiliza O_NONBLOCK en el socket. Ver select(2) y fcntl(2) para más detalles.
 
 B<AVISO> : No debe tratar de mezclar el E/S con buferes (como C<read> o <FH>) con C<select>, excepto lo autorizado por POSIX, e incluso entonces sólo en sistemas POSIX.  Tiene que usar en su lugar C<sysread>.
 
@@ -3652,7 +3652,7 @@ X<socket>
 
 Abre un socket de la clase especificada y lo adhiere al gestor de archivo SOCKET.  DOMINIO, TIPO, y PROTOCOLO son especificados de la misma manera que la llamada del sistema del mismo nombre.  Debe usar C<use Socket> primero para obtener las apropiadas definiciones.  Ver los ejemplos en L<perlipc/"Sockets: Comunicación Cliente/Servidor">.
 
-En sistemas que soportan la bandera cerrar-en-ejecución sobre ficheros, la bandera será puesta para el nuevo descriptor de fichero abierto, determinado por el valor de $^F.  Ver L<perlvar/$^F>.
+En sistemas que soportan la bandera cerrar-en-ejecución sobre archivos, la bandera será puesta para el nuevo descriptor de archivo abierto, determinado por el valor de $^F.  Ver L<perlvar/$^F>.
 
 =item socketpair SOCKET1,SOCKET2,DOMINIO,TIPO,PROTOCOLO
 X<socketpair>
@@ -3660,7 +3660,7 @@ X<socketpair>
 Crea un par de sockets anónimos en el dominio especificado, del tipo especificado.  DOMINIO, TIPO, y PROTOCOLO son especificados de la misma manera que la llamada del sistema del mismo nombre.  Si no está implementada, lanza una excepción.
 Devuelve verdadero si tuvo éxito.
 
-En sistemas que apoyan la bandera close-on-exec en ficheros, esta bandera se establecerá para los nuevos descriptores de fichero abiertos, según lo determinado por el valor de $^F.  Ver L<perlvar/$^F>.
+En sistemas que apoyan la bandera close-on-exec en archivos, esta bandera se establecerá para los nuevos descriptores de archivo abiertos, según lo determinado por el valor de $^F.  Ver L<perlvar/$^F>.
 
 Algunos sistemas definen C<pipe> en términos de C<socketpair>, en el que una llamada a C<pipe(Rdr, Wtr)> es esencialmente:
 
@@ -3700,22 +3700,22 @@ Pero los benchmarks indicaron que, para algunas entradas, en algunas plataformas
 Ejemplos:
 
     # ordenación léxica
-    @articulos = sort @ficheros;
+    @articulos = sort @archivos;
     
     # lo mismo, pero con una rutina de ordenación explícita
-    @articulos = sort {$a cmp $b} @ficheros;
+    @articulos = sort {$a cmp $b} @archivos;
     
     # ahora, independiente del tamaño de caja
-    @articulos = sort {uc($a) cmp uc($b)} @ficheros;
+    @articulos = sort {uc($a) cmp uc($b)} @archivos;
     
     # lo mismo, en orden inverso
-    @articulos = sort {$b cmp $a} @ficheros;
+    @articulos = sort {$b cmp $a} @archivos;
     
     # ordenación numérica ascendente
-    @articulos = sort {$a <=> $b} @ficheros;
+    @articulos = sort {$a <=> $b} @archivos;
     
     # ordenación numérica descendente
-    @articulos = sort {$b <=> $a} @ficheros;
+    @articulos = sort {$b <=> $a} @archivos;
     
     # esto ordena el hash %edad por valor en lugar de por clave
     # usando una función incluida
@@ -3802,11 +3802,11 @@ Si, en cambio, quiere ordenar el array @claves con la rutina de comparación C<b
 
 Si está usando strict, I<no debe> declarar $a y $b como léxicas.  Son variables globales del paquete.  Esto significa que si usted está en el paquete C<main> y escribe
 
-    @articulos = sort {$b <=> $a} @ficheros;
+    @articulos = sort {$b <=> $a} @archivos;
 
 entonces C<$a> y C<$b> son C<$main::a> y C<$main::b> (o C<$::a> y C<$::b>), pero si está en el paquete C<FooPack>, es lo mismo que escribir
 
-    @articulos = sort {$FooPack::b <=> $FooPack::a} @ficheros;
+    @articulos = sort {$FooPack::b <=> $FooPack::a} @archivos;
 
 Se requiere que la función de comparación se comporte de forma correcta.  Si devuelve resultados inconsistentes (algunas veces diciendo que C<$x[1]> es menor que C<$x[2]> y otras veces diciendo lo opuesto, por ejemplo) los resultados no están definidos.
 
@@ -4237,8 +4237,8 @@ para una semilla puede caer presa en la propiedad matemática
 
 un tercio de las ocasiones.  Así que no lo haga.
 
-=item stat GESTOR_FICHERO
-X<stat> X<file, status> X<ctime> X<fichero, estado>
+=item stat GESTOR_ARCHIVO
+X<stat> X<file, status> X<ctime> X<archivo, estado>
 
 =item stat EXPR
 
@@ -4250,39 +4250,39 @@ Devuelve una lista de 13 elementos dando la información de estado de un archivo
 
     ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
        $atime,$mtime,$ctime,$blksize,$blocks)
-           = stat($fichero);
+           = stat($archivo);
 
-No todos los campos están soportados por todos los sistemas de ficheros.  Aquí están los significados de los campos:
+No todos los campos están soportados por todos los sistemas de archivos.  Aquí están los significados de los campos:
 
-  0 dev      número de dispositivo del sistema de ficheros
+  0 dev      número de dispositivo del sistema de archivos
   1 ino      número de inodo
-  2 mode     modo de fichero (tipo y permisos)
-  3 nlink    número de enlaces (duros) al fichero
-  4 uid      ID numérico del usuario propietario del fichero
-  5 gid      ID numérico del grupo del propietario del fichero
-  6 rdev     identificador del dispositivo (solo ficheros especiales)
-  7 size     tamaño total del fichero, en bytes
+  2 mode     modo de archivo (tipo y permisos)
+  3 nlink    número de enlaces (duros) al archivo
+  4 uid      ID numérico del usuario propietario del archivo
+  5 gid      ID numérico del grupo del propietario del archivo
+  6 rdev     identificador del dispositivo (solo archivos especiales)
+  7 size     tamaño total del archivo, en bytes
   8 atime    tiempo último acceso, en segundos, desde el epoch
   9 mtime    tiempo última modificación, en segundos desde el epoch
  10 ctime    tiempo cambio inodo, en segundos desde el (*)
- 11 blksize  tamaño preferido del bloque de E/S para el sistema de ficheros
+ 11 blksize  tamaño preferido del bloque de E/S para el sistema de archivos
  12 blocks   número actual de bloques reservados
 
 (El epoch fue a las 00:00 GMT del 1 de enero de 1970)
 
-(*) No todos los campos están soportados por todos los sistemas de ficheros. En particular, el campo ctime no es portátil.  En particular, no puede esperar que sea el "tiempo de creación", véase L<perlport/"Ficheros y sistemas de ficheros"> para más detalles.
+(*) No todos los campos están soportados por todos los sistemas de archivos. En particular, el campo ctime no es portátil.  En particular, no puede esperar que sea el "tiempo de creación", véase L<perlport/"Archivos y sistemas de archivos"> para más detalles.
 
-Si a C<stat> se le pasa el gestor de archivo especial consistente en un subrayado, no se hacen estadísticas, sino que se devuelven el contenido actual de la estructura de estadísticas de la última llamada C<stat>, C<lstat>, o test de ficheros.  Ejemplo:
+Si a C<stat> se le pasa el gestor de archivo especial consistente en un subrayado, no se hacen estadísticas, sino que se devuelven el contenido actual de la estructura de estadísticas de la última llamada C<stat>, C<lstat>, o test de archivos.  Ejemplo:
 
-    if (-x $fichero && (($d) = stat(_)) && $d < 0) {
-        print "$fichero es un fichero NFS ejecutable\n";
+    if (-x $archivo && (($d) = stat(_)) && $d < 0) {
+        print "$archivo es un archivo NFS ejecutable\n";
     }
 
 (Esto funciona solo en máquinas en las cuales el número de dispositivo es negativo para NFS)
 
 Dado que el modo contiene el tipo de archivo y sus permisos, debe desenmascarar la porción de tipo de archivo y usar (s)printf con C<"%o"> si desea ver los permisos reales.
 
-    $modo = (stat($fichero))[2];
+    $modo = (stat($archivo))[2];
     printf "Permisos son %04o\n", $modo & 07777;
 
 En contexto escalar, C<stat> devuelve un valor booleano que indica el éxito o el fracaso y, si tiene éxito, establece la información asociada con el gestor de archivo especial C<_>.
@@ -4290,16 +4290,16 @@ En contexto escalar, C<stat> devuelve un valor booleano que indica el éxito o e
 El módulo <File::stat> proporciona un conveniente mecanismo de acceso por nombre:
 
     use File::stat;
-    $sb = stat($fichero);
-    printf "Fichero es %s, tamaño es %s, permisos %04o, mtime %s\n",
-           $fichero, $sb->size, $sb->mode & 07777,
+    $sb = stat($archivo);
+    printf "Archivo es %s, tamaño es %s, permisos %04o, mtime %s\n",
+           $archivo, $sb->size, $sb->mode & 07777,
            scalar localtime $sb->mtime;
 
 Puede importar constantes simbólicas (C<S_IF*>) y funciones (C<S_IS*>) desde el módulo Fcntl:
 
     use Fcntl ':mode';
 
-    $modo = (stat($fichero))[2];
+    $modo = (stat($archivo))[2];
 
     $usuario_rwx    = ($modo & S_IRWXU) >> 6;
     $grupo_lectura  = ($modo & S_IRGRP) >> 3;
@@ -4389,19 +4389,19 @@ Por ejemplo, aquí hay un bucle que inserta índices de entradas antes de cualqu
 
 En la búsqueda de C</\bfoo\b/>, los únicos lugares que serán examinados de C<$_> serán los que contengan una C<f>, debido a que C<f> es más rara que una C<o>.  En general, esto es un gran ahorro, salvo en casos patológicos.  La única pregunta es si ahorra más tiempo que en lo que se tardó en construir la lista enlazada, al principio.
 
-Tenga en cuenta que si usted tiene que buscar en cadenas que no sabe hasta el tiempo de ejecución, puede crear un bucle completo como una cadena y luego hacerle un C<eval>, para evitar tener que volver a recompilar todos los patrones todo el tiempo.  Junto con la indefinición de C<$/> para la entrada de archivos completos como un único registro, esto puede ser bastante rápido, a menudo más rápido que los programas especializados como fgrep(1).  Lo siguiente examina una lista de archivos (C<@ficheros>) por una lista de palabras (C<@palabras>), e imprime los nombres de los archivos que contienen una coincidencia:
+Tenga en cuenta que si usted tiene que buscar en cadenas que no sabe hasta el tiempo de ejecución, puede crear un bucle completo como una cadena y luego hacerle un C<eval>, para evitar tener que volver a recompilar todos los patrones todo el tiempo.  Junto con la indefinición de C<$/> para la entrada de archivos completos como un único registro, esto puede ser bastante rápido, a menudo más rápido que los programas especializados como fgrep(1).  Lo siguiente examina una lista de archivos (C<@archivos>) por una lista de palabras (C<@palabras>), e imprime los nombres de los archivos que contienen una coincidencia:
 
     $buscar = 'while (<>) { study;';
     foreach $palabra (@palabras) {
         $buscar .= "++\$visto{\$ARGV} if /\\b$palabra\\b/;\n";
     }
     $buscar .= "}";
-    @ARGV = @ficheros;
+    @ARGV = @archivos;
     undef $/;
     eval $buscar;        # esto aúlla
     $/ = "\n";           # volvemos al delimitador de entrada normal
-    foreach $fichero (sort keys(%visto)) {
-        print $fichero, "\n";
+    foreach $archivo (sort keys(%visto)) {
+        print $archivo, "\n";
     }
 
 =item sub NOMBRE BLOQUE
@@ -4487,14 +4487,14 @@ Syscall devuelve cualquier valor devuelto por la llamada al sistema que llama.
 Si la llamada al sistema falla, C<syscall> devuelve C<-1> y establece C<$!> (errno).
 Tenga en cuenta que algunas llamadas al sistema legítimamente pueden devolver C<-1>.  La forma correcta de manejar llamadas de ese tipo es el de asignar C<$!=0;> antes de la llamada y comprobar el valor de C<$!> si syscall devuelve C<-1>.
 
-Hay un problema con C<syscall(&SYS_pipe)>: devuelve el número de fichero de la lectura final de la tubería que crea.  No hay manera de recuperar el número de fichero del otro extremo.  Puede evitar este problema mediante el uso, en su lugar, de C<pipe>.
+Hay un problema con C<syscall(&SYS_pipe)>: devuelve el número de archivo de la lectura final de la tubería que crea.  No hay manera de recuperar el número de archivo del otro extremo.  Puede evitar este problema mediante el uso, en su lugar, de C<pipe>.
 
-=item sysopen GESTOR_FICHERO,FICHERO,MODO
+=item sysopen GESTOR_ARCHIVO,ARCHIVO,MODO
 X<sysopen>
 
-=item sysopen GESTOR_FICHERO,FICHERO,MODO,PERMISOS
+=item sysopen GESTOR_ARCHIVO,ARCHIVO,MODO,PERMISOS
 
-Abre el archivo cuyo nombre viene dado por FICHERO, y lo asocia con GESTOR_FICHERO.  Si GESTOR_FICHERO es una expresión, el valor es tomado como el nombre real del gestor buscado.  Esta función llama a la función subyacente del sistema operativo C<open> con los parámetros FICHERO, MODO, PERMISOS.
+Abre el archivo cuyo nombre viene dado por ARCHIVO, y lo asocia con GESTOR_ARCHIVO.  Si GESTOR_ARCHIVO es una expresión, el valor es tomado como el nombre real del gestor buscado.  Esta función llama a la función subyacente del sistema operativo C<open> con los parámetros ARCHIVO, MODO, PERMISOS.
 
 Los valores posibles y bits de bandera del parámetro MODO son dependientes del sistema; están disponibles en el módulo estándar C<Fcntl>.
 Consulte la documentación de C<open> de su sistema operativo para ver qué valores y bits de bandera están disponibles.  Puede combinar varias banderas con el operador C<|>.
@@ -4504,7 +4504,7 @@ X<O_RDONLY> X<O_RDWR> X<O_WRONLY>
 
 Por razones históricas, algunos valores funcionan en casi todos los sistemas soportados por Perl: 0 significa solo lectura, 1 significa sólo escritura y 2 significa lectura y escritura.  Sabemos que estos valores I<no> funcionan bajo OS/390 y VM/ESA Unix y en el Macintosh; es probable que no desea utilizarlos en nuevos programas.
 
-Si el archivo con el nombre FICHERO no existe y la llamada C<open> lo crea (por lo general porque el modo incluye la bandera C<O_CREAT>), entonces el valor de PERMISOS especifica los permisos del archivo recién creado.  Si se omite el argumento PERMISOS a C<sysopen>, Perl utiliza el valor octal C<0666>.
+Si el archivo con el nombre ARCHIVO no existe y la llamada C<open> lo crea (por lo general porque el modo incluye la bandera C<O_CREAT>), entonces el valor de PERMISOS especifica los permisos del archivo recién creado.  Si se omite el argumento PERMISOS a C<sysopen>, Perl utiliza el valor octal C<0666>.
 Estos valores de permisos tiene que estar en octal, y son modificados por el valor de C<umask> de su proceso actual.
 X<O_CREAT>
 
@@ -4522,32 +4522,32 @@ En muchos sistemas Unix, fdopen() se conoce que falla cuando los descriptores de
 
 Ver L<perlopentut> para una más amable, más suave explicación de apertura de los archivos.
 
-=item sysread GESTOR_FICHERO,ESCALAR,LONGITUD,DESPLAZAMIENTO
+=item sysread GESTOR_ARCHIVO,ESCALAR,LONGITUD,DESPLAZAMIENTO
 X<sysread>
 
-=item sysread GESTOR_FICHERO,ESCALAR,LONGITUD
+=item sysread GESTOR_ARCHIVO,ESCALAR,LONGITUD
 
-Intenta leer LONGITUD bytes de datos en la variable ESCALAR desde el GESTOR_FICHERO especificado, utilizando read(2).  Omite E/S con buffer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búferes de datos.  Devuelve el número de bytes realmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso, también se establece C<$!>).  ESCALAR crecerá o se reducirá de manera que el último byte leído sea el último byte del escalar después de la lectura.
+Intenta leer LONGITUD bytes de datos en la variable ESCALAR desde el GESTOR_ARCHIVO especificado, utilizando read(2).  Omite E/S con buffer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búferes de datos.  Devuelve el número de bytes realmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso, también se establece C<$!>).  ESCALAR crecerá o se reducirá de manera que el último byte leído sea el último byte del escalar después de la lectura.
 
 Un DESPLAZAMIENTO puede ser especificado para colocar los datos leídos en algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
 
-No hay función syseof(), que está bien, ya que, de todos modos, eof() no funciona bien con los ficheros de dispositivo (como los ttys).  Use sysread() y compruebe si el valor devuelto es 0 para decidir si ha llegado al final.
+No hay función syseof(), que está bien, ya que, de todos modos, eof() no funciona bien con los archivos de dispositivo (como los ttys).  Use sysread() y compruebe si el valor devuelto es 0 para decidir si ha llegado al final.
 
 Tenga en cuenta que si el gestor de archivo ha sido marcado como  C<:utf8>, son leídos caracteres Unicode en lugar de bytes (la LONGITUD, el DESPLAZAMIENTO y el valor de retorno de sysread() están descritos en forma de número de caracteres Unicode).
 La capa C<:encoding(...)> implícitamente introduce la capa C<:utf8>.
 Ver L</binmode>, L</open>, y el pragma C<open>, L<open>.
 
-=item sysseek GESTOR_FICHERO,POSICIÓN,DESDEDÓNDE
+=item sysseek GESTOR_ARCHIVO,POSICIÓN,DESDEDÓNDE
 X<sysseek> X<lseek>
 
-Establece la posición del GESTOR_FICHERO en bytes usando lseek(2).  GESTOR_FICHERO puede ser una expresión cuyo valor da el nombre del gestor de archivo.  Los valores de DESDEDÓNDE son C<0> para establecer la nueva posición a POSICIÓN, C<1> para establecer la posición actual más POSICIÓN, y C<2> para establecerlo a EOF más POSICIÓN (normalmente negativo).
+Establece la posición del GESTOR_ARCHIVO en bytes usando lseek(2).  GESTOR_ARCHIVO puede ser una expresión cuyo valor da el nombre del gestor de archivo.  Los valores de DESDEDÓNDE son C<0> para establecer la nueva posición a POSICIÓN, C<1> para establecer la posición actual más POSICIÓN, y C<2> para establecerlo a EOF más POSICIÓN (normalmente negativo).
 
-Nota sobre lo de I<en bytes>: incluso si el gestor de fichero se ha puesto para operar en caracteres (por ejemplo usando la capa de E/S C<:encoding(utf8)>), tell() devolverá desplazamientos en bytes, no en caracteres (porque implementando esto convertirían en inaceptablemente lentas a seek() y tell()).
+Nota sobre lo de I<en bytes>: incluso si el gestor de archivo se ha puesto para operar en caracteres (por ejemplo usando la capa de E/S C<:encoding(utf8)>), tell() devolverá desplazamientos en bytes, no en caracteres (porque implementando esto convertirían en inaceptablemente lentas a seek() y tell()).
 
 sysseek() omite E/S buffer normal, por lo que mezclar esto con lecturas (que no sean C<sysread>, por ejemplo, C<< <> >> o read()) C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión.
 
 Para DESDEDÓNDE puede usar las constantes C<SEEK_SET>,
-C<SEEK_CUR>, y C<SEEK_END> (inicio de fichero, posición actual, y fin de fichero) desde el módulo Fcntl.  El uso de las constantes también es más portátil que confiar en 0, 1 y 2.  Por ejemplo, para definir una función "systell":
+C<SEEK_CUR>, y C<SEEK_END> (inicio de archivo, posición actual, y fin de archivo) desde el módulo Fcntl.  El uso de las constantes también es más portátil que confiar en 0, 1 y 2.  Por ejemplo, para definir una función "systell":
 
     use Fcntl 'SEEK_CUR';
     sub systell { sysseek($_[0], 0, SEEK_CUR) }
@@ -4595,14 +4595,14 @@ Ver L<perlop/"`STRING`"> y L</exec> para más detalles.
 
 Debido a que C<system> hace un C<fork> y un C<wait> puede afectar al controlador C<SIGCHLD>. Véase L<perlipc> para más detalles.
 
-=item syswrite GESTOR_FICHERO,ESCALAR,LONGITUD,DESPLAZAMIENTO
+=item syswrite GESTOR_ARCHIVO,ESCALAR,LONGITUD,DESPLAZAMIENTO
 X<syswrite>
 
-=item syswrite GESTOR_FICHERO,ESCALAR,LONGITUD
+=item syswrite GESTOR_ARCHIVO,ESCALAR,LONGITUD
 
-=item syswrite GESTOR_FICHERO,ESCALAR
+=item syswrite GESTOR_ARCHIVO,ESCALAR
 
-Intenta escribir LONGITUD bytes de datos desde la variable ESCALAR al GESTOR_FICHERO especificado, utilizando write(2).  Si LONGITUD no se especifica, escribe todo el ESCALAR.  Omite E/S con buffer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búferes de datos.  Devuelve el número de bytes realmente escritos, o C<undef> si hubo un error (en este caso, también se establece la variable C<$!>).  Si LONGITUD es mayor que los datos disponibles en ESCALAR después del DESPLAZAMIENTO, sólo se escribirán los datos que estén disponibles.
+Intenta escribir LONGITUD bytes de datos desde la variable ESCALAR al GESTOR_ARCHIVO especificado, utilizando write(2).  Si LONGITUD no se especifica, escribe todo el ESCALAR.  Omite E/S con buffer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búferes de datos.  Devuelve el número de bytes realmente escritos, o C<undef> si hubo un error (en este caso, también se establece la variable C<$!>).  Si LONGITUD es mayor que los datos disponibles en ESCALAR después del DESPLAZAMIENTO, sólo se escribirán los datos que estén disponibles.
 
 Un DESPLAZAMIENTO puede ser especificado para escribir datos desde algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica escribir tantos caracteres contando desde el final de la cadena.
 Si ESCALAR es de longitud cero, sólo se puede utilizar un DESPLAZAMIENTO de 0.
@@ -4611,14 +4611,14 @@ B<Advertencia>: Si el gestor está marcado como C<:utf8>, caracteres Unicode cod
 La capa C<:encoding(...)> implícitamente introduce la capa C<:utf8>.
 Ver L</binmode>, L</open>, y el pragma C<open>, L<open>.
 
-=item tell GESTOR_FICHERO
+=item tell GESTOR_ARCHIVO
 X<tell>
 
 =item tell
 
-Devuelve la posición actual I<en bytes> para GESTOR_FICHERO, o -1 en caso de error.  GESTOR_FICHERO puede ser una expresión cuyo valor da el nombre del gestor de archivo real.  Si GESTOR_FICHERO se omite, se asume que es el último fichero leído.
+Devuelve la posición actual I<en bytes> para GESTOR_ARCHIVO, o -1 en caso de error.  GESTOR_ARCHIVO puede ser una expresión cuyo valor da el nombre del gestor de archivo real.  Si GESTOR_ARCHIVO se omite, se asume que es el último archivo leído.
 
-Nota sobre lo de I<en bytes>: incluso si el gestor de fichero se ha puesto para operar en caracteres (por ejemplo usando la capa de open C<:encoding(utf8)>), tell() devolverá desplazamientos en bytes, no en caracteres (porque implementando esto convertirían en lentas a seek() y tell()).
+Nota sobre lo de I<en bytes>: incluso si el gestor de archivo se ha puesto para operar en caracteres (por ejemplo usando la capa de open C<:encoding(utf8)>), tell() devolverá desplazamientos en bytes, no en caracteres (porque implementando esto convertirían en lentas a seek() y tell()).
 
 El valor de retorno de tell() para los flujos estándares como STDIN depende del sistema operativo: puede devolver -1 o algo más.
 tell() en tuberías, colas, y sockets, por lo general, devuelve -1.
@@ -4639,9 +4639,9 @@ X<tie>
 
 Esta función une una variable a una clase de paquete que ofrecerá la implementación para esa variable.  VARIABLE es el nombre de la variable que será enlazada.  CLASE es el nombre de la clase que implementa objetos del tipo correcto.  Cualesquiera argumentos adicionales son pasados al método C<new> de la clase (es decir, C<TIESCALAR>, C<TIEHANDLE>, C<TIEARRAY>, o C<TIEHASH>).  Por lo general estos son argumentos que podrían ser transmitidos a la función del C C<dbm_open()>.  El objeto devuelto por el método C<new> también es devuelto por la función C<tie>, que será útil si desea acceder a otros métodos en la CLASE.
 
-Note que las funciones como C<keys> y C<values> pueden devolver largas listas como cuando se usan con grandes ficheros DBM.  Puede preferir usar la función C<each> para iterar sobre tales listas.  Ejemplo:
+Note que las funciones como C<keys> y C<values> pueden devolver largas listas como cuando se usan con grandes archivos DBM.  Puede preferir usar la función C<each> para iterar sobre tales listas.  Ejemplo:
 
-    # imprime los desplazamientos en el fichero histórico
+    # imprime los desplazamientos en el archivo histórico
     use NDBM_File;
     tie(%HIST, 'NDBM_File', '/usr/lib/news/history', 1, 0);
     while (($key,$val) = each %HIST) {
@@ -4744,16 +4744,16 @@ Los tiempos de los hijos solo se incluyen de los hijos terminados.
 
 El operador de transliteración.  Igual que el C<y///>.  Ver L<perlop/"Operadores entrecomillados">.
 
-=item truncate GESTOR_FICHERO,LONGITUD
+=item truncate GESTOR_ARCHIVO,LONGITUD
 X<truncate>
 
 =item truncate EXPR,LONGITUD
 
-Trunca el archivo abierto en GESTOR_FICHERO, o nombrado por EXPR, a la longitud especificada.  Lanza una excepción si truncate no está implementada en el sistema.  Devuelve verdadero si tiene éxito, sino, el valor indefinido.
+Trunca el archivo abierto en GESTOR_ARCHIVO, o nombrado por EXPR, a la longitud especificada.  Lanza una excepción si truncate no está implementada en el sistema.  Devuelve verdadero si tiene éxito, sino, el valor indefinido.
 
 El comportamiento no está definido si LONGITUD es mayor que la longitud del archivo.
 
-La posición en el fichero de GESTOR_FICHERO no cambia.  Puede llamar a L<seek> antes de escribir en el archivo.
+La posición en el archivo de GESTOR_ARCHIVO no cambia.  Puede llamar a L<seek> antes de escribir en el archivo.
 
 =item uc EXPR
 X<uc> X<uppercase> X<toupper> X<mayúsculas>
@@ -4786,10 +4786,10 @@ X<umask>
 Establece la umask para el proceso a EXPR y devuelve el valor anterior.
 Si EXPR se omite, simplemente devuelve la umask actual.
 
-Los permisos Unix C<rwxr-x---> son representados como tres conjuntos de tres bits, o tres dígitos octales: C<0750> (el 0 precedente indica que es octal, y que no es uno de los dígitos).  El valor de C<umask> es un número que representa los bits de lso permisos que quedan desactivados.  El valor de permiso (o "modo") que se pasa a C<mkdir> o C<sysopen> son modificados por su umask, así que incluso si usted dice C<sysopen> para crear un archivo con permisos de C<0777>, y su umask es C<0022>, entonces el fichero realmente es creado con permisos C<0755>.  Si su C<umask> fuera C<0027> (el grupo no puede escribir, los otros no pueden leer, escribir o ejecutar), entonces pasando a C<sysopen> C<0666> creará un archivo con el modo C<0640> (C<0666 &~ 027> es C<0640>).
+Los permisos Unix C<rwxr-x---> son representados como tres conjuntos de tres bits, o tres dígitos octales: C<0750> (el 0 precedente indica que es octal, y que no es uno de los dígitos).  El valor de C<umask> es un número que representa los bits de lso permisos que quedan desactivados.  El valor de permiso (o "modo") que se pasa a C<mkdir> o C<sysopen> son modificados por su umask, así que incluso si usted dice C<sysopen> para crear un archivo con permisos de C<0777>, y su umask es C<0022>, entonces el archivo realmente es creado con permisos C<0755>.  Si su C<umask> fuera C<0027> (el grupo no puede escribir, los otros no pueden leer, escribir o ejecutar), entonces pasando a C<sysopen> C<0666> creará un archivo con el modo C<0640> (C<0666 &~ 027> es C<0640>).
 
-He aquí algunos consejos: suministre un modo de creación de C<0666> para ficheros regulares (en C<sysopen>) y uno de C<0777> para directorios (en C<mkdir>) y los archivos ejecutables.  Esto ofrece a los usuarios la libertad de elección: si quieren archivos protegidos, podrían elegir un umasks para el proceso de C<022>, C<027>, o incluso la máscara, particularmente antisocial, de C<077>.
-Los programas rara vez o nunca deben tomar decisiones políticas, que es mejor dejar al usuario.  La excepción a esto es cuando se escriben archivos que deben mantenerse de forma privada: archivos de correo, los cookies del navegador web, ficheros I<rhosts>, y así sucesivamente.
+He aquí algunos consejos: suministre un modo de creación de C<0666> para archivos regulares (en C<sysopen>) y uno de C<0777> para directorios (en C<mkdir>) y los archivos ejecutables.  Esto ofrece a los usuarios la libertad de elección: si quieren archivos protegidos, podrían elegir un umasks para el proceso de C<022>, C<027>, o incluso la máscara, particularmente antisocial, de C<077>.
+Los programas rara vez o nunca deben tomar decisiones políticas, que es mejor dejar al usuario.  La excepción a esto es cuando se escriben archivos que deben mantenerse de forma privada: archivos de correo, los cookies del navegador web, archivos I<rhosts>, y así sucesivamente.
 
 Si umask(2) no está implementada en su sistema y está tratando de restringir el acceso por I<sí mismo> (es decir, C<< (EXPR & 0700) > 0 >>), se lanza una excepción.  Si umask(2) no está implementado y usted no está tratando de restringir el acceso por sí mismo, devuelve C<undef>.
 
@@ -4826,13 +4826,13 @@ Elimina una lista de archivos. En caso de éxito, devuelve el número de archivo
     unlink glob "*.bak";
 
 En caso de error, C<unlink> no indicará qué archivos no se han podido borrar.
-Si quiere saber qué ficheros no pudo eliminar, trátelos de uno en uno:
+Si quiere saber qué archivos no pudo eliminar, trátelos de uno en uno:
 
-     foreach my $fichero ( @goners ) {
-         unlink $fichero or warn "No puedo borrar $fichero: $!";
+     foreach my $archivo ( @goners ) {
+         unlink $archivo or warn "No puedo borrar $archivo: $!";
      }
 
-Nota: C<unlink> no intentará eliminar directorios a menos que usted sea superusuario y la bandera B<-U> se suministre a Perl. Incluso si se cumplen estas condiciones, se advierte que desvincular un directorio puede causar daños a su sistema de ficheros.  Por último, con C<unlink> en directorios no está soportado en muchos sistemas operativos.  Utilice C<rmdir> en su lugar.
+Nota: C<unlink> no intentará eliminar directorios a menos que usted sea superusuario y la bandera B<-U> se suministre a Perl. Incluso si se cumplen estas condiciones, se advierte que desvincular un directorio puede causar daños a su sistema de archivos.  Por último, con C<unlink> en directorios no está soportado en muchos sistemas operativos.  Utilice C<rmdir> en su lugar.
 
 Si LISTA se omite, C<unlink> utiliza C<$_>.
 
@@ -4973,13 +4973,13 @@ Ver L<perlmodlib> para una lista de módulos y pragmas estándar.  Ver L<perlrun
 =item utime LISTA
 X<utime>
 
-Cambia los tiempos de acceso y modificación de cada archivo de una lista de archivos.  Los dos primeros elementos de la lista deben ser el tiempo de acceso y modificación, NUMÉRICOS, y en ese orden.  Devuelve el número de ficheros cambiados con éxito.  El tiempo de cambio de inodo de cada archivo se establece en la hora actual.  Por ejemplo, este código tiene el mismo efecto que el comando touch(1) de Unix cuando los archivos <realmente existen> y pertenecen al usuario que ejecuta el programa:
+Cambia los tiempos de acceso y modificación de cada archivo de una lista de archivos.  Los dos primeros elementos de la lista deben ser el tiempo de acceso y modificación, NUMÉRICOS, y en ese orden.  Devuelve el número de archivos cambiados con éxito.  El tiempo de cambio de inodo de cada archivo se establece en la hora actual.  Por ejemplo, este código tiene el mismo efecto que el comando touch(1) de Unix cuando los archivos <realmente existen> y pertenecen al usuario que ejecuta el programa:
 
     #!/usr/bin/perl
     $atime = $mtime = time;
     utime $atime, $mtime, @ARGV;
 
-Desde Perl 5.7.2, si los dos primeros elementos de la lista son C<undef>, se llama a la librería del sistema C utime(2) con un segundo argumento nulo. En la mayoría de los sistemas, esto hará que los tiempos de acceso y modificación del archivo se establezcan a la hora actual (es decir, equivalente al ejemplo anterior) y funcionará incluso en archivos de los cuales usted no tenga permisos de escritura:
+Desde Perl 5.7.2, si los dos primeros elementos de la lista son C<undef>, se llama a la biblioteca del sistema C utime(2) con un segundo argumento nulo. En la mayoría de los sistemas, esto hará que los tiempos de acceso y modificación del archivo se establezcan a la hora actual (es decir, equivalente al ejemplo anterior) y funcionará incluso en archivos de los cuales usted no tenga permisos de escritura:
 
     for $file (@ARGV) {
 	utime(undef, undef, $file) 
@@ -5293,19 +5293,19 @@ El uso de un controlador C<__WARN__> proporciona una poderosa manera de silencia
 
 Ver L<perlvar> para más detalles sobre la configuración de las entradas C<%SIG>, y para más ejemplos.  Véase el módulo Carp para otros tipos de avisos mediante sus funciones carp() y cluck().
 
-=item write GESTOR_FICHERO
+=item write GESTOR_ARCHIVO
 X<write>
 
 =item write EXPR
 
 =item write
 
-Escribe un registro formateado (posiblemente de varias líneas) al GESTOR_FICHERO especificado, utilizando el formato asociado con ese archivo.  Por defecto el formato de un archivo es el que tiene el mismo nombre que el gestor de archivo, pero el formato para el canal de salida (véase la función C<select>) se puede establecer de forma explícita mediante la asignación del nombre del formato a la variable C<$~>.
+Escribe un registro formateado (posiblemente de varias líneas) al GESTOR_ARCHIVO especificado, utilizando el formato asociado con ese archivo.  Por defecto el formato de un archivo es el que tiene el mismo nombre que el gestor de archivo, pero el formato para el canal de salida (véase la función C<select>) se puede establecer de forma explícita mediante la asignación del nombre del formato a la variable C<$~>.
 
 El principio de procesamiento de formularios se maneja de forma automática: si no hay suficiente espacio en la página actual para el registro formateado, la página se avanza escribiendo un avance de página, un formato especial de principio de página se utiliza para dar formato al encabezado de la página nueva, y entonces el registro se escribe.
 Por defecto, el formato de principio de página es el nombre del gestor de archivo con "_TOP" añadido al final, pero puede ser configurada de forma dinámica con el formato de su elección mediante la asignación del nombre a la variable C<$^> mientras que el gestor de archivo esté seleccionado.  El número de líneas restantes de la página actual está en la variable C<$->, que se puede fijar a C<0> para forzar una nueva página.
 
-Si GESTOR_FICHERO no está especificado, la salida va al canal predeterminado de salida actual, que suele ser STDOUT, pero puede ser modificado por el operador C<select>.  Si el GESTOR_FICHERO es una EXPR, entonces la expresión se evalúa y la cadena resultante se utiliza para buscar el nombre del GESTOR_FICHERO en tiempo de ejecución.  Para más información sobre formatos, véase L<perlform>.
+Si GESTOR_ARCHIVO no está especificado, la salida va al canal predeterminado de salida actual, que suele ser STDOUT, pero puede ser modificado por el operador C<select>.  Si el GESTOR_ARCHIVO es una EXPR, entonces la expresión se evalúa y la cadena resultante se utiliza para buscar el nombre del GESTOR_ARCHIVO en tiempo de ejecución.  Para más información sobre formatos, véase L<perlform>.
 
 Tenga en cuenta que write I<no> es lo contrario de C<read>.  Por desgracia.
 

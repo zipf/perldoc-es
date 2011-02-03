@@ -122,10 +122,10 @@ No haga tontas contorsiones para salir de un bucle al inicio o al final, cuando 
 
     LINEA:
 	for (;;) {
-	    sentencias;
+	    instrucciones;
 	    last LINEA if $foo;
 	    next LINEA if /^#/;
-	    sentencias;
+	    instrucciones;
 	}
 
 =item *
@@ -148,7 +148,7 @@ Elija identificadores mnemónicos.  Si no puede recordar lo que significa un mne
 
 Mientras identificadores cortos como C<$leenombre> están bien, use guiones bajos para separar palabras en los identificadores más largos.  Generalmente es más fácil leer C<$var_nombres_como_este> que C<$VarNombresComoEste>, especialmente para los que no sean castellanoparlantes. Es una regla que funciona también con C<VAR_NOMBRES_COMO_ESTE>.
 
-Los nombres de los paquetes son, en alguna ocasión, una excepción a esta regla.  Perl, de forma informal, reserva nombres de módulos en minúscula para módulos "pragma" como C<integer> y C<strict>.  Otros módulos deben comenzar con una letra mayúscula y usar luego una mezcla de mayúsculas y minúsculas, pero probablemente sin guiones bajos debido a limitaciones en la representación de nombres de módulos como ficheros en sistemas de ficheros primitivos que deben ajustarse a unos pocos bytes.
+Los nombres de los paquetes son, en alguna ocasión, una excepción a esta regla.  Perl, de forma informal, reserva nombres de módulos en minúscula para módulos "pragma" como C<integer> y C<strict>.  Otros módulos deben comenzar con una letra mayúscula y usar luego una mezcla de mayúsculas y minúsculas, pero probablemente sin guiones bajos debido a limitaciones en la representación de nombres de módulos como archivos en sistemas de archivos primitivos que deben ajustarse a unos pocos bytes.
 
 =item *
 
@@ -222,7 +222,7 @@ use C<BE<lt>E<gt>> para nombres de comandos como B<cat> o B<grep>.
 
 =item *
 
-use C<FE<lt>E<gt>> o C<CE<lt>E<gt>> para nombres de ficheros. C<FE<lt>E<gt>> debe ser el único código Pod para nombres de fichero, pero como la mayoría de los formateadores de Pod lo muestran en cursiva, los caminos Unix y Windows con sus barras y contrabarras pueden hacerlo menos legible, por lo que es mejor mostrarlo con C<CE<lt>E<gt>>.
+use C<FE<lt>E<gt>> o C<CE<lt>E<gt>> para nombres de archivos. C<FE<lt>E<gt>> debe ser el único código Pod para nombres de archivo, pero como la mayoría de los formateadores de Pod lo muestran en cursiva, los caminos Unix y Windows con sus barras y contrabarras pueden hacerlo menos legible, por lo que es mejor mostrarlo con C<CE<lt>E<gt>>.
 
 =back
 

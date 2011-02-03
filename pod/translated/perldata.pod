@@ -63,7 +63,7 @@ la operación int establece un contexto escalar para el operador <>, que respond
 
     sort( <STDIN> )
 
-entonces la operación sort establece un contexto de lista para <>, el cual procede a leer todas las líneas disponibles hasta alcanzar el final del fichero, y envía de vuelta esa lista de líneas a la subrutina sort, que entonces ordena las líneas y las devuelve como una lista o lo que sea dependiendo de cuál sea el contexto en que esté sort.
+entonces la operación sort establece un contexto de lista para <>, el cual procede a leer todas las líneas disponibles hasta alcanzar el final del archivo, y envía de vuelta esa lista de líneas a la subrutina sort, que entonces ordena las líneas y las devuelve como una lista o lo que sea dependiendo de cuál sea el contexto en que esté sort.
 
 La asignación es un poco especial en el sentido de que utiliza su argumento de la izquierda para determinar el contexto del argumento de la derecha.  La asignación a un escalar evalúa lo que hay en el lado derecho en contexto escalar, mientras que la asignación a un array o a un hash evalúa el lado derecho en contexto de lista.  La asignación a una lista (o a una porción, que también es una lista después de todo) también evalúa el lado derecho en contexto de lista.
 
@@ -83,7 +83,7 @@ Un valor escalar se interpreta como VERDADERO, en el sentido booleano, si no es 
 X<boolean> X<bool> X<true> X<false> X<truth> X<booleano> X<verdadero> X<falso> X<verdad>
 
 Hay en realidad dos tipos de cadenas nulas (a las que algunas veces nos referimos como cadenas "vacías"); una definida, y otra, indefinida.  La versión definida es sólo una cadena de longitud cero, tal como C<"">.
-La versión indefinida es el valor que indica que no existe ningún valor real para algo, como cuando hubo un error, se alcanzó el fin de fichero, o cuando se hace referencia a una variable o un elemento de array o hash no inicializados.  Aunque en las versiones anteriores de Perl, un escalar no definido podía llegar a ser definido la primera vez que se usaba en cualquier lugar que esperase un valor definido, esto no va a ocurrir más, excepto en los raros casos de "autovivificación" que se explican en L<perlref>.  Se puede usar el operador defined() para determinar si un valor escalar está definido (esto no tiene significado si se aplica a arrays o hashes), y el operador undef() para producir un valor no definido.
+La versión indefinida es el valor que indica que no existe ningún valor real para algo, como cuando hubo un error, se alcanzó el fin de archivo, o cuando se hace referencia a una variable o un elemento de array o hash no inicializados.  Aunque en las versiones anteriores de Perl, un escalar no definido podía llegar a ser definido la primera vez que se usaba en cualquier lugar que esperase un valor definido, esto no va a ocurrir más, excepto en los raros casos de "autovivificación" que se explican en L<perlref>.  Se puede usar el operador defined() para determinar si un valor escalar está definido (esto no tiene significado si se aplica a arrays o hashes), y el operador undef() para producir un valor no definido.
 X<defined> X<definido> X<undefined> X<indefinido> X<undef> X<null> X<nulo> X<string, null> X<cadena, nulo>
 
 Para saber si una cadena dada es un número válido distinto de cero, a veces es suficiente con compararlo con el 0 numérico y también con el "0" léxico (aunque esto provocará ruido si los avisos están activados).  Esto es porque las cadenas que no son números cuentan como 0, igual a como se comportan en B<awk>:
@@ -200,11 +200,11 @@ X<special literal> X<__END__> X<__DATA__> X<END> X<DATA>
 X<end> X<data> X<^D> X<^Z> X<literal especial>
 
 Los literales especiales __FILE__, __LINE__ y __PACKAGE__ representan el nombre del archivo actual, número de línea, y el nombre del paquete en ese punto de su programa.  Sólo podrán ser utilizados como símbolos aislados; no se interpolarán dentro de cadenas.  Si no hay paquete actual (debido a una directiva C<package;> vacía), __PACKAGE__ tiene el valor indefinido.
-X<__FILE__> X<__LINE__> X<__PACKAGE__> X<line> X<línea> X<file> X<fichero> X<package> X<paquete>
+X<__FILE__> X<__LINE__> X<__PACKAGE__> X<line> X<línea> X<file> X<archivo> X<package> X<paquete>
 
-Los dos caracteres de control ^D y ^Z, y los símbolos __END__ y __DATA__ pueden ser usados para indicar el fin lógico del programa antes del final real del fichero.  Cualquier texto que le siga, es ignorado.
+Los dos caracteres de control ^D y ^Z, y los símbolos __END__ y __DATA__ pueden ser usados para indicar el fin lógico del programa antes del final real del archivo.  Cualquier texto que le siga, es ignorado.
 
-Texto después de __DATA__ se puede leer a través del gestor de archivo C<PAQUETE::DATA>, donde C<PAQUETE> es el paquete que estaba en curso cuando se encontró el símbolo __DATA__.  El gestor de archivo se deja abierto apuntando al contenido que hay después de __DATA__.  Es responsabilidad del programa hacer C<close DATA> cuando se termine la lectura del mismo.  Por compatibilidad con scripts viejos escritos antes de la introducción de __DATA__, __END__ se comporta como __DATA__ en el script de nivel superior (pero no en los archivos cargados con C<require> o C<do>) y deja el resto del contenido del fichero accesible a través de C <main::DATA>.
+Texto después de __DATA__ se puede leer a través del gestor de archivo C<PAQUETE::DATA>, donde C<PAQUETE> es el paquete que estaba en curso cuando se encontró el símbolo __DATA__.  El gestor de archivo se deja abierto apuntando al contenido que hay después de __DATA__.  Es responsabilidad del programa hacer C<close DATA> cuando se termine la lectura del mismo.  Por compatibilidad con I<scripts> viejos escritos antes de la introducción de __DATA__, __END__ se comporta como __DATA__ en el script de nivel superior (pero no en los archivos cargados con C<require> o C<do>) y deja el resto del contenido del archivo accesible a través de C <main::DATA>.
 
 Ver L<Autocargador> para una mayor descripción de __DATA__, y ejemplos de su uso.  Tenga en cuenta que no puede leer desde el gestor de archivo de datos en un bloque BEGIN: el bloque BEGIN se ejecutará tan pronto como sea visto (durante la compilación), momento en que el correspondiente símbolo __DATA__ (o __END__) aún no se ha visto.
 
@@ -286,10 +286,10 @@ Esta interpolación se combina con el hecho de que la apertura y cierre de paré
 Una lista de valores también pueden ser indexadas como un array normal.  Debe poner la lista entre paréntesis para evitar ambigüedades.  Por ejemplo:
 
     # stat devuelve una lista.
-    $acceso = (stat($fichero))[8];
+    $acceso = (stat($archivo))[8];
 
     # ERROR DE SINTAXIS
-    $acceso = stat($fichero)[8];  # ¡OOPS!, OLVIDÓ LOS PARÉNTESIS
+    $acceso = stat($archivo)[8];  # ¡OOPS!, OLVIDÓ LOS PARÉNTESIS
 
     # Buscar un dígito hexadecimal.
     $digitohex = ('a','b','c','d','e','f')[$digito-10];
@@ -306,7 +306,7 @@ Las listas pueden ser asignados a ella sólo cuando cada elemento de la lista en
 Una excepción a esto es que puedes asignar C<undef> en una lista.
 Esto es útil para descartar algunos de los valores de retorno de una función:
 
-    ($dev, $ino, undef, undef, $uid, $gid) = stat($fichero);
+    ($dev, $ino, undef, undef, $uid, $gid) = stat($archivo);
 
 Lista de asignación en contexto escalar devuelve el número de elementos producidos por la expresión en el lado derecho de la asignación:
 
@@ -419,7 +419,7 @@ Las asignaciones anteriores son exactamente iguales a
                    = (0xff0000, 0x0000ff, 0x00ff00);
     ($gente[0], $gente[-1]) = ($gente[-1], $gente[0]);
 
-Como cambiando una porción cambia el array o hash original que se está troceando, una sentencia C<foreach> cambiará algunos -o incluso todos- los valores del array o hash.
+Como cambiando una porción cambia el array o hash original que se está troceando, una instrucción C<foreach> cambiará algunos -o incluso todos- los valores del array o hash.
 
     foreach (@array[ 4 .. 10 ]) { s/pedro/pablo/ } 
 
@@ -490,10 +490,10 @@ Por ejemplo:
     }
     $fh = nuevoopen('/etc/passwd');
 
-Ahora que tenemos la notación, C<*foo{COSA}>, typeglobs no se utilizan tanto para la manipulación de gestores de archivo, aunque siguen siendo necesarios para pasar gestores de archivo y de directorio dentro o fuera de funciones. Esto es porque C<*HANDLE{IO}> sólo funciona si HANDLE ya se ha utilizado como un gestor de fichero.
+Ahora que tenemos la notación, C<*foo{COSA}>, typeglobs no se utilizan tanto para la manipulación de gestores de archivo, aunque siguen siendo necesarios para pasar gestores de archivo y de directorio dentro o fuera de funciones. Esto es porque C<*HANDLE{IO}> sólo funciona si HANDLE ya se ha utilizado como un gestor de archivo.
 En otras palabras, C<*FH> debe ser usado para crear nuevas entradas de en la tabla de símbolos; C<*foo{COSA}> no.  En caso de duda, use C<*FH>.
 
-Todas las funciones que son capaces de crear gestores de archivo (open(), opendir(), pipe(), socketpair(), sysopen(), socket(), y accept()) crea automáticamente un gestor de archivo anónimo si el gestor que se les pasa es una variable escalar sin inicializar. Esto permite que sentencias como C<open(my $fh, ...)> y C<open(local $fh,...)> que se utilizan para crear gestores de archivo que convenientemente se cerrarán automáticamente cuando termine el ámbito de aplicación, siempre que no haya otras referencias a ellos. Esto elimina en gran medida la necesidad de typeglobs al abrir gestores de archivo que deberían ser traspasados, como en el ejemplo siguiente:
+Todas las funciones que son capaces de crear gestores de archivo (open(), opendir(), pipe(), socketpair(), sysopen(), socket(), y accept()) crea automáticamente un gestor de archivo anónimo si el gestor que se les pasa es una variable escalar sin inicializar. Esto permite que instrucciones como C<open(my $fh, ...)> y C<open(local $fh,...)> que se utilizan para crear gestores de archivo que convenientemente se cerrarán automáticamente cuando termine el ámbito de aplicación, siempre que no haya otras referencias a ellos. Esto elimina en gran medida la necesidad de typeglobs al abrir gestores de archivo que deberían ser traspasados, como en el ejemplo siguiente:
 
     sub miopen {
         open my $fh, "@_"
