@@ -1,57 +1,40 @@
 package POD2::ES;
-
-use 5.005;
+use warnings;
 use strict;
-use vars qw($VERSION);
-$VERSION = '5.12.3.01_1';
-
-use base qw(Exporter);
-our @EXPORT = qw(print_pod print_pods search_perlfunc_re new pod_dirs);
 
 use utf8;
+use base 'POD2::Base';
+
+our $VERSION = '5.12.3.01_3';
 
 my $pods = {
-    perlintro	=> '5.12.3',
-    # perl	=> '5.12.3',
-    # perlbook	=> '5.12.3',
-    # perlcheat => '5.12.3',
-    # perldata	=> '5.12.3',
-    # perlfunc	=> '5.12.3',
-    # perlstyle => '5.12.3',
-    # perlsyn	=> '5.12.3',
+    perlintro   => '5.12.3',
+    # perl       => '5.12.3',
+    # perlbook   => '5.12.3',
+    # perlcheat  => '5.12.3',
+    # perldata   => '5.12.3',
+    # perlfunc   => '5.12.3',
+    # perlstyle  => '5.12.3',
+    # perlsyn    => '5.12.3',
 };
 
-sub new {
-    return __PACKAGE__;
-}
-
-sub pod_dirs {
-    ( my $mod = __PACKAGE__ . '.pm' ) =~ s|::|/|g;
-    ( my $dir = $INC{$mod} ) =~ s/\.pm\z//;
-    return $dir;
-}
-
-sub print_pods {
-    print_pod(sort keys %$pods);
-}
 
 sub print_pod {
     my @args = @_ ? @_ : @ARGV;
 
     while (@args) {
-	(my $pod = lc(shift @args)) =~ s/\.pod$//;
-	if ( exists $pods->{$pod} ) {
-	    print "\t'$pod' traducido correspondiente a Perl
-$pods->{$pod}\n";
-	}
-	else {
-	    print "\t'$pod' todavía no existe\n";
-	}
+        (my $pod = lc(shift @args)) =~ s/\.pod$//;
+        if ( exists $pods->{$pod} ) {
+            print "\t'$pod' traducido correspondiente a Perl $pods->{$pod}\n";
+        } else {
+            print "\t'$pod' no existe\n";
+        }
     }
 }
 
+
 sub search_perlfunc_re {
-    return 'Listado alfabético de funciones de Perl';
+    return 'Lista de funciones de Perl en orden alfabético';
 }
 
 1;
@@ -59,8 +42,7 @@ __END__
 
 =head1 NOMBRE
 
-POD2::ES - Documentación de Perl en español / Spanish translation of Perl
-core documentation
+POD2::ES - Documentación de Perl en español
 
 =head1 SINOPSIS
 
@@ -76,17 +58,16 @@ core documentation
 =head1 DESCRIPCIÓN
 
 pod2es es el proyecto de traducción al español de la documentación básica
-de Perl. Por su dimensión, es un proyecto a largo plazo. :-) 
+de Perl. Por su dimensión, es un proyecto a largo plazo.   
 
-Consulte L<http://github.com/zipf/perldoc-es> para obtener más información
-sobre el proyecto. 
+Vea L<http://github.com/zipf/perldoc-es> para obtener más información. 
 
 Cuando haya instalado el paquete, puede utilizar el siguiente comando para
 consultar la documentación: 
 
   %> perldoc POD2::ES::<nombre_de_pod>
 
-=head1 EXTENSIÓN DE perldoc
+=head1 ACTUALIZACIÓN DE perldoc
 
 Por desgracia, los útiles modificadores C<-f> y C<-q> de C<perldoc> no
 funcionan con la documentación traducida.
@@ -112,8 +93,7 @@ para no tener que escribir el modificador C<-L> cada vez:
  
 Puede aplicar la revisión con la línea siguiente: 
 
-  %> patch -p0 `/ruta_de_perl -MPod::Perldoc -e 'print
-$INC{"Pod/Perldoc.pm"}'` < /ruta/Perldoc.pm-3.14-patch
+  %> patch -p0 `/ruta_de_perl -MPod::Perldoc -e 'print $INC{"Pod/Perldoc.pm"}'` < /ruta/Perldoc.pm-3.14-patch
 
 La revisión se incluye con esta distribución y se encuentra en
 F<./patches/Perldoc.pm-3.14-patch>.
@@ -123,7 +103,7 @@ L<Pod::Perldoc|Pod::Perldoc>
 (incluida en Perl 5.8.7 y en Perl 5.8.8). Si tiene una distribución de Perl
 anterior
 (salvo la E<gt>= 5.8.1) y está impaciente por aplicar la revisión,
-actualice el módulo L<Pod::Perldoc|Pod::Perldoc> a la versión 3.14. ;-) 
+actualice el módulo L<Pod::Perldoc|Pod::Perldoc> a la versión 3.14.   
 
 Consulte la API C<search_perlfunc_re> para obtener más información.
 
@@ -161,10 +141,10 @@ pods pasados como argumentos.
 =item * C<search_perlfunc_re>
 
 Como el método C<search_perlfunc> de F<Pod/Perldoc.pm> utiliza la cadena
-"Lista alfabética de funciones de Perl" incluida en el código (como una
-expresión regular) para omitir la introducción, a fin de que el archivo de
-revisión funcione con otros idiomas con la opción C<-L>, hemos utilizado un
-mecanismo sencillo, similar a un complemento. 
+"Lista de funciones de Perl en orden alfabético" incluida en el código
+(como una expresión regular) para omitir la introducción, a fin de que el
+archivo de revisión funcione con otros idiomas con la opción C<-L>, hemos
+utilizado un mecanismo sencillo, similar a un complemento. 
 
 El paquete de idioma C<POD2::E<lt>idiomaE<gt>> debe exportar
 C<search_perlfunc_re> para devolver una traducción de la cadena mencionada
@@ -177,14 +157,67 @@ aplicar cada vez la revisión de F<Pod/Perldoc.pm>.
 
 =back
 
-=head1 Más información sobre el proyecto
+=head1 PROYECTO
 
-Visite L<http://github.com/zipf/perldoc-es> para obtener más información.
+Encontrará más información sobre el proyecto en
+L<http://github.com/zipf/perldoc-es>.
 
 =head1 AUTORES
 
-Joaquín Ferrero C<< explorer at joaquinferrero.com >>
-y Enrique Nell C<< blas.gordon at gmail.com >>.
+=over
+
+=item * Joaquín Ferrero, C< explorer at joaquinferrero.com >
+
+=item * Enrique Nell, C< blas.gordon at gmail.com >
+
+=back
+
+=head1 NOTAS SOBRE LA TRADUCCIÓN
+
+Para este proyecto hemos tomado las siguientes decisiones:
+
+=over
+
+=item * No utilizar caracteres acentuados en los nombres de variables y
+funciones de los ejemplos de código
+
+Es perfectamente posible utilizarlos, (solo hay que codificar el programa
+como UTF-8 y agregar "use utf8;" al principio), pero teniendo en mente a
+ese programador más impulsivo, que valora su tiempo y no quiere perderse en
+reflexiones ni verse encorsetado por las normas del lenguaje, creemos que
+así resultará más fácil probar el código de los ejemplos.
+
+Por otra parte, en aquellos sistemas que cuenten con un sistema antiguo de
+visualización de texto, como los terminales de línea de comandos, es posible
+que se pierdan los acentos. En la mayor parte de los casos será debido
+a la presencia de una versión de groff (programa utilizado por los comandos
+man y perldoc) que no admite dichos caracteres. En la documentación
+HTML no debería haber problemas.
+
+
+=item * No traducir los términos "array" y "hash"
+
+Si tenemos en cuenta que Perl tiene más de 20 años y que la inmensa mayoría
+de los libros disponibles sobre este lenguaje están en inglés, a nadie extrañará
+que la comunidad de habla hispana se refiera a estos tipos de datos por su
+nombre en inglés. Existen posibles traducciones, como "matriz", "lista" o
+"arreglo" para "array", o "diccionario" para "hash", pero su uso no se ha
+extendido, por lo que hemos preferido utilizar su nombre original.
+Creemos que esto facilitará la lectura de la documentación.
+
+
+=item * Utilizar "español neutro"
+
+El "español neutro" es un español controlado que pretende evitar el uso de
+términos ofensivos o de construcciones poco frecuentes en determinados países
+de habla hispana, con el objetivo de lograr traducciones válidas para 
+España y Latinoamérica.
+
+=back
+
+=head1 REFERENCIAS
+
+Proyecto OmegaT: L<http://omegat.org/>
 
 
 =head1 VEA TAMBIÉN
@@ -195,9 +228,9 @@ L<POD2::PT_BR>, L<POD2::IT>, L<POD2::FR>, L<POD2::LT>, L<perl>.
 =head1 ERRORES
 
 Puede notificar errores (bugs) o solicitar funcionalidad a través de la
-dirección C<bug-pod2-esd at rt.cpan.org> o de la interfaz web en
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POD2-ES>.  Se le
-comunicarán automáticamente los cambios relacionados con los errores
+dirección de correo electrónico C<bug-pod2-esd at rt.cpan.org> o de la
+interfaz web en L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POD2-ES>. 
+Se le comunicarán automáticamente los cambios relacionados con los errores
 notificados o la funcionalidad solicitada.
 
 
@@ -233,6 +266,8 @@ L<http://search.cpan.org/dist/POD2-ES/>
 
 =head1 AGRADECIMIENTOS
 
+Los autores desean expresar su agradecimiento al equipo de desarrollo
+de OmegaT, la herramienta utilizada para la traducción.
 
 =head1 LICENCIA Y COPYRIGHT
 
@@ -242,14 +277,7 @@ Este programa es software libre; puede redistribuirlo o modificarlo bajo
 los términos de la licencia GNU General Public License publicada por la
 Free Software Foundation, o los de la licencia Artistic.
 
-	Consulte http://dev.perl.org/licenses/ para obtener más
-información.
+Consulte http://dev.perl.org/licenses/ para obtener más información.
 
 
 =cut
-
-
-=head1 TRADUCTORES
-
-Joaquín Ferrero C<< explorer at joaquinferrero.com >>
-Enrique Nell C<< blas.gordon at gmail.com >>

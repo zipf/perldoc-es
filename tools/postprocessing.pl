@@ -5,9 +5,9 @@
 use strict;
 use warnings;
 use File::Copy;
+use File::Basename;
 use Text::Wrap qw(wrap $columns);
 use utf8;
-use 5.012;
 
 $|++;
 
@@ -34,6 +34,8 @@ copy($pod_path, $in_path);
 open my $in, '<:encoding(latin-1)', $in_path;
 open my $out, '>:encoding(latin-1)', $out_path;
 
+# wrap lines (OmegaT removes some line breaks) 
+
 $columns = 76;
 
 while ( <$in> ) {
@@ -49,9 +51,24 @@ while ( <$in> ) {
 
 close $in;
 
+# Add TRANSLATORS section
+
 print $out "\n\n=head1 TRADUCTORES\n\n";
-say $out "Joaquín Ferrero C<< explorer at joaquinferrero.com >>";
-say $out "Enrique Nell C<< blas.gordon at gmail.com >>";
+print $out "=over\n\n";
+print $out "=item * Joaquín Ferrero, C< explorer at joaquinferrero.com >\n\n";
+print $out "=item * Enrique Nell, C< blas.gordon at gmail.com >\n\n";
+print $out "=back";
 
 close $out;
+
+
+# Convert pod to html for visual check
+
+my ($name, $path, $suffix) = fileparse($pod_path, qr{\.pod;\.pm});
+my $out_html = $path . "/$name.html";
+
+system("perl -MPod::Simple::HTML -e Pod::Simple::HTML::go $pod_path > $out_html");
+
+
+
 

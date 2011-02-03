@@ -1,14 +1,11 @@
 package POD2::ES;
-
-use 5.005;
+use warnings;
 use strict;
-use vars qw($VERSION);
-$VERSION = '5.12.3.01_1';
-
-use base qw(Exporter);
-our @EXPORT = qw(print_pod print_pods search_perlfunc_re new pod_dirs);
 
 use utf8;
+use base 'POD2::Base';
+
+our $VERSION = '5.12.3.01_2';
 
 my $pods = {
     perlintro   => '5.12.3',
@@ -21,19 +18,6 @@ my $pods = {
     # perlsyn   => '5.12.3',
 };
 
-sub new {
-    return __PACKAGE__;
-}
-
-sub pod_dirs {
-    ( my $mod = __PACKAGE__ . '.pm' ) =~ s|::|/|g;
-    ( my $dir = $INC{$mod} ) =~ s/\.pm\z//;
-    return $dir;
-}
-
-sub print_pods {
-    print_pod(sort keys %$pods);
-}
 
 sub print_pod {
     my @args = @_ ? @_ : @ARGV;
@@ -42,15 +26,15 @@ sub print_pod {
         (my $pod = lc(shift @args)) =~ s/\.pod$//;
         if ( exists $pods->{$pod} ) {
             print "\t'$pod' traducido correspondiente a Perl $pods->{$pod}\n";
-        }
-        else {
+        } else {
             print "\t'$pod' todavía no existe\n";
         }
     }
 }
 
+
 sub search_perlfunc_re {
-    return 'Listado alfabético de funciones de Perl';
+    return 'Lista de funciones de Perl en orden alfabético';
 }
 
 1;
@@ -58,7 +42,7 @@ __END__
 
 =head1 NOMBRE
 
-POD2::ES - Documentación de Perl en español / Spanish translation of Perl core documentation
+POD2::ES - Documentación de Perl en español
 
 =head1 SINOPSIS
 
@@ -73,9 +57,9 @@ POD2::ES - Documentación de Perl en español / Spanish translation of Perl core d
 
 =head1 DESCRIPCIÓN
 
-pod2es es el proyecto de traducción al español de la documentación básica de Perl. Por su dimensión, es un proyecto a largo plazo. :-) 
+pod2es es el proyecto de traducción al español de la documentación básica de Perl. Por su dimensión, es un proyecto a largo plazo.   
 
-Consulte L<http://github.com/zipf/perldoc-es> para obtener más información sobre el proyecto. 
+Vea L<http://github.com/zipf/perldoc-es> para obtener más información. 
 
 Cuando haya instalado el paquete, puede utilizar el siguiente comando para consultar la documentación: 
 
@@ -109,7 +93,7 @@ La revisión se incluye con esta distribución y se encuentra en F<./patches/Perld
 
 Tenga en cuenta que la revisión es para la versión 3.14 de L<Pod::Perldoc|Pod::Perldoc>
 (incluida en Perl 5.8.7 y en Perl 5.8.8). Si tiene una distribución de Perl anterior
-(salvo la E<gt>= 5.8.1) y está impaciente por aplicar la revisión, actualice el módulo L<Pod::Perldoc|Pod::Perldoc> a la versión 3.14. ;-) 
+(salvo la E<gt>= 5.8.1) y está impaciente por aplicar la revisión, actualice el módulo L<Pod::Perldoc|Pod::Perldoc> a la versión 3.14.   
 
 Consulte la API C<search_perlfunc_re> para obtener más información.
 
@@ -142,22 +126,20 @@ Imprime en pantalla la versión original de Perl correspondiente a todos los pods
 =item * C<search_perlfunc_re>
 
 Como el método C<search_perlfunc> de F<Pod/Perldoc.pm> utiliza la cadena
-"Lista alfabética de funciones de Perl" incluida en el código (como una expresión regular) para omitir la introducción, a fin de que el archivo de revisión funcione con otros idiomas con la opción C<-L>, hemos utilizado un mecanismo sencillo, similar a un complemento. 
+"Lista de funciones de Perl en orden alfabético" incluida en el código (como una expresión regular) para omitir la introducción, a fin de que el archivo de revisión funcione con otros idiomas con la opción C<-L>, hemos utilizado un mecanismo sencillo, similar a un complemento. 
 
 El paquete de idioma C<POD2::E<lt>idiomaE<gt>> debe exportar C<search_perlfunc_re> para devolver una traducción de la cadena mencionada en el párrafo anterior. Esta cadena se usará para omitir la introducción de F<perlfunc.pod>. Si 
 C<POD2::E<lt>idiomaE<gt>-E<gt>search_perlfunc_re> genera un error (o no existe), se restablece el comportamiento predeterminado. Este mecanismo permite agregar traducciones de C<POD2::*> adicionales sin necesidad de aplicar cada vez la revisión de F<Pod/Perldoc.pm>.
 
 =back
 
-=head1 Más información sobre el proyecto
+=head1 PROYECTO
 
-Visite L<http://github.com/zipf/perldoc-es> para obtener más información.
+Encontrará más información sobre el proyecto en L<http://github.com/zipf/perldoc-es>.
 
 =head1 AUTORES
 
-Joaquín Ferrero C<< explorer at joaquinferrero.com >>
-y Enrique Nell C<< blas.gordon at gmail.com >>.
-
+Joaquín Ferrero E<lt> explorer at joaquinferrero.com E<gt> and Enrique Nell E<lt> blas.gordon at gmail.com E<gt>.
 
 =head1 VEA TAMBIÉN
 
@@ -166,7 +148,7 @@ L<POD2::PT_BR>, L<POD2::IT>, L<POD2::FR>, L<POD2::LT>, L<perl>.
 
 =head1 ERRORES
 
-Puede notificar errores (bugs) o solicitar funcionalidad a través de la dirección C<bug-pod2-esd at rt.cpan.org> o de la interfaz web en L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POD2-ES>.  Se le comunicarán automáticamente los cambios relacionados con los errores notificados o la funcionalidad solicitada.
+Puede notificar errores (bugs) o solicitar funcionalidad a través de la dirección de correo electrónico C<bug-pod2-esd at rt.cpan.org> o de la interfaz web en L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POD2-ES>.  Se le comunicarán automáticamente los cambios relacionados con los errores notificados o la funcionalidad solicitada.
 
 
 =head1 ASISTENCIA
@@ -208,7 +190,7 @@ Copyright 2011 Equipo de Perl en Español.
 
 Este programa es software libre; puede redistribuirlo o modificarlo bajo los términos de la licencia GNU General Public License publicada por la Free Software Foundation, o los de la licencia Artistic.
 
-	Consulte http://dev.perl.org/licenses/ para obtener más información.
+Consulte http://dev.perl.org/licenses/ para obtener más información.
 
 
 =cut
