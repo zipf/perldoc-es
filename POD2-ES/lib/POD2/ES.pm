@@ -275,7 +275,7 @@ Proyecto OmegaT: L<http://omegat.org/>
 
 Por el elevado volumen de trabajo que representa y su larga duración,
 el proyecto de traducción de la documentación de Perl requiere un 
-esfuerzo sostenido que solo está al alcance de los espíritus más 
+esfuerzo sostenido que sólo está al alcance de los espíritus más 
 sólidos y altruistas.
 Los autores no exigen, pero tampoco rechazarán, compensaciones en 
 forma de dinero, libros, productos derivados del cerdo (chancho) o
