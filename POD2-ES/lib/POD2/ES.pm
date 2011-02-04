@@ -181,10 +181,10 @@ Para este proyecto hemos tomado las siguientes decisiones:
 =item * No utilizar caracteres acentuados en los nombres de variables y
 funciones de los ejemplos de código
 
-Es perfectamente posible utilizarlos, (solo hay que codificar el programa
+Es perfectamente posible utilizarlos (solo hay que codificar el programa
 como UTF-8 y agregar "use utf8;" al principio), pero teniendo en mente a
 ese programador más impulsivo, que valora su tiempo y no quiere perderse en
-reflexiones ni verse encorsetado por las normas del lenguaje, creemos que
+reflexiones ni verse encorsetado por las normas de la lengua, creemos que
 así resultará más fácil probar el código de los ejemplos.
 
 Por otra parte, en aquellos sistemas que cuenten con un sistema antiguo de
@@ -214,10 +214,6 @@ de habla hispana, con el objetivo de lograr traducciones válidas para
 España y Latinoamérica.
 
 =back
-
-=head1 REFERENCIAS
-
-Proyecto OmegaT: L<http://omegat.org/>
 
 
 =head1 VEA TAMBIÉN
@@ -266,8 +262,26 @@ L<http://search.cpan.org/dist/POD2-ES/>
 
 =head1 AGRADECIMIENTOS
 
-Los autores desean expresar su agradecimiento al equipo de desarrollo
+Los autores desean expresar su gratitud al equipo de desarrollo
 de OmegaT, la herramienta utilizada para la traducción.
+
+
+=head1 REFERENCIAS
+
+Proyecto OmegaT: L<http://omegat.org/>
+
+
+=head1 DONATIVOS
+
+Por el elevado volumen de trabajo que representa y su larga duración,
+el proyecto de traducción de la documentación de Perl requiere un 
+esfuerzo sostenido que solo está al alcance de los espíritus más 
+sólidos y altruistas.
+Los autores no exigen, pero tampoco rechazarán, compensaciones en 
+forma de dinero, libros, productos derivados del cerdo (chancho) o
+viajes a la Polinesia, destinadas a reducir la fatiga y mantener la
+moral alta. Todo será bienvenido.
+
 
 =head1 LICENCIA Y COPYRIGHT
 
