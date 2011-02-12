@@ -5,12 +5,13 @@ use strict;
 use utf8;
 use base 'POD2::Base';
 
-our $VERSION = '5.12.3.01';
+our $VERSION = '5.12.3.02';
 
 my $pods = {
     perlintro   => '5.12.3',
-    # perl       => '5.12.3',
-    # perlbook   => '5.12.3',
+    perl        => '5.12.3',
+    perlbook    => '5.12.3',
+    perlunitut  => '5.12.3',
     # perlcheat  => '5.12.3',
     # perldata   => '5.12.3',
     # perlfunc   => '5.12.3',
