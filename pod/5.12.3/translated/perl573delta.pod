@@ -1,27 +1,27 @@
 =head1 NOMBRE
 
-perl573delta - qu√© hay de nuevo para perl v5.7.3
+perl573delta - quÈ hay de nuevo para perl v5.7.3
 
-=head1 DESCRIPCI√ìN
+=head1 DESCRIPCI”N
 
-Este documento describe las diferencias entre la versi√≥n 5.7.2 y la versi√≥n 5.7.3.  
+Este documento describe las diferencias entre la versiÛn 5.7.2 y la versiÛn 5.7.3.  
 
-(Para ver las diferencias entre la versi√≥n 5.6.0 y la versi√≥n 5.7.0, v√©ase L<perl570delta>.  (Para ver las diferencias entre la versi√≥n 5.7.0 y la versi√≥n 5.7.1, v√©ase L<perl571delta>.  (Para ver las diferencias entre la versi√≥n 5.7.1 y la versi√≥n 5.7.2, v√©ase L<perl572delta>).
+(Para ver las diferencias entre la versiÛn 5.6.0 y la versiÛn 5.7.0, vÈase L<perl570delta>.  (Para ver las diferencias entre la versiÛn 5.7.0 y la versiÛn 5.7.1, vÈase L<perl571delta>.  (Para ver las diferencias entre la versiÛn 5.7.1 y la versiÛn 5.7.2, vÈase L<perl572delta>).
 
 =head1 Cambios
 
-Esto es s√≥lo una selecci√≥n de algunos de los cambios m√°s notables.
-Los n√∫meros se refieren a los n√∫meros de cambio en el repositorio Perl; v√©ase L<Changes58> (o L<Cambios> en Perl 5.8.1).  Adem√°s de estos cambios, mucho trabajo se llev√≥ a cabo en la integraci√≥n de I<threads>, PerlIO, y Unicode; limpieza general del c√≥digo, y por √∫ltimo, pero no menos importante, portar a los no-Unix, tales como Win32, VMS, Cygwin, DJGPP, VOS, Mac OS Classic, y EBCDIC.
+Esto es sÛlo una selecciÛn de algunos de los cambios m·s notables.
+Los n˙meros se refieren a los n˙meros de cambio en el repositorio Perl; vÈase L<Changes58> (o L<Cambios> en Perl 5.8.1).  Adem·s de estos cambios, mucho trabajo se llevÛ a cabo en la integraciÛn de I<threads>, PerlIO, y Unicode; limpieza general del cÛdigo, y por ˙ltimo, pero no menos importante, portar a los no-Unix, tales como Win32, VMS, Cygwin, DJGPP, VOS, Mac OS Classic, y EBCDIC.
 
 =over 4
 
 =item 11362
 
-a√±adir LC_MESSAGES a la etiqueta de exportaci√≥n :locale_h de POSIX
+aÒadir LC_MESSAGES a la etiqueta de exportaciÛn :locale_h de POSIX
 
 =item 11371
 
-a√±adir DEL a [:cntrl:]
+aÒadir DEL a [:cntrl:]
 
 =item 11375
 
@@ -33,7 +33,7 @@ Win32: fallos arreglados en el manejo de entornos virtualizados
 
 =item 11410
 
-arreglado un error en la comprobaci√≥n de seguridad aceitosa de open()
+arreglado un error en la comprobaciÛn de seguridad aceitosa de open()
 
 =item 11423
 
@@ -41,7 +41,7 @@ hacer que el fork() de perl sea seguro incluso en plataformas que no tienen pthr
 
 =item 11459
 
-realizar la optimizaci√≥n de conexi√≥n y los niveles de depuraci√≥n durante la compilaci√≥n de Perl es m√°s f√°cil usando la variable de entorno OPTIMIZE
+realizar la optimizaciÛn de conexiÛn y los niveles de depuraciÛn durante la compilaciÛn de Perl es m·s f·cil usando la variable de entorno OPTIMIZE
 
 =item 11475
 
@@ -49,15 +49,15 @@ hacer que las capturas no utilizadas de split() sean indefinidas, no ''
 
 =item 11485
 
-Search::Dict: permite transformar l√≠neas antes de compararlas 
+Search::Dict: permite transformar lÌneas antes de compararlas 
 
 =item 11490
 
-permitir la instalaci√≥n de m√≥dulos extra o empaquetados cuando se compila Perl
+permitir la instalaciÛn de mÛdulos extra o empaquetados cuando se compila Perl
 
 =item 11516
 
-a√±adir -Wall en cflags cuando se compila con gcc para eliminar pr√°cticas dudosas de C
+aÒadir -Wall en cflags cuando se compila con gcc para eliminar pr·cticas dudosas de C
 
 =item 11541
 
@@ -65,7 +65,7 @@ optimizador conectable
 
 =item 11549
 
-WinCE: integrar su versi√≥n
+WinCE: integrar su versiÛn
 
 =item 11589
 
@@ -73,11 +73,11 @@ Win32: el select() de 4 argumentos estaba roto
 
 =item 11594
 
-introducir la utilidad perlivp para comprobar la instalaci√≥n de Perl (PIV = Procedimiento de Verificaci√≥n de la instalaci√≥n)
+introducir la utilidad perlivp para comprobar la instalaciÛn de Perl (PIV = Procedimiento de VerificaciÛn de la instalaciÛn)
 
 =item 11623
 
-cambiar el nombre de lib/unicode a lib/unicore para evitar problemas de may√∫sculas y min√∫sculas, con lib/Unicode
+cambiar el nombre de lib/unicode a lib/unicore para evitar problemas de may˙sculas y min˙sculas, con lib/Unicode
 
 =item 111631
 
@@ -85,31 +85,31 @@ eliminar Time::Piece
 
 =item 11643
 
-documentar que el uso de UTF-8 no es la manera correcta en la mayor√≠a de las ocasiones
+documentar que el uso de UTF-8 no es la manera correcta en la mayorÌa de las ocasiones
 
 =item 11656
 
-permitir la construcci√≥n de perl con -DUSE_UTF8_SCRIPTS que hace que sea la codificaci√≥n UTF-8 la de por defecto en el codificado de los script (no est√° por defecto ya que romper√≠a todos los script que tiene un legado de ocho bits de datos dentro de si)
+permitir la construcciÛn de perl con -DUSE_UTF8_SCRIPTS que hace que sea la codificaciÛn UTF-8 la de por defecto en el codificado de los script (no est· por defecto ya que romperÌa todos los script que tiene un legado de ocho bits de datos dentro de si)
 
 =item 11725
 
-la divisi√≥n preserva los enteros de 64 bits
+la divisiÛn preserva los enteros de 64 bits
 
 =item 11743
 
-documentar la caracter√≠stica "referencia a c√≥digo" en @INC
+documentar la caracterÌstica "referencia a cÛdigo" en @INC
 
 =item 11794
 
-m√≥dulo (%) preserva los enteros de 64 bits
+mÛdulo (%) preserva los enteros de 64 bits
 
 =item 11825
 
-actualizaci√≥n a Unicode 3.1.1
+actualizaciÛn a Unicode 3.1.1
 
 =item 11865
 
-a√±adir soporte al prototipado de \[$@%&*]
+aÒadir soporte al prototipado de \[$@%&*]
 
 =item 11874
 
@@ -137,11 +137,11 @@ Devel::Peek: muestra SVs UTF-8 como \x{...}
 
 =item 12288
 
-Data::Dumper: opci√≥n para abreviar hashes
+Data::Dumper: opciÛn para abreviar hashes
 
 =item 12542
 
-a√±adido perlpodspec
+aÒadido perlpodspec
 
 =item 12652
 
@@ -157,11 +157,11 @@ hashes de solo lectura (el interfaz de usuario es Hash::Util)
 
 =item 13162
 
-a√±adido Devel::PPPort
+aÒadido Devel::PPPort
 
 =item 13179
 
-a√±adido el pragma sort
+aÒadido el pragma sort
 
 =item 13326
 
@@ -169,11 +169,11 @@ VMS: arreglado perl -P
 
 =item 13358
 
-a√±adido perlpacktut
+aÒadido perlpacktut
 
 =item 13452
 
-SUPER-UX: a√±adido archivo de sugerencias
+SUPER-UX: aÒadido archivo de sugerencias
 
 =item 13575
 
@@ -181,11 +181,11 @@ Win32: waitpid(-1,WNOHANG) no bloqueante
 
 =item 13684
 
-introducir la opci√≥n -t para un control de seguridad aceitoso m√°s suave
+introducir la opciÛn -t para un control de seguridad aceitoso m·s suave
 
 =item 14694
 
-a√±adido el pragma if
+aÒadido el pragma if
 
 =item 14832
 
@@ -199,24 +199,24 @@ documentar el comportamiento del nuevo comportamiento de I<taint> de exec LISTA 
 
 =head1 Informar de errores
 
-Si usted encuentra algo que piensa que es un error, podr√≠a verificar los art√≠culos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  Tambi√©n puede haber informaci√≥n en http://www.perl.com/, La p√°gina oficial de Perl.
+Si usted encuentra algo que piensa que es un error, podrÌa verificar los artÌculos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  TambiÈn puede haber informaciÛn en http://www.perl.com/, La p·gina oficial de Perl.
 
-Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuci√≥n.  Aseg√∫rese de reducir la aparici√≥n del error en un programa que sea peque√±o, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser√°n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaci√≥n de Perl.
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuciÛn.  Aseg˙rese de reducir la apariciÛn del error en un programa que sea pequeÒo, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser·n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaciÛn de Perl.
 
-=head1 VEA TAMBI√âN
+=head1 VEA TAMBI…N
 
-El archivo de F<Changes> (Cambios) para obtener m√°s informaci√≥n exhaustiva sobre lo que ha cambiado.
+El archivo de F<Changes> (Cambios) para obtener m·s informaciÛn exhaustiva sobre lo que ha cambiado.
 
-El archivo F<INSTALL> (INSTALAR) de c√≥mo construir Perl.
+El archivo F<INSTALL> (INSTALAR) de cÛmo construir Perl.
 
 El archivo F<README> (LEEME) para asuntos generales.
 
-Los archivos F<Artistic> y F<Copying> para ver la informaci√≥n sobre derechos de autor.
+Los archivos F<Artistic> y F<Copying> para ver la informaciÛn sobre derechos de autor.
 
 =head1 HISTORIA
 
 Escrito por Jarkko Hietaniemi <F<jhi@iki.fi>>, con muchas contribuciones de los I<Perl Porters> y usuarios Perl que suministraron comentarios y revisiones.
 
-Env√≠e omisiones o correcciones a <F<perlbug@perl.org>>.
+EnvÌe omisiones o correcciones a <F<perlbug@perl.org>>.
 
 =cut

@@ -1,4 +1,4 @@
-Si lees este archivo _tal_como_es_, ignora los caracteres curiosos que veas. Est√° escrito en formato POD (ver la p√°gina de manual perlpod) que est√° espec√≠ficamente dise√±ado para ser legible de forma sencilla.
+Si lees este archivo _tal_como_es_, ignora los caracteres curiosos que veas. Est· escrito en formato POD (ver la p·gina de manual perlpod) que est· especÌficamente diseÒado para ser legible de forma sencilla.
 
 =head1 NOMBRE
 
@@ -13,7 +13,7 @@ Se puede leer este documento en los siguientes formatos:
         explorer perldgux.html
         info perldgux
 
-por listar algunos (no todos pueden estar disponibles simult√°neamente), o puede ser le√≠do I<tal cual>: como F<README.dgux>.
+por listar algunos (no todos pueden estar disponibles simult·neamente), o puede ser leÌdo I<tal cual>: como F<README.dgux>.
 
 =cut
 
@@ -23,16 +23,16 @@ Contenido
 
       NOMBRE
       SINOPSIS
-      DESCRIPCI√ìN
-      COMPILACI√ìN
+      DESCRIPCI”N
+      COMPILACI”N
          -  Caso sin I<threads>
          -  Caso con I<threads>
-         -  Comprobaci√≥n
+         -  ComprobaciÛn
          -  Instalando el perl compilado
       AUTOR
-      VER TAMBI√âN
+      VER TAMBI…N
 
-=head1 DESCRIPCI√ìN
+=head1 DESCRIPCI”N
 
 Perl 5.7/8.x para DG/UX ix86 R4.20MU0x
 
@@ -40,19 +40,19 @@ Perl 5.7/8.x para DG/UX ix86 R4.20MU0x
 
 =head2 Perl sin I<threads> en DG/UX
 
-S√≥lo tiene que ejecutar el script ./Configure desde el directorio principal.
+SÛlo tiene que ejecutar el script ./Configure desde el directorio principal.
 Luego ejecute "make" para compilar.
 
 =head2 Perl con I<threads> en DG/UX
 
-Si est√° utilizando como compilador el GCC-2.95.x revisi√≥n DG/UX, una soluci√≥n f√°cil para la configuraci√≥n de perl en su m√°quina DG/UX es ejecutar el comando:
+Si est· utilizando como compilador el GCC-2.95.x revisiÛn DG/UX, una soluciÛn f·cil para la configuraciÛn de perl en su m·quina DG/UX es ejecutar el comando:
 
 ./Configure -Dusethreads -Duseithreads -Dusedevel -des
 
-Esto, autom√°ticamente, aceptar√° todos los valores predeterminados y, en particular, /usr/local/ como directorio de instalaci√≥n.
-Tenga en cuenta que GCC-2.95.x revisi√≥n DG/UX sabe de la opci√≥n -pthread, que le permite vincular correctamente la biblioteca -lthread de DG/UX.
+Esto, autom·ticamente, aceptar· todos los valores predeterminados y, en particular, /usr/local/ como directorio de instalaciÛn.
+Tenga en cuenta que GCC-2.95.x revisiÛn DG/UX sabe de la opciÛn -pthread, que le permite vincular correctamente la biblioteca -lthread de DG/UX.
 
-Si desea cambiar el directorio de instalaci√≥n o tiene una DG/UX est√°ndar con un compilador de C GCC-2.7.2.x, entonces no tiene m√°s remedio que hacer una compilaci√≥n interactiva mediante la ejecuci√≥n de la orden:
+Si desea cambiar el directorio de instalaciÛn o tiene una DG/UX est·ndar con un compilador de C GCC-2.7.2.x, entonces no tiene m·s remedio que hacer una compilaciÛn interactiva mediante la ejecuciÛn de la orden:
 
 ./Configure -Dusethreads -Duseithreads
 
@@ -60,24 +60,24 @@ En particular, con GCC-2.7.2.x acepte todos los valores por defecto, y *busque* 
 
     Any additional ld flags (NOT including libraries)? [ -pthread]
 
-en lugar de -pthread, ponga -lthread. CGCC-2.7.2.x que viene con el sistema operativo DG/UX NO conoce la opci√≥n -pthread. As√≠ que su compilaci√≥n producir√° un error si usted elige los valores predeterminados.
-Despu√©s de la configuraci√≥n haya terminado, se puede hacer un "make" para compilar.
+en lugar de -pthread, ponga -lthread. CGCC-2.7.2.x que viene con el sistema operativo DG/UX NO conoce la opciÛn -pthread. AsÌ que su compilaciÛn producir· un error si usted elige los valores predeterminados.
+DespuÈs de la configuraciÛn haya terminado, se puede hacer un "make" para compilar.
 
 =head2 Comprobando Perl en DG/UX
 
-La ejecuci√≥n de un "make test" ejecutar√° todas las pruebas. 
+La ejecuciÛn de un "make test" ejecutar· todas las pruebas. 
 Si la prueba lib/ftmp-security da como resultado algo como
 
     lib/ftmp-security....File::Temp::_gettemp:
     Parent directory (/tmp/) is not safe (sticky bit not set
     when world writable?) at lib/ftmp-security.t line 100
 
-no entre en p√°nico y establezca el bit sticky en el directorio /tmp haciendo lo siguiente como root:
+no entre en p·nico y establezca el bit sticky en el directorio /tmp haciendo lo siguiente como root:
 
 cd /
 chmod +t /tmp (=pone el sticky bit a /tmp).
 
-A continuaci√≥n, vuelva a ejecutar las pruebas. Esta vez, todo debe estar bien.
+A continuaciÛn, vuelva a ejecutar las pruebas. Esta vez, todo debe estar bien.
 
 =head2 Instalando el perl compilado en DG/UX
 
@@ -87,13 +87,13 @@ Ejecute el comando "make install"
 
 Takis Psarogiannakopoulos
 Universidad de Cambridge
-Centro para las Ciencias Matem√°ticas
-Departamento de Matem√°ticas Puras
+Centro para las Ciencias Matem·ticas
+Departamento de Matem·ticas Puras
 Wilberforce road
 Cambridge CB3 0WB , UK
 email <takis@XFree86.Org>
 
-=head1 VEA TAMBI√âN
+=head1 VEA TAMBI…N
 
 perl(1).
 

@@ -1,12 +1,12 @@
 =head1 NOMBRE
 
-perl583delta - Qu√© hay de nuevo para perl v5.8.3
+perl583delta - QuÈ hay de nuevo para perl v5.8.3
 
-=head1 DESCRIPCI√ìN
+=head1 DESCRIPCI”N
 
-Este documento describe las diferencias entre la versi√≥n 5.8.2 y la versi√≥n 5.8.3.
+Este documento describe las diferencias entre la versiÛn 5.8.2 y la versiÛn 5.8.3.
 
-Si est√° actualizando desde una versi√≥n anterior como la 5.6.1, primero lea L<perl58delta>, que describe las diferencias entre 5.6.0 y 5.8.0, y L<perl581delta> y L<perl582delta>, que describe las diferencias entre 5.8.0, 5.8.1 y 5.8.2.
+Si est· actualizando desde una versiÛn anterior como la 5.6.1, primero lea L<perl58delta>, que describe las diferencias entre 5.6.0 y 5.8.0, y L<perl581delta> y L<perl582delta>, que describe las diferencias entre 5.8.0, 5.8.1 y 5.8.2.
 
 =head1 Incompatibilidades
 
@@ -14,16 +14,16 @@ No hay cambios incompatibles con 5.8.2.
 
 =head1 Mejoras principales
 
-Un m√©todo C<SCALAR> est√° ahora disponible para los hash enlazados. Esto se activa cuando un hash enlazado se utiliza en contexto escalar, como
+Un mÈtodo C<SCALAR> est· ahora disponible para los hash enlazados. Esto se activa cuando un hash enlazado se utiliza en contexto escalar, como
 
     if (%tied_hash) {
 	...
     }
 
 
-El comportamiento anterior era que %hash_enlazado devolver√≠a todo la que hubiera devuelto este hash antes de ser enlazado (por lo general, 0). El nuevo comportamiento en ausencia de un m√©todo SCALAR es retornar verdadero si est√° en medio de una iteraci√≥n C<each>, y de otra manera, llamar a FIRSTKEY para comprobar si el hash est√° vac√≠o (asegurarse de que una posterior C<each> tambi√©n comenzar√° llamando FIRSTKEY). Por favor, vea L<perltie/SCALAR> para ver todos los detalles y advertencias.
+El comportamiento anterior era que %hash_enlazado devolverÌa todo la que hubiera devuelto este hash antes de ser enlazado (por lo general, 0). El nuevo comportamiento en ausencia de un mÈtodo SCALAR es retornar verdadero si est· en medio de una iteraciÛn C<each>, y de otra manera, llamar a FIRSTKEY para comprobar si el hash est· vacÌo (asegurarse de que una posterior C<each> tambiÈn comenzar· llamando FIRSTKEY). Por favor, vea L<perltie/SCALAR> para ver todos los detalles y advertencias.
 
-=head1 M√≥dulos y Pragmata
+=head1 MÛdulos y Pragmata
 
 =over 4
 
@@ -41,7 +41,7 @@ El comportamiento anterior era que %hash_enlazado devolver√≠a todo la que hubier
 
 =item FindBin
 
-Se proporciona, C<de nuevo>, una funci√≥n para resolver los problemas donde m√≥dulos en diferentes directorios desean utilizar FindBin.
+Se proporciona, C<de nuevo>, una funciÛn para resolver los problemas donde mÛdulos en diferentes directorios desean utilizar FindBin.
 
 =item List::Util
 
@@ -63,96 +63,96 @@ Ahora puede debilitar referencias para leer solo valores.
 
 =item threads::shared
 
-C<cond_wait> tiene una nueva forma de dos argumentos. Se ha a√±adido C<cond_timedwait>.
+C<cond_wait> tiene una nueva forma de dos argumentos. Se ha aÒadido C<cond_timedwait>.
 
 =back
 
 =head1 Cambios en las herramientas
 
-C<find2perl> ahora asume C<-print> como una acci√≥n por defecto. Anteriormente, era necesario que se especificara de forma expl√≠cita.
+C<find2perl> ahora asume C<-print> como una acciÛn por defecto. Anteriormente, era necesario que se especificara de forma explÌcita.
 
-Una nueva utilidad, C<prove>, hace que sea f√°cil ejecutar una prueba de regresi√≥n individual en la l√≠nea de comandos. C<prove> es parte de Test::Harness, que los usuarios de versiones anteriores de Perl pueden instalar desde CPAN.
+Una nueva utilidad, C<prove>, hace que sea f·cil ejecutar una prueba de regresiÛn individual en la lÌnea de comandos. C<prove> es parte de Test::Harness, que los usuarios de versiones anteriores de Perl pueden instalar desde CPAN.
 
-=head1 Nueva documentaci√≥n
+=head1 Nueva documentaciÛn
 
-La documentaci√≥n ha sido revisada en diversos lugares para producir p√°ginas de manual m√°s est√°ndares.
+La documentaciÛn ha sido revisada en diversos lugares para producir p·ginas de manual m·s est·ndares.
 
-La documentaci√≥n de los bloques especiales (BEGIN, CHECK, INIT, FIN) ha sido mejorado.
+La documentaciÛn de los bloques especiales (BEGIN, CHECK, INIT, FIN) ha sido mejorado.
 
-=head1 Mejoras en la instalaci√≥n y configuraci√≥n
+=head1 Mejoras en la instalaciÛn y configuraciÛn
 
 Perl ahora se compila en OpenVMS I64
 
 =head1 Arreglo de determinados errores
 
-Usando substr() en una cadena UTF8 podr√≠a causar que los subsecuentes accesos a dicha cadena devuelvan basura. Esto se debi√≥ a que se almacenaban desplazamientos UTF8 incorrectos, y ahora ya est√° arreglado.
+Usando substr() en una cadena UTF8 podrÌa causar que los subsecuentes accesos a dicha cadena devuelvan basura. Esto se debiÛ a que se almacenaban desplazamientos UTF8 incorrectos, y ahora ya est· arreglado.
 
-join() podr√≠a devolver basura cuando la misma instrucci√≥n join() fue anteriormente usada para procesar datos de 8 bits habiendo procesado anteriormente datos UTF8, debido a que las banderas en ese √°rea de trabajo temporal no eran correctamente reinicializadas. Esto ha sido arreglado.
+join() podrÌa devolver basura cuando la misma instrucciÛn join() fue anteriormente usada para procesar datos de 8 bits habiendo procesado anteriormente datos UTF8, debido a que las banderas en ese ·rea de trabajo temporal no eran correctamente reinicializadas. Esto ha sido arreglado.
 
-C<$a .. $b> ahora funcionar√° como se espera cuando $a o $b sean C<undef>
+C<$a .. $b> ahora funcionar· como se espera cuando $a o $b sean C<undef>
 
-Usando claves Unicode con hashes enlazados ahora deber√≠a funcionar correctamente.
+Usando claves Unicode con hashes enlazados ahora deberÌa funcionar correctamente.
 
-Leyendo $^E ahora preserva $!. Anteriormente, el c√≥digo en C que implementaba $^E no preservaba C<errno>, por lo que la lectura de $^E podr√≠a causar que C<errno> y, por lo tanto, C<$!> cambiaran de forma inesperada.
+Leyendo $^E ahora preserva $!. Anteriormente, el cÛdigo en C que implementaba $^E no preservaba C<errno>, por lo que la lectura de $^E podrÌa causar que C<errno> y, por lo tanto, C<$!> cambiaran de forma inesperada.
 
-Funciones reentrantes trabajar√°n (una vez m√°s) con C++. 5.8.2 introdujo una correcci√≥n de errores que rompi√≥ accidentalmente la compilaci√≥n de las extensiones Perl escritas en C++
+Funciones reentrantes trabajar·n (una vez m·s) con C++. 5.8.2 introdujo una correcciÛn de errores que rompiÛ accidentalmente la compilaciÛn de las extensiones Perl escritas en C++
 
-=head1 Diagn√≥sticos nuevos y cambiados
+=head1 DiagnÛsticos nuevos y cambiados
 
-El error fatal "DESTROY cre√≥ una nueva referencia al objeto muerto" ya est√° documentada en L<perldiag>.
+El error fatal "DESTROY creÛ una nueva referencia al objeto muerto" ya est· documentada en L<perldiag>.
 
 =head1 Cambios internos
 
-El c√≥digo hash ha sido reprogramado para reducir la duplicaci√≥n de c√≥digo fuente. El interfaz externo no se ha modificado, y aparte de la correcci√≥n de errores descritos anteriormente, no deber√≠a haber ning√∫n cambio en el comportamiento.
+El cÛdigo hash ha sido reprogramado para reducir la duplicaciÛn de cÛdigo fuente. El interfaz externo no se ha modificado, y aparte de la correcciÛn de errores descritos anteriormente, no deberÌa haber ning˙n cambio en el comportamiento.
 
 C<hv_clear_placeholders> ahora es parte de la API de perl
 
-Algunas macros C se han arreglado. En ciertas macros que crean variables locales temporales se nombra ahora estas variables de forma m√°s defensiva, que deber√≠an evitar errores con la coincidencia de nombres.
+Algunas macros C se han arreglado. En ciertas macros que crean variables locales temporales se nombra ahora estas variables de forma m·s defensiva, que deberÌan evitar errores con la coincidencia de nombres.
 
 <signal.h> ahora es siempre incluido.
 
-=head1 Configuraci√≥n y construcci√≥n
+=head1 ConfiguraciÛn y construcciÛn
 
-C<Configure> ahora invoca retrollamadas, independientemente del valor de la variable que se requiera. Retrollamadas anteriores solo se invocaban en la rama C<case $variable $define)>. Este cambio s√≥lo debe afectar a los mantenedores de la plataforma al escribir sugerencias en los archivos de configuraci√≥n.
+C<Configure> ahora invoca retrollamadas, independientemente del valor de la variable que se requiera. Retrollamadas anteriores solo se invocaban en la rama C<case $variable $define)>. Este cambio sÛlo debe afectar a los mantenedores de la plataforma al escribir sugerencias en los archivos de configuraciÛn.
 
-=head1 Problemas en plataformas espec√≠ficas
+=head1 Problemas en plataformas especÌficas
 
-El test de regresi√≥n ext/threads/shared/t/wait.t falla en los primeros RedHat 9 y HP-UX 10.20 debido a errores en las implementaciones de los hilos.
-Los usuarios de RedHat deber√≠an ver la p√°gina https://rhn.redhat.com/errata/RHBA-2003-136.html y considerar la actualizaci√≥n de sus glibc.
+El test de regresiÛn ext/threads/shared/t/wait.t falla en los primeros RedHat 9 y HP-UX 10.20 debido a errores en las implementaciones de los hilos.
+Los usuarios de RedHat deberÌan ver la p·gina https://rhn.redhat.com/errata/RHBA-2003-136.html y considerar la actualizaciÛn de sus glibc.
 
 =head1 Problemas conocidos
 
-Hilos independientes todav√≠a no son compatibles con Windows, ya que pueden provocar problemas de violaci√≥n de acceso a memoria.
+Hilos independientes todavÌa no son compatibles con Windows, ya que pueden provocar problemas de violaciÛn de acceso a memoria.
 
-Hay una conocida condici√≥n de carrera al abrir scripts con C<suidperl>. C<suidperl> no es construido ni instalado por defecto, y es obsoleto desde perl 5.8.0. Se recomienda reemplazar el uso de suidperl con herramientas como sudo (http://www.courtesan.com/sudo/)
+Hay una conocida condiciÛn de carrera al abrir scripts con C<suidperl>. C<suidperl> no es construido ni instalado por defecto, y es obsoleto desde perl 5.8.0. Se recomienda reemplazar el uso de suidperl con herramientas como sudo (http://www.courtesan.com/sudo/)
 
 Tenemos un retraso de errores sin resolver. Tratar con errores e informes de errores es un trabajo poco atractivo; no es algo ideal para un trabajo voluntario, pero eso es todo lo que tenemos.
 
-El equipo de desarrollo de perl5 est√° implementando cambios para ayudar a resolver este problema, que deber√≠a aparecer a principios de 2004.
+El equipo de desarrollo de perl5 est· implementando cambios para ayudar a resolver este problema, que deberÌa aparecer a principios de 2004.
 
 =head1 Direcciones futuras
 
-C√≥digo congelado para la pr√≥xima versi√≥n de mantenimiento (5.8.4) ser√° el 31 de marzo de 2004, con el lanzamiento previsto para mediados de abril. Del mismo modo, la congelaci√≥n de 5.8.5 ser√° a finales de junio, con el lanzamiento a mediados de julio.
+CÛdigo congelado para la prÛxima versiÛn de mantenimiento (5.8.4) ser· el 31 de marzo de 2004, con el lanzamiento previsto para mediados de abril. Del mismo modo, la congelaciÛn de 5.8.5 ser· a finales de junio, con el lanzamiento a mediados de julio.
 
 =head1 Obituario
 
-Iain 'Spoon' Truskett, Perl hacker, autor de L<perlreref> y contribuidor a CPAN, muri√≥ repentinamente el 29 de diciembre de 2003, a la edad de 24 a√±os.
+Iain 'Spoon' Truskett, Perl hacker, autor de L<perlreref> y contribuidor a CPAN, muriÛ repentinamente el 29 de diciembre de 2003, a la edad de 24 aÒos.
 Le echaremos de menos.
 
 =head1 Informar de errores
 
-Si usted encuentra algo que piensa que es un error, podr√≠a verificar los art√≠culos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  Tambi√©n puede haber informaci√≥n en http://www.perl.org/, La p√°gina oficial de Perl.
+Si usted encuentra algo que piensa que es un error, podrÌa verificar los artÌculos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  TambiÈn puede haber informaciÛn en http://www.perl.org/, La p·gina oficial de Perl.
 
-Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuci√≥n.  Aseg√∫rese de reducir la aparici√≥n del error en un programa que sea peque√±o, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser√°n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaci√≥n de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuciÛn.  Aseg˙rese de reducir la apariciÛn del error en un programa que sea pequeÒo, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser·n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaciÛn de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
 
-=head1 VEA TAMBI√âN
+=head1 VEA TAMBI…N
 
-El archivo de F<Changes> (Cambios) para obtener m√°s informaci√≥n exhaustiva sobre lo que ha cambiado.
+El archivo de F<Changes> (Cambios) para obtener m·s informaciÛn exhaustiva sobre lo que ha cambiado.
 
-El archivo F<INSTALL> (INSTALAR) de c√≥mo construir Perl.
+El archivo F<INSTALL> (INSTALAR) de cÛmo construir Perl.
 
 El archivo F<README> (LEEME) para asuntos generales.
 
-Los archivos F<Artistic> y F<Copying> para ver la informaci√≥n sobre derechos de autor.
+Los archivos F<Artistic> y F<Copying> para ver la informaciÛn sobre derechos de autor.
 
 =cut

@@ -1,18 +1,18 @@
-microperl se supone que es realmente un perl m√≠nimo, incluso a√∫n m√°s que el m√≠nimo miniperl.  No se necesita Configure para construir microperl, por otra parte esto significa que las interfaces entre Perl y su sistema operativo se quedan en muy, muy, muy m√≠nimas.
+microperl se supone que es realmente un perl mÌnimo, incluso a˙n m·s que el mÌnimo miniperl.  No se necesita Configure para construir microperl, por otra parte esto significa que las interfaces entre Perl y su sistema operativo se quedan en muy, muy, muy mÌnimas.
 
-Todo esto es experimental.  Si no sabe qu√© hacer con microperl probablemente no deber√≠a construirlo.  No informe de errores en microperl; corrija los errores.
+Todo esto es experimental.  Si no sabe quÈ hacer con microperl probablemente no deberÌa construirlo.  No informe de errores en microperl; corrija los errores.
 
-Asumimos ANSI C89 m√°s lo siguiente:
+Asumimos ANSI C89 m·s lo siguiente:
 - <stdlib.h>
 - rename()
-- opendir(), readdir(), closedir() (v√≠a dirent.h)
-- memchr(), memcmp(), memcpy() (v√≠a string.h)
+- opendir(), readdir(), closedir() (vÌa dirent.h)
+- memchr(), memcmp(), memcpy() (vÌa string.h)
 - (un seguro) putenv() (via stdlib.h)
 - strtoul() (via stdlib.h)
 (grep para 'define' en uconfig.sh.)
-Tambi√©n, Perl times() est√° definido para devolver siempre ceros.
+TambiÈn, Perl times() est· definido para devolver siempre ceros.
 
-Si a√∫n sigue leyendo esto y est√° ansioso por probar microperl:
+Si a˙n sigue leyendo esto y est· ansioso por probar microperl:
 
 	make -f Makefile.micro
 
@@ -20,9 +20,9 @@ Si realiza cambios en uconfig.sh, ejecute
 
 	make -f Makefile.micro regen_uconfig
 
-para regenerar uconfig.h.  Si su plataforma de compilaci√≥n no es de 32 bits little-endian (como x86), es posible que quiera probar
+para regenerar uconfig.h.  Si su plataforma de compilaciÛn no es de 32 bits little-endian (como x86), es posible que quiera probar
 
 	make -f Makefile.micro patch_uconfig
 
-*antes* del "make -f Makefile.micro".  Esto intenta parchear m√≠nimamente el uconfig.sh utilizando su *actual* Perl para que su microperl tenga los tipos y tama√±os b√°sicos y orden de los bytes correcto.
+*antes* del "make -f Makefile.micro".  Esto intenta parchear mÌnimamente el uconfig.sh utilizando su *actual* Perl para que su microperl tenga los tipos y tamaÒos b·sicos y orden de los bytes correcto.
 

@@ -2,9 +2,9 @@
 
 perlcheat - Chuleta de Perl 5
 
-=head1 DESCRIPCI√ìN
+=head1 DESCRIPCI”N
 
-Esta 'chuleta' es una referencia r√°pida, para los programadores principiantes de Perl. No se menciona todo, porque 195 caracter√≠sticas pueden ser apabullantes.
+Esta 'chuleta' es una referencia r·pida, para los programadores principiantes de Perl. No se menciona todo, porque 195 caracterÌsticas pueden ser apabullantes.
 
 =head2 La hoja
 
@@ -14,14 +14,14 @@ Esta 'chuleta' es una referencia r√°pida, para los programadores principiantes d
   list      %hash    elemento: $array[0]     $hash{'a'}
             &sub
             *glob    VALORES ESCALARES
-                     n√∫mero, cadena, referencia, glob, undef
+                     n˙mero, cadena, referencia, glob, undef
   REFERENCIAS
   \     referencias     $$foo[1]      igual que $foo->[1]
   $@%&* desreferencia   $$foo{bar}     igual que $foo->{bar}
-  []    array an√≥nimo  ${$$foo[1]}[2] igual que $foo->[1]->[2]
-  {}    hash an√≥nimo   ${$$foo[1]}[2] igual que $foo->[1][2]
+  []    array anÛnimo  ${$$foo[1]}[2] igual que $foo->[1]->[2]
+  {}    hash anÛnimo   ${$$foo[1]}[2] igual que $foo->[1][2]
   \()   lista de referencias
-                          N√öMEROS vs CADENAS  ENLACES
+                          N⁄MEROS vs CADENAS  ENLACES
   OPERADOR PRECEDENCIA    =          =        perl.plover.com
   ->                      +          .        search.cpan.org
   ++ --                   == !=      eq ne         cpan.org
@@ -38,16 +38,16 @@ Esta 'chuleta' es una referencia r√°pida, para los programadores principiantes d
   | ^              REGEX METACARACT.          REGEX MODIFICADORES
   &&               ^     comienzo cadena      /i no caja de letras
   || //            $     fin  cad. (antes \n)  /m line based ^$
-  .. ...           +     uno o m√°s            /s . includes \n
-  ?:               *     cero o m√°s           /x ign. wh.space
+  .. ...           +     uno o m·s            /s . includes \n
+  ?:               *     cero o m·s           /x ign. wh.space
   = += -= *= etc.  ?     zero or one          /g global
   , =>             {3,7} repetir en rango     /o comp. una vez
   op. lista        ()    captura
-  not              (?:)  no captura       REGEX CLASE CAR√ÅCTER
-  and              []    clase car√°cter   .  == [^\n]
+  not              (?:)  no captura       REGEX CLASE CAR¡CTER
+  and              []    clase car·cter   .  == [^\n]
   or xor           |     alternativa      \s == espacio en blanco
                    \b    borde palabra    \w == caract. palabra
-                   \z    fin cadena       \d == d√≠gitos
+                   \z    fin cadena       \d == dÌgitos
   HACER                                   \S, \W y \D negado
   use strict;        NO HACER
   use warnings;      "$foo"           ENLACES
@@ -59,30 +59,30 @@ Esta 'chuleta' es una referencia r√°pida, para los programadores principiantes d
   stat      localtime    caller         SPECIAL VARIABLES
    0 dev    0 segundo    0 paquete      $_    variable por def.
    1 ino    1 minuto     1 nom. archivo $0    nombre programa
-   2 mode   2 hora       2 l√≠nea        $/    sep. entrada
-   3 nlink  3 d√≠a        3 subrutina    $\    sep. salida
+   2 mode   2 hora       2 lÌnea        $/    sep. entrada
+   3 nlink  3 dÌa        3 subrutina    $\    sep. salida
    4 uid    4 mes-1      4 hasargs      $|    autoflush
-   5 gid    5 a√±o-1900   5 wantarray    $!    sys/libcall error
-   6 rdev   6 d√≠a semana 6 evaltext     $@    eval error
-   7 size   7 d√≠a a√±o    7 is_requere   $$    ID del proceso
+   5 gid    5 aÒo-1900   5 wantarray    $!    sys/libcall error
+   6 rdev   6 dÌa semana 6 evaltext     $@    eval error
+   7 size   7 dÌa aÒo    7 is_requere   $$    ID del proceso
    8 atime  8 es_dst     8 hints        $.    line number
-   9 mtime               9 bitmask      @ARGV args. l√≠nea comandos
-  10 ctime  solo usar                   @INC  rutas de inclusi√≥n
+   9 mtime               9 bitmask      @ARGV args. lÌnea comandos
+  10 ctime  solo usar                   @INC  rutas de inclusiÛn
   11 blksz  POSIX::      3..9 solo      @_    args. subrutina
   12 blcks  strftime!    con EXPR       %ENV  entorno
 
-=head1 RECONOCIMIENTOS
+=head1 AGRADECIMIENTOS
 
-La primera versi√≥n de este documentos apareci√≥ en Perl Monks, en donde muchas personas dieron sus √∫tiles sugerencias. Gracias, Perl Monks.
+La primera versiÛn de este documentos apareciÛ en Perl Monks, en donde muchas personas dieron sus ˙tiles sugerencias. Gracias, Perl Monks.
 
-Un agradecimiento especial a Damian Conway, quien no s√≥lo sugiri√≥ importantes cambios, sino que se tom√≥ el tiempo suficiente para contar las caracter√≠sticas listadas y hacer una versi√≥n para Perl 6 y demostrar que Perl seguir√° siendo Perl.
+Un agradecimiento especial a Damian Conway, quien no sÛlo sugiriÛ importantes cambios, sino que se tomÛ el tiempo suficiente para contar las caracterÌsticas listadas y hacer una versiÛn para Perl 6 y demostrar que Perl seguir· siendo Perl.
 
 =head1 AUTOR
 
 Juerd Waalboer <#####@juerd.nl>, con la ayuda de muchos Perl Monks.
 
-=head1 VEA TAMBI√âN
+=head1 VEA TAMBI…N
 
- http://perlmonks.org/?node_id=216602      la publicaci√≥n original en PM
- http://perlmonks.org/?node_id=238031      Versi√≥n Perl 6 de Damian Conway
- http://juerd.nl/site.plp/perlcheat        p√°gina de la chuleta Perl
+ http://perlmonks.org/?node_id=216602      la publicaciÛn original en PM
+ http://perlmonks.org/?node_id=238031      VersiÛn Perl 6 de Damian Conway
+ http://juerd.nl/site.plp/perlcheat        p·gina de la chuleta Perl

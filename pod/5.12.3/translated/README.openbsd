@@ -1,22 +1,22 @@
-Si lees este archivo _tal_como_es_, ignora los caracteres curiosos que veas.  Est√° escrito en formato POD (ver pod/perlpod.pod) que est√° espec√≠ficamente dise√±ado para ser legible de forma sencilla.
+Si lees este archivo _tal_como_es_, ignora los caracteres curiosos que veas.  Est· escrito en formato POD (ver pod/perlpod.pod) que est· especÌficamente diseÒado para ser legible de forma sencilla.
 
 =head1 NOMBRE
 
-README.openbsd - Perl versi√≥n 5 sobre sistemas OpenBSD
+README.openbsd - Perl versiÛn 5 sobre sistemas OpenBSD
 
-=head1 DESCRIPCI√ìN
+=head1 DESCRIPCI”N
 
-Este documentos describe varias caracter√≠sticas de OpenBSD que afectar√°n a c√≥mo Perl versi√≥n 5 (de ahora en adelante s√≥lo Perl) es compilado y/o ejecutado.
+Este documentos describe varias caracterÌsticas de OpenBSD que afectar·n a cÛmo Perl versiÛn 5 (de ahora en adelante sÛlo Perl) es compilado y/o ejecutado.
 
-=head2 OpenBSD vuelca el n√∫cleo desde getprotobyname_r y getservbyname_r con ithreads
+=head2 OpenBSD vuelca el n˙cleo desde getprotobyname_r y getservbyname_r con ithreads
 
-Cuando Perl est√° configurado para usar ithreads, usar√° llamadas de biblioteca reentrantes preferentemente sobre versiones no-reentrantes.  Existe una incompatibilidad en las funciones de 
+Cuando Perl est· configurado para usar ithreads, usar· llamadas de biblioteca reentrantes preferentemente sobre versiones no-reentrantes.  Existe una incompatibilidad en las funciones de 
 OpenBSD C<getprotobyname_r> y C<getservbyname_r> en las versiones 3.7
-y superiores que causar√°n un SEGV cuando se llamen sin haber hecho antes un C<bzero> en sus estructuras de retorno antes de llamar a estas funciones.  El Perl actual deber√≠a manejar este problema correctamente.  Anteriores Perls con threads (5.8.6 o anteriores) tendr√°n este problema.  Si quiere correr un Perl con hilos sobre OpenBSD 3.7 o superior, necesitar√° actualizar Perl al menos a la versi√≥n 5.8.7.
+y superiores que causar·n un SEGV cuando se llamen sin haber hecho antes un C<bzero> en sus estructuras de retorno antes de llamar a estas funciones.  El Perl actual deberÌa manejar este problema correctamente.  Anteriores Perls con threads (5.8.6 o anteriores) tendr·n este problema.  Si quiere correr un Perl con hilos sobre OpenBSD 3.7 o superior, necesitar· actualizar Perl al menos a la versiÛn 5.8.7.
 
 =head1 AUTOR
 
 Steve Peters <steve@fisharerojo.org>
 
-Por favor, informe de cualquier error, actualizaci√≥n o sugerencias a  F<perlbug@perl.org>.
+Por favor, informe de cualquier error, actualizaciÛn o sugerencias a  F<perlbug@perl.org>.
 
