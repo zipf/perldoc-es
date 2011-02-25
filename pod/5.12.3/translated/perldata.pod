@@ -100,7 +100,7 @@ Este método podría ser mejor porque de otro modo no podría tratar notaciones IEE
     warn "no es un entero"      unless /^[+-]?\d+$/;
     warn "no es número real"    unless /^-?\d+\.?\d*$/;     # rechaza .2
     warn "no es número real"    unless /^-?(?:\d+(?:\.\d*)?|\.\d+)$/;
-    warn "no es un float C"
+    warn "no es flotante en C"
 	unless /^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/;
 
 La longitud de un array es un valor escalar.  Puede conocerse la longitud del array @días evaluando C<$#días>, como en B<csh>.  Sin embargo, esto no es la longitud del array, sino el subíndice del último elemento, que es un valor distinto ya que, ordinariamente, hay un elemento número 0.
@@ -351,17 +351,17 @@ A menudo es más legible usar el operador C<< => >> entre los pares clave / valor
 o para inicializar referencias hash para ser utilizados como registros:
 
     $rec = {
-                brujo => 'Mable, el Despiadado',
-                gato  => 'Fluffy, el Feroz',
+                bruja => 'Mable la Implacable',
+                gato  => 'Fluffy el Feroz',
                 fecha => '10/31/1776',
     };
 
 o para utilizar llamadas con parámetros por nombre para funciones complicadas:
 
-   $campo = $consulta->radio_group(
-               name      => 'grupo_nombre',
-               values    => ['fulana','mengana','tolano'],
-               default   => 'mengana',
+   $field = $query->radio_group(
+               name      => 'nombre_grupo',
+               values    => ['eenie','meenie','minie'],
+               default   => 'meenie',
                linebreak => 'true',
                labels    => \%etiquetas
    );

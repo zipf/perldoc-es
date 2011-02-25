@@ -10,8 +10,8 @@ Esta 'chuleta' es una referencia rápida, para los programadores principiantes de
 
   CONTEXTO  CARACT.            ARRAYS        HASHES
   void      $scalar  completo: @array        %hash
-  scalar    @array   trozo:    @array[0, 2]  @hash{'a', 'b'}
-  list      %hash    elemento: $array[0]     $hash{'a'}
+  escalar   @array    trozo:   @array[0, 2]  @hash{'a', 'b'}
+  lista      %hash    elemento: $array[0]    $hash{'a'}
             &sub
             *glob    VALORES ESCALARES
                      número, cadena, referencia, glob, undef
@@ -20,7 +20,7 @@ Esta 'chuleta' es una referencia rápida, para los programadores principiantes de
   $@%&* desreferencia   $$foo{bar}     igual que $foo->{bar}
   []    array anónimo  ${$$foo[1]}[2] igual que $foo->[1]->[2]
   {}    hash anónimo   ${$$foo[1]}[2] igual que $foo->[1][2]
-  \()   lista de referencias
+  \()   lista de ref.
                           NÚMEROS vs CADENAS  ENLACES
   OPERADOR PRECEDENCIA    =          =        perl.plover.com
   ->                      +          .        search.cpan.org
@@ -40,14 +40,14 @@ Esta 'chuleta' es una referencia rápida, para los programadores principiantes de
   || //            $     fin  cad. (antes \n)  /m line based ^$
   .. ...           +     uno o más            /s . includes \n
   ?:               *     cero o más           /x ign. wh.space
-  = += -= *= etc.  ?     zero or one          /g global
+  = += -= *= etc.  ?     cero o más           /g global
   , =>             {3,7} repetir en rango     /o comp. una vez
   op. lista        ()    captura
   not              (?:)  no captura       REGEX CLASE CARÁCTER
   and              []    clase carácter   .  == [^\n]
-  or xor           |     alternativa      \s == espacio en blanco
-                   \b    borde palabra    \w == caract. palabra
-                   \z    fin cadena       \d == dígitos
+  or xor           |     alternativa      \s == espacio
+                   \b    lím. palabra     \w == caract. palabra
+                   \z    final cadena     \d == dígitos
   HACER                                   \S, \W y \D negado
   use strict;        NO HACER
   use warnings;      "$foo"           ENLACES

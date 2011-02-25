@@ -91,8 +91,8 @@ Ver también L</"Instrucciones Switch">.
     }
 
     for (@nombres) {
-	admin($_)   when [ qw/Alicia Roberto/ ];
-	regular($_) when [ qw/Cris David Helena/ ];
+	admin($_)  when [ qw/Alice Bob/ ];
+	normal($_) when [ qw/Chris David Ellen/ ];
     }
 
 El modificador C<foreach> es un iterador: ejecuta la instrucción una vez por cada elemento en la LISTA (con C<$_> asociado a cada elemento en cada iteración).
@@ -125,7 +125,7 @@ X<next> X<last> X<redo>
 Para C<last>, ha de ser un poco más elegante
 X<last>
 
-    LOOP: { 
+    BUCLE: { 
 	    do {
 		last if $x = $y**2;
 		# hacer algo aquí
@@ -167,8 +167,8 @@ Note que, a diferencia del C y Pascal, están definidas en términos de BLOQUES, n
     if (!open(FOO)) { die "No puedo abrir $FOO: $!"; }
     die "No puedo abrir $FOO: $!" unless open(FOO);
     open(FOO) or die "No puedo abrir $FOO: $!";	# ¡FOO o quieto!
-    open(FOO) ? 'hola, mamá' : die "No puedo abrir $FOO: $!";
-			# un poco exótico, este último
+    open(FOO) ? 'hola mamá' : die "No puedo abrir $FOO: $!";
+			# Un poco exótico, este último
 
 La instrucción C<if> es sencilla.  Como los BLOQUES están siempre rodeados de llaves, nunca hay ambigüedad sobre dónde van el C<if> y el C<else>.  Si usa C<unless> en lugar de C<if>, el sentido del test se invierte. Como C<if>, C<unless> puede ser seguido por C<else>. C<unless> puede, incluso, ser seguido por una o más instrucciones C<elsif>, aunque quizás quiera pensarlo dos veces antes de usar esta construcción del lenguaje tan particular, lo mismo que cualquiera que al leer su código tendrá que pensar al menos dos veces antes de entender qué ha querido decir.
 
@@ -187,7 +187,7 @@ X<loop control> X<loop, control> X<next> X<last> X<redo> X<continue> X<control d
 El comando C<next> inicia la siguiente iteración del bucle:
 
     LINEA: while (<STDIN>) {
-	next LINEA if /^#/;	# descartar comentarios
+	next LINEA if /^#/;	# descartar los comentarios
 	...
     }
 
@@ -210,7 +210,7 @@ Si las líneas de entrada acaban en contra barras para indicar continuación, quer
 	    $_ .= <>;
 	    redo unless eof();
 	}
-	# ahora procese $_
+	# ahora, procesa $_
     }
 
 que es la versión corta de la versión más explícita:
@@ -219,21 +219,21 @@ que es la versión corta de la versión más explícita:
 	chomp($linea);
 	if ($linea =~ s/\\$//) {
 	    $linea .= <ARGV>;
-	    redo LINEA unless eof(); # ¡no eof(ARGV)!
+	    redo LINEA unless eof(); # ¡no es eof(ARGV)!
 	}
-	# ahora procese $linea
+	# ahora, procesa $linea
     }
 
 Note que si existiese un bloque C<continue> en este código, sería ejecutado sólo en las líneas descartadas por la expresión regular (debido a que C<redo> salta el bloque C<continue>). Un bloque C<continue> se usa a menudo para reiniciar contadores de línea o patrones de un sólo uso:
 
     # inspirado por :1,$g/fred/s//WILMA/
     while (<>) {
-	?(fred)?    && s//WILMA $1 WILMA/;
-	?(barney)?  && s//BETTY $1 BETTY/;
+	?(pedro)?    && s//WILMA $1 WILMA/;
+	?(pablo)?    && s//BETTY $1 BETTY/;
 	?(homer)?   && s//MARGE $1 MARGE/;
     } continue {
 	print "$ARGV $.: $_";
-	close ARGV  if eof();		# reset $.
+	close ARGV  if eof();		# resetea $.
 	reset	    if eof();		# resetea ?patrón?
     }
 
@@ -242,8 +242,8 @@ Si la palabra C<while> se reemplaza por la palabra C<until>, el sentido del test
 Las instrucciones de control de bucle no funcionan en un C<if> o C<unless>, porque no son bucles.  Aunque puede doblar las llaves para crearlos.
 
     if (/patrón/) {{
-	last if /fred/;
-	next if /barney/; # mismo efecto que "last", pero no se ve muy claro
+	last if /pedro/;
+	next if /pablo/; # mismo efecto que "last", pero no se ve muy claro
 	# hacer algo aquí
     }}
 
@@ -278,7 +278,7 @@ X<eof> X<end-of-file> X<fin de archivo>
     $en_un_tty = -t STDIN && -t STDOUT;
     sub prompt { print "¿si? " if $en_un_tty }
     for ( prompt(); <STDIN>; prompt() ) {
-	# haciendo algo
+	# hacer algo
     }
 
 Usando C<readline> (o el operador C<< <EXPR> >>) como condición de un bucle C<for>, es una forma abreviada de escribir lo siguiente.  Este comportamiento es el mismo que en la condición de un bucle C<while>.
@@ -309,11 +309,11 @@ Ejemplos:
 
     for (@array) { s/foo/bar/ }
 
-    for my $elem (@elementos) {
-	$elem *= 2;
+    for my $elemento (@elementos) {
+	$elemento *= 2;
     }
 
-    for $cuenta (10,9,8,7,6,5,4,3,2,1,'BOOM') {
+    for $cuenta_atras (10,9,8,7,6,5,4,3,2,1,'BOOM') {
 	print $cuenta, "\n"; sleep(1);
     }
 
@@ -325,14 +325,14 @@ Ejemplos:
 
 Aquí hay un ejemplo de cómo un programador de C codificaría un determinado algoritmo en Perl:
 
-    for (my $i = 0; $i < @ary1; $i++) {
+    for (my $i = 0; $i < @array1; $i++) {
 	for (my $j = 0; $j < @ary2; $j++) {
 	    if ($ary1[$i] > $ary2[$j]) {
-		last; # no puede salir fuera :-(
+		last; # no puedo volver al bucle más externo :-(
 	    }
 	    $ary1[$i] += $ary2[$j];
 	}
-	# aquí es adonde last me lleva
+	# Aquí es donde lleva el 'last'
     }
 
 Y aquí está cómo un programador de Perl, más cómodo con el lenguaje, puede hacer:
@@ -385,20 +385,20 @@ Esta construcción es muy flexible y poderosa. Por ejemplo:
     use feature ":5.10";
     given($foo) {
 	when (undef) {
-	    say '$foo está indefinido';
+	    say '$foo es indefinido';
 	}
 	when ("foo") {
 	    say '$foo es la cadena "foo"';
 	}
 	when ([1,3,5,7,9]) {
 	    say '$foo es un dígito impar';
-	    continue; # sigue en el siguiente
+	    continue; # Sigue en la siguiente
 	}
 	when ($_ < 100) {
 	    say '$foo es numéricamente menor que 100';
 	}
-	when (\&comprobacion_complicada) {
-	    say 'una comprobación complicada para $foo es verdadera';
+	when (\&confirmacion_complicada) {
+	    say 'una confirmación complicada para $foo es cierta';
 	}
 	default {
 	    die q(No sé qué hacer con $foo);
@@ -533,7 +533,7 @@ Note que la columna "Código similar" no siempre es una interpretación exacta.  P
     Array       Array      arrays son comparables[2]
     Regex       Array      grep array                       grep /$a/, @$b
     undef       Array      array contiene undef             grep !defined, @$b
-    Cualquiera  Array      coincidencia inteligente de un elemento del array[3]
+    Cualq.  Array     busca en un array      elemento[3]
                                                grep $a ~~ $_, @$b
 
     Hash        Regex      grep clave hash                  grep /$b/, keys %$a
@@ -670,7 +670,7 @@ Aquí hay algunos ejemplos que será capaz de escribir en la línea de comandos del
 
     % perl
     # line 345 "goop"
-    eval "\n#line " . __LINE__ . ' "' . __FILE__ ."\"\ndie 'foo'";
+    eval "\n#línea " . __LINE__ . ' "' . __FILE__ ."\"\ndie 'foo'";
     print $@;
     __END__
     foo at goop line 345.

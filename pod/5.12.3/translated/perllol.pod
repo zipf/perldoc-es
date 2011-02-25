@@ -23,7 +23,7 @@ Un array de un array es justo un array @AoA normal sobre la que se puede aplicar
 Ahora, debe tener mucho cuidado de que el paréntesis externo debe ser eso: un paréntesis.  Esto es así porque está asignando a un @array, por lo que necesita usar paréntesis.  Si I<no> quiere que sea un @AoA, sino una referencia a él, puede hacer algo más parecido a esto:
 
     # asignar una referencia a un array de referencias de array
-    $ref_to_AoA = [
+    $ref_a_AoA = [
 	[ "pedro", "pablo", "pebbles", "bambam", "dino", ],
 	[ "homer", "bart", "marge", "maggie", ],
 	[ "george", "jane", "elroy", "judy", ],
@@ -161,14 +161,14 @@ porque solo va a conseguir un listado de referencias, y perl nunca desreferencia
 Si quisiera hacer un seguimiento de los subíndices, podría hacer lo siguiente:
 
     for $i ( 0 .. $#AoA ) {
-	print "\t elemento $i es [ @{$AoA[$i]} ],\n";
+	print "\t ítem $i es [ @{$AoA[$i]} ],\n";
     }
 
 o tal vez incluso así.  Observe el bucle interior.
 
     for $i ( 0 .. $#AoA ) {
 	for $j ( 0 .. $#{$AoA[$i]} ) {
-	    print "elemento $i $j es $AoA[$i][$j]\n";
+	    print "ítem $i $j es $AoA[$i][$j]\n";
 	}
     }
 
@@ -177,7 +177,7 @@ Como puede ver, se está haciendo un poco complicado.  Es por eso que a veces es 
     for $i ( 0 .. $#AoA ) {
 	$aref = $AoA[$i];
 	for $j ( 0 .. $#{$aref} ) {
-	    print "elemento $i $j es $AoA[$i][$j]\n";
+	    print "ítem $i $j es $AoA[$i][$j]\n";
 	}
     }
 
@@ -187,7 +187,7 @@ Hmm ... que aún es un poco feo.  ¿Qué le parece esto?
 	$aref = $AoA[$i];
 	$n = @$aref - 1;
 	for $j ( 0 .. $n ) {
-	    print "elemento $i $j es $AoA[$i][$j]\n";
+	    print "ítem $i $j es $AoA[$i][$j]\n";
 	}
     }
 

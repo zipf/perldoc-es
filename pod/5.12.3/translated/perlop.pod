@@ -21,7 +21,7 @@ Los operadores Perl tienen la asociatividad y precedencia siguientes, enumerados
     izquierda	->
     no asoc.	++ --
     derecha	**
-    derecha	! ~ \ unarios + y -
+    right	! ~ \ unarios + y -
     izquierda	=~ !~
     izquierda	* / % x
     izquierda	+ - .
@@ -100,7 +100,7 @@ De lo contrario, el lado derecho es un nombre de método o una variable escalar s
 =head2 Auto incremento y auto decremento
 X<increment> X<auto-increment> X<++> X<decrement> X<auto-decrement> X<--> X<incremento> X<auto incremento> X<decremento> X<auto decremento>
 
-"++" y "--" funcionan como en C.  Es decir, si son colocados antes de una variable, incrementan o decrementan la variable por uno antes de devolver el valor; y colocados después, incrementan o decrementan después de haber devuelto el valor.
+"++" y "--" funcionan como en C. Es decir, si son colocados antes de una variable, incrementan o decrementan la variable por uno antes de devolver el valor, y colocados después, incrementan o decrementan después de haber devuelto el valor.
 
     $i = 0;  $j = 0;
     print $i++;  # imprime 0
@@ -114,7 +114,7 @@ Evite instrucciones como:
 
 Perl no garantizará el resultado de las instrucciones anteriores.
 
-El operador de auto incremento tiene un poco más de magia en él.  Si usted incrementa una variable que es numérica, o que haya sido utilizada en un contexto numérico, se obtiene un incremento normal.  Sin embargo, si la variable se ha utilizado sólo en contextos de cadena desde que se creó, y tiene un valor que no es la cadena vacía y coincide con el patrón C</^[a-zA-Z]*[0-9]*\z/>, el incremento se realiza como una cadena, conservando cada caráctar dentro de su rango, conllevando a:
+El operador de auto incremento tiene un poco más de magia en él.  Si usted incrementa una variable que es numérica, o que haya sido utilizada en un contexto numérico, se obtiene un incremento normal.  Sin embargo, si la variable se ha utilizado sólo en contextos de cadena desde que se creó, y tiene un valor que no es la cadena vacía y coincide con el patrón C</^[a-zA-Z]*[0-9]*\z/>, el incremento se realiza como una cadena, conservando cada carácter dentro de su rango, conllevando a:
 
     print ++($foo = '99');	# imprime '100'
     print ++($foo = 'a0');	# imprime 'a1'
@@ -211,9 +211,9 @@ Binario "<<" devuelve el valor de su argumento de la izquierda desplazado por el
 
 Binario ">>" devuelve el valor de su argumento izquierdo desplazado a la derecha por el número de bits especificado por el argumento de la derecha.  Los argumentos deben ser números enteros.  (Ver también L<Aritmética entera>).
 
-Tenga en cuenta que tanto "<<" como ">>" en Perl están implementados directamente a través del "<<" y ">>" en C.  Si C<use integer> (véase L<Aritmética entera>) está en vigor entonces se utilizan los enteros C con signo; sino, se utilizan enteros C sin signo.  De cualquier manera, la aplicación no va a generar resultados más grandes que el tamaño del tipo entero con el que Perl fue construido (32 o 64 bits).
+Tenga en cuenta que tanto "<<" como ">>" en Perl están implementados directamente a través de "<<" y ">>" en C. Si C<use integer> (véase L<Aritmética entera>) está en vigor entonces se utilizan los enteros C con signo; sino, se utilizan enteros C sin signo.  De cualquier manera, la aplicación no va a generar resultados más grandes que el tamaño del tipo entero con el que Perl fue construido (32 o 64 bits).
 
-El resultado del desbordamiento del rango de los números enteros no está definido, ya que tampoco está definido en C.  En otras palabras, usando enteros de 32 bits, C<< 1 << 32 >> no está definido.  Desplazando por un número negativo de bits también está indefinido.
+El resultado del desbordamiento del rango de los números enteros no está definido, ya que tampoco está definido en C. En otras palabras, usando enteros de 32 bits, C<< 1 << 32 >> no está definido.  Desplazando por un número negativo de bits también está indefinido.
 
 =head2 Operadores unarios con nombre
 X<operator, named unary> X<operador, unario con nombre>
@@ -338,7 +338,7 @@ Los contextos escalar o lista se propagan hacia el operando de la derecha si es 
 =head2 Defined-Or lógico al estilo del C
 X<//> X<operator, logical, defined-or> X<operador, lógico, defined-or>
 
-A pesar de que no tiene equivalente directo en C, el operador Perl C<//> está relacionado con el operador or del C.  De hecho, es exactamente lo mismo que C<||>, excepto que comprueba la definición del lado izquierdo en lugar de su estado de verdad.  Por lo tanto, C<$a // $b> es similar a C<defined($a) || $b> (excepto que devuelve el valor de C<$a> en lugar del valor de C<defined($a)>) y es exactamente equivalente a C<defined($a) ? $a : $b>.  Esto es muy útil para proporcionar valores por defecto a las variables.  Si realmente desea probar si al menos uno de los dos, C<$a> o C<$b>, están definidos, use C<defined($a // $b)>.
+A pesar de que no tiene equivalente directo en C, el operador Perl C<//> está relacionado con el operador or del C.  De hecho, es exactamente lo mismo que C<||>, excepto que comprueba la definición del lado izquierdo en lugar de su estado de verdad.  Por lo tanto, C<$a // $b> es similar a C<defined($a) || $b> (excepto que devuelve el valor de C<$a> en lugar del valor de C<defined($a)>) y es equivalente exactamente a C<defined($a) ? $a : $b>.  Esto es muy útil para proporcionar valores por defecto a las variables.  Si realmente desea probar si al menos uno de los dos, C<$a> o C<$b>, están definidos, use C<defined($a // $b)>.
 
 Los operadores C<||>, C<//> y C<&&> devuelven el último valor evaluado (a diferencia de los operadores del C C<||> y C<&&>, que devuelve 0 o 1). Por lo tanto, un forma razonablemente portátil para averiguar el directorio principal podría ser:
 
@@ -354,13 +354,13 @@ En particular, esto significa que usted no debería usar esto para seleccionar en
 Como alternativas más legibles a C<&&> y C<||> cuando se usan para control de flujo, Perl proporciona los operadores C<and> y C<or> (véase más adelante).
 El comportamiento abreviado es idéntico.  Sin embargo, la precedencia de "and" y "or" es mucho menor, de modo que usted puede usarlos con seguridad después de un operador de lista sin necesidad de paréntesis:
 
-    unlink "alpha", "beta", "gamma"
+    unlink "alfa", "beta", "gamma"
 	    or gripe(), next LINEA;
 
 Con los operadores del estilo del C esto se hubiera escrito así:
 
-    [fuzzy] unlink "alpha", "beta", "gamma"
-	    or gripe(), next LINEA;
+    unlink("alfa", "beta", "gamma")
+	    || (gripe(), next LINEA);
 
 Es poco probable que quiera usar "or" para hacer asignaciones; véase más adelante.
 
@@ -394,7 +394,7 @@ Como operador escalar:
 
     next LINEA if (1 .. /^$/);  # salta las líneas de cabecera, resumen de
                                #   next LINEA if ($. == 1 .. /^$/);
-                               # (típicamente en un bucle etiqueta con LINEA)
+                               # (típicamente en un bucle etiquetado como LINEA)
 
     s/^/> / if (/^$/ .. eof());  # citar el cuerpo
 
@@ -405,7 +405,7 @@ Como operador escalar:
         if ($en_cabecera) {
             # hacer algo
         } else { # en cuerpo
-            # hacer otra cosa
+            # sino hacer otra cosa
         }
     } continue {
         close ARGV if eof;             # reinicia $. por cada archivo
@@ -464,10 +464,10 @@ Debido a que cada operando es evaluado en forma de número entero, C<2,18 .. 3,14
 =head2 Operadores condicionales
 X<operator, conditional> X<operator, ternary> X<ternary> X<?:> X<operador, condicional> X<operador, ternario> X<ternario>
 
-El ternario "?:" es el operador condicional, al igual que en C.  Funciona como un if-then-else.  Si el argumento antes de la "?" es verdadero, se devuelve el argumento anterior al ":", de lo contrario se devuelve el argumento después de ":".  Por ejemplo:
+Ternario "?:" es el operador condicional, al igual que en C. Funciona como un if-then-else.  Si el argumento anterior al ? es verdadero, se devuelve el argumento anterior al ":"; de lo contrario se devuelve el argumento posterior a ":".  Por ejemplo:
 
     printf "Tengo %d perro%s.\n", $n,
-	    ($n == 1) ? '' : 's';
+	    ($n == 1) ? '' : "s";
 
 Contexto escalar o lista es propagado hacia adelante, en el segundo o tercer argumento, cualquiera que sea el seleccionado.
 
@@ -475,7 +475,7 @@ Contexto escalar o lista es propagado hacia adelante, en el segundo o tercer arg
     @a = $ok ? @b : @c;  # obtiene un array
     $a = $ok ? @b : @c;  # oops, ¡esto solo cuenta elementos!
 
-El operador puede ser asignado si tanto el segundo y tercer argumentos son I<ivalores> legales (lo que significa que puede asignarles valores):
+El operador puede ser asignado si tanto el segundo y tercer argumentos son I<ivalores> legales (lo que significa que les puede asignar valores):
 
     ($a_o_b ? $a : $b) = $c;
 
@@ -502,7 +502,7 @@ X<%=> X<^=> X<x=> X<asignación> X<operador, asignación>
 
 "=" es el operador ordinario de asignación.
 
-Operadores de asignación funcionan como en C.  Es decir,
+Operadores de asignación funcionan como en C. Es decir,
 
     $a += 2;
 
@@ -575,8 +575,8 @@ El operador blablablá (indicado como C<...>) es un marcador de posición para cód
 	sub no_implementado { ... }
 	
 	eval { no_implementado() };
-	if( $@ eq 'Unimplemented' ) {
-	  print "¡Encontré el blablablá!\n";
+	if( $@ eq 'No implementado' ) {
+	  print "¡He encontrado el blablablá!\n";
 	  }
 
 Sólo se puede utilizar el blablablá en lugar de una instrucción completa.
@@ -694,15 +694,15 @@ X<escape sequence> X<escape> X<escapado> X<operador, comilla> X<operador, entrec
 
 Mientras solemos solemos pensar de lo entrecomillado como si fueran valores literales, en Perl funcionan como operadores, ofreciendo diversos tipos de interpolación y capacidades de coincidencia de patrones.  Perl no solo proporciona caracteres normales de entrecomillado para estos comportamientos, sino que también proporciona una manera para que usted elija su carácter de entrecomillado para cualquiera de ellos.  En la siguiente tabla, un C<{}> representa cualquier par de delimitadores que usted elija.
 
-    Normal  Genérico      Significado	     Interpola
+      Normal   Genérico     Significado	     Interpola
 	''	 q{}	      Literal		  no
-	""	qq{}	      Literal		  yes
-	``	qx{}	      Comando		  yes*
-		qw{}	 Lista de palabras	  no
-	//	 m{}	   Coincidencia	  	  yes*
-		qr{}	      Patrón		  yes*
-		 s{}{}	    Sustitución		  yes*
-		tr{}{}	  Transliteración		  no (pero vea abajo)
+	""	qq{}	      Literal		  sí
+	``	qx{}	      Comando		  sí*
+		qw{}	   Lista palabras	  no
+	//	 m{}	    Coincidencia	  sí*
+		qr{}	      Patrón		  sí*
+		 s{}{}	    Substitución	  sí*
+		tr{}{}    Transliteración	  no (pero vea abajo)
         <<EOF               doc-empotrado	  sí*
 
 	* excepto si el delimitador es ''.
@@ -813,11 +813,11 @@ El resultado puede ser utilizado como un sub-patrón en una coincidencia:
 Desde que Perl puede compilar el patrón en el momento de la ejecución del operador qr(), usarlo puede tener ventajas de velocidad en algunas situaciones, notablemente si el resultado de qr() se utiliza de forma independiente:
 
     sub coincidencia {
-	my $patrones = shift;
-	my @compilado = map qr/$_/i, @$patrones;
+	my $patrones   = shift;
+	my @compilados = map qr/$_/i, @$patrones;
 	grep {
 	    my $exito = 0;
-	    foreach my $pat (@compilado) {
+	    foreach my $pat (@compilados) {
 		$exito = 1, last if /$pat/;
 	    }
 	    $exito;
@@ -829,7 +829,7 @@ La precompilación del patrón en una representación interna en el momento de qr()
 Las opciones son:
 
     m	Trata la cadena como un conjunto de múltiples líneas.
-    s	Trata la cadena como una única línea. (Trata . coincide con un carácter de nueva línea)
+    s	Trata la cadena como una única línea. (Hace que . coincida con un car. de nueva línea)
     i	Hace coincidencia de patrones independiente del tamaño de caja.
     x	Usa expresiones regulares extendidas.
     p	Cuando exista una coincidencia preserva una copia de la cadena concordante,
@@ -882,7 +882,7 @@ Ejemplos:
     # un grep para pobres
     $arg = shift;
     while (<>) {
-	print if /$arg/o;	# solo compilar una vez
+	print if /$arg/o;	# compilar solo una vez
     }
 
     if (($F1, $F2, $Etc) = ($foo =~ /^(\S+)\s+(\S+)\s*(.*)/))
@@ -908,7 +908,7 @@ Ejemplos:
     $/ = "";
     while (defined($parrafo = <>)) {
 	while ($parrafo =~ /[a-z]['")]*[.!?]+['")]*\s/g) {
-	    $instrucciones++;
+	    $sentencias++;
 	}
     }
     print "$instrucciones\n";
@@ -1408,7 +1408,7 @@ El carácter C<-> es tratado de forma especial y por lo tanto C<\-> es tratado co
 
 =item C<"">, C<``>, C<qq//>, C<qx//>, C<< <file*glob> >>, C<<<"EOF">
 
-C<\Q>, C<\U>, C<\u>, C<\L>, C<\l> (posiblemente emparejado con C<\E>) son convertidas a las correspondientes construcciones Perl.  Así, C<"$foo\Qbaz$bar"> es convertida a C<$foo . (quotemeta("baz" . $bar))> internamente.
+C<\Q>, C<\U>, C<\u>, C<\L>, C<\l> (posiblemente emparejado con C<\E>) son convertidas a las correspondientes construcciones Perl.  Así, C<"$foo\Qbaz$bar"> es convertida internamente a C<$foo . (quotemeta("baz" . $bar))>.
 Las otras secuencias de escape, como C<\200> y C<\t> y caracteres escapados con contrabarras, como C<\\> y C<\->, son reemplazadas con los literales apropiados.
 
 Hay que hacer hincapié en que I<lo que caiga dentro de C<\Q> y C<\E>> es interpolado de la forma normal.  Algo como C<"\Q\\E"> no tiene dentro a C<\E>.  en cambio, tiene a C<\Q>, C<\\>, y C<E>, por lo que el resultado es el mismo que para C<"\\\\E">.  Como regla general, las contrabarras entre C<\Q> y C<\E> pueden dar lugar a resultados no intuitivos.  Así, C<"\Q\t\E"> es convertido a C<quotemeta("\t")>, que es lo mismo que C<"\\\t"> (porque TAB no es alfanumérico).  Tenga en cuenta también que:
@@ -1636,13 +1636,13 @@ X<constant folding> X<folding> X<plegado de constantes> X<plegado>
 
 Al igual que C, Perl hace una cierta cantidad de evaluación de expresiones en tiempo de compilación cuando determina que todos los argumentos a un operador son estáticos y no tienen efectos secundarios.  En particular, concatenación de cadenas que sucede en tiempo de compilación entre literales que no hacen sustitución de variables.  La interpolación de contrabarras también sucede en tiempo de compilación.  Se puede decir
 
-    'Ahora es el momento para todos' . "\n" .
+    'Ahora es el momento de todos' . "\n" .
 	'los hombres buenos por venir.'
 
 y todo esto se reduce a una sola cadena, internamente.  Del mismo modo, si dice
 
     foreach $archivo (@archivos) {
-	if (-s $file > 5 + 100 * 2**16) {  }
+	if (-s $archivo > 5 + 100 * 2**16) {  }
     }
 
 el compilador precalculará el número que representa esa expresión para que el intérprete no tenga que hacerlo.
@@ -1709,7 +1709,7 @@ Números de punto flotante son sólo aproximaciones a lo que un matemático llamarí
 
 No es una buena idea comprobar la igualdad o la desigualdad exacta de números en punto flotante.  Aquí hay un (relativamente caro) ejemplo en torno a cómo comprobar si dos números de punto flotante son iguales en un determinado número de decimales.  Ver Knuth, volumen II, para un tratamiento más fuerte de este tema.
 
-    sub fp_equal {
+    sub fp_igual {
 	my ($X, $Y, $PUNTOS) = @_;
 	my ($tX, $tY);
 	$tX = sprintf("%.${PUNTOS}g", $X);
@@ -1737,17 +1737,17 @@ Hay varios módulos que permiten calcular con precisión fija o ilimitada (limitad
 
 Aquí hay un breve resumen, aunque incompleto:
 
-	Math::Fraction		grandes e ilimitadas fracciones como 9973 / 12967
-	Math::String		trata secuencias de cadena como números
-	Math::FixedPrecision	calcula con una precisión fija
-	Math::Currency		para cálculos monetarios
-	Bit::Vector		manipula vectores de bits muy rápido (usa C)
-	Math::BigIntFast		envoltura para Bit::Vector para grandes números
-	Math::Pari		ofrece acceso a la biblioteca Pari en C
-	Math::BigInteger		usa una biblioteca externa en C
-	Math::Cephes		usa la biblioteca externa Cephes en C (no grandes números)
-	Math::Cephes::Fraction	fracciones vía la biblioteca Cephes
-	Math::GMP		otra usando una biblioteca externa en C
+	Math::Fraction           grandes, ilimitadas fracciones como 9973 / 12967
+	Math::String             trata secuencias de cadenas como números
+	Math::FixedPrecision     calcula con una precisión fija
+	Math::Currency           para cálculos monetarios
+	Bit::Vector              manipula vectores bit rápidamente (usa C)
+	Math::BigIntFast         envoltorio de Bit::Vector para grandes números
+	Math::Pari               ofrece acceso a la biblioteca C Pari
+	Math::BigInteger         usa una biblioteca C externa
+	Math::Cephes             usa biblioteca C externa Cephes (no grandes números)
+	Math::Cephes::Fraction   fracciones vía la biblioteca Cephes
+	Math::GMP                otro usando una biblioteca C externa
 
 Elija con cuidado.
 

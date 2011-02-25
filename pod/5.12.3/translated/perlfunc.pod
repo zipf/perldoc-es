@@ -602,8 +602,8 @@ Ejemplo:
         or die "No puedo iniciar sort: $!";
     #...                        # imprimir a la salida
     close OUTPUT                # esperar que sort termine
-        or warn $! ? "Error cerrando tubería sort: $!"
-                   : "Estatus de salida $? desde sort";
+        or warn $! ? "Error cerrando la tubería con sort: $!"
+                   : "Estado de salida $? desde sort";
     open(INPUT, 'foo')          # obtener los resultado de sort
         or die "No puedo abrir 'foo' para entrada: $!";
 
@@ -625,7 +625,7 @@ X<continue>
 
 =item continue
 
-C<continue> es realmente una instrucción de control de flujo en lugar de una función.  Si existe un BLOQUE C<continue> adjunto a un BLOQUE (típicamente en un C<while> o C<foreach>), siempre es ejecutado justo antes de que la condicional sea de nuevo evaluada, igual que la tercera parte de un bucle C<for> en C.  Así, puede ser usado para incrementar una variable de bucle, incluso cuando el bucle ha sido interrumpido por medio de una instrucción C<next> (por lo que es similar a la instrucción C<continue> del C).
+C<continue> es realmente una instrucción de control de flujo en lugar de una función.  Si existe un BLOQUE C<continue> adjunto a un BLOQUE (típicamente en un C<while> o C<foreach>), siempre es ejecutado justo antes de que la condicional sea de nuevo evaluada, igual que la tercera parte de un bucle C<for> en C. Esto puede ser utilizado para incrementar una variable de bucle, incluso cuando el bucle ha sido interrumpido por la sentencia C<next> (que es similar a la sentencia C<continue> del C).
 
 C<last>, C<next> o C<redo> puede aparecer dentro de un bucle C<continue>; C<last> y C<redo> se comportarán como si se hubieran ejecutado dentro del bloque principal.  También C<next>, pero como ejecutará un bloque C<continue>, quizás se convierta en algo divertido.
 
@@ -863,10 +863,10 @@ También puede llamar a C<die> con una referencia como argumento, y si éste queda
     eval { ... ; die Some::Module::Exception->new( FOO => "bar" ) };
     if (my $ev_err = $@) {
         if (blessed($ev_err) && $ev_err->isa("Some::Module::Exception")) {
-            # handle Some::Module::Exception
+            # controlador Some::Module::Exception
         }
         else {
-            # manejar todas las otras posibles excepciones
+            # controla todas las otras posibles excepciones
         }
     }
 
@@ -913,13 +913,13 @@ La inclusión de bibliotecas de módulos es mejor hacerla con los operadores C<use
 Puede usar C<do> para leer en un programa un archivo de configuración.  Comprobación manual de errores se puede hacer así:
 
     # leer en archivos de configuración: primero el sistema, luego el usuario
-    for $archivo ("/share/prog/defaults.rc",
+    for $file ("/share/prog/defaults.rc",
                "$ENV{HOME}/.someprogrc")
     {
-        unless ($return = do $archivo) {
-            warn "no puedo parsear $archivo: $@" if $@;
-            warn "no puedo hacer $archivo: $!"   unless defined $return;
-            warn "no puedo ejecutar $archivo"    unless $return;
+        unless ($return = do $file) {
+            warn "no puedo analizar $file: $@" if $@;
+            warn "no puedo hacer $file: $!"    unless defined $return;
+            warn "no puedo ejecutar $file"     unless $return;
         }
     }
 
@@ -1118,7 +1118,7 @@ Usar un objeto indirecto con C<exec> o C<system> es también más seguro.  Este us
 
     @args = ( "echo sorpresa" );
 
-    exec @args;               # sujeto a los escapes del shell
+    exec @args;               # sujeto a los escapados del shell
                                 # if @args == 1
     exec { $args[0] } @args;  # seguro incluso con una lista de un argumento
 
@@ -1309,7 +1309,7 @@ Declara una imagen de formato para usar con la función C<write>.  Por ejemplo:
 
     format Algo =
         Test: @<<<<<<<< @||||| @>>>>>
-              $str,     $%,    '$' . int($numero)
+              $str,     $%,    '$' . int($num)
     .
 
     $str = "widget";
@@ -1551,7 +1551,7 @@ Un ejemplo para comprobar si el algoritmo de Nagle está activado en un socket:
     my $packed = getsockopt($socket, $tcp, TCP_NODELAY)
         or die "getsockopt TCP_NODELAY: $!";
     my $nodelay = unpack("I", $empaquetado);
-    print "El algoritmo de Nagle está activado: ", $nodelay ? "off\n" : "on\n";
+    print "El algoritmo de Nagle está puesto a ", $nodelay ? "off\n" : "on\n";
 
 
 =item glob EXPR
@@ -1670,8 +1670,8 @@ para obtener las correctas definiciones de la función.  Si F<sys/ioctl.ph> no ex
 El valor devuelto de C<ioctl> (y C<fcntl>) es como sigue:
 
     si OS devuelve:    entonces Perl devuelve:
-        -1               el valor indefinido
-         0               la cadena "0 but true"
+        -1               valor indefinido
+         0              cadena "0 but true"
     otra cosa          ese número
 
 Así, Perl devuelve verdadero en éxito y falso en fallo, por lo que aún podemos determinar el valor actual devuelto por el sistema operativo:
@@ -1757,7 +1757,7 @@ X<last> X<break>
 
 El comando C<last> es como la instrucción C<break> del C (usada en bucles); inmediatamente sale del bucle en cuestión.  Si la ETIQUETA se omite, el comando se refiere al bucle más interior en que se encuentre.  El bloque C<continue>, si está, no es ejecutado:
 
-    LINE: while (<STDIN>) {
+    LINEA: while (<STDIN>) {
         last LINE if /^$/;  # salir cuando se termine la cabecera
         #...
     }
@@ -1874,7 +1874,7 @@ Convierte un tiempo devuelto por la función time() en una lista de 9 elementos s
 
     #  0    1    2     3     4    5     6     7     8
     ($seg,$min,$hora,$mdia,$mes,$anno,$sdia,$ydia,$esdst) =
-                                                localtime(time);
+					    localtime(time);
 
 Todos los elementos de la lista son numéricos y derivan de la 'struct tm' del C.  $seg, $min y $hora son los segundos, minutos y horas del tiempo especificado.
 
@@ -1935,7 +1935,7 @@ X<log> X<logarithm> X<e> X<ln> X<base> X<logaritmo>
 
 =item log
 
-Devuelve el logaritmo natural (base I<e>) de EXPR.  Si EXPR se omite, devuelve el logaritmo de C<$_>.  Para obtener el logaritmo de otra base, use álgebra básica: el logaritmo de base N de un número es igual al logaritmo natural de ese número dividido por el logaritmo natural de N.  Por ejemplo:
+Devuelve el logaritmo natural (base I<e>) de EXPR.  Si EXPR se omite, devuelve el logaritmo de C<$_>.  Para obtener el logaritmo de otra base, uso álgebra básica: el logaritmo de base N de un número es igual al logaritmo natural de ese número dividido por el logaritmo natural de N. Por ejemplo:
 
     sub log10 {
         my $n = shift;
@@ -2060,7 +2060,7 @@ X<next> X<continue>
 
 El comando C<next> es como la instrucción C<continue> en C; comienza la siguiente iteración del bucle:
 
-    LINE: while (<STDIN>) {
+    LINEA: while (<STDIN>) {
         next LINEA if /^#/;  # descartar comentarios
         #...
     }
@@ -2215,7 +2215,7 @@ Ejemplos generales:
     sub procesa {
         my($archivo, $entrada) = @_;
         $entrada++;    # esto es un incremento de cadena
-        unless (open($entrada, $archivo)) {
+        unless (open($input, $filename)) {
             print STDERR "No puedo abrir $archivo: $!\n";
             return;
         }
@@ -2223,10 +2223,10 @@ Ejemplos generales:
         local $_;
         while (<$entrada>) {    # note el uso de la indirección
             if (/^#include "(.*)"/) {
-                procesa($1, $entrada);
+                procesa($1, $input);
                 next;
             }
-            #...          # más cosas
+            #...          # cualquier otra cosa
         }
     }
 
@@ -2349,8 +2349,8 @@ Utilizando el constructor del paquete C<IO::Handle> (o una de sus subclases, com
         my $TODO = shift;
         my $handle = IO::File->new;
         open($handle, "miarchivo") or die "miarchivo: $!";
-        $primero = <$handle>
-            or return ();     # Cerrado automáticamente aquí.
+        $first = <$handle>
+            or return ();     # Cerrado aquí automáticamente.
         mung $primero or die "mung falló";  # O aquí.
         return $primero, <$handle> if $TODO;  # O aquí.
         $primero;          # O aquí.
@@ -2459,8 +2459,7 @@ La PLANTILLA es una secuencia de caracteres que dan el orden y el tipo de los va
 
     i  Un valor entero con signo.
     I  Un valor entero sin signo.
-      (Este 'entero' es _al_menos_, de 32 bit de ancho.  Su exacto
-           tamaño depende de lo que un compilador C local llama 'int').
+      (Este 'entero' es _al_menos_, de 32 bit de ancho.  Su tamaño exacto depende de lo que un compilador C local llama 'int').
 
     n  Un corto sin signo (16 bit) en orden "red" (big-endian).
     N  Un largo sin signo (32 bit) en orden "red" (big-endian).
@@ -2500,14 +2499,14 @@ La PLANTILLA es una secuencia de caracteres que dan el orden y el tipo de los va
 
 Uno o más de los modificadores siguientes pueden, opcionalmente, seguir a ciertas letras en la PLANTILLA (la segunda columna enumeran las letras para las cuales el modificador es válido):
 
-    !   sSlLiI     Fuerza tamaños nativos (corto, largo, entero) en lugar
-                   de tamaños (16/32 bit) fijos.
+    !   sSlLiI     Fuerza a tamaños nativos (short, long, int) en lugar
+                   de tamaños fijos (16/32 bit)
 
         xX         Hace x y X actuar como comandos de alineamiento.
 
         nNvV       Trata a enteros como con signo, en lugar de sin signo.
 
-        @.         Especifica una posición como desplazamiento byte en la
+        @.         Especifica una posición como desplazamiento de byte en la
                    representación interna de la cadena empaquetada. Eficiente pero
                    peligroso.
 
@@ -2760,7 +2759,7 @@ es la cadena C<"\0X\0\0YZ">.
 C<x> y C<X> aceptan el modificar C<!> para actuar como comando de alineamiento: saltan hacia adelante o atrás a la posición más cercana alineada a un múltiplo de C<contador> caracteres. Por ejemplo, para pack() o unpack() una estructura en C como
 
     struct {
-	char   c;    /* un carácter de 8-bit, con signo */
+	char   c;    /* uno con signo, carácter 8-bit */
 	double d; 
 	char   cc[2];
     }
@@ -3104,15 +3103,15 @@ El comando C<redo> reinicia la iteración sin evaluar de nuevo la condición.  El 
 
     # elimina ingenuamente comentarios Pascal
     # (aviso: asumes que no hay { o } en cadenas)
-    LINE: while (<STDIN>) {
+    LINEA: while (<STDIN>) {
         while (s|({.*}.*){.*}|$1 |) {}
         s|{.*}| |;
         if (s|{.*| |) {
-            $front = $_;
+            $frente = $_;
             while (<STDIN>) {
                 if (/}/) {  # ¿fin de comentario?
-                    s|^|$front\{|;
-                    redo LINE;
+                    s|^|$frente\{|;
+                    redo LINEA;
                 }
             }
         }
@@ -3191,28 +3190,28 @@ De lo contrario, C<require> demanda que un archivo de biblioteca sea incluido si
 
     sub require {
        my ($nombrearchivo) = @_;
-       if (exists $INC{$nombrearchivo}) {
-           return 1 if $INC{$nombrearchivo};
+       if (exists $INC{$archivo}) {
+           return 1 if $INC{$archivo};
            die "Falló la compilación en require";
        }
        my ($realnombrearchivo,$resultado);
        ITER: {
-           foreach $prefijo (@INC) {
-               $realnombrearchivo = "$prefijo/$nombrearchivo";
-               if (-f $realnombrearchivo) {
-                   $INC{$nombrearchivo} = $realnombrearchivo;
-                   $resultado = do $realnombrearchivo;
+           foreach $prefix (@INC) {
+               $nombre_archivo_real = "$prefijo/$archivo";
+               if (-f $nombre_archivo_real) {
+                   $INC{$archivo} = $nombre_archivo_real;
+                   $resultado = do $nombre_archivo_real;
                    last ITER;
                }
            }
-           die "No encuentro $nombrearchivo en \@INC";
+           die "No encuentro el $archivo en \@INC";
        }
        if ($@) {
-           $INC{$nombrearchivo} = undef;
+           $INC{$archivo} = undef;
            die $@;
        } elsif (!$resultado) {
-           delete $INC{$nombrearchivo};
-           die "$nombrearchivo no devolvió un valor verdadero";
+           delete $INC{$archivo};
+           die "$archivo no devolvió un valor verdadero";
        } else {
            return $resultado;
        }
@@ -3431,7 +3430,7 @@ Si eso no funciona (algunas implementaciones de E/S son particularmente irritabl
     for (;;) {
         for ($curpos = tell(FILE); $_ = <FILE>;
              $curpos = tell(FILE)) {
-            # buscar por algo y ponerlo en el archivo
+            # buscar por algo y ponerlo en los archivos
         }
         sleep($por_un_rato);
         seek(FILE, $curpos, 0);
@@ -4006,9 +4005,9 @@ uno o más de:
    +       prefija un número no negativo con un signo más
    -       justifica a la izquierda dentro del campo
    0       usa ceros, no espacios, justificados a la derecha
-   #       garantiza el "0" precedente en cualquier octal,
-           prefija los hexadecimales distintos de cero con "0x" o "0X",
-           prefija los binarios distintos de cero con "0b" o "0B"
+   #       garantiza el "0" inicial para todos los octales,
+           prefija hexadecimales no ceros con "0x" o "0X",
+           prefija binarios no cero con "0b" o "0B"
 
 Por ejemplo:
 
@@ -4153,7 +4152,7 @@ puede averiguar si Perl considera "long double" como el valor por defecto para e
 
     use Config;
     if ($Config{uselongdouble} eq "define") {
-	print "dobles largos por defecto\n";
+	print "long doubles por defecto\n";
     }
 
 También puede ser que los long doubles y doubles sean la misma cosa:
@@ -4291,7 +4290,7 @@ El módulo <File::stat> proporciona un conveniente mecanismo de acceso por nombre
 
     use File::stat;
     $sb = stat($archivo);
-    printf "Archivo es %s, tamaño es %s, permisos %04o, mtime %s\n",
+    printf "Archivo es %s, tamaño es %s, perm %04o, mtime %s\n",
            $archivo, $sb->size, $sb->mode & 07777,
            scalar localtime $sb->mtime;
 
@@ -4334,11 +4333,11 @@ Comúnmente disponibles las constantes C<S_IF*> son:
 
 y las funciones C<S_IF*> son
 
-    S_IMODE($modo)    la parte de $modo conteniendo los bits de permisos
-            y los bits setuid/setgid/sticky
+    S_IMODE($modo)    la parte de $modo conteniendo los bit de permiso
+            y los bit setuid/setgid/sticky
 
-    S_IFMT($modo)    la parte de $modo conteniendo el tipo de archivo
-            que puede ser bit-andeado con (por ejemplo) S_IFREG
+    S_IFMT($modo)    la parte de $modo conteniendo los bit del tipo
+            de archivo que puede ser bit-andeado con (por ejemplo) S_IFREG
                         o con las siguientes funciones
 
     # Los operadores -f, -d, -l, -b, -c, -p, y -S.
@@ -4637,7 +4636,7 @@ El valor puede ser indicado a C<seekdir> para acceder a un lugar determinado en 
 =item tie VARIABLE,CLASE,LISTA
 X<tie>
 
-Esta función une una variable a una clase de paquete que ofrecerá la implementación para esa variable.  VARIABLE es el nombre de la variable que será enlazada.  CLASE es el nombre de la clase que implementa objetos del tipo correcto.  Cualesquiera argumentos adicionales son pasados al método C<new> de la clase (es decir, C<TIESCALAR>, C<TIEHANDLE>, C<TIEARRAY>, o C<TIEHASH>).  Por lo general estos son argumentos que podrían ser transmitidos a la función del C C<dbm_open()>.  El objeto devuelto por el método C<new> también es devuelto por la función C<tie>, que será útil si desea acceder a otros métodos en la CLASE.
+Esta función une una variable a una clase de paquete que ofrecerá la implementación para esa variable.  VARIABLE es el nombre de la variable que será enlazada.  CLASE es el nombre de la clase que implementa objetos del tipo correcto.  Cualesquiera argumentos adicionales son pasados al método C<new> de la clase (es decir, C<TIESCALAR>, C<TIEHANDLE>, C<TIEARRAY>, o C<TIEHASH>).  Por lo general estos son argumentos que pudieran ser transmitidos a la función del C C<dbm_open()>. El objeto devuelto por el método C<new> también es devuelto por la función C<tie>, que será útil si desea tener acceso a otros métodos en CLASE.
 
 Note que las funciones como C<keys> y C<values> pueden devolver largas listas como cuando se usan con grandes archivos DBM.  Puede preferir usar la función C<each> para iterar sobre tales listas.  Ejemplo:
 
@@ -4981,9 +4980,9 @@ Cambia los tiempos de acceso y modificación de cada archivo de una lista de arch
 
 Desde Perl 5.7.2, si los dos primeros elementos de la lista son C<undef>, se llama a la biblioteca del sistema C utime(2) con un segundo argumento nulo. En la mayoría de los sistemas, esto hará que los tiempos de acceso y modificación del archivo se establezcan a la hora actual (es decir, equivalente al ejemplo anterior) y funcionará incluso en archivos de los cuales usted no tenga permisos de escritura:
 
-    for $file (@ARGV) {
-	utime(undef, undef, $file) 
-	    || warn "no puedo tocar $file: $!";
+    for $archivo (@ARGV) {
+	utime(undef, undef, $archivo) 
+	    || warn "no puedo tocar $archivo: $!";
     } 
 
 Bajo NFS se utilizará la hora del servidor NFS, no el tiempo de la máquina local.  Si hay un problema de sincronización de tiempos, el servidor NFS y el equipo local tendrán tiempos diferentes.  El comando de Unix touch(1), de hecho, utilizará esta forma en lugar de la que se muestra en el primer ejemplo.
@@ -5075,13 +5074,13 @@ Este es un ejemplo para ilustrar cómo los bits están amparados efectivamente en 
 
     for $w (0..3) {
         $ancho = 2**$w;
-        for ($shift=0; $shift < $ancho; ++$shift) {
-            for ($despl=0; $despl < 32/$ancho; ++$despl) {
-                $cadena = pack("B*", "0"x32);
+        for ($shift=0; $shift < $width; ++$shift) {
+            for ($off=0; $off < 32/$width; ++$off) {
+                $str = pack("B*", "0"x32);
                 $bits = (1<<$shift);
-                vec($cadena, $despl, $ancho) = $bits;
-                $res = unpack("b*",$cadena);
-                $val = unpack("V", $cadena);
+                vec($str, $off, $width) = $bits;
+                $res = unpack("b*",$str);
+                $val = unpack("V", $str);
                 write;
             }
         }
