@@ -6,9 +6,14 @@ perllol - Manipulación de array de array en Perl
 
 =head2 Declaración y acceso de los array de array
 
-Lo más sencillo es crear un array de array (a veces, de forma imprecisa, es llamado una lista de listas).  Es razonablemente fácil de entender, y casi todo lo que se aplica aquí también se aplicará más tarde con las estructuras de datos más elaborados.
+Lo más sencillo es crear un array de array (a veces, de forma imprecisa, es
+llamado una lista de listas).  Es razonablemente fácil de entender, y casi todo
+lo que se aplica aquí también se aplicará más tarde con las estructuras de
+datos más elaborados.
 
-Un array de un array es justo un array @AoA normal sobre la que se puede aplicar dos subíndices, como C<$AoA[3][2]>.  Aquí hay una declaración del array:
+Un array de un array es justo un array @AoA normal sobre la que se puede
+aplicar dos subíndices, como C<$AoA[3][2]>.  Aquí hay una declaración del
+array:
 
     # asignar a nuestro array, un array de referencias a array
     @AoA = (
@@ -20,7 +25,10 @@ Un array de un array es justo un array @AoA normal sobre la que se puede aplicar
     print $AoA[2][2];
   bart
 
-Ahora, debe tener mucho cuidado de que el paréntesis externo debe ser eso: un paréntesis.  Esto es así porque está asignando a un @array, por lo que necesita usar paréntesis.  Si I<no> quiere que sea un @AoA, sino una referencia a él, puede hacer algo más parecido a esto:
+Ahora, debe tener mucho cuidado de que el paréntesis externo debe ser eso: un
+paréntesis.  Esto es así porque está asignando a un @array, por lo que necesita
+usar paréntesis.  Si I<no> quiere que sea un @AoA, sino una referencia a él,
+puede hacer algo más parecido a esto:
 
     # asignar una referencia a un array de referencias de array
     $ref_a_AoA = [
@@ -31,7 +39,12 @@ Ahora, debe tener mucho cuidado de que el paréntesis externo debe ser eso: un pa
 
     print $ref_to_AoA->[2][2];
 
-Observe que el paréntesis más exterior ha cambiado, por lo que nuestra sintaxis de acceso ha cambiado también.  Eso es porque, a diferencia de C, en perl no puede intercambiar libremente los array y referencias a ellos.  $ref_to_AoA es una referencia a un array, mientras que @AoA es un array.  Del mismo modo, C<$AoA[2]> no es un array, si no una referencia a un array.  Así que ¿cómo entonces puede escribir lo siguiente
+Observe que el paréntesis más exterior ha cambiado, por lo que nuestra sintaxis
+de acceso ha cambiado también.  Eso es porque, a diferencia de C, en perl no
+puede intercambiar libremente los array y referencias a ellos.  $ref_to_AoA es
+una referencia a un array, mientras que @AoA es un array.  Del mismo modo,
+C<$AoA[2]> no es un array, si no una referencia a un array.  Así que ¿cómo
+entonces puede escribir lo siguiente
 
     $AoA[2][2]
     $ref_to_AoA->[2][2]
@@ -41,14 +54,22 @@ en lugar de tener que escribir lo siguiente?
     $AoA[2]->[2]
     $ref_to_AoA->[2]->[2]
 
-Bueno, eso es porque la regla dice que sólo en los corchetes o llaves adyacentes, es libre de omitir la flecha de referencias.
-Pero no puede hacerlo para el primer caso si es un escalar que contenga una referencia, lo que significa que $ref_to_AoA siempre lo necesita.
+Bueno, eso es porque la regla dice que sólo en los corchetes o llaves
+adyacentes, es libre de omitir la flecha de referencias. Pero no puede hacerlo
+para el primer caso si es un escalar que contenga una referencia, lo que
+significa que $ref_to_AoA siempre lo necesita.
 
 =head2 Creciendo
 
-Todo eso está bien y es bueno para la declaración de una estructura de datos fijos, pero ¿y si quisiera añadir nuevos elementos sobre la marcha, o construirlo desde cero?
+Todo eso está bien y es bueno para la declaración de una estructura de datos
+fijos, pero ¿y si quisiera añadir nuevos elementos sobre la marcha, o
+construirlo desde cero?
 
-En primer lugar, echemos un vistazo a la lectura desde un archivo.  Esto es algo así como la adición de una fila cada vez.  Vamos a suponer que hay un archivo de texto plano en el que cada línea es una fila y cada palabra un elemento.  Si está tratando de desarrollar un array @AoA conteniendo todo eso, esta es la manera correcta de hacerlo:
+En primer lugar, echemos un vistazo a la lectura desde un archivo.  Esto es
+algo así como la adición de una fila cada vez.  Vamos a suponer que hay un
+archivo de texto plano en el que cada línea es una fila y cada palabra un
+elemento.  Si está tratando de desarrollar un array @AoA conteniendo todo eso,
+esta es la manera correcta de hacerlo:
 
     while (<>) {
 	@tmp = split;
@@ -68,13 +89,16 @@ O podría haber usado una variable temporal con el array en ella.
 	$AoA[$i] = [ @tmp ];
     }
 
-Es muy importante que esté seguro que está utilizando el constructor de referencia a array C<[]>.  Si no esto quedaría muy mal:
+Es muy importante que esté seguro que está utilizando el constructor de
+referencia a array C<[]>.  Si no esto quedaría muy mal:
 
     $AoA[$i] = @tmp;
 
-Ya ve, asignando un array como este a un escalar sólo contaría el número de elementos en @tmp, que probablemente no es lo que quiere.
+Ya ve, asignando un array como este a un escalar sólo contaría el número de
+elementos en @tmp, que probablemente no es lo que quiere.
 
-Si está ejecutando bajo C<use strict>, tendrá que agregar algunas declaraciones para hacerle feliz:
+Si está ejecutando bajo C<use strict>, tendrá que agregar algunas declaraciones
+para hacerle feliz:
 
     use strict;
     my(@AoA, @tmp);
@@ -89,7 +113,8 @@ Por supuesto, no necesita el array temporal para nada:
 	push @AoA, [ split ];
     }
 
-Tampoco tiene por qué usar push().  Puede hacer una asignación directa si sabe dónde quiere ponerlo:
+Tampoco tiene por qué usar push().  Puede hacer una asignación directa si sabe
+dónde quiere ponerlo:
 
     my (@AoA, $i, $linea);
     for $i ( 0 .. 10 ) {
@@ -104,20 +129,25 @@ o incluso sólo
 	$AoA[$i] = [ split ' ', <> ];
     }
 
-Debe, por lo general, desconfiar del uso de funciones que podrían devolver listas en contexto escalar sin constancia explícita de ello.  Esto será más claro para el lector casual:
+Debe, por lo general, desconfiar del uso de funciones que podrían devolver
+listas en contexto escalar sin constancia explícita de ello.  Esto será más
+claro para el lector casual:
 
     my (@AoA, $i);
     for $i ( 0 .. 10 ) {
 	$AoA[$i] = [ split ' ', scalar(<>) ];
     }
 
-Si quería tener una variable $ref_to_AoA como una referencia a un array, tendrá que hacer algo como esto:
+Si quería tener una variable $ref_to_AoA como una referencia a un array, tendrá
+que hacer algo como esto:
 
     while (<>) {
 	push @$ref_to_AoA, [ split ];
     }
 
-Ahora puede agregar nuevas filas.  ¿Qué pasa con la adición de nuevas columnas?  Si está tratando con matrices justo, a menudo es más fácil usar una asignación simple:
+Ahora puede agregar nuevas filas.  ¿Qué pasa con la adición de nuevas columnas?
+ Si está tratando con matrices justo, a menudo es más fácil usar una asignación
+simple:
 
     for $x (1 .. 10) {
 	for $y (1 .. 10) {
@@ -129,7 +159,8 @@ Ahora puede agregar nuevas filas.  ¿Qué pasa con la adición de nuevas columnas? 
 	$AoA[$x][20] += func2($x);
     }
 
-No importa qué elementos estén allí o no: serán, con mucho gusto, creados para usted, estableciendo elementos intermedios a C<undef> cuando sea necesario.
+No importa qué elementos estén allí o no: serán, con mucho gusto, creados para
+usted, estableciendo elementos intermedios a C<undef> cuando sea necesario.
 
 Si sólo quiere añadir a una fila, tendrá que hacer algo un poco más divertido:
 
@@ -140,11 +171,13 @@ Note que yo I<no puedo> decir simplemente:
 
     push $AoA[0], "wilma", "betty";  # ¡MAL!
 
-De hecho, esto ni siquiera compilaría.  ¿Por qué?  Debido a que el argumento de push() debe ser un array real, no sólo una referencia.
+De hecho, esto ni siquiera compilaría.  ¿Por qué?  Debido a que el argumento de
+push() debe ser un array real, no sólo una referencia.
 
 =head2 Acceso e impresión
 
-Ahora es el momento de imprimir la estructura de datos.  ¿Cómo va a hacer eso?  Bueno, si desea sólo uno de los elementos, es trivial:
+Ahora es el momento de imprimir la estructura de datos.  ¿Cómo va a hacer eso? 
+Bueno, si desea sólo uno de los elementos, es trivial:
 
     print $AoA[0][0];
 
@@ -152,7 +185,11 @@ Si desea imprimir toda el conjunto, sin embargo, no se puede decir
 
     print @AoA;		# MAL
 
-porque solo va a conseguir un listado de referencias, y perl nunca desreferencia de forma automática.  En su lugar, tiene que hacer un bucle o dos.  Esto muestra toda la estructura, utilizando la construcción de un bucle al estilo del for() de la shell para ciclar por el conjunto externo de subíndices.
+porque solo va a conseguir un listado de referencias, y perl nunca
+desreferencia de forma automática.  En su lugar, tiene que hacer un bucle o
+dos.  Esto muestra toda la estructura, utilizando la construcción de un bucle
+al estilo del for() de la shell para ciclar por el conjunto externo de
+subíndices.
 
     for $aref ( @AoA ) {
 	print "\t [ @$aref ],\n";
@@ -172,7 +209,8 @@ o tal vez incluso así.  Observe el bucle interior.
 	}
     }
 
-Como puede ver, se está haciendo un poco complicado.  Es por eso que a veces es más fácil tomar un descanso en su marcha campo a través:
+Como puede ver, se está haciendo un poco complicado.  Es por eso que a veces es
+más fácil tomar un descanso en su marcha campo a través:
 
     for $i ( 0 .. $#AoA ) {
 	$aref = $AoA[$i];
@@ -193,10 +231,15 @@ Hmm ... que aún es un poco feo.  ¿Qué le parece esto?
 
 =head2 Porciones
 
-Si desea obtener una porción (parte de una fila) en una matriz multidimensional, va a tener que hacer algunos juegos malabares con los subíndices.  Eso es porque mientras que nosotros tenemos un sinónimo sencillo para los elementos individuales a través de la flecha puntero de desreferencia, no existe tal conveniencia para las porciones.
-(Recuerde, por supuesto, que siempre se puede escribir un bucle para hacer una operación de corte)
+Si desea obtener una porción (parte de una fila) en una matriz
+multidimensional, va a tener que hacer algunos juegos malabares con los
+subíndices.  Eso es porque mientras que nosotros tenemos un sinónimo sencillo
+para los elementos individuales a través de la flecha puntero de desreferencia,
+no existe tal conveniencia para las porciones. (Recuerde, por supuesto, que
+siempre se puede escribir un bucle para hacer una operación de corte)
 
-Aquí está cómo hacer una operación con un bucle.  Vamos a suponer una variable @AoA, como antes.
+Aquí está cómo hacer una operación con un bucle.  Vamos a suponer una variable
+@AoA, como antes.
 
     @part = ();
     $x = 4;
@@ -210,7 +253,9 @@ Ese mismo bucle podría ser sustituido por una operación de corte:
 
 pero como se podrá imaginar, esto es bastante duro para el lector.
 
-¡Ah!, pero ¿qué pasa si yo quisiera un I<porción bidimensional>, ¿cómo hacer que $x vaya de 4 al 8 y $y de 7 al 12?  Hmm ... aquí está la forma más sencilla:
+¡Ah!, pero ¿qué pasa si yo quisiera un I<porción bidimensional>, ¿cómo hacer
+que $x vaya de 4 al 8 y $y de 7 al 12?  Hmm ... aquí está la forma más
+sencilla:
 
     @newAoA = ();
     for ($startx = $x = 4; $x <= 8; $x++) {
@@ -225,12 +270,14 @@ Podemos reducir algunos de los bucles usando porciones
 	push @newAoA, [ @{ $AoA[$x] } [ 7..12 ] ];
     }
 
-Si está en una transformada Schwartziana, es probable que haya elegido map para esto
+Si está en una transformada Schwartziana, es probable que haya elegido map para
+esto
 
     @newAoA = map { [ @{ $AoA[$_] } [ 7..12 ] ] } 4 .. 8;
 
-Pero su jefe le puede acusar de estar buscando un trabajo de seguridad (o rápida inseguridad) usando código inescrutable, y le será difícil excusarse. :-)
-Si yo fuera usted, lo pondría en una función:
+Pero su jefe le puede acusar de estar buscando un trabajo de seguridad (o
+rápida inseguridad) usando código inescrutable, y le será difícil excusarse.
+:-) Si yo fuera usted, lo pondría en una función:
 
     @newAoA = splice_2D( \@AoA, 4 => 8, 7 => 12 );
     sub splice_2D {
@@ -253,3 +300,4 @@ L<perldata>, L<perlref>, L<perldsc>
 Tom Christiansen <F<tchrist@perl.com>>
 
 Última actualización: mar Jun  4 16:16:23 MDT 1998
+

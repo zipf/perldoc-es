@@ -13,7 +13,8 @@ Se puede leer este documento en los siguientes formatos:
         explorer perldgux.html
         info perldgux
 
-por listar algunos (no todos pueden estar disponibles simultáneamente), o puede ser leído I<tal cual>: como F<README.dgux>.
+por listar algunos (no todos pueden estar disponibles simultáneamente), o puede
+ser leído I<tal cual>: como F<README.dgux>.
 
 =cut
 
@@ -45,37 +46,45 @@ Luego ejecute "make" para compilar.
 
 =head2 Perl con I<threads> en DG/UX
 
-Si está utilizando como compilador el GCC-2.95.x revisión DG/UX, una solución fácil para la configuración de perl en su máquina DG/UX es ejecutar el comando:
+Si está utilizando como compilador el GCC-2.95.x revisión DG/UX, una solución
+fácil para la configuración de perl en su máquina DG/UX es ejecutar el comando:
 
 ./Configure -Dusethreads -Duseithreads -Dusedevel -des
 
-Esto, automáticamente, aceptará todos los valores predeterminados y, en particular, /usr/local/ como directorio de instalación.
-Tenga en cuenta que GCC-2.95.x revisión DG/UX sabe de la opción -pthread, que le permite vincular correctamente la biblioteca -lthread de DG/UX.
+Esto, automáticamente, aceptará todos los valores predeterminados y, en
+particular, /usr/local/ como directorio de instalación. Tenga en cuenta que
+GCC-2.95.x revisión DG/UX sabe de la opción -pthread, que le permite vincular
+correctamente la biblioteca -lthread de DG/UX.
 
-Si desea cambiar el directorio de instalación o tiene una DG/UX estándar con un compilador de C GCC-2.7.2.x, entonces no tiene más remedio que hacer una compilación interactiva mediante la ejecución de la orden:
+Si desea cambiar el directorio de instalación o tiene una DG/UX estándar con un
+compilador de C GCC-2.7.2.x, entonces no tiene más remedio que hacer una
+compilación interactiva mediante la ejecución de la orden:
 
 ./Configure -Dusethreads -Duseithreads
 
-En particular, con GCC-2.7.2.x acepte todos los valores por defecto, y *busque* por el siguiente mensaje:
+En particular, con GCC-2.7.2.x acepte todos los valores por defecto, y *busque*
+por el siguiente mensaje:
 
     Any additional ld flags (NOT including libraries)? [ -pthread]
 
-en lugar de -pthread, ponga -lthread. CGCC-2.7.2.x que viene con el sistema operativo DG/UX NO conoce la opción -pthread. Así que su compilación producirá un error si usted elige los valores predeterminados.
-Después de la configuración haya terminado, se puede hacer un "make" para compilar.
+en lugar de -pthread, ponga -lthread. CGCC-2.7.2.x que viene con el sistema
+operativo DG/UX NO conoce la opción -pthread. Así que su compilación producirá
+un error si usted elige los valores predeterminados. Después de la
+configuración haya terminado, se puede hacer un "make" para compilar.
 
 =head2 Comprobando Perl en DG/UX
 
-La ejecución de un "make test" ejecutará todas las pruebas. 
-Si la prueba lib/ftmp-security da como resultado algo como
+La ejecución de un "make test" ejecutará todas las pruebas.  Si la prueba
+lib/ftmp-security da como resultado algo como
 
     lib/ftmp-security....File::Temp::_gettemp:
     Parent directory (/tmp/) is not safe (sticky bit not set
     when world writable?) at lib/ftmp-security.t line 100
 
-no entre en pánico y establezca el bit sticky en el directorio /tmp haciendo lo siguiente como root:
+no entre en pánico y establezca el bit sticky en el directorio /tmp haciendo lo
+siguiente como root:
 
-cd /
-chmod +t /tmp (=pone el sticky bit a /tmp).
+cd / chmod +t /tmp (=pone el sticky bit a /tmp).
 
 A continuación, vuelva a ejecutar las pruebas. Esta vez, todo debe estar bien.
 
@@ -85,13 +94,9 @@ Ejecute el comando "make install"
 
 =head1 AUTOR
 
-Takis Psarogiannakopoulos
-Universidad de Cambridge
-Centro para las Ciencias Matemáticas
-Departamento de Matemáticas Puras
-Wilberforce road
-Cambridge CB3 0WB , UK
-email <takis@XFree86.Org>
+Takis Psarogiannakopoulos Universidad de Cambridge Centro para las Ciencias
+Matemáticas Departamento de Matemáticas Puras Wilberforce road Cambridge CB3
+0WB , UK email <takis@XFree86.Org>
 
 =head1 VEA TAMBIÉN
 

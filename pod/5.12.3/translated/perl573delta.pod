@@ -4,14 +4,22 @@ perl573delta - qué hay de nuevo para perl v5.7.3
 
 =head1 DESCRIPCIÓN
 
-Este documento describe las diferencias entre la versión 5.7.2 y la versión 5.7.3.  
+Este documento describe las diferencias entre la versión 5.7.2 y la versión
+5.7.3.
 
-(Para ver las diferencias entre la versión 5.6.0 y la versión 5.7.0, véase L<perl570delta>.  (Para ver las diferencias entre la versión 5.7.0 y la versión 5.7.1, véase L<perl571delta>.  (Para ver las diferencias entre la versión 5.7.1 y la versión 5.7.2, véase L<perl572delta>).
+(Para ver las diferencias entre la versión 5.6.0 y la versión 5.7.0, véase
+L<perl570delta>.  (Para ver las diferencias entre la versión 5.7.0 y la versión
+5.7.1, véase L<perl571delta>.  (Para ver las diferencias entre la versión 5.7.1
+y la versión 5.7.2, véase L<perl572delta>).
 
 =head1 Cambios
 
-Esto es sólo una selección de algunos de los cambios más notables.
-Los números se refieren a los números de cambio en el repositorio Perl; véase L<Changes58> (o L<Cambios> en Perl 5.8.1).  Además de estos cambios, mucho trabajo se llevó a cabo en la integración de I<threads>, PerlIO, y Unicode; limpieza general del código, y por último, pero no menos importante, portar a los no-Unix, tales como Win32, VMS, Cygwin, DJGPP, VOS, Mac OS Classic, y EBCDIC.
+Esto es sólo una selección de algunos de los cambios más notables. Los números
+se refieren a los números de cambio en el repositorio Perl; véase L<Changes58>
+(o L<Cambios> en Perl 5.8.1).  Además de estos cambios, mucho trabajo se llevó
+a cabo en la integración de I<threads>, PerlIO, y Unicode; limpieza general del
+código, y por último, pero no menos importante, portar a los no-Unix, tales
+como Win32, VMS, Cygwin, DJGPP, VOS, Mac OS Classic, y EBCDIC.
 
 =over 4
 
@@ -37,11 +45,13 @@ arreglado un error en la comprobación de seguridad aceitosa de open()
 
 =item 11423
 
-hacer que el fork() de perl sea seguro incluso en plataformas que no tienen pthread_atfork()
+hacer que el fork() de perl sea seguro incluso en plataformas que no tienen
+pthread_atfork()
 
 =item 11459
 
-realizar la optimización de conexión y los niveles de depuración durante la compilación de Perl es más fácil usando la variable de entorno OPTIMIZE
+realizar la optimización de conexión y los niveles de depuración durante la
+compilación de Perl es más fácil usando la variable de entorno OPTIMIZE
 
 =item 11475
 
@@ -49,7 +59,7 @@ hacer que las capturas no utilizadas de split() sean indefinidas, no ''
 
 =item 11485
 
-Search::Dict: permite transformar líneas antes de compararlas 
+Search::Dict: permite transformar líneas antes de compararlas
 
 =item 11490
 
@@ -57,7 +67,8 @@ permitir la instalación de módulos extra o empaquetados cuando se compila Perl
 
 =item 11516
 
-añadir -Wall en cflags cuando se compila con gcc para eliminar prácticas dudosas de C
+añadir -Wall en cflags cuando se compila con gcc para eliminar prácticas
+dudosas de C
 
 =item 11541
 
@@ -73,11 +84,13 @@ Win32: el select() de 4 argumentos estaba roto
 
 =item 11594
 
-introducir la utilidad perlivp para comprobar la instalación de Perl (PIV = Procedimiento de Verificación de la instalación)
+introducir la utilidad perlivp para comprobar la instalación de Perl (PIV =
+Procedimiento de Verificación de la instalación)
 
 =item 11623
 
-cambiar el nombre de lib/unicode a lib/unicore para evitar problemas de mayúsculas y minúsculas, con lib/Unicode
+cambiar el nombre de lib/unicode a lib/unicore para evitar problemas de
+mayúsculas y minúsculas, con lib/Unicode
 
 =item 111631
 
@@ -85,11 +98,15 @@ eliminar Time::Piece
 
 =item 11643
 
-documentar que el uso de UTF-8 no es la manera correcta en la mayoría de las ocasiones
+documentar que el uso de UTF-8 no es la manera correcta en la mayoría de las
+ocasiones
 
 =item 11656
 
-permitir la construcción de perl con -DUSE_UTF8_SCRIPTS que hace que sea la codificación UTF-8 la de por defecto en el codificado de los script (no está por defecto ya que rompería todos los script que tiene un legado de ocho bits de datos dentro de si)
+permitir la construcción de perl con -DUSE_UTF8_SCRIPTS que hace que sea la
+codificación UTF-8 la de por defecto en el codificado de los script (no está
+por defecto ya que rompería todos los script que tiene un legado de ocho bits
+de datos dentro de si)
 
 =item 11725
 
@@ -193,29 +210,40 @@ implementar des/empaquetado de IV/UV/NV/long double con j/J/F/D
 
 =item 14854
 
-documentar el comportamiento del nuevo comportamiento de I<taint> de exec LISTA y system LISTA
+documentar el comportamiento del nuevo comportamiento de I<taint> de exec LISTA
+y system LISTA
 
 =back
 
 =head1 Informar de errores
 
-Si usted encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  También puede haber información en http://www.perl.com/, La página oficial de Perl.
+Si usted encuentra algo que piensa que es un error, podría verificar los
+artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc
+y la base de datos de errores de perl en http://bugs.perl.org/.  También puede
+haber información en http://www.perl.com/, La página oficial de Perl.
 
-Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa
+B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del
+error en un programa que sea pequeño, pero suficiente.  Su informe de error,
+junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser
+analizado por el equipo de adaptación de Perl.
 
 =head1 VEA TAMBIÉN
 
-El archivo de F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+El archivo de F<Changes> (Cambios) para obtener más información exhaustiva
+sobre lo que ha cambiado.
 
 El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
 
 El archivo F<README> (LEEME) para asuntos generales.
 
-Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de
+autor.
 
 =head1 HISTORIA
 
-Escrito por Jarkko Hietaniemi <F<jhi@iki.fi>>, con muchas contribuciones de los I<Perl Porters> y usuarios Perl que suministraron comentarios y revisiones.
+Escrito por Jarkko Hietaniemi <F<jhi@iki.fi>>, con muchas contribuciones de los
+I<Perl Porters> y usuarios Perl que suministraron comentarios y revisiones.
 
 Envíe omisiones o correcciones a <F<perlbug@perl.org>>.
 
