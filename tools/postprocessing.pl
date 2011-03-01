@@ -36,7 +36,7 @@ open my $out, '>:encoding(latin-1)', $out_path;
 
 # wrap lines (OmegaT removes some line breaks) 
 
-$columns = 76;
+$columns = 80;
 
 while ( <$in> ) {
 
