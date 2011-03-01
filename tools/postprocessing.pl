@@ -55,8 +55,8 @@ close $in;
 
 print $out "\n\n=head1 TRADUCTORES\n\n";
 print $out "=over\n\n";
-print $out "=item * Joaquín Ferrero, C< explorer at joaquinferrero.com >\n\n";
-print $out "=item * Enrique Nell, C< blas.gordon at gmail.com >\n\n";
+print $out "=item * Joaquín Ferrero C< explorer + POD2ES at joaquinferrero.com >\n\n";
+print $out "=item * Enrique Nell C< blas.gordon at gmail.com >\n\n";
 print $out "=back";
 
 close $out;
