@@ -4,24 +4,23 @@ perl - El intérprete del lenguaje Perl
 
 =head1 SINOPSIS
 
-B<perl> S<[ B<-sTtuUWX> ]>  S<[ B<-hv> ] [ B<-V>[:I<configvar>] ]>  S<[ B<-cw>
-] [ B<-d>[B<t>][:I<debugger>] ] [ B<-D>[I<número/lista>] ]>  S<[ B<-pna> ] [
-B<-F>I<patrón> ] [ B<-l>[I<octal>] ] [ B<-0>[I<octal/hexadecimal>] ]>   S<[
-B<-I>I<dir> ] [ B<-m>[B<->]I<módulo> ] [ B<-M>[B<->]I<'módulo...'> ] [ B<-f> ]>
-    S<[ B<-C [I<número/lista>] >]>  S<[ B<-S> ]>    S<[ B<-x>[I<dir>] ]>    S<[
-B<-i>[I<extensión>] ]>  S<[ [B<-e>|B<-E>] I<'comando'> ] [ B<--> ] [
-I<programa> ] [ I<argumento> ]...>
+B<perl>	S<[ B<-sTtuUWX> ]>
+	S<[ B<-hv> ] [ B<-V>[:I<configvar>] ]>
+	S<[ B<-cw> ] [ B<-d>[B<t>][:I<debugger>] ] [ B<-D>[I<número/lista>] ]>
+	S<[ B<-pna> ] [ B<-F>I<patrón> ] [ B<-l>[I<octal>] ] [ B<-0>[I<octal/hexadecimal>] ]>
+	S<[ B<-I>I<dir> ] [ B<-m>[B<->]I<módulo> ] [ B<-M>[B<->]I<'módulo...'> ] [ B<-f> ]>
+	S<[ B<-C [I<número/lista>] >]>
+	S<[ B<-S> ]>
+	S<[ B<-x>[I<dir>] ]>
+	S<[ B<-i>[I<extensión>] ]>
+	S<[ [B<-e>|B<-E>] I<'comando'> ] [ B<--> ] [ I<programa> ] [ I<argumento> ]...>
 
 =head1 OBTENIENDO AYUDA
 
-El programa F<perldoc> le da acceso a toda la documentación que viene con Perl.
- Puede obtener más documentación, seminarios y soporte desde la comunidad en
-línea en L<http://www.perl.org/>.
+El programa F<perldoc> le da acceso a toda la documentación que viene con Perl.  Puede obtener más documentación, seminarios y soporte desde la comunidad en línea en L<http://www.perl.org/>.
 
-Si es nuevo en Perl, debe empezar ejecutando C<perldoc perlintro>, que es una
-introducción general para novatos y ofrece una base suficiente para navegar por
-el resto de la extensa documentación de Perl.  Ejecute C<perldoc perldoc> para
-aprender más cosas que puede hacer con F<perldoc>.
+Si es nuevo en Perl, debe empezar ejecutando C<perldoc perlintro>,
+que es una introducción general para novatos y ofrece una base suficiente para navegar por el resto de la extensa documentación de Perl.  Ejecute C<perldoc perldoc> para aprender más cosas que puede hacer con F<perldoc>.
 
 Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
 
@@ -116,7 +115,7 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
 
     perlutil		utilidades empaquetadas con la distribución Perl
 
-    perlcompile	Introducción al sistema de compilación Perl
+    perlcompile		Introducción al sistema de compilación Perl
 
     perlfilter		Filtros de código fuente
 
@@ -239,78 +238,47 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
     perlwin32		Notas para Windows
 
 
-En un sistema de la familia Unix, esta documentación estará también, por lo
-general, disponible como páginas de manual para su uso con el programa F<man>.
+En un sistema de la familia Unix, esta documentación estará también, por lo general, disponible como páginas de manual para su uso con el programa F<man>.
 
-En general, si ha ocurrido algo extraño en su programa y no está seguro de
-dónde debe buscar ayuda, intente primero usar la opción B<-w>.  A menudo,
-mostrará dónde está el problema.
+En general, si ha ocurrido algo extraño en su programa y no está seguro de dónde debe buscar ayuda, intente primero usar la opción B<-w>.  A menudo, mostrará dónde está el problema.
 
 =head1 DESCRIPCIÓN
 
-Perl, oficialmente, significa Lenguaje práctico para la extracción e informe
-(I<Practical Extraction and Report Language>), excepto cuando no hace eso.
+Perl, oficialmente, significa Lenguaje práctico para la extracción e informe (I<Practical Extraction and Report Language>), excepto cuando no hace eso.
 
-Perl es un lenguaje optimizado para el escaneo de archivos de texto, extraer
-información de estos archivos de texto, e impresión de informes basados en esa
-información.  Es también un buen lenguaje para muchas tareas de gestión de
-sistemas.  El lenguaje está pensado para ser práctico (fácil de usar,
-eficiente, completo) en lugar de hermoso (pequeño, elegante, mínimo).
+Perl es un lenguaje optimizado para el escaneo de archivos de texto, extraer información de estos archivos de texto, e impresión de informes basados en esa información.  Es también un buen lenguaje para muchas tareas de gestión de sistemas.  El lenguaje está pensado para ser práctico (fácil de usar, eficiente, completo) en lugar de hermoso (pequeño, elegante, mínimo).
 
-Perl combina (en opinión del autor, de todos modos), algunas de las mejores
-características de B<C>, B<sed>, B<awk>, y B<sh>, así que la gente que conozca
-estos lenguajes no deberían tener dificultades con él.  (Historiadores del
-lenguaje notarán algunos vestigios de B<csh>, Pascal, e incluso BASIC-PLUS). La
-sintaxis de las expresiones corresponden estrechamente con la sintaxis de las
-expresiones del C.  A diferencia de la mayoría de los sistemas Unix, Perl no
-limita arbitrariamente el tamaño de sus datos - si tiene memoria, Perl puede
-sorber su archivo entero como una sola cadena.  La recursividad es de
-profundidad ilimitada.  Y las tablas utilizadas por los hashes (a veces
-llamadas "matrices asociativas") crecen lo que sea necesario para evitar que el
-rendimiento se degrade.  Perl puede utilizar sofisticadas técnicas de
-concordancia de patrones para escanear grandes cantidades de datos,
-rápidamente.  Si bien optimizados para el escaneo de texto, Perl también puede
-tratar con datos binarios, y puede hacer que los archivos dbm parezcan hashes. 
-Scripts setuid de Perl son más seguros que los programas en C a través de un
-mecanismo de seguimiento de flujo de datos que impide muchos agujeros de
-seguridad estúpidos.
+Perl combina (en opinión del autor, de todos modos), algunas de las mejores características de B<C>, B<sed>, B<awk>, y B<sh>, así que la gente que conozca estos lenguajes no deberían tener dificultades con él.  (Historiadores del lenguaje notarán algunos vestigios de B<csh>, Pascal, e incluso BASIC-PLUS). La sintaxis de las expresiones corresponden estrechamente con la sintaxis de las expresiones del C.  A diferencia de la mayoría de los sistemas Unix, Perl no limita arbitrariamente el tamaño de sus datos - si tiene memoria, Perl puede sorber su archivo entero como una sola cadena.  La recursividad es de profundidad ilimitada.  Y las tablas utilizadas por los hashes (a veces llamadas "matrices asociativas") crecen lo que sea necesario para evitar que el rendimiento se degrade.  Perl puede utilizar sofisticadas técnicas de concordancia de patrones para escanear grandes cantidades de datos, rápidamente.  Si bien optimizados para el escaneo de texto, Perl también puede tratar con datos binarios, y puede hacer que los archivos dbm parezcan hashes.  Scripts setuid de Perl son más seguros que los programas en C a través de un mecanismo de seguimiento de flujo de datos que impide muchos agujeros de seguridad estúpidos.
 
-Si tiene un problema en que normalmente utilizaría B<sed> o B<awk> o B<sh>,
-pero excede sus capacidades o debe funcionar un poco más rápido, y usted no
-desea escribir esa tontería en C, Perl puede ser para usted.  También hay
-traductores para convertir sus scripts B<sed> y B<awk> en scripts Perl.
+Si tiene un problema en que normalmente utilizaría B<sed> o B<awk> o B<sh>, pero excede sus capacidades o debe funcionar un poco más rápido, y usted no desea escribir esa tontería en C, Perl puede ser para usted.  También hay traductores para convertir sus scripts B<sed> y B<awk> en scripts Perl.
 
 Pero espere, aún hay más...
 
-Iniciado en 1993 (véase L<perlhist>), la versión de Perl 5 es casi una
-reescritura completa que proporciona los beneficios adicionales siguientes:
+Iniciado en 1993 (véase L<perlhist>), la versión de Perl 5 es casi una reescritura completa que proporciona los beneficios adicionales siguientes:
 
 =over 4
 
 =item *
 
-la modularidad y la reutilización usando innumerables módulos
+la modularidad y la reutilización usando innumerables módulos 
 
 Descrito en L<perlmod>, L<perlmodlib> y L<perlmodinstall>.
 
 =item *
 
-integrable y ampliable
+integrable y ampliable 
 
-Descrito en L<perlembed>, L<perlxstut>, L<perlxs>, L<perlcall>, L<perlguts> y
-L<xsubpp>.
+Descrito en L<perlembed>, L<perlxstut>, L<perlxs>, L<perlcall>, L<perlguts> y L<xsubpp>.
 
 =item *
 
-sus propias variables mágicas (incluyendo múltiples implementaciones
-simultáneas de DBM)
+sus propias variables mágicas (incluyendo múltiples implementaciones simultáneas de DBM)
 
 Descrito en L<perltie> y L<AnyDBM_File>.
 
 =item *
 
-subrutinas ahora pueden ser reemplazadas, cargadas automáticamente y
-prototipadas
+subrutinas ahora pueden ser reemplazadas, cargadas automáticamente y prototipadas
 
 Descrito en L<perlsub>
 
@@ -352,8 +320,7 @@ Descrito en L<perlre>, con ejemplos adicionales en L<perlop>.
 
 =item *
 
-depurador mejorado y entorno Perl interactivo, con soporte de un editor
-integrado
+depurador mejorado y entorno Perl interactivo, con soporte de un editor integrado
 
 Descrito en L<perldebtut>, L<perldebug> y L<perldebguts>.
 
@@ -369,9 +336,7 @@ Bueno, esto ya es I<definitivamente> suficiente autobombo.
 
 =head1 DISPONIBILIDAD
 
-Perl está disponible para la mayoría de sistemas operativos, incluyendo a casi
-todas las plataformas Unix.  Ver L<perlport/"Plataformas soportadas"> para ver
-un listado.
+Perl está disponible para la mayoría de sistemas operativos, incluyendo a casi todas las plataformas Unix.  Ver L<perlport/"Plataformas soportadas"> para ver un listado.
 
 =head1 ENTORNO
 
@@ -381,10 +346,7 @@ Ver L<perlrun>.
 
 Larry Wall <larry@wall.org>, con ayuda de montones de otras personas.
 
-Si sus historias de éxito y testimonio de Perl puede ser de ayuda a otros que
-desean abogar por el uso de Perl en sus aplicaciones, o si simplemente desea
-expresar su gratitud a Larry y los desarrolladores de Perl, por favor escriba a
-perl-thanks@perl.org .
+Si sus historias de éxito y testimonio de Perl puede ser de ayuda a otros que desean abogar por el uso de Perl en sus aplicaciones, o si simplemente desea expresar su gratitud a Larry y los desarrolladores de Perl, por favor escriba a perl-thanks@perl.org .
 
 =head1 ARCHIVOS
 
@@ -402,19 +364,14 @@ perl-thanks@perl.org .
 
 =head1 DIAGNÓSTICO
 
-El pragma C<use warnings> (y la opción B<-w>) produce algunos diagnósticos
-encantadores.
+El pragma C<use warnings> (y la opción B<-w>) produce algunos diagnósticos encantadores.
 
-Ver L<perldiag> para la explicación de todos los diagnósticos de Perl.  El
-pragma C<use diagnostics> automáticamente cambia las normalmente concisas
-advertencias y errores de Perl en formatos más largos.
+Ver L<perldiag> para la explicación de todos los diagnósticos de Perl.  El pragma C<use diagnostics> automáticamente cambia las normalmente concisas advertencias y errores de Perl en formatos más largos.
 
-Los errores de compilación le indicarán el número de línea del error, con
-indicación del siguiente símbolo que iba a ser examinado. (En un script pasado
-a Perl a través de opciones B<-e>, cada B<-e> cuenta como una sola línea).
+Los errores de compilación le indicarán el número de línea del error, con indicación del siguiente símbolo que iba a ser examinado.
+(En un script pasado a Perl a través de opciones B<-e>, cada B<-e> cuenta como una sola línea).
 
-scripts setuid tienen restricciones adicionales que pueden producir mensajes de
-error como "dependencia insegura".  Ver L<perlsec>.
+scripts setuid tienen restricciones adicionales que pueden producir mensajes de error como "dependencia insegura".  Ver L<perlsec>.
 
 ¿Mencionamos que debe considerar, definitivamente, el usar la opción B<-w>?
 
@@ -422,37 +379,19 @@ error como "dependencia insegura".  Ver L<perlsec>.
 
 La opción B<-w> no es obligatoria.
 
-Perl está a merced de las definiciones de su máquina en diversas operaciones,
-como la conversión de tipos, atof(), y salida en punto flotante con sprintf ().
+Perl está a merced de las definiciones de su máquina en diversas operaciones, como la conversión de tipos, atof(), y salida en punto flotante con sprintf ().
 
-Si su stdio requiere un posicionamiento, o un eof entre lecturas y escrituras
-en un determinado flujo, lo mismo ocurre con Perl.  (Esto no se aplica a
-sysread () y syswrite ()).
+Si su stdio requiere un posicionamiento, o un eof entre lecturas y escrituras en un determinado flujo, lo mismo ocurre con Perl.  (Esto no se aplica a sysread () y syswrite ()).
 
-Aunque ninguno de los tipos integrados de datos tiene límites de tamaño (aparte
-del tamaño de la memoria), todavía hay unos pocos límites arbitrarios: un
-determinado nombre de variable no podrá ser superior a 251 caracteres.  Los
-números de línea mostrados por los diagnósticos se almacenan internamente como
-enteros cortos, por lo que se limita a un máximo de 65535 (cifras más altas
-quedarán afectadas por el desbordamiento).
+Aunque ninguno de los tipos integrados de datos tiene límites de tamaño (aparte del tamaño de la memoria), todavía hay unos pocos límites arbitrarios: un determinado nombre de variable no podrá ser superior a 251 caracteres.  Los números de línea mostrados por los diagnósticos se almacenan internamente como enteros cortos, por lo que se limita a un máximo de 65535 (cifras más altas quedarán afectadas por el desbordamiento).
 
-Puede enviar sus informes de fallos (asegúrese de incluir la información de
-configuración completa en términos de producción por el programa myconfig en el
-árbol de código fuente Perl, o con C<perl -V>) a perlbug@perl.org. Si tuvo
-éxito en la compilación de perl, el script B<perlbug> en el subdirectorio
-F<utils/> se puede utilizar para el envío de un correo electrónico con el
-informe de errores.
+Puede enviar sus informes de fallos (asegúrese de incluir la información de configuración completa en términos de producción por el programa myconfig en el árbol de código fuente Perl, o con C<perl -V>) a perlbug@perl.org. Si tuvo éxito en la compilación de perl, el script B<perlbug> en el subdirectorio F<utils/> se puede utilizar para el envío de un correo electrónico con el informe de errores.
 
-Perl, en realidad significa Recolector de basura patológicamente ecléctico
-(Pathologically Eclectic Rubbish Lister), pero no le diga a nadie que se lo he
-dicho.
+Perl, en realidad significa Recolector de basura patológicamente ecléctico (Pathologically Eclectic Rubbish Lister), pero no le diga a nadie que se lo he dicho.
 
 =head1 NOTAS
 
-El lema de Perl es "Hay más que una manera de hacerlo". Adivinar cuántas más se
-deja como ejercicio para el lector.
+El lema de Perl es "Hay más que una manera de hacerlo". Adivinar cuántas más se deja como ejercicio para el lector.
 
-Las tres principales virtudes de un programador son pereza, impaciencia e
-Hibris (desmesura u orgullo exagerado en uno mismo).  Ver el Libro del Camello
-para ver por qué.
+Las tres principales virtudes de un programador son pereza, impaciencia e Hibris (desmesura u orgullo exagerado en uno mismo).  Ver el Libro del Camello para ver por qué.
 

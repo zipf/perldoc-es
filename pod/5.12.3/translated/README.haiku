@@ -7,8 +7,7 @@ README.haiku - Perl versión 5.10+ en Haiku
 
 =head1 DESCRIPCIÓN
 
-Este archivo contiene instrucciones de cómo construir Perl para Haiku y listas
-de problemas conocidos.
+Este archivo contiene instrucciones de cómo construir Perl para Haiku y listas de problemas conocidos.
 
 =head1 CONSTRUCCIÓN E INSTALACIÓN
 
@@ -37,30 +36,22 @@ Perl no puede ser compilado con soporte multihilo ATM.
 
 =item *
 
-El test C<ext/Socket/t/socketpair.t> falla. Precisando más: las subpruebas
-usando sockets de datagramas fallan. Los datagramas sockect Unix aún no están
-implementados en Haiku.
+El test C<ext/Socket/t/socketpair.t> falla. Precisando más: las subpruebas usando sockets de datagramas fallan. Los datagramas sockect Unix aún no están implementados en Haiku.
 
 =item *
 
-Una subprueba del test C<ext/Sys/Syslog/t/syslog.t> falla. Esto se debe a que
-Haiku aún no implementa soporte para C</dev/log>.
+Una subprueba del test C<ext/Sys/Syslog/t/syslog.t> falla. Esto se debe a que Haiku aún no implementa soporte para C</dev/log>.
 
 =item *
 
-Los test C<lib/Net/Ping/t/450_service.t> y C<lib/Net/Ping/t/510_ping_udp.t>
-fallan. Esto se debe a errores en la implementación de la pila del sistema de
-red de Haiku.
+Los test C<lib/Net/Ping/t/450_service.t> y C<lib/Net/Ping/t/510_ping_udp.t> fallan. Esto se debe a errores en la implementación de la pila del sistema de red de Haiku.
 
 =back
 
 =head1 CONTACTO
 
-Para problemas específicos de Haiku, póngase en contacto con los
-desarrolladores HaikuPorts: http://ports.haiku-files.org/
+Para problemas específicos de Haiku, póngase en contacto con los desarrolladores HaikuPorts: http://ports.haiku-files.org/
 
-La primera adaptación de Haiku fue realizada por Ingo Weinhold
-<ingo_weinhold@gmx.de>.
+La primera adaptación de Haiku fue realizada por Ingo Weinhold <ingo_weinhold@gmx.de>.
 
 Última actualización: 2008-10-29
-

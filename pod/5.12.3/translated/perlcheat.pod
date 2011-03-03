@@ -4,22 +4,20 @@ perlcheat - Chuleta de Perl 5
 
 =head1 DESCRIPCIÓN
 
-Esta 'chuleta' es una referencia rápida, para los programadores principiantes
-de Perl. No se menciona todo, porque 195 características pueden ser
-apabullantes.
+Esta 'chuleta' es una referencia rápida, para los programadores principiantes de Perl. No se menciona todo, porque 195 características pueden ser apabullantes.
 
 =head2 La hoja
 
   CONTEXTO  CARACT.            ARRAYS        HASHES
   void      $scalar  completo: @array        %hash
-  escalar   @array    trozo:   @array[0, 2]  @hash{'a', 'b'}
-  lista      %hash    elemento: $array[0]    $hash{'a'}
+  escalar   @array   trozo:    @array[0, 2]  @hash{'a', 'b'}
+  lista     %hash    elemento: $array[0]     $hash{'a'}
             &sub
             *glob    VALORES ESCALARES
                      número, cadena, referencia, glob, undef
   REFERENCIAS
-  \     referencias     $$foo[1]      igual que $foo->[1]
-  $@%&* desreferencia   $$foo{bar}     igual que $foo->{bar}
+  \     referencias    $$foo[1]       igual que $foo->[1]
+  $@%&* desreferencia  $$foo{bar}     igual que $foo->{bar}
   []    array anónimo  ${$$foo[1]}[2] igual que $foo->[1]->[2]
   {}    hash anónimo   ${$$foo[1]}[2] igual que $foo->[1][2]
   \()   lista de ref.
@@ -39,7 +37,7 @@ apabullantes.
   &
   | ^              REGEX METACARACT.          REGEX MODIFICADORES
   &&               ^     comienzo cadena      /i no caja de letras
-  || //            $     fin  cad. (antes \n)  /m line based ^$
+  || //            $     fin  cad. (antes \n) /m line based ^$
   .. ...           +     uno o más            /s . includes \n
   ?:               *     cero o más           /x ign. wh.space
   = += -= *= etc.  ?     cero o más           /g global
@@ -75,13 +73,9 @@ apabullantes.
 
 =head1 AGRADECIMIENTOS
 
-La primera versión de este documentos apareció en Perl Monks, en donde muchas
-personas dieron sus útiles sugerencias. Gracias, Perl Monks.
+La primera versión de este documentos apareció en Perl Monks, en donde muchas personas dieron sus útiles sugerencias. Gracias, Perl Monks.
 
-Un agradecimiento especial a Damian Conway, quien no sólo sugirió importantes
-cambios, sino que se tomó el tiempo suficiente para contar las características
-listadas y hacer una versión para Perl 6 y demostrar que Perl seguirá siendo
-Perl.
+Un agradecimiento especial a Damian Conway, quien no sólo sugirió importantes cambios, sino que se tomó el tiempo suficiente para contar las características listadas y hacer una versión para Perl 6 y demostrar que Perl seguirá siendo Perl.
 
 =head1 AUTOR
 
