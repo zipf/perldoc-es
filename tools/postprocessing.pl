@@ -35,12 +35,19 @@ my $processed = Pod::Tidy::tidy_files(
                                      );
 
 
+# Get path components
+
+my ($name, $path, $suffix) = fileparse($pod_path, qr{\.pod;\.pm});
+
 
 # Add TRANSLATORS section
 
 open my $out, '>>:encoding(latin-1)', $pod_path;
 
-print $out  <<'END';
+if ( $suffix =~ /\.pod|\.pm/ ) {
+
+    print $out  <<'END';
+
 =head1 TRADUCTORES
 
 =over
@@ -53,13 +60,27 @@ print $out  <<'END';
 
 END
 
+} else {   # e.g., README files
+
+
+    print $out  <<'END';
+
+TRADUCTORES
+
+Joaquín Ferrero, explorer + POD2ES at joaquinferrero.com
+
+Enrique Nell, C< blas.gordon + POD2ES at gmail.com
+
+END
+
+}
+
 close $out;
 
 
 
 # Convert pod to html for visual check
 
-my ($name, $path, $suffix) = fileparse($pod_path, qr{\.pod;\.pm});
 my $out_html = $path . "/$name.html";
 
 system("perl -MPod::Simple::HTML -e Pod::Simple::HTML::go $pod_path > $out_html");
