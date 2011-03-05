@@ -69,7 +69,7 @@ TRADUCTORES
 
 Joaquín Ferrero, explorer + POD2ES at joaquinferrero.com
 
-Enrique Nell, C< blas.gordon + POD2ES at gmail.com
+Enrique Nell, blas.gordon + POD2ES at gmail.com
 
 END
 
