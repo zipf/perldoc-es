@@ -1,12 +1,14 @@
 #!/usr/bin/env perl
 
 # Copyright 2011 by Enrique Nell
+#
+# Requires Pod::Simple::HTML
 
 use strict;
 use warnings;
 use File::Copy;
 use File::Basename;
-use Text::Wrap qw(wrap $columns);
+use Pod::Tidy qw( tidy_files );
 use utf8;
 
 $|++;
@@ -24,42 +26,35 @@ if ( $ARGV[0] ) {
 }
 
 
-my ($in_path, $out_path);
-$in_path = "$pod_path.bak";
-$out_path = $pod_path;
+# Wrap lines (OmegaT removes some line breaks) 
 
-copy($pod_path, $in_path);
+my $processed = Pod::Tidy::tidy_files(
+                                        files   => [ $pod_path ],
+                                        inplace => 1,
+                                        columns => 80,
+                                     );
 
 
-open my $in, '<:encoding(latin-1)', $in_path;
-open my $out, '>:encoding(latin-1)', $out_path;
-
-# wrap lines (OmegaT removes some line breaks) 
-
-$columns = 80;
-
-while ( <$in> ) {
-
-    if ( /^\s*$/ ) {
-        print $out $_;
-        next;
-    }
-      
-    print $out wrap( "", "", ("$_") );
-
-}
-
-close $in;
 
 # Add TRANSLATORS section
 
-print $out "\n\n=head1 TRADUCTORES\n\n";
-print $out "=over\n\n";
-print $out "=item * Joaquín Ferrero, C< explorer + POD2ES at joaquinferrero.com >\n\n";
-print $out "=item * Enrique Nell, C< blas.gordon + POD2ES at gmail.com >\n\n";
-print $out "=back";
+open my $out, '>>:encoding(latin-1)', $pod_path;
+
+print $out  <<'END';
+=head1 TRADUCTORES
+
+=over
+
+=item * Joaquín Ferrero, C< explorer + POD2ES at joaquinferrero.com >
+
+=item * Enrique Nell, C< blas.gordon + POD2ES at gmail.com >
+
+=back
+
+END
 
 close $out;
+
 
 
 # Convert pod to html for visual check
