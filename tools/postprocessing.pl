@@ -26,25 +26,30 @@ if ( $ARGV[0] ) {
 }
 
 
-# Wrap lines (OmegaT removes some line breaks) 
-
-my $processed = Pod::Tidy::tidy_files(
-                                        files   => [ $pod_path ],
-                                        inplace => 1,
-                                        columns => 80,
-                                     );
-
-
 # Get path components
 
-my ($name, $path, $suffix) = fileparse($pod_path, qr{\.pod;\.pm});
+my ($name, $path, $suffix) = fileparse($pod_path, qr{\.pod|\.pm});
+
+
+
+# Wrap lines (OmegaT removes some line breaks) 
+
+if ( $suffix =~ /pod$|pm$/ ) {
+    my $processed = Pod::Tidy::tidy_files(
+                                            files   => [ $pod_path ],
+                                            inplace => 1,
+                                            columns => 80,
+                                         );
+
+}
 
 
 # Add TRANSLATORS section
 
 open my $out, '>>:encoding(latin-1)', $pod_path;
 
-if ( $suffix =~ /\.pod|\.pm/ ) {
+
+if ( $suffix =~ /pod$|pm$/ ) {
 
     print $out  <<'END';
 
