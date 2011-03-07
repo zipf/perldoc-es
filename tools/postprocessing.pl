@@ -47,7 +47,7 @@ Readonly my $TRANSLATORS_POD => <<'END';
 
 END
 
-#Translators section for READMES
+# Translators section for READMES
 Readonly my $TRANSLATORS => <<'END';
 
 TRADUCTORES
