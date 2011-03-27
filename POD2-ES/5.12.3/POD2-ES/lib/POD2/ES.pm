@@ -40,7 +40,6 @@ sub print_pod {
 
 1;
 
-1;
 __END__
 
 =head1 NOMBRE
