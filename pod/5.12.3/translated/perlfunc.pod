@@ -330,7 +330,7 @@ Si quiere usar C<alarm> controlar la duración de una llamada del sistema necesit
     eval {
         local $SIG{ALRM} = sub { die "alarma\n" }; # NB: \n necesario
         alarm $timeout;
-        $nread = sysread SOCKET, $buffer, $largo;
+        $nread = sysread SOCKET, $búfer, $largo;
         alarm 0;
     };
     if ($@) {
@@ -588,7 +588,7 @@ X<close>
 
 =item close
 
-Cierra el archivo o tubería asociada con el gestor, limpiando los buffers IO, y cierra el descriptor del archivo en el sistema.  Devuelve verdadero si las operaciones han tenido éxito y si ningún error fue reportado por alguna capa PerlIO.  Cierra el gestor actualmente seleccionado si se omite el argumento.
+Cierra el archivo o tubería asociada con el gestor, limpiando los búfer de E/S, y cierra el descriptor del archivo en el sistema.  Devuelve verdadero si las operaciones han tenido éxito y si ningún error fue reportado por alguna capa PerlIO.  Cierra el gestor actualmente seleccionado si se omite el argumento.
 
 No tiene porqué cerrar el GESTOR_ARCHIVO si inmediatamente va a hacer otro C<open> sobre él mismo, porque C<open> lo cierra por usted.  (Ver C<open>). Sin embargo, un C<close> explícito en un archivo de entrada reinicia el contador de líneas (C<$.>), mientras que un C<close> implícito hecho por C<open>, no.
 
@@ -1211,7 +1211,7 @@ primero para obtener las definiciones de las constantes.  El procesado de argume
 Por ejemplo:
 
     use Fcntl;
-    fcntl($gestor, F_GETFL, $buffer_retorno_empaquetado)
+    fcntl($gestor, F_GETFL, $búfer_retorno_empaquetado)
         or die "no puedo hacer fcntl F_GETFL: $!";
 
 No necesita comprobar con C<defined> al regreso de C<fcntl>.
@@ -2234,7 +2234,7 @@ Ver L<perliol> para información detallada sobre PerlIO.
 
 Puede también, en la tradición de Bourne shell, especificar una EXPR comenzando con C<< '>&' >>, en cuyo caso el resto de la cadena se interpreta como el nombre de un gestor de archivo (o descriptor de archivo, si es numérico) para que sea duplicado (con C<dup(2)> ) y luego abierto.  Puede usar C<&> después de C<< > >>, C<<< >> >>>, C<< < >>, C<< +> >>, C<<< +>> >>>, y C<< +< >>.
 El modo que especifique debe coincidir con el modo del gestor de archivo original.
-(Duplicar un gestor de archivo no tiene en cuenta cualquier contenido existente de los buffers de E/S). Si utiliza la forma de tres arg. entonces puede pasar un número, el nombre de un gestor de archivo o la normal "referencia a un glob".
+(Duplicar un gestor de archivo no tiene en cuenta cualquier contenido existente de los búfer de E/S). Si utiliza la forma de tres arg. entonces puede pasar un número, el nombre de un gestor de archivo o la normal "referencia a un glob".
 
 Aquí hay un script que salva, redirecciona, y restaura C<STDOUT> y C<STDERR> usando varios métodos:
 
@@ -2245,8 +2245,8 @@ Aquí hay un script que salva, redirecciona, y restaura C<STDOUT> y C<STDERR> usa
     open STDOUT, '>', "foo.out" or die "No puedo redirigir STDOUT: $!";
     open STDERR, ">&STDOUT"     or die "No puedo duplicar STDOUT: $!";
 
-    select STDERR; $| = 1;  # hacerlo sin buffers
-    select STDOUT; $| = 1;  # hacerlo sin buffers
+    select STDERR; $| = 1;  # hacerlo sin búfer
+    select STDOUT; $| = 1;  # hacerlo sin búfer
 
     print STDOUT "stdout 1\n";  # esto funciona
     print STDERR "stderr 1\n";  # también para subprocesos
@@ -3416,7 +3416,7 @@ C<SEEK_CUR>, y C<SEEK_END> (inicio de archivo, posición actual, y fin de archivo
 
 Nota sobre lo de I<en bytes>: incluso si el gestor de archivo se ha puesto para operar en caracteres (por ejemplo usando la capa de open C<:encoding(utf8)>), tell() devolverá desplazamientos en bytes, no en caracteres (porque implementando esto convertirían en lentas a seek() y tell()).
 
-Si desea posicionar el archivo para las funciones C<sysread> o C<syswrite>, no utilice C<seek>, porque hace impredecible y no portátil la posición de lectura/escritura del archivo a causa del efecto del buffer del archivo.  Use en su lugar C<sysseek>.
+Si desea posicionar el archivo para las funciones C<sysread> o C<syswrite>, no utilice C<seek>, porque hace impredecible y no portátil la posición de lectura/escritura del archivo a causa del efecto del búfer del archivo.  Use en su lugar C<sysseek>.
 
 Debido a las normas y rigores de la norma ANSI C, en algunos sistemas tendrá que hacer una búsqueda cada vez que alterne entre la lectura y la escritura.  Entre otras cosas, esto puede tener el efecto de llamar a los clearerr(3) de stdio.
 Un DONDE de C<1> (C<SEEK_CUR>) es útil para no mover la posición del archivo:
@@ -4526,7 +4526,7 @@ X<sysread>
 
 =item sysread GESTOR_ARCHIVO,ESCALAR,LONGITUD
 
-Intenta leer LONGITUD bytes de datos en la variable ESCALAR desde el GESTOR_ARCHIVO especificado, utilizando read(2).  Omite E/S con buffer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búferes de datos.  Devuelve el número de bytes realmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso, también se establece C<$!>).  ESCALAR crecerá o se reducirá de manera que el último byte leído sea el último byte del escalar después de la lectura.
+Intenta leer LONGITUD bytes de datos en la variable ESCALAR desde el GESTOR_ARCHIVO especificado, utilizando read(2).  Omite E/S con búfer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búfer de datos.  Devuelve el número de bytes realmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso, también se establece C<$!>).  ESCALAR crecerá o se reducirá de manera que el último byte leído sea el último byte del escalar después de la lectura.
 
 Un DESPLAZAMIENTO puede ser especificado para colocar los datos leídos en algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
 
@@ -4543,7 +4543,7 @@ Establece la posición del GESTOR_ARCHIVO en bytes usando lseek(2).  GESTOR_ARCHI
 
 Nota sobre lo de I<en bytes>: incluso si el gestor de archivo se ha puesto para operar en caracteres (por ejemplo usando la capa de E/S C<:encoding(utf8)>), tell() devolverá desplazamientos en bytes, no en caracteres (porque implementando esto convertirían en inaceptablemente lentas a seek() y tell()).
 
-sysseek() omite E/S buffer normal, por lo que mezclar esto con lecturas (que no sean C<sysread>, por ejemplo, C<< <> >> o read()) C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión.
+sysseek() omite E/S búfer normal, por lo que mezclar esto con lecturas (que no sean C<sysread>, por ejemplo, C<< <> >> o read()) C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión.
 
 Para DESDEDÓNDE puede usar las constantes C<SEEK_SET>,
 C<SEEK_CUR>, y C<SEEK_END> (inicio de archivo, posición actual, y fin de archivo) desde el módulo Fcntl.  El uso de las constantes también es más portátil que confiar en 0, 1 y 2.  Por ejemplo, para definir una función "systell":
@@ -4601,7 +4601,7 @@ X<syswrite>
 
 =item syswrite GESTOR_ARCHIVO,ESCALAR
 
-Intenta escribir LONGITUD bytes de datos desde la variable ESCALAR al GESTOR_ARCHIVO especificado, utilizando write(2).  Si LONGITUD no se especifica, escribe todo el ESCALAR.  Omite E/S con buffer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búferes de datos.  Devuelve el número de bytes realmente escritos, o C<undef> si hubo un error (en este caso, también se establece la variable C<$!>).  Si LONGITUD es mayor que los datos disponibles en ESCALAR después del DESPLAZAMIENTO, sólo se escribirán los datos que estén disponibles.
+Intenta escribir LONGITUD bytes de datos desde la variable ESCALAR al GESTOR_ARCHIVO especificado, utilizando write(2).  Si LONGITUD no se especifica, escribe todo el ESCALAR.  Omite E/S con búfer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búfer de datos.  Devuelve el número de bytes realmente escritos, o C<undef> si hubo un error (en este caso, también se establece la variable C<$!>).  Si LONGITUD es mayor que los datos disponibles en ESCALAR después del DESPLAZAMIENTO, sólo se escribirán los datos que estén disponibles.
 
 Un DESPLAZAMIENTO puede ser especificado para escribir datos desde algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica escribir tantos caracteres contando desde el final de la cadena.
 Si ESCALAR es de longitud cero, sólo se puede utilizar un DESPLAZAMIENTO de 0.
@@ -4624,8 +4624,8 @@ tell() en tuberías, colas, y sockets, por lo general, devuelve -1.
 
 No existe la función C<systell>.  Use C<sysseek(FH, 0, 1)> para eso.
 
-No utilice tell() (u otras operaciones de E/S con buffer) en un gestor de archivo que ha sido manipulado por sysread(), syswrite() o sysseek().
-Esas funciones ignoran el sistema de buffer, mientras que tell(), no.
+No utilice tell() (u otras operaciones de E/S con búfer) en un gestor de archivo que ha sido manipulado por sysread(), syswrite() o sysseek().
+Esas funciones ignoran el sistema de búfer, mientras que tell(), no.
 
 =item telldir GESTOR_DIR
 X<telldir>
