@@ -39,9 +39,9 @@ Readonly my $TRANSLATORS_POD => <<'END';
 
 =over
 
-=item * Joaquín Ferrero, C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
 
-=item * Enrique Nell, C< blas.gordon + POD2ES at gmail.com >
+=item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
 
 =back
 
@@ -52,9 +52,9 @@ Readonly my $TRANSLATORS => <<'END';
 
 TRADUCTORES
 
-Joaquín Ferrero, explorer + POD2ES at joaquinferrero.com
+Joaquín Ferrero (Tech Lead), explorer + POD2ES at joaquinferrero.com
 
-Enrique Nell, blas.gordon + POD2ES at gmail.com
+Enrique Nell (Language Lead), blas.gordon + POD2ES at gmail.com
 
 END
 
@@ -117,8 +117,6 @@ if ( $suffix =~ /pod$|pm$/ ) {
     close $out;
 
 }
-
-
 
 
 
