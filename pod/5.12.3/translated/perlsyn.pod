@@ -179,7 +179,7 @@ Si la ETIQUETA se omite, las instrucciones de control de bucle se refieren al bu
 
 Si existe un BLOQUE C<continue>, siempre es ejecutado justo antes de que la condición sea evaluada de nuevo.  Así, puede ser usada para incrementar una variable de bucle, incluso cuando el ciclo ha sido parado por medio de la instrucción C<next>.
 
-Hay módulos de extensiones que también pueden engancharse en el intérprete de Perl para definir nuevas clases de instrucciones compuestas.  Son presentadas por un identificador que la extensión reconoce, y la sintaxis que le sigue se define enteramente por la extensión.  Si es usted un implementador, mire L<perlapi/PL_keyword_plugin> para informarse sobre este mecanismo.  Si está usando un módulo así, mire la documentación del módulo para ver los detalles de la sintaxis que define.
+Hay módulos de extensiones que también pueden engancharse en el intérprete de Perl para definir nuevas clases de instrucciones compuestas.  Son presentadas por una palabra clave que la extensión reconoce, y la sintaxis que le sigue se define enteramente por la extensión.  Si es usted un implantador, mire L<perlapi/PL_keyword_plugin> para informarse sobre este mecanismo.  Si está usando un módulo así, mire la documentación del módulo para ver los detalles de la sintaxis que define.
 
 =head2 Control de bucles
 X<loop control> X<loop, control> X<next> X<last> X<redo> X<continue> X<control de bucles> X<bucle, control>
@@ -291,10 +291,10 @@ X<readline> X<< <> >>
 =head2 Bucles Foreach
 X<for> X<foreach>
 
-El bucle C<foreach> itera sobre los valores de una lista normal y pone la variable VAR a cada uno de los elementos de la lista.  Si la variable es precedida por el identificador C<my>, entonces su ámbito es léxicamente local y por eso es visible sólo dentro del bucle.  Dicho de otra forma, la variable es implícitamente local al bucle y recupera su valor anterior al salir del bucle.  Si la variable fue previamente declarada con C<my>, usará esta variable en vez de la global, pero sigue siendo local en el bucle.  Esta implícita localización ocurre I<solamente> en un bucle C<foreach>.
+El bucle C<foreach> itera sobre los valores de una lista normal y pone la variable VAR a cada uno de los elementos de la lista.  Si la variable es precedida por la palabra clave C<my>, entonces su ámbito es léxicamente local y por eso es visible sólo dentro del bucle.  Dicho de otra forma, la variable es implícitamente local al bucle y recupera su valor anterior al salir del bucle.  Si la variable fue previamente declarada con C<my>, usará esta variable en vez de la global, pero sigue siendo local en el bucle.  Esta implícita localización ocurre I<solamente> en un bucle C<foreach>.
 X<my> X<local>
 
-El identificador C<foreach> es realmente un sinónimo del identificador C<for>, así que puede usar C<foreach> por legibilidad o C<for> por brevedad.  (O si le es más familiar el shell Bourne que el I<csh>, escribir C<for> le será más natural). Si VAR se omite, C<$_> se inicializa con cada valor.
+La palabra clave C<foreach> es realmente un sinónimo de la palabra clave C<for>, así que puede usar C<foreach> por legibilidad o C<for> por brevedad.  (O si le es más familiar el shell Bourne que el I<csh>, escribir C<for> le será más natural). Si VAR se omite, C<$_> se inicializa con cada valor.
 X<$_>
 
 Si cualquier elemento de LISTA es un I<lvalue> (un valor que puede ponerse en el lado izquierdo de una expresión de asignación), puede modificarlo, modificando VAR dentro del bucle.  Recíprocamente, si cualquier elemento de LISTA NO es un I<lvalue>, cualquier intento de modificar este elemento fallará (provocará un error).  En otras palabras, la variable índice del bucle C<foreach> es implícitamente un alias de cada elemento de la lista sobre la que está iterando.
@@ -371,7 +371,7 @@ A partir de Perl 5.10, puede decir
 
 que activa la característica conmutador, que se basa estrechamente en la propuesta en Perl 6.
 
-Los identificadores C<given> y C<when> son análogos a C<switch> y C<case> en otros lenguajes, por lo que el código anterior podrá ser escrito como
+Las palabras clave C<given> y C<when> son análogos a C<switch> y C<case> en otros lenguajes, por lo que el código anterior podrá ser escrito como
 
     given($_) {
 	when (/^abc/) { $abc = 1; }
@@ -479,11 +479,11 @@ C<default> se comporta exactamente igual que C<when(1 == 1)>, que es lo mismo qu
 
 =head3 Saliendo
 
-Puede usar el identificador C<break> para salir del bloque C<given> actual.  Cada bloque C<when> se termina, implícitamente, con un C<break>.
+Puede usar la palabra clave C<break> para salir del bloque C<given> actual.  Cada bloque C<when> se termina, implícitamente, con un C<break>.
 
 =head3 Atravesar
 
-Puede usar el identificador C<continue> para pasar de un caso al siguiente:
+Puede usar la palabra clave C<continue> para pasar de un caso al siguiente:
 
     given($foo) {
 	when (/x/) { say '$foo contiene una x'; continue }

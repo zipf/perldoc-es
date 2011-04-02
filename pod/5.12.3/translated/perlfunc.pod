@@ -38,7 +38,7 @@ Un array con nombre, en contexto escalar, es muy diferente de lo que en un prime
 
 En general, funciones en Perl que sirven como envoltorios para llamadas al sistema ("syscalls") del mismo nombre (como  chown(2), fork(2), closedir(2), etc.) todas ellas devuelven verdadero cuando tienen éxito y C<undef> en otro caso, como se menciona en las descripciones de más abajo.  Esto es diferente de las interfaces en C, que devuelven C<-1> en caso de fallo.  Excepciones a esta regla son C<wait>, C<waitpid> y C<syscall>.  Llamadas al sistema también actualizan la variable especial C<$!> en caso de fallo.  Otras funciones no, excepto accidentalmente.
 
-Hay módulos con expansiones que también pueden engancharse en el intérprete Perl para definir nuevas clases de expresiones basadas en palabras clave.  Pueden parecerse a funciones, pero también pueden ser complementamente diferentes.  La sintasix que sigue al identificador se define enteramente por la expansión.  Si es usted un implementador, mire L<perlapi/PL_keyword_plugin> para informarse sobre este mecanismo.  Si está usando un módulo así, mire la documentación del módulo para ver los detalles de la sintaxis que define.
+Hay módulos con expansiones que también pueden engancharse en el intérprete Perl para definir nuevas clases de expresiones basadas en palabras clave.  Pueden parecerse a funciones, pero también pueden ser complementamente diferentes.  La sintasix que sigue al identificador se define enteramente por la expansión.  Si es usted un implantador, mire L<perlapi/PL_keyword_plugin> para informarse sobre este mecanismo.  Si está usando un módulo así, mire la documentación del módulo para ver los detalles de la sintaxis que define.
 
 =head2 Funciones Perl por categoría
 X<function> X<función>
@@ -94,7 +94,7 @@ X<file> X<filehandle> X<directory> X<pipe> X<link> X<symlink> X<archivo> X<contr
 
 C<chomp>, C<chop>, C<chr>, C<crypt>, C<hex>, C<index>, C<lc>, C<lcfirst>, C<length>, C<oct>, C<ord>, C<pack>, C<q//>, C<qq//>, C<reverse>, C<rindex>, C<sprintf>, C<substr>, C<tr///>, C<uc>, C<ucfirst>, C<y///>
 
-=item Identificadores relativos al control de flujo de tu programa Perl
+=item Palabras clave relativas al control de flujo de su programa Perl
 X<control flow> X<control de flujo>
 
 C<caller>, C<continue>, C<die>, C<do>, C<dump>, C<eval>, C<exit>,
@@ -122,12 +122,12 @@ X<process> X<pid> X<process id> X<proceso> X<id proceso>
 
 C<alarm>, C<exec>, C<fork>, C<getpgrp>, C<getppid>, C<getpriority>, C<kill>, C<pipe>, C<qx/STRING/>, C<setpgrp>, C<setpriority>, C<sleep>, C<system>, C<times>, C<wait>, C<waitpid>
 
-=item Identificadores relativos a los módulos Perl
+=item Palabras clave relativas a los módulos Perl
 X<module> X<módulo>
 
 C<do>, C<import>, C<no>, C<package>, C<require>, C<use>
 
-=item Identificadores relativos a las clases y orientación a objetos
+=item Palabras clave relativas a las clases y orientación a objetos
 X<object> X<class> X<package> X<objeto> X<clase> X<paquete>
 
 C<bless>, C<dbmclose>, C<dbmopen>, C<package>, C<ref>, C<tie>, C<tied>,
@@ -413,7 +413,7 @@ Ver L<perlmod/"Módulos Perl">.
 
 Sale de un bloque C<given()>.
 
-Este identificador se activa con la característica C<"switch">: vea L<feature> para más información
+Esta palabra clave se activa con la característica C<"switch">: vea L<feature> para más información
 
 =item caller EXPR
 X<caller> X<call stack> X<stack> X<stack trace> X<llamador> X<pila de llamdas> X<pila> X<traza de pila>
@@ -1016,7 +1016,7 @@ Ver L</warn>, L<perlvar>, L<warnings> y L<perllexwarn>.
 
 Note que, como C<eval> atrapa errores considerados fatales, es útil para determinar cuando una característica en particular (como C<socket> o C<symlink>) está implementada.  También es la excepción en el sistema de atrapado de Perl, donde el operador die se usa para levantar excepciones.
 
-Si desea capturar los errores cuando se carga un módulo XS, algunos problemas con la interfaz binaria (como el sesgo de versión de Perl) puede ser fatal, incluso con C<eval> a menos que C<$ENV{PERL_DL_NONLAZY}> esté puesto. Ver L<perlrun>.
+Si desea capturar los errores cuando se carga un módulo XS, algunos problemas con la interfaz binaria (como el sesgo de versión de Perl) puede ser fatal, incluso con C<eval> a menos que C<$ENV{PERL_DL_NONLAZY}> esté puesto. Vea L<perlrun>.
 
 Si el código a ser ejecutado no varía, puede usar la forma BLOQUE de eval para atrapar errores en tiempo de ejecución sin incurrir en la penalidad de recompilar cada vez.  El error, si está, es devuelto en C<$@>.
 Ejemplos:
@@ -2301,7 +2301,7 @@ El último ejemplo de cada bloque muestra la tubería como "forma de lista", que t
 
 Ver L<perlipc/"Aperturas seguras de tuberías"> para más ejemplos sobre esto.
 
-Empezando con v5.6.0, Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (véase L <perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier identificador abierto.
+Empezando con v5.6.0, Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (véase L <perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier controlador abierto.
 
 En sistemas que apoyan la bandera close-on-exec en archivos, esta bandera se establecerá para el descriptor de archivo abierto recientemente según lo determinado por el valor de $^F.  Ver L<perlvar/$^F>.
 
@@ -4560,7 +4560,7 @@ X<system> X<shell>
 
 Hace exactamente lo mismo que C<exec LISTA>, excepto que se hace primero un fork, y el proceso padre espera a que el proceso hijo termine.  Tenga en cuenta que el tratamiento de los argumentos varía en función del número de argumentos.  Si hay más de un argumento en LISTA, o si la lista es un array con más de un valor, se inicia el programa indicado en el primer elemento de la lista, con los argumentos indicados por el resto de la lista.  Si sólo hay un argumento escalar, se comprueba si el argumento tiene metacaracteres, y si hay alguno, el argumento entero es pasado al shell de comandos para que sea interpretado (suele ser C</bin/sh -c> en plataformas Unix, pero varía en otras plataformas).  Si no hay metacaracteres shell en el argumento, es dividido en palabras y pasadas directamente a C<execvp>, que es más eficiente.
 
-Empezando con v5.6.0, Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (véase L <perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier identificador abierto.
+Empezando con v5.6.0, Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (véase L <perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier controlador abierto.
 
 El valor devuelto es el estado de salida del programa devuelto por la llamada C<wait>.  Para obtener el valor real de la salida, se debe desplazar ocho a la derecha (ver más abajo). Ver también L</exec>.  Esto I<no> es lo que desea utilizar para capturar la salida de un comando; para eso debe utilizar solamente las comillas invertidas o C<qx//>, como se describe en L<perlop/"`CADENA`">.  Un valor devuelto de -1 indica un fallo en el arranque del programa o un error de la llamada al sistema wait(2) (inspeccionar $! para ver la razón).
 
