@@ -533,8 +533,7 @@ Note que la columna "Código similar" no siempre es una interpretación exacta.  P
     Array       Array      arrays son comparables[2]
     Regex       Array      grep array                       grep /$a/, @$b
     undef       Array      array contiene undef             grep !defined, @$b
-    Cualq.  Array     busca en un array      elemento[3]
-                                               grep $a ~~ $_, @$b
+    Cualq.      Array      busca en un array elemento[3]    grep $a ~~ $_, @$b
 
     Hash        Regex      grep clave hash                  grep /$b/, keys %$a
     Array       Regex      grep array                       grep /$b/, @$a
