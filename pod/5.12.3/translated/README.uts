@@ -45,7 +45,7 @@ Por último, pruebe con
 
   make test 2>&1 | tee make-test.out
 
-En la salida, los únicos fallos que debe ver deben ser similares a:
+En la salida, los únicos errores que debe ver deben ser similares a:
 
    lib/Math/BigInt/t/bigfltpm.........Use of uninitialized value ...
    FAILED at test 57
@@ -64,7 +64,7 @@ En la salida, los únicos fallos que debe ver deben ser similares a:
    lib/Net/servent....................FAILED at test 0
 
 Esto significa que todo pasa a excepción de algunos problemas en los paquetes "Math::BigInt", "Math::Complex", y "Math::Trig".
-El fallo en lib/Net/servent parece que es un error en el programa de pruebas.  Para confirmar esto, desde el directorio principal fuente de Perl, hacer:
+El error en lib/Net/servent parece que es un error en el programa de pruebas.  Para confirmar esto, desde el directorio principal fuente de Perl, hacer:
 
    LD_LIBRARY_PATH=`pwd` ./perl -Ilib lib/Net/servent.t
 

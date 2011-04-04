@@ -64,12 +64,12 @@ Algunas codificaciones, como las de la familia C<iso-8859> ("alfabeto latino"), 
 
 =head3 Descodificación
 
-B<Descodificar> consiste en convertir I<binario> a I<texto>. Para descodificar necesita saber la codificación que se utilizó al codificar. También es fundamental que lo que se va a descodificar sea descodificable. No tiene sentido descodificar una imagen PNG en una cadena de texto.
+B<Descodificar> consiste en convertir I<binario> a I<texto>. Para descodificar necesita saber la codificación que se utilizó al codificar. También es fundamental que lo que se va a descodificar sea descodificable. (por ejemplo, no tiene sentido descodificar una imagen PNG en una cadena de texto).
 
 =head3 Formato interno
 
 Perl utiliza un B<formato interno>, que es una codificación con la que se codifican las cadenas de texto para almacenarlas en memoria. Todas las cadenas de texto tienen este formato interno.
-De hecho, ¡es el único formato de las cadenas de texto!
+(de hecho, es el único formato de las cadenas de texto)
 
 No tiene que preocuparse por los detalles, ya que la conversión se realiza automáticamente al descodificar y codificar.
 
@@ -79,7 +79,7 @@ Agregue al encabezado estándar de su programa la línea siguiente:
 
     use Encode qw(encode decode);
 
-O, si no le sobra energía, puede limitarse a escribir esto:
+Si no le sobra energía, puede limitarse a escribir esto:
 
     use Encode;
 
