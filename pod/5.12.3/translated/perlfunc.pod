@@ -28,7 +28,7 @@ Si ejecuta Perl con la opción B<-w> le avisará sobre todo esto.  Por ejemplo, la
 
 Unas pocas funciones no toman ningún argumento, por lo que funcionan tanto como operadores unarios como operadores de lista.  Estas incluyen funciones como C<time> y C<endpwent>.  Por ejemplo, C<time+86_400> siempre significa C<time() + 86_400>.
 
-Para funciones que pueden ser usadas tanto en contexto escalar como en lista, un fallo no abortivo es indicado, generalmente, devolviendo el valor indefinido, y en contexto lista devolviendo la lista vacía.
+Para funciones que pueden ser usadas tanto en contexto escalar como en lista, un error no abortivo es indicado, generalmente, devolviendo el valor indefinido en el contexto escalar, y en contexto lista devolviendo la lista vacía.
 
 Recuerde la siguiente regla importante: B<No hay regla> que relacione el comportamiento de una expresión en contexto lista a su comportamiento en contexto escalar, o viceversa.  Puede hacer dos cosas totalmente diferentes.
 Cada operador y función decide qué clase de valor será más apropiado para devolver en contexto escalar.  Algunos operadores devuelven la longitud de la lista que se hubiera devuelto en contexto lista.  Algunos operadores devuelven el primer valor de la lista.  Algunos operadores devuelven el último valor de la lista.  Algunos operadores devuelven una cuenta del número de operaciones exitosas.  En general, ellos hacen lo que usted quiere, siempre que quiera coherencia.
@@ -36,7 +36,7 @@ X<contexto>
 
 Un array con nombre, en contexto escalar, es muy diferente de lo que en un primer vistazo pudiera ser una lista en contexto escalar.  No puede conseguir que una lista como C<(1,2,3)> se convierta en contexto escalar porque el compilador conoce el contexto en tiempo de compilación.  Se generará aquí el operador coma, no la versión de construcción de listas.  Esto significa que nunca será una lista.
 
-En general, funciones en Perl que sirven como envoltorios para llamadas al sistema ("syscalls") del mismo nombre (como  chown(2), fork(2), closedir(2), etc.) todas ellas devuelven verdadero cuando tienen éxito y C<undef> en otro caso, como se menciona en las descripciones de más abajo.  Esto es diferente de las interfaces en C, que devuelven C<-1> en caso de fallo.  Excepciones a esta regla son C<wait>, C<waitpid> y C<syscall>.  Llamadas al sistema también actualizan la variable especial C<$!> en caso de fallo.  Otras funciones no, excepto accidentalmente.
+En general, funciones en Perl que sirven como envoltorios para llamadas al sistema ("syscalls") del mismo nombre (como  chown(2), fork(2), closedir(2), etc.) todas ellas devuelven verdadero cuando tienen éxito y C<undef> en otro caso, como se menciona en las descripciones de más abajo.  Esto es diferente de las interfaces en C, que devuelven C<-1> en caso de error.  Excepciones a esta regla son C<wait>, C<waitpid> y C<syscall>.  Llamadas al sistema también actualizan la variable especial C<$!> en caso de error.  Otras funciones no, excepto accidentalmente.
 
 Hay módulos con expansiones que también pueden engancharse en el intérprete Perl para definir nuevas clases de expresiones basadas en palabras clave.  Pueden parecerse a funciones, pero también pueden ser complementamente diferentes.  La sintasix que sigue al identificador se define enteramente por la expansión.  Si es usted un implantador, mire L<perlapi/PL_keyword_plugin> para informarse sobre este mecanismo.  Si está usando un módulo así, mire la documentación del módulo para ver los detalles de la sintaxis que define.
 
@@ -323,7 +323,7 @@ Sólo un temporizador puede estar contando cada vez.  Cada llamada desactiva el t
 
 Para lapsos de tiempo inferiores a un segundo, el módulo Time::HiRes (en CPAN, y desde Perl 5.8 parte de la distribución estándar) ofrece ualarm().  Puede también usar la versión de select() de cuatro argumentos, dejando los tres primeros indefinidos, o puede usar la interfaz C<syscall> para acceder a setitimer(2) si su sistema lo soporta. Ver L<perlfaq8> para más detalles.
 
-Normalmente es un fallo entremezclar llamadas a C<alarm> y C<sleep>, porque C<sleep> puede ser, internamente, implementado en su sistema con C<alarm>.
+Normalmente es un error entremezclar llamadas a C<alarm> y C<sleep>, porque C<sleep> puede ser, internamente, implementado en su sistema con C<alarm>.
 
 Si quiere usar C<alarm> controlar la duración de una llamada del sistema necesita una pareja C<eval>/C<die>.  No puede confiar que la alarma que llama a la llamada del sistema falle y ponga C<$!> a C<EINTR> porque Perl activa gestores de señal para reiniciar llamadas al sistema en algunos sistemas.  Usando C<eval>/C<die> siempre funciona, teniendo en cuenta las advertencias dadas en L<perlipc/"Señales">.
 
@@ -733,7 +733,7 @@ X<defined> X<undef> X<undefined> X<definido> X<indefinido>
 
 Devuelve un valor Booleano indicando si EXPR tiene un valor que no sea el valor indefinido C<undef>.  Si EXPR no está presente, se comprobará C<$_>.
 
-Muchas operaciones devuelven C<undef> para indicar un fallo, fin de archivo, error del sistema, variable no inicializada u otras condiciones excepcionales.  Esta función le permite distinguir C<undef> de otros valores.  (Un simple test Booleano no distinguirá entre C<undef>, cero, el string vacío y C<"0">, que son todos igualmente falso). Note que como C<undef> es un escalar válido, su presencia no indica I<necesariamente> una condición excepcional: C<pop> devuelve C<undef> cuando su argumento es un array vacío, I<o> cuando el elemento a devolver sea un C<undef>.
+Muchas operaciones devuelven C<undef> para indicar un error, fin de archivo, error del sistema, variable no inicializada u otras condiciones excepcionales.  Esta función le permite distinguir C<undef> de otros valores.  (Un simple test Booleano no distinguirá entre C<undef>, cero, el string vacío y C<"0">, que son todos igualmente falso). Note que como C<undef> es un escalar válido, su presencia no indica I<necesariamente> una condición excepcional: C<pop> devuelve C<undef> cuando su argumento es un array vacío, I<o> cuando el elemento a devolver sea un C<undef>.
 
 Puede usar también C<defined(&func)> para comprobar si la subrutina C<&func> ha sido definida.  El valor devuelto no es afectado por ninguna declaración posterior de C<&func>.  Una subrutina que no ha sido definida puede ser ejecutada: su paquete puede tener un método C<AUTOLOAD> que la hace aparecer la primera vez que es llamada; ver L<perlsub>.
 
@@ -1122,7 +1122,7 @@ Usar un objeto indirecto con C<exec> o C<system> es también más seguro.  Este us
                                 # if @args == 1
     exec { $args[0] } @args;  # seguro incluso con una lista de un argumento
 
-La primera versión, sin el objeto indirecto, ejecuta el programa I<echo>, pasándole C<"sorpresa"> como argumento.  La segunda versión no; intentó ejecutar un programa llamado literalmente I<"echo sorpresa">, no lo encontró, y puso C<$?> a un valor distinto de cero para indicar un fallo.
+La primera versión, sin el objeto indirecto, ejecuta el programa I<echo>, pasándole C<"sorpresa"> como argumento.  La segunda versión no; intentó ejecutar un programa llamado literalmente I<"echo sorpresa">, no lo encontró, y puso C<$?> a un valor distinto de cero para indicar un error.
 
 A partir de la versión v5.6.0, Perl intenta vaciar todos los archivos abiertos para salida antes de ejecutar exec, pero esto puede no estar soportado en algunas plataformas (ver L<perlport>).  Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en el módulo English) o llamar el método C<autoflush()> de C<IO::Handle> en cualquiera de los gestores de archivo abiertos para evitar la pérdida de datos en la salida.
 
@@ -1247,7 +1247,7 @@ Puede usar esto para encontrar cuándo dos gestores se refieren al mismo descript
 =item flock GESTOR_ARCHIVO,OPERACIÓN
 X<flock> X<lock> X<locking>
 
-Llama a flock(2), o una emulación de ella, sobre GESTOR_ARCHIVO.  Devuelve verdadero para éxito, falso en fallo.  Produce un error fatal si se usa en una máquina que no implemente flock(2), bloqueo fcntl(2), o lockf(3).
+Llama a flock(2), o una emulación de ella, sobre GESTOR_ARCHIVO.  Devuelve verdadero para éxito, falso en caso de error.  Produce un error fatal si se usa en una máquina que no implemente flock(2), bloqueo fcntl(2), o lockf(3).
 C<flock> es el interfaz portable de Perl de bloqueo de archivo, aunque sólo bloquea archivos enteros, no registros.
 
 Dos potenciales no obvias pero tradicionales semánticas de C<flock> son que espera indefinidamente hasta que el bloqueo es efectivo, y que B<meramente es un consejo>.  Tales bloqueos discrecionalmente son más flexibles, pero ofrecen pocas garantías.  Esto significa que los programas que no usen C<flock> pueden modificar archivos bloqueados con C<flock>.  Ver L<perlport>, la documentación específica de su adaptación Perl, o sus páginas de manual locales para los detalles.  Es mejor asumir el comportamiento tradicional si está escribiendo programas portables.  (Pero si no, puede siempre sentirse libre de escribir sus propias idiosincrasias del sistema (algunas veces llamadas "features" -características-).  Adhesión servil a los requerimientos de portabilidad no debe impedirle obtener el trabajo hecho).
@@ -1674,7 +1674,7 @@ El valor devuelto de C<ioctl> (y C<fcntl>) es como sigue:
          0              cadena "0 but true"
     otra cosa          ese número
 
-Así, Perl devuelve verdadero en éxito y falso en fallo, por lo que aún podemos determinar el valor actual devuelto por el sistema operativo:
+Así, Perl devuelve verdadero en éxito y falso en caso de error, por lo que aún podemos determinar el valor actual devuelto por el sistema operativo:
 
     $retval = ioctl(...) || -1;
     printf "Sistema devolvió %d\n", $retval;
@@ -2891,7 +2891,7 @@ X<pos> X<match, position> X<coincidencia, posición>
 
 =item pos
 
-Devuelve el desplazamiento donde la última búsqueda C<m//g> terminó para la variable en cuestión (C<$_> es usada cuando no se especifica la variable).  Tenga en cuenta que 0 es un desplazamiento válido de la coincidencia.  C<undef> indica que la posición de búsqueda se restablece (generalmente debido a un fallo de coincidencia, pero también puede ser porque aún no ha sido ejecutada la coincidencia sobre el escalar). C<pos> accede directamente a la ubicación utilizada por el motor de expresiones regulares para almacenar el desplazamiento, por lo que asignar a C<pos> cambiará ese desplazamiento, por lo que también influirá en la aserción de ancho cero C<\G> en las expresiones regulares. Debido a que una coincidencia C<m//gc> fallida no reinicia el desplazamiento, el retorno de C<pos> no cambiará en ese caso.  Ver L<perlre> y L<perlop>.
+Devuelve el desplazamiento donde la última búsqueda C<m//g> terminó para la variable en cuestión (C<$_> es usada cuando no se especifica la variable).  Tenga en cuenta que 0 es un desplazamiento válido de la coincidencia.  C<undef> indica que la posición de búsqueda se restablece (generalmente debido a un error de coincidencia, pero también puede ser porque aún no ha sido ejecutada la coincidencia sobre el escalar). C<pos> accede directamente a la ubicación utilizada por el motor de expresiones regulares para almacenar el desplazamiento, por lo que asignar a C<pos> cambiará ese desplazamiento, por lo que también influirá en la aserción de ancho cero C<\G> en las expresiones regulares. Debido a que una coincidencia C<m//gc> fallida no reinicia el desplazamiento, el retorno de C<pos> no cambiará en ese caso.  Ver L<perlre> y L<perlop>.
 
 =item print GESTOR_ARCHIVO LISTA
 X<print>
@@ -3610,7 +3610,7 @@ Cierra una conexión de socket en la manera indicada por el CÓMO, que tiene la mi
 Esto es útil con sockets cuando desee decirle al otro lado que ha terminado de escribir, pero no ha terminado la lectura, o viceversa.
 También es una forma más insistente de cerrar, ya que también desactiva el descriptor de archivo en cualquier copia bifurcada en otros procesos.
 
-Devuelve C<1> para el éxito; en caso de error, devuelve C<undef> si el primer argumento no es un gestor de archivo válido, o devuelve C<0> y actualiza C<$!> por cualquier otro fallo.
+Devuelve C<1> para el éxito; en caso de error, devuelve C<undef> si el primer argumento no es un gestor de archivo válido, o devuelve C<0> y actualiza C<$!> por cualquier otro error.
 
 =item sin EXPR
 X<sin> X<sine> X<asin> X<arcsine> X<arco seno> X<seno>
@@ -4551,7 +4551,7 @@ C<SEEK_CUR>, y C<SEEK_END> (inicio de archivo, posición actual, y fin de archivo
     use Fcntl 'SEEK_CUR';
     sub systell { sysseek($_[0], 0, SEEK_CUR) }
 
-Devuelve la nueva posición, o el valor indefinido en caso de fallo.  Una posición de cero es devuelto como cadena C<"0 but true"> (I<"0 pero verdadero">), por lo que C<sysseek> devuelve verdadero o falso en caso de fallo, sin embargo, usted puede determinar fácilmente la nueva posición.
+Devuelve la nueva posición, o el valor indefinido en caso de error.  Una posición de cero es devuelto como cadena C<"0 but true"> (I<"0 pero verdadero">), por lo que C<sysseek> devuelve verdadero o falso en caso de error, sin embargo, usted puede determinar fácilmente la nueva posición.
 
 =item system LISTA
 X<system> X<shell>
@@ -4562,7 +4562,7 @@ Hace exactamente lo mismo que C<exec LISTA>, excepto que se hace primero un fork
 
 Empezando con v5.6.0, Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (véase L <perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier controlador abierto.
 
-El valor devuelto es el estado de salida del programa devuelto por la llamada C<wait>.  Para obtener el valor real de la salida, se debe desplazar ocho a la derecha (ver más abajo). Ver también L</exec>.  Esto I<no> es lo que desea utilizar para capturar la salida de un comando; para eso debe utilizar solamente las comillas invertidas o C<qx//>, como se describe en L<perlop/"`CADENA`">.  Un valor devuelto de -1 indica un fallo en el arranque del programa o un error de la llamada al sistema wait(2) (inspeccionar $! para ver la razón).
+El valor devuelto es el estado de salida del programa devuelto por la llamada C<wait>.  Para obtener el valor real de la salida, se debe desplazar ocho a la derecha (ver más abajo). Ver también L</exec>.  Esto I<no> es lo que desea utilizar para capturar la salida de un comando; para eso debe utilizar solamente las comillas invertidas o C<qx//>, como se describe en L<perlop/"`CADENA`">.  El retorno de valor de -1 indica un error en el arranque del programa o un error de la llamada al sistema wait(2) (inspeccionar $! para ver la razón).
 
 Si desea hacer que C<system> (y muchos otros fragmentos de Perl) mueran en caso de error, eche un vistazo al pragma L<autodie>.
 
@@ -4574,10 +4574,10 @@ Puesto que C<SIGINT> y C<SIGQUIT> son ignoradas durante la ejecución de C<system
     system(@args) == 0
         or die "system @args falló: $?"
 
-Si desea inspeccionar manualmente el fallo de C<system>, puede comprobar todas las posibles causas del fallo mediante la inspección de C<$?> como esto:
+Si desea inspeccionar manualmente el error de C<system>, puede comprobar todas las posibles causas del error mediante la inspección de C<$?> como esto:
 
     if ($? == -1) {
-        print "fallo al ejecutar: $!\n";
+        print "error al ejecutar: $!\n";
     }
     elsif ($? & 127) {
         printf "hijo muerto con señal %d, %s coredump\n",
@@ -4818,7 +4818,7 @@ X<unlink> X<delete> X<remove> X<rm> X<del> X<elimina> X<borra>
 
 =item unlink
 
-Elimina una lista de archivos. En caso de éxito, devuelve el número de archivos que se han eliminado correctamente. En caso de fallo, se devuelve falso y establece C<$!> (errno):
+Elimina una lista de archivos. En caso de éxito, devuelve el número de archivos que se han eliminado correctamente. En caso de error, se devuelve falso y establece C<$!> (errno):
 
     my $unlinked = unlink 'a', 'b', 'c';
     unlink @goners;
