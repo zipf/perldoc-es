@@ -8,8 +8,7 @@ Actualmente ya no es posible trabajar con cadenas de texto de manera irreflexiva
 
 Hay mucho que aprender sobre juegos de caracteres y codificaciones de texto. Probablemente lo mejor sea dedicar un día entero a esta tarea, pero para aprender los conceptos básicos bastan unos pocos minutos. 
 
-Aunque estos conceptos no son tan básicos... Se supone que ya conoce la diferencia entre bytes y caracteres, y comprende (y acepta)
-que hay muchos juegos de caracteres y codificaciones distintos, que debe utilizar explícitamente en su programa. Para adquirir estos conocimientos básicos, es recomendable leer el artículo "The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)" de Joel Spolsky, en
+Aunque estos conceptos no son tan básicos... Se supone que ya conoce la diferencia entre bytes y caracteres, y comprende (y acepta) que hay muchos juegos de caracteres y codificaciones distintos, que debe utilizar explícitamente en su programa. Para adquirir estos conocimientos básicos, es recomendable leer el artículo "The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)" de Joel Spolsky, en
 L<http://joelonsoftware.com/articles/Unicode.html>.
 
 En este tutorial hablamos en términos absolutos, y solo proporcionamos una visión limitada de las muchas características relacionadas con el procesamiento de cadenas de caracteres que Perl ofrece. Sin embargo, es probable que para la mayoría de los proyectos baste con esta información.
@@ -22,8 +21,7 @@ Es posible que tenga que leer esta sección varias veces...
 
 =head3 Unicode
 
-B<Unicode> es un juego de caracteres en el que caben muchos caracteres. El valor ordinal
-de un carácter se denomina B<código de carácter>   (en la práctica, la distinción entre los conceptos de código de carácter y carácter es difusa, por lo que se suelen utilizar ambos términos indistintamente).
+B<Unicode> es un juego de caracteres en el que caben muchos caracteres. El valor ordinal de un carácter se denomina B<código de carácter> (I<code point>).   En la práctica, la distinción entre los conceptos de código de carácter y carácter es difusa, por lo que se suelen utilizar ambos términos indistintamente.
 
 Hay muchísimos códigos de carácter, pero el hardware trabaja con bytes, y un byte sólo puede representar 256 valores.  En Unicode hay muchos más caracteres, por lo que necesitamos una forma de hacerlos accesibles.
 
@@ -33,8 +31,7 @@ Existen varias codificaciones de Unicode en competencia, de las cuales la más ut
 
 B<UTF-8> es una codificación de Unicode. Muchas personas creen que Unicode es lo mismo que UTF-8, pero se equivocan. Hay otras codificaciones de Unicode, pero UTF-8 se está convirtiendo en la codificación estándar. 
 
-En UTF-8 los primeros 128 códigos de carácter (0 a 127) son equivalentes a ASCII. Ocupan un solo byte por carácter. Todos los demás caracteres se codifican como dos o más 
-bytes (hasta seis) mediante un esquema complejo. Afortunadamente, Perl se encarga de esto.
+En UTF-8 los primeros 128 códigos de carácter (0 a 127) son equivalentes a ASCII. Ocupan un solo byte por carácter. Todos los demás caracteres se codifican como dos o más bytes (hasta seis) mediante un esquema complejo. Afortunadamente, Perl se encarga de esto.
 
 =head3 Cadenas de texto (cadenas de caracteres)
 
@@ -102,11 +99,9 @@ No es posible descodificar de manera fiable si no se sabe cómo se codificaron lo
     my $bar   = decode('ISO-8859-1', readline STDIN);
     my $xyzzy = decode('Windows-1251', $cgi->param('foo'));
 
-El procesamiento se realiza igual que antes. La única diferencia es que ahora trabajamos con caracteres en lugar de bytes. Esto resulta muy útil al utilizar funciones como 
-C<substr> o C<length>.
+El procesamiento se realiza igual que antes. La única diferencia es que ahora trabajamos con caracteres en lugar de bytes. Esto resulta muy útil al utilizar funciones como C<substr> o C<length>.
 
-Es importante comprender que en una cadena de texto no hay bytes. Por supuesto,
-Perl utiliza su propia codificación para almacenar la cadena en memoria, pero el usuario no tiene que conocer los detalles.
+Es importante comprender que en una cadena de texto no hay bytes. Por supuesto, Perl utiliza su propia codificación para almacenar la cadena en memoria, pero el usuario no tiene que conocer los detalles.
 Si necesita el número de bytes para algo, debe calcularlo en el paso 3, después de codificar la cadena. Así podrá saber exactamente cuántos bytes hay en la cadena generada.
 
 La sintaxis para codificar cadenas de texto en cadenas binarias es tan sencilla como la sintaxis de descodificación:
@@ -117,8 +112,7 @@ Si necesita averiguar la longitud de la cadena en bytes, ahora es el momento de 
 
     my $numero_bytes = length $cuerpo_texto;
 
-Y si el protocolo utilizado ofrece alguna manera de indicar al destinatario la codificación de caracteres utilizada, es muy recomendable hacerlo. Por ejemplo, el correo electrónico y HTTP son compatibles con los encabezados MIME, por lo que puede usar el encabezado 
-C<Content-Type>. También se puede utilizar C<Content-Length> para indicar el número de I<bytes>, un dato que siempre viene bien conocer.
+Y si el protocolo utilizado ofrece alguna manera de indicar al destinatario la codificación de caracteres utilizada, es muy recomendable hacerlo. Por ejemplo, el correo electrónico y HTTP son compatibles con los encabezados MIME, por lo que puede usar el encabezado C<Content-Type>. También se puede utilizar C<Content-Length> para indicar el número de I<bytes>, un dato que siempre viene bien conocer.
 
     "Content-Type: text/plain; charset=UTF-8",
     "Content-Length: $numero_bytes"
@@ -133,13 +127,9 @@ Después de leer este documento, debe leer L<perlunifaq>.
 
 =head1 AGRADECIMIENTOS
 
-Deseo expresar mi agradecimiento a las siguientes personas: 
+Deseo expresar mi agradecimiento a las siguientes personas: Johan Vromans de Squirrel Consultancy. Sus diatribas contra UTF-8 en las reuniones de los Amsterdam Perl Mongers hicieron que me interesara por el tema y me propusiera aprender a utilizar de una manera segura las codificaciones de caracteres en Perl.
 
-Johan Vromans de Squirrel Consultancy. Sus diatribas contra UTF-8 en las reuniones de los 
-Amsterdam Perl Mongers hicieron que me interesara por el tema y me propusiera aprender a utilizar de una manera segura las codificaciones de caracteres en Perl.
-
-Gerard Goossen de TTY. Su presentación "UTF-8 in the wild" (Dutch
-Perl Workshop 2006) me sirvió de inspiración para publicar mis ideas y escribir este tutorial.
+Gerard Goossen de TTY. Su presentación "UTF-8 in the wild" (Dutch Perl Workshop 2006) me sirvió de inspiración para publicar mis ideas y escribir este tutorial.
 
 Todas las personas que han hecho preguntas sobre este tema en diversos canales IRC sobre Perl y que me han recordado constantemente lo necesaria que era una explicación más sencilla.
 
