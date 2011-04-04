@@ -40,12 +40,13 @@ Es posible que tenga que leer esta sección varias veces...
 =head3 Unicode
 
 B<Unicode> es un juego de caracteres en el que caben muchos caracteres. El
-valor ordinal de un carácter se denomina B<código de carácter>   (en la
-práctica, la distinción entre los conceptos de código de carácter y carácter es
-difusa, por lo que se suelen utilizar ambos términos indistintamente).
+valor ordinal de un carácter se denomina B<código de carácter> (I<code point>).
+En la práctica, la distinción entre los conceptos de código de carácter y 
+carácter es difusa, por lo que se suelen utilizar ambos términos 
+indistintamente.
 
 Hay muchísimos códigos de carácter, pero el hardware trabaja con bytes, y un
-byte sólo puede representar 256 valores.  En Unicode hay muchos más caracteres,
+byte sólo puede representar 256 valores. En Unicode hay muchos más caracteres,
 por lo que necesitamos una forma de hacerlos accesibles.
 
 Existen varias codificaciones de Unicode en competencia, de las cuales la más
@@ -60,7 +61,7 @@ pero UTF-8 se está convirtiendo en la codificación estándar.
 
 En UTF-8 los primeros 128 códigos de carácter (0 a 127) son equivalentes a
 ASCII. Ocupan un solo byte por carácter. Todos los demás caracteres se
-codifican como dos o más  bytes (hasta seis) mediante un esquema complejo.
+codifican como dos o más bytes (hasta seis) mediante un esquema complejo.
 Afortunadamente, Perl se encarga de esto.
 
 =head3 Cadenas de texto (cadenas de caracteres)
@@ -148,7 +149,7 @@ los datos. Si puede elegir, es recomendable utilizar UTF-8 de manera estándar.
 
 El procesamiento se realiza igual que antes. La única diferencia es que ahora
 trabajamos con caracteres en lugar de bytes. Esto resulta muy útil al utilizar
-funciones como  C<substr> o C<length>.
+funciones como C<substr> o C<length>.
 
 Es importante comprender que en una cadena de texto no hay bytes. Por supuesto,
 Perl utiliza su propia codificación para almacenar la cadena en memoria, pero
@@ -172,7 +173,7 @@ texto.
 Y si el protocolo utilizado ofrece alguna manera de indicar al destinatario la
 codificación de caracteres utilizada, es muy recomendable hacerlo. Por ejemplo,
 el correo electrónico y HTTP son compatibles con los encabezados MIME, por lo
-que puede usar el encabezado  C<Content-Type>. También se puede utilizar
+que puede usar el encabezado C<Content-Type>. También se puede utilizar
 C<Content-Length> para indicar el número de I<bytes>, un dato que siempre viene
 bien conocer.
 
@@ -193,7 +194,7 @@ Después de leer este documento, debe leer L<perlunifaq>.
 Deseo expresar mi agradecimiento a las siguientes personas:
 
 Johan Vromans de Squirrel Consultancy. Sus diatribas contra UTF-8 en las
-reuniones de los  Amsterdam Perl Mongers hicieron que me interesara por el tema
+reuniones de los Amsterdam Perl Mongers hicieron que me interesara por el tema
 y me propusiera aprender a utilizar de una manera segura las codificaciones de
 caracteres en Perl.
 
@@ -222,8 +223,8 @@ L<perlunifaq>, L<perlunicode>, L<perluniintro>, L<Encode>
 
 =over
 
-=item * Joaquín Ferrero, C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
 
-=item * Enrique Nell, C< blas.gordon + POD2ES at gmail.com >
+=item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
 
 =back

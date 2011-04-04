@@ -4,7 +4,7 @@ use strict;
 
 use base 'POD2::Base';
 
-our $VERSION = '5.12.3.03';
+our $VERSION = '5.12.3.05';
 
 sub search_perlfunc_re {
     return 'Lista de funciones de Perl en orden alfabético';
@@ -15,6 +15,7 @@ sub pod_info {{
     perl        => '5.12.3',
     perlbook    => '5.12.3',
     perlunitut  => '5.12.3',
+    perlfaq1    => '5.12.3',
     # perlcheat  => '5.12.3',
     # perldata   => '5.12.3',
     # perlfunc   => '5.12.3',
@@ -107,7 +108,7 @@ Tenga en cuenta que la revisión es para la versión 3.14 de
 L<Pod::Perldoc|Pod::Perldoc> (incluida en Perl 5.8.7 y en Perl 5.8.8). Si tiene
 una distribución de Perl anterior (salvo la E<gt>= 5.8.1) y está impaciente por
 aplicar la revisión, actualice el módulo L<Pod::Perldoc|Pod::Perldoc> a la
-versión 3.14.    Perl 5.10 ya contiene esta funcionalidad, por lo que no es
+versión 3.14. Perl 5.10 ya contiene esta funcionalidad, por lo que no es
 necesario aplicar la revisión.
 
 Consulte la API C<search_perlfunc_re> para obtener más información.
@@ -151,7 +152,7 @@ mecanismo sencillo, similar a un complemento.
 El paquete de idioma C<POD2::E<lt>idiomaE<gt>> debe exportar
 C<search_perlfunc_re> para devolver una traducción de la cadena mencionada en
 el párrafo anterior. Esta cadena se usará para omitir la introducción de
-F<perlfunc.pod>. Si  C<POD2::E<lt>idiomaE<gt>-E<gt>search_perlfunc_re> genera
+F<perlfunc.pod>. Si C<POD2::E<lt>idiomaE<gt>-E<gt>search_perlfunc_re> genera
 un error (o no existe), se restablece el comportamiento predeterminado. Este
 mecanismo permite agregar traducciones de C<POD2::*> adicionales sin necesidad
 de aplicar cada vez la revisión de F<Pod/Perldoc.pm>.
@@ -167,9 +168,9 @@ L<http://github.com/zipf/perldoc-es>.
 
 =over
 
-=item * Joaquín Ferrero, C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
 
-=item * Enrique Nell, C< blas.gordon + POD2ES at gmail.com >
+=item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
 
 =back
 
@@ -211,7 +212,7 @@ esto facilitará la lectura de la documentación.
 
 El "español neutro" es un español controlado que pretende evitar el uso de
 términos ofensivos o de construcciones poco frecuentes en determinados países
-de habla hispana, con el objetivo de lograr traducciones válidas para  España y
+de habla hispana, con el objetivo de lograr traducciones válidas para España y
 Latinoamérica.
 
 =back
@@ -226,7 +227,7 @@ L<POD2::PT_BR>, L<POD2::IT>, L<POD2::FR>, L<POD2::LT>, L<perl>.
 
 Puede notificar errores (bugs) o solicitar funcionalidad a través de la
 dirección de correo electrónico C<bug-pod2-esd at rt.cpan.org> o de la interfaz
-web en L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POD2-ES>.  Se le
+web en L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POD2-ES>. Se le
 comunicarán automáticamente los cambios relacionados con los errores
 notificados o la funcionalidad solicitada.
 
@@ -275,9 +276,9 @@ Proyecto OmegaT: L<http://omegat.org/>
 =head1 DONATIVOS
 
 Por el elevado volumen de trabajo que representa y su larga duración, el
-proyecto de traducción de la documentación de Perl requiere un  esfuerzo
-sostenido que sólo está al alcance de los espíritus más  sólidos y altruistas.
-Los autores no exigen--pero tampoco rechazarán--compensaciones en  forma de
+proyecto de traducción de la documentación de Perl requiere un esfuerzo
+sostenido que sólo está al alcance de los espíritus más sólidos y altruistas.
+Los autores no exigen--pero tampoco rechazarán--compensaciones en forma de
 dinero, libros, quesos y productos derivados del cerdo (o chancho), o incluso
 viajes a la Polinesia, destinadas a reducir la fatiga del equipo y a mantener
 alta la moral. Todo será bienvenido.
