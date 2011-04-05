@@ -1,0 +1,59 @@
+Puede leer este archivo en cualquier editor de texto (verá algunos caracteres
+extraños, pero puede ignorarlos). Está escrito en formato POD (vea
+pod/perlpod.pod), un formato diseñado específicamente para ser legible tal
+cual.
+
+=head1 NOMBRE
+
+README.freebsd - Perl versión 5 en sistemas FreeBSD
+
+=head1 DESCRIPCIÓN
+
+En este documento se describen varias características de FreeBSD que afectan a
+la compilación y ejecución de Perl versión 5 (en lo sucesivo, Perl).
+
+=head2 FreeBSD vuelca la memoria de trabajo desde readdir_r con ithreads
+
+Si Perl está configurado para usar ithreads, las llamadas a biblioteca
+reentrantes tendrán preferencia sobre las versiones no reentrantes. En las
+versiones 4.5 y anteriores de FreeBSD existe un error en la función 
+C<readdir_r> que provocará un SEGV si se leen directorios grandes. Está
+disponible una revisión de FreeBSD libc (vea
+http://www.freebsd.org/cgi/query-pr.cgi?pr=misc/30631)
+que se ha integrado en FreeBSD 4.6.
+
+=head2 En FreeBSD, $^X no siempre contiene una ruta de acceso completa
+
+Siempre que es posible, perl 5.8.0 establece una ruta de acceso completa como
+valor de C<$^X>. Para ello, pregunta al sistema operativo. En FreeBSD, para
+localizar la ruta de acceso completa del intérprete perl se lee el vínculo
+simbólico F</proc/curproc/file>. Existe un error en FreeBSD que puede hacer que
+el resultado de la lectura de un vínculo simbólico sea erróneo en determinadas
+circunstancias (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=35703).
+En estos casos, perl vuelve al comportamiento anterior (utilizar el valor
+argv[0] de C en C<$^X>).
+
+=head2 Perl ya no forma parte de la "distribución base de FreeBSD"
+
+Esto no es tan malo como parece. Significa que Perl ya no formará parte del
+B<sistema de compilación del núcleo> de FreeBSD. No obstante, es muy probable
+que Perl siga formando parte de la "instalación predeterminada" y, en cualquier
+caso, la versión más reciente estará incluida en el sistema de versiones
+adaptadas. La primera versión FreeBSD a la que afectará este cambio es la 5.0;
+no afectará a las versiones 4.n.
+
+=head1 AUTOR
+
+Nicholas Clark <nick@ccl4.org>, con aportaciones de Slaven Rezic
+y Tim Bunce.
+
+Para notificar errores, actualizaciones o sugerencias, utilice la dirección
+F<perlbug@perl.org>.
+
+
+TRADUCTORES
+
+Joaquín Ferrero (Tech Lead), explorer + POD2ES at joaquinferrero.com
+
+Enrique Nell (Language Lead), blas.gordon + POD2ES at gmail.com
+
