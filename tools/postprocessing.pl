@@ -1,8 +1,13 @@
-#!/usr/bin/env perl
+#!/usr/bin/env perl -s
 
 # Copyright 2011 by Enrique Nell
 #
+# "Usage: perl postprocessing.pl [-tra] <pod_path>\n";
+#
+# The optional parameter -tra adds the Translators section
+#
 # Requires Pod::Simple::HTML
+
 
 use strict;
 use warnings;
@@ -12,6 +17,8 @@ use Pod::Tidy qw( tidy_files );
 use Text::Wrap qw( wrap $columns );
 use Readonly;
 use utf8;
+
+use vars qw( $tra );
 
 $|++;
 
@@ -23,7 +30,7 @@ if ( $ARGV[0] ) {
 
 } else {
  
-    die "Usage: perl preprocessing.pl <pod_path>\n";
+    die "Usage: perl postprocessing.pl [-tra] <pod_path>\n";
 
 }
 
@@ -71,11 +78,15 @@ if ( $suffix =~ /pod$|pm$/ ) {
 
 
     # Add TRANSLATORS section
-    open my $out, '>>:encoding(latin-1)', $pod_path;
-
-    print $out $TRANSLATORS_POD;
+    if ( $tra ) {
     
-    close $out;
+        open my $out, '>>:encoding(latin-1)', $pod_path;
+
+        print $out $TRANSLATORS_POD;
+    
+        close $out;
+
+    }
 
 
     # Convert pod to html for visual check
@@ -112,7 +123,7 @@ if ( $suffix =~ /pod$|pm$/ ) {
     close $in;
     
     # Add TRANSLATORS section 
-    print $out $TRANSLATORS;
+    print $out $TRANSLATORS if $tra;
 
     close $out;
 
