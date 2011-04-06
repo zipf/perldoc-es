@@ -2,9 +2,11 @@
 
 # Copyright 2011 by Enrique Nell
 #
-# "Usage: perl postprocessing.pl [-tra] <pod_path>\n";
+# "Usage: perl postprocessing.pl [-trans] [-not_pod] <pod_path>\n";
 #
-# The optional parameter -tra adds the Translators section
+# The optional parameter -trans adds the Translators section
+#
+# The optional parameter -not_pod specifies the file is not pod
 #
 # Requires Pod::Simple::HTML
 
@@ -18,7 +20,7 @@ use Text::Wrap qw( wrap $columns );
 use Readonly;
 use utf8;
 
-use vars qw( $tra );
+use vars qw( $trans $not_pod );
 
 $|++;
 
@@ -30,7 +32,7 @@ if ( $ARGV[0] ) {
 
 } else {
  
-    die "Usage: perl postprocessing.pl [-tra] <pod_path>\n";
+    die "Usage: perl postprocessing.pl [-trans] [-not_pod] <pod_path>\n";
 
 }
 
@@ -54,7 +56,7 @@ Readonly my $TRANSLATORS_POD => <<'END';
 
 END
 
-# Translators section for READMES
+# Translators section for other formats
 Readonly my $TRANSLATORS => <<'END';
 
 TRADUCTORES
@@ -67,7 +69,7 @@ END
 
 
 
-if ( $suffix =~ /pod$|pm$/ ) {
+if ( !$not_pod ) {
 
     # Wrap lines (OmegaT removes some line breaks) using Pod::Tidy 
     my $processed = Pod::Tidy::tidy_files(
@@ -78,7 +80,7 @@ if ( $suffix =~ /pod$|pm$/ ) {
 
 
     # Add TRANSLATORS section
-    if ( $tra ) {
+    if ( $trans ) {
     
         open my $out, '>>:encoding(latin-1)', $pod_path;
 
@@ -95,7 +97,7 @@ if ( $suffix =~ /pod$|pm$/ ) {
     system("perl -MPod::Simple::HTML -e Pod::Simple::HTML::go $pod_path > $out_html");
 
 
-} else {   # e.g., README files
+} else {   # Other text formats (e.g., the main distribution README)
 
     # Wrap lines (OmegaT removes some line breaks) using Text::Wrap
     my ( $in_path, $out_path );
@@ -123,7 +125,7 @@ if ( $suffix =~ /pod$|pm$/ ) {
     close $in;
     
     # Add TRANSLATORS section 
-    print $out $TRANSLATORS if $tra;
+    print $out $TRANSLATORS if $trans;
 
     close $out;
 
