@@ -2,7 +2,7 @@
 
 # Copyright 2011 by Enrique Nell
 #
-# "Usage: perl postprocessing.pl [-trans] [-not_pod] <pod_path>\n";
+# Usage: perl postprocessing.pl [-trans] [-not_pod] <pod_path>
 #
 # The optional parameter -trans adds the Translators section
 #
