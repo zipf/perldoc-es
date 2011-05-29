@@ -154,8 +154,8 @@ mecanismo sencillo, similar a un complemento.
 El paquete de idioma C<POD2::E<lt>idiomaE<gt>> debe exportar
 C<search_perlfunc_re> para devolver una traducción de la cadena mencionada en
 el párrafo anterior. Esta cadena se usará para omitir la introducción de
-F<perlfunc.pod>. Si C<POD2::E<lt>idiomaE<gt>-E<gt>search_perlfunc_re> genera
-un error (o no existe), se restablece el comportamiento predeterminado. Este
+F<perlfunc.pod>. Si C<POD2::E<lt>idiomaE<gt>-E<gt>search_perlfunc_re> genera un
+error (o no existe), se restablece el comportamiento predeterminado. Este
 mecanismo permite agregar traducciones de C<POD2::*> adicionales sin necesidad
 de aplicar cada vez la revisión de F<Pod/Perldoc.pm>.
 
