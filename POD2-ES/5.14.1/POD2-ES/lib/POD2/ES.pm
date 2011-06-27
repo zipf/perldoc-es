@@ -13,10 +13,11 @@ sub search_perlfunc_re {
 sub pod_info {{
     perl        => '5.14.1',
     perlbook    => '5.14.1',
+    perldata    => '5.14.1',
     perlfaq1    => '5.14.1',
     perlintro   => '5.14.1',
     perlunitut  => '5.14.1',
-    perldata   => '5.14.1',
+    perlutil    => '5.14.1',
     'README.freebsd'  => '5.14.1',
     'README.openbsd'  => '5.14.1',
     # perlcheat  => '5.14.1',
