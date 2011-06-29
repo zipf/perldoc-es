@@ -5,28 +5,28 @@ perlintro -- Breve introducción y descripción general de Perl
 =head1 DESCRIPCIÓN
 
 Este documento proporciona una introducción rápida al lenguaje de programación
-Perl e incluye referencias a documentación adicional.  Es una guía de
+Perl e incluye referencias a documentación adicional. Es una guía de
 iniciación para los nuevos usuarios del lenguaje que proporciona la información
 necesaria para poder leer el código Perl de otras personas y comprender a
 grandes rasgos su funcionamiento, o para escribir scripts sencillos.
 
-Es un documento introductorio, no una guía completa.  Tampoco explica el
-lenguaje en detalle.  En algunos casos se ha sacrificado la precisión para
-transmitir la idea general.  Es I<muy> recomendable complementar esta
+Es un documento introductorio, no una guía completa. Tampoco explica el
+lenguaje en detalle. En algunos casos se ha sacrificado la precisión para
+transmitir la idea general. Es I<muy> recomendable complementar esta
 introducción con información del manual de Perl completo, cuya tabla de
 contenido se encuentra en L<perltoc>.
 
 En este documento se incluyen referencias a otras partes de la documentación de
-Perl.  Puede consultar la documentación mediante el comando C<perldoc> o
+Perl. Puede consultar la documentación mediante el comando C<perldoc> o
 cualquier otro método que use para leer este documento.
 
 En la documentación de Perl se incluyen muchos ejemplos que ilustran las
-características descritas.  Tenga en cuenta que muchos de estos ejemplos son
+características descritas. Tenga en cuenta que muchos de estos ejemplos son
 fragmentos de código, no programas completos.
 
 Los ejemplos de las distintas partes de la documentación reflejan el estilo y
 las preferencias de sus autores, y pueden ser más escuetos que una línea de
-código equivalente en un programa real.  Salvo si se indica lo contrario, debe
+código equivalente en un programa real. Salvo si se indica lo contrario, debe
 suponer que al principio del "programa" se incluyen las instrucciones C<use
 strict> y C<use warnings>, y que todas las variables han sido declaradas,
 aunque se omitan las declaraciones para facilitar la lectura del ejemplo.
@@ -43,17 +43,17 @@ profesional como programador se va a encontrar distintos estilos.
 Perl es un lenguaje de programación de propósito general desarrollado
 originalmente para la manipulación de texto y que, en la actualidad, se usa
 para una amplia gama de tareas, como administración de sistemas, desarrollo
-web, programación de red,  desarrollo de interfaces gráficas de usuario, etc.
+web, programación de red, desarrollo de interfaces gráficas de usuario, etc.
 
 El lenguaje se diseñó para ser práctico (fácil de usar, eficaz, completo), más
-que estético (reducido, elegante, minimalista).  Se caracteriza principalmente
+que estético (reducido, elegante, minimalista). Se caracteriza principalmente
 por su facilidad de uso (permite programar tanto de manera procedural como
 orientada a objetos (OO)), su magnífica capacidad para procesamiento de texto y
 por tener una de las colecciones de módulos de terceros más impresionantes del
 mundo.
 
 En L<perl>, L<perlfaq1> y en muchos otros sitios se incluyen definiciones de
-Perl.  Esto refleja el hecho de que, aunque Perl tiene muchos públicos
+Perl. Esto refleja el hecho de que, aunque Perl tiene muchos públicos
 distintos, muchas personas piensan que merece la pena escribir sobre este
 lenguaje.
 
@@ -68,7 +68,7 @@ Como alternativa, puede colocar al principio del script la siguiente línea:
 
     #!/usr/bin/env perl
 
-... y ejecutar el script como C</ruta/script.pl>.  Por supuesto, antes deberá
+... y ejecutar el script como C</ruta/script.pl>. Por supuesto, antes deberá
 marcarlo como ejecutable con el comando C<chmod 755 script.pl> (en Unix).
 
 (En esta línea se supone que dispone del programa B<env>. También puede
@@ -98,8 +98,8 @@ manual correspondientes a L<strict> y L<warnings>.
 
 =head2 Descripción general de la sintaxis básica
 
-Un script o programa Perl consta de una o varias instrucciones.  Estas
-instrucciones se escriben directamente en el script.  Es decir, no es necesario
+Un script o programa Perl consta de una o varias instrucciones. Estas
+instrucciones se escriben directamente en el script. Es decir, no es necesario
 utilizar una función C<main()> ni nada similar.
 
 Las instrucciones de Perl deben terminar con un signo de punto y coma:
@@ -138,7 +138,7 @@ No es necesario escribir los números entre comillas:
     print 42;
 
 Puede escribir los argumentos de las funciones entre paréntesis u omitir los
-paréntesis, si lo prefiere.  Solo son necesarios en algunos casos para aclarar
+paréntesis, si lo prefiere. Solo son necesarios en algunos casos para aclarar
 la precedencia.
 
     print("Hola a todos\n");
@@ -160,7 +160,7 @@ Un escalar representa un solo valor:
     my $respuesta = 42;
 
 Los valores escalares pueden ser cadenas, enteros o números de punto flotante,
-y Perl los convertirá de un tipo a otro cuando sea necesario.  No es necesario
+y Perl los convertirá de un tipo a otro cuando sea necesario. No es necesario
 predeclarar los tipos de las variables, pero éstas deben declararse con la
 palabra clave C<my> la primera vez que se usan. (Éste es uno de los requisitos
 de C<use strict;>.)
@@ -172,8 +172,8 @@ Los valores escalares se pueden usar de varias maneras:
     print "El cuadrado de $respuesta es ", $respuesta * $respuesta, "\n";
 
 Hay varios escalares "mágicos" con nombres que recuerdan conjuntos de signos de
-puntuación (o "ruido de señal").  Estas variables especiales se usan para
-diversos fines y se describen en L<perlvar>.  La única que tiene que conocer
+puntuación (o "ruido de señal"). Estas variables especiales se usan para
+diversos fines y se describen en L<perlvar>. La única que tiene que conocer
 por ahora es C<$_>, la "variable predeterminada". Se usa como argumento
 predeterminado de varias funciones de Perl y su valor se establece
 implícitamente en determinadas estructuras de bucle.
@@ -188,7 +188,7 @@ Un array representa una lista de valores:
     my @numeros = (23, 42, 69);
     my @mezcla   = ("camello", 42, 1.23);
 
-El índice de un array empieza en cero.  Para obtener los elementos de un array:
+El índice de un array empieza en cero. Para obtener los elementos de un array:
 
     print $animales[0];  # imprime "camello" en pantalla
     print $animales[1];  # imprime "llama" en pantalla
@@ -199,7 +199,7 @@ array:
     print $mezcla[$#mezcla];  # último elemento, imprime 1.23 en pantalla
 
 Podría sentirse tentado de usar C<$#array + 1> para determinar el número de
-elementos de un array.  No es necesario.  Si utiliza C<@array> donde Perl
+elementos de un array. No es necesario. Si utiliza C<@array> donde Perl
 espera encontrar un valor escalar ("en contexto escalar"), obtendrá el número
 de elementos del array:
 
@@ -303,8 +303,8 @@ En realidad no es obligatorio usar C<my>; se puede usar simplemente:
     $var = "valor";
 
 Sin embargo, el uso anterior creará variables globales en todo el programa,
-algo que no se recomienda en programación.  En cambio, C<my> crea variables
-dentro de un ámbito léxico.  El ámbito de las variables es el bloque (conjunto
+algo que no se recomienda en programación. En cambio, C<my> crea variables
+dentro de un ámbito léxico. El ámbito de las variables es el bloque (conjunto
 de instrucciones entre llaves) en el que se definen.
 
     my $x = "foo";
@@ -318,19 +318,19 @@ de instrucciones entre llaves) en el que se definen.
     print $y;               # no imprime nada; $y está fuera del ámbito
 
 Si escribe C<use strict;> al principio de los scripts de Perl y usa C<my>, el
-intérprete detectará determinados errores frecuentes de programación.  Así, en
+intérprete detectará determinados errores frecuentes de programación. Así, en
 el ejemplo anterior, la última instrucción C<print $y> provocará una error en
-tiempo de compilación que impedirá la ejecución del programa.  Es muy
+tiempo de compilación que impedirá la ejecución del programa. Es muy
 recomendable usar C<strict>.
 
 =head2 Estructuras condicionales y de bucle
 
-Perl ofrece las estructuras condiciones y de bucle habituales.  En Perl 5.10,
+Perl ofrece las estructuras condiciones y de bucle habituales. En Perl 5.10,
 incluso ofrece una instrucción case/switch (llamada C<given>/C<when>). 
 Consulte "Instrucciones switch" en L<perlsyn> para obtener información
 detallada.
 
-Una condición puede ser cualquier expresión Perl.  Consulte la lista de
+Una condición puede ser cualquier expresión Perl. Consulte la lista de
 operadores de la siguiente sección para obtener información sobre los
 operadores lógicos booleanos y de comparación que se suelen usar en
 instrucciones condicionales.
@@ -356,7 +356,7 @@ También existe la versión negada:
 Esto se proporciona como una versión más legible de C<if (!I<condición>)>.
 
 Tenga en cuenta que en Perl es obligatorio usar las llaves, aunque sólo haya
-una línea en el bloque.  Sin embargo, puede escribir los bloques condicionales
+una línea en el bloque. Sin embargo, puede escribir los bloques condicionales
 de una sola línea de manera que recuerden a una frase en inglés:
 
     # la manera tradicional
@@ -416,8 +416,8 @@ L<perlsyn>.
 
 =head2 Funciones y operadores predefinidos
 
-Perl incluye una amplia selección de funciones y operadores predefinidos.  Ya
-hemos visto algunas funciones, como C<print>, C<sort> y C<reverse>.  Al
+Perl incluye una amplia selección de funciones y operadores predefinidos. Ya
+hemos visto algunas funciones, como C<print>, C<sort> y C<reverse>. Al
 principio de L<perlfunc> se incluye una lista completa de funciones. También
 puede obtener fácilmente información sobre cualquier función mediante el
 comando C<perldoc -f I<nombre_función>>.
@@ -464,8 +464,8 @@ determinar si debe ordenar numéricamente (99 menor que 100) o alfabéticamente
     !   not
 
 (En la tabla anterior C<and>, C<or> y C<not> no son solo descripciones de los
-operadores. Son también operadores.  Ofrecen más legibilidad que los operadores
-tipo C correspondientes, como C<&&>, pero su precedencia es distinta.  Consulte
+operadores. Son también operadores. Ofrecen más legibilidad que los operadores
+tipo C correspondientes, como C<&&>, pero su precedencia es distinta. Consulte
 L<perlop> para obtener más información.)
 
 =item Otros operadores
@@ -494,7 +494,7 @@ se muestra un resumen de cómo se usa:
     open(my $registro, ">>", "mi.registro")     or die "No se puede abrir mi.registro: $!";
 
 Puede utilizar el operador C<< <> >> para leer de un identificador de archivo
-abierto.  En contexto escalar, este operador lee una sola línea del
+abierto. En contexto escalar, este operador lee una sola línea del
 identificador de archivo, mientras que en contexto de lista lee todo el archivo
 y asigna cada línea a un elemento de la lista:
 
@@ -529,7 +529,7 @@ con C<close()> (de todos modos, Perl se encargará de ello si se le olvida):
 
 El soporte de Perl para las expresiones regulares es amplio y profundo, y se
 describe en gran detalle en los documentos L<perlrequick> y L<perlretut>, entre
-otros.  Se incluye a continuación un resumen:
+otros. Se incluye a continuación un resumen:
 
 =over 4
 
@@ -552,9 +552,9 @@ El operador de sustitución, C<s///>, se describe en L<perlop>.
 
 =item Expresiones regulares más complejas
 
-No tiene que limitarse a detectar coincidencias en cadenas fijas.  De hecho,
+No tiene que limitarse a detectar coincidencias en cadenas fijas. De hecho,
 puede detectar coincidencias donde quiera con expresiones regulares más
-complejas.  Estas se describen de forma detallada en L<perlre>. A continuación
+complejas. Estas se describen de forma detallada en L<perlre>. A continuación
 se incluye una guía rápida:
 
     .                   un solo carácter
@@ -599,7 +599,7 @@ Algunos ejemplos breves:
 
 =item Paréntesis de captura
 
-Además de para agrupar, los paréntesis también  se pueden usar para capturar
+Además de para agrupar, los paréntesis también se pueden usar para capturar
 los resultados de partes de una expresión regular a fin de usarlos
 posteriormente. Los resultados se almacenan en C<$1>, C<$2>, etc.
 
@@ -632,7 +632,7 @@ Ahora podemos usar la subrutina como cualquier función integrada:
 
     registrador("Tenemos una subrutina para registrar.");
 
-¿Qué hace C<shift>?  Los argumentos pasados a una subrutina están disponibles
+¿Qué hace C<shift>? Los argumentos pasados a una subrutina están disponibles
 en un array especial denominado C<@_> (consulte L<perlvar> para obtener más
 información). El argumento predeterminado de la función C<shift> es C<@_>. Así,
 C<my $mensaje_registro= shift;> quita el primer elemento de la lista de
@@ -674,10 +674,10 @@ terceros, que se describe a continuación.
 
 No pierda tiempo reinventando la rueda. Los módulos de Perl disponibles en CPAN
 ( http://www.cpan.org/) proporcionan funcionalidad que puede utilizar en sus
-programas.  La distribución de Perl incluye muchos módulos populares.
+programas. La distribución de Perl incluye muchos módulos populares.
 
 Las categorías de módulos abarcan desde la manipulación de texto hasta
-protocolos de red, integración de bases de datos o gráficos.  En CPAN también
+protocolos de red, integración de bases de datos o gráficos. En CPAN también
 está disponible una lista de módulos clasificados por categorías.
 
 Para aprender a instalar los módulos que descargue de CPAN, lea
@@ -692,7 +692,7 @@ L<perlfaq> contiene preguntas y respuestas relacionadas con muchas tareas
 comunes, y en muchos casos sugiere los módulos de CPAN adecuados para cada
 tarea.
 
-En L<perlmod> se describen los módulos de Perl en general.  L<perlmodlib>
+En L<perlmod> se describen los módulos de Perl en general. L<perlmodlib>
 enumera los módulos incluidos en la instalación de Perl.
 
 Si desea escribir módulos de Perl, L<perlnewmod> le ayudará a empezar.
