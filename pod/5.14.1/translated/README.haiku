@@ -1,0 +1,57 @@
+Si lees este archivo _tal_como_es_, ignora los caracteres curiosos que veas.
+Está escrito en formato POD (ver pod/perlpod.pod) que está específicamente diseñado para ser legible de forma sencilla.
+
+=head1 NOMBRE
+
+README.haiku - Perl versión 5.10+ en Haiku
+
+=head1 DESCRIPCIÓN
+
+Este archivo contiene instrucciones de cómo construir Perl para Haiku y listas de problemas conocidos.
+
+=head1 CONSTRUCCIÓN E INSTALACIÓN
+
+El procedimiento de construcción es completamente estándar:
+
+  ./Configure -de
+  make
+  make install
+
+Hace a perl ejecutable y crea un enlace simbólico para libperl:
+
+  chmod a+x /boot/common/bin/perl
+  cd /boot/common/lib; ln -s perl5/5.15.0/BePC-haiku/CORE/libperl.so .
+
+Reemplace C<5.15.0> con su respectiva versión de Perl.
+
+=head1 PROBLEMAS CONOCIDOS
+
+Los siguientes problemas se encuentran en la versión Haiku 28311:
+
+=over 4
+
+=item *
+
+Perl no puede ser compilado con soporte multihilo ATM.
+
+=item *
+
+El test F<ext/Socket/t/socketpair.t> falla. Precisando más: las subpruebas usando sockets de datagramas fallan. Los datagramas sockect Unix aún no están implementados en Haiku.
+
+=item *
+
+Una subprueba del test F<ext/Sys/Syslog/t/syslog.t> falla. Esto se debe a que Haiku aún no implementa soporte para C</dev/log>.
+
+=item *
+
+Los test F<lib/Net/Ping/t/450_service.t> y F<lib/Net/Ping/t/510_ping_udp.t> fallan. Esto se debe a errores en la implementación de la pila del sistema de red de Haiku.
+
+=back
+
+=head1 CONTACTO
+
+Para problemas específicos de Haiku, póngase en contacto con los desarrolladores HaikuPorts: L<http://ports.haiku-files.org/>
+
+La primera adaptación de Haiku fue realizada por Ingo Weinhold <ingo_weinhold@gmx.de>.
+
+Última actualización: 2008-10-29
