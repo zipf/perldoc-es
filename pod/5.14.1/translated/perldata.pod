@@ -11,10 +11,10 @@ X<variable, nombre> X<nombre variable> X<tipo dato> X<tipo>
 Perl tiene tres estructuras de datos incorporadas al lenguaje: Los escalares, los arrays de escalares, y los arrays asociativos de escalares, también conocidos como "hashes".  Un escalar es una cadena de caracteres (de cualquier tamaño, limitada únicamente por la memoria disponible), un número o una referencia a algo (esto se tratará en L<perlref>).  Los arrays normales son listas ordenadas de escalares indexadas por números, empezando por 0.  Los hashes son colecciones no ordenadas de valores escalares indexadas por sus claves asociadas, que son cadenas de caracteres.
 
 A los valores se accede normalmente por su nombre, o a través de una referencia con nombre.
-El primer carácter del nombre nos dice a qué tipo de estructura de datos se está accediendo.  El resto del nombre indica a qué valor particular se accede.  Normalmente, este nombre es un I<identificador>, es decir, una palabra que comienza por una letra o carácter de subrayado y que contiene letras, caracteres de subrayado o dígitos.  En ciertos casos, puede ser una serie de identificadores separados por C<::> (o por el ligeramente arcaico C<'>); donde todos los identificadores menos el último se interpretan como nombres de paquetes que determinan el espacio de nombres en el que se buscará el identificador final (véase L<perlmod/Packages> para obtener los detalles).  También, es posible sustituir un simple identificador por una expresión que produzca una referencia al valor en tiempo de ejecución.   Ésto se describe con mayor detalle más abajo y en L<perlref>.
+El primer carácter del nombre nos dice a qué tipo de estructura de datos se está accediendo.  El resto del nombre indica a qué valor particular se accede.  Normalmente, este nombre es un I<identificador>, es decir, una palabra que comienza por una letra o carácter de subrayado y que contiene letras, caracteres de subrayado o dígitos.  En ciertos casos, puede ser una serie de identificadores separados por C<::> (o por el ligeramente arcaico C<'>); donde todos los identificadores menos el último se interpretan como nombres de paquetes que determinan el espacio de nombres en el que se buscará el identificador final (vea L<perlmod/Packages> para obtener los detalles).  También, es posible sustituir un simple identificador por una expresión que produzca una referencia al valor en tiempo de ejecución.   Ésto se describe con mayor detalle más abajo y en L<perlref>.
 X<identifier> X<identificador>
 
-Perl también tiene su propias variables incorporadas cuyos nombres no siguen estas reglas.  Éstas tienen extraños nombres, y por tanto no pueden colisionar accidentalmente con ninguna de sus variables normales.  Las cadenas que coinciden con las partes encerradas entre paréntesis de una expresión regular se guardan con nombres que contienen sólo dígitos después del C<$> (véase L<perlre> y L<perlop>).
+Perl también tiene su propias variables incorporadas cuyos nombres no siguen estas reglas.  Éstas tienen extraños nombres, y por tanto no pueden colisionar accidentalmente con ninguna de sus variables normales.  Las cadenas que coinciden con las partes encerradas entre paréntesis de una expresión regular se guardan con nombres que contienen sólo dígitos después del C<$> (vea L<perlre> y L<perlop>).
 Además, ciertas variables especiales que proporcionan acceso al medio interno de Perl tienen nombres que contienen caracteres de puntuación y caracteres de control.  Se describen en L<perlvar>.
 X<variable, built-in> X<variable, primitiva>
 
@@ -45,7 +45,7 @@ X<namespace> X<espacio de nombres>
 Puesto que los nombres de variables siempre empiezan por '$', '@', o '%', las palabras "reservadas", de hecho, no están reservadas con respecto a los nombres de variables.  Sí I<están> reservadas, sin embargo, para las etiquetas y gestores de archivo, ya que éstos no tienen un carácter especial al comienzo.  No se puede tener un gestor de archivo llamado "log", por ejemplo.  Un consejo: es mejor escribir C<open(LOG,'archlog')> que C<open(log,'archlog')>.  Utilizar gestores de archivo en mayúsculas mejora la legibilidad de los programas y les protege de conflictos con futuras palabras reservadas.  El tamaño de caja I<es> significativo: "FOO", "Foo" y "foo" son todos ellos nombres diferentes.  Los nombres que empiezan por una letra o el símbolo de subrayado pueden incluir también dígitos y subrayados.
 X<identifier, case sensitivity> X<case> X<identificador, sensible al tamaño de caja> X<tamaño de caja> X<mayúsculas y minúsculas>
 
-Es posible sustituir cualquier nombre alfanumérico por una expresión que devuelva una referencia a un dato del tipo apropiado.  Para una descripción de ésto, véase L<perlref>.
+Es posible sustituir cualquier nombre alfanumérico por una expresión que devuelva una referencia a un dato del tipo apropiado.  Para una descripción de ésto, vea L<perlref>.
 
 Los nombres que comienzan con un dígito, solo pueden contener más dígitos.  Los nombres que no empiecen ni por letra, ni subrayado, ni dígito, ni acento circunflejo (es decir, un carácter de control) están limitados a un solo carácter, como por ejemplo C<$%> o C<$$>.  (La mayor parte de estos nombres de un solo carácter tienen un significado predefinido para Perl.  Por ejemplo, C<$$> es el ID del proceso actual).
 
@@ -113,7 +113,7 @@ También se puede ganar una minúscula cantidad de eficiencia pre-extendiendo un a
     @loquesea  = ();
     $#loquesea = -1;
 
-Si se evalúa un array en un contexto escalar, éste devuelve la longitud del array.  (Note que esto no es cierto para las listas, que devuelven el último valor, como el operador coma de C, y tampoco para las funciones incorporadas, que devuelven lo que les parezca mejor devolver). Lo siguiente es siempre verdadero:
+Si se evalúa un array en un contexto escalar, éste devuelve la longitud del array.  (Note que esto no es cierto para las listas, que devuelven el último valor, como el operador coma de C, y tampoco para las funciones integradas, que devuelven lo que les parezca mejor devolver). Lo siguiente es siempre verdadero:
 X<array, length> X<array, longitud>
 
     scalar(@loquesea) == $#loquesea - $[ + 1;
@@ -155,7 +155,7 @@ X<number, literal> X<número, literal>
 Los literales de cadena se suelen delimitar con comillas simples o dobles.  Funcionan de forma muy parecida a las comillas en las líneas de comandos Unix: literales de cadena entre comillas dobles están sujetos a la barra invertida y la sustitución de variables; cadenas entre comillas simples no lo están (a excepción de C<\'> y C<\\>).  Las reglas normales de la barra invertida en el estilo del C se aplican para la creación de caracteres como el salto de línea, tabuladores, etc, así como algunas formas más exóticas.  Ver L<perlop/"Comillas y Operadores de comillas"> para una lista de ellos.
 X<string, literal> X<cadena, literal>
 
-Hexadecimal, octal o binario, representaciones en cadenas literales (por ejemplo, '0xff') no se convierten automáticamente en su representación en entero.  Las funciones hex() y oct() hacen estas conversiones por usted.  Véase L<perlfunc/hex> y L<perlfunc/oct> para más detalles.
+Hexadecimal, octal o binario, representaciones en cadenas literales (por ejemplo, '0xff') no se convierten automáticamente en su representación en entero.  Las funciones hex() y oct() hacen estas conversiones por usted.  Vea L<perlfunc/hex> y L<perlfunc/oct> para más detalles.
 
 También puede incrustar directamente caracteres de nueva línea dentro de sus cadenas, es decir, que puede terminar en una línea diferente de cuando empezaron.  Esto es bueno, pero si se le olvida cerrar el entrecomillado, el error no será reportado hasta que Perl encuentre otra línea que contenga el carácter de comillas, que puede estar mucho más allá en el programa.  Sustitución de variables dentro de cadenas se limita a variables escalares, arrays y porciones de array y hash.  (En otras palabras, nombres que empiezan con $ o @, seguido de una opcional expresión entre corchetes como si fuera un subíndice). El segmento de código siguiente imprime "El precio es $Z<>100".
 X <interpolation> X<interpolación>
@@ -276,7 +276,7 @@ LISTAs hacen una interpolación automática de las sublistas.  Es decir, cuando un
     (@foo,@bar,&AlgunaSub,%glarch)
 
 contiene todos los elementos de @foo seguido por todos los elementos de @bar, seguido de todos los elementos devueltos por la subrutina llamada AlgunaSub llamada en contexto lista, seguido de los pares clave/valor de %glarch.
-Para hacer referencia a una lista que <NO> interpole, véase L<perlref> .
+Para hacer referencia a una lista que <NO> interpole, vea L<perlref> .
 
 La lista nula se representa por ().  Interpolarla en una lista no tiene ningún efecto.  Así que ((),(),()) es equivalente a ().  Del mismo modo, la interpolación de un array sin elementos es lo mismo que si no se hubiera interpolado ningún array en ese punto.
 
@@ -394,7 +394,7 @@ También puede subindexar una lista para obtener un solo elemento de ella.
 
 =head2 Emulación de matrices multidimensionales
 
-Matrices multidimensionales pueden ser emuladas usando listas como subíndices en un hash. Los elementos de la lista se unen con el separador de subíndice (véase L<perlvar/$;>).
+Matrices multidimensionales pueden ser emuladas usando listas como subíndices en un hash. Los elementos de la lista se unen con el separador de subíndice (vea L<perlvar/$;>).
 
     $foo{$a,$b,$c}
 
@@ -493,7 +493,7 @@ o tal vez como una referencia real, de esta manera:
 
     $fh = \*STDOUT;
 
-Véase L<perlsub> por ejemplos del uso de estos gestores indirectos de archivo en funciones.
+Vea L<perlsub> por ejemplos del uso de estos gestores indirectos de archivo en funciones.
 
 Typeglobs son también una manera de crear un gestor de archivo local usando el operador local().  Estos últimos duran hasta que se sale de su bloque, pero puede ser traspasado.
 Por ejemplo:
@@ -526,7 +526,7 @@ Todas las funciones que son capaces de crear gestores de archivo (open(), opendi
 Tenga en cuenta que si se usa una variable escalar ya inicializada, el resultado es diferente: C<my $fh='zzz'; open($fh, ...)> es equivalente a C<open( *{'zzz'}, ...)>.
 C<use strict 'refs'> prohíbe tal práctica.
 
-Otra forma de crear gestores de archivo anónimos es con el módulo Symbol o con el módulo IO::Handle y sus acólitos.  Estos módulos tienen la ventaja de no ocultar diferentes tipos del mismo nombre durante el local().  Véase la parte inferior de L<perlfunc/open> para un ejemplo.
+Otra forma de crear gestores de archivo anónimos es con el módulo Symbol o con el módulo IO::Handle y sus acólitos.  Estos módulos tienen la ventaja de no ocultar diferentes tipos del mismo nombre durante el local().  Vea la parte inferior de L<perlfunc/open> para un ejemplo.
 
 =head1 VEA TAMBIÉN
 
