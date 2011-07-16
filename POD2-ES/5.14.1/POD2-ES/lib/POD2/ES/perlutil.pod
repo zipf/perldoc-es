@@ -4,11 +4,11 @@ perlutil - Utilidades incluidas en la distribución de Perl
 
 =head1 DESCRIPCIÓN
 
-Además del intérprete de Perl, la distribución de Perl instala en el sistema
-varias utilidades. La distribución de Perl también usa algunas utilidades
-durante el proceso de instalación. En este documento se muestra la lista de
-utilidades, se explica para que sirven y se proporcionan referencias a la
-documentación de cada módulo, si la hay.
+Además del intérprete de Perl, la distribución de Perl incluye varias
+utilidades que se instalan en el sistema; algunas de ellas se usan durante el
+proceso de instalación de la distribución. Este documento contiene una
+descripción de las utilidades y referencias a la documentación de cada módulo
+(si existe).
 
 =head1 LISTA DE UTILIDADES
 
@@ -28,7 +28,7 @@ E<lt>nombreE<gt>>.
 =item L<pod2man|pod2man> y L<pod2text|pod2text>
 
 Cuando se ejecuta desde un terminal, normalmente F<perldoc> llama a F<pod2man>
-para convertir el formato POD (Plain Old Documentation, consulte L<perlpod>
+para convertir el formato POD (Plain Old Documentation; consulte L<perlpod>
 para ver una descripción) en una página de manual, y después ejecuta F<man>
 para mostrarla; si F<man> no está disponible, se usa F<pod2text> y el resultado
 se canaliza a través de su paginador favorito.
@@ -55,8 +55,8 @@ especificado.
 
 =item L<podchecker|podchecker>
 
-Al redactar documentación POD, puede usar la utilidad F<podchecker> para buscar
-errores de marcas POD.
+Al redactar documentación POD puede usar la utilidad F<podchecker> para
+detectar errores de marcas POD.
 
 =item L<splain|splain>
 
@@ -65,17 +65,16 @@ una descripción.
 
 =item L<roffitall|roffitall>
 
-La utilidad C<roffitall> no se instala en el sistema, pero está dentro del
-directorio F<pod/> del kit de código fuente de Perl. Esta utilidad convierte
+La utilidad C<roffitall> no se instala en el sistema, pero puede encontrarla en
+el directorio F<pod/> del kit de código fuente de Perl. Esta utilidad convierte
 toda la documentación de la distribución al formato F<*roff> y a partir de esto
-genera un código fuente PostScript de o un archivo de texto.
+genera código fuente PostScript o un archivo de texto.
 
 =back
 
 =head2 Conversores
 
-Hemos incluido tres filtros de conversión que le ayudarán a convertir programas
-a Perl:
+Los tres filtros de conversión siguientes generan código Perl:
 
 =over 3
 
@@ -83,7 +82,7 @@ a Perl:
 
 F<a2p> convierte scripts F<awk> en programas Perl; por ejemplo, si ejecuta
 C<a2p -F:> sobre el sencillo script F<awk> C<{print $2}>, generará un programa
-Perl a partir del código:
+Perl basado en el código siguiente:
 
     while (<>) {
         ($Fld1,$Fld2) = split(/[:\n]/, $_, -1);
@@ -122,7 +121,7 @@ C<File::Find>:
 
 =back
 
-Además de estos filtros para convertir a otros lenguajes, la utilidad
+Además de estos filtros para traducir otros lenguajes, la utilidad
 L<pl2pm|pl2pm> permite convertir bibliotecas de código Perl 4 antiguo en
 módulos de Perl 5 modernos.
 
@@ -190,7 +189,7 @@ de C en código Perl. Han quedado obsoletos desde que surgió F<h2xs>.
 =item L<h2xs|h2xs>
 
 F<h2xs> convierte archivos de encabezado de C en módulos XS y agrega gran parte
-del código necesario para comunicar las bibliotecas C y los módulos Perl.
+del código necesario para la comunicación entre bibliotecas C y módulos Perl.
 También resulta muy útil para crear la estructura inicial de módulos Perl
 puros.
 
@@ -206,7 +205,6 @@ perl. Para ello no tiene que saber cómo funciona XS.
 
 F<xsubpp> es un compilador que permite convertir código XS de Perl en código C.
 Lo suelen ejecutar los archivos makefile generados por L<ExtUtils::MakeMaker>.
-
 F<xsubpp> compila el código XS y genera código C; para ello, incrusta las
 construcciones necesarias para que las funciones C puedan manipular valores
 Perl y agregar el código necesario para que Perl pueda acceder a esas
@@ -241,9 +239,9 @@ perl.
 =item L<piconv>
 
 B<piconv> es una versión Perl de B<iconv>, un conversor de codificaciones de
-caracteres, de uso muy extendido en el mundo Unix. Este script se desarrolló
-principalmente como una demostración de tecnología para Perl 5.8.0, pero en
-general puede usar piconv en lugar de iconv.
+caracteres de uso muy extendido en el mundo Unix. Este script se desarrolló
+simplemente como una demostración de tecnología para Perl 5.8.0, pero puede
+usar piconv para cualquier tarea para la que usaría iconv.
 
 =item L<ptar>
 

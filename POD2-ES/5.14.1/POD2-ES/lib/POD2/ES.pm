@@ -13,7 +13,7 @@ sub search_perlfunc_re {
 sub pod_info {{
     perl        => '5.14.1',
     perlbook    => '5.14.1',
-    perldata    => '5.14.1',
+    #perldata    => '5.14.1',
     perlfaq1    => '5.14.1',
     perlintro   => '5.14.1',
     perlunitut  => '5.14.1',
