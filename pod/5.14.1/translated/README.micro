@@ -1,0 +1,37 @@
+microperl se supone que es realmente un perl mínimo, incluso aún más que el mínimo miniperl.  No se necesita Configure para construir microperl, por otra parte esto significa que las interfaces entre Perl y su sistema operativo se quedan en muy, muy, muy mínimas.
+
+Todo esto es experimental.  Si no sabe qué hacer con microperl probablemente no debería construirlo.  Por favor, no informe de errores en microperl; corrija los errores.  (Informes de errores acerca de microperl sin correcciones/parches son equivalentes a las peticiones - no van a ser desechados, pero probablemente no se trabajará en ellos, a menos que coincida oportunamente con una comezón personal de algún voluntario)
+
+Asumimos ANSI C89 más lo siguiente:
+- <stddef.h>, <stdlib.h>
+- rename()
+- opendir(), readdir(), closedir() (vía dirent.h)
+- memchr(), memcmp(), memcpy(), memset() (vía string.h)
+- (un seguro) putenv() (vía stdlib.h)
+- strtoul() (vía stdlib.h)
+(grep para 'define' en uconfig.sh.)
+También, Perl times() está definido para devolver siempre ceros.
+
+Si aún sigue leyendo esto y está ansioso por probar microperl:
+
+	make -f Makefile.micro
+
+Los valores por defecto asumen una plataforma little-endian LP32 - es decir, los largos y punteros son de 32 bits, por lo que sizeof(long) y sizeof(void *) son 4
+Si su plataforma es little-endian LP64 - es decir, los largos y punteros son de 64 bits, sizeof(long) y sizeof(void *) son 8, entonces primero tiene que ejecutar
+
+	make -f Makefile.micro regen_uconfig64
+
+para generar un uconfig.h adecuado.
+
+Si realiza cambios en uconfig.sh, ejecute
+
+	make -f Makefile.micro regen_uconfig
+
+para regenerar uconfig.h.  (o regen_uconfig64 si está editando uconfig64.sh)
+
+
+Si ninguna de las configuraciones por defecto funcionan en su plataforma, es posible que desee probar
+
+	make -f Makefile.micro patch_uconfig
+
+*antes* del "make -f Makefile.micro".  Esto intenta parchear mínimamente el uconfig.sh utilizando su *actual* Perl para que su microperl tenga los tipos y tamaños básicos y orden de los bytes correcto.
