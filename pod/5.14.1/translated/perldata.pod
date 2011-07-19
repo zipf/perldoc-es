@@ -39,10 +39,10 @@ Los hashes enteros se designan por '%': X<hash>
 
 Además de lo anterior, las subrutinas se nombran empezando por '&', aunque ésto es opcional cuando no provoque ambigüedad, igual que el sujeto de una frase en español es a menudo redundante cuando va implícito en el verbo, como en "(yo) tengo lo que usted necesita".  Las entradas de la tabla de símbolos pueden nombrarse empezando por '*', aunque no hace falta que se preocupe por esto ahora (y quizá nunca deba hacerlo :-).
 
-Cada tipo de variable tiene su propio espacio de nombres, y ocurre igual con otros tipos de identificadores que no designan variables.  Esto significa que usted puede, sin temor a conflictos, utilizar el mismo nombre para una variable escalar, un array o un hash; o, por la misma razón, para un gestor de archivo, un gestor de directorio, el nombre de una subrutina, un nombre de formato o una etiqueta.  Significa entonces que $foo y @foo son dos variables distintas.  También significa que C<$foo[1]> es parte de @foo, no parte de $foo.  Ésto puede parecer un poco raro, pero eso está bien, porque es raro.
+Cada tipo de variable tiene su propio espacio de nombres, y ocurre igual con otros tipos de identificadores que no designan variables.  Esto significa que usted puede, sin temor a conflictos, utilizar el mismo nombre para una variable escalar, un array o un hash; o, por la misma razón, para un identificador de archivo, un identificador de directorio, el nombre de una subrutina, un nombre de formato o una etiqueta.  Significa entonces que $foo y @foo son dos variables distintas.  También significa que C<$foo[1]> es parte de @foo, no parte de $foo.  Ésto puede parecer un poco raro, pero eso está bien, porque es raro.
 X<namespace> X<espacio de nombres>
 
-Puesto que los nombres de variables siempre empiezan por '$', '@', o '%', las palabras "reservadas", de hecho, no están reservadas con respecto a los nombres de variables.  Sí I<están> reservadas, sin embargo, para las etiquetas y gestores de archivo, ya que éstos no tienen un carácter especial al comienzo.  No se puede tener un gestor de archivo llamado "log", por ejemplo.  Un consejo: es mejor escribir C<open(LOG,'archlog')> que C<open(log,'archlog')>.  Utilizar gestores de archivo en mayúsculas mejora la legibilidad de los programas y les protege de conflictos con futuras palabras reservadas.  El tamaño de caja I<es> significativo: "FOO", "Foo" y "foo" son todos ellos nombres diferentes.  Los nombres que empiezan por una letra o el símbolo de subrayado pueden incluir también dígitos y subrayados.
+Puesto que los nombres de variables siempre empiezan por '$', '@', o '%', las palabras "reservadas", de hecho, no están reservadas con respecto a los nombres de variables.  Sí I<están> reservadas, sin embargo, para las etiquetas e identificadores de archivo, ya que éstos no tienen un carácter especial al comienzo.  No se puede tener un identificador de archivo llamado "log", por ejemplo.  Un consejo: es mejor escribir C<open(LOG,'archlog')> que C<open(log,'archlog')>.  Utilizar identificadores de archivo en mayúsculas mejora la legibilidad de los programas y les protege de conflictos con futuras palabras reservadas.  El tamaño de caja I<es> significativo: "FOO", "Foo" y "foo" son todos ellos nombres diferentes.  Los nombres que empiezan por una letra o el símbolo de subrayado pueden incluir también dígitos y subrayados.
 X<identifier, case sensitivity> X<case> X<identificador, sensible al tamaño de caja> X<tamaño de caja> X<mayúsculas y minúsculas>
 
 Es posible sustituir cualquier nombre alfanumérico por una expresión que devuelva una referencia a un dato del tipo apropiado.  Para una descripción de ésto, vea L<perlref>.
@@ -203,14 +203,14 @@ X<__FILE__> X<__LINE__> X<__PACKAGE__> X<line> X<file> X<package> X<línea> X<arc
 
 Los dos caracteres de control ^D y ^Z, y los símbolos __END__ y __DATA__ pueden ser usados para indicar el fin lógico del programa antes del final real del archivo.  Cualquier texto que le siga, es ignorado.
 
-El texto después de __DATA__ se puede leer a través del gestor de archivo C<PAQUETE::DATA>, donde C<PAQUETE> es el paquete que estaba en curso cuando se encontró el símbolo __DATA__.  El gestor de archivo se deja abierto apuntando a la línea que hay después de __DATA__.  Es responsabilidad del programa hacer C<close DATA> cuando se termine la lectura del mismo.  Por compatibilidad con I<scripts> viejos escritos antes de la introducción de __DATA__, __END__ se comporta como __DATA__ en el script de nivel superior (pero no en los archivos cargados con C<require> o C<do>) y deja el resto del contenido del archivo accesible a través de C<main::DATA>.
+El texto después de __DATA__ se puede leer a través del identificador de archivo C<PAQUETE::DATA>, donde C<PAQUETE> es el paquete que estaba en curso cuando se encontró el símbolo __DATA__.  El identificador de archivo se deja abierto apuntando a la línea que hay después de __DATA__.  Es responsabilidad del programa hacer C<close DATA> cuando se termine la lectura del mismo.  Por compatibilidad con I<scripts> viejos escritos antes de la introducción de __DATA__, __END__ se comporta como __DATA__ en el script de nivel superior (pero no en los archivos cargados con C<require> o C<do>) y deja el resto del contenido del archivo accesible a través de C<main::DATA>.
 
-Ver L<Autocargador> para una mayor descripción de __DATA__, y ejemplos de su uso.  Tenga en cuenta que no puede leer desde el gestor de archivo de datos en un bloque BEGIN: el bloque BEGIN se ejecutará tan pronto como sea visto (durante la compilación), momento en que el correspondiente símbolo __DATA__ (o __END__) aún no se ha visto.
+Ver L<Autocargador> para una mayor descripción de __DATA__, y ejemplos de su uso.  Tenga en cuenta que no puede leer desde el identificador de archivo de datos en un bloque BEGIN: el bloque BEGIN se ejecutará tan pronto como sea visto (durante la compilación), momento en que el correspondiente símbolo __DATA__ (o __END__) aún no se ha visto.
 
 =head3 Palabras sueltas
 X<bareword>
 
-Una palabra que no tiene otra interpretación en la gramática será tratada como si fuera una cadena entrecomillada.  Estos son conocidos como "I<barewords>" (palabras sueltas).  Al igual que con gestores de archivo y las etiquetas, una palabra suelta que consiste enteramente en minúsculas tiene el riesgo de llegar a un conflicto con los futuras palabras reservadas, y si utiliza el pragma C<use warnings> o la opción B<-w>, Perl le advertirá sobre cualquiera de estas palabras.  Perl limita las palabras sueltas (como a los identificadores) a cerca de 250 caracteres.  Las futuras versiones de Perl probablemente eliminarán estas limitaciones arbitrarias.
+Una palabra que no tiene otra interpretación en la gramática será tratada como si fuera una cadena entrecomillada.  Estos son conocidos como "I<barewords>" (palabras sueltas).  Al igual que con identificadores de archivo y las etiquetas, una palabra suelta que consiste enteramente en minúsculas tiene el riesgo de llegar a un conflicto con los futuras palabras reservadas, y si utiliza el pragma C<use warnings> o la opción B<-w>, Perl le advertirá sobre cualquiera de estas palabras.  Perl limita las palabras sueltas (como a los identificadores) a cerca de 250 caracteres.  Las futuras versiones de Perl probablemente eliminarán estas limitaciones arbitrarias.
 
 Algunas personas tal vez deseen prohibir palabras sueltas por completo.  Si usted dice
 
@@ -468,7 +468,7 @@ Las porciones, en contexto escalar, devuelven el último elemento de la porción.
 Si se siente confuso sobre el porqué usa un '@' en una porción de hash en lugar de un '%', piénselo así:  El tipo de carácter (corchete o llave) indica si se trata de un array o un hash.
 Por otra parte, el símbolo principal ('$' o '@') en el array o hash indica si va a obtener un valor singular (un escalar) o uno plural (una lista).
 
-=head2 Typeglobs y controladores de archivo
+=head2 Typeglobs e identificadores de archivo
 X<typeglob> X<filehandle> X<*> X<controlador de archivo>
 
 Perl utiliza un tipo interno que se llama I<typeglob> para mantener una entrada entera en la tabla de símbolos.  El prefijo de un tipo de typeglob es una C<*>, porque representa todos los tipos.  Esta es la forma preferida para pasar arrays y hashes por referencia, a una función, pero como ahora tenemos referencias de verdad, esto es raramente necesario.  
@@ -485,7 +485,7 @@ Este:
 
 temporalmente hace que $Aqui::azul sea un alias de $Ahi::verde, pero no hace que @Aqui::azul sea un alias de @Ahi::verde, o que %Aqui::azul sea un alias de %Ahi::verde, etc. Ver L<perlmod/"Tablas de símbolos"> para más ejemplos sobre esto.  Por extraño que pueda parecer, esta es la base para todo el sistema de importación/exportación en los módulos.
 
-Otro uso para los typeglobs es pasar gestores de archivo en una función o para crear nuevos gestores de archivo.  Si necesita utilizar un typeglob para guardar un gestor de archivo, hágalo de esta manera:
+Otro uso para los typeglobs es pasar identificadores de archivo en una función o para crear nuevos identificadores de archivo.  Si necesita utilizar un typeglob para guardar un identificador de archivo, hágalo de esta manera:
 
     $fh = *STDOUT;
 
@@ -493,9 +493,9 @@ o tal vez como una referencia real, de esta manera:
 
     $fh = \*STDOUT;
 
-Vea L<perlsub> por ejemplos del uso de estos gestores indirectos de archivo en funciones.
+Vea L<perlsub> por ejemplos del uso de estos identificadores indirectos de archivo en funciones.
 
-Typeglobs son también una manera de crear un gestor de archivo local usando el operador local().  Estos últimos duran hasta que se sale de su bloque, pero puede ser traspasado.
+Typeglobs son también una manera de crear un identificador de archivo local usando el operador local().  Estos últimos duran hasta que se sale de su bloque, pero puede ser traspasado.
 Por ejemplo:
 
     sub nuevoopen {
@@ -506,10 +506,10 @@ Por ejemplo:
     }
     $fh = nuevoopen('/etc/passwd');
 
-Ahora que tenemos la notación C<*foo{COSA}>, typeglobs no se utilizan tanto para la manipulación de gestores de archivo, aunque siguen siendo necesarios para pasar gestores de archivo y de directorio dentro o fuera de funciones. Esto es porque C<*HANDLE{IO}> sólo funciona si HANDLE ya se ha utilizado como un gestor de archivo.
+Ahora que tenemos la notación C<*foo{COSA}>, typeglobs no se utilizan tanto para la manipulación de identificadores de archivo, aunque siguen siendo necesarios para pasar identificadores de archivo y de directorio dentro o fuera de funciones. Esto es porque C<*HANDLE{IO}> sólo funciona si HANDLE ya se ha utilizado como un identificador.
 En otras palabras, C<*FH> debe ser usado para crear nuevas entradas de en la tabla de símbolos; C<*foo{COSA}>, no.  En caso de duda, use C<*FH>.
 
-Todas las funciones que son capaces de crear gestores de archivo (open(), opendir(), pipe(), socketpair(), sysopen(), socket(), y accept()) crea automáticamente un gestor de archivo anónimo si el gestor que se les pasa es una variable escalar sin inicializar. Esto permite que instrucciones como C<open(my $fh, ...)> y C<open(local $fh,...)> se utilizan para crear gestores de archivo que convenientemente se cerrarán automáticamente cuando termine el ámbito de aplicación, siempre que no haya otras referencias a ellos. Esto elimina en gran medida la necesidad de typeglobs al abrir gestores de archivo que deberían ser traspasados, como en el ejemplo siguiente:
+Todas las funciones que son capaces de crear identificadores de archivo (open(), opendir(), pipe(), socketpair(), sysopen(), socket(), y accept()) crea automáticamente un identificador de archivo anónimo si el identificador que se les pasa es una variable escalar sin inicializar. Esto permite que instrucciones como C<open(my $fh, ...)> y C<open(local $fh,...)> se utilicen para crear identificadores de archivo que convenientemente se cerrarán automáticamente cuando termine el ámbito de aplicación, siempre que no haya otras referencias a ellos. Esto elimina en gran medida la necesidad de typeglobs al abrir identificadores de archivo que deberían ser traspasados, como en el ejemplo siguiente:
 
     sub miopen {
         open my $fh, "@_"
@@ -526,7 +526,7 @@ Todas las funciones que son capaces de crear gestores de archivo (open(), opendi
 Tenga en cuenta que si se usa una variable escalar ya inicializada, el resultado es diferente: C<my $fh='zzz'; open($fh, ...)> es equivalente a C<open( *{'zzz'}, ...)>.
 C<use strict 'refs'> prohíbe tal práctica.
 
-Otra forma de crear gestores de archivo anónimos es con el módulo Symbol o con el módulo IO::Handle y sus acólitos.  Estos módulos tienen la ventaja de no ocultar diferentes tipos del mismo nombre durante el local().  Vea la parte inferior de L<perlfunc/open> para un ejemplo.
+Otra forma de crear identificadores de archivo anónimos es con el módulo Symbol o con el módulo IO::Handle y sus acólitos.  Estos módulos tienen la ventaja de no ocultar diferentes tipos del mismo nombre durante el local().  Vea la parte inferior de L<perlfunc/open> para un ejemplo.
 
 =head1 VEA TAMBIÉN
 
