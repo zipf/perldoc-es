@@ -7,7 +7,7 @@ WriteMakefile(
     NAME              => 'POD2::ES',
     AUTHOR            => q{Equipo de Perl en Español},
     VERSION_FROM      => 'lib/POD2/ES.pm',
-    ABSTRACT_FROM     => 'lib/POD2/ES.pm',
+    ABSTRACT          => 'Documentación de Perl en español',
     ($ExtUtils::MakeMaker::VERSION >= 6.3002
       ? ('LICENSE'=> 'perl')
       : ()),

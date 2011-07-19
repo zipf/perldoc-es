@@ -1,7 +1,7 @@
 # This Makefile is for the POD2::ES extension to perl.
 #
 # It was generated automatically by MakeMaker version
-# 6.56 (Revision: 65600) from the contents of
+# 6.58 (Revision: 65800) from the contents of
 # Makefile.PL. Don't edit this file, edit Makefile.PL instead.
 #
 #       ANY CHANGES MADE HERE WILL BE LOST!
@@ -11,9 +11,10 @@
 
 #   MakeMaker Parameters:
 
-#     ABSTRACT_FROM => q[lib/POD2/ES.pm]
-#     AUTHOR => q[Equipo de Perl en Español]
+#     ABSTRACT => q[Documentación de Perl en español]
+#     AUTHOR => [q[Equipo de Perl en Español]]
 #     BUILD_REQUIRES => {  }
+#     CONFIGURE_REQUIRES => {  }
 #     LICENSE => q[perl]
 #     NAME => q[POD2::ES]
 #     PL_FILES => {  }
@@ -59,11 +60,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = POD2::ES
 NAME_SYM = POD2_ES
-VERSION = 5.14.1.01
+VERSION = 5.14.1.04
 VERSION_MACRO = VERSION
-VERSION_SYM = 5_14_1_01
+VERSION_SYM = 5_14_1_04
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 5.14.1.01
+XS_VERSION = 5.14.1.04
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -139,8 +140,8 @@ PERM_RW = 644
 PERM_RWX = 755
 
 MAKEMAKER   = /Users/zipf/perl5/perlbrew/perls/perl-5.12.2/lib/5.12.2/ExtUtils/MakeMaker.pm
-MM_VERSION  = 6.56
-MM_REVISION = 65600
+MM_VERSION  = 6.58
+MM_REVISION = 65800
 
 # FULLEXT = Pathname for extension directory (eg Foo/Bar/Oracle).
 # BASEEXT = Basename part of FULLEXT. May be just equal FULLEXT. (eg Oracle)
@@ -166,8 +167,11 @@ MAN1PODS =
 MAN3PODS = lib/POD2/ES.pm \
 	lib/POD2/ES/perl.pod \
 	lib/POD2/ES/perlbook.pod \
+	lib/POD2/ES/perlcheat.pod \
 	lib/POD2/ES/perlfaq1.pod \
+	lib/POD2/ES/perlfaq2.pod \
 	lib/POD2/ES/perlintro.pod \
+	lib/POD2/ES/perlnumber.pod \
 	lib/POD2/ES/perlunitut.pod \
 	lib/POD2/ES/perlutil.pod
 
@@ -199,21 +203,30 @@ TO_INST_PM = lib/.DS_Store \
 	lib/POD2/ES/README.openbsd \
 	lib/POD2/ES/perl.pod \
 	lib/POD2/ES/perlbook.pod \
+	lib/POD2/ES/perlcheat.pod \
 	lib/POD2/ES/perlfaq1.pod \
+	lib/POD2/ES/perlfaq2.pod \
 	lib/POD2/ES/perlintro.pod \
+	lib/POD2/ES/perlnumber.pod \
 	lib/POD2/ES/perlunitut.pod \
 	lib/POD2/ES/perlutil.pod
 
-PM_TO_BLIB = lib/POD2/ES/perlfaq1.pod \
+PM_TO_BLIB = lib/POD2/ES/perlnumber.pod \
+	blib/lib/POD2/ES/perlnumber.pod \
+	lib/POD2/ES/perlfaq1.pod \
 	blib/lib/POD2/ES/perlfaq1.pod \
 	lib/POD2/ES/perlunitut.pod \
 	blib/lib/POD2/ES/perlunitut.pod \
+	lib/POD2/ES/perlcheat.pod \
+	blib/lib/POD2/ES/perlcheat.pod \
 	lib/POD2/ES/.DS_Store \
 	blib/lib/POD2/ES/.DS_Store \
 	lib/POD2/ES.pm \
 	blib/lib/POD2/ES.pm \
 	lib/POD2/ES/README.freebsd \
 	blib/lib/POD2/ES/README.freebsd \
+	lib/POD2/ES/perlfaq2.pod \
+	blib/lib/POD2/ES/perlfaq2.pod \
 	lib/POD2/.DS_Store \
 	blib/lib/POD2/.DS_Store \
 	lib/POD2/ES/README.openbsd \
@@ -231,7 +244,7 @@ PM_TO_BLIB = lib/POD2/ES/perlfaq1.pod \
 
 
 # --- MakeMaker platform_constants section:
-MM_Unix_VERSION = 6.56
+MM_Unix_VERSION = 6.58
 PERL_MALLOC_DEF = -DPERL_EXTMALLOC_DEF -Dmalloc=Perl_malloc -Dfree=Perl_mfree -Drealloc=Perl_realloc -Dcalloc=Perl_calloc
 
 
@@ -296,7 +309,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = POD2-ES
-DISTVNAME = POD2-ES-5.14.1.01
+DISTVNAME = POD2-ES-5.14.1.04
 
 
 # --- MakeMaker macro section:
@@ -449,20 +462,26 @@ POD2MAN = $(POD2MAN_EXE)
 
 
 manifypods : pure_all  \
-	lib/POD2/ES/perl.pod \
+	lib/POD2/ES/perlnumber.pod \
 	lib/POD2/ES/perlfaq1.pod \
-	lib/POD2/ES/perlintro.pod \
 	lib/POD2/ES/perlunitut.pod \
-	lib/POD2/ES/perlbook.pod \
+	lib/POD2/ES/perlcheat.pod \
 	lib/POD2/ES.pm \
+	lib/POD2/ES/perlfaq2.pod \
+	lib/POD2/ES/perl.pod \
+	lib/POD2/ES/perlintro.pod \
+	lib/POD2/ES/perlbook.pod \
 	lib/POD2/ES/perlutil.pod
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
-	  lib/POD2/ES/perl.pod $(INST_MAN3DIR)/POD2::ES::perl.$(MAN3EXT) \
+	  lib/POD2/ES/perlnumber.pod $(INST_MAN3DIR)/POD2::ES::perlnumber.$(MAN3EXT) \
 	  lib/POD2/ES/perlfaq1.pod $(INST_MAN3DIR)/POD2::ES::perlfaq1.$(MAN3EXT) \
-	  lib/POD2/ES/perlintro.pod $(INST_MAN3DIR)/POD2::ES::perlintro.$(MAN3EXT) \
 	  lib/POD2/ES/perlunitut.pod $(INST_MAN3DIR)/POD2::ES::perlunitut.$(MAN3EXT) \
-	  lib/POD2/ES/perlbook.pod $(INST_MAN3DIR)/POD2::ES::perlbook.$(MAN3EXT) \
+	  lib/POD2/ES/perlcheat.pod $(INST_MAN3DIR)/POD2::ES::perlcheat.$(MAN3EXT) \
 	  lib/POD2/ES.pm $(INST_MAN3DIR)/POD2::ES.$(MAN3EXT) \
+	  lib/POD2/ES/perlfaq2.pod $(INST_MAN3DIR)/POD2::ES::perlfaq2.$(MAN3EXT) \
+	  lib/POD2/ES/perl.pod $(INST_MAN3DIR)/POD2::ES::perl.$(MAN3EXT) \
+	  lib/POD2/ES/perlintro.pod $(INST_MAN3DIR)/POD2::ES::perlintro.$(MAN3EXT) \
+	  lib/POD2/ES/perlbook.pod $(INST_MAN3DIR)/POD2::ES::perlbook.$(MAN3EXT) \
 	  lib/POD2/ES/perlutil.pod $(INST_MAN3DIR)/POD2::ES::perlutil.$(MAN3EXT) 
 
 
@@ -493,14 +512,15 @@ clean :: clean_subdirs
 	  *$(LIB_EXT) core \
 	  core.[0-9] $(INST_ARCHAUTODIR)/extralibs.all \
 	  core.[0-9][0-9] $(BASEEXT).bso \
-	  pm_to_blib.ts core.[0-9][0-9][0-9][0-9] \
+	  pm_to_blib.ts MYMETA.json \
+	  core.[0-9][0-9][0-9][0-9] MYMETA.yml \
 	  $(BASEEXT).x $(BOOTSTRAP) \
 	  perl$(EXE_EXT) tmon.out \
 	  *$(OBJ_EXT) pm_to_blib \
 	  $(INST_ARCHAUTODIR)/extralibs.ld blibdirs.ts \
 	  core.[0-9][0-9][0-9][0-9][0-9] *perl.core \
 	  core.*perl.*.? $(MAKE_APERL_FILE) \
-	  perl $(BASEEXT).def \
+	  $(BASEEXT).def perl \
 	  core.[0-9][0-9][0-9] mon.out \
 	  lib$(BASEEXT).def perlmain.c \
 	  perl.exe so_locations \
@@ -527,31 +547,76 @@ realclean purge ::  clean realclean_subdirs
 # --- MakeMaker metafile section:
 metafile : create_distdir
 	$(NOECHO) $(ECHO) Generating META.yml
-	$(NOECHO) $(ECHO) '--- #YAML:1.0' > META_new.yml
-	$(NOECHO) $(ECHO) 'name:               POD2-ES' >> META_new.yml
-	$(NOECHO) $(ECHO) 'version:            5.14.1.01' >> META_new.yml
-	$(NOECHO) $(ECHO) 'abstract:           Documentación de Perl en español' >> META_new.yml
+	$(NOECHO) $(ECHO) '---' > META_new.yml
+	$(NOECHO) $(ECHO) 'abstract: '\''Documentación de Perl en español'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'author:' >> META_new.yml
-	$(NOECHO) $(ECHO) '    - Equipo de Perl en Español' >> META_new.yml
-	$(NOECHO) $(ECHO) 'license:            perl' >> META_new.yml
-	$(NOECHO) $(ECHO) 'distribution_type:  module' >> META_new.yml
-	$(NOECHO) $(ECHO) 'configure_requires:' >> META_new.yml
-	$(NOECHO) $(ECHO) '    ExtUtils::MakeMaker:  0' >> META_new.yml
+	$(NOECHO) $(ECHO) '  - '\''Equipo de Perl en Español'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'build_requires:' >> META_new.yml
-	$(NOECHO) $(ECHO) '    ExtUtils::MakeMaker:  0' >> META_new.yml
-	$(NOECHO) $(ECHO) 'requires:' >> META_new.yml
-	$(NOECHO) $(ECHO) '    POD2::Base:    0.043' >> META_new.yml
-	$(NOECHO) $(ECHO) '    Pod::Perldoc:  3.15' >> META_new.yml
-	$(NOECHO) $(ECHO) '    Test::More:    0' >> META_new.yml
-	$(NOECHO) $(ECHO) 'no_index:' >> META_new.yml
-	$(NOECHO) $(ECHO) '    directory:' >> META_new.yml
-	$(NOECHO) $(ECHO) '        - t' >> META_new.yml
-	$(NOECHO) $(ECHO) '        - inc' >> META_new.yml
-	$(NOECHO) $(ECHO) 'generated_by:       ExtUtils::MakeMaker version 6.56' >> META_new.yml
+	$(NOECHO) $(ECHO) '  ExtUtils::MakeMaker: 0' >> META_new.yml
+	$(NOECHO) $(ECHO) 'configure_requires:' >> META_new.yml
+	$(NOECHO) $(ECHO) '  ExtUtils::MakeMaker: 0' >> META_new.yml
+	$(NOECHO) $(ECHO) 'dynamic_config: 1' >> META_new.yml
+	$(NOECHO) $(ECHO) 'generated_by: '\''ExtUtils::MakeMaker version 6.58, CPAN::Meta::Converter version 2.110930'\''' >> META_new.yml
+	$(NOECHO) $(ECHO) 'license: perl' >> META_new.yml
 	$(NOECHO) $(ECHO) 'meta-spec:' >> META_new.yml
-	$(NOECHO) $(ECHO) '    url:      http://module-build.sourceforge.net/META-spec-v1.4.html' >> META_new.yml
-	$(NOECHO) $(ECHO) '    version:  1.4' >> META_new.yml
+	$(NOECHO) $(ECHO) '  url: http://module-build.sourceforge.net/META-spec-v1.4.html' >> META_new.yml
+	$(NOECHO) $(ECHO) '  version: 1.4' >> META_new.yml
+	$(NOECHO) $(ECHO) 'name: POD2-ES' >> META_new.yml
+	$(NOECHO) $(ECHO) 'no_index:' >> META_new.yml
+	$(NOECHO) $(ECHO) '  directory:' >> META_new.yml
+	$(NOECHO) $(ECHO) '    - t' >> META_new.yml
+	$(NOECHO) $(ECHO) '    - inc' >> META_new.yml
+	$(NOECHO) $(ECHO) 'requires:' >> META_new.yml
+	$(NOECHO) $(ECHO) '  POD2::Base: 0.043' >> META_new.yml
+	$(NOECHO) $(ECHO) '  Pod::Perldoc: 3.15' >> META_new.yml
+	$(NOECHO) $(ECHO) '  Test::More: 0' >> META_new.yml
+	$(NOECHO) $(ECHO) 'version: v5.14.1.04' >> META_new.yml
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
+	$(NOECHO) $(ECHO) Generating META.json
+	$(NOECHO) $(ECHO) '{' > META_new.json
+	$(NOECHO) $(ECHO) '   "abstract" : "Documentación de Perl en español",' >> META_new.json
+	$(NOECHO) $(ECHO) '   "author" : [' >> META_new.json
+	$(NOECHO) $(ECHO) '      "Equipo de Perl en Español"' >> META_new.json
+	$(NOECHO) $(ECHO) '   ],' >> META_new.json
+	$(NOECHO) $(ECHO) '   "dynamic_config" : 1,' >> META_new.json
+	$(NOECHO) $(ECHO) '   "generated_by" : "ExtUtils::MakeMaker version 6.58, CPAN::Meta::Converter version 2.110930",' >> META_new.json
+	$(NOECHO) $(ECHO) '   "license" : [' >> META_new.json
+	$(NOECHO) $(ECHO) '      "perl_5"' >> META_new.json
+	$(NOECHO) $(ECHO) '   ],' >> META_new.json
+	$(NOECHO) $(ECHO) '   "meta-spec" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",' >> META_new.json
+	$(NOECHO) $(ECHO) '      "version" : "2"' >> META_new.json
+	$(NOECHO) $(ECHO) '   },' >> META_new.json
+	$(NOECHO) $(ECHO) '   "name" : "POD2-ES",' >> META_new.json
+	$(NOECHO) $(ECHO) '   "no_index" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '      "directory" : [' >> META_new.json
+	$(NOECHO) $(ECHO) '         "t",' >> META_new.json
+	$(NOECHO) $(ECHO) '         "inc"' >> META_new.json
+	$(NOECHO) $(ECHO) '      ]' >> META_new.json
+	$(NOECHO) $(ECHO) '   },' >> META_new.json
+	$(NOECHO) $(ECHO) '   "prereqs" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '      "build" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '         "requires" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '            "ExtUtils::MakeMaker" : 0' >> META_new.json
+	$(NOECHO) $(ECHO) '         }' >> META_new.json
+	$(NOECHO) $(ECHO) '      },' >> META_new.json
+	$(NOECHO) $(ECHO) '      "configure" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '         "requires" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '            "ExtUtils::MakeMaker" : 0' >> META_new.json
+	$(NOECHO) $(ECHO) '         }' >> META_new.json
+	$(NOECHO) $(ECHO) '      },' >> META_new.json
+	$(NOECHO) $(ECHO) '      "runtime" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '         "requires" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '            "POD2::Base" : "0.043",' >> META_new.json
+	$(NOECHO) $(ECHO) '            "Pod::Perldoc" : "3.15",' >> META_new.json
+	$(NOECHO) $(ECHO) '            "Test::More" : 0' >> META_new.json
+	$(NOECHO) $(ECHO) '         }' >> META_new.json
+	$(NOECHO) $(ECHO) '      }' >> META_new.json
+	$(NOECHO) $(ECHO) '   },' >> META_new.json
+	$(NOECHO) $(ECHO) '   "release_status" : "stable",' >> META_new.json
+	$(NOECHO) $(ECHO) '   "version" : "v5.14.1.04"' >> META_new.json
+	$(NOECHO) $(ECHO) '}' >> META_new.json
+	-$(NOECHO) $(MV) META_new.json $(DISTVNAME)/META.json
 
 
 # --- MakeMaker signature section:
@@ -643,8 +708,12 @@ ci :
 
 # --- MakeMaker distmeta section:
 distmeta : create_distdir metafile
-	$(NOECHO) cd $(DISTVNAME) && $(ABSPERLRUN) -MExtUtils::Manifest=maniadd -e 'eval { maniadd({q{META.yml} => q{Module meta-data (added by MakeMaker)}}) } ' \
+	$(NOECHO) cd $(DISTVNAME) && $(ABSPERLRUN) -MExtUtils::Manifest=maniadd -e 'exit unless -e q{META.yml};' \
+	  -e 'eval { maniadd({q{META.yml} => q{Module YAML meta-data (added by MakeMaker)}}) }' \
 	  -e '    or print "Could not add META.yml to MANIFEST: $${'\''@'\''}\n"' --
+	$(NOECHO) cd $(DISTVNAME) && $(ABSPERLRUN) -MExtUtils::Manifest=maniadd -e 'exit unless -f q{META.json};' \
+	  -e 'eval { maniadd({q{META.json} => q{Module JSON meta-data (added by MakeMaker)}}) }' \
+	  -e '    or print "Could not add META.json to MANIFEST: $${'\''@'\''}\n"' --
 
 
 
@@ -841,7 +910,7 @@ testdb_static :: testdb_dynamic
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="5.14.1.01">' > $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="5.14.1.04">' > $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>Documentación de Perl en español</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Equipo de Perl en Español</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
@@ -858,11 +927,14 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
+	  lib/POD2/ES/perlnumber.pod blib/lib/POD2/ES/perlnumber.pod \
 	  lib/POD2/ES/perlfaq1.pod blib/lib/POD2/ES/perlfaq1.pod \
 	  lib/POD2/ES/perlunitut.pod blib/lib/POD2/ES/perlunitut.pod \
+	  lib/POD2/ES/perlcheat.pod blib/lib/POD2/ES/perlcheat.pod \
 	  lib/POD2/ES/.DS_Store blib/lib/POD2/ES/.DS_Store \
 	  lib/POD2/ES.pm blib/lib/POD2/ES.pm \
 	  lib/POD2/ES/README.freebsd blib/lib/POD2/ES/README.freebsd \
+	  lib/POD2/ES/perlfaq2.pod blib/lib/POD2/ES/perlfaq2.pod \
 	  lib/POD2/.DS_Store blib/lib/POD2/.DS_Store \
 	  lib/POD2/ES/README.openbsd blib/lib/POD2/ES/README.openbsd \
 	  lib/POD2/ES/perl.pod blib/lib/POD2/ES/perl.pod \
