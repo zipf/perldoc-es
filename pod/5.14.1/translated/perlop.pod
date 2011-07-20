@@ -812,14 +812,11 @@ El carácter que siga a C<\c> es mapeado a algún otro carácter, tal como se muest
    \c^      chr(30)
    \c?      chr(127)
 
-En otras palabras, es el carácter cuyo código de punto era 64 xor con su mayúscula.  C<\c?> es DELETE porque C<ord("?") ^ 64> es 127, y
-C<\c@> es NULL porque el ord de "@" es 64, por lo que haciendo el xor 64 produce un 0.
-
 Además, C<\c\I<X>> es igual a C< chr(28) . "I<X>"> para cualquier I<X>, pero no puede estar al final de una cadena, porque la contrabarra se interpretaría como que se estaría escapando la comilla final.
 
 En las plataformas ASCII, los caracteres resultantes de la lista anterior son el conjunto completo de los caracteres de control ASCII.  Este no es el caso en las plataformas EBCDIC; ver L<perlebcdic/DIFERENCIAS EN LOS OPERADORES> para ver la lista completa del significado de estas secuencias, tanto en las plataformas ASCII como en EBCDIC.
 
-No se recomienda el uso de cualquier otro carácter después de la "c", aparte de los mencionados anteriormente, y algunos de ellos están en desuso, con la intención de eliminarlas en Perl v5.16.  Sin embargo, lo que le sucede ahora, para cualquiera de estos otros caracteres, es que el valor se obtiene haciendo un xor con el séptimo bit, que es 64.
+No se recomienda el uso de cualquier otro carácter después de la "c", aparte de los mencionados anteriormente, y algunos de ellos están en desuso, con la intención de eliminarlas en Perl v5.16.  Sin embargo, lo que le sucede ahora, para cualquiera de estos otros caracteres, es que el valor se obtiene invirtiendo el bit 7 (0x40).
 
 Para obtener caracteres de control independientes de la plataforma, se puede utilizar C<\N{...}>.
 
@@ -1907,9 +1904,8 @@ que durará hasta el final de ese BLOQUE.  Tenga en cuenta que esto no significa 
 
 Usado en números, los operadores binarios ("&", "|", "^", "~", "<<", y ">>") siempre producen resultados enteros.  (Pero vea también L<Operadores de bit en cadenas>). Sin embargo, C<use integer> todavía tiene sentido para ellos.  De forma predeterminada, los resultados se interpretan como enteros sin signo, pero si C<use integer> está en efecto, sus resultados se interpretan como enteros con signo.  Por ejemplo, C<~0> por lo general se evalúa como un valor entero de gran tamaño.  Sin embargo, C<use integer; ~0> es C<-1> en las máquinas con complemento a dos.
 
-=head2 Aritmética de Punto Flotante
-
-X<punto-flotante> X<punto flotante> X<float> X<real> X<flotante>
+=head2 Aritmética de punto flotante
+X<floating-point> X<floating point> X<float> X<real> X<punto flotante> X<flotante>
 
 Mientras que C<use integer> sólo proporciona aritmética de enteros, no existe un mecanismo análogo para proporcionar redondeo automático o truncamiento a un determinado número de decimales.  Para redondear a un determinado número de dígitos, sprintf() o printf() suele ser el camino más fácil.
 Vea L<perlfaq4>.
