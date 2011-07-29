@@ -1460,7 +1460,7 @@ Esta es una nueva advertencia, en situaciones como ésta:
     $r = do {my @a; \$#a};
     $$r = 503;
 
-=head2 No-cadenas pasadas como máscara de bits
+=head2 Non-string passed as bitmask
 
 Esta es una nueva advertencia, producida cuando un número ha sido pasado como un argumento a select(), en vez de una máscara de bits.
 
@@ -1473,7 +1473,7 @@ Esta es una nueva advertencia, producida cuando un número ha sido pasado como un
     vec($rin,fileno(STDIN),1) = 1;
     ($nfound,$timeleft) = select($rout=$rin, undef, undef, $timeout);
 
-=head2 Patrón de búsqueda no terminado u operador ternario interpretado como un patrón de búsqueda
+=head2 Search pattern not terminated or ternary operator parsed as search pattern
 
 Este error de sintaxis indica que el analizador léxico no pudo encontrar el delimitador final de una construcción C<?PATRÓN?>. Al mencionar el operador ternario en este mensaje de error hace que sea más fácil diagnosticar errores de sintaxis.
 
