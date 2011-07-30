@@ -633,7 +633,7 @@ X<continue>
 
 =item continue
 
-C<continue> es realmente una instrucción de control de flujo en lugar de una función.  Si existe un BLOQUE C<continue> adjunto a un BLOQUE (típicamente en un C<while> o C<foreach>), siempre es ejecutado justo antes de que la condicional sea de nuevo evaluada, igual que la tercera parte de un bucle C<for> en C. Esto puede ser utilizado para incrementar una variable de bucle, incluso cuando el bucle ha sido interrumpido por la sentencia C<next> (que es similar a la sentencia C<continue> del C).
+C<continue> es realmente una instrucción de control de flujo en lugar de una función.  Si existe un BLOQUE C<continue> adjunto a un BLOQUE (típicamente en un C<while> o C<foreach>), siempre es ejecutado justo antes de que la condicional sea de nuevo evaluada, igual que la tercera parte de un bucle C<for> en C. Esto puede ser utilizado para incrementar una variable de bucle, incluso cuando el bucle ha sido interrumpido por la instrucción C<next> (que es similar a la instrucción C<continue> del C).
 
 C<last>, C<next> o C<redo> puede aparecer dentro de un bucle C<continue>; C<last> y C<redo> se comportarán como si se hubieran ejecutado dentro del bloque principal.  También C<next>, pero como ejecutará un bloque C<continue>, quizás se convierta en algo divertido.
 
@@ -1579,7 +1579,7 @@ X<given>
 
 =item given BLOQUE
 
-C<given> es análogo a la palabra clave C<switch>, de otros lenguajes. C<given> y C<when> se utilizan en Perl para implementar sentencias parecidas a C<switch>/C<case>.
+C<given> es análogo a la palabra clave C<switch>, de otros lenguajes. C<given> y C<when> se utilizan en Perl para implementar instrucciones parecidas a C<switch>/C<case>.
 Solamente disponible a partir de Perl 5.10.  Por ejemplo:
 
     use v5.10;
@@ -5491,7 +5491,7 @@ X<when>
 
 =item when BLOQUE
 
-C<when> es análogo a la palabra clave C<case>, de otros lenguajes. Usando con un bucle C<foreach> o el experimental bloque C<given>, C<when> puede ser usado en Perl para implementar sentencias parecidas a C<switch>/C<case>.  Disponible como una sentencia después de Perl 5.10 y como un modificador de sentencia después de 5.14.  
+C<when> es análogo a la palabra clave C<case>, de otros lenguajes. Usando con un bucle C<foreach> o el experimental bloque C<given>, C<when> puede ser usado en Perl para implementar instrucciones parecidas a C<switch>/C<case>.  Disponible como una instrucción después de Perl 5.10 y como un modificador de instrucción después de 5.14.  
 Aquí hay tres ejemplos:
 
     use v5.10;

@@ -105,7 +105,7 @@ X<increment> X<auto-increment> X<++> X<decrement> X<auto-decrement> X<--> X<incr
     print $i++;  # imprime 0
     print ++$j;  # imprime 1
 
-Tenga en cuenta que, al igual que en C, Perl no define B<cuando> la variable se incrementa o disminuye. Sólo sabe que se hará en algún momento antes o después de que el valor sea devuelto. Esto también significa que la modificación de una variable dos veces en la misma declaración dará lugar a un comportamiento indefinido.
+Tenga en cuenta que, al igual que en C, Perl no define B<cuando> la variable se incrementa o disminuye. Sólo sabe que se hará en algún momento antes o después de que el valor sea devuelto. Esto también significa que la modificación de una variable dos veces en la misma instrucción dará lugar a un comportamiento indefinido.
 Evite instrucciones como:
 
     $i = $i ++;
@@ -1711,7 +1711,7 @@ A diferencia de B<csh>, no se realiza traducción en el retorno de los datos: los
 
 En contexto escalar, la evaluación de un identificador de archivo entre ángulos retorna la siguiente línea de ese archivo (con el carácter de salto de línea, en su caso, incluido), o C<undef> al final del archivo o en caso de error.  Cuando C<$/> está configurado a C<undef> (a veces conocido como modo sorber-el-archivo) y el archivo está vacío, devuelve C<''> la primera vez, seguido por un C<undef>, posteriormente.
 
-Normalmente debe asignar el valor devuelto a una variable, pero hay una situación en la que sucede una asignación automática.  Si y sólo si el símbolo de entrada es la única cosa dentro de la condición de una declaración C<while> (incluso si está disfrazado como un bucle C<for(;;)>), el valor es automáticamente asignado a la variable global $_, destruyendo su valor anterior.  (Esto puede parecer algo extraño para usted, pero usará esta construcción en casi todos los scripts de Perl que escriba). La variable $_ no estará, implícitamente, localizada en el contexto del bucle.
+Normalmente debe asignar el valor devuelto a una variable, pero hay una situación en la que sucede una asignación automática.  Si y sólo si el símbolo de entrada es la única cosa dentro de la condición de una instrucción C<while> (incluso si está disfrazado como un bucle C<for(;;)>), el valor es automáticamente asignado a la variable global $_, destruyendo su valor anterior.  (Esto puede parecer algo extraño para usted, pero usará esta construcción en casi todos los scripts de Perl que escriba). La variable $_ no estará, implícitamente, localizada en el contexto del bucle.
 Tendrá que poner un C<local $_;> antes del bucle si quiere que sea así.
 
 Las siguientes líneas son equivalentes:

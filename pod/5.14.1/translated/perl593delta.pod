@@ -40,7 +40,7 @@ El pragma C<sort> tiene ahora un alcance léxico. Su efecto solía ser global.
 
 El pragma C<feature> se utiliza para activar una nueva sintaxis que rompe la compatibilidad Perl con versiones anteriores del lenguaje. Se trata de una pragma léxico, al igual que C<strict> o C<warnings>.
 
-En la actualidad, están disponibles las siguientes nuevas características: C<switch> (añade una sentencia switch), C<~~> (añade un operador Perl 6 de emparejamiento inteligente), C<say> (añade una función incorporada C<say>), y C<err> (añade una palabra clave C<err>).
+En la actualidad, están disponibles las siguientes nuevas características: C<switch> (añade una instrucción switch), C<~~> (añade un operador Perl 6 de emparejamiento inteligente), C<say> (añade una función incorporada C<say>), y C<err> (añade una palabra clave C<err>).
 Estas características se describen a continuación.
 
 Tenga en cuenta que, por defecto, C<err> activa un nivel bajo de precedencia con el operador defined-or (aunque, como palabra clave débil, lo que significa que cualquier función puede sobreescribirla). Ahora sólo se reconoce cuando se activa explícitamente (y entonces se considera como una palabra clave normal).
@@ -49,7 +49,7 @@ Estas características, y el mismo pragma C<feature>, han sido aportados por Robi
 
 =head2 El operador Switch y el emparejamiento inteligente
 
-Perl 5 ahora tiene una sentencia switch. Está disponible cuando C<use feature 'switch'> está en vigor. Esta característica introduce tres nuevas palabras clave, C<given>, C<when>, y C<default>:
+Perl 5 ahora tiene una instrucción switch. Está disponible cuando C<use feature 'switch'> está en vigor. Esta característica introduce tres nuevas palabras clave, C<given>, C<when>, y C<default>:
 
     given ($foo) {
 	when (/^abc/) { $abc = 1; }
@@ -58,9 +58,9 @@ Perl 5 ahora tiene una sentencia switch. Está disponible cuando C<use feature 's
 	default { $nada = 1; }
     }
 
-Una descripción más completa de cómo Perl hace coincidir la variable del switch con las condiciones C<when> se da en L<perlsyn/"Sentencias switch">.
+Una descripción más completa de cómo Perl hace coincidir la variable del switch con las condiciones C<when> se da en L<perlsyn/"Instrucciones switch">.
 
-Este tipo de emparejamientos se llaman I<smart match> (emparejamiento o coincidencia inteligente), y también es posible utilizarlo fuera de las sentencias switch, a través del nuevo operador C<~~> (activado a través de la directiva C<use feature '~~'>). Vea L<perlsyn/"Coincidencia inteligente, en detalle">.
+Este tipo de emparejamientos se llaman I<smart match> (emparejamiento o coincidencia inteligente), y también es posible utilizarlo fuera de las instrucciones switch, a través del nuevo operador C<~~> (activado a través de la directiva C<use feature '~~'>). Vea L<perlsyn/"Coincidencia inteligente, en detalle">.
 
 =head2 C<say()>
 
