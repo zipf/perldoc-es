@@ -14,7 +14,7 @@ Si está actualizando desde una versión anterior como la 5.10.0, primero lea L<pe
 
 =head2 Optimización de "señales de seguridad"
 
-El despacho de señales ha sido movido del bucle de ejecución a los operadores de control. Esto debería dar un pequeño porcentaje de aumento de velocidad, y elimina casi la totalidad de la pérdida de velocidad causada por la introducción de las "señales de seguridad" en la 5.8.0. Señales aún deben ser despachadas dentro de la sentencia igual que anteriormente - si este no es el caso, o es posible crear bucles sin interrupción, esto es un error, y los informes animan a recrear estas cuestiones.
+El despacho de señales ha sido movido del bucle de ejecución a los operadores de control. Esto debería dar un pequeño porcentaje de aumento de velocidad, y elimina casi la totalidad de la pérdida de velocidad causada por la introducción de las "señales de seguridad" en la 5.8.0. Las señales aún deben ser despachadas dentro de la instrucción igual que antes - si este no es el caso, o es posible crear bucles sin interrupción, esto es un error, y los informes animan a recrear estas cuestiones.
 
 =head2 Asignación a C<$0> establece el nombre del proceso con C<prctl()> en Linux
 
