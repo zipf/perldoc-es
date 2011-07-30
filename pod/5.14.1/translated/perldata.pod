@@ -152,7 +152,7 @@ Los literales numéricos se especifican en cualquiera de los siguientes formatos 
 Está permitido el uso de guiones bajos en literales numéricos entre los dígitos para aumentar la legibilidad.  Podría, por ejemplo, agrupar los dígitos binarios en grupos de tres en tres (como si fuera, al estilo Unix, de un argumento de modo, como en 0b110_100_100) o de cuatro en cuatro (para representar nibbles, como en 0b1010_0110) o en otros grupos.
 X<number, literal> X<número, literal>
 
-Los literales de cadena se suelen delimitar con comillas simples o dobles.  Funcionan de forma muy parecida a las comillas en las líneas de comandos Unix: literales de cadena entre comillas dobles están sujetos a la barra invertida y la sustitución de variables; cadenas entre comillas simples no lo están (a excepción de C<\'> y C<\\>).  Las reglas normales de la barra invertida en el estilo del C se aplican para la creación de caracteres como el salto de línea, tabuladores, etc, así como algunas formas más exóticas.  Ver L<perlop/"Comillas y Operadores de comillas"> para una lista de ellos.
+Los literales de cadena se suelen delimitar con comillas simples o dobles.  Funcionan de forma muy parecida a las comillas en las líneas de comandos Unix: literales de cadena entre comillas dobles están sujetos a la barra invertida y la sustitución de variables; cadenas entre comillas simples no lo están (a excepción de C<\'> y C<\\>).  Las reglas normales de la barra invertida en el estilo del C se aplican para la creación de caracteres como el salto de línea, tabuladores, etc, así como algunas formas más exóticas.  Vea L<perlop/"Comillas y Operadores de comillas"> para una lista de ellos.
 X<string, literal> X<cadena, literal>
 
 Hexadecimal, octal o binario, representaciones en cadenas literales (por ejemplo, '0xff') no se convierten automáticamente en su representación en entero.  Las funciones hex() y oct() hacen estas conversiones por usted.  Vea L<perlfunc/hex> y L<perlfunc/oct> para más detalles.
@@ -203,7 +203,7 @@ X<__FILE__> X<__LINE__> X<__PACKAGE__> X<line> X<file> X<package> X<línea> X<arc
 
 Los dos caracteres de control ^D y ^Z, y los símbolos __END__ y __DATA__ pueden ser usados para indicar el fin lógico del programa antes del final real del archivo.  Cualquier texto que le siga, es ignorado.
 
-El texto después de __DATA__ se puede leer a través del identificador de archivo C<PAQUETE::DATA>, donde C<PAQUETE> es el paquete que estaba en curso cuando se encontró el símbolo __DATA__.  El identificador de archivo se deja abierto apuntando a la línea que hay después de __DATA__.  Es responsabilidad del programa hacer C<close DATA> cuando se termine la lectura del mismo.  Por compatibilidad con I<scripts> viejos escritos antes de la introducción de __DATA__, __END__ se comporta como __DATA__ en el script de nivel superior (pero no en los archivos cargados con C<require> o C<do>) y deja el resto del contenido del archivo accesible a través de C<main::DATA>.
+El texto después de __DATA__ se puede leer a través del identificador de archivo C<PAQUETE::DATA>, donde C<PAQUETE> es el paquete que estaba en curso cuando se encontró el símbolo __DATA__.  El gestor de archivo se deja abierto apuntando al contenido que hay después de __DATA__.  Es responsabilidad del programa hacer C<close DATA> cuando se termine la lectura del mismo.  Por compatibilidad con I<scripts> viejos escritos antes de la introducción de __DATA__, __END__ se comporta como __DATA__ en el script de nivel superior (pero no en los archivos cargados con C<require> o C<do>) y deja el resto del contenido del archivo accesible a través de C<main::DATA>.
 
 Ver L<Autocargador> para una mayor descripción de __DATA__, y ejemplos de su uso.  Tenga en cuenta que no puede leer desde el identificador de archivo de datos en un bloque BEGIN: el bloque BEGIN se ejecutará tan pronto como sea visto (durante la compilación), momento en que el correspondiente símbolo __DATA__ (o __END__) aún no se ha visto.
 
@@ -392,18 +392,6 @@ También puede subindexar una lista para obtener un solo elemento de ella.
 
     $dir = (getpwnam("daemon"))[7];
 
-=head2 Emulación de matrices multidimensionales
-
-Matrices multidimensionales pueden ser emuladas usando listas como subíndices en un hash. Los elementos de la lista se unen con el separador de subíndice (vea L<perlvar/$;>).
-
-    $foo{$a,$b,$c}
-
-es equivalente a
-
-    $foo{join($;, $a, $b, $c)}
-
-El separador de subíndice por defecto es "\034", el mismo que en SUBSEP en B<awk>.
-
 =head2 Porciones
 X<slice> X<array, slice> X<hash, slice> X<porción> X<array, porción> X<hash, porción>
 
@@ -526,7 +514,7 @@ Todas las funciones que son capaces de crear identificadores de archivo (open(),
 Tenga en cuenta que si se usa una variable escalar ya inicializada, el resultado es diferente: C<my $fh='zzz'; open($fh, ...)> es equivalente a C<open( *{'zzz'}, ...)>.
 C<use strict 'refs'> prohíbe tal práctica.
 
-Otra forma de crear identificadores de archivo anónimos es con el módulo Symbol o con el módulo IO::Handle y sus acólitos.  Estos módulos tienen la ventaja de no ocultar diferentes tipos del mismo nombre durante el local().  Vea la parte inferior de L<perlfunc/open> para un ejemplo.
+Otra forma de crear identificadores de archivo anónimos es con el módulo Symbol o con el módulo IO::Handle y sus acólitos.  Estos módulos tienen la ventaja de no ocultar diferentes tipos del mismo nombre durante el local().  Ver la parte inferior de L<perlfunc/"open IDENTIFICADOR_ARCHIVO"> para un ejemplo.
 
 =head1 VEA TAMBIÉN
 

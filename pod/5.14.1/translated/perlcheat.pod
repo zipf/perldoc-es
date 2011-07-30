@@ -1,83 +1,81 @@
 =head1 NOMBRE
 
-perlcheat - Chuleta de Perl 5
+perlcheat - Hoja resumen de Perl 5
 
 =head1 DESCRIPCIÓN
 
-Esta 'chuleta' es una referencia rápida, para los programadores principiantes de Perl. No se menciona todo, porque 195 características pueden ser apabullantes.
+Esta 'hoja resumen' es una referencia útil para programadores principiantes. No abarca todo, pero incluye 195 características del lenguaje; no es mal comienzo.
 
 =head2 La hoja
 
-  CONTEXTO  SIGILOS ref        ARRAYS        HASHES
-  vacío     $scalar SCALAR     @array        %hash
-  escalar   @array  ARRAY      @array[0, 2]  @hash{'a', 'b'}
-  lista     %hash   HASH       $array[0]     $hash{'a'}
-            &sub    CODE
-            *glob   GLOB       VALORES ESCALARES
-                    FORMAT     número, string, ref, glob, undef
+  CONTEXTOS  SIGILOS             ARRAYS        HASHES
+  nulo       $escalar  completo: @array        %hash
+  escalar    @array    porción:  @array[0, 2]  @hash{'a', 'b'}
+  lista      %hash     elemento: $array[0]     $hash{'a'}
+             &sub
+             *glob    VALORES ESCALARES
+                      número, cadena, referencia, glob, undef
   REFERENCIAS
-  \      referencia      $$foo[1]   igual a $foo->[1]
-  $@%&*  desreferencia   $$foo{bar} igual a $foo->{bar}
-  []     array anónimo   ${$$foo[1]}[2] igual a $foo->[1]->[2]
-  {}     hash anónimo    ${$$foo[1]}[2] igual a $foo->[1][2]
-  \()    lista de ref.
-                         NÚMEROS vs CADENAS    ENLACES
-  OPERADOR PRECEDENCIA   =          =          perldoc.perl.org
-  ->                     +          .           search.cpan.org
-  ++ --                  == !=      eq ne              cpan.org
-  **                     < > <= >=  lt gt le ge          pm.org
-  ! ~ \ u+ u-            <=>        cmp                p3rl.org
-  =~ !~                                           perlmonks.org
-  * / % x                SINTAXIS
-  + - .                  foreach (LISTA) { }    for (a;b;c) { }
-  << >>                  while   (e) { }        until (e)   { }
-  operadores             if      (e) { } elsif (e) { } else { }
-  < > <= >= lt gt le ge  unless  (e) { } elsif (e) { } else { }
-  == != <=> eq ne cmp ~~ given   (e) { when (e) {} default {} }
+  \     crear referencia      $$foo[1]       equivale a $foo->[1]
+  $@%&* resolver referencia   $$foo{bar}     equivale a $foo->{bar}
+  []    ref. array anónimo    ${$$foo[1]}[2] equivale a $foo->[1]->[2]
+  {}    ref. hash anónimo     ${$$foo[1]}[2] equivale a $foo->[1][2]
+  \()   lista referencias
+                          NÚMEROS  CADENAS         VÍNCULOS
+  PRIORIDAD OPERADORES      =          =           perl.plover.com
+  ->                        +          .           search.cpan.org
+  ++ --                   == !=      eq ne         cpan.org
+  **                      < > <= >=  lt gt le ge   pm.org
+  ! ~ \ u+ u-             <=>        cmp           tpj.com
+  =~ !~                                            perldoc.com
+  * / % x                 SINTAXIS
+  + - .                   for    (LISTA) { }, for (a;b;c) { }
+  << >>                   while  ( ) { }, until ( ) { }
+  ops unarios con nombre  if     ( ) { } elsif ( ) { } else { }
+  < > <= >= lt gt le ge   unless ( ) { } elsif ( ) { } else { }
+  == != <=> eq ne cmp ~~  for igual a foreach (SIEMPRE)
   &
-  | ^             REGEX METACARACTERES           REGEX MODIFICADORES
-  &&              ^      inicio cad.             /i no caja de letras
-  || //           $      fin cad. (antes de \n)  /m basado en líneas ^$
-  .. ...          +      uno o más               /s . incluye \n
-  ?:              *      cero o más              /x ignora espacios
-  = += -= *= etc  ?      cero o más              /p preserva
-  , =>            {3,7}  repite en rango         /a ASCII  /aa seguro
-  op. lista       |      alternativa             /l local  /d  dual
-  not             []     clase carácter          /u Unicode
-  and             \b     borde palabra           /e evalúa /ee rep.
-  or xor          \z     fin cad.                /g global
-                  ()     captura                 /o compila una vez
-  DEBUG           (?:p)  no captura
-   -MO=Deparse    (?#t)  comentario           REGEX CLASES CAR.
-   -MO=Terse      (?=p)  ancho 0, adelante    .   [^\n]
-   -D##           (?!p)  ancho 0, adel. neg.  \s  whitespace
-   -d:Trace       (?<=p) ancho 0 detrás \K    \w  car. palabra
-                  (?<!p) ancho 0 det. neg.    \d  dígitos
-  CONFIGURACIÓN   (?>p)  no backtrack         \pP propiedad nominada
-  perl -V:ivsize  (?|p|p)reset ramas          \h  espacio horiz.
-                  (?&NM) capt. con nombre     \R  rupt. línea
-                                              \S \W \D \H negados
-  LISTAS DE RETORNO DE FUNCIONES
-  stat      localtime    caller         VARIABLES ESPECIALES
-   0 dev    0 segundo     0 paquete     $_    variable por def.
-   1 ino    1 minuto      1 nom. arch.  $0    nombre programa
-   2 mode   2 hora        2 línea       $/    sep. entrada
-   3 nlink  3 día         3 subrutina   $\    sep. salida
-   4 uid    4 mes-1       4 hasargs     $|    autoflush
-   5 gid    5 año-1900    5 wantarray   $!    sys/libcall error
-   6 rdev   6 día semana  6 evaltext    $@    eval error
-   7 size   7 día año     7 is_require  $$    ID proc.
-   8 atime  8 es_dst      8 hints       $.    número línea
-   9 mtime                9 bitmask     @ARGV args. línea com.
-  10 ctime               10 hinthash    @INC  rutas de inclusión
-  11 blksz  POSIX::      3..9 solo      @_    args. subrutina
-  12 blcks               con EXPR       %ENV  entorno
+  | ^              METACARACTERES EXP. REG.       MODIFICADORES EXP. REG.
+  &&               ^     principio cadena         /i no distingue may./min.
+  || //            $     fin cadena (antes \n)    /m basado en líneas ^$
+  .. ...           +     uno o varios             /s . incluye \n
+  ?:               *     cero o varios            /x ign. espacios en blanco
+  = += -= *= etc.  ?     cero o una               /g global
+  , =>             {3,7} repeticiones             /o compilar patrón 1 vez
+  ops lista        ()    captura
+  not              (?:)  sin captura              CLASES CARACTERES EXP. REG.
+  and              []    clase caracteres         .  == [^\n]
+  or xor           |     alternancia              \s == espacio en blanco
+                   \b    límite de palabra        \w == caracteres de palabra
+                   \z    fin cadena               \d == dígitos
+  CORRECTO                                        \S, \W y \D negación
+  use strict;        INCORRECTO
+  use warnings;      "$foo"                 VÍNCULOS
+  my $var;           $$nombre_variable      perl.com
+  open() or die $!;  `$entrada_usuario`     use.perl.org
+  use Modules;       /$entrada_usuario/     perl.apache.org
+
+  LISTAS RETORNO FUNCIONES
+  stat      localtime    caller            VARIABLES ESPECIALES
+   0 dev    0 segundo    0 paquete         $_    variable predeterminada
+   1 ino    1 minuto     1 nombre archivo  $0    nombre programa
+   2 mode   2 hora       2 línea           $/    separador entrada
+   3 nlink  3 día        3 subrutina       $\    separador entrada
+   4 uid    4 mes-1      4 hasargs         $|    volcado automático
+   5 gid    5 año-1900   5 wantarray       $!    error de sys/libcall
+   6 rdev   6 día semana 6 evaltext        $@    error eval
+   7 size   7 día año    7 is_require      $$    Id. proceso
+   8 atime  8 is_dst     8 hints           $.    número de línea
+   9 mtime               9 máscara bits    @ARGV args línea comandos
+  10 ctime  ¡use                           @INC  rutas de inclusión
+  11 blksz  POSIX::      3..9 solo         @_    args subrutina
+  12 blcks  strftime!    con EXPR          %ENV  entorno
 
 =head1 AGRADECIMIENTOS
 
-La primera versión de este documentos apareció en Perl Monks, en donde muchas personas dieron sus útiles sugerencias. Gracias, Perl Monks.
+La primera versión de este documento se publicó en Perl Monks, donde muchas personas realizaron útiles sugerencias. Gracias, Perl Monks.
 
-Un agradecimiento especial a Damian Conway, quien no sólo sugirió importantes cambios, sino que se tomó el tiempo suficiente para contar las características listadas y hacer una versión para Perl 6 y demostrar que Perl seguirá siendo Perl.
+Debemos un agradecimiento especial a Damian Conway, quien no sólo sugirió importantes cambios, sino que también se entretuvo en contar el número de características incluidas y creó una versión para Perl 6 con el fin de demostrar que Perl seguirá siendo Perl.
 
 =head1 AUTOR
 
@@ -89,14 +87,14 @@ Juerd Waalboer <#####@juerd.nl>, con la ayuda de muchos Perl Monks.
 
 =item *
 
-L<http://perlmonks.org/?node_id=216602> - la publicación original en PM
+L<http://perlmonks.org/?node_id=216602> - Artículo original de PM
 
 =item *
 
-L<http://perlmonks.org/?node_id=238031> - Versión Perl 6 de Damian Conway
+L<http://perlmonks.org/?node_id=238031> - Versión para Perl 6 de Damian Conway
 
 =item *
 
-L<http://juerd.nl/site.plp/perlcheat> - página de la chuleta Perl
+L<http://juerd.nl/site.plp/perlcheat> - Página de la hoja resumen de Perl
 
 =back

@@ -106,7 +106,7 @@ C<until> hace lo opuesto, repite la instrucción I<hasta> que la condición sea ve
     print $i++ while $i <= 10;
     print $j++ until $j >  10;
 
-Los modificadores C<while> y C<until> tienen la usual semántica de los "bucles C<while>" (la condición se evalúa primero), excepto cuando se aplica a un bloque C<do> (o a la obsoleta instrucción subrutina C<do>), en cuyo caso el bloque se ejecuta una vez antes de sea evaluada la condición.  De esa manera puede escribir bucles como este:
+Los modificadores C<while> y C<until> tienen la usual semántica de los "bucles C<while>" (la condición se evalúa primero), excepto cuando se aplica a un bloque C<do> (o a la obsoleta instrucción de subrutina C<do>), en cuyo caso el bloque se ejecuta una vez antes de que sea evaluada la condición.  De esa manera puede escribir bucles como este:
 
     do {
 	$linea = <STDIN>;
@@ -362,15 +362,14 @@ La construcción BLOQUE puede ser usada para emular estructuras I<switch>.
 
 Estas construcciones son muy frecuentes, porque las versiones anteriores de Perl no tenían oficialmente una instrucción C<switch>.
 
-=head2 Sentencias switch
-
+=head2 Instrucciones Switch
 X<switch> X<case> X<given> X<when> X<default>
 
 A partir de Perl 5.10, puede decir
 
     use feature "switch";
 
-que activa la característica conmutador, que se basa estrechamente en la propuesta en Perl 6.  A partir de Perl 5.16, se puede cambiar el prefijo de las palabras clave con C<CORE::> para acceder a las nuevas características sin tener que usar una declaración C<use feature>.
+que activa la característica conmutador, que se basa estrechamente en la propuesta en Perl 6.
 
 Las palabras clave C<given> y C<when> son análogos a C<switch> y C<case> en otros lenguajes, por lo que el código anterior podrá ser escrito como
 
@@ -501,7 +500,7 @@ Esto quedará optimizado en C<'foo'>, así que C<'bar'> nunca será considerado (in
 
     when ([qw(foo bar)] { ... }
 
-Esto es algo equivalente a la funcionalidad de la sentencia C<switch> del C (no debe confundirse con la funcionalidad de I<Perl>; vea más adelante), en donde el mismo bloque se utiliza para varias declaraciones C<case>.
+Esto es algo equivalente a la funcionalidad de la instrucción C<switch> del C (no debe confundirse con la funcionalidad de I<Perl>; vea más adelante), en donde el mismo bloque se utiliza para varias instrucciones C<case>.
 
 Otro método abreviado útil es que, si usa un array o hash literal, como el argumento a C<given>, se convierte en una referencia. Asi que, por ejemplo, C<given(@foo)> es lo mismo que C<given(\@foo)>.
 
@@ -523,13 +522,13 @@ Puede usar la palabra clave C<continue> para pasar de un caso al siguiente:
 
 =head3 Valor de retorno
 
-Cuando una sentencia C<given> es también una expresión válida (p.e. cuando es la última sentencia de un bloque), se evalúa a:
+Cuando una instrucción C<given> es también una expresión válida (p.e. cuando es la última instrucción de un bloque), se evalúa a:
 
 =over 4
 
 =item *
 
-una lista vacía tan pronto como se encuentre una sentencia C<break>.
+una lista vacía tan pronto como se encuentre un C<break> explícito.
 
 =item *
 
@@ -543,7 +542,7 @@ el valor de la última expresión evaluada del bloque C<given>, si ninguna condici
 
 En los dos últimos casos, la última expresión se evalúa en el contexto en el que se aplicó al bloque C<given>.
 
-Tenga en cuenta que, a diferencia de C<if> y C<unless>, sentencias fallidas de C<when> siempre se evalúan a una lista vacía.
+Tenga en cuenta que, a diferencia de C<if> y C<unless>, las instrucciones fallidas de C<when> siempre se evalúan a una lista vacía.
 
     my $precio = do { given ($item) {
 	when ([ 'pera', 'manzana' ]) { 1 }

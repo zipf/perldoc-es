@@ -105,7 +105,7 @@ X<increment> X<auto-increment> X<++> X<decrement> X<auto-decrement> X<--> X<incr
     print $i++;  # imprime 0
     print ++$j;  # imprime 1
 
-Tenga en cuenta que, al igual que en C, Perl no define B<cuando> la variable se incrementa o disminuye. Sólo sabe que se hará en algún momento antes o después de que el valor sea devuelto. Esto también significa que la modificación de una variable dos veces en la misma declaración dará lugar a un comportamiento indefinido.
+Tenga en cuenta que, al igual que en C, Perl no define B<cuando> la variable se incrementa o disminuye. Sólo sabe que se hará en algún momento antes o después de que el valor sea devuelto. Esto también significa que la modificación de una variable dos veces en la misma instrucción dará lugar a un comportamiento indefinido.
 Evite instrucciones como:
 
     $i = $i ++;
@@ -812,14 +812,11 @@ El carácter que siga a C<\c> es mapeado a algún otro carácter, tal como se muest
    \c^      chr(30)
    \c?      chr(127)
 
-En otras palabras, es el carácter cuyo código de punto era 64 xor con su mayúscula.  C<\c?> es DELETE porque C<ord("?") ^ 64> es 127, y
-C<\c@> es NULL porque el ord de "@" es 64, por lo que haciendo el xor 64 produce un 0.
-
 Además, C<\c\I<X>> es igual a C< chr(28) . "I<X>"> para cualquier I<X>, pero no puede estar al final de una cadena, porque la contrabarra se interpretaría como que se estaría escapando la comilla final.
 
 En las plataformas ASCII, los caracteres resultantes de la lista anterior son el conjunto completo de los caracteres de control ASCII.  Este no es el caso en las plataformas EBCDIC; ver L<perlebcdic/DIFERENCIAS EN LOS OPERADORES> para ver la lista completa del significado de estas secuencias, tanto en las plataformas ASCII como en EBCDIC.
 
-No se recomienda el uso de cualquier otro carácter después de la "c", aparte de los mencionados anteriormente, y algunos de ellos están en desuso, con la intención de eliminarlas en Perl v5.16.  Sin embargo, lo que le sucede ahora, para cualquiera de estos otros caracteres, es que el valor se obtiene haciendo un xor con el séptimo bit, que es 64.
+No se recomienda el uso de cualquier otro carácter después de la "c", aparte de los mencionados anteriormente, y algunos de ellos están en desuso, con la intención de eliminarlas en Perl v5.16.  Sin embargo, lo que le sucede ahora, para cualquiera de estos otros caracteres, es que el valor se obtiene invirtiendo el bit 7 (0x40).
 
 Para obtener caracteres de control independientes de la plataforma, se puede utilizar C<\N{...}>.
 
@@ -1714,7 +1711,7 @@ A diferencia de B<csh>, no se realiza traducción en el retorno de los datos: los
 
 En contexto escalar, la evaluación de un identificador de archivo entre ángulos retorna la siguiente línea de ese archivo (con el carácter de salto de línea, en su caso, incluido), o C<undef> al final del archivo o en caso de error.  Cuando C<$/> está configurado a C<undef> (a veces conocido como modo sorber-el-archivo) y el archivo está vacío, devuelve C<''> la primera vez, seguido por un C<undef>, posteriormente.
 
-Normalmente debe asignar el valor devuelto a una variable, pero hay una situación en la que sucede una asignación automática.  Si y sólo si el símbolo de entrada es la única cosa dentro de la condición de una declaración C<while> (incluso si está disfrazado como un bucle C<for(;;)>), el valor es automáticamente asignado a la variable global $_, destruyendo su valor anterior.  (Esto puede parecer algo extraño para usted, pero usará esta construcción en casi todos los scripts de Perl que escriba). La variable $_ no estará, implícitamente, localizada en el contexto del bucle.
+Normalmente debe asignar el valor devuelto a una variable, pero hay una situación en la que sucede una asignación automática.  Si y sólo si el símbolo de entrada es la única cosa dentro de la condición de una instrucción C<while> (incluso si está disfrazado como un bucle C<for(;;)>), el valor es automáticamente asignado a la variable global $_, destruyendo su valor anterior.  (Esto puede parecer algo extraño para usted, pero usará esta construcción en casi todos los scripts de Perl que escriba). La variable $_ no estará, implícitamente, localizada en el contexto del bucle.
 Tendrá que poner un C<local $_;> antes del bucle si quiere que sea así.
 
 Las siguientes líneas son equivalentes:
@@ -1907,9 +1904,8 @@ que durará hasta el final de ese BLOQUE.  Tenga en cuenta que esto no significa 
 
 Usado en números, los operadores binarios ("&", "|", "^", "~", "<<", y ">>") siempre producen resultados enteros.  (Pero vea también L<Operadores de bit en cadenas>). Sin embargo, C<use integer> todavía tiene sentido para ellos.  De forma predeterminada, los resultados se interpretan como enteros sin signo, pero si C<use integer> está en efecto, sus resultados se interpretan como enteros con signo.  Por ejemplo, C<~0> por lo general se evalúa como un valor entero de gran tamaño.  Sin embargo, C<use integer; ~0> es C<-1> en las máquinas con complemento a dos.
 
-=head2 Aritmética de Punto Flotante
-
-X<punto-flotante> X<punto flotante> X<float> X<real> X<flotante>
+=head2 Aritmética de punto flotante
+X<floating-point> X<floating point> X<float> X<real> X<punto flotante> X<flotante>
 
 Mientras que C<use integer> sólo proporciona aritmética de enteros, no existe un mecanismo análogo para proporcionar redondeo automático o truncamiento a un determinado número de decimales.  Para redondear a un determinado número de dígitos, sprintf() o printf() suele ser el camino más fácil.
 Vea L<perlfaq4>.
