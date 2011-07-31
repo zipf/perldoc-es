@@ -15,14 +15,14 @@ La compatibilidad binaria con 5.8.0 ha sido restaurada en 5.8.2, que requiere ro
 
 Esto sólo afectará a las personas que tienen un perl 5.8.1 multihilo, y los módulos compilados que utilizan estas llamadas, y ahora intenta ejecutar los módulos compilados con 5.8.2. La solución es volver a compilar y volver a instalar los módulos usando 5.8.2.
 
-=head1 Mejoras principales
+=head1 Mejoras del núcleo
 
 =head2 Aleatorización Hash
 
 La asignación al azar hash introducido con 5.8.1 ha sido modificado. Se constató que, aunque la implementación fue introducida en 5.8.1, compatible a nivel de código fuente con 5.8.0, no era compatible a nivel binario, en ciertos casos. 5.8.2 contiene una implementación mejorada que es a la vez compatible a nivel de código fuente y binario con 5.8.0 y 5.8.1, y se mantiene robusto contra la forma de ataque que provocó el cambio de 5.8.1.
 
 Estamos muy agradecidos con el proyecto Debian por sus aportaciones en este ámbito.
-Ver L<perlsec/"Ataques de complejidad algorítmica"> para la justificación original de este cambio.
+Vea L<perlsec/"Ataques de complejidad algorítmica"> para la justificación original de este cambio.
 
 =head2 Multihilos
 
