@@ -24,19 +24,21 @@ if ( $ARGV[0] ) {
 
 } else {
  
-    die "Usage: perl copy_files.pl <pod_name> # e.g., perldata.pod\n";
+    die "Usage: perl postprocess.pl <pod_name1> <pod_name2> ... # e.g., perldata.pod\n";
 
 }
 
 
 # Hard-coded paths relative to /perldoc-es/tools
 # Source
-Readonly my $SOURCE_PATH    => "../../omegat_514/514/source";
-Readonly my $TRANS_PATH    => "../../omegat_514/514/target";
+Readonly my $SOURCE_PATH => "../../omegat_514/514/source";
+Readonly my $TRANS_PATH  => "../../omegat_514/514/target";
+Readonly my $MEM_PATH    => "../../omegat_514/514/omegat/project_save.tmx";   
 # Target
 Readonly my $CLEAN_PATH  => "../../omegat_clean_prj/source";
 Readonly my $DISTR_PATH  => "../POD2-ES/5.14.1/POD2-ES/lib/POD2/ES";
 Readonly my $POD_PATH    => "../pod/5.14.1/reviewed";
+Readonly my $CLEANM_PATH => "../../omegat_clean_prj/omegat/project_save.tmx";
 
 # Translators section for POD
 Readonly my $TRANSLATORS_POD => <<'END';
@@ -63,6 +65,9 @@ foreach my $pod_name (@names) {
     my $pod    = "$POD_PATH/$pod_name";
     my $clean  = "$CLEAN_PATH/$pod_name";
 
+    # copy work memory to clean project => clean memory
+    copy($MEM_PATH, $CLEANM_PATH);
+
     # copy source file to clean project => clean memory
     copy($source, $clean);
         
@@ -75,32 +80,68 @@ foreach my $pod_name (@names) {
     
     # Post-processing stage
     
+    # Get path components
+    my ($name, $path, $suffix) = fileparse($trans, qr{\.pod|\.pm|\..*});    
+    say $name;
+    say $path;
+    say $suffix;
+
+    my $readme;
+    $readme++ if $name eq "README";
+    say "Readme file" if $readme;    
+
     # Replace double-spaces after full-stop with single space
-
     open my $dirty, '<:encoding(latin-1)', $distr;
-
+   
     my $text = do { local $/; <$dirty> };
-
+    
     close $dirty;
 
-
-    $text =~ s/(?<=\.)\s\s(?=[A-Z])/ /gs;
-
+    $text =~ s/(?<=\.)  (?=[A-Z])/ /g; # two white spaces after full stop
 
     open my $fixed, '>:encoding(latin-1)', $distr;
+    
+    if ($readme) {
+     
+        # Add pod formatting to the first paragraph, to help Pod::Tidy 
+        print $fixed "=head1 FOO\n\n$text";
 
-    print $fixed $text;
+    } else {
+
+        print $fixed $text;
+
+    }
 
     close $fixed;
 
-        
+
     # Wrap lines (OmegaT removes some line breaks) using Pod::Tidy 
     my $processed = Pod::Tidy::tidy_files(
                                             files   => [ $distr ],
                                             inplace => 1,
                                             columns => 80,
                                          );
+
+
+    if ($readme) {
+        
+        # Remove added pod formatting from README files 
+        open my $dirty, '<:encoding(latin-1)', $distr;
+   
+        my $text = do { local $/; <$dirty> };
     
+        close $dirty;
+
+        $text =~ s/^=head1 FOO\n\n//;
+
+        open my $fixed, '>:encoding(latin-1)', $distr;
+
+        print $fixed $text;
+
+        close $fixed;
+    }
+
+
     # Add TRANSLATORS section to distribution file
     open my $out, '>>:encoding(latin-1)', $distr;
 
@@ -108,10 +149,8 @@ foreach my $pod_name (@names) {
     
     close $out;
     
-    # Get path components
-    my ($name, $path, $suffix) = fileparse($trans, qr{\.pod|\.pm});
 
-    # generate HTML file for proofreading;
+    # Generate HTML file for proofreading;
     my $html = "$POD_PATH/$name.html";
     system("perl -MPod::Simple::HTML -e Pod::Simple::HTML::go $distr > $html");
 
