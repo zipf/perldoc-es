@@ -1,0 +1,237 @@
+=head1 NOMBRE
+
+perlstyle - Guía de estilo Perl
+
+=head1 DESCRIPCIÓN
+
+Cada programador tendrá, naturalmente, sus propias preferencias con respecto al estilo, pero hay algunas directrices que harán sus programas más fáciles de leer, entender y mantener.
+
+Lo más importante es ejecutar siempre sus programas con la opción B<-w> puesta.  Puede desactivarla explícitamente en partes del código con el pragma C<no warnings> o con la variable C<$^W> si así lo desea.  Debería siempre también correr con C<use strict> o conocer la razón de porqué no hacerlo.  El pragma C<use sigtrap> e incluso el C<use diagnostics> pueden ser también muy útiles.
+
+Con respecto a la estética del código, a lo único que Larry le preocupa es que la llave de cierre de un BLOQUE multilínea debe alinearse con la palabra reservada que inició esa estructura.
+Aparte de eso, él tiene otras preferencias que no son tan estrictas:
+
+=over 4
+
+=item *
+
+Sangrado a 4 columnas.
+
+=item *
+
+Llave de apertura en la misma línea que la palabra reservada, si es posible, o si no, alineada en vertical con ella.
+
+=item *
+
+Espacio antes de llave de apertura de un BLOQUE multilínea.
+
+=item *
+
+Un BLOQUE de una sola línea puede ser puesto en una sola línea, incluyendo sus llaves.o
+
+=item *
+
+Sin espacio antes de punto y coma.
+
+=item *
+
+Punto y coma omitido en BLOQUE "pequeño" de una sola línea.
+
+=item *
+
+Espacio alrededor de la mayoría de operadores.
+
+=item *
+
+Espacio alrededor de un subíndice "complejo" (entre corchetes).
+
+=item *
+
+Líneas en blanco entre bloques que hacen cosas diferentes.
+
+=item *
+
+else en nueva línea. No en la misma línea que la llave de cierre del if.
+
+=item *
+
+Sin espacio entre el nombre de función y su paréntesis de apertura.
+
+=item *
+
+Espacio después de cada coma.
+
+=item *
+
+Dividir líneas largas después de un operador (excepto C<and> y C<or>).
+
+=item *
+
+Espacio después del último paréntesis coincidente en la línea actual.
+
+=item *
+
+Alinear elementos correspondientes verticalmente.
+
+=item *
+
+Omitir la puntuación redundante mientras no se reduzca la claridad.
+
+=back
+
+Larry tiene sus razones para cada una de estas ideas, pero el no aspira que la mente de los demás trabaje de la misma forma que la suya.
+
+Aquí hay otras cuestiones de estilo que sí que hay que recordar:
+
+=over 4
+
+=item *
+
+Sólo porque usted I<PUEDA> hacer algo de una determinada manera no significa que usted I<DEBA> hacerlo de esa manera.  Perl está diseñado para darle varias opciones para hacer cualquier cosa, así que elija la más legible.  Por ejemplo
+
+    open(FOO,$foo) || die "No puedo abrir $foo: $!";
+
+es mejor que
+
+    die "No puedo abrir $foo: $!" unless open(FOO,$foo);
+
+porque la segunda forma esconde el objetivo principal de la instrucción dentro de un modificador.  De otra forma
+
+    print "Empezando análisis\n" if $locuaz;
+
+es mejor que
+
+    $locuaz && print "Empezando análisis\n";
+
+porque el objetivo principal no es si el usuario escribió B<-v> o no.
+
+De forma similar, sólo porque un operador le permite asumir argumentos por defecto no significa que usted tenga que hacer uso de esos valores por defecto.  Los valores por defecto son para los programadores de sistemas perezosos escribiendo programas pequeños.  Si usted quiere que su programa sea legible, considere suplir el argumento.
+
+De la misma forma, sólo porque usted I<PUEDA> omitir paréntesis en muchos lugares no significa que deba hacerlo:
+
+    return print reverse sort num values %array;
+    return print(reverse(sort num (values(%array))));
+
+En caso de duda, coloque paréntesis.  Por lo menos esto hará que algún pobre inútil pueda usar la tecla % en B<vi>.
+
+Incluso si usted no tiene dudas, considerar el bienestar mental de la persona que tenga que mantener el código después de usted, y quien seguramente pondrá los paréntesis en el lugar equivocado.
+
+=item *
+
+No haga tontas contorsiones para salir de un bucle al inicio o al final, cuando Perl dispone del operador C<last> para que pueda salir desde el interior.  Sólo "desángrelo" un poco para hacerlo más visible:
+
+    LINEA:
+	for (;;) {
+	    instrucciones;
+	  last LINEA if $foo;
+	    next LINEA if /^#/;
+	    instrucciones;
+	}
+
+=item *
+
+No se asuste de usar etiquetas de bucles -están para aumentar la legibilidad así como permitir rupturas de bucles multiniveles-.  Ver el ejemplo anterior.
+
+=item *
+
+Evite usar C<grep()> (o C<map()>) o `acentos graves` en contexto nulos, es decir, cuando usted no va usar los valores de retorno.  Todas estas funciones tienen valores de retorno, así que úselos.  De otra forma, use un bucle C<foreach()> o la función C<system()>.
+
+=item *
+
+Para la portabilidad, cuando utilice características que pueden no estar implementadas en todas las máquinas, compruebe el código en un eval para ver si falla.  Si usted sabe en qué versión o patchlevel fue implementada una cierta característica, puede comprobar C<$]> (C<$PERL_VERSION> en C<English>) para ver si está incluida.  El módulo C<Config> le permitirá también interrogar por los valores determinados por el programa B<Configure> cuando Perl fue instalado.
+
+=item *
+
+Elija identificadores mnemónicos.  Si no puede recordar lo que significa un mnemónico, usted tiene un problema.
+
+=item *
+
+Mientras identificadores cortos como C<$leenombre> están bien, use guiones bajos para separar palabras en los identificadores más largos.  Generalmente es más fácil leer C<$var_nombres_como_este> que C<$VarNombresComoEste>, especialmente para los que no sean castellanoparlantes. Es una regla que funciona también con C<VAR_NOMBRES_COMO_ESTE>.
+
+Los nombres de los paquetes son, en alguna ocasión, una excepción a esta regla.  Perl, de forma informal, reserva nombres de módulos en minúscula para módulos "pragma" como C<integer> y C<strict>.  Otros módulos deben comenzar con una letra mayúscula y usar luego una mezcla de mayúsculas y minúsculas, pero probablemente sin guiones bajos debido a limitaciones en la representación de nombres de módulos como archivos en sistemas de archivos primitivos que deben ajustarse a unos pocos bytes.
+
+=item *
+
+Puede encontrar útil usar el tamaño de caja de las letras para indicar el ámbito o naturaleza de una variable. Por ejemplo:
+
+    $TODO_MAYUSCULAS    Sólo constantes (¡cuidado con variables perl!)
+    $Algunas_Mayusculas Ámbito de paquete/estática
+    $sin_mayusculas     Ámbito de función, variables my() o local()
+
+Funciones y nombres de métodos parece que funcionan mejor con minúsculas.
+Ej., C<$obj-E<gt>como_cadena()>.
+
+Puede usar un guión bajo inicial para indicar que una variable o función no debe ser usado fuera del paquete que lo define.
+
+=item *
+
+Si tiene una expresión regular especialmente complicada, use el modificador C</x> y ponga algunos espacios en blanco para que no parezca una línea telefónica con ruido de fondo.
+No use barras inclinadas como delimitador cuando en su expresión regular tenga barras o contrabarras inclinadas.
+
+=item *
+
+Use los nuevos operadores C<and> y C<or> para evitar poner demasiados paréntesis en listas de operadores y para reducir la incidencia de puntuación de operadores como C<&&> y C<||>.  Llame a sus subrutinas como si fueran funciones u operadores de lista para evitar el excesivo número de ligaduras (&&) y paréntesis.
+
+=item *
+
+Use documentos incluídos en vez de repetir instrucciones C<print()>.
+
+=item *
+
+Alineé elementos correspondientes verticalmente, especialmente si es demasiado largo el espacio que ocupan como para entrar en una sola línea.
+
+    $IDX = $ST_MTIME;
+    $IDX = $ST_ATIME 	   if $opt_u;
+    $IDX = $ST_CTIME 	   if $opt_c;
+    $IDX = $ST_SIZE  	   if $opt_s;
+
+    mkdir $tmpdir, 0700	or die "no puedo hacer mkdir $tmpdir: $!";
+    chdir($tmpdir)      or die "no puede chdir $tmpdir: $!";
+    mkdir 'tmp',   0777	or die "no puedo hacer mkdir $tmpdir/tmp: $!";
+
+=item *
+
+Siempre compruebe los valores devueltos por las llamadas al sistema.  Los buenos mensajes de error deben ir al C<STDERR>, incluyendo qué programa causó el problema, qué función del sistema y qué argumentos fueron, y (MUY IMPORTANTE) debe contener el mensaje de error estándar del sistema por el cual falló.  Aquí hay un simple pero útil ejemplo:
+
+    opendir(D, $dir)	 or die "no puedo hacer opendir $dir: $!";
+
+=item *
+
+Alinear transliteraciones cuando tengan sentido:
+
+    tr [abc]
+       [xyz];
+
+=item *
+
+Piense en la reutilización.  ¿Por qué perder la energía cerebral de un acierto cuando puede volver a usarlo otra vez?  Considere generalizar su código.  Considere escribir un módulo o una clase de objetos.  Considere hacer su código limpio utilizando C<use strict> y C<use warnings> (o B<-w>).  Considere compartir su código.  Considere cambiar su punto de vista vital.  Considere... ¡oh!, olvídelo.
+
+=item *
+
+Intente documentar su código y usar formateo Pod de una forma consistente. Están son las convenciones más usadas:
+
+=over 4
+
+=item *
+
+use C<CE<lt>E<gt>> por función, variable y nombres de módulos (y más generalmente cualquier cosa que pueda ser considerada parte del código, como gestores de archivo o valores específicos). Note como los nombres de función se vuelven más legibles con los paréntesis detrás de su nombre, como esta C<funcion()>.
+
+=item *
+
+use C<BE<lt>E<gt>> para nombres de comandos como B<cat> o B<grep>.
+
+=item *
+
+use C<FE<lt>E<gt>> o C<CE<lt>E<gt>> para nombres de archivos. C<FE<lt>E<gt>> debe ser el único código Pod para nombres de archivo, pero como la mayoría de los formateadores de Pod lo muestran en cursiva, los caminos Unix y Windows con sus barras y contrabarras pueden hacerlo menos legible, por lo que es mejor mostrarlo con C<CE<lt>E<gt>>.
+
+=back
+
+=item *
+
+Sea coherente.
+
+=item *
+
+Sea amable.
+
+=back

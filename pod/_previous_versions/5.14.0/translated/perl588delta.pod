@@ -1,0 +1,1523 @@
+=encoding utf8
+
+=head1 NOMBRE
+
+perl588delta - qué hay de nuevo en perl v5.8.8
+
+=head1 DESCRIPCIÓN
+
+Este documento describe las diferencias entre la versión 5.8.7 y la versión 5.8.8.
+
+=head1 Incompatibilidades
+
+No hay cambios intencionadamente incompatibles con 5.8.7. Si los hay, los errores e informes serán bienvenidos.
+
+=head1 Mejoras principales
+
+=over
+
+=item *
+
+C<chdir>, C<chmod> y C<chown> ahora pueden trabajar tanto con nombres de ficheros como con controladores de ficheros, si el sistema soporta, respectivamente, C<fchdir>, C<fchmod> y C<fchown>, gracias a un parche proporcionado por Gisle Aas.
+
+=back
+
+=head1 Módulos y Pragmata
+
+=over
+
+=item *
+
+C<Attribute::Handlers> actualizado a la versión 0.78_02
+
+=over
+
+=item *
+
+Corrección de error tipográfico en la documentación
+
+=back
+
+=item *
+
+C<attrs> actualizado a la versión 1.02
+
+=over
+
+=item *
+
+Solo limpieza interior
+
+=back
+
+=item *
+
+C<autouse> actualizado a la versión 1.05
+
+=over
+
+=item *
+
+Implementación simplificada
+
+=back
+
+=item *
+
+C<B> actualizado a la versión 1.09_01
+
+=over
+
+=item *
+
+La jerarquía de la herencia de los módulos C<B::> ha sido corregida; C<B::NV> ahora hereda desde C<B::SV> (en lugar de C<B::IV>).
+
+=back
+
+=item *
+
+C<blib> actualizado a la versión 1.03
+
+=over
+
+=item *
+
+Corrección de error tipográfico en la documentación
+
+=back
+
+=item *
+
+C<ByteLoader> actualizado a la versión 0.06
+
+=over
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<CGI> actualizado a la versión 3.15
+
+=over
+
+=item *
+
+Un extraño "?" devuelto por C<self_url()>, eliminado
+
+=item *
+
+Arreglado el atributo para select en C<scrolling_list()>
+
+=item *
+
+C<virtual_port> ahora funciona correctamente con el protocolo https
+
+=item *
+
+C<upload_hook()> y C<append()> ahora funcionan en el modo orientado a función
+
+=item *
+
+C<POST_MAX> ya no provoca que el cliente se quede colgado
+
+=item *
+
+Ahora están desactivados los índices automáticos de tabulación, y se ha añadido un nuevo pragma para volverlos a activar
+
+=item *
+
+C<end_form()> ya no emite un C<< <div> >> vacío (e inválido)
+
+=item *
+
+C<CGI::Carp> funciona mejor en ciertas configuraciones de mod_perl
+
+=item *
+
+Ahora funciona la variable C<$CGI::TMPDIRECTORY>
+
+=item *
+
+Mejora en la documentación
+
+=back
+
+=item *
+
+C<charnames> actualizado a la versión 1.05
+
+=over
+
+=item *
+
+C<viacode()> ahora acepta cadenas hexadecimales y ha sido optimizado.
+
+=back
+
+=item *
+
+C<CPAN> actualizado a la versión 1.76_02
+
+=over
+
+=item *
+
+1 error menor arreglado para Win32
+
+=back
+
+=item *
+
+C<Cwd> actualizado a la versión 3.12
+
+=over
+
+=item *
+
+C<canonpath()> en Win32 ahora colapsa secciones F<foo\..> correctamente.
+
+=item *
+
+Mejorado el comportamiento en el SO Symbian.
+
+=item *
+
+Documentación mejorada y errores ortográficos arreglados
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<Data::Dumper> actualizado a la version 2.121_08
+
+=over
+
+=item *
+
+Un problema donde C<Data::Dumper> a veces actualizaba el estado del iterador de hashes, ha sido arreglado
+
+=item *
+
+Las etiquetas numéricas ahora funcionan
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<DB> actualizado a la versión 1.01
+
+=over
+
+=item *
+
+Un problema donde el estado del motor de expresiones regulares, algunas veces, se sobrecargaba cuando se ejecutaba en el depurador, se ha solucionado.
+
+=back
+
+=item *
+
+C<DB_File> actualizado a la versión 1.814
+
+=over
+
+=item *
+
+Añadido soporte para Berkeley DB 4.4.
+
+=back
+
+=item *
+
+C<Devel::DProf> actualizado a la versión 20050603.00
+
+=over
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<Devel::Peek> actualizado a la versión 1.03
+
+=over
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<Devel::PPPort> actualizado a la versión 3.06_01
+
+=over
+
+=item *
+
+La comprobación de argumentos de C<--compat-version> ha sido mejorada
+
+=item *
+
+Los archivos pasados en la línea de comandos son, por defecto, filtrados
+
+=item *
+
+Se añadió la opción C<--nofilter> para eliminar el filtrado
+
+=item *
+
+Mejora en la documentación
+
+=back
+
+=item *
+
+C<diagnostics> actualizado a la versión 1.15
+
+=over
+
+=item *
+
+Corrección de error tipográfico en la documentación
+
+=back
+
+=item *
+
+C<Digest> actualizado a la versión 1.14
+
+=over
+
+=item *
+
+El constructor ahora sabe qué módulo implementa SHA-224
+
+=item *
+
+Ajustes y correcciones de errata en la documentación
+
+=back
+
+=item *
+
+C<Digest::MD5> actualizado a la versión 2.36
+
+=over
+
+=item *
+
+Ahora se usa C<XSLoader> para acelerar la carga
+
+=item *
+
+Documentación mejorada incluyendo las últimas debilidades descubiertas en MD5 
+
+=back
+
+=item *
+
+C<Dumpvalue> actualizado a la versión 1.12
+
+=over
+
+=item *
+
+Arreglo en la documentación
+
+=back
+
+=item *
+
+C<DynaLoader> actualizado, pero, desafortunadamente, no somos capaces de aumentar su número de versión :-(
+
+=over
+
+=item *
+
+Implementa C<dl_unload_file> en Win32
+
+=item *
+
+Limpieza interior
+
+=item *
+
+C<XSLoader> 0.06 incorporado; pequeña optimización en la llamada a C<bootstrap_inherit()> y mejoras en la documentación.
+
+=back
+
+=item *
+
+C<Encode> actualizado a la versión 2.12
+
+=over
+
+=item *
+
+¡Ahora se acepta una referencia a código en C<CHECK>!
+
+=item *
+
+3 nuevos caracteres añadidos en la codificación ISO-8859-7
+
+=item *
+
+Añadida nueva codificación C<MIME-Header-ISO_2022_JP>
+
+=item *
+
+Arreglado un problema con caracteres no completos y C<< encoding(utf-8-strict) >>.
+
+=item *
+
+Ajustes y correcciones en la documentación
+
+=back
+
+=item *
+
+C<English> actualizado a la versión 1.02
+
+=over
+
+=item *
+
+La variable C<< $COMPILING >> ha sido añadida
+
+=back
+
+=item *
+
+C<ExtUtils::Constant> actualizado a la versión 0.17
+
+=over
+
+=item *
+
+Mejorada la compatibilidad con versiones anteriores de perl
+
+=back
+
+=item *
+
+C<ExtUtils::MakeMaker> actualizado a la versión 6.30 (era 6.17)
+
+=over
+
+=item *
+
+Demasiado para listarlo aquí; vea  L<http://search.cpan.org/dist/ExtUtils-MakeMaker/Changes>
+
+=back
+
+=item *
+
+C<File::Basename> actualizado a la versión 2.74, con cambios aportados por Michael Schwern.
+
+=over
+
+=item *
+
+Documentación clarificada y errores corregidos.
+
+=item *
+
+C<basename> ahora elimina separadores finales superfluos antes de procesar el nombre.
+
+=item *
+
+C<basename> ahora devuelve C</> para el parámetro C</>, para hacer C<basename>
+consistente con la utilidad shell del mismo nombre.
+
+=item *
+
+El sufijo ya no es eliminado si es idéntico al resto de los caracteres en el nombre, una vez más para mantener la coherencia con la utilidad del shell.
+
+=item *
+
+Alguna limpieza interna de código.
+
+=back
+
+=item *
+
+C<File::Copy> actualizado a la versión 2.09
+
+=over
+
+=item *
+
+Copiando un archivo sobre sí mismo provocará un error.
+
+=item *
+
+Ahora, mover un archivo entre sistemas de archivos, conserva las fechas de acceso y modificación
+
+=back
+
+=item *
+
+C<File::Find> actualizado a la versión 1.10
+
+=over
+
+=item *
+
+Arreglos en la portabilidad de Win32
+
+=item *
+
+Mejora en la documentación
+
+=back
+
+=item *
+
+C<File::Glob> actualizado a la versión 1.05
+
+=over
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<File::Path> actualizado a la versión 1.08
+
+=over
+
+=item *
+
+C<mkpath> ahora preserva C<errno> cuando C<mkdir> falla
+
+=back
+
+=item *
+
+C<File::Spec> actualizado a la versión 3.12
+
+=over
+
+=item *
+
+C<File::Spec->rootdir()> ahora devuelve C<\> en Win32, en lugar de C</>
+
+=item *
+
+C<$^O> podría estar, algunas veces, pringada. Esto ha sido corregido.
+
+=item *
+
+Ahora, C<canonpath>, en Win32, colapsa secciones C<foo/..> (o C<foo\..>) correctamente, en lugar de la "equivocada" tarea que hacía antes.
+Tenga en cuenta que C<canonpath> en Unix sigue B<sin> colapsar estas secciones, ya que, de hacerlo, sería incorrecto.
+
+=item *
+
+Algunas mejoras en la documentación
+
+=item *
+
+Alguna limpieza interna de código
+
+=back
+
+=item *
+
+C<FileCache> actualizado a la versión 1.06
+
+=over
+
+=item *
+
+Arreglados errores de formateo en la documentación POD
+
+=back
+
+=item *
+
+C<Filter::Simple> actualizado a la versión 0.82
+
+=item *
+
+C<FindBin> actualizado a la versión 1.47
+
+=over
+
+=item *
+
+Ahora funciona mejor con los directorios donde los derechos de acceso sean más restrictivos de lo habitual.
+
+=back
+
+=item *
+
+C<GDBM_File> actualizado a la versión 1.08
+
+=over
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<Getopt::Long> actualizado a la versión 2.35
+
+=over
+
+=item *
+
+C<prefix_pattern> ha sido complementado por una nueva opción de configuración, C<long_prefix_pattern>, que permite al usuario especificar qué patrones de prefijo deben tener aplicado un estilo semántico para opciones largas.
+
+=item *
+
+Las opciones ahora pueden tomar múltiples valores al mismo tiempo (experimental)
+
+=item *
+
+Varios errores corregidos
+
+=back
+
+=item *
+
+C<if> actualizado a la versión 0.05
+
+=over
+
+=item *
+
+Da mensajes de error más significativos cuando se invoca C<if> con una condición en contexto de lista.
+
+=item *
+
+Restaura la compatibilidad con versiones anteriores de perl
+
+=back
+
+=item *
+
+C<IO> actualizado a la versión 1.22
+
+=over
+
+=item *
+
+Mejora en la documentación
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<IPC::Open2> actualizado a la versión 1.02
+
+=over
+
+=item *
+
+Mejora en la documentación
+
+=back
+
+=item *
+
+C<IPC::Open3> actualizado a la versión 1.02
+
+=over
+
+=item *
+
+Mejora en la documentación
+
+=back
+
+=item *
+
+C<List::Util> actualizado a la versión 1.18 (era 1.14)
+
+=over
+
+=item *
+
+Arreglada la versión en puro perl de C<refaddr> para evitar la bendición de una referencia no bendecida
+
+=item *
+
+Usa C<XSLoader> para acelerar la carga
+
+=item *
+
+Arregladas varias pérdidas de memoria
+
+=item *
+
+Limpieza interna y arreglos en la portabilidad
+
+=back
+
+=item *
+
+C<Math::Complex> actualizada a la versión 1.35
+
+=over
+
+=item *
+
+C<atan2(0, i)> ahora funciona, así como todos los casos (computables) de argumentos complejos
+
+=item *
+
+Correcciones de errores determinados en C<make> y C<emake>
+
+=item *
+
+Asistencia en la devolución directa de la I<k>-ésima raíz
+
+=item *
+
+Soporte de C<[2,-3pi/8]> en C<emake>
+
+=item *
+
+Soporte de C<inf> para C<make>/C<emake>
+
+=item *
+
+C<make>/C<emake> mejor documentado
+
+=back
+
+=item *
+
+C<Math::Trig> actualizado a la versión 1.03
+
+=over
+
+=item *
+
+Añade más rutinas para cálculos de arcos esféricos: C<great_circle_waypoint> y C<great_circle_destination>
+
+=back
+
+=item *
+
+C<MIME::Base64> actualizado a la versión 3.07
+
+=over
+
+=item *
+
+Usa C<XSLoader> para acelerar la carga
+
+=item *
+
+Mejora en la documentación
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<NDBM_File> actualizado a la versión 1.06
+
+=over
+
+=item *
+
+Mejora en la documentación
+
+=back
+
+=item *
+
+C<ODBM_File> actualizado a la versión 1.06
+
+=over
+
+=item *
+
+Arreglado un error ortográfico en la documentación
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<Opcode> actualizado a la versión 1.06
+
+=over
+
+=item *
+
+Mejora en la documentación
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<open> actualizado a la versión 1.05
+
+=over
+
+=item *
+
+Mejora en la documentación
+
+=back
+
+=item *
+
+C<overload> actualizado a la versión 1.04
+
+=over
+
+=item *
+
+Mejora en la documentación
+
+=back
+
+=item *
+
+C<PerlIO> actualizado a la versión 1.04
+
+=over
+
+=item *
+
+C<PerlIO::via> ahora itera bien sobre las capas
+
+=item *
+
+C<PerlIO::scalar> ahora entiende C<< $/ = "" >>
+
+=item *
+
+C<encoding(utf-8-strict)> ahora funciona con caracteres no completos
+
+=item *
+
+Mejora en la documentación
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<Pod::Functions> actualizado a la versión 1.03
+
+=over
+
+=item *
+
+Arreglados errores ortográficos en la documentación
+
+=back
+
+=item *
+
+C<Pod::Html> actualizado a la versión 1.0504
+
+=over
+
+=item *
+
+Ahora la salida HTML enlazará correctamente con C<=item> en la misma página, y deberá ser un XHTML válido.
+
+=item *
+
+Los nombres de variables se reconocen según lo previsto
+
+=item *
+
+Arreglados errores ortográficos en la documentación
+
+=back
+
+=item *
+
+C<Pod::Parser> actualizado a la versión 1.32
+
+=over
+
+=item *
+
+Permite que los archivos comiencen con un C<=head> en la primera línea
+
+=item *
+
+Arreglo en la portabilidad de Win32
+
+=item *
+
+Arreglado el estado de la salida de C<pod2usage>
+
+=item *
+
+Nueva opción C<-noperldoc> para C<pod2usage>
+
+=item *
+
+Ahora se permiten nuevos esquemas URL arbitrarios
+
+=item *
+
+Arreglados errores ortográficos en la documentación
+
+=back
+
+=item *
+
+C<POSIX> actualizado a la versión 1.09
+
+=over
+
+=item *
+
+Arreglados errores ortográficos en la documentación
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<re> actualizado a la versión 0.05
+
+=over
+
+=item *
+
+Arreglado un error ortográfico en la documentación
+
+=back
+
+=item *
+
+C<Safe> actualizado a la versión 2.12
+
+=over
+
+=item *
+
+Mejora menor en la documentación
+
+=back
+
+=item *
+
+C<SDBM_File> actualizado a la versión 1.05
+
+=over
+
+=item *
+
+Arreglado un error ortográfico en la documentación
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<Socket> actualizado a la versión 1.78
+
+=over
+
+=item *
+
+Limpieza interior
+
+=back
+
+=item *
+
+C<Storable> actualizado a la versión 2.15
+
+=over
+
+=item *
+
+Se incluye la funcionalidad C<STORABLE_attach> añadida por Adam Kennedy, y menores requisitos de memoria estando bajo C<ithreads>, usando el código de seguimiento de clonación de C<ithreads>.
+
+=back
+
+=item *
+
+C<Switch> actualizado a la versión 2.10_01
+
+=over
+
+=item *
+
+Arreglados errores ortográficos en la documentación
+
+=back
+
+=item *
+
+C<Sys::Syslog> actualizado a la versión 0.13
+
+=over
+
+=item *
+
+Ahora ofrece macros numéricas y etiquetas C<Exporter> más explicativas.
+
+=item *
+
+Ya no utiliza C<Sys::Hostname> ya que puede proporcionar valores inútiles en entornos de red sin configurar, así que, en vez de eso, utiliza C<INADDR_LOOPBACK> directamente.
+
+=item *
+
+C<syslog()> ahora usa fecha y hora locales.
+
+=item *
+
+C<setlogmask()> ahora se comporta igual que su homólogo en C.
+
+=item *
+
+C<setlogsock()> ahora hará C<croak()> tal como está documentado.
+
+=item *
+
+Mejora en los mensajes de errores y advertencias.
+
+=item *
+
+Documentación mejorada.
+
+=back
+
+=item *
+
+C<Term::ANSIColor> actualizado a la versión 1.10
+
+=over
+
+=item *
+
+Corrige un error en C<colored> cuando C<$EACHLINE> está activado, que provocaba que las líneas compuestas únicamente de ceros (cero literal) no se colorearán.
+
+=item *
+
+Mejora de las pruebas.
+
+=back
+
+=item *
+
+C<Term::ReadLine> actualizado a la versión 1.02
+
+=over
+
+=item *
+
+Ajustes en la documentación
+
+=back
+
+=item *
+
+C<Test::Harness> actualizado a la versión 2.56 (era 2.48)
+
+=over
+
+=item *
+
+El temporizador C<Test::Harness> está apagado por defecto.
+
+=item *
+
+Ahora muestra el tiempo transcurrido en milisegundos.
+
+=item *
+
+Varios errores corregidos
+
+=back
+
+=item *
+
+C<Test::Simple> actualizado a la versión 0.62 (era 0.54)
+
+=over
+
+=item *
+
+C<is_deeply()> ya no falla en la mayoría de los casos
+
+=item *
+
+Varios errores menores arreglados
+
+=item *
+
+Mejoras en la documentación
+
+=back
+
+=item *
+
+C<Text::Tabs> actualizado a la versión 2005.0824
+
+=over
+
+=item *
+
+Proporciona una implementación más rápida de C<expand>
+
+=back
+
+=item *
+
+C<Text::Wrap> actualizado a la versión 2005.082401
+
+=over
+
+=item *
+
+Agrega C<$Text::Wrap::separator2>, que le permite preservar los caracteres de nueva línea presentes, pero añade nuevas rupturas de línea usando otras cadenas de caracteres.
+
+=back
+
+=item *
+
+C<threads> actualizado a la versión 1.07
+
+=over
+
+=item *
+
+C<threads> ahora activará C<no warnings 'threads'>
+
+=item *
+
+Un intérprete de una hebra es ahora liberado después de un C<< $t->join() >> en lugar de después de C<undef $t>, que debería fijar un poco las pérdidas de memoria de C<ithreads>. (Arreglado por Dave Mitchell)
+
+=item *
+
+Algunas correcciones ortográficas en la documentación.
+
+=back
+
+=item *
+
+C<threads::shared> actualizado a la versión 0.94
+
+=over
+
+=item *
+
+Solo cambios en la documentación
+
+=item *
+
+Nota: Una mejor implementación de C<threads::shared> está disponible en CPAN - esto será fusionado en 5.8.9 si se prueba que es estable.
+
+=back
+
+=item *
+
+C<Tie::Hash> actualizado a la versión 1.02
+
+=over
+
+=item *
+
+Arreglado un error ortográfico en la documentación
+
+=back
+
+=item *
+
+C<Time::HiRes> actualizado a la versión 1.86 (era 1.66)
+
+=over
+
+=item *
+
+Funciones añadidas C<clock_nanosleep()> y C<clock()>
+
+=item *
+
+Se ha añadido soporte para las funciones POSIX C<clock_gettime()> y C<clock_getres()>
+
+=item *
+
+Devuelve C<undef> o una lista vacía si falla la función en C C<gettimeofday()>
+
+=item *
+
+Mejorada la detección de C<nanosleep>
+
+=item *
+
+Limpieza interior
+
+=item *
+
+Mejora en la documentación
+
+=back
+
+=item *
+
+C<Unicode::Collate> actualizada a la versión 0.52
+
+=over
+
+=item *
+
+Ahora implementa la UCA Revisión 14 (basada en Unicode 4.1.0).
+
+=item *
+
+El método C<Unicode::Collate->new> ya no sobreescribe el C<$_> del usuario
+
+=item *
+
+Mejora en la documentación
+
+=back
+
+=item *
+
+C<Unicode::UCD> actualizado a la versión 0.24
+
+=over
+
+=item *
+
+Arreglados errores ortográficos en la documentación
+
+=back
+
+=item *
+
+C<User::grent> actualizado a la versión 1.01
+
+=over
+
+=item *
+
+Arreglado un error ortográfico en la documentación
+
+=back
+
+=item *
+
+C<utf8> actualizado a la versión 1.06
+
+=over
+
+=item *
+
+Arreglados errores ortográficos en la documentación
+
+=back
+
+=item *
+
+C<vmsish> actualizado a la versión 1.02
+
+=over
+
+=item *
+
+Arreglados errores ortográficos en la documentación
+
+=back
+
+=item *
+
+C<warnings> actualizado a la versión 1.05
+
+=over
+
+=item *
+
+Ahora funciona caballerosamente con las funciones internas de C<Carp::>
+
+=item *
+
+Limpieza interior
+
+=item *
+
+Actualización de la documentación
+
+=back
+
+=item *
+
+C<Win32> actualizado a la versión 0.2601
+
+=for cínicos ¿Cuántas versiones de perl 5.8.x puedo lanzar antes de Vista?
+
+=over
+
+=item *
+
+Proporciona soporte para C<Win32::GetOSName> en Windows Vista
+
+=item *
+
+Mejoras en la documentación
+
+=back
+
+=item *
+
+C<XS::Typemap> actualizado a la versión 0.02
+
+=over
+
+=item *
+
+Limpieza interior
+
+=back
+
+=back
+
+=head1 Cambios en las herramientas
+
+=head2 Mejoras en C<h2xs>
+
+C<h2xs> implementa una nueva opción: C<--use-xsloader>, para forzar el uso de C<XSLoader> incluso en módulos retro-compatibles.
+
+El manejo de los nombres de los autores que tenían apóstrofes se ha solucionado.
+
+Cualquier enum con valores negativos es ahora omitido.
+
+=head2 Mejoras en C<perlivp>
+
+C<perlivp> implementa la nueva opción C<-a>, y ya no buscará, por defecto, por archivos F<*.ph>.  Use la opción C<-a> para correr I<todas> las pruebas.
+
+=head1 Nueva documentación
+
+La página de manual L<perlglossary> es un glosario de términos utilizados en la documentación de Perl, técnicos y otros, amablemente proporcionado por O'Reilly Media, inc.
+
+=head1 Mejoras en el rendimiento
+
+=over 4
+
+=item *
+
+La creación de referencias débiles es ahora I<O(1)> en lugar de I<O(n)>, cortesía de Nicholas Clark. El borrado de referencias débiles sigue siendo I<O(n)>, pero si el borrado solo sucede en la salida del programa, puede ser omitido por completo.
+
+=item *
+
+Salvador Fandiño proporcionó mejoras para reducir la memoria usada por C<sort> y para mejorar la velocidad en algunos casos.
+
+=item *
+
+Jarkko Hietaniemi y Andy Lester trabajaron para marcar como C<static> la mayor cantidad de datos en los archivos de código fuente en C, para incrementar la proporción del archivo ejecutable que el sistema operativo puede compartir entre procesos, y reducir así la cantidad de memoria utilizada en sistemas multiusuario.
+
+=back
+
+=head1 Mejoras en la instalación y configuración
+
+Hacer make en paralelo debería funcionar ahora correctamente, aunque todavía puede haber problemas si se indica a C<make test> que se ejecute en paralelo.
+
+Compilando con compiladores Borland en Win32 debería funcionar con más facilidad. En particular, Hay Steve trabajó para quitar muchas advertencias emitidas por estos compiladores y al menos un error interno del compilador de C.
+
+C<Configure> ahora detectará C<clearenv> y C<unsetenv>, gracias a un parche de Alan Burlison. También probará por C<futimes> y también por si C<sprintf> devuelve correctamente la longitud de la cadena formateada, que serán ambas usadas en perl 5.8.9.
+
+Hay mejoras para next-3.0, vmesa, IX, Darwin, Solaris, Linux,
+DEC/OSF, HP-UX y MPE/iX
+
+Extensiones Perl en Windows pueden ahora ser estáticamente compiladas en Perl DLL, gracias al trabajo de Vadim Konovalov. (Esta mejora fue hecha en realidad en 5.8.7, pero se omitió accidentalmente a partir de L<perl587delta>).
+
+=head1 Arreglo de determinados errores
+
+=head2 no warnings 'category' ahora funciona correctamente con -w
+
+Anteriormente, cuando se ejecutaba con las advertencias habilitadas a nivel global a través de C<-w>, una desactivación selectiva de categorías de advertencias específicas podría, realmente, desactivar todas las advertencias.
+Esto ha sido corregido; ahora C<no warnings 'io';> sólo desactivará las advertencias en la clase C<io>. Anteriormente, desactivaría erróneamente todas las advertencias.
+
+Esta corrección de error puede causar que algunos programas inicien, de forma correcta, la emisión de advertencias.
+
+=head2 Eliminar el exceso de optimización
+
+Perl 5.8.4 introducía un cambio para que las asignaciones de C<undef> a un escalar, o de una lista vacía a un array o un hash, fueran optimizadas. Ya que esto podría causar problemas cuando intervenían saltos C<goto>, este cambio ha sido deshecho.
+
+=head2 Arreglos en sprintf()
+
+Usando la función sprintf() con algunos formatos podría dar lugar a un desbordamiento de búfer, en algunos casos específicos. Esto se ha corregido, junto con otros errores, sobre todo en la comprobación de los límites.
+
+En arreglos relacionados, era posible, para código mal escrito que no siguiera la documentación de C<Sys::Syslog>, tener vulnerabilidades en el formateo.
+C<Sys::Syslog> ha sido cambiado para proteger a los usuarios de la pobre calidad del código de terceros.
+
+=head2 Enlentecimiento del depurador y de Unicode
+
+Se ha informado de que ejecutando el depurador de Perl cuando se tratan datos Unicode, podría causar una ralentización inesperadamente grande. La causa más probable de ello fue identificado y solucionado por Nicholas Clark.
+
+=head2 Correcciones menores
+
+=over 4
+
+=item *
+
+C<FindBin> ahora funciona mejor con los directorios donde los derechos de acceso sean más restrictivos de lo habitual.
+
+=item *
+
+Varias fugas de memoria en ithreads fueron cerradas. Una mejor implementación de C<threads::shared> está disponible en CPAN - esto será fusionado en 5.8.9 si se prueba que es estable.
+
+=item *
+
+Los espacios finales de C<$!> y C<$^E> ahora son recortados.
+
+=item *
+
+Las operaciones que requiere perl para leer la lista de procesos agrupados, tales como lecturas de C<$(> y C<$)>, ahora es asignada dinámicamente la memoria en lugar de utilizar un array de tamaño fijo. El array de tamaño fijo podría provocar el agotamiento de la pila C en sistemas configurados para utilizar un gran número de grupos.
+
+=item *
+
+C<PerlIO::scalar> ahora funciona mejor con opciones no predeterminadas de C<$/>.
+
+=item *
+
+Ahora puede usar el operador C<x> para repetir una lista C<qw//>. Esto se usaba para levantar un error de sintaxis.
+
+=item *
+
+El depurador, ahora, sigue la traza correctamente en la ejecución de código eval("")uado que contenga directivas #line.
+
+=item *
+
+El valor del pragma C<open> ya no es ignorado por el open de tres argumentos.
+
+=item *
+
+La optimización de C<for (reverse @a)> introducido en perl 5.8.6 puede portarse mal cuando el array tuviera elementos indefinidos y fuera usado en contexto de IVALOR. Dave Mitchell proporcionó un arreglo.
+
+=item *
+
+Algunas coincidencias insensibles al tamaño de caja de los caracteres, entre datos codificados en UTF-8 y expresiones regulares de 8 bits, y viceversa, podría dar advertencias sobre caracteres incorrectos. Esto ha sido solventado por Dave Mitchell e Yves Orton.
+
+=item *
+
+C<lcfirst> y C<ucfirst> podrían corromper la cadena de caracteres en ciertos casos donde la longitud de la codificación UTF-8 de la cadena en minúsculas, mayúsculas o capitulares, puede diferir. Esto fue corregido por Nicholas Clark.
+
+=item *
+
+Perl ahora utilizará las funciones de la biblioteca C C<unsetenv> y C<clearenv> si se indica que se deben borrar claves de C<%ENV> o si se elimina C<%ENV> por completo, gracias a un parche de Alan Burlison.
+
+=back
+
+=head1 Diagnósticos nuevos y cambiados
+
+=head2 Intento de asignar una longitud a un array liberado
+
+Esta es una nueva advertencia, en situaciones como ésta:
+
+    $r = do {my @a; \$#a};
+    $$r = 503;
+
+=head2 No-cadenas pasadas como máscara de bits
+
+Esta es una nueva advertencia, producida cuando un número ha sido pasado como un argumento a select(), en vez de una máscara de bits.
+
+    # Incorrecto, mostrará un aviso
+    $rin = fileno(STDIN);
+    ($nfound,$timeleft) = select($rout=$rin, undef, undef, $timeout);
+    
+    # Debería ser
+    $rin = '';
+    vec($rin,fileno(STDIN),1) = 1;
+    ($nfound,$timeleft) = select($rout=$rin, undef, undef, $timeout);
+
+=head2 Patrón de búsqueda no terminado u operador ternario interpretado como un patrón de búsqueda
+
+Este error de sintaxis indica que el analizador léxico no pudo encontrar el delimitador final de una construcción C<?PATRÓN?>. Al mencionar el operador ternario en este mensaje de error hace que sea más fácil diagnosticar errores de sintaxis.
+
+=head1 Cambios internos
+
+Se ha hecho una buena cantidad de refactorizaciones del código fuente C<C>, en parte para que sea más ordenado y más fácil de mantener. El código objeto resultante y el C<perl> binario pueden ser menores que 5.8.7, en particular, debido a un cambio aportado por Dave Mitchell, que rehízo el código de las advertencias para que fuera significativamente menor. Además de ser má pequeño y, posiblemente, más rápido, no debería haber cambios detectables por el usuario.
+
+Andy Lester suministró muchas mejoras para determinar qué parámetros de las funciones y qué variables locales podrían realmente ser declaradas C<const> para el compilador de C. Steve Peters proporcionó nuevas macros C<*_set> y rediseñó el núcleo para utilizar éstas en lugar de asignar a macros en contexto de IVALOR.
+
+Dave Mitchell mejoró la salida de depura del analizador léxico con C<-DT>
+
+Nicholas Clark cambió la asignación del búfer de cadena de texto por lo que ahora es redondeado al siguiente múltiplo de 4 (u 8 en las plataformas con punteros de 64 bits). Esto debería reducir el número de llamadas a C<realloc> sin tener que llegar a utilizar ningún otro espacio de memoria adicional.
+
+El array de C<HV> de los C<HE*> es ahora asignado al correcto (y mínimo) tamaño, gracias a un nuevo cambio de Nicholas Clark. Compile con C<-DPERL_USE_LARGE_HV_ALLOC> para usar el viejo, descuidado, valor por defecto.
+
+Para XS o con fines de depuración embebida, si perl es compilado con C<-DDEBUG_LEAKING_SCALARS_FORK_DUMP>, además de C<-DDEBUG_LEAKING_SCALARS> entonces un proceso hijo es creado con C<fork> justo antes de la destrucción global, y es utilizado para mostrar los valores de cualquier escalar que sea encontrado y que tenga que ser eliminado al final de la destrucción global. Sin esto, los escalares ya habrían sido liberados, de tal manera, que se haría imposible producir cualquier descarga significativa de sus contenidos.  Esta característica se implementó por el infatigable Nicholas Clark, basado en una idea de Mike Giroux.
+
+=head1 Problemas en plataformas específicas
+
+El optimizador en HP-UX 11.23 (Itanium 2) está ahora, en parte, desactivado (reducido a +O1) cuando se usa en HP C-ANSI-C; la causa de los problemas en los niveles más altos de optimización aún no está clara.
+
+Hay un puñado de pruebas fallidas que quedan en VMS, sobre todo debido a la corrección de pruebas y ajustes menores con demasiadas dependencias como para poder integrarse en esta versión de la secuencia de desarrollo, donde todos ellas han sido corregidas.  La siguiente es una lista de los errores esperados con el número de revisión de la corrección en el que se conocen:
+
+    ext/Devel/PPPort/t/ppphtest.t  #26913
+    ext/List/Util/t/p_tainted.t    #26912
+    lib/ExtUtils/t/PL_FILES.t      #26813
+    lib/ExtUtils/t/basic.t         #26813
+    t/io/fs.t
+    t/op/cmp.t
+
+=head1 Informar de errores
+
+Si usted encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  También puede haber información en http://www.perl.org/, La página oficial de Perl.
+
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
+
+=head1 VEA TAMBIÉN
+
+El archivo de F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+
+El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+
+El archivo F<README> (LEEME) para asuntos generales.
+
+Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+
+=cut

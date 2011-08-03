@@ -1,0 +1,128 @@
+=head1 NOMBRE
+
+perl582delta - Qué hay de nuevo en perl v5.8.2
+
+=head1 DESCRIPCIÓN
+
+Este documento describe las diferencias entre la versión 5.8.1 y la versión 5.8.2.
+
+Si está actualizando desde una versión anterior como la 5.6.1, primero lea L<perl58delta>, que describe las diferencias entre 5.6.0 y 5.8.0, y L<perl581delta>, que describe las diferencias entre 5.8.0 y 5.8.1.
+
+=head1 Incompatibilidades
+
+Se perdió, accidentalmente, la compatibilidad binaria entre 5.8.0 y 5.8.1, en la construcción de módulos en paralelo, al llamar a ciertas llamadas del sistema reentrantes.
+La compatibilidad binaria con 5.8.0 ha sido restaurada en 5.8.2, que requiere romper la compatibilidad con 5.8.1. Vemos esto como el menor de dos males.
+
+Esto sólo afectará a las personas que tienen un perl 5.8.1 multihilo, y los módulos compilados que utilizan estas llamadas, y ahora intenta ejecutar los módulos compilados con 5.8.2. La solución es volver a compilar y volver a instalar los módulos usando 5.8.2.
+
+=head1 Mejoras principales
+
+=head2 Aleatorización Hash
+
+La asignación al azar hash introducido con 5.8.1 ha sido modificado. Se constató que, aunque la implementación fue introducida en 5.8.1, compatible a nivel de código fuente con 5.8.0, no era compatible a nivel binario, en ciertos casos. 5.8.2 contiene una implementación mejorada que es a la vez compatible a nivel de código fuente y binario con 5.8.0 y 5.8.1, y se mantiene robusto contra la forma de ataque que provocó el cambio de 5.8.1.
+
+Estamos muy agradecidos con el proyecto Debian por sus aportaciones en este ámbito.
+Ver L<perlsec/"Ataques de complejidad algorítmica"> para la justificación original de este cambio.
+
+=head2 Multihilos
+
+Varias agotamientos de memoria, asociados con variables compartidas entre hilos han sido corregidos.
+
+=head1 Módulos y Pragmata
+
+=head2 Módulos y Pragmata actualizados
+
+Los siguientes módulos y pragmata se han actualizado desde Perl 5.8.1:
+
+=over 4
+
+=item Devel::PPPort
+
+=item Digest::MD5
+
+=item I18N::LangTags
+
+=item libnet
+
+=item MIME::Base64
+
+=item Pod::Perldoc
+
+=item strict
+
+Mejor documentación
+
+=item Tie::Hash
+
+Mejor documentación
+
+=item Time::HiRes
+
+=item Unicode::Collate
+
+=item Unicode::Normalize
+
+=item UNIVERSAL
+
+Mejor documentación
+
+=back
+
+=head1 Arreglo de determinados errores
+
+Algunos errores de sintaxis involucrados en no reconocer operadores de test de archivo son ahora manejados correctamente por el analizador.
+
+=head1 Cambios internos
+
+El Intérprete de inicialización es más completo cuando -DMULTIPLICITY está desactivado.
+Esto debería resolver los problemas con la inicialización y destrucción del intérprete de Perl presente más de una vez en un único proceso.                      
+
+=head1 Problemas en plataformas específicas
+
+Las banderas del enlazador dinámico han sido modificados para Solaris y OS X, lo que debería solucionar los mismos problemas que aparecen en la construcción de algunos módulos XS.
+
+Errores corregidos en sockets en OS/2 y tmpfile.
+
+En OS X, C<setreuid> y amigos, son molestos; perl ahora trabajará en torno a sus problemas de la mejor manera posible.
+
+=head1 Direcciones futuras
+
+A partir de 5.8.3 tenemos la intención de hacer el mantenimiento más frecuente, con un menor número de cambios en cada uno. La intención es propagar la corrección de errores a versiones estables con mayor rapidez y hacer esas actualizaciones menos problemáticas. Esto debería dar a los usuarios finales una mayor flexibilidad en su elección del momento de la actualización, y permitir una evaluación más sencilla de los efectos de las actualizaciones. El plan actual es que el código quede congelado de la siguiente manera
+
+=over 4
+
+=item *
+
+5.8.3 23:59:59 GMT miércoles, 31 de diciembre 2003
+
+=item *
+
+5.8.4 23:59:59 GMT miércoles, 31 de marzo 2004
+
+=item *
+
+5.8.5 23:59:59 GMT miércoles, 30 de junio 2004
+
+=back
+
+con el consiguiente comunicado poco después, cuando se complete los test.
+
+Ver L<perl581delta/"Direcciones futuras"> para tener una mayor perspectiva.
+
+=head1 Informar de errores
+
+Si usted encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  También puede haber información en http://www.perl.com/, La página oficial de Perl.
+
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
+
+=head1 VEA TAMBIÉN
+
+El archivo de F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+
+El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+
+El archivo F<README> (LEEME) para asuntos generales.
+
+Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+
+=cut

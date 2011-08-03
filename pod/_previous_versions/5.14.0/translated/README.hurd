@@ -1,0 +1,41 @@
+Si lees este archivo _tal_como_es_, ignora los caracteres curiosos que veas.
+Está escrito en formato POD (ver pod/perlpod.pod) que está específicamente diseñado para ser legible de forma sencilla.
+
+=head1 NOMBRE
+
+README.hurd - Perl versión 5 sobre Hurd
+
+=head1 DESCRIPCIÓN
+
+Si quiere usar Perl sobre Hurd, le recomiendo usar la distribución Debian
+GNU/Hurd ( ver http://www.debian.org/ ), incluso aunque todavía no exista una versión estable.  La anterior distribución binaria "gnu-0.2" con toda seguridad, tiene problemas adicionales.
+
+=head2 Problemas conocidos de Perl sobre Hurd 
+
+El conjunto de test Perl seguirá informando de algunos errores sobre Hurd.  Las pruebas El "lib/anydbm" y "pragma/warnings" son casi seguro que fracasarán.
+Ambos errores, realmente, no son específicos a Hurd, como se indica en la salida de los test.
+
+El test de socket fallará si la red no está configurada.  Tiene que hacer "/hurd/pfinet" el traductor para "/servers/socket/2", dándole los argumentos correctos.  Intente "/hurd/pfinet --help" para más información.
+
+Aquí están las estadísticas de Perl 5.005_62 en mi sistema:
+
+ Failed Test  Status Wstat Total Fail  Failed  List of failed
+ -------------------------------------------------------------------------
+ lib/anydbm.t                 12    1   8.33%  12
+ pragma/warnings             333    1   0.30%  215
+
+ 8 tests and 24 subtests skipped.
+ Failed 2/229 test scripts, 99.13% okay. 2/10850 subtests failed, 99.98% okay.
+
+¡Hay pocos sistemas que lo hagan peor!
+
+Sin embargo, desde que estoy corriendo en la reciente distribución de Hurd, y aunque un montón de errores expuestos por el conjunto de test de Perl han sido arreglados, usted puede encontrar más errores.  Los candidatos probables son: "op/stat", "lib/io_pipe", "lib/io_sock", "lib/io_udp" y "lib/hora".
+
+De cualquier forma, si está viendo errores más allá de los aquí mencionados en este documento, considere, por favor, actualizar al último Hurd antes de informar de este error. 
+
+=head1 AUTOR
+
+Mark Kettenis <kettenis@gnu.org>
+
+Last Updated: Fri, 29 Oct 1999 22:50:30 +0200
+
