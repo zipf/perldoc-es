@@ -1,7 +1,7 @@
 =head1 NOMBRE
 X<function> X<función>
 
-perlfunc - Funciones incluídas en Perl
+perlfunc - Funciones integradas en Perl
 
 =head1 DESCRIPCIÓN
 
@@ -961,7 +961,7 @@ Cuando se le llama en contexto lista, devuelve una lista de dos elementos consis
 
 Las entradas de un hash son devueltas en un aparente orden aleatorio.  El actual orden aleatorio está sujeto a cambio en futuras versiones de Perl, pero se garantiza que sea el mismo orden que las funciones C<keys> o C<values> producirían (mientras que el hash no haya sido modificado).  Desde Perl 5.8.2 la ordenación puede ser diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (ver L<perlsec/"Ataques por Complejidad Algorítmica">).
 
-Después de C<each> haya devuelto todas las entradas del hash o del array, la siguiente llamada a C<each> devuelve la lista vacía en contexto lista y C<undef> en contexto escalar.  La siguiente llamada reinicia la iteración.  Cada hash o array tiene su iterador interno, accedido por C<each> , C<keys>, y C<values>.  El iterador es implícitamente restablecido cuando C<each> ha llegado al final como se acaba de describir; puede ser explícitamente restablecido llamando a C<keys> o C<values> sobre el hash o array.  Si añade o borra un elemento de un hash mientras está iterando sobre él, puede encontrarse con entradas desaparecidas o duplicadas, así que no lo haga.  Excepción: siempre es seguro borrar el último ítem devuelto por C<each()>, por lo que entonces el siguiente código funcionará correctamente:
+Después de que C<each> haya devuelto todas las entradas del hash o del array, la siguiente llamada a C<each> devuelve la lista vacía en contexto lista y C<undef> en contexto escalar.  La siguiente llamada reinicia la iteración.  Cada hash o array tiene su iterador interno, accedido por C<each> , C<keys>, y C<values>.  El iterador es implícitamente restablecido cuando C<each> ha llegado al final como se acaba de describir; puede ser explícitamente restablecido llamando a C<keys> o C<values> sobre el hash o array.  Si añade o borra un elemento de un hash mientras está iterando sobre él, puede encontrarse con entradas desaparecidas o duplicadas, así que no lo haga.  Excepción: siempre es seguro borrar el último ítem devuelto por C<each()>, por lo que entonces el siguiente código funcionará correctamente:
 
         while (($clave, $valor) = each %hash) {
           print $clave, "\n";
@@ -1910,7 +1910,7 @@ Hace lo mismo que la llamada del sistema listen(2).  Devuelve verdadero si tiene
 =item local EXPR
 X<local>
 
-Lo que realmente querrá usar es C<my>, debido a que C<local> no es lo que la mayoría de la gente piensa en algo "local".  Ver L <perlsub/"Variables privadas con my()"> para más detalles.
+Lo que realmente querrá usar es C<my>, debido a que C<local> no es lo que la mayoría de la gente piensa en algo "local".  Ver L<perlsub/"Variables privadas con my()"> para más detalles.
 
 Un local() modifica las variables listadas para que sean locales en el bloque que les rodea, un archivo o un eval().  Si se lista más de un valor, esa lista debe ser puesta entre paréntesis.  Ver L<perlsub/"Valores temporales con local()"> para más detalles, incluidas las cuestiones relativas a arrays y hash enlazadas.
 

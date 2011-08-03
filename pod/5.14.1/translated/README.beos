@@ -14,7 +14,7 @@ Este archivo contiene instrucciones de cómo construir Perl para BeOS y listas de
 =head2 Requisitos
 
 He construido y probado Perl 5.8.6 y 5.9.1 bajo BeOS R5 x86 net server.
-No puedo decir nada con respecto a PPC. Desde que Perl 5.8.0 ha sido lanzado para BeOS BONE, sospecho, que es una buena oportunidad, para que todavía se pueda compilar en un sistema BONE. El único cambio que he hecho, que afecta a los sistemas BONE es el reconocimiento de si se trata de un sistema BONE o no, en C <hints/beos.sh>. Ahora, el soporte para red debe permanecer habilitado en los sistemas BONE. Esto, sin embargo, también podría romper la compilación.
+No puedo decir nada con respecto a PPC. Desde que Perl 5.8.0 ha sido lanzado para BeOS BONE, sospecho, que es una buena oportunidad, para que todavía se pueda compilar en un sistema BONE. El único cambio que he hecho, que afecta a los sistemas BONE es el reconocimiento de si se trata de un sistema BONE o no, en C<hints/beos.sh>. Ahora, el soporte para red debe permanecer habilitado en los sistemas BONE. Esto, sin embargo, también podría romper la compilación.
 
 Como las versiones más recientes de autoconf requieren soporte de flock(), he escrito una emulación de flock() (flock_server) y la publiqué en BeBits:
 
