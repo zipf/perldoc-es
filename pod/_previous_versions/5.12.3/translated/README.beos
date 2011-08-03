@@ -1,0 +1,88 @@
+Si lees este archivo _tal_como_es_, ignora los caracteres curiosos que veas.
+Está escrito en formato POD (ver pod/perlpod.pod) que está específicamente diseñado para ser legible de forma sencilla.
+
+=head1 NOMBRE
+
+README.beos - Perl versión 5.8+ en BeOS
+
+=head1 DESCRIPCIÓN
+
+Este archivo contiene instrucciones de cómo construir Perl para BeOS y listas de problemas conocidos.
+
+=head1 CONSTRUCCIÓN E INSTALACIÓN
+
+=head2 Requisitos
+
+He construido y probado Perl 5.8.6 y 5.9.1 bajo BeOS R5 x86 net server.
+No puedo decir nada con respecto a PPC. Desde que Perl 5.8.0 ha sido lanzado para BeOS BONE, sospecho, que es una buena oportunidad, para que todavía se pueda compilar en un sistema BONE. El único cambio que he hecho, que afecta a los sistemas BONE es el reconocimiento de si se trata de un sistema BONE o no, en C <hints/beos.sh>. Ahora, el soporte para red debe permanecer habilitado en los sistemas BONE. Esto, sin embargo, también podría romper la compilación.
+
+Como las versiones más recientes de autoconf requieren soporte de flock(), he escrito una emulación de flock() (flock_server) y la publiqué en BeBits:
+
+	http://www.bebits.com/app/4030
+
+Si quiere construir un Perl con soporte de flock(), tiene que instalar este paquete en primer lugar.
+
+=head2 Configure
+
+Con soporte de flock():
+
+	CFLAGS=-I/path/to/flock/server/headers ./configure.gnu \
+		--prefix=/boot/home/config
+
+Reemplace C</ruta/a/cabeceras/servidor/flock> con la ruta al directorio que contiene la cabecera C<flock.h>.
+
+Sin soporte de flock():
+
+	./configure.gnu --prefix=/boot/home/config
+
+=head2 Compilación
+
+Con soporte de flock():
+
+	make LDLOADLIBS="-lnet -lflock"
+
+Sin soporte de flock():
+
+	make LDLOADLIBS="-lnet"
+
+C<-lnet> es necesario en los sistemas net server solo si el compilador no lo agrega de forma automática (El gcc de Be R5 así lo hace; el gcc de Oliver Tappe 2.95.3, no).
+
+=head2 Instalación
+
+Instalar todos los archivos de perl:
+
+	make install
+
+Crear un enlace simbólico para libperl:
+
+	cd ~/config/lib; ln -s perl5/5.8.6/BePC-beos/CORE/libperl.so .
+
+Reemplace C<5.8.6> con su respectiva versión de Perl.
+
+=head1 PROBLEMAS CONOCIDOS
+
+=over 4
+
+=item *
+
+Soporte para socket está desactivado para BeOS R5 net server. No me atrevía aún a activarlo y ver qué problemas pueden ocurrir.
+
+=item *
+
+Los test para LFS (I<large file support>, soporte para archivos grandes) (C<t/op/lfs> y C<xt/Fcntl/t/syslfs>) están deshabilitados, debido a que el posicionamiento a más de 2 GB falla, según jhi@iki.fi, que fue el último que controló la adaptación de BeOS y la actualización de este archivo antes de mí. No lo he comprobado por mí mismo.
+
+=item *
+
+El test C<t/io/fflush> falla en el número 6. Por lo que puedo decir, es causado por un error en la implementación de las tuberías en BeOS que se produce cuando se inicia otro proceso hijo. En el caso particular del test C<system("perl -e 0")> vacía la tubería de salida estándar de otro proceso hijo.
+
+=item *
+
+El test C<ext/POSIX/t/waitpid> falla en el número 1. Después de que todos los procesos hijo hayan terminado, el waitpid(-1, ...) de BeOS devuelve 0 en lugar de -1 (como debería). No tengo idea de cómo solucionar este problema.
+
+=back
+
+=head1 CONTACTO
+
+Para información específica de problemas BeOS no dude en enviar un correo a: Ingo Weinhold <bonefish@cs.tu-berlin.de>
+
+Última actualización: 2004-12-16

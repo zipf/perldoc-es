@@ -1,0 +1,100 @@
+=head1 NOMBRE
+
+perlcheat - Chuleta de Perl 5
+
+=head1 DESCRIPCIÓN
+
+Esta 'chuleta' es una referencia rápida, para los programadores principiantes de Perl. No se menciona todo, porque 195 características pueden ser apabullantes.
+
+=head2 La hoja
+
+  CONTEXTO  CARACT.            ARRAYS        HASHES
+  void      $scalar  completo: @array        %hash
+  escalar   @array   trozo:    @array[0, 2]  @hash{'a', 'b'}
+  lista     %hash    elemento: $array[0]     $hash{'a'}
+            &sub
+            *glob    VALORES ESCALARES
+                     número, cadena, referencia, glob, undef
+  REFERENCIAS
+  \     referencias    $$foo[1]       igual que $foo->[1]
+  $@%&* desreferencia  $$foo{bar}     igual que $foo->{bar}
+  []    array anónimo  ${$$foo[1]}[2] igual que $foo->[1]->[2]
+  {}    hash anónimo   ${$$foo[1]}[2] igual que $foo->[1][2]
+  \()   lista de ref.
+                          NÚMEROS vs CADENAS  ENLACES
+  OPERADOR PRECEDENCIA    =          =        perl.plover.com
+  ->                      +          .        search.cpan.org
+  ++ --                   == !=      eq ne         cpan.org
+  **                      < > <= >=  lt gt le ge   pm.org
+  ! ~ \ u+ u-             <=>        cmp           tpj.com
+  =~ !~                                            perldoc.com
+  * / % x                 SINTAXIS
+  + - .                   for    (LIST) { }, for (a;b;c) { }
+  << >>                   while  ( ) { }, until ( ) { }
+  oper. con nombre        if     ( ) { } elsif ( ) { } else { }
+  < > <= >= lt gt le ge   unless ( ) { } elsif ( ) { } else { }
+  == != <=> eq ne cmp ~~  for es igual a foreach (SIEMPRE)
+  &
+  | ^              REGEX METACARACT.          REGEX MODIFICADORES
+  &&               ^     comienzo cadena      /i no caja de letras
+  || //            $     fin  cad. (antes \n) /m line based ^$
+  .. ...           +     uno o más            /s . includes \n
+  ?:               *     cero o más           /x ign. wh.space
+  = += -= *= etc.  ?     cero o más           /g global
+  , =>             {3,7} repetir en rango     /o comp. una vez
+  op. lista        ()    captura
+  not              (?:)  no captura       REGEX CLASE CARÁCTER
+  and              []    clase carácter   .  == [^\n]
+  or xor           |     alternativa      \s == espacio
+                   \b    lím. palabra     \w == caract. palabra
+                   \z    final cadena     \d == dígitos
+  HACER                                   \S, \W y \D negado
+  use strict;        NO HACER
+  use warnings;      "$foo"           ENLACES
+  my $var;           $$variable       perl.com
+  open() or die $!;  `$userinput`     use.perl.org
+  use Modules;       /$userinput/     perl.apache.org
+
+  FUNCTION RETURN LISTS
+  stat      localtime    caller         SPECIAL VARIABLES
+   0 dev    0 segundo    0 paquete      $_    variable por def.
+   1 ino    1 minuto     1 nom. archivo $0    nombre programa
+   2 mode   2 hora       2 línea        $/    sep. entrada
+   3 nlink  3 día        3 subrutina    $\    sep. salida
+   4 uid    4 mes-1      4 hasargs      $|    autoflush
+   5 gid    5 año-1900   5 wantarray    $!    sys/libcall error
+   6 rdev   6 día semana 6 evaltext     $@    eval error
+   7 size   7 día año    7 is_requere   $$    ID del proceso
+   8 atime  8 es_dst     8 hints        $.    line number
+   9 mtime               9 bitmask      @ARGV args. línea comandos
+  10 ctime  solo usar                   @INC  rutas de inclusión
+  11 blksz  POSIX::      3..9 solo      @_    args. subrutina
+  12 blcks  strftime!    con EXPR       %ENV  entorno
+
+=head1 AGRADECIMIENTOS
+
+La primera versión de este documentos apareció en Perl Monks, en donde muchas personas dieron sus útiles sugerencias. Gracias, Perl Monks.
+
+Un agradecimiento especial a Damian Conway, quien no sólo sugirió importantes cambios, sino que se tomó el tiempo suficiente para contar las características listadas y hacer una versión para Perl 6 y demostrar que Perl seguirá siendo Perl.
+
+=head1 AUTOR
+
+Juerd Waalboer <#####@juerd.nl>, con la ayuda de muchos Perl Monks.
+
+=head1 VEA TAMBIÉN
+
+=over 4
+
+=item *
+
+L<http://perlmonks.org/?node_id=216602> - la publicación original en PM
+
+=item *
+
+L<http://perlmonks.org/?node_id=238031> - Versión Perl 6 de Damian Conway
+
+=item *
+
+L<http://juerd.nl/site.plp/perlcheat> - página de la chuleta Perl
+
+=back

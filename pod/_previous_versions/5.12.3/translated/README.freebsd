@@ -1,0 +1,29 @@
+Si lees este archivo _tal_como_es_, ignora los caracteres curiosos que veas.  Está escrito en formato POD (ver pod/perlpod.pod) que está específicamente diseñado para ser legible de forma sencilla.
+
+=head1 NOMBRE
+
+README.freebsd - Perl versión 5 sobre sistemas FreeBSD
+
+=head1 DESCRIPCIÓN
+
+Este documentos describe varias características de FreeBSD que afectarán a cómo Perl versión 5 (de ahora en adelante sólo Perl) es compilado y/o ejecutado.
+
+=head2 FreeBSD vuelca el núcleo desde readdir_r con ithreads
+
+Cuando Perl está configurado para usar ithreads, usará llamadas de biblioteca reentrantes preferentemente sobre versiones no-reentrantes.  Hay un bug en la función C<readdir_r> de FreeBSD en la versión 4.5 y anteriores que pueden provocar un SEGV al leer grandes directorios. Un parche para la libc de FreeBSD está disponible (ver http://www.freebsd.org/cgi/query-pr.cgi?pr=misc/30631 ) y ha sido integrado en FreeBSD 4.6.
+
+=head2 $^X no siempre contiene el camino completo en FreeBSD
+
+perl 5.8.0 pone C<$^X> hasta donde sea posible a todo el camino completo preguntando al sistema operativo. En FreeBSD el camino completo del intérprete perl se encuentra leyendo el enlace simbólico F</proc/curproc/file>. Hay un bug en FreeBSD, donde el resultado de leer un enlace simbólico puede ser erróneo en determinadas circunstancias (ver http://www.freebsd.org/cgi/query-pr.cgi?pr=35703 ).
+En estos casos perl volverá al anterior comportamiento de usar el valor del C argv[0] para C<$^X>.
+
+=head2 Perl ya no formará parte de la "base FreeBSD"
+
+-No tan malo como suena- quiere decir que Perl ya no formará parte del B<sistema de construcción del kernel> de FreeBSD.  Perl seguirá, probablemente, formando parte de la "instalación por defecto" y en cualquier caso la último versión será adaptada.  La primera versión FreeBSD con este cambio es 5.0. Todas las versiones 4.n mantendrán su status quo.
+
+=head1 AUTOR
+
+Nicholas Clark <nick@ccl4.org>, recopilando la sabiduría proporcionada por Slaven Rezic y Tim Bunce.
+
+Por favor, informe de cualquier error, actualización o sugerencias a  F<perlbug@perl.org>.
+
