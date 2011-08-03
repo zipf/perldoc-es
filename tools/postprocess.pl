@@ -36,8 +36,8 @@ Readonly my $TRANS_PATH  => "../../omegat_514/514/target";
 Readonly my $MEM_PATH    => "../../omegat_514/514/omegat/project_save.tmx";   
 # Target
 Readonly my $CLEAN_PATH  => "../../omegat_clean_prj/source";
-Readonly my $DISTR_PATH  => "../POD2-ES/5.14.1/POD2-ES/lib/POD2/ES";
-Readonly my $POD_PATH    => "../pod/5.14.1/reviewed";
+Readonly my $DISTR_PATH  => "../POD2-ES/POD2-ES/lib/POD2/ES";
+Readonly my $POD_PATH    => "../pod/reviewed";
 Readonly my $CLEANM_PATH => "../../omegat_clean_prj/omegat/project_save.tmx";
 
 # Translators section for POD
