@@ -1,0 +1,40 @@
+Puede leer este archivo en cualquier editor de texto (verá algunos caracteres extraños, pero puede ignorarlos).
+Está escrito en formato POD (vea pod/perlpod.pod), un formato diseñado específicamente para ser legible tal cual.
+
+=head1 NOMBRE 
+
+README.hurd - Perl versión 5 en Hurd
+
+=head1 DESCRIPCIÓN
+
+Si desea usar Perl en Hurd, debe usar la distribución Debian GNU/Hurd ( visite http://www.debian.org/ ), aunque aún no existe una versión oficial estable.  Con toda seguridad, la distribución binaria anterior, "gnu-0.2", tendrá más problemas.
+
+=head2 Problemas conocidos de Perl en Hurd 
+
+El conjunto de tests de Perl seguirá informando de algunos errores en Hurd.  Es más que probable que no se superen los tests "lib/anydbm" y "pragma/warnings".
+En realidad, estos errores no son específicos de Hurd, como parece indicar el resultado del conjunto de tests.
+
+Si la red no está configurada, los tests de socketa generarán errores.  Debe hacer que "/hurd/pfinet" sea el traductor para "/servers/socket/2", suministrándole los argumentos correctos.  Pruebe "/hurd/pfinet --help" para obtener más información.
+
+Estas son las estadísticas para Perl 5.005_62 en mi sistema:
+
+ Failed Test  Status Wstat Total Fail  Failed  List of failed
+ -------------------------------------------------------------------------
+ lib/anydbm.t                 12    1   8.33%  12
+ pragma/warnings             333    1   0.30%  215
+
+ 8 tests and 24 subtests skipped.
+ Failed 2/229 test scripts, 99.13% okay. 2/10850 subtests failed, 99.98% okay.
+
+¡Hay muchos sistemas que lo hacen peor!
+
+Sin embargo, como estoy ejecutando una instantánea muy reciente de Hurd en la que se han corregido muchos de los errores expuestos por el conjunto de tests de Perl, es posible que encuentre más errores.  Los candidatos probables son: "op/stat", "lib/io_pipe", "lib/io_sock", "lib/io_udp" y "lib/time".
+
+En cualquier caso, si ve más errores que los mencionados en este documento, debería actualizar a la versión más reciente de Hurd antes de notificar esto como un error. 
+
+=head1 AUTOR
+
+Mark Kettenis <kettenis@gnu.org>
+
+Última actualización: viernes, 29 de octubre de 1999 22:50:30 +0200
+

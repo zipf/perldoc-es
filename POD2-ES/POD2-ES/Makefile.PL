@@ -1,6 +1,5 @@
 use strict;
 use warnings;
-use utf8;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
