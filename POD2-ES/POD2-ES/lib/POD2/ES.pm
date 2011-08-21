@@ -4,28 +4,26 @@ use strict;
 
 use base 'POD2::Base';
 
-our $VERSION = '5.14.1.05';
+our $VERSION = '5.14.1.06';
 
 sub search_perlfunc_re {
     return 'Lista de funciones de Perl en orden alfabético';
 }
 
 sub pod_info {{
-    perl        => '5.14.1',
-    perlbook    => '5.14.1',
-    perlcheat   => '5.14.1',
-    #perldata    => '5.14.1',
-    perlfaq1    => '5.14.1',
-    perlfaq2    => '5.14.1',
-    perlintro   => '5.14.1',
-    perlnumber  => '5.14.1',
-    perlunitut  => '5.14.1',
-    perlutil    => '5.14.1',
+    perl              => '5.14.1',
+    perlbook          => '5.14.1',
+    perlcheat         => '5.14.1',
+    perlfaq1          => '5.14.1',
+    perlfaq2          => '5.14.1',
+    perlintro         => '5.14.1',
+    perlnumber        => '5.14.1',
+    perlsource        => '5.14.1',
+    perlunitut        => '5.14.1',
+    perlutil          => '5.14.1',
     'README.freebsd'  => '5.14.1',
+    'README.hurd'     => '5.14.1',
     'README.openbsd'  => '5.14.1',
-    # perlfunc   => '5.14.1',
-    # perlstyle  => '5.14.1',
-    # perlsyn    => '5.14.1',
 }};
 
 sub print_pod {
