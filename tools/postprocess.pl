@@ -4,9 +4,8 @@
 #
 # Requires Pod::Simple::HTML
 
-use strict;
-use warnings;
 use 5.012;
+use warnings;
 use File::Copy;
 use File::Basename;
 use Readonly;
@@ -151,7 +150,7 @@ foreach my $pod_name (@names) {
     
 
     # Generate HTML file for proofreading;
-    my $html = "$POD_PATH/$name.html";
+    my $html = "$POD_PATH/$name$suffix.html";
     system("perl -MPod::Simple::HTML -e Pod::Simple::HTML::go $distr > $html");
 
     unlink "$distr~";
