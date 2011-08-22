@@ -7,17 +7,16 @@ README.hurd - Perl versión 5 sobre Hurd
 
 =head1 DESCRIPCIÓN
 
-Si quiere usar Perl sobre Hurd, le recomiendo usar la distribución Debian
-GNU/Hurd ( ver http://www.debian.org/ ), incluso aunque todavía no exista una versión estable.  La anterior distribución binaria "gnu-0.2" con toda seguridad, tiene problemas adicionales.
+Si desea usar Perl en Hurd, la distribución recomendada es Debian GNU/Hurd (visite http://www.debian.org/ ), aunque aún no existe una versión oficial estable.  La anterior distribución binaria "gnu-0.2" con toda seguridad, tiene problemas adicionales.
 
 =head2 Problemas conocidos de Perl sobre Hurd 
 
-El conjunto de test Perl seguirá informando de algunos errores sobre Hurd.  Las pruebas El "lib/anydbm" y "pragma/warnings" son casi seguro que fracasarán.
-Ambos errores, realmente, no son específicos a Hurd, como se indica en la salida de los test.
+El conjunto de pruebas de Perl podría detectar errores en Hurd.  Es muy probable que no se superen las pruebas "lib/anydbm" y "pragma/warnings".
+En realidad, estos errores no son específicos de Hurd (como parece indicar el resultado del conjunto de pruebas).
 
-El test de socket fallará si la red no está configurada.  Tiene que hacer "/hurd/pfinet" el traductor para "/servers/socket/2", dándole los argumentos correctos.  Intente "/hurd/pfinet --help" para más información.
+Si la red no está configurada, las pruebas de sockets pueden generar errores.  Debe establecer "/hurd/pfinet" como traductor de "/servers/socket/2", suministrándole los argumentos correctos.  Pruebe "/hurd/pfinet --help" para obtener más información.
 
-Aquí están las estadísticas de Perl 5.005_62 en mi sistema:
+Estas son las estadísticas correspondientes a Perl 5.005_62 en mi sistema:
 
  Failed Test  Status Wstat Total Fail  Failed  List of failed
  -------------------------------------------------------------------------
@@ -27,11 +26,11 @@ Aquí están las estadísticas de Perl 5.005_62 en mi sistema:
  8 tests and 24 subtests skipped.
  Failed 2/229 test scripts, 99.13% okay. 2/10850 subtests failed, 99.98% okay.
 
-¡Hay pocos sistemas que lo hagan peor!
+En muchos sistemas los resultados obtenidos son peores...
 
-Sin embargo, desde que estoy corriendo en la reciente distribución de Hurd, y aunque un montón de errores expuestos por el conjunto de test de Perl han sido arreglados, usted puede encontrar más errores.  Los candidatos probables son: "op/stat", "lib/io_pipe", "lib/io_sock", "lib/io_udp" y "lib/hora".
+Sin embargo, como estoy ejecutando una instantánea muy reciente de Hurd, en la que se han corregido muchos de los errores expuestos por el conjunto de pruebas de Perl, es posible que otros usuarios encuentren más errores.  Los candidatos probables son: "op/stat", "lib/io_pipe", "lib/io_sock", "lib/io_udp" y "lib/time".
 
-De cualquier forma, si está viendo errores más allá de los aquí mencionados en este documento, considere, por favor, actualizar al último Hurd antes de informar de este error. 
+En cualquier caso, si ve más errores que los mencionados en este documento, debería actualizar a la versión más reciente de Hurd antes de notificar los errores. 
 
 =head1 AUTOR
 
