@@ -16,7 +16,7 @@ perlnumber - Semántica de números y operaciones numéricas en Perl
 
 En este documento se describe el procesamiento interno de valores numéricos en Perl.
 
-Se omite completamente la funcionalidad de sobrecarga de operadores de Perl,  La sobrecarga de operadores permite establecer comportamientos definidos por el usuario para números, como operaciones con enteros arbitrariamente grandes, números de punto flotante de precisión arbitraria, operaciones con números "exóticos" (como la aritmética modular o la aritmética de números p-ádicos), etc.  Encontrará información detallada en L<overload>.
+Se omite completamente la funcionalidad de sobrecarga de operadores de Perl,  que permite establecer comportamientos definidos por el usuario para números, como operaciones con enteros arbitrariamente grandes, números de punto flotante de precisión arbitraria, operaciones con números "exóticos" (como la aritmética modular o la aritmética de números p-ádicos), etc.  Encontrará información detallada en L<overload>.
 
 =head1 Cómo se almacenan los números
 
@@ -45,12 +45,12 @@ Como se mencionó antes, Perl puede almacenar un número en uno de tres formatos d
 
 Hay seis conversiones posibles:
 
-  entero nativo		--> punto flotante nativo (*)
-  entero nativo		--> cadena decimal
-  punto flotante nativo	--> entero nativo (*)
-  punto flotante nativo	--> cadena decimal (*)
-  cadena decimal		--> entero nativo
-  cadena decimal		--> punto flotante nativo (*)
+  entero nativo         --> punto flotante nativo (*)
+  entero nativo         --> cadena decimal
+  punto flotante nativo --> entero nativo (*)
+  punto flotante nativo --> cadena decimal (*)
+  cadena decimal        --> entero nativo
+  cadena decimal        --> punto flotante nativo (*)
 
 Estas conversiones obedecen las siguientes normas generales:
 
