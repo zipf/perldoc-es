@@ -1,0 +1,753 @@
+=head1 NOMBRE
+
+perl581delta - qué hay de nuevo en perl v5.8.1
+
+=head1 DESCRIPCIÓN
+
+Este documento describe las diferencias entre la versión 5.8.0 y la versión 5.8.1.
+
+Si está actualizando desde una versión anterior como la 5.6.1, primero lea L<perl58delta>, que describe las diferencias entre 5.6.0 y la 5.8.0.
+
+En caso de que usted se está preguntando sobre 5.6.1, fue una corrección de errores, idéntica a la versión de desarrollo 5.7.1.  ¿Confundido?  Esta línea de tiempo, con suerte, le ayudará un poco: lista los lanzamientos importantes, sus programas de mantenimiento y las versiones de desarrollo.
+
+          Nuevo	Mantenimiento	Desarrollo
+
+          5.6.0				2000-Mar-22
+			5.7.0		2000-Sep-02
+	5.6.1				2001-Apr-08
+			5.7.1		2001-Apr-09
+			5.7.2		2001-Jul-13
+			5.7.3		2002-Mar-05
+	5.8.0				2002-Jul-18
+		5.8.1			2003-Sep-25
+
+=head1 Incompatibilidades
+
+=head2 Aleatorización Hash
+
+Debido principalmente a razones de seguridad, el "orden aleatorio" de los hashes se ha hecho aún más aleatorio.  Anteriormente, mientras que el orden de los elementos de un hash obtenidos mediante keys(), values() y each() era, esencialmente, aleatorio, seguía siendo replicable.  Ahora, sin embargo, el orden varía entre diferentes ejecuciones de Perl.
+
+B<Perl nunca ha garantizado ningún tipo de ordenación de las claves de un hash>, y esa ordenación ya ha cambiado varias veces a lo largo de la vida útil de Perl 5.  Además, el ordenamiento de las claves de un hash siempre ha sido, y sigue siendo, afectado por el orden de la inserción de los elementos.
+
+La aleatoriedad añadida puede afectar a las aplicaciones.
+
+Un posible escenario es cuando la salida de una aplicación ha incluido datos hash.  Por ejemplo, si ha utilizado el módulo Data::Dumper para volcar los datos en diferentes archivos, y luego comparó los archivos para ver si los datos han cambiado, ahora tendrá falsos positivos ya que el orden en que los hashes se vuelcan pueden variar.  En general, la cura es ordenar las claves (o valores); en particular para Data::Dumper use la opción C<Sortkeys>.  Si un determinado orden es muy importante, utilice hashes enlazados: por ejemplo, el módulo Tie::IxHash, que por defecto preserva el orden en que los elementos de un hash han sido añadidos.
+
+Un problema más sutil es la confianza en el orden de la "destrucción global".
+Eso es lo que ocurre al final de la ejecución: Perl destruye todas las estructuras de datos, incluyendo los datos del usuario.  Si sus destructores (las subrutinas DESTROY) han asumido cualquier tipo de orden para la destrucción global, podrían ocurrir problemas más adelante.  Por ejemplo, en un destructor de un objeto no puede asumir que los objetos de cualquier otra clase todavía están disponibles, a menos que mantenga una referencia a ellos.
+Si la variable de entorno PERL_DESTRUCT_LEVEL se establece a un valor distinto de cero, o si Perl está saliendo de un hilo, también destruirá las referencias comunes y las tablas de símbolos que ya no están en uso.
+No puede llamar a un método de clase o a una función ordinaria en una clase que se haya destruido de esa manera.
+
+La asignación al azar de un hash sirvió para revelar suposiciones ocultas acerca de alguna ordenación particular de los elementos de un hash, y errores definitivos: reveló un par de errores en el núcleo de Perl y en los módulos básicos.
+
+Para desactivar la asignación al azar de un hash en tiempo de ejecución, ponga la variable de entorno PERL_HASH_SEED a 0 (cero) antes de ejecutar Perl (para más información véase L<perlrun/PERL_HASH_SEED>), o para desactivar la función completamente en tiempo de compilación, compilar con C<-DNO_HASH_SEED> (vea F<INSTALL>).
+
+Vea L<perlsec/"Ataques de complejidad algorítmica"> para la justificación original de este cambio.
+
+=head2 UTF-8 en identificadores de archivo ya no son activados por locale
+
+En Perl 5.8.0 todos los identificadores de archivo, incluidos los identificadores de archivo estándar, se establecían implícitamente en Unicode UTF-8 si la configuración regional indicaba el uso de UTF-8.  Esta característica causaba muchos problemas, por lo que la función se ha desactivado y rediseñado: vea L</"Mejoras del núcleo">.
+
+=head2 Las cadenas v-strings de un solo dígito ya no son v-strings delante de un "=>"
+
+Las cadenas de versión o v-strings (vea L<perldata/"Cadenas de versión"> ), característica introducida en Perl 5.6.0, ha sido una fuente de confusión -especialmente cuando el usuario no desea utilizarla, pero Perl piensa que sabe más que él-.  Especialmente preocupante ha sido la característica de que antes de un "=>", una cadena de versión (una "v" seguida de dígitos) se ha interpretado como un v-string en lugar de una cadena literal.  En otras palabras:
+
+	%h = ( v65 => 42 );
+
+ha significado desde Perl 5.6.0
+
+	%h = ( 'A' => 42 );
+
+(al menos en las plataformas de la progenie ASCII). Perl 5.8.1 restauró la interpretación más natural
+
+	%h = ( 'v65' => 42 );
+
+v-strings con múltiples números como C<v65.66> y C<65.66.67> siguen siendo v-strings en Perl 5.8.
+
+=head2 (Win32) La opción -C ha sido reasignada
+
+La opción -C ha cambiado de una forma incompatible.  La semántica anterior de esta opción sólo tiene sentido en Win32 y sólo con "use utf8" en el universo de versiones 5.6.x, y no tienen sentido para la implementación de Unicode en 5.8.0.  Dado que esta opción quizás no podría haber sido utilizada más por cualquier persona, se ha reutilizado.  El comportamiento que esta opción activaba en las versiones 5.6.x puede ser soportada de manera transparente, dependiendo de la moda, en una próxima versión.
+
+Para la nueva vida de esta opción, vea L<"UTF-8 ya no está por defecto bajo la configuración regional de UTF-8"> y L<perlrun/-C>.
+
+=head2 (Win32) La opción /d de cmd.exe
+
+Perl 5.8.1 usa el modificador /d cuando se ejecuta el shell cmd.exe, internamente, para system(), comillas invertidas, y al abrir tuberías hacia programas externos.  Esta opción adicional deshabilita la ejecución de los comandos AutoRun del registro, que generalmente se considera indeseable cuando se ejecutan programas externos.  Si desea mantener la compatibilidad con el antiguo comportamiento, establezca PERL5SHELL en su entorno a C<cmd /x/c>.
+
+=head1 Mejoras del núcleo
+
+=head2 UTF-8 ya no está por defecto bajo la configuración regional de UTF-8
+
+En Perl 5.8.0 se introdujeron muchas características Unicode.   Una de ellas resultó ser de más molestia que beneficio: la automágica (y silenciosa) "UTF-8-fijación" de los identificadores de archivo, incluyendo los identificadores de archivo estándar, si la configuración regional del usuario indica el uso de UTF-8.
+
+Por ejemplo, si usted tenía C<en_US.UTF-8> como su configuración local, su STDIN y STDOUT fueron automáticamente "UTF-8", en otras palabras, se hizo un binmode(..., ": utf8") de forma implícita.  Esto significaba que intentando imprimir, por ejemplo, chr(0xff), terminaba imprimiendo los bytes 0xc3 0xbf.  Difícilmente se acordaría de ello a menos que fuera consciente de esta característica de Perl 5.8.0.
+El problema es que la gran mayoría de la gente no lo era: por ejemplo, en RedHat versiones 8 y 9, la configuración local B<por defecto> es UTF-8, por lo que todos los usuarios de RedHat obtenían identificadores de archivo UTF-8, lo quisieran o no.
+El dolor se intensificó por que la implementación de Unicode de Perl 5.8.0 (todavía) tenía errores desagradables, especialmente en relación con el uso de s// y tr///.  (Errores que han sido corregidos en 5.8.1)
+
+Por lo tanto se tomó la decisión de dar marcha atrás a esta característica y se cambió, desde una manera por defecto implícita y silenciosa a otra opción explícita y consciente.  La nueva opción de la línea de comandos de Perl C<-C> y su contrapartida en la variable de entorno PERL_UNICODE ahora se pueden utilizar para controlar la forma en que Perl y Unicode interactuan en las interfaces como E/S y, por ejemplo, los argumentos en la línea de comandos.  Vea L<perlrun/-C> y L<perlrun/PERL_UNICODE> para más información.
+
+=head2 Acceso a señales de forma insegura de nuevo disponibles
+
+En Perl 5.8.0 fue introducido el concepto llamado "acceso a señales de forma segura".  Esto significa que Perl ya no gestiona las señales de forma inmediata, sino que "entre los códigos de operación", cuando es más seguro hacerlo.  El manejo inmediato anterior podría dañar el estado interno de Perl, lo que resulta en caídas misteriosas.
+
+Sin embargo, el nuevo modelo de seguridad también tiene sus problemas.  Porque ahora un código de operación, una unidad básica de ejecución Perl, nunca es interrumpida, sino que va a ejecutarse hasta el final; ciertas operaciones que pueden tomar mucho tiempo ahora realmente se toman un largo tiempo.  Por ejemplo, ciertas operaciones de red tienen sus propios mecanismos de bloqueo de tiempo de espera, y ser capaz de interrumpirles de inmediato estaría bien.
+
+Por lo tanto, perl 5.8.1 introduce una "puerta trasera" para restaurar el comportamiento pre-5.8.0 (pre-5.7.3, en realidad) de las señales.  Sólo tiene que configurar la variable de entorno PERL_SIGNALS a C<unsafe>, e inmediatamente el antiguo (y peligroso) comportamiento de la gestión de señales volverá.  Vea L<perlrun/PERL_SIGNALS> y L<perlipc/"Señales diferidas (Acceso seguro a señales)">.
+
+En noticias aparte, ahora puede usar señales de forma segura con POSIX::sigaction.  Vea L<POSIX/POSIX::SigAction>.
+
+=head2 Arrays enlazados con índices de array negativos
+
+Anteriormente, los índices que se pasaban a los métodos C<FETCH>, C<STORE>, C<EXISTS>, y C<DELETE> de la clase array enlazada eran siempre no negativos.  Si el argumento era negativo, Perl llamaría a FETCHSIZE de forma implícita y sumaría el resultado al índice antes de pasar el resultado al método de array enlazado.  Este comportamiento es ahora opcional.  Si la clase de array enlazado contiene una variable de paquete denominada C<$NEGATIVE_INDICES> que se establece a un valor real, los valores negativos serán pasados directamente a C<FETCH>, C<STORE>, C<EXISTS>, y C<DELETE>.
+
+=head2 local ${$x}
+
+La sintaxis
+
+	local ${$x}
+	local @{$x}
+	local %{$x}
+
+ahora localizan variables, teniendo en cuenta que $x es un nombre válido de variable.
+
+=head2 Unicode Character Database 4.0.0
+
+La copia de la base de datos de caracteres Unicode incluidos en Perl 5.8 ha sido actualizado desde la 3.2.0 a la 4.0.0.  Esto significa que, por ejemplo, las propiedades de caracteres Unicode son como en Unicode 4.0.0.
+
+=head2 Advertencias de desaprobación
+
+Hay una nueva característica desaprobada.  Perl 5.8.0 olvidó añadir algunas advertencias de desaprobación, estas advertencias han sido ahora añadidas.
+Por último, un recordatorio de una eliminación inminente.
+
+=head3 (Recordatorio) Pseudo-hashes están en desuso (de verdad)
+
+Pseudo-hashes están obsoletas desde Perl 5.8.0 y serán eliminadas en Perl 5.10.0, vea L<perl58delta> para más detalles.  Cada intento de acceso a los pseudo-hashes activará la alerta C<Pseudo-hashes are deprecated>.
+Si de verdad quiere seguir usando pseudo-hash, pero no quiere ver la advertencia de obsolescencia, utilice:
+
+    no warnings 'deprecated';
+
+O bien, puede seguir utilizando el pragma L<fields> pero, por favor, no permita que las estructuras de datos sigan siendo pseudo-hashes.
+
+=head3 (Recordatorio) los I<threads> estilo 5.005 son obsoletos (de verdad)
+
+Los I<threads> estilo 5.005 (activados con C<use Thread;>) fueron desaprobados en Perl 5.8.0 y serán eliminados después de Perl 5.8, vea L<perl58delta> para más detalles.  Cada creación de un I<thread> estilo 5.005 disparará la advertencia C<5.005 threads are deprecated>.  Si realmente desea seguir utilizando los I<threads> 5.005 pero no quiere ver la advertencia de obsolescencia, utilice:
+
+    no warnings 'deprecated';
+
+=head3 (Recordatorio) La variable $* es obsoleta (de verdad)
+
+La variable C<$*> que controla la coincidencia multi-línea ha sido desaprobada y será eliminada después de 5.8.  La variable ha dejado de utilizarse desde hace bastante tiempo, y ahora se muestra la advertencia de desaprobación C<Use of $* is deprecated>; ahora la variable será finalmente eliminada.  La funcionalidad ha sido reemplazada por los modificadores C</s> y C</m> en la coincidencia de patrones.
+Si realmente desea seguir utilizando la variable C<$*> pero no quiere ver la advertencia de obsolescencia, utilice:
+
+    no warnings 'deprecated';
+
+=head2 Mejoras varias
+
+C<map> en contexto vacío ya no es oneroso. C<map> ahora depende del contexto, y no construirá una lista si es llamado en contexto vacío.
+
+Si un I<socket> es cerrado por el servidor mientras se está imprimiendo en él, el cliente recibe ahora una SIGPIPE.  Aunque esta nueva característica no fue planeada, apareció de forma natural de los cambios que se hicieron a PerlIO, y se considera una característica accidental.
+
+PerlIO::get_layers(FH) devuelve los nombres de las capas PerlIO activas en un identificador de archivo.
+
+Las capas PerlIO::via pueden tener ahora un método UTF8 opcional para indicar cuándo la capa requiere que el flujo active ":utf8" de forma automática.
+
+utf8::is_utf8() ha sido añadido como una forma rápida de comprobar cuándo un escalar está codificado internamente en UTF-8 (Unicode).
+
+=head1 Módulos y Pragmata
+
+=head2 Módulos y Pragmata actualizados
+
+Los siguientes módulos y pragmata se han actualizado desde Perl 5.8.0:
+
+=over 4
+
+=item base
+
+=item B::Bytecode
+
+En una forma mucho mejor de lo que solía ser.  Todavía lejos de ser perfecto, pero quizás vale la pena intentarlo.
+
+=item B::Concise
+
+=item B::Deparse
+
+=item Benchmark
+
+Una característica opcional, C<hireswallclock>, permite ahora tiempos de alta resolución de reloj (utiliza Time::HiRes).
+
+=item ByteLoader
+
+Vea B::Bytecode.
+
+=item bytes
+
+Ahora tiene bytes::substr.
+
+=item CGI
+
+=item charnames
+
+Ahora puede tener personalizados alias como nombres de caracteres.
+
+=item CPAN
+
+En la actualidad existe una interfaz de línea de comandos simple para el módulo CPAN.pm llamado F<cpan>.
+
+=item Data::Dumper
+
+Una nueva opción, Pair, permite elegir el separador entre las claves y valores de un hash.
+
+=item DB_File
+
+=item Devel::PPPort
+
+=item Digest::MD5
+
+=item Encode
+
+Actualizaciones significativas en la funcionalidad del pragma de codificación (formatos tr/// y del identificador de archivo de datos DATA).
+
+Si un identificador de archivo se ha marcado para tener una cierta codificación, los caracteres no traducibles son detectados en la entrada, no después (cuando los datos dañados se estén utilizando).
+
+La tabla de conversión ISO 8859-6 ha sido corregida (el 0x30..0x39 erróneamente estaba asignado a U+0660..U+0669, en lugar de U+0030..U+0039).  La conversión GSM 03.38 no maneja correctamente las secuencias de escape.  La codificación UTF-7 ha sido añadida (haciendo que Encode tenga las características completas con Unicode::String).
+
+=item fields
+
+=item libnet
+
+=item Math::BigInt
+
+Muchos errores se han corregido desde v1.60, la versión incluida en Perl v5.8.0. Destaca de forma notable el fallo en Calc que causaba que div y mod fallaran para ciertos valores grandes, y los arreglos para el manejo de las entradas erróneas.
+
+Algunas nuevas características han sido añadidas, por ejemplo, al método broot() ahora puede pasarle parámetros a config() para cambiar algunos ajustes en tiempo de ejecución, y ahora es posible atrapar la creación de NaN e infinity.
+
+Como de costumbre, algunas optimizaciones se llevaron a cabo y se hizo que el proceso matemático fuera, en general, un poco más rápido. En algunos casos, mucho más rápido, en realidad. Especialmente las bibliotecas alternativas como Math::BigInt::GMP se beneficiaron de todo esto. Además, muchas de las rutinas bastante torpes como fsqrt() y flog() son ahora mucho más rápidas.
+
+=item MIME::Base64
+
+=item NEXT
+
+La herencia de diamante ahora funciona.
+
+=item Net::Ping
+
+=item PerlIO::scalar
+
+Leer de escalares que no sean cadenas (como las variables especiales, vea L<perlvar>) ahora funciona.
+
+=item podlators
+
+=item Pod::LaTeX
+
+=item PodParsers
+
+=item Pod::Perldoc
+
+Reescritura completa.  Como efecto colateral, ya no se niega a iniciarse cuando se ejecuta como el usuario root.
+
+=item Scalar::Util
+
+Nuevas utilerías: refaddr, isvstring, looks_like_number, set_prototype.
+
+=item Storable
+
+Ahora puede almacenar referencias a código (a través de B::Deparse, no es tan infalible).
+
+=item strict
+
+Las versiones anteriores del pragma strict no comprobaban de forma implícita los parámetros pasados a sus rutinas "import" (use) y "unimport" (no).
+Esto permitía hacer el falso modismo:
+
+        use strict qw(@ISA);
+        @ISA = qw(Foo);
+
+Sin embargo, esto planteó (probablemente) la falsa expectativa de que los strict refs, vars y subs estaban siendo forzados (y que @ISA era, de alguna manera "declarada").  Sin embargo, los strict refs, vars y subs B<no> estaban forzados cuando se utilizaba ese falso modismo.
+
+A partir de Perl 5.8.1, lo anterior B<provocará> un error.  Esto puede hacer que los programas que lo usaban para ejecutar, de forma aparente, sin advertencias ni errores, fallen cuando se ejecute en 5.8.1.
+Esto sucede porque
+
+        use strict qw(@ISA);
+
+ahora fallará con el error:
+
+        Unknown 'strict' tag(s) '@ISA'
+
+El remedio para este problema es reemplazar este código con la expresión correcta:
+
+        use strict;
+        use vars qw(@ISA);
+        @ISA = qw(Foo);
+
+=item Term::ANSIcolor
+
+=item Test::Harness
+
+Ahora es mucho más exigente con la salida extra o con la que falta de los scripts de test.
+
+=item Test::More
+
+=item Test::Simple
+
+=item Text::Balanced
+
+=item Time::HiRes
+
+El uso de nanosleep(), si está disponible, permite la mezcla de lapsos en fracciones de segundo junto con las alarmas.
+
+=item threads
+
+Varias correcciones, por ejemplo para problemas y pérdidas de memoria en join().  En algunas plataformas (como Linux) que usan glibc, el consumo mínimo de memoria de un ithread se ha reducido en varios cientos de kilobytes.
+
+=item threads::shared
+
+Muchas fugas de memoria han sido corregidas.
+
+=item Unicode::Collate
+
+=item Unicode::Normalize
+
+=item Win32::GetFolderPath
+
+=item Win32::GetOSVersion
+
+Ahora devuelve información adicional.
+
+=back
+
+=head1 Cambios en las herramientas
+
+La utilidad C<h2xs> produce ahora un diseño más moderno: F<Foo-Bar/lib/Foo/Bar.pm> en lugar de F<Foo/Bar/Bar.pm>.
+Además, la prueba reutilizable se llama ahora F<t/Foo-Bar.t> en lugar de F<t/1.t>.
+
+El depurador de Perl (F<lib/perl5db.pl>) ha sido ampliamente documentado y los errores encontrados, mientras que la documentación se ha fijado.
+
+C<perldoc> ha sido reescrito desde cero para ser más robusto y rico en características.
+
+C<perlcc -B> trabaja ahora por lo menos un poco mejor, mientras que C<perlcc -c> está algo más roto.  (El paquete del compilador de Perl, en su conjunto, sigue siendo experimental.)
+
+=head1 Nueva documentación
+
+perl573delta se ha añadido a la lista de las diferencias entre las versiones de desarrollo (ya bastante obsoletas) 5.7.2 y 5.7.3.
+
+perl58delta ha sido añadido: es el perldelta de 5.8.0, detallando las diferencias entre 5.6.0 y 5.8.0.
+
+perlartistic ha sido añadido: se trata de la Licencia Artística en formato pod, haciendo más fácil para los módulos referirse a ella.
+
+perlcheat ha sido añadida: se trata de una hoja de trucos Perl.
+
+perlgpl ha sido añadido: es la Licencia General Pública GNU en formato pod, haciendo más fácil para los módulos referirse a ella.
+
+perlmacosx ha sido añadido para hablar acerca de la instalación y el uso de Perl en Mac OS X.
+
+perlos400 ha sido añadido para hablar acerca de la instalación y el uso de Perl en OS/400 PASE.
+
+perlreref ha sido añadido: es una referencia rápida para expresiones regulares.
+
+=head1 Mejoras en la instalación y configuración
+
+La ubicación estándar de Perl en Unix, F</usr/bin/perl>, ya no es, por defecto, sobreescrita, si existe.  Este cambio fue muy prudente, porque muchos de los instaladores de Unix ya ofrecen un F</usr/bin/perl>, pero al mismo tiempo muchas utilidades del sistema puede depender de la versión exacta de Perl, así que es mejor no sobrescribirlo.
+
+Ahora se pueden especificar directorios de instalación para las páginas man y HTML, y scripts para el propio equipo y para el instalador del sistema.  Vea F<INSTALL>.
+
+Ahora se puede especificar un directorio destino para la instalación de Perl mediante la especificación de la variable DESTDIR para C<make install>.  (Esta característica es ligeramente diferente de la anterior C<Configure -Dinstallprefix=...>.) Vea F<INSTALL>.
+
+versiones 3.x de gcc introdujeron una nueva advertencia que causaba mucho ruido en la compilación Perl: C<gcc -Ialreadyknowndirectory (advertencia: cambiando el órden de búsqueda)>.  Esta advertencia ha sido eliminada para no confundir a Configure de esos directorios antes de la compilación.
+
+Ahora se pueden crear subconjuntos de módulos básicos de Perl usando las banderas de Configure C<-Dnoextensions=...> y C<-Donlyextensions=...>, vea F<INSTALL>.
+
+=head2 Mejoras específicas por plataforma
+
+En Cygwin Perl ahora se puede construir con soporte de hilos de ejecución (C<Configure -Duseithreads>).
+Esto funciona tanto con Cygwin 1.3.22 y Cygwin 1.5.3.
+
+En las versiones más recientes de FreeBSD Perl 5.8.0 la compilación falló debido a que trata de utilizar F<malloc.h>, que en FreeBSD es solo un archivo ficticio, y es un error fatal incluso el tratar de usarlo.  Ahora ya no se utiliza F<malloc.h>.
+
+Se sabe que Perl se compila también ahora en Hitachi HI-UXMPP.
+
+Se sabe que Perl se compila también ahora en LynxOS.
+
+Mac OS X ahora se instala con el número de versión de Perl incrustado en los nombres de directorio de la instalación para facilitar la actualización por parte del usuario que compiló Perl, y los directorios de instalación, en general, son más estándar.
+En otras palabras, la instalación por defecto ya no rompe el Perl proporcionado por Apple.  Por otro lado, con C<Configure -Dprefix=/usr> ahora puede, realmente, cambiar el Perl suministrado por Apple (B<por favor, tenga cuidado>).
+
+Mac OS X ahora por defecto compila Perl de forma estática.  Este cambio se llevó a cabo principalmente por obtener tiempos de arranque más rápidos.  El Perl proporcionado por Apple sigue siendo enlazado de forma dinámica y compartida, y se puede habilitar el nivel de compartición de su propia compilación de Perl por medio de C<Configure -Duseshrplib>.
+
+Perl ha sido adaptada al entorno de IBM OS/400 PASE.  La mejor manera de construir un Perl para PASE es utilizar un host AIX como entorno de compilación cruzado.  Vea README.os400.
+
+Se ha agregado otra opción de compilación cruzada: ahora Perl se compila en OpenZaurus, una distribución Linux basada en Mandrake + Embedix para la PDA Sharp Zaurus.  Vea el archivo Cross/README.
+
+En Tru64, cuando se utiliza gcc 3 baja la optimización de F<toke.c> a C<-O2> debido al enorme uso de memoria con el valor por defecto C<-O3>.
+
+Tru64 ahora compila Perl con las nuevas base de datos Berkeley.
+
+La construcción de Perl en WinCE se ha mejorado mucho, vea F<README.ce> y F<README.perlce>.
+
+=head1 Arreglo de determinados errores
+
+=head2 Clausuras, eval y léxicas
+
+Ha habido muchas correcciones en el área de las subs anónimas, léxicas y clausuras.  Aunque esto significa que Perl es más "correcto", es posible que algún código existente se rompa, por confiar en el comportamiento defectuoso.  En la práctica esto es poco probable a menos que el código contenga un agrupamiento muy complejo de subs anónimas, evals y léxicas.
+
+=head2 Arreglos genéricos
+
+Si un identificador de archivo de entrada es marcado como C<:utf8> y Perl ve UTF-8 ilegal cuando hace C<< <FH> >>, si las advertencias están activadas, se levanta inmediatamente una advertencia - en lugar de callar y dejar Perl descontento con el resto de datos estropeados.  (La capa C<:encoding(utf8)> también funciona del mismo modo.)
+
+binmode(SOCKET, ":utf8") solo funciona en el lado de la entrada, no en la salida del I<socket>.  Ahora funciona de las dos maneras.
+
+Para Perls con soporte de I<threads>, ciertas funciones de base de datos del sistema como getpwent() y getgrent(), ahora hacen crecer sus búfer de resultados de forma dinámica, en lugar de fallar.  Esto significa que en los sitios con una gran cantidad de usuarios y grupos, las funciones ya no fallarán devolviendo solo resultados parciales.
+
+Perl 5.8.0 había roto accidentalmente la capacidad de los usuarios de definir sus propias asignaciones mayúsculas <-> minúsculas en Unicode (como se indicaba en el libro del camello).  Esta característica se ha fijado y está también mejor documentada.
+
+En 5.8.0, esto
+
+	$some_unicode .= <FH>;
+
+no funciona correctamente, sino que corrompe los datos.  Este error ya se ha solucionado.
+
+Métodos enlazados como FETCH, etc ahora pueden acceder de forma segura a los valores enlazados, es decir, que resulta en una llamada recursiva a FETCH, etc. Recuerde, sin embargo, romper la recursión.
+
+En el arranque, Perl bloquea la señal SIGFPE, ya que no hay mucho que Perl pueda hacer al respecto.  Anteriormente, este bloqueo se encontraba en vigor también para los programas ejecutados desde dentro de Perl.  Ahora Perl restaura la rutina de manejo de SIGFPE original, fuera cual fuera, antes de ejecutar programas externos.
+
+Los números de línea en Perl ahora pueden ser mayores de 65536, o 2**16.
+(Los programas Perl siempre han sido capaces de tener más que eso, es sólo que los números de línea de los informes de errores y advertencias son "reiniciados".) Mientras que scripts tan grandes como estos, por lo general, indican la necesidad de repensar un poco el código, scripts de Perl como estos existen, por ejemplo, de resultas de un código generado.  Ahora, los números de línea puede ir hasta 4294967296, o 2**32.
+
+=head2 Arreglos específicos por plataforma
+
+Linux
+
+=over 4
+
+=item *
+
+Estableciendo $0 funciona de nuevo (con ciertas limitaciones en las que Perl no ha podido hacer mucho al respecto: vea L<perlvar/$0>)
+
+=back
+
+HP-UX
+
+=over 4
+
+=item *
+
+Ahora funciona el establecer $0.
+
+=back
+
+VMS
+
+=over 4
+
+=item *
+
+Configuración ahora prueba por la presencia de C<poll()>, e IO::Poll ahora utiliza la función suministrada por el proveedor, si es detectada.
+
+=item *
+
+Una violación de acceso poco frecuente en la puesta en marcha de Perl podría producirse si la imagen de Perl se instaló con privilegios o si hubo un identificador con el conjunto de atributos del subsistema en la lista de derechos del proceso.  Cualquiera de estas circunstancias provocaba código contaminado que contenía un error de puntero. 
+La aritmética de punteros errónea ha sido corregida.
+
+=item *
+
+El límite de longitud en los valores (no claves) en el hash %ENV se ha elevado de 255 bytes a 32640 bytes (excepto cuando el ajuste PERL_ENV_TABLES sobreescribe el uso predeterminado de los nombres lógicos de %ENV).  Si es necesario acceder a estos valores largos desde el exterior de Perl, sea consciente de que se implementan utilizando los nombres de la lista de búsqueda lógica que almacena el valor en partes, de 255 bytes cada una (hasta 128 de ellas) de cada elemento de la lista de búsqueda. Al hacer una búsqueda en %ENV desde dentro de Perl, los elementos son combinados en un solo valor.  La actual habilidad específica de VMS de acceder a elementos individuales de un nombre lógico de lista de búsqueda a través de la sintaxis $ENV{'foo;N'} (donde N es el índice de la lista de búsqueda) no se ve afectada.
+
+=item *
+
+La implementación de tuberías ahora utiliza más locales que símbolos DCL globales para la comunicación entre procesos.
+
+=item *
+
+File::Find podría confundirse cuando se navega a un directorio de forma relativa cuyo nombre coincide con un nombre lógico.  Este problema se ha corregido mediante la adición de la sintaxis de directorio de nombres de ruta de acceso relativo, evitando así la traducción de nombres lógicos.
+
+=back
+
+Win32
+
+=over 4
+
+=item *
+
+Una pérdida de memoria en la emulación de fork() se ha arreglado.
+
+=item *
+
+El valor de retorno de la función incorporada ioctl() se rompió accidentalmente en 5.8.0.  Esto ha sido corregido.
+
+=item *
+
+El bucle de mensajes interno ejecutado por perl durante las operaciones de bloqueo a veces interfiere con los mensajes que eran externos a Perl.
+A menudo, esto resultó en el bloqueo de las operaciones, finalizando antes de tiempo, o la devolución de resultados incorrectos, cuando se estaba ejecutando Perl bajo entornos que podrían generar mensajes de Windows.  Esto ha sido corregido.
+
+=item *
+
+Tuberías y I<sockets> están, ahora, automáticamente, en modo binario.
+
+=item *
+
+La forma de cuatro argumentos de select() no preservaba $! (errno) correctamente cuando se han producido errores en la llamada subyacente.  Esto ha sido arreglado.
+
+=item *
+
+El problema "CR CR LF" ha sido fijado, binmode(FH ":crlf") es ahora, efectivamente, una no-operación.
+
+=back
+
+=head1 Diagnósticos nuevos y cambiados
+
+Todos las advertencias relacionadas con pack() y unpack() se hicieron más informativas y consistentes.
+
+=head2 Caambiada "I<A thread exited while %d threads were running>" (Un hilo de ejecución terminó mientras %d hilos se estaban ejecutando)
+
+La versión antigua
+
+    I<A thread exited while %d other threads were still running> (Un hilo de ejecución terminó mientras %d otros hilos seguían ejecutándose)
+
+era engañoso, porque los "otros" incluían también al hilo que daba la advertencia.
+
+=head2 Eliminado "I<Attempt to clear a restricted hash>" (Intento de limpiar un hash restringido)
+
+No es ilegal borrar un hash restringido, por lo que el aviso fue retirado.
+
+=head2 Nuevo "I<Illegal declaration of anonymous subroutine>" (Declaración ilegal de una subrutina anónima)
+
+Debe especificar el bloque de código para C<sub>.
+
+=head2 Cambiado "I<Invalid range "%s" in transliteration operator>" (Rango "%s" inválido en el operador de transliteración)
+
+La versión antigua
+
+    Rango "%s" inválido [] en el operador de transliteración
+
+simplemente estaba mal, porque no existen "rangos []" en tr///.
+
+=head2 Nuevo "I<Missing control char name in \c>" (Falta nombre de carácter de control en \c)
+
+Se explica por sí mismo.
+
+=head2 Nuevo "I<Newline in left-justified string for %s>" (Avance de línea en cadena justificada a la izquierda para %s)
+
+Pueden aparecer espacios de relleno después del avance de línea, que probablemente no es lo que tenía en mente.
+
+=head2 Nuevo "I<Possible precedence problem on bitwise %c operator>" (Posible problema de precedencia en el operador de bit %c)
+
+Si piensa que esto
+
+    $x & $y == 0
+
+comprueba si el enmascaramiento AND de $x e $y son cero, le gustará esta advertencia.
+
+=head2 Nuevo "Pseudo-hashes are deprecated"
+
+Esta advertencia debería haber salido ya desde 5.8.0.
+
+=head2 Nuevo "I<read() on %s filehandle %s>" (read() en identificador %s de archivo %s)
+
+No se puede read() (o sysread()) de un identificador de archivo cerrado o no abierto.
+
+=head2 Nuevo "5.005 threads are deprecated"
+
+Esta advertencia debería haber salido ya desde 5.8.0.
+
+=head2 Nuevo "I<Tied variable freed while still in use>" (Variable enlazada liberada mientras todavía está en uso)
+
+Algo tiró del enchufe en una variable enlazada que seguía viva, Perl apuesta seguro por el rescate.
+
+=head2 Nuevo "I<To%s: illegal mapping '%s'>" (A %s: mapeo ilegal '%s')
+
+Se ha especificado un mapeo Unicode de caja ilegal definido por el usuario.
+
+=head2 Nuevo "I<Use of freed value in iteration>" (Uso de un valor liberado en la iteración)
+
+Algo modificó los valores que se utilizaron en la iteración.  Esto no es bueno.
+
+=head1 Cambios internos
+
+Estas noticias solamente son importantes para usted si, o escribe código XS o le gustaría saber acerca de o quiere I<hackear> las partes internas Perl (usando Devel::Peek o cualquiera de los módulos C<B::>), o como para ejecutar Perl con la opción C<-D>.
+
+Los ejemplos incluidos en L<perlembed> han sido revisados para estar al día y ser consistentes: por ejemplo, el uso correcto de PERL_SYS_INIT3() y PERL_SYS_TERM().
+
+Una remodelación extensa del código de control (el código responsable de las variables léxicas) ha sido llevado a cabo por Dave Mitchell.
+
+Una amplia labor en la v-strings por parte de John Peacock.
+
+Longitud y posición de la caché UTF-8: para acelerar la tramitación de escalares Unicode (UTF-8), se introdujo una memoria caché.  Existen problemas potenciales si una extensión no pasa por la API oficial y modifica directamente el PV de un SV: el caché UTF-8 no es borrado como debiera.
+
+API obsoleta en Perl 5.8.0, como sv_2pv, sv_catpvn, sv_catsv, sv_setsv, están de nuevo disponibles.
+
+Ciertas API de C del núcleo de Perl, como cxinc y regatom ya no están disponibles en todo el código que esté fuera del núcleo principal de las extensiones de Perl.  Esto es intencional.  Nunca deberían haber estado disponibles con los nombres más acortados, y si su aplicación depende de ellos, debe (y avergonzarse de ello) contactar con los  perl5-porters para discutir cuáles son las API adecuadas.
+
+Ciertas API C del núcleo de Perl, como C<Perl_list> ya no están disponibles sin su prefijo C<Perl_>.  Si su módulo XS deja de funcionar debido a que algunas funciones no se pueden encontrar, en muchos casos una solución sencilla es añadir el prefijo C<Perl_> a la función y el contexto del hilo C<aTHX_> como primer argumento de la llamada a la función.  Esta también es la forma en que siempre se debería haber hecho: dejar que los formularios Perl agotasen el núcleo fue un accidente.  Para una incorporación más limpia también puede forzar esto para todas las API definiendo, en tiempo de compilación, el B<define> PERL_NO_SHORT_NAMES para cpp.
+
+Perl_save_bool() ha sido añadido.
+
+Objetos Regexp (los creados con C<qr>) ahora tienen S-magic en lugar de R-magic.  Esto arregla expresiones regulares de la forma /...(??{...;$x})/ para que deje de ignorar los cambios realizados en $x.  El S-magic evita decaer la optimización de almacenamiento en caché y que las construcciones (??{...}) sean obscenamente lentas (y por lo tanto, inútiles).  Vea también L<perlguts/"Variables Mágicas">.
+Regexp::Copy se vio afectada por este cambio.
+
+Las macros internas de depueración Perl DEBUG() y DEB() han sido renombradas a PERL_DEBUG() y PERL_DEB() para evitar conflictos en el espacio de nombres.
+
+C<-DL> eliminado (el test de agotamiento estaba roto y no mantenido desde hace años; de otra forma, use malloc de depuración o herramientas como valgrind y Purify).
+
+El modificador de detalle C<v> añadido para C<-DXv> y C<-Dsv>, vea L<perlrun>.
+
+=head1 Nuevas pruebas
+
+En Perl 5.8.0 había alrededor de 69.000 pruebas distintas en alrededor de 700 archivos de prueba, en Perl 5.8.1 hay cerca de 77.000 pruebas distintas en alrededor de 780 archivos de prueba.
+El número exacto dependerá de la configuración de Perl y de la plataforma del sistema operativo.
+
+=head1 Problemas conocidos
+
+La asignación al azar de hash mencionado en L</Cambios Incompatibles> es definitivamente un problema: despertará errores latentes y sacudirá a las malas suposiciones.
+
+Si desea utilizar mod_perl 2.x. con Perl 5.8.1, necesitará mod_perl-1.99_10 o superior.  Las versiones anteriores de mod_perl 2.x no funcionan con la función de aleatorización de los hashes.  (mod_perl 1.x funciona bien.) También necesitará Apache::Test 1.04 o superior.
+
+Muchas de las plataformas más raras en las que funcionaba al 100% o muy cerca de ello con perl 5.8.0 se han quedado un poco descuidadas debido a que sus responsables se han ocupado últimamente de otras cosas, y por lo tanto habrá más fallos en esas plataformas.  En estas plataformas se incluyen a Mac OS Classic, IBM z/OS (y otras plataformas EBCDIC), y NetWare.  Las plataformas más comunes de Perl (Unix y familia, las plataformas Microsoft y VMS) tiene pruebas lo suficientemente grandes y una población de expertos que lo están haciendo bien.
+
+=head2 Hashes enlazados en contexto escalar
+
+Actualmente, los hashes enlazados no devuelven nada útil en contexto escalar, por ejemplo cuando se utilizan como pruebas booleanas:
+
+	if (%tied_hash) { ... }
+
+El comportamiento sin sentido actual siempre devolvía falso, independientemente de si el hash está vacío o si tiene elementos.
+
+La causa principal es que no existe una interfaz para los implementadores de los hashes enlazados para implementar el comportamiento de un hash en contexto escalar.
+
+=head2 Fallos en Net::Ping 450_service y 510_ping_udp
+
+Los subtests 9 y 18 de lib/Net/Ping/t/450_service.t, y el subtest 2 de lib/Net/Ping/t/510_ping_udp.t pueden fallar si usted tiene una inusual configuración de red.  Un ejemplo de la última prueba sería la de intentar enviar un ping UDP a la dirección IP 127.0.0.1.
+
+=head2 B::C
+
+El soporte de compilador generador de C, B::C (la interfaz que hay por detrás de C<perlcc -c>) sigue estando aún más roto de lo que solía ser a causa de extensos cambios en las variables léxicas.  (Las buenas noticias es que B::Bytecode y ByteLoader son mejores de lo que solía ser.)
+
+=head1 Problemas en plataformas específicas
+
+=head2 EBCDIC Platforms
+
+IBM z/OS y otras plataformas EBCDIC siguen siendo problemáticas en relación con la compatibilidad con Unicode.  Muchas pruebas de Unicode se omiten cuando en realidad deberían ser arregladas.
+
+=head2 Problemas en Cygwin 1.5
+
+En Cygwin 1.5 las pruebas F<io/tell> y F<op/sysio> tienen fallas por alguna razón aún desconocida.  En 1.5.5 las pruebas de threads stress_cv, stress_re y stress_string siguen fallando a menos que la variable de entorno PerlIO se ajuste a "perlio" (que hace también desaparecer el fallo de io/tell).
+
+Perl 5.8.1 se compila y funciona bien con Cygwin 1.3: con (uname-a) C<CYGWIN_NT-5.0 ... 1.3.22(0.78/3/2) 2003-03-18 09:20 i686 ...> se consiguió un 100% de un "make test" con C<Configure -des -Duseithreads>.
+
+=head2 HP-UX: advertencias de HP cc sobre sendfile y sendpath
+
+Con ciertas versiones del compilador de C de HP (por ejemplo, B.11.11.02) obtendrá muchas advertencias como esta (líneas ajustadas para facilitar la lectura):
+
+  cc: "/usr/include/sys/socket.h", line 504: warning 562:
+    Redeclaración de "sendfile" con un especificador de clase de almacenamiento diferente:
+      "sendfile" tendrá un enlazado interno.
+  cc: "/usr/include/sys/socket.h", line 504: warning 562:
+    Redeclaración de "sendpath" con un especificador de clase de almacenamiento especifico:
+      "sendpath" tendrá un enlazado interno.
+
+Estas advertencias aparecen durante la compilación de Perl y durante ciertas pruebas de lib/ExtUtils que invocan al compilador de C.  La advertencia, sin embargo, no es grave y puede ser ignorada.
+
+=head2 IRIX: t/uni/tr_7jis.t falla falsamente
+
+La prueba t/uni/tr_7jis.t se sabe que da un informe de fallo bajo 'make test' o la prueba se cuelga con determinadas versiones de IRIX (por lo menos la IRIX 6.5 y compiladores MIPSpro versión 7.3.1.1m), pero si se ejecuta manualmente la prueba pasa de forma completa.
+
+=head2 Mac OS X: no usemymalloc
+
+El malloc Perl (C<-Dusemymalloc>) no funciona en absoluto en Mac OS X. Sin embargo, esto no es tan grave, debido a que el malloc nativo funciona muy bien.
+
+=head2 Tru64: No compilación con threaded con el GNU cc (gcc)
+
+En las últimas versiones de Tru64 (por ejemplo, v5.1B o posterior) gcc no se puede utilizar para compilar un Perl con soporte de hilos de ejecución (-Duseithreads) debido a que el fichero del sistema C<< <pthread.h> >> no sabe nada sobre gcc.
+
+=head2 Win32: sysopen, sysread, syswrite
+
+A partir de la versión 5.8.0, sysopen()/sysread()/syswrite() no se comportan como lo hacían antes en 5.6.1 y anteriores, con respecto al modo "texto".
+Estos funciones incorporadas, ahora, funcionan siempre en modo "binario" (incluso si se pasó a sysopen() la bandera O_TEXT, o si se utilizó binmode() con el identificador de archivo).  Tenga en cuenta que este problema sólo afecta a los archivos de disco, ya que los I<sockets> y tuberías siempre han estado en modo "binario" en la versión para Windows.  Ya que este comportamiento se considera actualmente un error, un comportamiento compatible puede ser re-introducido en una futura versión.  Hasta entonces, el uso de sysopen(), sysread() y syswrite() no está soportado para las operaciones en modo "texto".
+
+=head1 Direcciones futuras
+
+Las siguientes cosas B<pueden> suceder en el futuro.  Los primeros lanzamientos a disposición del público de estas características serán publicadas en la versión desarrollador Perl 5.9.x, culminando con la publicación de Perl 5.10.0.  Estas son nuestras mejores estimaciones por el momento: nos reservamos el derecho de reconsiderarlo.
+
+=over 4
+
+=item *
+
+PerlIO se convertirá en el predeterminado.  En la actualidad (en Perl 5.8.x) la biblioteca stdio todavía es utilizada si Perl piensa que puede usar ciertos trucos para hacer que stdio vaya B<realmente> más rápido.  Para futuras versiones nuestro objetivo es hacer que PerlIO vaya aún más rápido.
+
+=item *
+
+Una nueva característica llamada I<assertions> estará disponible.  Esto significa que uno puede tener código llamado assertions salpicado en el código: suele ser optimizado, pero se puede activar con la opción C<-A> opción.
+
+=item *
+
+Un nuevo operador C<//> (definido-o) estará disponible.  Esto significa que uno podrá decir
+
+    $a // $b
+
+en lugar de
+
+   defined $a ? $a : $b
+
+and
+
+   $c //= $d;
+
+en lugar de
+
+   $c = $d unless defined $c;
+
+El operador tendrá la misma precedencia y asociatividad que C<||>.
+Un parche para las feuntes del código Perl 5.8.1 estará disponibles en CPAN como F<authors/id/H/HM/HMBRAND/dor-5.8.1.diff>.
+
+=item *
+
+C<unpack()> desempaquetará, por defecto, C<$_>.
+
+=item *
+
+Varias técnicas Copy-On-Write serán investigadas con la esperanza de acelerar Perl.
+
+=item *
+
+CPANPLUS, Inline, y Module::Build se convertirán en módulos principales.
+
+=item *
+
+Se ha introducido la capacidad de escribir verdaderos pragmas con alcance léxico.
+
+=item *
+
+Se seguirá trabajando en el bytecompiler y byteloader.
+
+=item *
+
+Los v-strings, tal como existen en la actualidad, está previsto que sean descartados.  La forma v-less (1.2.3) se convertirá en un "objeto de versión" cuando se utilice con C<use>, C<require> y C<$VERSION>.  $^V también será un "objeto de versión", por lo que la construcción printf("%vd",...) ya no será necesaria.  La versión v-ful (v1.2.3) se convertirá en obsoleta.  La equivalencia de cadenas y v-strings (p. e., que en la actualidad 5.8.0 es igual a "\5\8\0") va a desaparecer.  Sin embargo, B<puede no haber advertencias con los v-strings>: es muy difícil detectar cuándo los v-strings se están utilizando de forma segura, y cuándo no.
+
+=item *
+
+5.005 I<Threads> serán eliminados
+
+=item *
+
+La variable C<$*> será eliminada
+(que estaba en desuso desde hace mucho tiempo)
+
+=item *
+
+Pseudo-hashes serán eliminados
+
+=back
+
+=head1 Informar de errores
+
+Si encuentra algo que piensa que es un error, debe revisar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/ . Hay también información en la página principal de Perl, http://www.perl.org/ .
+
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
+
+=head1 VEA TAMBIÉN
+
+El archivo de F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+
+El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+
+El archivo F<README> (LEEME) para asuntos generales.
+
+Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+
+=cut
