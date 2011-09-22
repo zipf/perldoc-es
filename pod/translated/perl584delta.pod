@@ -1,0 +1,203 @@
+=head1 NOMBRE
+
+perl584delta - what is new for perl v5.8.4
+
+=head1 DESCRIPCIÓN
+
+Este documento describe las diferencias entre la versión 5.8.3 y la versión 5.8.4.
+
+=head1 Incompatibilidades
+
+Muchos pequeños errores han sido corregidos. Scripts que puedan depender de conductas erróneas previas deberán tener en cuenta estas correcciones como cambios incompatibles :-) Se recomienda realizar pruebas de aceptación suficientes para esta versión para estar seguro de que esto no les afecta, antes de poner esa versión en producción.
+
+La salida de diagnóstico de Carp se ha cambiado un poco, para agregar un espacio después de la coma entre los argumentos. Esto hace que sea mucho más fácil para las herramientas como los navegadores web para ajustar la presentación, pero podría confundir a cualquier herramienta automática que llevase a cabo un análisis detallado de la salida de Carp.
+
+La salida del comando interno dump se ha mejorado, de modo que los caracteres no imprimibles, como el nueva línea y la tecla de retroceso se emiten en notación C<\x>, en lugar de octal. Esto solo puede confundir a herramientas poco robustas que analicen la salida de los módulos, tales como Desarrollo::Peek.
+
+=head1 Mejoras del núcleo
+
+=head2 Envolviendo a Malloc
+
+Perl ahora pueden ser compilado para que detecte los intentos de reservar bloques patológicamente grandes de memoria.  Previamente, tales asignaciones podrían verse afectados por la pasada de vuelta de los enteros en los cálculos del tamaño, que causa una mala distribución, que provocaría una caída de perl, y teóricamente podrían ser utilizados para realizar ataques de "ruptura de pila".  La envoltura por defecto está activa en plataformas en las que sabemos que funciona (la mayoría de las configuraciones de AIX, BSDi, Darwin, DEC OSF/1, FreeBSD, HP/UX, GNU Linux, OpenBSD, Solaris, VMS y la mayor parte de los compiladores Win32) y por defecto queda desactivado en otras plataformas.
+
+=head2 Unicode Character Database 4.0.1
+
+La copia de la base de datos de caracteres Unicode incluidos en Perl 5.8 ha sido actualizado desde la 4.0.0 a la 4.0.1.
+
+=head2 suidperl menos inseguro
+
+Paul Szabo ha analizado y parcheado C<suidperl> para eliminar los inseguridades conocidas en este momento. Actualmente no hay ningún agujero conocido en C<suidperl>, pero la experiencia anterior muestra que no podemos estar seguros de que estos fueron los últimos. Es posible que ya no invoque a perl con el uid activado, directamente, así que para mantener la compatibilidad anterior con I<scripts> que llaman a #!/usr/bin/suidperl el único binario con uid activado es ahora C<sperl5.8.>I<n> (C<sperl5.8.4> para esta versión). C<suidperl> es instalado como un enlace duro a C<perl>; tanto C<suidperl> como C<perl> invocarán al binario C<sperl5.8.4> automáticamente, por lo que este cambio debería ser completamente transparente.
+
+Para nuevos proyectos el equipo básico de desarrollo perl recomienda, encarecidamente, que utilice herramientas específicas para el propósito de seguridad, tales como C<sudo>, en lugar de C<suidperl>.
+
+=head2 format
+
+Además de las correcciones de errores, las características de C<format> han sido mejoradas. Vea L<perlform>
+
+=head1 Módulos y Pragmata
+
+El (mal) uso de C</tmp> en módulos básicos y documentación han sido recortados.
+Algunos módulos disponibles, tanto en el núcleo de perl e independientes de CPAN ("módulos con doble vida") aún no han tenido los cambios aplicados; los cambios se integrarán en futuras versiones estables de perl, ya que los módulos se actualizan en CPAN.
+
+=head2 Módulos actualizados
+
+=over 4
+
+=item Attribute::Handlers
+
+=item B
+
+=item Benchmark
+
+=item CGI
+
+=item Carp
+
+=item Cwd
+
+=item Exporter
+
+=item File::Find
+
+=item IO
+
+=item IPC::Open3
+
+=item Local::Maketext
+
+=item Math::BigFloat
+
+=item Math::BigInt
+
+=item Math::BigRat
+
+=item MIME::Base64
+
+=item ODBM_File
+
+=item POSIX
+
+=item Shell
+
+=item Socket
+
+Hay un soporte experimental para los sockets abstractos del dominio Unix en Linux.
+
+=item Storable
+
+=item Switch
+
+Sincronizado con su versión 2.10 en CPAN
+
+=item Sys::Syslog
+
+C<syslog()> ahora puede utilizar constantes numéricas para los nombres de las facilidades y las prioridades, además de cadenas normales.
+
+=item Term::ANSIcolor
+
+=item Time::HiRes
+
+=item Unicode::UCD
+
+=item Win32
+
+Win32.pm/Win32.xs se han trasladado desde el módulo libwin32 al núcleo de Perl
+
+=item base
+
+=item open
+
+=item threads
+
+I<Threads> desligados son ahora también compatibles con Windows.
+
+=item utf8
+
+=back
+
+=head1 Mejoras en el rendimiento
+
+=over 4
+
+=item *
+
+Mapeos acelerados en el cambio de tamaño de caja en Unicode (C</i>, C<lc>, C<uc>, etc).
+
+=item *
+
+Optimizado sort ejecutado sobre la misma variable (ej.: C<@a = sort @a>)
+
+=item *
+
+Optimizadas las asignaciones innecesarias.
+
+  my $s = undef;
+  my @a = ();
+  my %h = ();
+
+=item *
+
+Optimizado C<map> en contexto escalar
+
+=back
+
+=head1 Cambios en las herramientas
+
+El depurador de Perl (F<lib/perl5db.pl>) ahora puede guardar todos los comandos del depurador para ser analizados más tarde, y puede mostrar el árbol de herencia de una clase padre dada.
+
+=head1 Mejoras en la instalación y configuración
+
+El proceso de compilación, tanto en VMS como en Windows han tenido pequeñas mejoras. El compilador de Borland C en Windows ahora puede compilar perl con PerlIO y/o tener activado USE_LARGE_FILES.
+
+C<perl.exe> en Windows ahora tiene un icono de un "Camello". El uso de un camello con el motivo de Perl es una marca registrada de O'Reilly and Associates Inc., y es utilizado con su permiso (es decir, la distribución del código fuente, la compilación de un ejecutable en Windows a partir de él, y ??el uso de ese ejecutable a nivel local). El uso del camello suministrado, para cualquier otra cosa que fuera más allá de ser el icono de un archivo ejecutable perl no está específicamente cubierto, y cualquiera que quiera redistribuir binarios perl I<con> el icono debe consultar antes, y directamente, con O'Reilly.
+
+Perl debe compilarse limpiamente en Stratus VOS, una vez más.
+
+=head1 Arreglo de determinados errores
+
+Más errores de utf8 arreglados, sobre todo en cómo C<chomp>, C<chop>, C<send>, y C<syswrite> interactuan con datos utf8. La concatenación funciona ahora correctamente cuando el C<use bytes;> está activo en el ámbito actual.
+
+Pragmata ahora se propaga correctamente en construcciones (?{...}) en las expresiones regulares.
+Código como este
+
+   my $x = qr{ ... (??{ $x }) ... };
+
+ahora fallará (correctamente) bajo el uso estricto. (Debido a que la variable interna C<$x> es y siempre es referida como C<$::x>)
+
+La advertencia "I<const in void context> (constante en contexto vacío)" ha sido suprimida de las expresiones booleanas optimizadas, como en C<5 || print;>
+
+C<perl -i> podría hacer C<fchmod(stdin)> por error. Esto es grave si stdin está conectado a un terminal, y perl es ejecutado como root. Ahora arreglado.
+
+=head1 Diagnósticos nuevos y cambiados
+
+C<Carp> y las rutinas de diagnóstico internas utilizadas por C<Devel::Peek> se han hecho más claras, como se describe en L</Cambios incompatibles>
+
+=head1 Cambios internos
+
+Algunos errores han sido corregidos en los procedimientos internos de los hash. Hashes restringidos y sus marcadores de posición son ahora reservados y eliminados en momentos ligeramente diferentes, pero esto no debería ser apreciado por el código de usuario.
+
+=head1 Direcciones futuras
+
+La congelación de código para la versión de mantenimiento siguiente (5.8.5) será el 30 de junio de 2004, con la publicación a mediados de julio.
+
+=head1 Problemas en plataformas específicas
+
+Esta publicación se sabe que no se compila en Windows 95.
+
+=head1 Informar de errores
+
+Si usted encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  También puede haber información en http://www.perl.org/, La página oficial de Perl.
+
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
+
+=head1 VEA TAMBIÉN
+
+El archivo de F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+
+El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+
+El archivo F<README> (LEEME) para asuntos generales.
+
+Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+
+=cut
