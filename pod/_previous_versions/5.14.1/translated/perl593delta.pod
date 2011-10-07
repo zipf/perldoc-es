@@ -1,0 +1,417 @@
+=encoding utf8
+
+=head1 NOMBRE
+
+perl593delta - qué hay de nuevo en perl v5.9.3
+
+=head1 DESCRIPCIÓN
+
+Este documento describe las diferencias entre las versiones de desarrollo 5.9.2 y la 5.9.3. Vea L<perl590delta>, L<perl591delta> y L<perl592delta> para las diferencias entre 5.8.0 y 5.9.2.
+
+=head1 Incompatibilidades
+
+=head2 Análisis de C<-f _>
+
+Se fuerza a que el identificador C<_> sea considerada una palabra suelta después de un operador de test de fichero. Esto soluciona una serie de cuestiones de mala interpretación cuando esté definida una subrutina global C<_>.
+
+=head2 C<mkdir()>
+
+C<mkdir()> sin argumentos ahora se refiere a C<$_>.
+
+=head2 goto y eval mágicos
+
+La construcción C<eval { goto &foo }> ya no está permitida. (Note que la construcción similar, pero usando C<eval("")>, ya estaba prohibida.)
+
+=head2 C<$#> se ha eliminado
+
+La variable obsoleta C<$#> (formato de salida para los números) se ha eliminado. Una nueva advertencia, C<$# is no longer supported>, ha sido añadida.
+
+=head2 C<:unique>
+
+El atributo C<:unique> se ha convertido en una no-operación, debido a que su implementación era, fundamentalmente, defectuosa y no multi-hilo.
+
+=head2 Ámbito del pragma C<sort>
+
+El pragma C<sort> tiene ahora un alcance léxico. Su efecto solía ser global.
+
+=head1 Mejoras del núcleo
+
+=head2 El pragma C<feature>
+
+El pragma C<feature> se utiliza para activar una nueva sintaxis que rompe la compatibilidad Perl con versiones anteriores del lenguaje. Se trata de una pragma léxico, al igual que C<strict> o C<warnings>.
+
+En la actualidad, están disponibles las siguientes nuevas características: C<switch> (añade una instrucción switch), C<~~> (añade un operador Perl 6 de emparejamiento inteligente), C<say> (añade una función incorporada C<say>), y C<err> (añade una palabra clave C<err>).
+Estas características se describen a continuación.
+
+Tenga en cuenta que, por defecto, C<err> activa un nivel bajo de precedencia con el operador defined-or (aunque, como palabra clave débil, lo que significa que cualquier función puede sobreescribirla). Ahora sólo se reconoce cuando se activa explícitamente (y entonces se considera como una palabra clave normal).
+
+Estas características, y el mismo pragma C<feature>, han sido aportados por Robin Houston.
+
+=head2 El operador Switch y el emparejamiento inteligente
+
+Perl 5 ahora tiene una instrucción switch. Está disponible cuando C<use feature 'switch'> está en vigor. Esta característica introduce tres nuevas palabras clave, C<given>, C<when>, y C<default>:
+
+    given ($foo) {
+	when (/^abc/) { $abc = 1; }
+	when (/^def/) { $def = 1; }
+	when (/^xyz/) { $xyz = 1; }
+	default { $nada = 1; }
+    }
+
+Una descripción más completa de cómo Perl hace coincidir la variable del switch con las condiciones C<when> se da en L<perlsyn/"Instrucciones switch">.
+
+Este tipo de emparejamientos se llaman I<smart match> (emparejamiento o coincidencia inteligente), y también es posible utilizarlo fuera de las instrucciones switch, a través del nuevo operador C<~~> (activado a través de la directiva C<use feature '~~'>). Vea L<perlsyn/"Coincidencia inteligente, en detalle">.
+
+=head2 C<say()>
+
+say() es una nueva función integrada; sólo está disponible cuando C<use feature 'say'> está en vigor, que es similar a print(), pero que, implícitamente, añade un carácter de nueva línea a la cadena a ser impresa. Vea L<perlfunc/say>.
+
+=head2 C<CLONE_SKIP()>
+
+Perl ahora tiene soporte para la subrutina especial C<CLONE_SKIP>. Al igual que C<CLONE>, C<CLONE_SKIP> es llamado una vez por paquete; sin embargo, es llamado justo antes de que comience la clonación, y en el contexto del hilo de ejecución del padre. Si devuelve un valor verdadero, entonces ningún objeto de esa clase se clonará. Vea L<perlmod> para los detalles. (Escrito por Dave Mitchell.)
+
+=head2 C<${^CHILD_ERROR_NATIVE}>
+
+Una nueva variable interna, C<${^CHILD_ERROR_NATIVE}>, indica el estado nativo devuelto por la última tubería cerrada, comando con acento grave, llamada exitosa a wait() o waitpid(), o desde el operador system(). Vea L<perlrun> para más detalles. (Escrito por Gisle Aas.)
+
+=head2 Aserciones
+
+El soporte para aserciones, introducida en Perl 5.9.0, se ha mejorado.
+La sintaxis del comando C<-A> ha cambiado; ahora acepta un nombre de un módulo opcional, por defecto C<assertions::activate>. Vea L<aserciones> y L<perlrun>. (Escrito por Salvador Fandiño García.)
+
+=head2 Unicode Character Database 4.1.0
+
+La copia de la base de datos de caracteres Unicode incluidos en Perl 5.9 ha sido actualizado a la 4.1.0.
+
+=head2 C<no VERSION>
+
+Ahora puede utilizar C<no> seguido por un número de versión para especificar que desea utilizar una versión de Perl más vieja que la especificada.
+
+=head2 Subrutinas recursivas sort
+
+Ahora puede utilizar subrutinas recursivas con sort(), gracias a Robin Houston.
+
+=head2 Efecto de los pragma en eval
+
+El valor en tiempo de compilación de la variable especial C<%^H> ahora se puede propagar en un código eval("")uado. Esto hace que sea más útil para implementar pragmas léxicos.
+
+Como un efecto secundario de esto, la sobrecarga de las constantes ahora se propaga en eval("").
+
+=head2 Nueva opción en línea de comandos B<-E>
+
+B<-E> es equivalente a B<-e>, pero implícitamente activa todas las características opcionales (igual que C<use feature ":5.10">).
+
+=head2 C<chdir>, C<chmod> y C<chown> en identificadores de archivos
+
+C<chdir>, C<chmod> y C<chown> ahora pueden trabajar tanto con nombres de ficheros como con identificadores de archivos, si el sistema soporta, respectivamente, C<fchdir>, C<fchmod> y C<fchown>, gracias a un parche proporcionado por Gisle Aas.
+
+=head2 Agrupación de SO
+
+C<$(> y C<$)> ahora devuelven grupos en el orden en que el SO los devuelve, gracias a Gisle Aas. Esto no es lo que ocurría anteriormente.
+
+=head1 Módulos y Pragmata
+
+=head2 Nuevos módulos principales
+
+=over 4
+
+=item *
+
+Un nuevo pragma, C<feature>, ha sido añadido; vea más arriba en L</"Mejoras principales">.
+
+=item *
+
+C<assertions::compat>, también disponible en CPAN, permite el uso de aserciones en versiones perl anteriores a 5.9.0 (que fue el primero en soportarlas nativamente).
+
+=item *
+
+C<Math::BigInt::FastCalc> es una versión XS, y por lo tanto más rápida, de C<Math::BigInt::Calc>.
+
+=item *
+
+C<Compress::Zlib> es un interfaz a la biblioteca de compresión zlib. Viene con una versión integrada de zlib, así que tener un zlib funcional no es un requisito previo para instalarlo. Es utilizado por C<Archive::Tar> (ver más abajo).
+
+=item *
+
+C<IO::Zlib> es un interfaz con estilo C<IO::> a C<Compress::Zlib>.
+
+=item *
+
+C<Archive::Tar> es un módulo para manipular archivos C<tar>.
+
+=item *
+
+C<Digest::SHA> es un módulo usado para calcular cuántos tipos de resúmenes SHA, han sido incluidos para el soporte SHA en el módulo de CPAN.
+
+=item *
+
+Han sido añadidos C<ExtUtils::CBuilder> y C<ExtUtils::ParseXS>.
+
+=back
+
+=head1 Cambios en las herramientas
+
+=head2 C<ptar>
+
+C<ptar> es una implementación en puro perl de C<tar>, que viene incluido con C<Archive::Tar>.
+
+=head2 C<ptardiff>
+
+C<ptardiff> es una pequeña utilidad que genera las diferencias entre los contenidos de un archivo tar y un árbol de directorio. Como C<ptar>, viene con C<Archive::Tar>.
+
+=head2 C<shasum>
+
+Esta utilidad de línea de comandos, se utiliza para imprimir o comprobar resúmenes SHA; viene con el nuevo módulo C<Digest::SHA>.
+
+=head2 Mejoras en C<h2xs>
+
+C<h2xs> implementa una nueva opción: C<--use-xsloader>, para forzar el uso de C<XSLoader> incluso en módulos retro-compatibles.
+
+El manejo de los nombres de los autores que tenían apóstrofes se ha solucionado.
+
+Cualquier enum con valores negativos es ahora omitido.
+
+=head2 Mejoras en C<perlivp>
+
+C<perlivp>, por defecto, ya no comprueba los archivos F<*.ph>.  Use la nueva opción C<-a> para correr I<todas> las pruebas.
+
+=head1 Documentación
+
+=head2 Glosario Perl
+
+La página de manual L<perlglossary> es un glosario de términos utilizados en la documentación de Perl, técnicos y otros, amablemente proporcionado por O'Reilly Media, Inc.
+
+L<perltodo> ahora lista una hoja de ruta aproximada de Perl 5.10.
+
+=head1 Mejoras en el rendimiento
+
+=head2 SWASHGET XS-asistida
+
+Algunos códigos escritos en puro perl que se estaban usando para recuperar las propiedades Unicode y las asignaciones de transcripción ha sido reimplementados en XS.
+
+=head2 Subrutinas constantes
+
+Las funciones incorporadas del intérprete ahora soportan un formato de memoria mucho más eficiente de las constantes que se pueden insertar en la traza del código (I<inline>). Almacenar una referencia a un valor constante en una tabla de símbolos es equivalente a un completo typeglob referenciando a una subrutina constante, pero usando unos 400 bytes menos de memoria. Este cacheo de la subrutina constante se actualiza automáticamente a un typeglob real con subrutina, si es necesario.
+El enfoque adoptado es análogo a la optimización del espacio existente para las declaraciones básicas de subrutinas, que son almacenadas como escalares normales en lugar del typeglob completo.
+
+Varios de los módulos básicos se han convertido para usar esta característica para sus constantes dependientes del sistema - como resultado de esto, C<use POSIX;> ahora ocupa 200K menos de memoria.
+
+=head2 C<PERL_DONT_CREATE_GVSV>
+
+La nueva opción de compilación C<PERL_DONT_CREATE_GVSV>, presentado como una opción en perl 5.8.8, está activada de forma predeterminada en Perl 5.9.3. Evita que perl cree un escalar vacío con cada nuevo typeglob. Vea L<perl589delta> para más detalles.
+
+=head2 Referencias débiles son ahora más livianas
+
+La creación de referencias débiles es ahora I<O(1)> en lugar de I<O(n)>, cortesía de Nicholas Clark. El borrado de referencias débiles sigue siendo I<O(n)>, pero si el borrado solo sucede en la salida del programa, puede ser omitido por completo.
+
+=head2 Mejoras en sort()
+
+Salvador Fandiño proporcionó mejoras para reducir la memoria usada por C<sort> y para mejorar la velocidad en algunos casos.
+
+=head1 Mejoras en la instalación y configuración
+
+=head2 Mejoras en la compilación
+
+Hacer make en paralelo debería funcionar ahora correctamente, aunque todavía puede haber problemas si se indica a C<make test> que se ejecute en paralelo.
+
+Compilando con compiladores Borland en Win32 debería funcionar con más facilidad. En particular, Hay Steve trabajó para quitar muchas advertencias emitidas por estos compiladores y al menos un error interno del compilador de C.
+
+Extensiones Perl en Windows pueden ahora ser estáticamente compiladas en Perl DLL, gracias al trabajo de Vadim Konovalov.
+
+=head2 Nuevas o mejoras plataformas
+
+Perl ha sido portado a Symbian OS. Vea L<perlsymbian> para más información.
+
+La adaptación a VMS ha sido mejorada. Vea L<perlvms>.
+
+DynaLoader::dl_unload_file() ahora funciona en Windows.
+
+La portabilidad de Perl en distintos compiladores recientes de Windows ha sido mejorada (Borland C++, Visual C++ 7.0).
+
+=head2 Nuevas pruebas
+
+C<Configure> ahora detectará C<clearenv> y C<unsetenv>, gracias a un parche de Alan Burlison. También probará por C<futimes> (y lo usará internamente si está disponible), y también por si C<sprintf> devuelve correctamente la longitud de la cadena formateada.
+
+=head2 Archivos auxiliares de los módulos
+
+Los archivos README y registros de cambios de los módulos de CPAN incluidos con perl ya no son  instalados.
+
+=head1 Arreglo de determinados errores
+
+=head2 C<defined $$x>
+
+C<use strict "refs"> hace caso omiso de una referencia dura en un argumento para defined(), como en:
+
+    use strict "refs";
+    my $x = "foo";
+    if (defined $$x) {...}
+
+Esto ahora produce correctamente el error en tiempo de ejecución C<Can't use string as a SCALAR ref while "strict refs" in use>. (Sin embargo, C<defined @$foo> y C<defined %$foo> todavía están permitidos. Se desaconseja, de todas maneras, usar estas construcciones.)
+
+=head2 Llamando a CORE::require()
+
+CORE::require() y CORE::do() eran siempre interpretadas como require() y do() cuando eran sobreescritas. Esto ha sido arreglado.
+
+=head2 Subíndices de porciones
+
+Ahora puede utilizar una forma de no-flecha para los subíndices encadenados después de una porción de una lista, como en:
+
+    ({foo => "bar"})[0]{foo}
+
+Esto solía ser un error de sintaxis; se requería un C<< -> >>.
+
+=head2 Eliminar el exceso de optimización
+
+Perl 5.9.2 introducía un cambio para que las asignaciones de C<undef> a un escalar, o de una lista vacía a un array o un hash, fueran optimizadas. Ya que esto podría causar problemas cuando intervenían saltos C<goto>, este cambio ha sido desechado.
+
+=head2 Arreglos en sprintf()
+
+Usando la función sprintf() con algunos formatos podría dar lugar a un desbordamiento de búfer, en algunos casos específicos. Esto se ha corregido, junto con otros errores, sobre todo en la comprobación de los límites.
+
+En arreglos relacionados, era posible, para código mal escrito que no siguiera la documentación de C<Sys::Syslog>, tener vulnerabilidades en el formateo.
+C<Sys::Syslog> ha sido cambiado para proteger a los usuarios de la pobre calidad del código de terceros.
+
+=head2 no warnings 'category' ahora funciona correctamente con -w
+
+Anteriormente, cuando se ejecutaba con las advertencias habilitadas a nivel global a través de C<-w>, una desactivación selectiva de categorías de advertencias específicas podría, realmente, desactivar todas las advertencias.
+Esto ha sido corregido; ahora C<no warnings 'io';> sólo desactivará las advertencias en la clase C<io>. Anteriormente, desactivaría erróneamente todas las advertencias.
+
+=head2 Correcciones menores
+
+=over 4
+
+=item *
+
+C<FindBin> ahora funciona mejor con los directorios donde los derechos de acceso sean más restrictivos de lo habitual.
+
+=item *
+
+Varias fugas de memoria en ithreads fueron cerradas. Además, ithreads se ha hecho menos intenso con el consumo de memoria.
+
+=item *
+
+Los espacios finales de C<$!> y C<$^E> ahora son recortados.
+
+=item *
+
+Las operaciones que requiere perl para leer la lista de procesos agrupados, tales como lecturas de C<$(> y C<$)>, ahora es asignada dinámicamente la memoria en lugar de utilizar un array de tamaño fijo. El array de tamaño fijo podría provocar el agotamiento de la pila C en sistemas configurados para utilizar un gran número de grupos.
+
+=item *
+
+C<PerlIO::scalar> ahora funciona mejor con opciones no predeterminadas de C<$/>.
+
+=item *
+
+El operador de repetición C<x> es ahora capaz de operar en listas C<qw//>. Esto se usaba para lanzar un error de sintaxis.
+
+=item *
+
+El depurador, ahora, sigue la traza correctamente en la ejecución de código eval("")uado que contenga directivas #line.
+
+=item *
+
+El valor del pragma C<open> ya no es ignorado por el open de tres argumentos.
+
+=item *
+
+Perl ahora utilizará las funciones de la biblioteca C C<unsetenv> y C<clearenv> si se indica que se deben borrar claves de C<%ENV> o si se elimina C<%ENV> por completo, gracias a un parche de Alan Burlison.
+
+=back
+
+=head2 Más correcciones Unicode
+
+=over 4
+
+=item *
+
+chr() de un valor negativo ahora da C<\x{FFFD}>, el carácter Unicode de reemplazo, salvo si está activo el pragma C<bytes>, en cuyo caso se utiliza los ocho bits más bajos, del valor indicado.
+
+=item *
+
+Algunas coincidencias insensibles al tamaño de caja de los caracteres, entre datos codificados en UTF-8 y expresiones regulares de 8 bits, y viceversa, podría dar advertencias sobre caracteres incorrectos. Esto ha sido solventado por Dave Mitchell e Yves Orton.
+
+=item *
+
+C<lcfirst> y C<ucfirst> podrían corromper la cadena de caracteres en ciertos casos donde la longitud de la codificación UTF-8 de la cadena en minúsculas, mayúsculas o capitulares, puede diferir. Esto fue corregido por Nicholas Clark.
+
+=back
+
+=head1 Diagnósticos nuevos y cambiados
+
+=head2 Intento de asignar una longitud a un array liberado
+
+Esta es una nueva advertencia, que se produce en situaciones como la siguiente:
+
+    $r = do {my @a; \$#a};
+    $$r = 503;
+
+=head2 Non-string passed as bitmask
+
+Esta es una nueva advertencia, producida cuando un número ha sido pasado como un argumento a select(), en vez de una máscara de bits.
+
+    # Incorrecto, mostrará un aviso
+    $rin = fileno(STDIN);
+    ($nfound,$timeleft) = select($rout=$rin, undef, undef, $timeout);
+    
+    # Debería ser
+    $rin = '';
+    vec($rin,fileno(STDIN),1) = 1;
+    ($nfound,$timeleft) = select($rout=$rin, undef, undef, $timeout);
+
+=head2 Search pattern not terminated or ternary operator parsed as search pattern
+
+Este error de sintaxis indica que el analizador léxico no pudo encontrar el delimitador final de una construcción C<?PATRÓN?>. Mencionando el operador ternario en este mensaje de error hace más fácil la diagnosis de la sintaxis.
+
+=head2 "%s" variable %s masks earlier declaration
+
+Esta advertencia es ahora emitida en casos más consistentes; en resumen, cuando una de las declaraciones en cuestión es una variable C<my>:
+
+    my $x;   my $x;	# avisa
+    my $x;  our $x;	# avisa
+    our $x;  my $x;	# avisa
+
+Por otra parte, lo siguiente:
+
+    our $x; our $x;
+
+ahora da una advertencia C<"our" variable %s redeclared>.
+
+=head2 readdir()/closedir()/etc. attempted on invalid dirhandle
+
+Estas nuevas advertencias son ahora emitidas cuando un identificador de directorio que es usado ya está cerrado o no es realmente un identificador de directorio.
+
+=head1 Cambios internos
+
+En general, el código fuente de perl ha sido refactorizado, enlazado, y optimizado en muchos lugares. Además, la gestión de memoria y la asignación se ha mejorado en un par de puntos.
+
+Andy Lester suministró muchas mejoras para determinar qué parámetros de las funciones y qué variables locales podrían realmente ser declaradas C<const> para el compilador de C. Steve Peters proporcionó nuevas macros C<*_set> y rediseñó el núcleo para utilizar éstas en lugar de asignar a macros en contexto de IVALOR.
+
+Dave Mitchell mejoró la salida de depuración del analizador léxico con C<-DT>.
+
+Un nuevo archivo, F<mathoms.c>, ha sido añadido. Contiene las funciones que ya no se utilizan en el núcleo de perl, pero que siguen estando disponibles por motivos de compatibilidad binaria o de código fuente. Sin embargo, esas funciones no serán compiladas si agrega C<-DNO_MATHOMS> en las opciones del compilador.
+
+La macro C<AvFLAGS> se ha eliminado.
+
+Las funciones C<av_*()>, usadas para manipular array, ya no aceptan parámetros C<AV*> nulos.
+
+=head2 Cambiada la herencia en los módulos B::
+
+La jerarquía de la herencia de los módulos C<B::> ha sido cambiada; C<B::NV> ahora hereda desde C<B::SV> (se usaba para heredar desde C<B::IV>).
+
+=head1 Informar de errores
+
+Si encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/ . Hay también información en la página principal de Perl, http://www.perl.org/ .
+
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.
+
+=head1 VEA TAMBIÉN
+
+El archivo de F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+
+El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+
+El archivo F<README> (LEEME) para asuntos generales.
+
+Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+
+=cut
