@@ -98,7 +98,7 @@ pondrá en mayúsculas "bar", pero la C</l> no afecta a la forma en que C<\U> func
 
 =head4 /l
 
-significa que hay que usar las reglas regionales actuales (vea L<perllocale>) en la coincidencia de patrones.  Por ejemplo, C<\w> coincidirá con los caracteres "palabra" de esa localidad, y la insensibilidad al tamaño de caja C<"/i"> coincidirá de acuerdo a las normas regionales de plegado de caja.  La regla regional utilizada será la vigente en el momento de la ejecución de la coincidencia de patrón.  Ésta puede no ser la misma que la configuración regional en tiempo de compilación, y pueden diferir de una coincidencia a otra, si hay una llamada a la función L<setlocale() perllocale/La función setlocale>.
+significa que hay que usar las reglas regionales actuales (vea L<perllocale>) en la coincidencia de patrones.  Por ejemplo, C<\w> coincidirá con los caracteres "palabra" de esa localidad, y la insensibilidad al tamaño de caja C<"/i"> coincidirá de acuerdo a las normas regionales de plegado de caja.  La regla regional utilizada será la vigente en el momento de la ejecución de la coincidencia de patrón.  Ésta puede no ser la misma que la configuración regional en tiempo de compilación, y pueden diferir de una coincidencia a otra, si hay una llamada a la L<función setlocale()|perllocale/La función setlocale>.
 
 Perl sólo soporta reglas regionales de bytes simples.  Esto significa que los puntos de código por encima de 255 se consideran como Unicode sin importar qué configuración regional esté en vigor.
 Según las normas Unicode, hay unos pocos casos que cruzan el límite 255/256 de las coincidencias de mayúsculas y minúsculas.  Éstos no se permiten bajo C</l>.  Por ejemplo, 0xFF no coincide, sin tener en cuenta el tamaño de caja, con el carácter 0x178, C<LATIN CAPITAL LETTER Y WITH DIAERESIS>, porque 0xFF quizás no sea C<LATIN SMALL LETTER Y WITH DIAERESIS> en la región actual, y Perl no tiene manera de saber si ese carácter incluso existe en la región, y mucho menos qué punto de código es.
@@ -134,7 +134,7 @@ Para prohibir coincidencias ASCII/no-ASCII (como "k" con C<\N{KELVIN SIGN}>), es
 
 Repetimos, este modificador proporciona protección para las aplicaciones que no quieran estar expuestas a todo el Unicode.  Especificándolo dos veces ofrece una protección adicional.
 
-Este modificador puede ser especificado para que sea el predeterminado usando C<use re '/a'> o C<use re '/aa'>, pero vea L</¿Qué modificares están activos?>.
+Este modificador puede ser especificado para que sea el predeterminado usando C<use re '/a'> o C<use re '/aa'>, pero vea L</¿Qué modificador de conjunto de caracteres está en vigor?>.
 X</a>
 X</aa>
 
@@ -179,7 +179,7 @@ Aquí hay algunos ejemplos de cómo funciona esto en una plataforma ASCII:
  chop $str;
  $str =~ /^\w/;       # ¡Todavía coincide! $str sigue estando en formato UTF-8.
 
-=head4 ¿Qué modificares están activos?
+=head4 ¿Qué modificador de conjunto de caracteres está en vigor?
 
 Cuáles de estos modificares están activos en un determinado punto de una expresión regular depende de un conjunto muy complejo de interacciones.  Como se ha explicado en L</Patrones extendidos>, es posible especificar explícitamente los modificadores que se aplican sólo a unas partes de una expresión regular.
 La parte más interior siempre tiene prioridad sobre cualquier otra externa, y la que se aplica a toda la expresión tiene prioridad sobre cualquiera de los ajustes por defecto que se describen en el resto de esta sección.
@@ -358,7 +358,7 @@ Vea L<perlrebackslash/Miscelánea> para más detalles.
 
 =item [5]
 
-Vea más abajo L</Búfer de captura> para más detalles.
+Vea más abajo L</Grupos de captura> para más detalles.
 
 =item [6]
 
@@ -732,7 +732,7 @@ Esta característica se puede utilizar con la variable especial C<$^N> para captu
 
 Dentro del bloque C<(?{...})>, C<$_> se refiere a la cadena contra que la expresión regular se está evaluando. También puede utilizar C<pos()> para saber cuál es la posición actual de coincidencia dentro de esa cadena.
 
-El C<código> está apropiadamente encerrado en un ámbito, en el sentido siguiente: si la aserción es retrotraída (comparar con L<"Retrotraer">), todos los cambios introducidos después de la C<local>ización son deshechos, por lo que
+El C<código> está apropiadamente encerrado en un ámbito, en el sentido siguiente: si la aserción es retrotraída (comparar con L<"Vuelta atrás">), todos los cambios introducidos después de la C<local>ización son deshechos, por lo que
 
   $_ = 'a' x 8;
   m<
@@ -752,7 +752,7 @@ será C<$res = 4>.  Tenga en cuanta que después de la coincidencia, C<$cnt> devue
 Esta aserción puede ser usada con un interruptor C<(?(condición)patrón-sí|patrón-no)>.  Si I<no> se usa de esta manera, el resultado de la evaluación de C<código> se pone en la variable especial C<$^R>.  Esto ocurre de forma inmediata, por lo que C<$^R> puede ser usada desde otras aserciones C<(?{ código })> dentro de la misma expresión regular.
 
 La asignación a C<$^R> anterior está apropiadamente localizada, por lo que el valor anterior de C<$^R> es restaurado si la aserción es retrotraída; ver
-L<"Retrotraer">.
+L<"Vuelta atrás">.
 
 Por razones de seguridad, esta construcción está prohibida si la expresión regular incluye interpolación de variables en tiempo de ejecución, a menos que el peligroso pragma C<use re 'eval'> esté en uso (vea L<re>), o las variables contengan resultados del operador C<qr//> (vea L<perlop/"qr/CADENAE<sol>msixpodual">).
 
@@ -945,10 +945,10 @@ Tenga en cuenta que los grupos de captura encontrados en el interior de la recur
 =item C<< (?>patrón) >>
 X<backtrack> X<backtracking> X<retroceso> X<retrocediendo> X<atómico> X<posesivo>
 
-Un subexpresión "independiente", aquella que coincide la subcadena con un I<único> C<patrón> que coincidiría si estuviera anclada en la posición indicada, y no coincide con I<ninguna otra más que esta subcadena>.  Esta construcción es útil para la optimización de lo que, en caso contrario, serían coincidencias "eternas", porque no va a dar marcha atrás (vea L<"Retroceso">).
+Un subexpresión "independiente", aquella que coincide la subcadena con un I<único> C<patrón> que coincidiría si estuviera anclada en la posición indicada, y no coincide con I<ninguna otra más que esta subcadena>.  Esta construcción es útil para la optimización de lo que, en caso contrario, serían coincidencias "eternas", porque no va a dar marcha atrás (vea L<"Vuelta atrás">).
 También puede ser útil en lugares donde la semántica "agarra todo lo que puedas, y no dar nada a cambio" sea deseable.
 
-Por ejemplo: C<< ^(?>a*)ab >> nunca coincidirá, ya que C<< (?>a*) >> (anclada al comienzo de la cadena, como antes) encontrará I<todos> los caracteres C<a> al comienzo de la cadena, sin dejar ninguna otra para C<ab>.  Por el contrario, C<a*ab> coincidirá igual que con C<a+b>, ya que la coincidencia del subgrupo C<a*> está influenciada por el texto del grupo siguiente C<ab> (vea L<"backtracking">).  En particular, C<a*> dentro de C<a*ab> coincidirá con menos caracteres que con solo C<a*>, para permitir que el resto del patrón coincida.
+Por ejemplo: C<< ^(?>a*)ab >> nunca coincidirá, ya que C<< (?>a*) >> (anclada al comienzo de la cadena, como antes) encontrará I<todos> los caracteres C<a> al comienzo de la cadena, sin dejar ninguna otra para C<ab>.  Por el contrario, C<a*ab> coincidirá igual que con C<a+b>, ya que la coincidencia del subgrupo C<a*> está influenciada por el texto del grupo siguiente C<ab> (vea L<"Vuelta atrás">).  En particular, C<a*> dentro de C<a*ab> coincidirá con menos caracteres que con solo C<a*>, para permitir que el resto del patrón coincida.
 
 C<< (?>patrón) >> no desactiva la vuelta atrás una vez que ha coincidido. Todavía es posible dar marcha atrás más allá de la construcción, pero no dentro de ella. Por tanto C<< ((?>a*)|(?>b*))ar >> aún lo haría con "bar".
 
@@ -1180,7 +1180,7 @@ coincidirá, y C<$1> será C<AB> y C<$2> será C<B>; C<$3> no será ajustado. Si coi
 
 =back
 
-=head2 I<Backtracking> (Vuelta atrás)
+=head2 Vuelta atrás
 X<backtrack> X<backtracking> X<vuelta atrás>
 
 NOTA: en esta sección se presenta una aproximación abstracta del comportamiento de las expresiones regulares.  Para un análisis más riguroso (y complicado punto de vista) de las normas involucradas en la selección de una coincidencia entre las alternativas posibles, vea L<Combinando piezas RE>.
@@ -1333,7 +1333,7 @@ También recuerde que "|" es interpretado como un literal cuando está entre corch
 
 Dentro de un patrón, puede designar subpatrones para su posterior consulta encerrándolos entre paréntesis, y puede referirse al subpatrón I<n>-ésimo más adelante, en el patrón utilizando el metacarácter \I<n> o \gI<n>.  Los subpatrones son numerados basados en el orden, de izquierda a derecha, de su paréntesis de apertura.  Una contrareferencia coincide con lo que en realidad coincidía con el subpatrón en la cadena examinada, no con las reglas de ese subpatrón.  Por lo tanto, C<(0|0x)\d*\s\g1\d*> coincidirá con "0x1234 0x4321", pero no con "0x1234 01234", debido a que el subpatrón primero coincidió con "0x", incluso aunque la regla C<0|0x> podría coincidir con el 0 a la izquierda en el segundo número.
 
-=head2 Atención sobre \1 en lugar de $1
+=head2 Advertencia de \1 en lugar de $1
 
 Algunas personas están demasiado acostumbradas a escribir cosas como:
 
@@ -1408,7 +1408,7 @@ imprime
 Tenga en cuenta que "hola" sólo se imprime una vez, ya que cuando Perl ve la sexta iteración del C<(?:)*> más exterior coincide con una cadena de longitud cero, detiene a C<*>.
 
 Los bucles de alto nivel preservan un estado adicional entre las iteraciones: cuándo la última coincidencia fue de longitud cero.  Para romper el bucle, la siguiente coincidencia después de una coincidencia de longitud cero se prohíbe que tenga una longitud cero.
-Esta prohibición se relaciona con dar la marcha atrás (vea L<"Marcha atrás">), por lo que la I<segunda mejor> coincidencia es elegida si la I<mejor> coincidencia es de longitud cero.
+Esta prohibición se relaciona con dar la marcha atrás (vea L<"Vuelta atrás">), por lo que la I<segunda mejor> coincidencia es elegida si la I<mejor> coincidencia es de longitud cero.
 
 Por ejemplo:
 
@@ -1426,7 +1426,7 @@ Coincidencias de longitud cero al final de la coincidencia anterior son ignorada
 
 Cada una de las piezas elementales de las expresiones regulares que se ha descrito anteriormente (por ejemplo, C<ab> o C<\Z>) podría coincidir como mucho con una subcadena en la posición indicada de la cadena de entrada.  Sin embargo, en una típica expresión regular, estas piezas elementales se combinan en patrones más complicados con los operadores de combinación C<ST>, C<S|T>, C<S*>, etc (en estos ejemplos C<S> y C<T> son subexpresiones regulares).
 
-Estas combinaciones pueden incluir alternativas, dando lugar a un problema de elección: ¿si tenemos una expresión regular C<a|ab> contra C<"abc">, coincidirá con la subcadena C<"a"> o con la C<"ab">?  Una forma de describir qué subcadena coincidente realmente, es con el concepto de dar marcha atrás (vea L<"Marcha atrás">).
+Estas combinaciones pueden incluir alternativas, dando lugar a un problema de elección: ¿si tenemos una expresión regular C<a|ab> contra C<"abc">, coincidirá con la subcadena C<"a"> o con la C<"ab">?  Una forma de describir qué subcadena coincidente realmente, es con el concepto de dar marcha atrás (vea L<"Vuelta atrás">).
 Sin embargo, esta descripción es de demasiado bajo nivel y te hace pensar en términos de una particular implementación.
 
 Otra descripción comienza con las nociones de "mejor"/"peor".  Todas las subcadenas que pueden ser coincidentes con la expresión regular dada se pueden clasificar desde la "mejor" coincidencia hasta la "peor" coincidencia, y es la "mejor" coincidencia la que es elegida.  Esto sustituye la pregunta "¿qué es elegida?" por la cuestión "¿que coincidencia es mejor, y cuál es peor?".

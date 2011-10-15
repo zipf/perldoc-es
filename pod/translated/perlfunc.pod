@@ -3570,7 +3570,7 @@ es el equivalente moral de estos dos:
 
 Ver L<perlop> para más detalles en operadores unarios y el operador coma.
 
-=item seek IDENTIFICADOR_ARCHIVO,POSICIÓN,DÓNDE
+=item seek IDENTIFICADOR_ARCHIVO,POSICIÓN,DESDE
 X<seek> X<fseek> X<filehandle, position> X<identificador de archivo, posición>
 
 Establece la posición de IDENTIFICADOR_ARCHIVO, igual que la llamada C<fseek> de C<stdio>.
@@ -4720,7 +4720,7 @@ Tenga en cuenta que si el identificador de archivo ha sido marcado como  C<:utf8
 La capa C<:encoding(...)> implícitamente introduce la capa C<:utf8>.
 Ver L</binmode>, L</open>, y el pragma C<open>, L<open>.
 
-=item sysseek IDENTIFICADOR_ARCHIVO,POSICIÓN,DÓNDE
+=item sysseek IDENTIFICADOR_ARCHIVO,POSICIÓN,DESDE
 X<sysseek> X<lseek>
 
 Establece la posición del IDENTIFICADOR_ARCHIVO en bytes usando lseek(2).  IDENTIFICADOR_ARCHIVO puede ser una expresión cuyo valor da el nombre del identificador de archivo.  Los valores de DÓNDE son C<0> para establecer la nueva posición a POSICIÓN; C<1> para establecerla a la actual más POSICIÓN; y C<2> para establecerla a EOF más POSICIÓN, normalmente negativa.
