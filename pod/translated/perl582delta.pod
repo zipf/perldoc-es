@@ -8,14 +8,14 @@ Este documento describe las diferencias entre la versión 5.8.1 y la versión 5.8.
 
 Si está actualizando desde una versión anterior como la 5.6.1, primero lea L<perl58delta>, que describe las diferencias entre 5.6.0 y 5.8.0, y L<perl581delta>, que describe las diferencias entre 5.8.0 y 5.8.1.
 
-=head1 Incompatibilidades
+=head1 Cambios incompatibles
 
 Se perdió, accidentalmente, la compatibilidad binaria entre 5.8.0 y 5.8.1, en la construcción de módulos en paralelo, al llamar a ciertas llamadas del sistema reentrantes.
 La compatibilidad binaria con 5.8.0 ha sido restaurada en 5.8.2, que requiere romper la compatibilidad con 5.8.1. Vemos esto como el menor de dos males.
 
 Esto sólo afectará a las personas que tienen un perl 5.8.1 multihilo, y los módulos compilados que utilizan estas llamadas, y ahora intenta ejecutar los módulos compilados con 5.8.2. La solución es volver a compilar y volver a instalar los módulos usando 5.8.2.
 
-=head1 Mejoras del núcleo
+=head1 Mejoras principales
 
 =head2 Aleatorización Hash
 

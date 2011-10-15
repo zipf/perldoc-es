@@ -21,7 +21,7 @@ En caso de que usted se está preguntando sobre 5.6.1, fue una corrección de erro
 	5.8.0				2002-Jul-18
 		5.8.1			2003-Sep-25
 
-=head1 Incompatibilidades
+=head1 Cambios incompatibles
 
 =head2 Aleatorización Hash
 
@@ -46,7 +46,7 @@ Vea L<perlsec/"Ataques de complejidad algorítmica"> para la justificación origin
 
 =head2 UTF-8 en identificadores de archivo ya no son activados por locale
 
-En Perl 5.8.0 todos los identificadores de archivo, incluidos los identificadores de archivo estándar, se establecían implícitamente en Unicode UTF-8 si la configuración regional indicaba el uso de UTF-8.  Esta característica causaba muchos problemas, por lo que la función se ha desactivado y rediseñado: vea L</"Mejoras del núcleo">.
+En Perl 5.8.0 todos los identificadores de archivo, incluidos los identificadores de archivo estándar, se establecían implícitamente en Unicode UTF-8 si la configuración regional indicaba el uso de UTF-8.  Esta característica causaba muchos problemas, por lo que la función se ha desactivado y rediseñado: vea L</"Mejoras principales">.
 
 =head2 Las cadenas v-strings de un solo dígito ya no son v-strings delante de un "=>"
 
@@ -74,7 +74,7 @@ Para la nueva vida de esta opción, vea L<"UTF-8 ya no está por defecto bajo la c
 
 Perl 5.8.1 usa el modificador /d cuando se ejecuta el shell cmd.exe, internamente, para system(), comillas invertidas, y al abrir tuberías hacia programas externos.  Esta opción adicional deshabilita la ejecución de los comandos AutoRun del registro, que generalmente se considera indeseable cuando se ejecutan programas externos.  Si desea mantener la compatibilidad con el antiguo comportamiento, establezca PERL5SHELL en su entorno a C<cmd /x/c>.
 
-=head1 Mejoras del núcleo
+=head1 Mejoras principales
 
 =head2 UTF-8 ya no está por defecto bajo la configuración regional de UTF-8
 
@@ -594,7 +594,7 @@ El número exacto dependerá de la configuración de Perl y de la plataforma del si
 
 =head1 Problemas conocidos
 
-La asignación al azar de hash mencionado en L</Cambios Incompatibles> es definitivamente un problema: despertará errores latentes y sacudirá a las malas suposiciones.
+La asignación al azar de hash mencionado en L</Cambios incompatibles> es definitivamente un problema: despertará errores latentes y sacudirá a las malas suposiciones.
 
 Si desea utilizar mod_perl 2.x. con Perl 5.8.1, necesitará mod_perl-1.99_10 o superior.  Las versiones anteriores de mod_perl 2.x no funcionan con la función de aleatorización de los hashes.  (mod_perl 1.x funciona bien.) También necesitará Apache::Test 1.04 o superior.
 
