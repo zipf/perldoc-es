@@ -60,11 +60,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = POD2::ES
 NAME_SYM = POD2_ES
-VERSION = 5.14.2.02
+VERSION = 5.14.2.03
 VERSION_MACRO = VERSION
-VERSION_SYM = 5_14_2_02
+VERSION_SYM = 5_14_2_03
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 5.14.2.02
+XS_VERSION = 5.14.2.03
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -175,6 +175,7 @@ MAN3PODS = lib/POD2/ES.pm \
 	lib/POD2/ES/perlintro.pod \
 	lib/POD2/ES/perlnumber.pod \
 	lib/POD2/ES/perlsource.pod \
+	lib/POD2/ES/perlstyle.pod \
 	lib/POD2/ES/perlunitut.pod \
 	lib/POD2/ES/perlutil.pod
 
@@ -214,6 +215,7 @@ TO_INST_PM = lib/.DS_Store \
 	lib/POD2/ES/perlintro.pod \
 	lib/POD2/ES/perlnumber.pod \
 	lib/POD2/ES/perlsource.pod \
+	lib/POD2/ES/perlstyle.pod \
 	lib/POD2/ES/perlunitut.pod \
 	lib/POD2/ES/perlutil.pod
 
@@ -241,16 +243,18 @@ PM_TO_BLIB = lib/POD2/ES/perldbmfilter.pod \
 	blib/lib/POD2/ES/perlunitut.pod \
 	lib/POD2/ES.pm \
 	blib/lib/POD2/ES.pm \
+	lib/POD2/ES/README.freebsd \
+	blib/lib/POD2/ES/README.freebsd \
 	lib/POD2/.DS_Store \
 	blib/lib/POD2/.DS_Store \
 	lib/POD2/ES/perlfaq2.pod \
 	blib/lib/POD2/ES/perlfaq2.pod \
-	lib/POD2/ES/README.freebsd \
-	blib/lib/POD2/ES/README.freebsd \
 	lib/POD2/ES/README.openbsd \
 	blib/lib/POD2/ES/README.openbsd \
 	lib/POD2/ES/perl.pod \
 	blib/lib/POD2/ES/perl.pod \
+	lib/POD2/ES/perlstyle.pod \
+	blib/lib/POD2/ES/perlstyle.pod \
 	lib/POD2/ES/perlutil.pod \
 	blib/lib/POD2/ES/perlutil.pod
 
@@ -321,7 +325,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = POD2-ES
-DISTVNAME = POD2-ES-5.14.2.02
+DISTVNAME = POD2-ES-5.14.2.03
 
 
 # --- MakeMaker macro section:
@@ -486,6 +490,7 @@ manifypods : pure_all  \
 	lib/POD2/ES/perl.pod \
 	lib/POD2/ES/perlintro.pod \
 	lib/POD2/ES/perlbook.pod \
+	lib/POD2/ES/perlstyle.pod \
 	lib/POD2/ES/perlutil.pod
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
 	  lib/POD2/ES/perlnumber.pod $(INST_MAN3DIR)/POD2::ES::perlnumber.$(MAN3EXT) \
@@ -500,6 +505,7 @@ manifypods : pure_all  \
 	  lib/POD2/ES/perl.pod $(INST_MAN3DIR)/POD2::ES::perl.$(MAN3EXT) \
 	  lib/POD2/ES/perlintro.pod $(INST_MAN3DIR)/POD2::ES::perlintro.$(MAN3EXT) \
 	  lib/POD2/ES/perlbook.pod $(INST_MAN3DIR)/POD2::ES::perlbook.$(MAN3EXT) \
+	  lib/POD2/ES/perlstyle.pod $(INST_MAN3DIR)/POD2::ES::perlstyle.$(MAN3EXT) \
 	  lib/POD2/ES/perlutil.pod $(INST_MAN3DIR)/POD2::ES::perlutil.$(MAN3EXT) 
 
 
@@ -588,7 +594,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '  POD2::Base: 0.043' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Pod::Perldoc: 3.15' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Test::More: 0' >> META_new.yml
-	$(NOECHO) $(ECHO) 'version: v5.14.2.02' >> META_new.yml
+	$(NOECHO) $(ECHO) 'version: v5.14.2.03' >> META_new.yml
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
 	$(NOECHO) $(ECHO) Generating META.json
 	$(NOECHO) $(ECHO) '{' > META_new.json
@@ -632,7 +638,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      }' >> META_new.json
 	$(NOECHO) $(ECHO) '   },' >> META_new.json
 	$(NOECHO) $(ECHO) '   "release_status" : "stable",' >> META_new.json
-	$(NOECHO) $(ECHO) '   "version" : "v5.14.2.02"' >> META_new.json
+	$(NOECHO) $(ECHO) '   "version" : "v5.14.2.03"' >> META_new.json
 	$(NOECHO) $(ECHO) '}' >> META_new.json
 	-$(NOECHO) $(MV) META_new.json $(DISTVNAME)/META.json
 
@@ -928,7 +934,7 @@ testdb_static :: testdb_dynamic
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="5.14.2.02">' > $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="5.14.2.03">' > $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>Documentación de Perl en español</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Equipo de Perl en Español</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
@@ -957,11 +963,12 @@ pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	  lib/POD2/ES/perlcheat.pod blib/lib/POD2/ES/perlcheat.pod \
 	  lib/POD2/ES/perlunitut.pod blib/lib/POD2/ES/perlunitut.pod \
 	  lib/POD2/ES.pm blib/lib/POD2/ES.pm \
+	  lib/POD2/ES/README.freebsd blib/lib/POD2/ES/README.freebsd \
 	  lib/POD2/.DS_Store blib/lib/POD2/.DS_Store \
 	  lib/POD2/ES/perlfaq2.pod blib/lib/POD2/ES/perlfaq2.pod \
-	  lib/POD2/ES/README.freebsd blib/lib/POD2/ES/README.freebsd \
 	  lib/POD2/ES/README.openbsd blib/lib/POD2/ES/README.openbsd \
 	  lib/POD2/ES/perl.pod blib/lib/POD2/ES/perl.pod \
+	  lib/POD2/ES/perlstyle.pod blib/lib/POD2/ES/perlstyle.pod \
 	  lib/POD2/ES/perlutil.pod blib/lib/POD2/ES/perlutil.pod 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
