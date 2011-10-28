@@ -11,7 +11,6 @@ use 5.012;
 use Readonly;
 use XML::Twig;
 
-$|++;
 
 # Hard-coded paths relative to /perldoc-es/tools
 # Clean memory
@@ -29,13 +28,6 @@ my $clean_entries = scalar(keys %{$clean_href});
 say "$clean_entries entries in clean memory";
 
 
-# Read work memory and add missing entries to the merged memory
-#my $work_href = read_tmx($WORK_PATH);
-
-#say scalar(keys %{$work_href}) . " entries in work memory";
-
-
-
 # Process work memory entries, to get non-matching entries 
 # and determine number of duplicates
 
@@ -51,9 +43,8 @@ $twig->parsefile($WORK_PATH);
 
 $twig->purge();
 
-say "Duplicates: " . $duplicates;
+say "Duplicates: $duplicates";
 say "Non-duplicate work memory entries that will be added to merged memory: " . scalar @non_matching;
-
 
 
 # Open merged memory and insert non-duplicate entries
@@ -74,13 +65,13 @@ foreach my $entry (@non_matching) {
 open my $out, '>', $MERGED_PATH;
 
 $twig_merged->print($out);
-
 $twig_merged->purge();
 
 say "Total entries in merged memory: ", $clean_entries + $added;
 
 
 sub merged_tu {
+
     my ($t, $elt, $clean_href, $non_matching_aref, $duplicates) = @_;
     
     my $source = ( $elt->children() )[0]->text();
@@ -96,11 +87,12 @@ sub merged_tu {
     }
 
     $elt->purge();
+
 }
 
 
-
 sub read_tmx {
+
     my $path = shift;
 
     my %segments;
@@ -112,23 +104,19 @@ sub read_tmx {
                              );
 
     $twig->parsefile($path);
-    
     $twig->purge();
-
 
     return \%segments;
 
 }
 
 
-
 sub process_unit {
+
     my ($t, $elt, $segments_href) = @_;
  
-
     my $source = ( $elt->children() )[0]->text();
     $segments_href->{ $source } =  $elt;
-
 
     $elt->purge();
 
