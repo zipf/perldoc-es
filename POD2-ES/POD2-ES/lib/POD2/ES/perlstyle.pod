@@ -22,69 +22,69 @@ preferencias menos estrictas:
 
 =over 4
 
-=item 
+=item *
 
 Sangría de 4 columnas.
 
-=item 
+=item *
 
 Llave de apertura en la misma línea que la palabra reservada, si es posible; si
 no, alineada en vertical con ella.
 
-=item 
+=item *
 
 Espacio antes de llave de apertura de un BLOQUE multilínea.
 
-=item 
+=item *
 
 Un BLOQUE de una línea puede colocarse en una sola línea, llaves incluidas.
 
-=item 
+=item *
 
 Ningún espacio antes de punto y coma.
 
-=item 
+=item *
 
 Punto y coma omitido en BLOQUE "pequeño" de una sola línea.
 
-=item 
+=item *
 
 Espacio en torno a la mayoría de operadores.
 
-=item 
+=item *
 
 Espacio en torno a un subíndice "complejo" (entre corchetes).
 
-=item 
+=item *
 
 Líneas en blanco entre fragmentos que hagan cosas distintas.
 
-=item 
+=item *
 
 Instrucción C<else> en nueva línea.
 
-=item 
+=item *
 
 Ningún espacio entre un nombre de función y su paréntesis de apertura.
 
-=item 
+=item *
 
 Espacio después de cada coma.
 
-=item 
+=item *
 
 A continuación de un operador (excepto C<and> y C<or>), las líneas largas deben
 dividirse.
 
-=item 
+=item *
 
 Espacio después del último emparejamiento de paréntesis en la línea actual.
 
-=item 
+=item *
 
 Alinear elementos correspondientes verticalmente.
 
-=item 
+=item *
 
 Omitir la puntuación redundante mientras se entienda bien el código.
 
@@ -98,7 +98,7 @@ conviene tener en mente:
 
 =over 4
 
-=item 
+=item *
 
 Que algo se B<pueda> hacer de una determinada manera no significa que se
 B<deba> hacer de esa manera. Perl se diseñó para ofrecer varias maneras de
@@ -142,7 +142,7 @@ Aunque usted no tenga dudas, piense en el bienestar mental de la persona que
 tendrá que mantener el código en el futuro; es probable que ponga los
 paréntesis en el lugar equivocado.
 
-=item 
+=item *
 
 No tiene que hacer filigranas para salir de un bucle al principio o al final.
 Perl dispone del operador C<last>, con el que puede salir desde cualquier
@@ -156,19 +156,19 @@ punto. Solo tiene que reducir un poco la sangría para sea más visible:
 	    instrucciones;
 	}
 
-=item 
+=item *
 
 No tenga miedo de usar etiquetas en bucles; mejoran la legibilidad y permiten
 establecer salidas de bucle en varios niveles. Vea el ejemplo anterior.
 
-=item 
+=item *
 
 Evite usar C<grep()> (o C<map()>) o `acentos graves` en un contexto nulo (es
 decir, desechando los valores de retorno). Estas funciones devuelven valores,
 por lo que debe usarlos. Como alternativa, use un bucle C<foreach()> o la
 función C<system()>.
 
-=item 
+=item *
 
 Para garantizar la portabilidad, si utiliza características que podrían no
 estar implementadas en todos los equipos, debe usar C<eval> para comprobar si
@@ -178,12 +178,12 @@ en C<English>) para ver si está incluida. El módulo C<Config> también permite
 consultar valores que el programa B<Configure> determinó durante la instalación
 de Perl.
 
-=item 
+=item *
 
 Elija identificadores mnemotécnicos. Si no puede recordar el significado de
 "mnemotécnico", tiene un problema.
 
-=item 
+=item *
 
 Aunque es aceptable usar identificadores cortos como por ejemplo C<$sinargs>
 ("sin argumentos"), en los identificadores más largos debe usar guiones bajos
@@ -200,7 +200,7 @@ minúsculas, pero preferiblemente sin guiones bajos (por limitaciones en
 sistemas de archivos primitivos para la representación de nombres de módulos
 como archivos que deben ajustarse a unos pocos bytes dispersos).
 
-=item 
+=item *
 
 Puede encontrar útil usar el tamaño de caja de las letras para indicar el
 ámbito o la naturaleza de una variable. Por ejemplo:
@@ -215,26 +215,26 @@ C<$obj-E<gt>como_cadena()>.
 Puede agregar un guión bajo inicial al principio del nombre de una variable o
 función para indicar no se debe usar fuera del paquete en el que se definió.
 
-=item 
+=item *
 
 En el caso de una expresión regular muy compleja, debe usar el modificador
 C</x> y poner algunos espacios en blanco para evitar que parezca un galimatías.
 Si una expresión regular contiene barras diagonales o barras diagonales
 inversas, no use barras diagonales como delimitadores.
 
-=item 
+=item *
 
 Use los nuevos operadores C<and> y C<or> para evitar poner demasiados
 paréntesis en listas de operadores, y para reducir la incidencia de operadores
 puntuación como C<&&> y C<||>. Llame a las subrutinas como si fueran funciones
 u operadores de lista para evitar un número excesivo de signos & y paréntesis.
 
-=item 
+=item *
 
 Use documentos incrustados (I<here documents>) en vez de repetir instrucciones
 C<print()>.
 
-=item 
+=item *
 
 Alinee verticalmente los elementos correspondientes, especialmente si no caben
 en una sola línea.
@@ -248,7 +248,7 @@ en una sola línea.
     chdir($tmpdir)      or die "no se puede ejecutar chdir $tmpdir: $!";
     mkdir 'tmp',   0777	or die "No se puede ejecutar mkdir $tmpdir/tmp: $!";
 
-=item 
+=item *
 
 Compruebe siempre los valores devueltos por las llamadas al sistema. Para que
 un mensaje de error se considere correcto, debe salir por C<STDERR>,
@@ -259,14 +259,14 @@ suficiente sería:
 
     opendir(D, $dir)	 or die "No se puede ejecutar opendir $dir: $!";
 
-=item 
+=item *
 
 Alinee las transliteraciones cuando sea adecuado:
 
     tr [abc]
        [xyz];
 
-=item 
+=item *
 
 Piense en la reutilización.  ¿Por qué gastar energía cerebral en algo que va a
 usar una sola vez?  Debería generalizar el código. Debería convertir el código
@@ -274,14 +274,14 @@ en un módulo o una clase de objetos. Debería escribir código más limpio con
 C<use strict> y C<use warnings> (o B<-w>). Debería compartir el código. Debería
 incluso cambiar su visión del mundo. Debería... bueno, ya me callo.
 
-=item 
+=item *
 
 Procure documentar el código y usar el formato Pod de una manera coherente. Las
 convenciones habituales son:
 
 =over 4
 
-=item 
+=item *
 
 usar C<CE<lt>E<gt>> para nombres de funciones, variables y módulos (y, de
 manera más general, cualquier cosa que se pueda considerar que forma parte del
@@ -289,11 +289,11 @@ código, como identificadores de archivos o valores específicos). Tenga en
 cuenta que los nombres de función se consideran más legibles con los paréntesis
 a continuación: C<funcion()>.
 
-=item 
+=item *
 
 usar C<BE<lt>E<gt>> para nombres de comandos, como B<cat> o B<grep>.
 
-=item 
+=item *
 
 usar C<FE<lt>E<gt>> o C<CE<lt>E<gt>> para nombres de archivos. C<FE<lt>E<gt>>
 debería ser el único código Pod usado para nombres de archivo, pero como la
@@ -303,11 +303,11 @@ podrían resultar menos legibles, por lo que es mejor usar C<CE<lt>E<gt>>.
 
 =back
 
-=item 
+=item *
 
 Sea coherente.
 
-=item 
+=item *
 
 Sea amable.
 
