@@ -4,7 +4,7 @@ use strict;
 
 use base 'POD2::Base';
 
-our $VERSION = '5.14.2.04';
+our $VERSION = '5.14.2.05';
 
 sub search_perlfunc_re {
     return 'Lista de funciones de Perl en orden alfabético';
