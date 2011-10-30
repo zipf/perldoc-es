@@ -1,19 +1,19 @@
 =head1 NOMBRE
 
-perl - El intérprete del lenguaje Perl
+perl - El intérprete del lenguaje Perl 5
 
 =head1 SINOPSIS
 
 B<perl>	S<[ B<-sTtuUWX> ]>
-	S<[ B<-hv> ] [ B<-V>[:I<configvar>] ]>
-	S<[ B<-cw> ] [ B<-d>[B<t>][:I<debugger>] ] [ B<-D>[I<número/lista>] ]>
+	S<[ B<-hv> ] [ B<-V>[:I<var_config>] ]>
+	S<[ B<-cw> ] [ B<-d>[B<t>][:I<depurador>] ] [ B<-D>[I<número/lista>] ]>
 	S<[ B<-pna> ] [ B<-F>I<patrón> ] [ B<-l>[I<octal>] ] [ B<-0>[I<octal/hexadecimal>] ]>
 	S<[ B<-I>I<dir> ] [ B<-m>[B<->]I<módulo> ] [ B<-M>[B<->]I<'módulo...'> ] [ B<-f> ]>
 	S<[ B<-C [I<número/lista>] >]>
 	S<[ B<-S> ]>
 	S<[ B<-x>[I<dir>] ]>
 	S<[ B<-i>[I<extensión>] ]>
-	S<[ [B<-e>|B<-E>] I<'comando'> ] [ B<--> ] [ I<programa> ] [ I<argumento> ]...>
+	S<[ [B<-e>|B<-E>] I<'comando'> ] [ B<--> ] [ I<archivo_programa> ] [ I<argumento> ]...>
 
 =head1 CÓMO OBTENER AYUDA
 
@@ -73,7 +73,7 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
       perlpacktut	Tutorial de pack() y unpack()
     perlpod		Documentación en texto simple (POD)
     perlpodspec 	Especificación del formato POD
-    perlpodstyle	Guía de estilo POD
+    perlpodstyle	Guía de estilo para POD
     perlrun		Ejecución y opciones de ejecución
     perldiag		Mensajes de diagnóstico
     perllexwarn 	Advertencias y control de advertencias
@@ -93,14 +93,14 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
     perlfork		Información sobre fork()
     perlnumber		Semántica de números
 
-    perlthrtut		Tutorial de subprocesos
+    perlthrtut		Tutorial de uso de hilos de ejecución
 
     perlport		Guía de portabilidad
     perllocale		Compatibilidad con la configuración regional
     perluniintro	Introducción a Unicode
     perlunicode 	Compatibilidad con Unicode
     perlunifaq		Preguntas más frecuentes sobre Unicode
-    perluniprops	Propiedades de Unicode versión 6.0.0 en Perl
+    perluniprops	Índice de propiedades de Unicode versión 6.0.0
     perlunitut		Tutorial de Unicode
     perlebcdic		Ejecución de Perl en plataformas EBCDIC
 
@@ -140,23 +140,23 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
     perlapio		Interfaz de abstracción de E/S interna
 
     perlhack		Guía para hackers
-    perlsource		Guía al árbol de código fuente de Perl
-    perlinterp		Visión general al código fuente del intérprete Perl, y cómo funciona
-    perlhacktut 	Paso a paso por la creación de un sencillo parche en código C
+    perlsource		Guía del árbol de código fuente
+    perlinterp		Descripción del código fuente y el funcionamiento del intérprete de Perl
+    perlhacktut 	Tutorial de creación de una revisión sencilla de código C
     perlhacktips	Consejos para modificar el código C del núcleo de Perl
     perlpolicy		Directivas de desarrollo de Perl
-    perlgit		Usando git con el repositorio de Perl
+    perlgit		Uso de git con el repositorio de Perl
 
 =head2 Varios
 
-    perlbook		Información sobre libros de Perl
+    perlbook		Información de libros sobre Perl
     perlcommunity	Información sobre la comunidad Perl
     perltodo		Tareas pendientes
 
     perldoc		Consulta de la documentación de Perl en formato Pod
 
     perlhist		Registros históricos de Perl
-    perldelta		Cambios desde la versión anterior
+    perldelta		Cambios con respecto a la versión anterior
     perl5141delta	Cambios en la versión 5.14.1
     perl5140delta	Cambios en la versión 5.14.0
     perl51311delta	Cambios en la versión 5.13.11
@@ -262,17 +262,17 @@ Si sucede algo raro con el programa y no está seguro de dónde debe buscar ayuda,
 
 =head1 DESCRIPCIÓN
 
-Oficialmente, Perl significa Practical Extraction and Report Language (I<Lenguaje práctico para la extracción de datos y creación de informes>), excepto cuando no hace eso.
+Oficialmente, Perl significa Practical Extraction and Report Language (I<Lenguaje práctico para la extracción de datos y creación de informes>), salvo cuando no se usa para eso.
 
-Perl era un lenguaje optimizado para procesar archivos de texto, a fin de extraer información y utilizarla para generar informes.  Rápidamente se convirtió en un magnífico lenguaje para muchas tareas de gestión de sistemas. Con los años, Perl se ha convertido en un lenguaje de programación de propósito general. Es ampliamente utilizado para todo, desde las rápidas "una-línea" hasta el desarrollo de aplicaciones a gran escala.
+Perl se creó como un lenguaje optimizado para procesar archivos de texto, a fin de extraer información y utilizarla para generar informes.  Pronto se convirtió en un lenguaje útil para muchas tareas de administración de sistemas. Con los años, Perl se ha convertido en un lenguaje de programación de propósito general. Se utiliza para todo tipo de desarrollos, desde "programas de una línea" hasta aplicaciones a gran escala.
 
 El lenguaje se diseñó para ser práctico (fácil de usar, eficaz, completo), más que estético (reducido, elegante, minimalista).
 
-Perl combina (en opinión del autor) algunas de las mejores características de C, B<sed>, B<awk> y B<sh>, por lo que las personas familiarizadas con estos lenguajes aprenderán Perl fácilmente  (los historiadores de los lenguajes también destacarán algunos vestigio de B<csh>, Pascal e incluso BASIC-PLUS). La sintaxis de expresiones es muy parecida a la de C.  A diferencia de la mayoría de las utilidades Unix, Perl no limita de forma arbitraria el tamaño de los datos; si el sistema dispone de memoria suficiente, puede "succionar" un archivo completo como una sola cadena.  La profundidad de recursión es ilimitada.  Y las tablas usadas por los hashes (a veces denominados "arrays asociativos") se expanden cuando es necesario para que el rendimiento no se vea afectado.  Perl puede utilizar sofisticadas técnicas de detección de patrones para analizar rápidamente grandes cantidades de datos.  Aunque está optimizado para el procesamiento de texto, Perl también tiene excelentes herramientas para extraer y cortar datos en binario.
+Perl combina (en opinión del autor) algunas de las mejores características de C, B<sed>, B<awk> y B<sh>, por lo que las personas familiarizadas con estos lenguajes aprenderán Perl fácilmente  (los historiadores de los lenguajes también destacarán algunos vestigio de B<csh>, Pascal e incluso BASIC-PLUS). La sintaxis de expresiones es muy parecida a la de C.  A diferencia de la mayoría de las utilidades Unix, Perl no limita de forma arbitraria el tamaño de los datos; si el sistema dispone de memoria suficiente, puede "succionar" un archivo completo como una sola cadena.  La profundidad de recursión es ilimitada.  Y las tablas usadas por los hashes (a veces denominados "arrays asociativos") se expanden cuando es necesario para que el rendimiento no se vea afectado.  Perl puede utilizar sofisticadas técnicas de detección de patrones para analizar rápidamente grandes cantidades de datos.  Aunque está optimizado para el procesamiento de texto, también incluye muchas herramientas magníficas para procesar datos binarios.
 
 Pero esto no es todo.
 
-En 1993 (vea L<perlhist>) se lanzó Perl 5, prácticamente una reescritura completa del lenguaje, que proporciona las siguientes ventajas adicionales:
+En 1993 (véase L<perlhist>) se lanzó Perl 5, prácticamente una reescritura completa del lenguaje, que proporciona las siguientes ventajas adicionales:
 
 =over 4
 
@@ -314,7 +314,7 @@ Se describe en L<perlobj>, L<perlboot>, L<perltoot>, L<perltooc> y L<perlbot>.
 
 =item *
 
-compatibilidad con procesos ligeros (hebras I<threads>)
+compatibilidad con procesos ligeros (hilos de ejecución)
 
 Se describe en L<perlthrtut> y L<threads>.
 
@@ -398,9 +398,9 @@ Perl depende de las definiciones de hardware para diversas operaciones, como la 
 
 Si stdio requiere ejecutar seek o eof entre lecturas y escrituras para una secuencia determinada, Perl también lo requerirá  (esto no se aplica a sysread() ni a syswrite()).
 
-Aunque ninguno de los tipos de datos integrados tiene un límite de tamaño (aparte del tamaño de la memoria disponible), hay algunos límites arbitrarios. Por ejemplo, un nombre de variable no puede tener más de 251 caracteres.  Por otra parte, los números de línea especificados por los diagnósticos se almacenan internamente como enteros cortos, por lo que están limitados a un máximo de 65535 (cifras más altas quedarán afectadas por el desbordamiento).
+Aunque ninguno de los tipos de datos predefinidos tiene un límite de tamaño (aparte del tamaño de la memoria disponible), hay algunos límites arbitrarios. Por ejemplo, un nombre de variable no puede tener más de 251 caracteres.  Por otra parte, los números de línea especificados por los diagnósticos se almacenan internamente como enteros cortos, por lo que están limitados a un máximo de 65535 (cifras más altas quedarán afectadas por el desbordamiento).
 
-Puede enviar sus informes de errores (asegúrese de incluir la información de configuración completa, como la salida del programa myconfig, en el árbol de código fuente Perl, o con C<perl -V>) a perlbug@perl.org. Si ha tenido éxito compilando Perl, el script L<perlbug> en el subdirectorio F<utils/> se puede utilizar para enviar por correo electrónico un informe de los errores encontrados.
+Puede enviar informes de error a través de la dirección perlbug@perl.org (no olvide incluir toda la información de configuración emitida por el programa myconfig en el árbol de código fuente de perl, o por C<perl -V>). Si ha logrado compilar perl, puede utilizar el script L<perlbug> del subdirectorio F<utils/> para enviar informes de error.
 
 En realidad Perl significa Pathologically Eclectic Rubbish Lister (Presentador de basura patológicamente ecléctico), pero nadie debe enterarse de esto :-).
 
