@@ -8,7 +8,8 @@ Este documento proporciona una introducción rápida al lenguaje de programación P
 
 Es un documento introductorio, no una guía completa.  Tampoco explica el lenguaje en detalle.  En algunos casos se ha sacrificado la precisión para transmitir la idea general.  Es I<muy> recomendable complementar esta introducción con información del manual de Perl completo, cuya tabla de contenido se encuentra en L<perltoc>.
 
-En este documento se incluyen referencias a otras partes de la documentación de Perl.  Puede consultar la documentación mediante el comando C<perldoc> o cualquier otro método que use para leer este documento.
+En este documento se incluyen referencias a otras partes de la documentación de Perl.  Puede consultar la documentación mediante el comando C<perldoc>
+o cualquier otro método que use para leer este documento.
 
 En la documentación de Perl se incluyen muchos ejemplos que ilustran las características descritas.  Tenga en cuenta que muchos de estos ejemplos son fragmentos de código, no programas completos.
 
@@ -18,9 +19,10 @@ Tenga en cuenta que los ejemplos han sido escritos por muchos autores distintos 
 
 =head2 ¿Qué es Perl?
 
-Perl es un lenguaje de programación de propósito general desarrollado originalmente para la manipulación de texto y que, en la actualidad, se usa para una amplia gama de tareas, como administración de sistemas, desarrollo web, programación de red, desarrollo de interfaces gráficas de usuario, etc.
+Perl es un lenguaje de programación de propósito general desarrollado originalmente para la manipulación de texto y que, en la actualidad, se usa para una amplia gama de tareas, como administración de sistemas, desarrollo web, programación de red, 
+desarrollo de interfaces gráficas de usuario, etc.
 
-El lenguaje se diseñó para ser práctico (fácil de usar, eficaz, completo), más que estético (reducido, elegante, minimalista).  Se caracteriza principalmente por su facilidad de uso (permite programar tanto de manera procedural como orientada a objetos (OO)), su magnífica capacidad integrada para procesamiento de texto y por tener una de las colecciones de módulos de terceros más impresionantes del mundo.
+El lenguaje se diseñó para ser práctico (fácil de usar, eficaz, completo), más que estético (reducido, elegante, minimalista).  Se caracteriza principalmente por su facilidad de uso (permite programar tanto de manera procedural como orientada a objetos (OO)), su magnífica capacidad para procesamiento de texto y por tener una de las colecciones de módulos de terceros más impresionantes del mundo.
 
 En L<perl>, L<perlfaq1> y en muchos otros sitios se incluyen definiciones de Perl.  Esto refleja el hecho de que, aunque Perl tiene muchos públicos distintos, muchas personas piensan que merece la pena escribir sobre este lenguaje.
 
@@ -106,10 +108,10 @@ En Perl hay tres tipos de variables principales: escalares, arrays y hashes.
 
 Un escalar representa un solo valor:
 
-    my $animal    = "camello";
+    my $animal = "camello";
     my $respuesta = 42;
 
-Los valores escalares pueden ser cadenas, enteros o números de punto flotante, y Perl los convertirá de un tipo a otro cuando sea necesario.  No es necesario predeclarar los tipos de las variables, pero éstas deben declararse con la palabra clave C<my> la primera vez que se usan. (Éste es uno de los requisitos de C<use strict;>).
+Los valores escalares pueden ser cadenas, enteros o números de punto flotante, y Perl los convertirá de un tipo a otro cuando sea necesario.  No es necesario predeclarar los tipos de las variables, pero éstas deben declararse con la palabra clave C<my> la primera vez que se usan. (Éste es uno de los requisitos de C<use strict;>.)
 
 Los valores escalares se pueden usar de varias maneras:
 
@@ -120,14 +122,14 @@ Los valores escalares se pueden usar de varias maneras:
 Hay varios escalares "mágicos" con nombres que recuerdan conjuntos de signos de puntuación (o "ruido de señal").  Estas variables especiales se usan para diversos fines y se describen en L<perlvar>.  La única que tiene que conocer por ahora es C<$_>, la "variable predeterminada".
 Se usa como argumento predeterminado de varias funciones de Perl y su valor se establece implícitamente en determinadas estructuras de bucle.
 
-    print;    # imprime el contenido de $_ de manera predeterminada
+    print;          # imprime el contenido de $_ de manera predeterminada
 
 =item Arrays
 
 Un array representa una lista de valores:
 
     my @animales = ("camello", "llama", "búho");
-    my @numeros  = (23, 42, 69);
+    my @numeros = (23, 42, 69);
     my @mezcla   = ("camello", 42, 1.23);
 
 El índice de un array empieza en cero.  Para obtener los elementos de un array:
@@ -147,15 +149,15 @@ Los nombres de los elementos que obtenemos del array empiezan por C<$> porque re
 
 Para obtener varios elementos de un array:
 
-    @animales[0,1];            # devuelve ("camello", "llama");
-    @animales[0..2];           # devuelve ("camello", "llama", "búho");
+    @animales[0,1];  # devuelve ("camello", "llama");
+    @animales[0..2];  # devuelve ("camello", "llama", "búho");
     @animales[1..$#animales];  # devuelve todos excepto el primero
 
 Esto se denomina una "porción de array".
 
 Puede hacer varias cosas útiles con las listas:
 
-    my @ordenados     = sort @animales;
+    my @ordenados    = sort @animales;
     my @orden_inverso = reverse @numeros;
 
 También hay dos arrays especiales: C<@ARGV> (los argumentos de línea de comandos pasados al script) y C<@_> (los argumentos pasados a una subrutina).  Se describen en L<perlvar>.
@@ -169,23 +171,24 @@ Un hash representa un conjunto de pares clave-valor:
 Puede usar espacio en blanco y el operador C<< => >> para expresarlos de manera más clara:
 
     my %color_fruta = (
-        manzana => "rojo",
+        manzana=> "rojo",
         plátano => "amarillo",
     );
 
 Para obtener los elementos de un hash:
 
-    $color_fruta{"manzana"};         # devuelve "rojo"
+    $color_fruta{"manzana"};           # devuelve "rojo"
 
-Puede obtener una lista de las claves y los valores con C<keys()> y C<values()> respectivamente.
+Puede obtener una lista de las claves y los valores con C<keys()> y  C<values()> respectivamente.
 
-    my @frutas  = keys %colores_fruta;
+    my @frutas = keys %colores_fruta;
     my @colores = values %colores_fruta;
 
 En los hashes no hay un orden interno específico, aunque puede ordenar las claves antes de recorrerlas en un bucle.
 
 De la misma manera que hay escalares y arrays especiales, también hay hashes especiales.
-El más conocido es C<%ENV>, que contiene variables de entorno.  Encontrará información sobre este hash (y sobre otras variables especiales) en L<perlvar>.
+El más conocido es C<%ENV>, que contiene variables de entorno.  Encontrará información sobre este hash (y sobre otras variables especiales) en 
+L<perlvar>.
 
 =back
 
@@ -196,8 +199,8 @@ Se pueden crear tipos de datos más complejos mediante referencias, que permiten 
 Una referencia es un valor escalar que puede apuntar a cualquier tipo de datos de Perl. Así, almacenando una referencia como el valor de un elemento de array o hash, puede crear fácilmente listas y hashes dentro de listas y hashes. En el ejemplo siguiente se muestra una estructura de hash de hashes de 2 niveles en la que se usan referencias de hash anónimas.
 
     my $variables = {
-        scalar  =>  {
-                     descripcion => "un solo valor",
+        escalar  =>  {
+                     descripcion => "elemento invidivual",
                      sigilo => '$',
                     },
         array   =>  {
@@ -205,12 +208,12 @@ Una referencia es un valor escalar que puede apuntar a cualquier tipo de datos d
                      sigilo => '@',
                     },
         hash    =>  {
-                     descripcion => "pares clave/valor",
+                     descripcion => "pares clave-valor",
                      sigilo => '%',
                     },
     };
 
-    print "Los escalares empiezan por $variables->{'scalar'}->{'sigilo'}\n";
+    print "Los escalares empiezan por $variables->{'escalar'}->{'sigilo'}\n";
 
 Encontrará información detallada sobre las referencias en L<perlreftut>, L<perllol>, L<perlref> y L<perldsc>.
 
@@ -262,7 +265,7 @@ También existe la versión negada:
         ...
     }
 
-Esto se proporciona como una versión más legible de C<if  (!I<condición>)>.
+Esto se proporciona como una versión más legible de C<if (!I<condición>)>.
 
 Tenga en cuenta que en Perl es obligatorio usar las llaves, aunque sólo haya una línea en el bloque.  Sin embargo, puede escribir los bloques condicionales de una sola línea de manera que recuerden a una frase en inglés:
 
@@ -316,11 +319,11 @@ El bucle for de C no se suele usar, ya que Perl proporciona una alternativa más 
 
 =back
 
-Para obtener más información sobre las estructuras de bucle (y otras estructuras que no se han mencionado en esta introducción), consulte L<perlsyn>.
+Para obtener más información sobre las estructuras de bucle (y otras estructuras que no se han mencionado en esta introducción ), consulte L<perlsyn>.
 
-=head2 Funciones y operadores integrados
+=head2 Funciones y operadores predefinidos
 
-Perl incluye una amplia selección de funciones y operadores integrados.  Ya hemos visto algunas funciones, como C<print>, C<sort> y C<reverse>.  Al principio de L<perlfunc> se incluye una lista completa de funciones. También puede obtener fácilmente información sobre cualquier función mediante el comando C<perldoc -f I<nombre_función>>.
+Perl incluye una amplia selección de funciones y operadores predefinidos.  Ya hemos visto algunas funciones, como C<print>, C<sort> y C<reverse>.  Al principio de L<perlfunc> se incluye una lista completa de funciones. También puede obtener fácilmente información sobre cualquier función mediante el comando C<perldoc -f I<nombre_función>>.
 
 Encontrará información detallada sobre los operadores de Perl en L<perlop>; algunos de los más comunes son:
 
@@ -351,7 +354,8 @@ Encontrará información detallada sobre los operadores de Perl en L<perlop>; algu
     le  menor o igual que
     ge  mayor o igual que
 
-¿Por qué se usa un operador de comparación para números y otro para cadenas?  Porque Perl no distingue el tipo del contenido de las variables y tiene que determinar si debe ordenar numéricamente (99 menor que 100) o alfabéticamente (100 es anterior a 99).
+¿Por qué se usa un operador de comparación para números y otro para cadenas?  Porque Perl no distingue el tipo del contenido de las variables y tiene que determinar si debe ordenar numéricamente (99 menor que 100) o alfabéticamente (100 es anterior a
+99).
 
 =item Lógica Booleana
 
@@ -359,7 +363,7 @@ Encontrará información detallada sobre los operadores de Perl en L<perlop>; algu
     ||  or
     !   not
 
-(En la tabla anterior C<and>, C<or> y C<not> no son solo descripciones de los operadores. Son también operadores.  Ofrecen más legibilidad que los operadores tipo C correspondientes, como C<&&>, pero su precedencia es distinta.  Consulte L<perlop> para obtener más información)
+(En la tabla anterior C<and>, C<or> y C<not> no son solo descripciones de los operadores. Son también operadores.  Ofrecen más legibilidad que los operadores tipo C correspondientes, como C<&&>, pero su precedencia es distinta.  Consulte L<perlop> para obtener más información.)
 
 =item Otros operadores
 
@@ -381,9 +385,9 @@ Muchos operadores se pueden combinar con un signo C<=> de la manera siguiente:
 La función C<open()> abre un archivo para entrada o salida.
 Esta función se describe de forma muy detallada en L<perlfunc> y L<perlopentut>. A continuación se muestra un resumen de cómo se usa:
 
-    open(my $entrada,  "<",  "entrada.txt") or die "No se puede abrir entrada.txt: $!";
-    open(my $salida,   ">",  "salida.txt")  or die "No se puede abrir salida.txt: $!";
-    open(my $registro, ">>", "mi.registro") or die "No se puede abrir mi.registro: $!";
+    open(my $entrada,  "<",  "entrada.txt")  or die "No se puede abrir entrada.txt: $!";
+    open(my $salida, ">",  "salida.txt") or die "No se puede abrir salida.txt: $!";
+    open(my $registro, ">>", "mi.registro")     or die "No se puede abrir mi.registro: $!";
 
 Puede utilizar el operador C<< <> >> para leer de un identificador de archivo abierto.  En contexto escalar, este operador lee una sola línea del identificador de archivo, mientras que en contexto de lista lee todo el archivo y asigna cada línea a un elemento de la lista:
 
@@ -424,9 +428,9 @@ El operador de detección de coincidencias C<//> se describe en L<perlop>.  Opera
 
 =item Sustitución simple
 
-    s/foo/bar/;               # reemplaza foo por bar en $_
-    $a =~ s/foo/bar/;         # reemplaza foo por bar en $a
-    $a =~ s/foo/bar/g;        # reemplaza todas las coincidencias de foo por bar en $a
+    s/foo/bar/;  # reemplaza foo por bar en $_
+    $a =~ s/foo/bar/;  # reemplaza foo por bar en $a
+    $a =~ s/foo/bar/g;  # reemplaza todas las coincidencias de foo por bar en $a
 
 El operador de sustitución, C<s///>, se describe en L<perlop>.
 
@@ -461,10 +465,10 @@ Algunos ejemplos breves:
 
     /^\d+/              cadena que empieza por uno o varios dígitos
     /^$/                cadena vacía (principio y final contiguos)
-    /(\d\s){3}/         tres dígitos, cada uno seguido de un carácter
-                        espacio (ej. "3 4 5 ")
-    /(a.)+/             cadena en la que cada letra impar es a
-                        (ej. "abacadaf")
+    /(\d\s){3}/         tres dígitos, cada uno seguido de un espacio
+              	(p. ej. "3 4 5 ")
+    /(a.)+/             cadena en la que cada letra impar
+                        es "a" (p. ej., "abacadaf")
 
     # Este bucle lee de STDIN e imprime las líneas que no estén vacías:
     while (<>) {
@@ -480,13 +484,14 @@ Los resultados se almacenan en C<$1>, C<$2>, etc.
     # manera rápida de descomponer una dirección de correo electrónico
 
     if ($email =~ /([^@]+)@(.+)/) {
-        print "El nombre de usuario  es $1\n";
-        print "El nombre del servidor es $2\n";
+        print "El nombre de usuario es $1\n";
+        print "El nombre de host es $2\n";
     }
 
 =item Otras características de las expresiones regulares
 
-Las expresiones regulares de Perl también ofrecen referencias a capturas previas, inspección hacia adelante, y muchas otras funcionalidades complejas.  Encontrará más información en L<perlrequick>, L<perlretut> y L<perlre>.
+Las expresiones regulares de Perl también ofrecen referencias a capturas previas, inspección hacia adelante, y muchas otras funcionalidades complejas.  Encontrará más información en L<perlrequick>,
+L<perlretut> y L<perlre>.
 
 =back
 
@@ -506,7 +511,7 @@ Ahora podemos usar la subrutina como cualquier función integrada:
 
 ¿Qué hace C<shift>?  Los argumentos pasados a una subrutina están disponibles en un array especial denominado C<@_> (consulte L<perlvar> para obtener más información).
 El argumento predeterminado de la función C<shift> es C<@_>.
-Así, C<my $mensaje_registro = shift;> quita el primer elemento de la lista de argumentos y se lo asigna a C<$mensaje_registro>.
+Así, C<my $mensaje_registro= shift;> quita el primer elemento de la lista de argumentos y se lo asigna a C<$mensaje_registro>.
 
 También podemos manipular C<@_> de otras maneras:
 
@@ -537,11 +542,12 @@ La aplicación que suelen hacer los programadores principiantes de la programació
 
 =head2 Utilización de módulos de Perl
 
-No pierda tiempo reinventando la rueda. Los módulos de Perl disponibles en CPAN (http://www.cpan.org/) proporcionan funcionalidad que puede utilizar en sus programas.  La distribución de Perl incluye muchos módulos populares.
+No pierda tiempo reinventando la rueda. Los módulos de Perl disponibles en CPAN ( http://www.cpan.org/) proporcionan funcionalidad que puede utilizar en sus programas.  La distribución de Perl incluye muchos módulos populares.
 
 Las categorías de módulos abarcan desde la manipulación de texto hasta protocolos de red, integración de bases de datos o gráficos.  En CPAN también está disponible una lista de módulos clasificados por categorías.
 
-Para aprender a instalar los módulos que descargue de CPAN, lea L<perlmodinstall>.
+Para aprender a instalar los módulos que descargue de CPAN, lea
+L<perlmodinstall>.
 
 Para aprender a usar un módulo específico, ejecute C<perldoc I<Nombre::Módulo>>.
 Normalmente agregará a su programa la línea C<use I<Nombre::Módulo>>, que le proporcionará acceso a las funciones exportadas o a una interfaz orientada a objetos del módulo.

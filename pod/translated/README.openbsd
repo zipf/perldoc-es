@@ -1,20 +1,20 @@
-Si lees este archivo _tal_como_es_, ignora los caracteres curiosos que veas.  Está escrito en formato POD (ver pod/perlpod.pod) que está específicamente diseñado para ser legible de forma sencilla.
+Puede leer este archivo en cualquier editor de texto (verá algunos caracteres extraños, pero puede ignorarlos).  Está escrito en formato POD (vea pod/perlpod.pod), un formato diseñado específicamente para ser legible tal cual.
 
 =head1 NOMBRE
 
-README.openbsd - Perl versión 5 sobre sistemas OpenBSD
+README.openbsd - Perl versión 5 en sistemas OpenBSD
 
 =head1 DESCRIPCIÓN
 
-Este documentos describe varias características de OpenBSD que afectarán a cómo Perl versión 5 (de ahora en adelante sólo Perl) es compilado y/o ejecutado.
+En este documento se describen varias características de OpenBSD que afectan a la compilación y ejecución de Perl versión 5 (en lo sucesivo, Perl).
 
-=head2 OpenBSD vuelca el núcleo desde getprotobyname_r y getservbyname_r con ithreads
+=head2 OpenBSD vuelca la memoria de trabajo desde getprotobyname_r y getservbyname_r con ithreads
 
-Cuando Perl está configurado para usar ithreads, usará llamadas de biblioteca reentrantes preferentemente sobre versiones no-reentrantes.  Existe una incompatibilidad en las funciones de OpenBSD C<getprotobyname_r> y C<getservbyname_r> en las versiones 3.7 y superiores que causarán un SEGV cuando se llamen sin haber hecho antes un C<bzero> en sus estructuras de retorno antes de llamar a estas funciones.  El Perl actual debería manejar este problema correctamente.  Anteriores Perls con threads (5.8.6 o anteriores) tendrán este problema.  Si quiere correr un Perl con hilos sobre OpenBSD 3.7 o superior, necesitará actualizar Perl al menos a la versión 5.8.7.
+Si Perl está configurado para usar ithreads, las llamadas a biblioteca reentrantes tendrán preferencia sobre las versiones no reentrantes.  En las versiones 3.7 y posteriores de OpenBSD existe una incompatibilidad en las funciones C<getprotobyname_r> y C<getservbyname_r> que provocará un SEGV si se llama a estas funciones sin haber aplicado antes la función C<bzero> a sus estructuras de retorno.  Este problema está solucionado en la versión actual de Perl,  pero afecta a las versiones antiguas (5.8.6 o anteriores) que se hayan compilado con compatibilidad con hilos de ejecución.  Si desea ejecutar una versión de Perl compatible con hilos de ejecución en OpenBSD 3.7 o posterior, tendrá que actualizar a Perl 5.8.7 como mínimo.
 
 =head1 AUTOR
 
 Steve Peters <steve@fisharerojo.org>
 
-Por favor, informe de cualquier error, actualización o sugerencias a  F<perlbug@perl.org>.
+Para notificar errores, actualizaciones o sugerencias, utilice la dirección F<perlbug@perl.org>.
 

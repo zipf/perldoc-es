@@ -1,25 +1,27 @@
-Si lees este archivo _tal_como_es_, ignora los caracteres curiosos que veas.  Está escrito en formato POD (ver pod/perlpod.pod) que está específicamente diseñado para ser legible de forma sencilla.
+Puede leer este archivo en cualquier editor de texto (verá algunos caracteres extraños, pero puede ignorarlos).  Está escrito en formato POD (vea pod/perlpod.pod), un formato diseñado específicamente para ser legible tal cual.
 
 =head1 NOMBRE
 
-README.freebsd - Perl versión 5 sobre sistemas FreeBSD
+README.freebsd - Perl versión 5 en sistemas FreeBSD
 
 =head1 DESCRIPCIÓN
 
-Este documentos describe varias características de FreeBSD que afectarán a cómo Perl versión 5 (de ahora en adelante sólo Perl) es compilado y/o ejecutado.
+En este documento se describen varias características de FreeBSD que afectan a la compilación y ejecución de Perl versión 5 (en lo sucesivo, Perl).
 
-=head2 FreeBSD vuelca el núcleo desde readdir_r con ithreads
+=head2 FreeBSD vuelca la memoria de trabajo desde readdir_r con ithreads
 
-Cuando Perl está configurado para usar ithreads, usará llamadas de biblioteca reentrantes preferentemente sobre versiones no-reentrantes.  Hay un bug en la función C<readdir_r> de FreeBSD en la versión 4.5 y anteriores que pueden provocar un SEGV al leer grandes directorios. Un parche para la libc de FreeBSD está disponible (ver http://www.freebsd.org/cgi/query-pr.cgi?pr=misc/30631 ) y ha sido integrado en FreeBSD 4.6.
+Si Perl está configurado para usar ithreads, las llamadas a biblioteca reentrantes tendrán preferencia sobre las versiones no reentrantes.  En las versiones 4.5 y anteriores de FreeBSD existe un error en la función  C<readdir_r> que provocará un SEGV si se leen directorios grandes. Está disponible una revisión de FreeBSD libc (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=misc/30631)
+que se ha integrado en FreeBSD 4.6.
 
-=head2 $^X no siempre contiene el camino completo en FreeBSD
+=head2 En FreeBSD, $^X no siempre contiene una ruta de acceso completa
 
-perl 5.8.0 pone C<$^X> hasta donde sea posible a todo el camino completo preguntando al sistema operativo. En FreeBSD el camino completo del intérprete perl se encuentra leyendo el enlace simbólico F</proc/curproc/file>. FreeBSD tiene un error en la lectura de estos enlaces simbólicos: a veces devuelve un valor incorrecto (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=35703 ).
-En estos casos perl volverá al anterior comportamiento de usar el valor del C argv[0] para C<$^X>.
+Siempre que es posible, perl 5.8.0 establece una ruta de acceso completa como valor de C<$^X>. Para ello, pregunta al sistema operativo. En FreeBSD, para localizar la ruta de acceso completa del intérprete perl se lee el vínculo simbólico F</proc/curproc/file>. Existe un error en FreeBSD que puede hacer que el resultado de la lectura de este vínculo simbólico devuelva un valor incorrecto (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=35703).
+En estos casos, perl vuelve al comportamiento anterior (utilizar el valor argv[0] de C en C<$^X>).
 
 =head1 AUTOR
 
-Nicholas Clark <nick@ccl4.org>, recopilando la sabiduría proporcionada por Slaven Rezic y Tim Bunce.
+Nicholas Clark <nick@ccl4.org>, con aportaciones de Slaven Rezic
+y Tim Bunce.
 
-Por favor, informe de cualquier error, actualización o sugerencias a  F<perlbug@perl.org>.
+Para notificar errores, actualizaciones o sugerencias, utilice la dirección F<perlbug@perl.org>.
 
