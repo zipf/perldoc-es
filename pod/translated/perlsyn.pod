@@ -16,7 +16,7 @@ Perl B<toma prestada la sintaxis> y conceptos de muchos lenguajes: awk, sed, C, 
 =head2 Declaraciones
 X<declaration> X<undef> X<undefined> X<uninitialized> X<declaración> X<indefinido> X<no inicializado>
 
-Los únicos elementos que necesita declarar en Perl son los informes y las subrutinas (y algunas veces ni siquiera las subrutinas).  Una variable almacena el valor indefinido (C<undef>) hasta que se le asigna un valor definido, que es cualquier otra cosa distinta de C<undef>.  Cuando se usa como un número, C<undef> es tratado como si fuera C<0>; cuando se usa como una cadena de caracteres (I<string>), se trata como el string vacío, C<"">; y cuando se usa como una referencia que no ha sido asignada, es tratado como un error.  Si ha activado los avisos (warnings), será notificado de un valor no inicializado cada vez que trate a C<undef> como si fuera una cadena o número.  Bueno, normalmente.  En contextos booleanos, como en:
+Los únicos elementos que necesita declarar en Perl son los informes y las subrutinas (y algunas veces ni siquiera las subrutinas).  Una variable almacena el valor indefinido (C<undef>) hasta que se le asigna un valor definido, que es cualquier otra cosa distinta de C<undef>.  Cuando se usa como un número, C<undef> es tratado como si fuera C<0>; cuando se usa como una cadena de caracteres (I<string>), se trata como la cadena vacía, C<"">; y cuando se usa como una referencia que no ha sido asignada, es tratado como un error.  Si ha activado los avisos (warnings), será notificado de un valor no inicializado cada vez que trate a C<undef> como si fuera una cadena o número.  Bueno, normalmente.  En contextos booleanos, como en:
 
     my $a;
     if ($a) {}
