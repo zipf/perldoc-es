@@ -1,0 +1,442 @@
+=head1 NOMBRE
+
+perl595delta - qué hay de nuevo para perl v5.9.5
+
+=head1 DESCRIPCIÓN
+
+Este documento describe las diferencias entre las versiones de desarrollo 5.9.4 y la 5.9.5. Vea L<perl590delta>, L<perl591delta>, L<perl592delta>, L<perl593delta> y L<perl594delta> para consultar las diferencias entre 5.8.0 y 5.9.4.
+
+=head1 Cambios incompatibles
+
+=head2 Contaminación y printf
+
+Cuando perl se ejecuta bajo el modo contaminado, C<printf()> y C<sprintf()> rechazarán cualquier argumento de formato que esté contaminado. (Rafael Garcia-Suarez)
+
+=head2 manejadores de señales y su indefinición
+
+Indefiniendo o borrando un gestor de señales con C<undef $SIG{FOO}> es ahora equivalente a ponerlo a C<'DEFAULT'>. (Rafael)
+
+=head2 modo estricto y desreferenciando array/hash en defined()
+
+C<defined @$foo> y C<defined %$bar> ahora siguen las normas impuestas por C<strict 'refs'> (es decir, C<$foo> y C<$bar> deberán ser referencias correctas.)
+(Nicholas Clark)
+
+(Sin embargo, C<defined(@foo)> y C<defined(%bar)> son siempre, de todos modos, construcciones no aconsejables.)
+
+=head2 C<(?p{})> ha sido eliminado
+
+La construcción basada en la expresión regular C<(?p{})>, que fue depreciada en perl 5.8, ha sido eliminada. Use en su lugar C<(??{})>. (Rafael)
+
+=head2 Los Pseudo-hashes han sido eliminados
+
+Soporte para pseudo-hashes ha sido eliminado a partir de Perl 5.9. (El pragma C<fields> se mantiene, pero utiliza una implementación alternativa.)
+
+=head2 Eliminación del compilador de bytecode  y de perlcc
+
+C<perlcc>, el cargador de bytecode y sus módulos asociados (B::C, B::CC, B::Bytecode, etc.) ya no se distribuyen con el código fuente de perl. Estas herramientas experimentales nunca han funcionado apropiadamente, y debido a la falta de voluntarios para mantenerlos en línea con los desarrollos en el intérprete perl, se ha decidido eliminarlos en lugar de incluir una versión rota de ellos.
+La última versión de estos módulos se puede encontrar en perl 5.9.4.
+
+Sin embargo, el entorno de trabajo del compilador B sigue estando soportado en el núcleo de perl, así como con los módulos más útiles dependientes de él (entre otro, B::Deparse y B::Concise).
+
+=head2 Eliminación de JPL
+
+El JPL (Java-Perl Linguo) ha sido eliminado del paquete de código fuente de perl.
+
+=head2 Detección precoz de herencia recursiva
+
+Ahora Perl levantará una excepción inmediatamente si modifica cualquiera de los C<@ISA> de los package si con ello se traduce en una herencia recursiva.
+
+Anteriormente, la excepción no ocurría hasta que Perl intentaba hacer uso de la herencia recursiva mientras resolvía un método o hacía un C<$foo-E<gt>isa($bar)>.
+
+=head1 Mejoras principales
+
+=head2 Expresiones regulares
+
+=over 4
+
+=item Patrones recursivos
+
+Ahora es posible escribir patrones recursivos sin usar la construcción C<(??{})>. Esta nueva manera es más eficiente, y en muchos casos, más fácil de leer.
+
+Cada paréntesis de captura puede ahora ser tratado como un patrón independiente que puede ser escrito con la sintaxis C<(?PARNO)> (C<PARNO> quiere decir "número de paréntesis"). Por ejemplo, el siguiente patrón coincidirá con pares de ángulos anidados y balanceados:
+
+    /
+     ^                      # comienzo de línea
+     (                      # comienzo búfer de captura 1
+	<                   #   coincide con un ángulo inicial
+	(?:                 #   coincide con uno de:
+	    (?>             #     no hagas vuelta atrás en el interior de este grupo
+		[^<>]+      #       uno o más de no-ángulos
+	    )               #     fin del grupo del no-vuelta atrás
+	|                   #     ... o ...
+	    (?1)            #     recursivo al grupo 1, e inténtalo de nuevo
+	)*                  #   0 o más veces.
+	>                   #   coincide con un ángulo final
+     )                      # fin del búfer de captura 1
+     $                      # fin de línea
+    /x
+
+Nota: los usuarios con experiencia con PCRE encontrarán que la implementación Perl de esta característica difiere de la incluida en PCRE en que es posible retroceder en un patrón recursivo, considerando que en PCRE la recursión es, por naturaleza, atómica o "posesiva". (Yves Orton)
+
+=item Búferes de captura nombrados
+
+Ahora es posible poner nombres a los paréntesis de captura en un patrón, y referirse a los contenidos capturados por ese nombre. La sintaxis del nombrado es C<< (?<NOMBRE>....) >>.
+Es posible referirse a un búfer nombrado con la sintaxis C<< \k<NOMBRE> >>. En código, los nuevos hash mágicos C<%+> y C<%-> puede ser usados para acceder a los contenidos de los búfer de captura.
+
+Así, para reemplazar todos los caracteres duplicados, uno podría escribir
+
+    s/(?<letra>.)\k<letra>/$+{letra}/g
+
+Solo los búfer con contenido definido será "visible" en el hash C<%+>, por lo que es posible hacer algo como
+
+    foreach my $nombre (keys %+) {
+        print "contenido del búfer '$nombre' es $+{$nombre}\n";
+    }
+
+El hash C<%-> es un poco más completo, ya que él contendrá referencias a array que almacenan valores para todos los búfer de captura con el mismo nombre, si existiera más de uno de ellos.
+
+C<%+> y C<%-> son implementados como hash enlazados a través del nuevo módulo C<Tie::Hash::NamedCapture>.
+
+Los usuarios expuestos al motor de expresiones regulares de .NET encontrarán que la implementación de perl difiere en que la ordenación numérica de los búfer es secuencial, y no "sin nombre, primero, con nombre, después". Así, en el patrón
+
+   /(A)(?<B>B)(C)(?<D>D)/
+
+$1 será 'A', $2 será 'B', $3 será 'C' y $4 será 'D' y ni $1 es 'A', ni $2 es 'C' ni $3 es 'B' ni $4 es 'D', como un programador de .NET esperaría. Esto está considerado como una característica adicional. (Yves Orton)
+
+=item Cuantificadores posesivos
+
+Perl ahora soporta la sintaxis "cuantificador posesivo" del patrón "coincidencia atómica". Básicamente, un cuantificador posesivo coincide tanto como puede y no devuelve nada. Por lo tanto, se puede utilizar para controlar la marcha atrás. La sintaxis es similar a coincidencias no ambiciosas, pero en lugar de utilizar un '?' se usa el modificador '+'. Por lo tanto C<?+>, C<*+>, C<++>, C<{min, max}+> ahora son cuantificadores legales. (Yves Orton)
+
+=item Verbos del control de la vuelta atrás
+
+El motor de expresiones regulares ahora es compatible con una serie de verbos de control de la vuelta atrás, de propósitos especiales: (*THEN), (*PRUNE), (*MARK), (*SKIP), (*COMMIT), (*FAIL) y (*ACCEPT). Vea L<perlre> para consultar sus descripciones. (Yves Orton)
+
+=item Contra referencias relativas
+
+Una nueva sintaxis C<\g{N}> o C<\gN> donde "N" es un entero decimal permite una forma más segura de la notación de contra referencia, así como permitir contra referencias relativas hacia atrás. Esto debería hacer más fácil el generar e integrar los patrones que contienen contra referencias. Vea L<perlre/"Búferes de captura">. (Yves Orton)
+
+=item Escapado C<\K>
+
+La funcionalidad del módulo de Jeff Pinyan Regexp::Keep ha sido añadido al núcleo. Ahora puede utilizar en las expresiones regulares el escapado especial C<\K> como una manera de hacer algo como mirar atrás con una longitud variable positiva . También es útil en las sustituciones, como:
+
+  s/(foo)bar/$1/g;
+
+que puede ser convertido a
+
+  s/foo\Kbar//g
+
+que es mucho más eficiente. (Yves Orton)
+
+=item Espacio en blanco vertical y horizontal, y salto de línea
+
+Las expresiones regulares reconocen ahora los escapes C<\v> y C<\h>, que coinciden con los espacios en blanco vertical y horizontal, respectivamente. C<\V> y C<\H>, lógicamente, coinciden con sus complementarios.
+
+C<\R> coincide con un salto de línea genérica, es decir, espacio en blanco vertical, además de la secuencia de caracteres C<"\x0D\x0A">.
+
+=back
+
+=head2 El prototipo C<_>
+
+Se ha añadido un nuevo carácter de prototipado. C<_> es equivalente a C<$> (que denota un escalar), pero por defecto es C<$_> si el argumento correspondiente no se suministra. Debido a la naturaleza opcional del argumento, sólo puede usarlo al final de un prototipo, o antes de un punto y coma.
+
+Esto tiene una pequeña consecuencia de incompatibilidad: la función prototype() ha sido ajustada para devolver C<_> en algunos funciones incorporadas en los casos apropiados (por ejemplo, C<prototype('CORE::rmdir')>). (Rafael)
+
+=head2 Bloques UNITCHECK
+
+C<UNITCHECK>, un nuevo bloque de código especial ha sido incorporado, además de C<BEGIN>, C<CHECK>, C<INIT> y C<END>.
+
+Los bloques C<CHECK> e C<INIT>, si bien son útiles para algunos propósitos específicos, siempre son ejecutados en la transición entre la compilación y la ejecución del programa principal, y por lo tanto no sirven para nada cada vez que el código se carga en tiempo de ejecución. Por otro lado, los bloques C<UNITCHECK> se ejecutan justo después de que la unidad que los ha definido ha sido compilada. Vea L<perlmod> para más información. (Alex Gough)
+
+=head2 readpipe() ahora es reemplazable
+
+La función incorporada readpipe() ahora es reemplazable. Sobrescribirla permite también sobrescribir su operador homólogo, C<qx//> (es decir, C<``>).
+Por otra parte, se refiere por defecto a C<$_> si no se proporciona ningún argumento. (Rafael)
+
+=head2 Argumento por defecto para readline()
+
+readline() ahora se refiere, por defecto, a C<*ARGV> si no se proporciona ningún argumento. (Rafael)
+
+=head2 UCD 5.0.0
+
+La copia de la base de datos de caracteres Unicode incluidos en Perl 5.9 ha sido actualizado a la 5.0.0.
+
+=head2 Coincidencia inteligente
+
+El operador de coincidencia inteligente (C<~~>) ya está disponible por defecto (ya no es necesario activarlo con C<use feature>). (Michael G Schwern)
+
+=head2 Carga implícita de C<feature>
+
+El pragma C<feature> es ahora implícitamente cargado cuando se requiere un mínimo de la versión de Perl (con la construcción C<use VERSION>) mayor que, o igual a 5.9.5.
+
+=head1 Módules y Pragmas
+
+=head2 Nuevo pragma, C<mro>
+
+Un nuevo pragma, C <mro> (Orden de método de resolución) ha sido añadido. Permite cambiar, en función de cada clase, el algoritmo que utiliza perl para encontrar los métodos heredados en caso de una jerarquía de herencia múltiple. El valor MRO por defecto no ha cambiado (DFS (I<Depth First Search>), Búsqueda Primero en Profundidad). Otro MRO está disponible: el algoritmo C3. Vea L<mro> para más información.
+(Brandon Black)
+
+Tenga en cuenta que, debido a los cambios en la implementación de la búsqueda de la jerarquía de clases, el código que se utiliza para indefinir el comodín C<*ISA>, es muy probable que quede roto. De todos modos, indefinir C<*ISA> tuvo el efecto colateral de la eliminación de la magia en el array @ISA y no se debería haber hecho desde el principio.
+
+=head2 bignum, bigint, bigrat
+
+Los tres pragmas numéricos C<bignum>, C<bigint> y C<bigrat> ahora tienen ámbito léxico. (Tels)
+
+=head2 Math::BigInt/Math::BigFloat
+
+Muchos errores han sido corregidos; destacan las comparaciones con NaN, que ya no advierten acerca de los valores indefinidos.
+
+Las siguientes cosas son nuevas:
+
+=over 4
+
+=item config()
+
+El método config() ahora también es compatible con el estilo de llamada C<< config('lib') >>, además de C<< config()->{'lib'} >>.
+
+=item import()
+
+En la importación, usando C<< lib => 'Foo' >> ahora avisa si la biblioteca de bajo nivel no se ha podido encontrar. Para suprimir esta advertencia, se puede utilizar en su lugar C<< try => 'Foo' >>. Para convertir la advertencia en una muerte, utilice en su lugar C<< only => 'Foo' >>.
+
+=item Modo de redondeo I<common>
+
+Ahora está soportado un modo de redondeo C<I<common>>.
+
+=back
+
+Además, se ha agregado soporte para los siguientes métodos:
+
+=over 4
+
+=item bpi(), bcos(), bsin(), batan(), batan2()
+
+=item bmuladd()
+
+=item bexp(), bnok()
+
+=item from_hex(), from_oct(), and from_bin()
+
+=item as_oct()
+
+=back
+
+Además, el soporte de matemáticas (Calc (Perl) y FastCalc (XS)) ahora son compatibles con el almacenamiento de números en partes con 9 dígitos en lugar de 7 en Perl que tengan soporte tanto de enteros de 64 bits como flotantes dobles largos. Esto significa que las operaciones matemáticas escalan mejor y por lo tanto son más rápidas para números muy grandes.
+
+=head2 Nuevos módulos principales
+
+=over 4
+
+=item *
+
+C<Locale::Maketext::Simple>, necesarios para CPANPLUS, es un simple contenedor alrededor de C<Locale::Maketext::Lexicon>. Note que C<Locale::Maketext::Lexicon> no está incluido en el núcleo de perl; el comportamiento de C<Locale::Maketext::Simple> gentilmente se degrada cuando ese último módulo no está presente.
+
+=item *
+
+C<Params::Check> implementa un mecanismo de análisis/comprobación de entrada genérica. Es utilizado por CPANPLUS.
+
+=item *
+
+C<Term::UI> simplifica la tarea de hacer preguntas en una terminal.
+
+=item *
+
+C<Object::Accessor> proporciona una interfaz para crear accesos por cada objeto.
+
+=item *
+
+C<Module::Pluggable> es un simple marco de trabajo para crear módulos conectables que aceptan submódulos enchufables.
+
+=item *
+
+C<Module::Load::Conditional> ofrece formas sencillas de consulta y, posiblemente, carga módulos instalados.
+
+=item *
+
+C<Time::Piece> proporciona una interfaz orientada a objetos a las funciones de tiempo, ignorando las funciones incorporadas localtime() y gmtime().
+
+=item *
+
+C<IPC::Cmd> ayuda a encontrar y ejecutar comandos externos, posiblemente de forma interactiva.
+
+=item *
+
+C<File::Fetch> proporciona un simple mecanismo genérico para la búsqueda de archivos.
+
+=item *
+
+C<Log::Message> y C<Log::Message::Simple> son utilizados por la característica de registro de C<CPANPLUS>.
+
+=item *
+
+C<Archive::Extract> es un mecanismo de extracción de archivo genérico para F<.tar> (normal, gzipeado o bzipeado) o archivos F<.zip>.
+
+=item *
+
+C<CPANPLUS> proporciona una API y una herramienta de línea de comandos para acceder a los espejos de CPAN.
+
+=back
+
+=head2 Cámbios en los módulos
+
+=over 4
+
+=item C<assertions>
+
+El pragma C<assertions>, sus submódulos C<assertions::activate> y C<assertions::compat> y la opción de línea de comandos B<-A> han sido eliminados.
+La interfaz no se consideró lo suficientemente madura para su inclusión en una versión estable.
+
+=item C<base>
+
+El pragma C<base> ahora avisa si una clase intenta heredar de sí misma.
+(Curtis "Ovid" Poe)
+
+=item C<strict> y C<warnings>
+
+C<strict> y C<warnings> ahora se quejan en voz alta si son cargados usando un tamaño de caja incorrecto (como en C<use Strict;>). (Johan Vromans)
+
+=item C<warnings>
+
+El pragma C<warnings> ya no carga C<Carp>. Esto significa que el código que utilizaba las rutinas C<Carp> sin haberlo cargado en tiempo de compilación puede ser necesario ajustarle; por lo general, el siguiente (y defectuoso) código no funcionará más, y requerirá que se añadan paréntesis después del nombre de la función:
+
+    use warnings;
+    require Carp;
+    Carp::confess "argh";
+
+=item C<less>
+
+C<less> ahora hace algo útil (o al menos lo intenta). De hecho, se ha convertido en un pragma léxico. Por lo tanto, en sus módulos, ahora puede probar si los usuarios han solicitado utilizar menos CPU, o menos memoria, menos magia, o incluso menos grasa. Vea L<less> por más. (Joshua ben Jore)
+
+=item C<Attribute::Handlers>
+
+C<Attribute::Handlers> ahora puede informar del archivo y número de línea del llamador.
+(David Feldman)
+
+=item C<B::Lint>
+
+C<B::Lint> ahora se basa en C<Module::Pluggable>, por lo que se puede ampliar con complementos. (Joshua ben Jore)
+
+=item C<B>
+
+Ahora es posible acceder al pragma léxico I<hints> (C<%^H>) utilizando el método B::COP::hints_hash(). Devuelve un objeto C<B::RHE>, que a su vez puede ser utilizado para obtener una referencia a un hash mediante el método B::RHE::HASH(). (Joshua ben Jore)
+
+=for p5p XXX documentar esto también en B.pm
+
+=item C<Thread>
+
+A medida que el viejo modelo de hilado del 5005 ha sido eliminado en favor del sistema de C<ithreads>, el módulo C<Thread> es ahora un envoltorio de compatibilidad, para ser utilizado solamente en el viejo código. Se ha eliminado de la lista predeterminada de extensiones dinámicas.
+
+=back
+
+=head1 Cambios en las herramientas
+
+=head2 C<cpanp>
+
+C<cpanp>, el shell CPANPLUS, ha sido añadido. (C<cpanp-run-perl>, un ayudante para la operación con CPANPLUS, se ha añadido también, pero no está destinado para un uso directo).
+
+=head2 C<cpan2dist>
+
+C<cpan2dist> es una nueva utilidad, que viene con CPANPLUS. Es una herramienta para crear distribuciones (o paquetes) de los módulos de CPAN.
+
+=head2 C<pod2html>
+
+La salida de C<pod2html> se ha mejorado para ser más personalizable a través de CSS. Algunos problemas de formato también se han corregido. (Jari Aalto)
+
+=head1 Documentación
+
+=head2 Nueva página de manual, perlunifaq
+
+Una nueva página de manual, L<perlunifaq> (Perl Unicode FAQ), ha sido añadida (Juerd Waalboer).
+
+=head1 Mejoras en la instalación y configuración
+
+=head2 Compatibilidad con C++
+
+Se han hecho esfuerzos para hacer perl y los módulos principales XS compilables con varios compiladores C++ (aunque la situación no es perfecta con algunos compiladores en algunas de las plataformas de prueba).
+
+=head2 Visual C++
+
+Perl ahora puede ser compilado con Microsoft Visual C++ 2005.
+
+=head2 Compilado estático en Win32
+
+Ahora es posible construir un C<perl-static.exe> que no depende de C<perl59.dll> en Win32. Vea los makefiles de Win32 para más detalles.
+(Vadim Konovalov)
+
+=head2 Compilaciones en win32
+
+Todas las compilaciones en Win32 (MS-Windows, WinCE) se han fusionado y limpiado.
+
+=head2 C<d_pseudofork> y C<d_printf_format_null>
+
+Una nueva variable de configuración, disponible en C<$Config{d_pseudofork}> en el módulo L<Config>, ha sido añadida, para distinguir de un soporte real de fork(), de un pseudofork falso utilizado en las plataformas Windows.
+
+Una nueva variable de configuración, C<d_printf_format_null>, ha sido añadida, para ver si los formatos para printf pueden ser NULL.
+
+=head2 Ayuda
+
+C<Configure -h> ha sido extendido con la opción más usada.
+
+Mucho menos mensajes 'I<Whoa there>'.
+
+=head2 Sistemas 64bit
+
+Una mejor detección de los sistemas de 64 bits (sólo), y el establecimiento, en consecuencia, de todos las rutas (a la biblioteca).
+
+=head2 Adaptaciones
+
+Se ha informado que Perl funciona en MidnightBSD.
+
+Se ha añadido soporte para Cray XT4 Catamount/Qk.
+
+Los parches de fabricante han sido fusionados para RedHat y Gentoo.
+
+=head1 Arreglo de determinados errores
+
+PerlIO::scalar ahora evitará la escritura a escalares de sólo lectura. Por otra parte, seek() es ahora compatible con gestores de archivo basados en PerlIO::scalar, poniéndose la cadena subyacente rellenada con ceros, según sea necesario. (Rafael, Jarkko Hietaniemi)
+
+study() nunca funcionó para las cadenas UTF-8, pero podría conducir a resultados falsos.
+Ahora es una no-operación en datos UTF-8. (Yves Orton)
+
+Las señales SIGILL, SIGBUS y SIGSEGV ahora siempre se entregan en una forma "insegura" (a diferencia de otras señales, que son diferidos hasta que el intérprete perl llega a un estado razonablemente estable; vea L<perlipc/"Señales Diferidas (Señales Seguras)">). (Rafael)
+
+Cuando un módulo o un archivo se carga a través de un gancho en @INC, y cuando este gancho ha fijado una entrada de nombre de archivo en %INC, __FILE__ está ahora preparado para este módulo de acuerdo con el contenido de esa entrada %INC. (Rafael)
+
+Las opciones C<-w> y C<-t> ahora se pueden utilizar en conjunto sin alterar qué categorías de alertas están activadas o no. (Rafael)
+
+Duplicando un gestor de archivo que tiene la capa PerlIO C<:utf8> activada, ahora activará correctamente esa capa en el gestor de archivo duplicado. (Rafael)
+
+La localización de un elemento hash cuya clave se dio como una variable no funciona correctamente si la variable se ha cambiado mientras que local() estaba en activo (como en C<local $h{$x}; ++$x>). (Bo Lindbergh)
+
+=head1 Diagnósticos nuevos y cambiados
+
+=head2 Depreciaciones
+
+Dos advertencias de depreciaciones han sido añadidas: (Rafael)
+
+    Opening dirhandle %s also as a file
+    Opening filehandle %s also as a directory
+
+=head1 Cambios internos
+
+Los constructores de hash y array anónimos ahora toman 1 operación en el árbol de operaciones en lugar de 3, ahora que pp_anonhash y pp_anonlist devuelven una referencia a un hash/array cuando la op. está marcado con OPf_SPECIAL (Nicholas Clark).
+
+=for p5p XXX tenemos algunos documentos sobre cómo crear complementos al motor de expresiones regulares, ya que ahora se puede hacer (¿perlreguts?)
+
+=for p5p XXX nuevo tipo BIND SV, #29544, #29642
+
+=head1 Informar de errores
+
+Si encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/rt3/ . Hay también información en la página principal de Perl, http://www.perl.org/ .
+
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.
+
+=head1 VEA TAMBIÉN
+
+El archivo de F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+
+El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+
+El archivo F<README> (LEEME) para asuntos generales.
+
+Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+
+=cut
