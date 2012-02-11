@@ -1,0 +1,217 @@
+=head1 NOMBRE
+
+perl585delta - qué hay de nuevo para perl v5.8.5
+
+=head1 DESCRIPCIÓN
+
+Este documento describe las diferencias entre la versión 5.8.4 y la versión 5.8.5.
+
+=head1 Cambios incompatibles
+
+No hay cambios incompatibles con 5.8.4.
+
+=head1 Mejoras principales
+
+El motor de expresiones regulares de Perl ahora tiene soporte para coincidir en la intersección de dos clases de caracteres Unicode. También puede referirse a una clase carácter definida por el usuario, desde el interior de otra clase carácter definida por el usuario.
+
+=head1 Módulos y Pragmata
+
+=over 4
+
+=item *
+
+Carp mejorado para trabajar adecuadamente con Safe. El sistema de mensajes de reporte de Carp ahora debería ser anormalmente libre - siempre imprimirá la información del número de línea.
+
+=item *
+
+CGI actualizado a la versión 3.05
+
+=item *
+
+charnames ahora evita sobreescribir $_
+
+=item *
+
+Digest actualizado a la versión 1.08
+
+=item *
+
+Encode actualizado a la versión 2.01
+
+=item *
+
+FileCache actualizado a la versión 1.04
+
+=item *
+
+libnet actualizado a la versión 1.19
+
+=item *
+
+Pod::Parser actualizado a la versión 1.28
+
+=item *
+
+Pod::Perldoc actualizado a la versión 3.13
+
+=item *
+
+Pod::LaTeX actualizado a la versión 0.57
+
+=item *
+
+Safe ahora funciona correctamente con Carp
+
+=item *
+
+Scalar-List-Utils actualizado a la versión 1.14
+
+=item *
+
+La documentación de Shell ha sido re-escrita, y su histórica auto-cita parcial de los argumentos de los comandos se puede ahora deshabilitar.
+
+=item *
+
+Test actualizado a la versión 1.25
+
+=item *
+
+Test::Harness actualizado a la versión 2.42
+
+=item *
+
+Time::Local actualizado a la versión 1.10
+
+=item *
+
+Unicode::Collate actualizado a la versión 0.40
+
+=item *
+
+Unicode::Normalize actualizado a la versión 0.30
+
+=back
+
+=head1 Cambios en las herramientas
+
+=head2 El depurador de Perl
+
+El depurador ahora puede emular el caminar hacia atrás, reiniciando y ejecutando todo hasta el último comando de un histórico de comandos.
+
+=head2 h2ph
+
+F<h2ph> ahora es capaz de entender un conjunto muy limitado de funciones en línea C - básicamente, las funciones en línea que parecen CPP macros. Esto ha sido introducido para manejar algunos cabeceras de las últimas versiones de la glibc. La advertencia estándar sigue siendo válida; citando la documentación de F<h2ph>, I<puede que tenga que regatear con los archivos generados>.
+
+=head1 Mejoras en la instalación y configuración
+
+Perl 5.8.5 se debe compilar limpiamente desde el código fuente en LynxOS.
+
+=head1 Arreglo de determinados errores
+
+=over 4
+
+=item *
+
+La optimización de sort in-situ introducido en 5.8.4 tenía un error. Por ejemplo, en un código como
+
+    @a = sort ($b, @a)
+
+el resultado podría omitir el valor de $b. Esto ha sido arreglado.
+
+=item *
+
+La optimización de las tareas innecesarias introducida en 5.8.4 podría dar advertencias falsas. Esto ha sido corregido.
+
+=item *
+
+Perl ahora detecta correctamente y lee scripts con la marca BOM y UTF-16 (sin BOM) de cualquier orden de bits.
+
+=item *
+
+Creando una nueva hebra cuando existen referencias débiles tenía errores, y con frecuencia causaba advertencias en el momento de la destrucción del intérprete. El fallo conocido ahora está arreglado.
+
+=item *
+
+Varios errores extraños involucrados en la manipulación de cadenas Unicode con C<substr> han sido corregidos.
+
+=item *
+
+Anteriormente, si la función de Perl expansor de archivo encontraba un directorio que no tenía permisos para abrir, regresaba de inmediato, lo que llevaba al truncamiento inesperado de la lista de resultados. Esto se ha solucionado, para ser coherente con el comportamiento del sistema de comodines del shell de Unix.
+
+=item *
+
+El tiempo de creación de hebras puede variar mucho entre ejecuciones idénticas. Esto fue causado por un pobre algoritmo de hash en las rutinas de clonado de hebras, que ya se ha resuelto.
+
+=item *
+
+El funcionamiento interno de la aplicación ithreads no comprobaba si la creación de hebras a nivel del sistema operativo había fracasado. threads->create() ahora devuelve C<undef> si falla la creación de la hebra en lugar de colgar a perl.
+
+=back
+
+=head1 Diagnósticos nuevos y cambiados
+
+=over 4
+
+=item *
+
+Perl -V tiene varias mejoras
+
+=over 4
+
+=item *
+
+correctamente saca los nombres de los parches locales que contienen fragmentos de código integrados u otros caracteres que utiliza para confundir.
+
+=item * 
+
+argumentos a -V que parecen expresiones regulares darán múltiples líneas en la salida.
+
+=item *
+
+Un carácter dos puntos final suprime el salto de línea y el terminador ";", permitiendo integrar consultas en comandos shell.
+
+=item *
+
+Un carácter dos puntos precedente elimina la parte "name =" de la respuesta, permitiendo asignar el nombre que necesite.
+
+=back
+
+=item *
+
+Cuando Perl no puede encontrar el script especificado, ahora produce una segunda línea que sugiere al usuario utilice la opción C<-S>:
+
+    $ perl5.8.5 missing.pl
+    Can't open perl script "missing.pl": No such file or directory.
+    Use -S to search $PATH for it.
+
+=back
+
+=head1 Cambios internos
+
+Los archivos de clases de caracteres Unicode utilizados por el motor de expresiones regulares ahora son compilados en tiempo de compilación desde los archivos de datos proporcionados por el consorcio Unicode, en lugar de ser enviados precompilados. Esto hace que el tarball del código fuente de Perl sea unos 200K más pequeño. Un efecto secundario es que el diseño de los archivos dentro de lib/unicore ha cambiado.
+
+=head1 Problemas conocidos
+
+La prueba de regresión F<t/uni/class.t> ahora realiza muchas más pruebas, y puede tardar varios minutos en ejecutarse incluso en una máquina rápida.
+
+=head1 Problemas en plataformas específicas
+
+Esta publicación se sabe que no se compila en Windows 95.
+
+=head1 Informar de errores
+
+Si usted encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  También puede haber información en http://www.perl.org/, La página oficial de Perl.
+
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
+
+=head1 VEA TAMBIÉN
+
+El archivo de F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+
+El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+
+El archivo F<README> (LEEME) para asuntos generales.
+
+Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+
+=cut
