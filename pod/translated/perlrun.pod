@@ -545,7 +545,7 @@ X<-t>
 
 Al igual que B<-T>, pero las comprobaciones de contaminación emitirán advertencias en lugar de errores fatales.  Estas advertencias se pueden controlar de forma normal con C<no warnings qw(taint)>.
 
-B<Nota: Esto no es un sustituto de C<-T>!> Esta a ser destinada a ser utilizada I<sólo> como una ayuda temporal para el desarrollo, mientras asegura código heredado: para el código en producción real y para nuevo código seguro escrito desde cero, utilice siempre el verdadero B<-T>.
+B<Nota: ¡Esto no es un sustituto de C<-T>!> Su destino es ser utilizada I<sólo> como una ayuda temporal para el desarrollo, mientras asegura código heredado: para el código en producción real y para nuevo código seguro escrito desde cero, utilice siempre el verdadero B<-T>.
 
 =item B<-T>
 X<-T>
@@ -900,7 +900,7 @@ Perl también tiene variables de entorno que controlan cómo Perl trata los datos 
 Perl y sus diferentes módulos y componentes, incluidos los marcos de prueba, a veces pueden hacer uso de ciertas variables de entorno.  Algunos de estos son específicos para una determinada plataforma.  Por favor, consulte la documentación del módulo correspondiente y toda la documentación para su plataforma (como L<perlsolaris>, L<perllinux>, L<perlmacosx>, L<perlwin32>, etc) para las variables propias de esas situaciones específicas.
 
 Perl hace disponibles todas las variables de entorno para el programa en ejecución, y las pasa a todos los procesos hijo que inicie.
-Sin embargo, la ejecución de programas setuid harían bien en ejecutar las siguientes líneas antes de hacer nada, sólo para seguir manteniendo a la gente honesta:
+Sin embargo, en la ejecución de programas setuid harían bien en ejecutar las siguientes líneas antes de hacer nada, solo para que la gente siga siendo honesta:
 
     $ENV{PATH}  = "/bin:/usr/bin";    # o lo que sea necesario
     $ENV{SHELL} = "/bin/sh" if exists $ENV{SHELL};
