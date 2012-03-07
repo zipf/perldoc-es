@@ -975,7 +975,7 @@ C<crypt> y la cadena complementaria pueden devolver valores contaminados para ar
 
 =item *
 
-La opción de línea de comandos C<-i.sufijo> ahora a crear el archivo con permisos restringidos, antes de cambiar su modo para que coincida con el archivo original. Esto elimina una potencial condición de carrera [RT #60904].
+La opción de línea de comandos C<-i>I<.sufijo> ahora recrea el archivo usando permisos restringidos, antes de cambiar su modo para que coincida con el archivo original. Esto elimina una potencial condición de carrera [RT #60904].
 
 =item *
 
@@ -995,7 +995,7 @@ En algunas circunstancias, $^R, incorrectamente, podría convertirse en indefinid
 
 =item *
 
-C<< $object->isa('Foo') >> podría reportar falso si el paquete C<Foo> no existe, incluso si el objeto de C<@ISA> contenía a C<Foo>.
+C<< $object-E<gt>isa('Foo') >> podría reportar falso si el paquete C<Foo> no existe, incluso si el objeto de C<@ISA> contenía C<Foo>.
 
 =item *
 
@@ -1127,7 +1127,7 @@ El uso de UTF-8 C<tr//> dentro de una clausura podría causar una violación de se
 
 =item *
 
-Llamando a C<sv_chop()> o, de lo contrario, la actualización de un SV podría resultar en un desalineado acceso de 64 bits en la arquitectura SPARC [RT #60574].
+Llamando a C<sv_chop()> o, de lo contrario, la actualización de un SV podría resultar en un acceso desalineado de 64 bits en la arquitectura SPARC [RT #60574].
 
 =item *
 
@@ -1280,7 +1280,7 @@ El uso de la estructura privada C<mro_meta> ha cambiado ligeramente. De todos mo
 
 =item *
 
-Una nueva herramienta, C<Porting/expand-macro.pl> ha sido añadida, que permite ver cómo una macro del preprocesador C se amplíe cuando se compile.
+Una nueva herramienta, F<Porting/expand-macro.pl> ha sido añadida, que permite ver cómo una macro del preprocesador C será ampliada cuando sea compilada.
 Esto es útil cuando se trata de descifrar el infierno de macros del que perl goza.
 
 =back
