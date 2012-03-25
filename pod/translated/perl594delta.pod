@@ -158,7 +158,7 @@ Clases con un único carácter son ahora tratados como si el carácter fuera utiliz
 
 Las alternancias, siempre que sea posible, son optimizadas en estructuras de coincidencia más eficientes. Las alternancias de cadenas literales son remezcladas en un árbol prefijado (Trie) y se les hace coincidir de forma simultánea.  Esto significa que en lugar de un tiempo O(N) para hacer coincidir N alternancias en un punto dado, el nuevo código lo realiza en un tiempo O(1). (Yves Orton)
 
-B<Nota:> Existe una gran cantidad de código que intenta solventar los históricos malos resultados de perl en la cuestión de las alternancias. A menudo, los trucos usados ??desactivarán estas nuevas optimizaciones. Esperemos que los módulos de apoyo utilizados para este propósito sean ajustados sobre estas nuevas optimizaciones para el momento en que v5.10 sea publicado.
+B<Nota:> Existe una gran cantidad de código que intenta solventar los históricos malos resultados de perl en la cuestión de las alternancias. A menudo, los trucos utilizados para esto, desactivarán las nuevas optimizaciones. Esperemos que los módulos de apoyo utilizados para este propósito sean ajustados sobre estas nuevas optimizaciones para el momento en que v5.10 sea publicado.
 
 =item Optimización del punto de arranque con Aho-Corasick
 
