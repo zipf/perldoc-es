@@ -1,28 +1,28 @@
 =head1 NOMBRE
 
-perl5101delta - quÈ hay de nuevo para perl v5.10.1
+perl5101delta - qu√© hay de nuevo para perl v5.10.1
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Este documento describe las diferencias entre la versiÛn 5.10.0 y la versiÛn 5.10.1.
+Este documento describe las diferencias entre la versi√≥n 5.10.0 y la versi√≥n 5.10.1.
 
-Si est· actualizando desde una versiÛn anterior como la 5.8.8, primero lea L<perl5100delta>, que describe las diferencias entre 5.8.8 y la 5.10.0.
+Si est√° actualizando desde una versi√≥n anterior como la 5.8.8, primero lea L<perl5100delta>, que describe las diferencias entre 5.8.8 y la 5.10.0.
 
 =head1 Cambios incompatibles
 
-=head2 Cambios en la instrucciÛn Switch
+=head2 Cambios en la instrucci√≥n Switch
 
-El manejo de expresiones complejas por C<given>/C<when> de la instrucciÛn switch ha sido mejorado. Hay dos nuevos casos en el que ahora C<when> interpreta su argumento como un valor booleano, en lugar de una expresiÛn que se utiliza en una coincidencia inteligente:
+El manejo de expresiones complejas por C<given>/C<when> de la instrucci√≥n switch ha sido mejorado. Hay dos nuevos casos en el que ahora C<when> interpreta su argumento como un valor booleano, en lugar de una expresi√≥n que se utiliza en una coincidencia inteligente:
 
 =over 4
 
 =item Operadores flip-flop
 
-Los operadores flip-flop C<..> y C<...> ahora son evaluados en contexto booleano, siguiendo su sem·ntica normal; vea L<perlop/"Operadores de rango">.
+Los operadores flip-flop C<..> y C<...> ahora son evaluados en contexto booleano, siguiendo su sem√°ntica normal; vea L<perlop/"Operadores de rango">.
 
-Tenga en cuenta que, como en Perl 5.10.0, C<when (1..10)> no va servir· para probar si un valor es un n˙mero entero entre 1 y 10, asÌ que en su lugar deberÌa usar C<when ([1..10])> (nÛtese la referencia al array).
+Tenga en cuenta que, como en Perl 5.10.0, C<when (1..10)> no va servir√° para probar si un valor es un n√∫mero entero entre 1 y 10, as√≠ que en su lugar deber√≠a usar C<when ([1..10])> (n√≥tese la referencia al array).
 
-Sin embargo, contrariamente a 5.10.0, la evaluaciÛn de los operadores flip-flop en contexto booleano asegura que ahora puede ser ˙til en un C<when()>, especialmente para implementar condiciones biestable, como en:
+Sin embargo, contrariamente a 5.10.0, la evaluaci√≥n de los operadores flip-flop en contexto booleano asegura que ahora puede ser √∫til en un C<when()>, especialmente para implementar condiciones biestable, como en:
 
     when (/^=begin/ .. /^=end/) {
       # hacer algo
@@ -30,24 +30,24 @@ Sin embargo, contrariamente a 5.10.0, la evaluaciÛn de los operadores flip-flop 
 
 =item Operador definido-or
 
-Una expresiÛn compuesta, que incluya al operador definido-or, como en C<when (expr1 // expr2)>, ser· tratada como booleana si la primera expresiÛn es booleana. (Esto amplia la regla actual que se aplica al operador or normal, como en C<when (expr1 || expr2)>.)
+Una expresi√≥n compuesta, que incluya al operador definido-or, como en C<when (expr1 // expr2)>, ser√° tratada como booleana si la primera expresi√≥n es booleana. (Esto amplia la regla actual que se aplica al operador or normal, como en C<when (expr1 || expr2)>.)
 
 =back
 
-La prÛxima secciÛn detalla m·s cambios introducidos en la sem·ntica del operador de coincidencia inteligente, que, naturalmente, tambiÈn modifica el comportamiento de las instrucciones switch donde se utilice de forma implÌcita la coincidencia inteligente.
+La pr√≥xima secci√≥n detalla m√°s cambios introducidos en la sem√°ntica del operador de coincidencia inteligente, que, naturalmente, tambi√©n modifica el comportamiento de las instrucciones switch donde se utilice de forma impl√≠cita la coincidencia inteligente.
 
 =head2 Cambios en la coincidencia inteligente
 
 =head3 Cambios en el despacho basado en tipos
 
-El operador de coincidencia inteligente C<~~> ya no es conmutativo. El comportamiento de una coincidencia inteligente ahora depende, principalmente, del tipo de su argumento derecho. Por otra parte, su sem·ntica se ha ajustado para que tenga una mayor coherencia y utilidad en algunos casos. Mientras que la compatibilidad con versiones anteriores, en general, se mantiene, se deben tenerse en cuenta diversos cambios:
+El operador de coincidencia inteligente C<~~> ya no es conmutativo. El comportamiento de una coincidencia inteligente ahora depende, principalmente, del tipo de su argumento derecho. Por otra parte, su sem√°ntica se ha ajustado para que tenga una mayor coherencia y utilidad en algunos casos. Mientras que la compatibilidad con versiones anteriores, en general, se mantiene, se deben tenerse en cuenta diversos cambios:
 
 =over 4
 
 =item *
 
-Referencias a cÛdigo con un prototipo vacÌo ya no son tratados de forma especial.
-Se les pasa un argumento como a otras referencias de cÛdigo (incluso si deciden ignorarlo).
+Referencias a c√≥digo con un prototipo vac√≠o ya no son tratados de forma especial.
+Se les pasa un argumento como a otras referencias de c√≥digo (incluso si deciden ignorarlo).
 
 =item *
 
@@ -55,25 +55,25 @@ C<%hash ~~ sub {}> y C<@array ~~ sub {}> ahora prueban a que la subrutina devuel
 
 =item *
 
-Debido a la rotura de la conmutatividad, las referencias a cÛdigo ya no se tratan de forma especial cuando aparecen a la izquierda del operador C<~~>, sino que son tratadas como cualquier otro valor escalar.
+Debido a la rotura de la conmutatividad, las referencias a c√≥digo ya no se tratan de forma especial cuando aparecen a la izquierda del operador C<~~>, sino que son tratadas como cualquier otro valor escalar.
 
 =item *
 
-C<undef ~~ %hash> siempre es falsa (ya que C<undef> no puede ser una clave en un hash). No se realiza conversiÛn implÌcita a C<""> (como era en el caso de Perl 5.10.0).
+C<undef ~~ %hash> siempre es falsa (ya que C<undef> no puede ser una clave en un hash). No se realiza conversi√≥n impl√≠cita a C<""> (como era en el caso de Perl 5.10.0).
 
 =item *
 
-C<$scalar ~~ @array> ahora siempre distribuye la coincidencia inteligente a lo largo de todos los elementos del array. Es cierto si un elemento de @array verifica que C<$scalar ~~ $elemento>. Esta es una generalizaciÛn del comportamiento anterior que ponÌa a prueba si el array contenÌa el escalar.
+C<$scalar ~~ @array> ahora siempre distribuye la coincidencia inteligente a lo largo de todos los elementos del array. Es cierto si un elemento de @array verifica que C<$scalar ~~ $elemento>. Esta es una generalizaci√≥n del comportamiento anterior que pon√≠a a prueba si el array conten√≠a el escalar.
 
 =back
 
-La tabla de combinaciones para el operador de coincidencia inteligente est· en L<perlsyn/"Coincidencia inteligente en detalle">.
+La tabla de combinaciones para el operador de coincidencia inteligente est√° en L<perlsyn/"Coincidencia inteligente en detalle">.
 
 =head3 Coincidencia inteligente y sobrecarga
 
-De acuerdo con la regla de reparto basada en el tipo del argumento de la derecha, cuando un objeto sobrecarga C<~~> aparece en el lado derecho del operador, la rutina de sobrecarga siempre ser· llamada (con un tercer argumento establecido a un valor verdadero, consulte L<overload>.) Sin embargo, cuando el objeto aparece a la izquierda, la rutina de sobrecarga ser· llamada sÛlo cuando el argumento de la derecha sea un escalar simple. De esta manera no se rompe la distribuciÛn del efecto de la coincidencia inteligente a travÈs de arrays, asÌ como otros comportamientos con los tipos complejos (referencias a cÛdigo, hashes, expresiones regulares). Por lo tanto, los programadores de rutinas de sobrecarga de coincidencia inteligente solo tienen que preocuparse de la comparaciÛn contra un escalar, y posiblemente, con una sobrecarga de la operaciÛn de convertir en cadena de caracteres; los otros casos comunes ser·n autom·ticamente gestionados de forma coherente.
+De acuerdo con la regla de reparto basada en el tipo del argumento de la derecha, cuando un objeto sobrecarga C<~~> aparece en el lado derecho del operador, la rutina de sobrecarga siempre ser√° llamada (con un tercer argumento establecido a un valor verdadero, consulte L<overload>.) Sin embargo, cuando el objeto aparece a la izquierda, la rutina de sobrecarga ser√° llamada s√≥lo cuando el argumento de la derecha sea un escalar simple. De esta manera no se rompe la distribuci√≥n del efecto de la coincidencia inteligente a trav√©s de arrays, as√≠ como otros comportamientos con los tipos complejos (referencias a c√≥digo, hashes, expresiones regulares). Por lo tanto, los programadores de rutinas de sobrecarga de coincidencia inteligente solo tienen que preocuparse de la comparaci√≥n contra un escalar, y posiblemente, con una sobrecarga de la operaci√≥n de convertir en cadena de caracteres; los otros casos comunes ser√°n autom√°ticamente gestionados de forma coherente.
 
-C<~~> rechazar· funcionar en objetos que no lo sobrecarguen (para no depender de la estructura subyacente del objeto) (Sin embargo, si el objeto sobrecarga la conversiÛn en cadena de caracteres o los operadores de conversiÛn en n˙meros, y si la sobrecarga de reserva est· activa, ser· utilizada en su lugar, como de costumbre.)
+C<~~> rechazar√° funcionar en objetos que no lo sobrecarguen (para no depender de la estructura subyacente del objeto) (Sin embargo, si el objeto sobrecarga la conversi√≥n en cadena de caracteres o los operadores de conversi√≥n en n√∫meros, y si la sobrecarga de reserva est√° activa, ser√° utilizada en su lugar, como de costumbre.)
 
 =head2 Otros cambios incompatibles
 
@@ -81,29 +81,29 @@ C<~~> rechazar· funcionar en objetos que no lo sobrecarguen (para no depender de
 
 =item *
 
-La sem·ntica de C<use feature :5.10*> ha cambiado ligeramente.
-Vea L<"MÛdulos y Pragmata"> para m·s informaciÛn.
+La sem√°ntica de C<use feature :5.10*> ha cambiado ligeramente.
+Vea L<"M√≥dulos y Pragmata"> para m√°s informaci√≥n.
 
 =item *
 
-Ahora es un error en tiempo de ejecuciÛn usar el operador de coincidencia inteligente C<~~> con un objeto que no tenga la sobrecarga definida para Èl. (De esta forma C<~~> no romper· la encapsulaciÛn al hacer la comparaciÛn con la representaciÛn interna del objeto a travÈs de la referencia.)
+Ahora es un error en tiempo de ejecuci√≥n usar el operador de coincidencia inteligente C<~~> con un objeto que no tenga la sobrecarga definida para √©l. (De esta forma C<~~> no romper√° la encapsulaci√≥n al hacer la comparaci√≥n con la representaci√≥n interna del objeto a trav√©s de la referencia.)
 
 =item *
 
-El sistema de control de versiones usado para el desarrollo del intÈrprete perl se ha cambiado de Perforce a git.  Esto es principalmente un asunto interno que sÛlo afecta a las personas que trabajan activamente en el n˙cleo de perl; pero puede tener visibilidad externa de menor importancia, por ejemplo, en algunos de los detalles de la salida de C<perl -V>. Vea L<perlrepository> para m·s informaciÛn.
+El sistema de control de versiones usado para el desarrollo del int√©rprete perl se ha cambiado de Perforce a git.  Esto es principalmente un asunto interno que s√≥lo afecta a las personas que trabajan activamente en el n√∫cleo de perl; pero puede tener visibilidad externa de menor importancia, por ejemplo, en algunos de los detalles de la salida de C<perl -V>. Vea L<perlrepository> para m√°s informaci√≥n.
 
 =item *
 
-La estructura interna del directorio C<ext/> en el cÛdigo fuente de perl, se ha reorganizado. En general, un mÛdulo C<Foo::Bar> cuyo cÛdigo fuente se almacenaba en F<ext/Foo/Bar/>, ahora se encuentra en F<ext/Foo-Bar/>. Adem·s, algunos mÛdulos se han movido de F<lib/> a F<ext/>. Esto es puramente un cambio de cÛdigo fuente, y no debe notar ninguna diferencia en la compilaciÛn o instalaciÛn de Perl, a menos que tenga un proceso de construcciÛn muy personalizado que, explÌcitamente, se basÈ en esta estructura, o que haya codificado en el propio cÛdigo el par·metro C<nonxs_ext> en F<Configure>. En concreto, este cambio no altera de manera predeterminada la ubicaciÛn de los archivos de la instalaciÛn final.
+La estructura interna del directorio C<ext/> en el c√≥digo fuente de perl, se ha reorganizado. En general, un m√≥dulo C<Foo::Bar> cuyo c√≥digo fuente se almacenaba en F<ext/Foo/Bar/>, ahora se encuentra en F<ext/Foo-Bar/>. Adem√°s, algunos m√≥dulos se han movido de F<lib/> a F<ext/>. Esto es puramente un cambio de c√≥digo fuente, y no debe notar ninguna diferencia en la compilaci√≥n o instalaci√≥n de Perl, a menos que tenga un proceso de construcci√≥n muy personalizado que, expl√≠citamente, se bas√© en esta estructura, o que haya codificado en el propio c√≥digo el par√°metro C<nonxs_ext> en F<Configure>. En concreto, este cambio no altera de manera predeterminada la ubicaci√≥n de los archivos de la instalaci√≥n final.
 
 =item *
 
-Como parte de la actualizaciÛn de C<Test::Harness> 2.x a la 3.x, se ha eliminado el mÛdulo experimental C<Test::Harness::Straps>.
-Vea L</"MÛdulos actualizados"> para m·s detalles.
+Como parte de la actualizaci√≥n de C<Test::Harness> 2.x a la 3.x, se ha eliminado el m√≥dulo experimental C<Test::Harness::Straps>.
+Vea L</"M√≥dulos actualizados"> para m√°s detalles.
 
 =item *
 
-Como parte de la actualizaciÛn de C<ExtUtils::MakeMaker>, los mÛdulos C<ExtUtils::MakeMaker::bytes> y C<ExtUtils::MakeMaker::vmsish> han sido eliminados de esta distribuciÛn.
+Como parte de la actualizaci√≥n de C<ExtUtils::MakeMaker>, los m√≥dulos C<ExtUtils::MakeMaker::bytes> y C<ExtUtils::MakeMaker::vmsish> han sido eliminados de esta distribuci√≥n.
 
 =item *
 
@@ -111,9 +111,9 @@ C<Module::CoreList> ya no contiene el hash C<%:patchlevel>.
 
 =item *
 
-Este es en realidad un cambio introducido en 5.10.0, pero se perdiÛ en la publicaciÛn de perldelta, por lo que se menciona aquÌ y ahora.
+Este es en realidad un cambio introducido en 5.10.0, pero se perdi√≥ en la publicaci√≥n de perldelta, por lo que se menciona aqu√≠ y ahora.
 
-Una correcciÛn de errores relacionados con el manejo del modificador C</m> y C<qr> resultÛ en un cambio de comportamiento entre 5.8.x y 5.10.0:
+Una correcci√≥n de errores relacionados con el manejo del modificador C</m> y C<qr> result√≥ en un cambio de comportamiento entre 5.8.x y 5.10.0:
 
     # coincide en 5.8.x, no coincide in 5.10.0
     $re = qr/^bar/; "foo\nbar" =~ /$re/m;
@@ -126,10 +126,10 @@ Una correcciÛn de errores relacionados con el manejo del modificador C</m> y C<q
 
 La copia de la base de datos de caracteres Unicode incluidos en Perl 5.10.1 ha sido actualizado desde la 5.0.0 a la 5.1.0. Vea L<http://www.unicode.org/versions/Unicode5.1.0/#Notable_Changes> para consultar los cambios principales.
 
-=head2 Una interfaz adecuada para un MÈtodo de ResoluciÛn de ”rdenes
+=head2 Una interfaz adecuada para un M√©todo de Resoluci√≥n de √ìrdenes
 
-A partir de Perl 5.10.1 existe una nueva interfaz para la conexiÛn y orden del mÈtodo de resoluciÛn aparte del predeterminado (buscar primero en profundidad lineal).
-El mÈtodo de resoluciÛn de orden C3 aÒadido en 5.10.0 se ha re-implementado como un complemento, sin cambiar su interfaz del espacio Perl. Vea L<perlmroapi> para obtener m·s informaciÛn.
+A partir de Perl 5.10.1 existe una nueva interfaz para la conexi√≥n y orden del m√©todo de resoluci√≥n aparte del predeterminado (buscar primero en profundidad lineal).
+El m√©todo de resoluci√≥n de orden C3 a√±adido en 5.10.0 se ha re-implementado como un complemento, sin cambiar su interfaz del espacio Perl. Vea L<perlmroapi> para obtener m√°s informaci√≥n.
 
 =head2 El pragma C<overloading>
 
@@ -137,647 +137,647 @@ Este pragma le permite desactivar o activar localmente la sobrecarga de algunas 
 
 =head2 Pruebas en paralelo
 
-La distribuciÛn principal ahora puede ejecutar sus pruebas de regresiÛn en paralelo en las plataformas de tipo Unix. En lugar de ejecutar C<make test>, ponga en su entorno la variable C<TEST_JOBS> al n˙mero de pruebas que se deben ejecutar en paralelo, y ejecute C<make test_harness>. En un shell de la familia Bourne, esto se puede hacer asÌ
+La distribuci√≥n principal ahora puede ejecutar sus pruebas de regresi√≥n en paralelo en las plataformas de tipo Unix. En lugar de ejecutar C<make test>, ponga en su entorno la variable C<TEST_JOBS> al n√∫mero de pruebas que se deben ejecutar en paralelo, y ejecute C<make test_harness>. En un shell de la familia Bourne, esto se puede hacer as√≠
 
     TEST_JOBS=3 make test_harness  # Ejecuta 3 test en paralelo
 
-Se utiliza una variable de entorno, en lugar de ejecutarse por sÌ mismo en paralelo, porque L<TAP::Harness> tiene que ser capaz, por sÌ mismo, de programar scripts de test individuales sin que haya conflictos entre ellos, y no hay un interfaz est·ndar de C<make> para interactuar con las programaciones de sus trabajos.
+Se utiliza una variable de entorno, en lugar de ejecutarse por s√≠ mismo en paralelo, porque L<TAP::Harness> tiene que ser capaz, por s√≠ mismo, de programar scripts de test individuales sin que haya conflictos entre ellos, y no hay un interfaz est√°ndar de C<make> para interactuar con las programaciones de sus trabajos.
 
-Tenga en cuenta que en la actualidad algunos scripts de prueba pueden fallar cuando se ejecuta en paralelo (sobre todo C<ext/IO/t/io_dir.t>). Si es necesario ejecute los scripts una vez m·s de forma secuencial y mire a ver si los errores desaparecen.
+Tenga en cuenta que en la actualidad algunos scripts de prueba pueden fallar cuando se ejecuta en paralelo (sobre todo C<ext/IO/t/io_dir.t>). Si es necesario ejecute los scripts una vez m√°s de forma secuencial y mire a ver si los errores desaparecen.
 
 =head2 Soporte DTrace
 
-Se ha aÒadido alg˙n soporte para DTrace. Vea "Soporte DTrace" en F<INSTALL>.
+Se ha a√±adido alg√∫n soporte para DTrace. Vea "Soporte DTrace" en F<INSTALL>.
 
-=head2 Suporte para C<configure_requires> en el mÛdulo de CPAN metadata
+=head2 Suporte para C<configure_requires> en el m√≥dulo de CPAN metadata
 
-Tanto C<CPAN> como C<CPANPLUS> son ahora compatibles con la palabra clave C<configure_requires> en el archivo de metadatos C<META.yml> incluido en las distribuciones de CPAN m·s recientes.
-Esto permite a los autores de la distribuciÛn especificar los requisitos previos de configuraciÛn que deben estar instalados antes de ejecutar F<Makefile.PL> o F<Build.PL>.
+Tanto C<CPAN> como C<CPANPLUS> son ahora compatibles con la palabra clave C<configure_requires> en el archivo de metadatos C<META.yml> incluido en las distribuciones de CPAN m√°s recientes.
+Esto permite a los autores de la distribuci√≥n especificar los requisitos previos de configuraci√≥n que deben estar instalados antes de ejecutar F<Makefile.PL> o F<Build.PL>.
 
-Consulte la documentaciÛn de C<ExtUtils::MakeMaker> o C<Module::Build> para m·s informaciÛn sobre cÛmo especificar C<configure_requires> cuando se crea una distribuciÛn para CPAN.
+Consulte la documentaci√≥n de C<ExtUtils::MakeMaker> o C<Module::Build> para m√°s informaci√≥n sobre c√≥mo especificar C<configure_requires> cuando se crea una distribuci√≥n para CPAN.
 
-=head1 MÛdulos y Pragmata
+=head1 M√≥dulos y Pragmata
 
-=head2 Nuevos mÛdulos y pragmas
+=head2 Nuevos m√≥dulos y pragmas
 
 =over 4
 
 =item C<autodie>
 
-Es una nueva alternativa de ·mbito lÈxico para el mÛdulo C<Fatal>.
-La versiÛn incluida es la 2.06_01. Tenga en cuenta que en esta versiÛn, usando una cadena C<eval>uada cuando C<autodie> est· activo puede causar que el comportamiento de autodie se fugue del ·mbito actual. Vea L<autodie/"ERRORES"> para m·s detalles.
+Es una nueva alternativa de √°mbito l√©xico para el m√≥dulo C<Fatal>.
+La versi√≥n incluida es la 2.06_01. Tenga en cuenta que en esta versi√≥n, usando una cadena C<eval>uada cuando C<autodie> est√° activo puede causar que el comportamiento de autodie se fugue del √°mbito actual. Vea L<autodie/"ERRORES"> para m√°s detalles.
 
 =item C<Compress::Raw::Bzip2>
 
-Fue aÒadido al n˙cleo principal (versiÛn 2.020).
+Fue a√±adido al n√∫cleo principal (versi√≥n 2.020).
 
 =item C<parent>
 
-Este pragma establece una relaciÛn ISA con clases base en tiempo de compilaciÛn. Proporciona la caracterÌstica clave de C<base> sin la funciÛn de fluencia.
+Este pragma establece una relaci√≥n ISA con clases base en tiempo de compilaci√≥n. Proporciona la caracter√≠stica clave de C<base> sin la funci√≥n de fluencia.
 
 =item C<Parse::CPAN::Meta>
 
-Fue aÒadido al n˙cleo principal (versiÛn 1.39).
+Fue a√±adido al n√∫cleo principal (versi√≥n 1.39).
 
 =back
 
-=head2 Cambios en la pr·gmata
+=head2 Cambios en la pr√°gmata
 
 =over 4
 
 =item C<attributes>
 
-Actualizado desde la versiÛn 0.08 a la 0.09.
+Actualizado desde la versi√≥n 0.08 a la 0.09.
 
 =item C<attrs>
 
-Actualizado desde la versiÛn 1.02 a la 1.03.
+Actualizado desde la versi√≥n 1.02 a la 1.03.
 
 =item C<base>
 
-Actualizado desde la versiÛn 2.13 a la 2.14. Vea L<parent> para una alternativa a esto.
+Actualizado desde la versi√≥n 2.13 a la 2.14. Vea L<parent> para una alternativa a esto.
 
 =item C<bigint>
 
-Actualizado desde la versiÛn 0.22 a la 0.23.
+Actualizado desde la versi√≥n 0.22 a la 0.23.
 
 =item C<bignum>
 
-Actualizado desde la versiÛn 0.22 a la 0.23.
+Actualizado desde la versi√≥n 0.22 a la 0.23.
 
 =item C<bigrat>
 
-Actualizado desde la versiÛn 0.22 a la 0.23.
+Actualizado desde la versi√≥n 0.22 a la 0.23.
 
 =item C<charnames>
 
-Actualizado desde la versiÛn 1.06 a la 1.07.
+Actualizado desde la versi√≥n 1.06 a la 1.07.
 
-El fichero base de datos Unicode F<NameAliases.txt> ha sido aÒadido. Esto tiene el efecto de aÒadir algunos caracteres C<\N> extra que antes no hubieran sido reconocidos, por ejemplo, C<"\N{LATIN CAPITAL LETTER GHA}">.
+El fichero base de datos Unicode F<NameAliases.txt> ha sido a√±adido. Esto tiene el efecto de a√±adir algunos caracteres C<\N> extra que antes no hubieran sido reconocidos, por ejemplo, C<"\N{LATIN CAPITAL LETTER GHA}">.
 
 =item C<constant>
 
-Actualizado desde la versiÛn 1.17 a la 1.13.
+Actualizado desde la versi√≥n 1.17 a la 1.13.
 
 =item C<feature>
 
-El significado de las caracterÌsticas C<:5.10> y C<:5.10.X> ha cambiado ligeramente. El ˙ltimo componente, si existe (es decir, C<X>) es, simplemente, ignorado.
-Esto se basa en el supuesto de que las nuevas funciones, en general, no se aÒadir· a las versiones de mantenimiento. Por tanto, C<:5,10> y C<:5.10.X> tienen un efecto idÈntico. Esto es un cambio en el comportamiento documentado para 5.10.0.
+El significado de las caracter√≠sticas C<:5.10> y C<:5.10.X> ha cambiado ligeramente. El √∫ltimo componente, si existe (es decir, C<X>) es, simplemente, ignorado.
+Esto se basa en el supuesto de que las nuevas funciones, en general, no se a√±adir√° a las versiones de mantenimiento. Por tanto, C<:5,10> y C<:5.10.X> tienen un efecto id√©ntico. Esto es un cambio en el comportamiento documentado para 5.10.0.
 
 =item C<fields>
 
-Actualizado de la versiÛn 2.13 a la 2.14 (sÛlo fue un salto de versiÛn, no hubo cambios funcionales).
+Actualizado de la versi√≥n 2.13 a la 2.14 (s√≥lo fue un salto de versi√≥n, no hubo cambios funcionales).
 
 =item C<lib>
 
-Actualizado desde la versiÛn 0.62 a la 0.5565.
+Actualizado desde la versi√≥n 0.62 a la 0.5565.
 
 =item C<open>
 
-Actualizado desde la versiÛn 1.06 a la 1.07.
+Actualizado desde la versi√≥n 1.06 a la 1.07.
 
 =item C<overload>
 
-Actualizado desde la versiÛn 1.06 a la 1.07.
+Actualizado desde la versi√≥n 1.06 a la 1.07.
 
 =item C<overloading>
 
-Vea m·s arriba L</"El pragma C<overloading>">.
+Vea m√°s arriba L</"El pragma C<overloading>">.
 
 =item C<version>
 
-Actualizado desde la versiÛn 0.74 a la 0.77.
+Actualizado desde la versi√≥n 0.74 a la 0.77.
 
 =back
 
-=head2 MÛdulos actualizados
+=head2 M√≥dulos actualizados
 
 =over 4
 
 =item C<Archive::Extract>
 
-Actualizado desde la versiÛn 0.24 a la 0.34.
+Actualizado desde la versi√≥n 0.24 a la 0.34.
 
 =item C<Archive::Tar>
 
-Actualizado desde la versiÛn 1.38 a la 1.52.
+Actualizado desde la versi√≥n 1.38 a la 1.52.
 
 =item C<Attribute::Handlers>
 
-Actualizado desde la versiÛn 0.79 a la 0.85.
+Actualizado desde la versi√≥n 0.79 a la 0.85.
 
 =item C<AutoLoader>
 
-Actualizado desde la versiÛn 5.63 a la 5.68.
+Actualizado desde la versi√≥n 5.63 a la 5.68.
 
 =item C<AutoSplit>
 
-Actualizado desde la versiÛn 1.05 a la 1.06.
+Actualizado desde la versi√≥n 1.05 a la 1.06.
 
 =item C<B>
 
-Actualizado desde la versiÛn 1.17 a la 1.22.
+Actualizado desde la versi√≥n 1.17 a la 1.22.
 
 =item C<B::Debug>
 
-Actualizado desde la versiÛn 1.05 a la 1.11.
+Actualizado desde la versi√≥n 1.05 a la 1.11.
 
 =item C<B::Deparse>
 
-Actualizado desde la versiÛn 0.83 a la 0.89.
+Actualizado desde la versi√≥n 0.83 a la 0.89.
 
 =item C<B::Lint>
 
-Actualizado desde la versiÛn 1.09 a la 1.11.
+Actualizado desde la versi√≥n 1.09 a la 1.11.
 
 =item C<B::Xref>
 
-Actualizado desde la versiÛn 1.01 a la 1.02.
+Actualizado desde la versi√≥n 1.01 a la 1.02.
 
 =item C<Benchmark>
 
-Actualizado desde la versiÛn 1.10 a la 1.11.
+Actualizado desde la versi√≥n 1.10 a la 1.11.
 
 =item C<Carp>
 
-Actualizado desde la versiÛn 1.08 a la 1.11.
+Actualizado desde la versi√≥n 1.08 a la 1.11.
 
 =item C<CGI>
 
-Actualizado desde la versiÛn 3.29 a la 3.43.
-(tambiÈn incluye el arreglo "default_value for popup_menu()" de 3.45).
+Actualizado desde la versi√≥n 3.29 a la 3.43.
+(tambi√©n incluye el arreglo "default_value for popup_menu()" de 3.45).
 
 =item C<Compress::Zlib>
 
-Actualizado desde la versiÛn 2.008 a la 2.020.
+Actualizado desde la versi√≥n 2.008 a la 2.020.
 
 =item C<CPAN>
 
-Actualizado desde la versiÛn 1.9205 a la 1.9402. C<CPAN::FTP> tiene un arreglo local para evitar que sea demasiado verboso en caso de fallo de descarga.
+Actualizado desde la versi√≥n 1.9205 a la 1.9402. C<CPAN::FTP> tiene un arreglo local para evitar que sea demasiado verboso en caso de fallo de descarga.
 
 =item C<CPANPLUS>
 
-Actualizado desde la versiÛn 0.84 a la 0.88.
+Actualizado desde la versi√≥n 0.84 a la 0.88.
 
 =item C<CPANPLUS::Dist::Build>
 
-Actualizado desde la versiÛn 0.06_02 a la 0.36.
+Actualizado desde la versi√≥n 0.06_02 a la 0.36.
 
 =item C<Cwd>
 
-Actualizado desde la versiÛn 3.25_01 a la 3.30.
+Actualizado desde la versi√≥n 3.25_01 a la 3.30.
 
 =item C<Data::Dumper>
 
-Actualizado desde la versiÛn 2.121_14 a la 2.124.
+Actualizado desde la versi√≥n 2.121_14 a la 2.124.
 
 =item C<DB>
 
-Actualizado desde la versiÛn 1.01 a la 1.02.
+Actualizado desde la versi√≥n 1.01 a la 1.02.
 
 =item C<DB_File>
 
-Actualizado desde la versiÛn 1.816_1 a la 1.820.
+Actualizado desde la versi√≥n 1.816_1 a la 1.820.
 
 =item C<Devel::PPPort>
 
-Actualizado desde la versiÛn 3.13 a la 3.19.
+Actualizado desde la versi√≥n 3.13 a la 3.19.
 
 =item C<Digest::MD5>
 
-Actualizado desde la versiÛn 2.36_01 a la 2.39.
+Actualizado desde la versi√≥n 2.36_01 a la 2.39.
 
 =item C<Digest::SHA>
 
-Actualizado desde la versiÛn 5.45 a la 5.47.
+Actualizado desde la versi√≥n 5.45 a la 5.47.
 
 =item C<DirHandle>
 
-Actualizado desde la versiÛn 1.01 a la 1.03.
+Actualizado desde la versi√≥n 1.01 a la 1.03.
 
 =item C<Dumpvalue>
 
-Actualizado desde la versiÛn 1.12 a la 1.13.
+Actualizado desde la versi√≥n 1.12 a la 1.13.
 
 =item C<DynaLoader>
 
-Actualizado desde la versiÛn 1.08 a la 1.10.
+Actualizado desde la versi√≥n 1.08 a la 1.10.
 
 =item C<Encode>
 
-Actualizado desde la versiÛn 2.23 a la 2.35.
+Actualizado desde la versi√≥n 2.23 a la 2.35.
 
 =item C<Errno>
 
-Actualizado desde la versiÛn 1.10 a la 1.11.
+Actualizado desde la versi√≥n 1.10 a la 1.11.
 
 =item C<Exporter>
 
-Actualizado desde la versiÛn 5.62 a la 5.63.
+Actualizado desde la versi√≥n 5.62 a la 5.63.
 
 =item C<ExtUtils::CBuilder>
 
-Actualizado desde la versiÛn 0.21 a la 0.2602.
+Actualizado desde la versi√≥n 0.21 a la 0.2602.
 
 =item C<ExtUtils::Command>
 
-Actualizado desde la versiÛn 1.13 a la 1.16.
+Actualizado desde la versi√≥n 1.13 a la 1.16.
 
 =item C<ExtUtils::Constant>
 
-Actualizado desde la versiÛn 0.20 a la 0.22. (Note que ninguna de estas versiones est·n disponibles en CPAN).
+Actualizado desde la versi√≥n 0.20 a la 0.22. (Note que ninguna de estas versiones est√°n disponibles en CPAN).
 
 =item C<ExtUtils::Embed>
 
-Actualizado desde la versiÛn 1.27 a la 1.28.
+Actualizado desde la versi√≥n 1.27 a la 1.28.
 
 =item C<ExtUtils::Install>
 
-Actualizado desde la versiÛn 1.44 a la 1.54.
+Actualizado desde la versi√≥n 1.44 a la 1.54.
 
 =item C<ExtUtils::MakeMaker>
 
-Actualizado desde la versiÛn 6.42 a la 6.55_02.
+Actualizado desde la versi√≥n 6.42 a la 6.55_02.
 
-Note que C<ExtUtils::MakeMaker::bytes> y C<ExtUtils::MakeMaker::vmsish> han sido eliminados de esta distribuciÛn.
+Note que C<ExtUtils::MakeMaker::bytes> y C<ExtUtils::MakeMaker::vmsish> han sido eliminados de esta distribuci√≥n.
 
 =item C<ExtUtils::Manifest>
 
-Actualizado desde la versiÛn 1.51_01 a la 1.56.
+Actualizado desde la versi√≥n 1.51_01 a la 1.56.
 
 =item C<ExtUtils::ParseXS>
 
-Actualizado desde la versiÛn 2.18_02 a la 2.2002.
+Actualizado desde la versi√≥n 2.18_02 a la 2.2002.
 
 =item C<Fatal>
 
-Actualizado desde la versiÛn 1.05 a la 2.06_01. Vea tambiÈn el nuevo pragma C<autodie>.
+Actualizado desde la versi√≥n 1.05 a la 2.06_01. Vea tambi√©n el nuevo pragma C<autodie>.
 
 =item C<File::Basename>
 
-Actualizado desde la versiÛn 2.76 a la 2.77.
+Actualizado desde la versi√≥n 2.76 a la 2.77.
 
 =item C<File::Compare>
 
-Actualizado desde la versiÛn 1.1005 a la 1.1006.
+Actualizado desde la versi√≥n 1.1005 a la 1.1006.
 
 =item C<File::Copy>
 
-Actualizado desde la versiÛn 2.11 a la 2.14.
+Actualizado desde la versi√≥n 2.11 a la 2.14.
 
 =item C<File::Fetch>
 
-Actualizado desde la versiÛn 0.14 a la 0.20.
+Actualizado desde la versi√≥n 0.14 a la 0.20.
 
 =item C<File::Find>
 
-Actualizado desde la versiÛn 1.12 a la 1.14.
+Actualizado desde la versi√≥n 1.12 a la 1.14.
 
 =item C<File::Path>
 
-Actualizado desde la versiÛn 2.04 a la 2.07_03.
+Actualizado desde la versi√≥n 2.04 a la 2.07_03.
 
 =item C<File::Spec>
 
-Actualizado desde la versiÛn 3.2501 a la 3.30.
+Actualizado desde la versi√≥n 3.2501 a la 3.30.
 
 =item C<File::stat>
 
-Actualizado desde la versiÛn 1.00 a la 1.01.
+Actualizado desde la versi√≥n 1.00 a la 1.01.
 
 =item C<File::Temp>
 
-Actualizado desde la versiÛn 0.18 a la 0.22.
+Actualizado desde la versi√≥n 0.18 a la 0.22.
 
 =item C<FileCache>
 
-Actualizado desde la versiÛn 1.07 a la 1.08.
+Actualizado desde la versi√≥n 1.07 a la 1.08.
 
 =item C<FileHandle>
 
-Actualizado desde la versiÛn 2.01 a la 2.02.
+Actualizado desde la versi√≥n 2.01 a la 2.02.
 
 =item C<Filter::Simple>
 
-Actualizado desde la versiÛn 0.82 a la 0.84.
+Actualizado desde la versi√≥n 0.82 a la 0.84.
 
 =item C<Filter::Util::Call>
 
-Actualizado desde la versiÛn 1.07 a la 1.08.
+Actualizado desde la versi√≥n 1.07 a la 1.08.
 
 =item C<FindBin>
 
-Actualizado desde la versiÛn 1.49 a la 1.50.
+Actualizado desde la versi√≥n 1.49 a la 1.50.
 
 =item C<GDBM_File>
 
-Actualizado desde la versiÛn 1.08 a la 1.09.
+Actualizado desde la versi√≥n 1.08 a la 1.09.
 
 =item C<Getopt::Long>
 
-Actualizado desde la versiÛn 2.37 a la 2.38.
+Actualizado desde la versi√≥n 2.37 a la 2.38.
 
 =item C<Hash::Util::FieldHash>
 
-Actualizado desde la versiÛn 1.03 a la 1.04. Esto arregla una fuga de memoria.
+Actualizado desde la versi√≥n 1.03 a la 1.04. Esto arregla una fuga de memoria.
 
 =item C<I18N::Collate>
 
-Actualizado desde la versiÛn 1.00 a la 1.01.
+Actualizado desde la versi√≥n 1.00 a la 1.01.
 
 =item C<IO>
 
-Actualizado desde la versiÛn 1.23_01 a la 1.25.
+Actualizado desde la versi√≥n 1.23_01 a la 1.25.
 
 Hace que el modo de trabajo no-bloqueante funcione Windows en C<IO::Socket::INET> [CPAN #43573].
 
 =item C<IO::Compress::*>
 
-Actualizado desde la versiÛn 2.008 a la 2.020.
+Actualizado desde la versi√≥n 2.008 a la 2.020.
 
 =item C<IO::Dir>
 
-Actualizado desde la versiÛn 1.06 a la 1.07.
+Actualizado desde la versi√≥n 1.06 a la 1.07.
 
 =item C<IO::Handle>
 
-Actualizado desde la versiÛn 1.27 a la 1.28.
+Actualizado desde la versi√≥n 1.27 a la 1.28.
 
 =item C<IO::Socket>
 
-Actualizado desde la versiÛn 1.30_01 a la 1.31.
+Actualizado desde la versi√≥n 1.30_01 a la 1.31.
 
 =item C<IO::Zlib>
 
-Actualizado desde la versiÛn 1.07 a la 1.09.
+Actualizado desde la versi√≥n 1.07 a la 1.09.
 
 =item C<IPC::Cmd>
 
-Actualizado desde la versiÛn 0.40_1 a la 0.46.
+Actualizado desde la versi√≥n 0.40_1 a la 0.46.
 
 =item C<IPC::Open3>
 
-Actualizado desde la versiÛn 1.02 a la 1.04.
+Actualizado desde la versi√≥n 1.02 a la 1.04.
 
 =item C<IPC::SysV>
 
-Actualizado desde la versiÛn 1.05 a la 2.01.
+Actualizado desde la versi√≥n 1.05 a la 2.01.
 
 =item C<lib>
 
-Actualizado desde la versiÛn 0.62 a la 0.5565.
+Actualizado desde la versi√≥n 0.62 a la 0.5565.
 
 =item C<List::Util>
 
-Actualizado desde la versiÛn 1.19 a la 1.21.
+Actualizado desde la versi√≥n 1.19 a la 1.21.
 
 =item C<Locale::Maketext>
 
-Actualizado desde la versiÛn 1.12 a la 1.13.
+Actualizado desde la versi√≥n 1.12 a la 1.13.
 
 =item C<Log::Message>
 
-Actualizado desde la versiÛn 0.01 a la 0.02.
+Actualizado desde la versi√≥n 0.01 a la 0.02.
 
 =item C<Math::BigFloat>
 
-Actualizado desde la versiÛn 1.59 a la 1.60.
+Actualizado desde la versi√≥n 1.59 a la 1.60.
 
 =item C<Math::BigInt>
 
-Actualizado desde la versiÛn 1.88 a la 1.89.
+Actualizado desde la versi√≥n 1.88 a la 1.89.
 
 =item C<Math::BigInt::FastCalc>
 
-Actualizado desde la versiÛn 0.16 a la 0.19.
+Actualizado desde la versi√≥n 0.16 a la 0.19.
 
 =item C<Math::BigRat>
 
-Actualizado desde la versiÛn 0.21 a la 0.22.
+Actualizado desde la versi√≥n 0.21 a la 0.22.
 
 =item C<Math::Complex>
 
-Actualizado desde la versiÛn 1.37 a la 1.56.
+Actualizado desde la versi√≥n 1.37 a la 1.56.
 
 =item C<Math::Trig>
 
-Actualizado desde la versiÛn 1.04 a la 1.20.
+Actualizado desde la versi√≥n 1.04 a la 1.20.
 
 =item C<Memoize>
 
-Actualizado desde la versiÛn 1.01_02 a la 1.01_03 (solo un pequeÒo cambio en la documentaciÛn).
+Actualizado desde la versi√≥n 1.01_02 a la 1.01_03 (solo un peque√±o cambio en la documentaci√≥n).
 
 =item C<Module::Build>
 
-Actualizado desde la versiÛn 0.2808_01 a la 0.34_02.
+Actualizado desde la versi√≥n 0.2808_01 a la 0.34_02.
 
 =item C<Module::CoreList>
 
-Actualizado desde la versiÛn 2.13 a la 2.18. Esta publicaciÛn ya no contiene el hash C<Module::CoreList::patchlevel>.
+Actualizado desde la versi√≥n 2.13 a la 2.18. Esta publicaci√≥n ya no contiene el hash C<Module::CoreList::patchlevel>.
 
 =item C<Module::Load>
 
-Actualizado desde la versiÛn 0.12 a la 0.16.
+Actualizado desde la versi√≥n 0.12 a la 0.16.
 
 =item C<Module::Load::Conditional>
 
-Actualizado desde la versiÛn 0.22 a la 0.30.
+Actualizado desde la versi√≥n 0.22 a la 0.30.
 
 =item C<Module::Loaded>
 
-Actualizado desde la versiÛn 0.01 a la 0.02.
+Actualizado desde la versi√≥n 0.01 a la 0.02.
 
 =item C<Module::Pluggable>
 
-Actualizado desde la versiÛn 3.6 a la 3.9.
+Actualizado desde la versi√≥n 3.6 a la 3.9.
 
 =item C<NDBM_File>
 
-Actualizado desde la versiÛn 1.07 a la 1.08.
+Actualizado desde la versi√≥n 1.07 a la 1.08.
 
 =item C<Net::Ping>
 
-Actualizado desde la versiÛn 2.33 a la 2.36.
+Actualizado desde la versi√≥n 2.33 a la 2.36.
 
 =item C<NEXT>
 
-Actualizado desde la versiÛn 0.60_01 a la 0.64.
+Actualizado desde la versi√≥n 0.60_01 a la 0.64.
 
 =item C<Object::Accessor>
 
-Actualizado desde la versiÛn 0.32 a la 0.34.
+Actualizado desde la versi√≥n 0.32 a la 0.34.
 
 =item C<OS2::REXX>
 
-Actualizado desde la versiÛn 1.03 a la 1.04.
+Actualizado desde la versi√≥n 1.03 a la 1.04.
 
 =item C<Package::Constants>
 
-Actualizado desde la versiÛn 0.01 a la 0.02.
+Actualizado desde la versi√≥n 0.01 a la 0.02.
 
 =item C<PerlIO>
 
-Actualizado desde la versiÛn 1.04 a la 1.06.
+Actualizado desde la versi√≥n 1.04 a la 1.06.
 
 =item C<PerlIO::via>
 
-Actualizado desde la versiÛn 0.04 a la 0.07.
+Actualizado desde la versi√≥n 0.04 a la 0.07.
 
 =item C<Pod::Man>
 
-Actualizado desde la versiÛn 2.16 a la 2.22.
+Actualizado desde la versi√≥n 2.16 a la 2.22.
 
 =item C<Pod::Parser>
 
-Actualizado desde la versiÛn 1.35 a la 1.37.
+Actualizado desde la versi√≥n 1.35 a la 1.37.
 
 =item C<Pod::Simple>
 
-Actualizado desde la versiÛn 3.05 a la 3.07.
+Actualizado desde la versi√≥n 3.05 a la 3.07.
 
 =item C<Pod::Text>
 
-Actualizado desde la versiÛn 3.08 a la 3.13.
+Actualizado desde la versi√≥n 3.08 a la 3.13.
 
 =item C<POSIX>
 
-Actualizado desde la versiÛn 1.17 a la 1.13.
+Actualizado desde la versi√≥n 1.17 a la 1.13.
 
 =item C<Safe>
 
-Actualizado desde la versiÛn 2.12 a la 2.18.
+Actualizado desde la versi√≥n 2.12 a la 2.18.
 
 =item C<Scalar::Util>
 
-Actualizado desde la versiÛn 1.19 a la 1.21.
+Actualizado desde la versi√≥n 1.19 a la 1.21.
 
 =item C<SelectSaver>
 
-Actualizado desde la versiÛn 1.01 a la 1.02.
+Actualizado desde la versi√≥n 1.01 a la 1.02.
 
 =item C<SelfLoader>
 
-Actualizado desde la versiÛn 1.11 a la 1.17.
+Actualizado desde la versi√≥n 1.11 a la 1.17.
 
 =item C<Socket>
 
-Actualizado desde la versiÛn 1.80 a la 1.82.
+Actualizado desde la versi√≥n 1.80 a la 1.82.
 
 =item C<Storable>
 
-Actualizado desde la versiÛn 2.18 a la 2.20.
+Actualizado desde la versi√≥n 2.18 a la 2.20.
 
 =item C<Switch>
 
-Actualizado desde la versiÛn 2.13 a la 2.14. Por favor, vea L</Obsolescencias>.
+Actualizado desde la versi√≥n 2.13 a la 2.14. Por favor, vea L</Obsolescencias>.
 
 =item C<Symbol>
 
-Actualizado desde la versiÛn 1.06 a la 1.07.
+Actualizado desde la versi√≥n 1.06 a la 1.07.
 
 =item C<Sys::Syslog>
 
-Actualizado desde la versiÛn 0.22 a la 0.27.
+Actualizado desde la versi√≥n 0.22 a la 0.27.
 
 =item C<Term::ANSIColor>
 
-Actualizado desde la versiÛn 1.12 a la 2.00.
+Actualizado desde la versi√≥n 1.12 a la 2.00.
 
 =item C<Term::ReadLine>
 
-Actualizado desde la versiÛn 1.03 a la 1.04.
+Actualizado desde la versi√≥n 1.03 a la 1.04.
 
 =item C<Term::UI>
 
-Actualizado desde la versiÛn 0.18 a la 0.20.
+Actualizado desde la versi√≥n 0.18 a la 0.20.
 
 =item C<Test::Harness>
 
-Actualizado desde la versiÛn 2.64 a la 3.17.
+Actualizado desde la versi√≥n 2.64 a la 3.17.
 
-Tenga en cuenta que un efecto secundario de la 2.x para actualizar a la 3.x es que el mÛdulo experimental C<Test::Harness::Straps> (y sus mÛdulos de apoyo C<Assert>, C<Iterator>, C<Point> y C<Results>) ha sido eliminado. Si todavÌa lo necesita, est·n disponibles en la distribuciÛn (no mantenida) C<Test-Harness-Straps> en CPAN.
+Tenga en cuenta que un efecto secundario de la 2.x para actualizar a la 3.x es que el m√≥dulo experimental C<Test::Harness::Straps> (y sus m√≥dulos de apoyo C<Assert>, C<Iterator>, C<Point> y C<Results>) ha sido eliminado. Si todav√≠a lo necesita, est√°n disponibles en la distribuci√≥n (no mantenida) C<Test-Harness-Straps> en CPAN.
 
 =item C<Test::Simple>
 
-Actualizado desde la versiÛn 0.72 a la 0.92.
+Actualizado desde la versi√≥n 0.72 a la 0.92.
 
 =item C<Text::ParseWords>
 
-Actualizado desde la versiÛn 3.26 a la 3.27.
+Actualizado desde la versi√≥n 3.26 a la 3.27.
 
 =item C<Text::Tabs>
 
-Actualizado desde la versiÛn 2007.1117 a la 2009.0305.
+Actualizado desde la versi√≥n 2007.1117 a la 2009.0305.
 
 =item C<Text::Wrap>
 
-Actualizado desde la versiÛn 2006.1117 a la 2009.0305.
+Actualizado desde la versi√≥n 2006.1117 a la 2009.0305.
 
 =item C<Thread::Queue>
 
-Actualizado desde la versiÛn 2.00 a la 2.11.
+Actualizado desde la versi√≥n 2.00 a la 2.11.
 
 =item C<Thread::Semaphore>
 
-Actualizado desde la versiÛn 2.01 a la 2.09.
+Actualizado desde la versi√≥n 2.01 a la 2.09.
 
 =item C<threads>
 
-Actualizado desde la versiÛn 1.67 a la 1.72.
+Actualizado desde la versi√≥n 1.67 a la 1.72.
 
 =item C<threads::shared>
 
-Actualizado desde la versiÛn 1.14 a la 1.29.
+Actualizado desde la versi√≥n 1.14 a la 1.29.
 
 =item C<Tie::RefHash>
 
-Actualizado desde la versiÛn 1.37 a la 1.38.
+Actualizado desde la versi√≥n 1.37 a la 1.38.
 
 =item C<Tie::StdHandle>
 
-Tiene cambios en la documentaciÛn, y se le ha asignado un n˙mero de versiÛn por primera vez: la versiÛn 4.2.
+Tiene cambios en la documentaci√≥n, y se le ha asignado un n√∫mero de versi√≥n por primera vez: la versi√≥n 4.2.
 
 =item C<Time::HiRes>
 
-Actualizado desde la versiÛn 1.9711 a la 1.9719.
+Actualizado desde la versi√≥n 1.9711 a la 1.9719.
 
 =item C<Time::Local>
 
-Actualizado desde la versiÛn 1.18 a la 1.1901.
+Actualizado desde la versi√≥n 1.18 a la 1.1901.
 
 =item C<Time::Piece>
 
-Actualizado desde la versiÛn 1.12 a la 1.15.
+Actualizado desde la versi√≥n 1.12 a la 1.15.
 
 =item C<Unicode::Normalize>
 
-Actualizado desde la versiÛn 1.02 a la 1.03.
+Actualizado desde la versi√≥n 1.02 a la 1.03.
 
 =item C<Unicode::UCD>
 
-Actualizado desde la versiÛn 0.25 a la 0.27.
+Actualizado desde la versi√≥n 0.25 a la 0.27.
 
-C<charinfo()> ahora funciona en los puntos de cÛdigo Unificado CJK aÒadido en las ˙ltimas versiones de Unicode.
+C<charinfo()> ahora funciona en los puntos de c√≥digo Unificado CJK a√±adido en las √∫ltimas versiones de Unicode.
 
-C<casefold()> devuelve nuevos campos para proporcionar tanto una interfaz m·s sencilla como una informaciÛn previa que faltaba. Los campos anteriores se mantienen para mantener la compatibilidad hacia atr·s. Se ha vuelto a poner informaciÛn especÌfica sobre puntos de cÛdigo Turkic.
+C<casefold()> devuelve nuevos campos para proporcionar tanto una interfaz m√°s sencilla como una informaci√≥n previa que faltaba. Los campos anteriores se mantienen para mantener la compatibilidad hacia atr√°s. Se ha vuelto a poner informaci√≥n espec√≠fica sobre puntos de c√≥digo Turkic.
 
-La documentaciÛn ha sido corregida y ampliada.
+La documentaci√≥n ha sido corregida y ampliada.
 
 =item C<UNIVERSAL>
 
-Actualizado desde la versiÛn 1.04 a la 1.05.
+Actualizado desde la versi√≥n 1.04 a la 1.05.
 
 =item C<Win32>
 
-Actualizado desde la versiÛn 0.34 a la 0.39.
+Actualizado desde la versi√≥n 0.34 a la 0.39.
 
 =item C<Win32API::File>
 
-Actualizado desde la versiÛn 0.1001_01 a la 0.1101.
+Actualizado desde la versi√≥n 0.1001_01 a la 0.1101.
 
 =item C<XSLoader>
 
-Actualizado desde la versiÛn 0.08 a la 0.10.
+Actualizado desde la versi√≥n 0.08 a la 0.10.
 
 =back
 
@@ -787,27 +787,27 @@ Actualizado desde la versiÛn 0.08 a la 0.10.
 
 =item F<h2ph>
 
-Ahora tambiÈn busca en C<include-fixed>, que es una reciente adiciÛn a la ruta de b˙squeda de gcc.
+Ahora tambi√©n busca en C<include-fixed>, que es una reciente adici√≥n a la ruta de b√∫squeda de gcc.
 
 =item F<h2xs>
 
 Ya no se trata incorrectamente los valores enum como macros (Daniel Burr).
 
-Ahora se manejan las constantes de estilo C++ (C<//>) correctamente en los enum. (Se usÛ un parche de Rainer Weikusat; Daniel Burr tambiÈn propuso un arreglo similar).
+Ahora se manejan las constantes de estilo C++ (C<//>) correctamente en los enum. (Se us√≥ un parche de Rainer Weikusat; Daniel Burr tambi√©n propuso un arreglo similar).
 
 =item F<perl5db.pl>
 
 Las subrutinas C<LVALUE> ahora funcionan dentro del depurador.
 
-El depurador ahora, correctamente, maneja el cachÈ de subrutinas constantes, y las plantillas de subrutina.
+El depurador ahora, correctamente, maneja el cach√© de subrutinas constantes, y las plantillas de subrutina.
 
 =item F<perlthanks>
 
-Perl 5.10.1 ha aÒadido una nueva utilidad F<perlthanks>, que es una variante de F<perlbug>, pero para el envÌo de informes de que no hay errores, a los autores y mantenedores de Perl. No obtener nada m·s que informes de error puede ser algo desmoralizante: veremos si esto cambia las cosas.
+Perl 5.10.1 ha a√±adido una nueva utilidad F<perlthanks>, que es una variante de F<perlbug>, pero para el env√≠o de informes de que no hay errores, a los autores y mantenedores de Perl. No obtener nada m√°s que informes de error puede ser algo desmoralizante: veremos si esto cambia las cosas.
 
 =back
 
-=head1 Nueva documentaciÛn
+=head1 Nueva documentaci√≥n
 
 =over 4
 
@@ -817,15 +817,15 @@ Contiene instrucciones para compilar perl para la plataforma Haiku.
 
 =item L<perlmroapi>
 
-Describe la nueva interfaz conectable de ”rdenes de ResoluciÛn de MÈtodo.
+Describe la nueva interfaz conectable de √ìrdenes de Resoluci√≥n de M√©todo.
 
 =item L<perlperf>
 
-Este documento, escrito por Richard Foley, ofrece una introducciÛn a la utilizaciÛn de tÈcnicas de rendimiento y optimizaciÛn que se pueden utilizar con especial referencia a los programas perl.
+Este documento, escrito por Richard Foley, ofrece una introducci√≥n a la utilizaci√≥n de t√©cnicas de rendimiento y optimizaci√≥n que se pueden utilizar con especial referencia a los programas perl.
 
 =item L<perlrepository>
 
-Describe cÛmo acceder al cÛdigo fuente de perl con el sistema de control de versiones I<git>.
+Describe c√≥mo acceder al c√≥digo fuente de perl con el sistema de control de versiones I<git>.
 
 =item L<perlthanks>
 
@@ -833,14 +833,14 @@ Esto describe la nueva utilidad F<perlthanks>.
 
 =back
 
-=head1 Cambios en la documentaciÛn actual
+=head1 Cambios en la documentaci√≥n actual
 
-Los grandes archivos C<Changes*> (que listaban todos los cambios realizados a perl en los ˙ltimos 18 aÒos) han sido eliminados y reemplazados por un pequeÒo archivo, tambiÈn llamado C<Changes>, que sÛlo explica cÛmo esa misma informaciÛn puede ser extraÌda del sistema de control de versiones git.
+Los grandes archivos C<Changes*> (que listaban todos los cambios realizados a perl en los √∫ltimos 18 a√±os) han sido eliminados y reemplazados por un peque√±o archivo, tambi√©n llamado C<Changes>, que s√≥lo explica c√≥mo esa misma informaci√≥n puede ser extra√≠da del sistema de control de versiones git.
 
-El archivo F<Porting/patching.pod> ha sido eliminado, ya que principalmente describe la interacciÛn con el antiguo repositorio basado en Perforce, que ya est· obsoleto.
-La informaciÛn que sigue siendo relevante ha sido movida a L<perlrepository>.
+El archivo F<Porting/patching.pod> ha sido eliminado, ya que principalmente describe la interacci√≥n con el antiguo repositorio basado en Perforce, que ya est√° obsoleto.
+La informaci√≥n que sigue siendo relevante ha sido movida a L<perlrepository>.
 
-L<perlapi>, L<perlintern>, L<perlmodlib> y L<perltoc> son ahora generados en tiempo de compilaciÛn, en lugar de ser empaquetados como parte de la distribuciÛn.
+L<perlapi>, L<perlintern>, L<perlmodlib> y L<perltoc> son ahora generados en tiempo de compilaci√≥n, en lugar de ser empaquetados como parte de la distribuci√≥n.
 
 =head1 Mejoras en el rendimiento
 
@@ -848,57 +848,57 @@ L<perlapi>, L<perlintern>, L<perlmodlib> y L<perltoc> son ahora generados en tie
 
 =item *
 
-Una nueva memoria cachÈ interna significa que C<isa()> ser·, a menudo, m·s r·pido.
+Una nueva memoria cach√© interna significa que C<isa()> ser√°, a menudo, m√°s r√°pido.
 
 =item *
 
-Bajo C<use locale>, la informaciÛn local relevante est· ahora almacenada en valores de sÛlo lectura, como la lista devuelta por C<keys %hash>. Esto hace a las operaciones como C<sort keys %hash> en el ·mbito de C<use locale> mucho m·s r·pidas.
+Bajo C<use locale>, la informaci√≥n local relevante est√° ahora almacenada en valores de s√≥lo lectura, como la lista devuelta por C<keys %hash>. Esto hace a las operaciones como C<sort keys %hash> en el √°mbito de C<use locale> mucho m√°s r√°pidas.
 
 =item *
 
-Ya no son llamados los mÈtodos C<DESTROY> vacÌos.
+Ya no son llamados los m√©todos C<DESTROY> vac√≠os.
 
 =back
 
-=head1 Mejoras en la instalaciÛn y configuraciÛn
+=head1 Mejoras en la instalaci√≥n y configuraci√≥n
 
-=head2 ReorganizaciÛn de F<ext/>
+=head2 Reorganizaci√≥n de F<ext/>
 
-La disposiciÛn de los directorios en F<ext> ha sido revisada. En concreto, todas las extensiones ahora son planas, y en el nivel superior, con la C</> en las rutas reemplazada por C<->, de modo que F<ext/Data/Dumper/> ahora es F<ext/Data-Dumper/>, etc. Los nombres de las extensiones, como se especifica en F<Configure>, y seg˙n lo informado por C<%Config::Config>, bajo las claves C<dynamic_ext>, C<known_extensions>, C<nonxs_ext> y C<static_ext> no han cambiado, y siguen utilizando C</>. Por lo tanto, este cambio no tendr· ning˙n efecto una vez se haya instalado perl. Sin embargo, C<Attribute::Handlers>, C<Safe> y C<mro> se han convertido en extensiones por derecho propio, por lo que si se ejecuta F<Configure> con opciones para especificar una lista exacta de las extensiones a ser compiladas, tendr· que cambiarla para tenerlo en cuenta.
+La disposici√≥n de los directorios en F<ext> ha sido revisada. En concreto, todas las extensiones ahora son planas, y en el nivel superior, con la C</> en las rutas reemplazada por C<->, de modo que F<ext/Data/Dumper/> ahora es F<ext/Data-Dumper/>, etc. Los nombres de las extensiones, como se especifica en F<Configure>, y seg√∫n lo informado por C<%Config::Config>, bajo las claves C<dynamic_ext>, C<known_extensions>, C<nonxs_ext> y C<static_ext> no han cambiado, y siguen utilizando C</>. Por lo tanto, este cambio no tendr√° ning√∫n efecto una vez se haya instalado perl. Sin embargo, C<Attribute::Handlers>, C<Safe> y C<mro> se han convertido en extensiones por derecho propio, por lo que si se ejecuta F<Configure> con opciones para especificar una lista exacta de las extensiones a ser compiladas, tendr√° que cambiarla para tenerlo en cuenta.
 
-Por 5.10.2, se prevÈ que muchos mÛdulos con una doble vida se muevan desde F<lib> a F<ext>; de nuevo, esto no tendr· ning˙n efecto en un perl ya instalado, pero importar· si llama a F<Configure> con una lista de extensiones pre-enlatadas para ser compiladas.
+Por 5.10.2, se prev√© que muchos m√≥dulos con una doble vida se muevan desde F<lib> a F<ext>; de nuevo, esto no tendr√° ning√∫n efecto en un perl ya instalado, pero importar√° si llama a F<Configure> con una lista de extensiones pre-enlatadas para ser compiladas.
 
-=head2 Mejoras en la configuraciÛn
+=head2 Mejoras en la configuraci√≥n
 
-Si C<vendorlib> y C<vendorarch> son iguales, entonces sÛlo se agregan a C<@INC> una vez.
+Si C<vendorlib> y C<vendorarch> son iguales, entonces s√≥lo se agregan a C<@INC> una vez.
 
 C<$Config{usedevel}> y el C<PERL_USE_DEVEL> de nivel C se definen ahora si perl es compilado con C<-Dusedevel>.
 
-F<Configure> permitir· el uso de C<-fstack-protector>, para proporcionar protecciÛn contra los ataques de destrozo de la pila, si el compilador lo soporta.
+F<Configure> permitir√° el uso de C<-fstack-protector>, para proporcionar protecci√≥n contra los ataques de destrozo de la pila, si el compilador lo soporta.
 
-F<Configure> ahora determinar· el correcto prototipado para las funciones reentrantes, y para C<gconvert>, si est· usando un compilador de C++ en lugar de un compilador de C.
+F<Configure> ahora determinar√° el correcto prototipado para las funciones reentrantes, y para C<gconvert>, si est√° usando un compilador de C++ en lugar de un compilador de C.
 
-En Unix, si se compila a partir de un ·rbol conteniendo un repositorio git, el proceso de configuraciÛn anotar· el hash de confirmaciÛn que haya obtenido, para mostrarlo en la salida de C<perl -v> y C<perl -V>. Confirmaciones no almacenadas son autom·ticamente agregadas a la lista de parches locales mostrada por C<perl -V>.
+En Unix, si se compila a partir de un √°rbol conteniendo un repositorio git, el proceso de configuraci√≥n anotar√° el hash de confirmaci√≥n que haya obtenido, para mostrarlo en la salida de C<perl -v> y C<perl -V>. Confirmaciones no almacenadas son autom√°ticamente agregadas a la lista de parches locales mostrada por C<perl -V>.
 
-=head2 Mejoras en la compilaciÛn
+=head2 Mejoras en la compilaci√≥n
 
-Como parte de la simplificaciÛn de la F<ext>, todas las extensiones en todas las plataformas se compilan por F<make_ext.pl>. Esto sustituye al F<ext/util/make_ext>, especÌfico de Unix; F<make_ext.com>, especÌfico de VMS; y F<win32/buildext.pl>, especÌfico de Win32.
+Como parte de la simplificaci√≥n de la F<ext>, todas las extensiones en todas las plataformas se compilan por F<make_ext.pl>. Esto sustituye al F<ext/util/make_ext>, espec√≠fico de Unix; F<make_ext.com>, espec√≠fico de VMS; y F<win32/buildext.pl>, espec√≠fico de Win32.
 
-=head2 Cambios especÌficos de cada plataforma
+=head2 Cambios espec√≠ficos de cada plataforma
 
 =over 4
 
 =item AIX
 
-Eliminado F<libbsd> de AIX 5L y 6.1. De F<libbsd>, sÛlo se utilizaba flock().
+Eliminado F<libbsd> de AIX 5L y 6.1. De F<libbsd>, s√≥lo se utilizaba flock().
 
-Eliminado F<libgdbm> de AIX 5L y 6.1. El F<libgdbm> es entregado como un paquete opcional con la caja de herramientas AIX. Por desgracia, la versiÛn de 64 bits est· rota.
+Eliminado F<libgdbm> de AIX 5L y 6.1. El F<libgdbm> es entregado como un paquete opcional con la caja de herramientas AIX. Por desgracia, la versi√≥n de 64 bits est√° rota.
 
-Cambios adecuados significa que AIX 4.2 deberÌa funcionar de nuevo.
+Cambios adecuados significa que AIX 4.2 deber√≠a funcionar de nuevo.
 
 =item Cygwin
 
-En Cygwin ahora quitamos el ˙ltimo n˙mero de la DLL. Este ha sido el comportamiento en la compilaciÛn de cygwin.com desde hace aÒos. Los archivos de pistas han sido actualizados.
+En Cygwin ahora quitamos el √∫ltimo n√∫mero de la DLL. Este ha sido el comportamiento en la compilaci√≥n de cygwin.com desde hace a√±os. Los archivos de pistas han sido actualizados.
 
 =item FreeBSD
 
@@ -906,7 +906,7 @@ Los archivos de pistas ahora identifican las bibliotecas correctas de enhebrado 
 
 =item Irix
 
-Ahora trabajamos en torno a un fallo extraÒo del preprocesador en el compilador del Irix 6.5: C<cc -E -> por desgracia, entra en el modo K&R, pero C<cc -E file.c> no lo hace.
+Ahora trabajamos en torno a un fallo extra√±o del preprocesador en el compilador del Irix 6.5: C<cc -E -> por desgracia, entra en el modo K&R, pero C<cc -E file.c> no lo hace.
 
 =item Haiku
 
@@ -930,18 +930,18 @@ Ahora hay soporte para Symbian S60 3.2 SDK y S60 5.0 SDK.
 
 =item Win32
 
-Un mejor manejo de ventana de mensajes significa que los mensajes C<alarm> y C<kill> ya no ser·n desechados cuando ocurran condiciones de carrera.
+Un mejor manejo de ventana de mensajes significa que los mensajes C<alarm> y C<kill> ya no ser√°n desechados cuando ocurran condiciones de carrera.
 
 =item VMS
 
-Lecturas de los archivos temporales que estÈn en la memoria de C<PerlIO::scalar> fallan si C<$/> se estableciÛ a una referencia numÈrica (para indicar lecturas estilo registro).
+Lecturas de los archivos temporales que est√©n en la memoria de C<PerlIO::scalar> fallan si C<$/> se estableci√≥ a una referencia num√©rica (para indicar lecturas estilo registro).
 Esto ha sido arreglado.
 
 VMS ahora soporta C<getgrgid>.
 
-Muchas mejoras y limpiezas se han hecho para el manejo y conversiÛn de cÛdigo de nombres de archivos en VMS.
+Muchas mejoras y limpiezas se han hecho para el manejo y conversi√≥n de c√≥digo de nombres de archivos en VMS.
 
-Habilitando el nombre lÛgico C<PERL_VMS_POSIX_EXIT> se codifica un estado de salida POSIX en un valor de condiciÛn VMS para una mejor interacciÛn con el shell bash de GNV y otras utilerÌas que dependen de los valores de salida de POSIX.  Vea L<perlvms/"$?"> para los detalles.
+Habilitando el nombre l√≥gico C<PERL_VMS_POSIX_EXIT> se codifica un estado de salida POSIX en un valor de condici√≥n VMS para una mejor interacci√≥n con el shell bash de GNV y otras utiler√≠as que dependen de los valores de salida de POSIX.  Vea L<perlvms/"$?"> para los detalles.
 
 =back
 
@@ -951,15 +951,15 @@ Habilitando el nombre lÛgico C<PERL_VMS_POSIX_EXIT> se codifica un estado de sal
 
 =item *
 
-5.10.0, inadvertidamente, desactivaba una optimizaciÛn, lo que provocÛ una caÌda de rendimiento apreciable en la asignaciÛn de listas, que a menudo se utiliza para asignar par·metros de funciÛn a C<@_>. La optimizaciÛn ha sido reinstalado, y arreglada la regresiÛn de rendimiento.
+5.10.0, inadvertidamente, desactivaba una optimizaci√≥n, lo que provoc√≥ una ca√≠da de rendimiento apreciable en la asignaci√≥n de listas, que a menudo se utiliza para asignar par√°metros de funci√≥n a C<@_>. La optimizaci√≥n ha sido reinstalado, y arreglada la regresi√≥n de rendimiento.
 
 =item *
 
-PÈrdida de memoria arreglada en C<while (1) { map 1, 1 }> [RT #53038].
+P√©rdida de memoria arreglada en C<while (1) { map 1, 1 }> [RT #53038].
 
 =item *
 
-Algunos potenciales volcados del n˙cleo en PerlIO arreglados [RT #57322,54828].
+Algunos potenciales volcados del n√∫cleo en PerlIO arreglados [RT #57322,54828].
 
 =item *
 
@@ -967,7 +967,7 @@ El depurador ahora trabaja con subrutinas de tipo I<ivalor>.
 
 =item *
 
-El comando C<m> del depurador estaba roto en mÛdulos que definÌan constantes [RT #61222].
+El comando C<m> del depurador estaba roto en m√≥dulos que defin√≠an constantes [RT #61222].
 
 =item *
 
@@ -975,39 +975,39 @@ C<crypt> y la cadena complementaria pueden devolver valores contaminados para ar
 
 =item *
 
-La opciÛn de lÌnea de comandos C<-i>I<.sufijo> ahora recrea el archivo usando permisos restringidos, antes de cambiar su modo para que coincida con el archivo original. Esto elimina una potencial condiciÛn de carrera [RT #60904].
+La opci√≥n de l√≠nea de comandos C<-i>I<.sufijo> ahora recrea el archivo usando permisos restringidos, antes de cambiar su modo para que coincida con el archivo original. Esto elimina una potencial condici√≥n de carrera [RT #60904].
 
 =item *
 
-En algunos sistemas Unix, el valor de C<$?> no tendr·n puesto a 1 el bit superior (C<$? & 128>) incluso si el hijo provoca un volcado del n˙cleo.
+En algunos sistemas Unix, el valor de C<$?> no tendr√°n puesto a 1 el bit superior (C<$? & 128>) incluso si el hijo provoca un volcado del n√∫cleo.
 
 =item *
 
-En algunas circunstancias, $^R, incorrectamente, podrÌa convertirse en indefinido [RT #57042].
+En algunas circunstancias, $^R, incorrectamente, podr√≠a convertirse en indefinido [RT #57042].
 
 =item *
 
-(XS) En diversas funciones hash, pasando un valor hash pre-calculado cuando la clave est· en UTF-8, podrÌa dar lugar a una b˙squeda incorrecta.
+(XS) En diversas funciones hash, pasando un valor hash pre-calculado cuando la clave est√° en UTF-8, podr√≠a dar lugar a una b√∫squeda incorrecta.
 
 =item *
 
-(XS) Incluyendo F<XSUB.h> antes que F<perl.h> dio un error en tiempo de compilaciÛn [RT #57176].
+(XS) Incluyendo F<XSUB.h> antes que F<perl.h> dio un error en tiempo de compilaci√≥n [RT #57176].
 
 =item *
 
-C<< $object-E<gt>isa('Foo') >> podrÌa reportar falso si el paquete C<Foo> no existe, incluso si el objeto de C<@ISA> contenÌa C<Foo>.
+C<< $object-E<gt>isa('Foo') >> podr√≠a reportar falso si el paquete C<Foo> no existe, incluso si el objeto de C<@ISA> conten√≠a C<Foo>.
 
 =item *
 
-Varios errores en el nuevo cÛdigo mro en 5.10.0, activados al manipular C<@ISA>, han sido encontrados y arreglados.
+Varios errores en el nuevo c√≥digo mro en 5.10.0, activados al manipular C<@ISA>, han sido encontrados y arreglados.
 
 =item *
 
-Operaciones bit a bit en referencias podrÌa hacer caer el intÈrprete, por ejemplo, C<$x=\$y; $x |= "foo"> [RT #54956].
+Operaciones bit a bit en referencias podr√≠a hacer caer el int√©rprete, por ejemplo, C<$x=\$y; $x |= "foo"> [RT #54956].
 
 =item *
 
-Patrones que incluyan alternancia pueden ser sensibles a la representaciÛn UTF-8 interna; por ejemplo,
+Patrones que incluyan alternancia pueden ser sensibles a la representaci√≥n UTF-8 interna; por ejemplo,
 
     my $byte = chr(192);
     my $utf8 = chr(192); utf8::upgrade($utf8);
@@ -1015,7 +1015,7 @@ Patrones que incluyan alternancia pueden ser sensibles a la representaciÛn UTF-8
 
 =item *
 
-Dentro de archivos de cÛdigo fuente Perl codificados en UTF8 (es decir, cuando C<use utf8> est· en vigor), las cadenas literales entrecomilladas dobles podrÌan resultar daÒadas cuando un C<\xNN>, C<\0NNN> o C<\N{}> es seguido por un car·cter literal con un valor ordinal superior a 255 [RT # 59908].
+Dentro de archivos de c√≥digo fuente Perl codificados en UTF8 (es decir, cuando C<use utf8> est√° en vigor), las cadenas literales entrecomilladas dobles podr√≠an resultar da√±adas cuando un C<\xNN>, C<\0NNN> o C<\N{}> es seguido por un car√°cter literal con un valor ordinal superior a 255 [RT # 59908].
 
 =item *
 
@@ -1023,11 +1023,11 @@ C<B::Deparse> fallaba al analizar diversas construcciones: C<readpipe STRING> [R
 
 =item *
 
-Utilizando C<setpgrp()> sin argumentos podrÌa corromper la pila de perl.
+Utilizando C<setpgrp()> sin argumentos podr√≠a corromper la pila de perl.
 
 =item *
 
-La forma de bloque de C<eval> ahora es especÌficamente capturable por C<Safe> y C<ops>.  Anteriormente fue errÛneamente considerado como una cadena C<eval>.
+La forma de bloque de C<eval> ahora es espec√≠ficamente capturable por C<Safe> y C<ops>.  Anteriormente fue err√≥neamente considerado como una cadena C<eval>.
 
 =item *
 
@@ -1035,13 +1035,13 @@ En 5.10.0, los dos caracteres C<[~> fueron se a veces analizados como el operado
 
 =item *
 
-En 5.10.0, el cuantificador C<*> en los patrones fue tratado a veces como C<{0,32767}> [RT #60034, #60464]. Por ejemplo, esta b˙squeda podrÌa fallar:
+En 5.10.0, el cuantificador C<*> en los patrones fue tratado a veces como C<{0,32767}> [RT #60034, #60464]. Por ejemplo, esta b√∫squeda podr√≠a fallar:
 
     ("ab" x 32768) =~ /^(ab)*$/
 
 =item *
 
-C<shmget> estaba limitado a un tamaÒo de segmento de 32 bits en SO de 64 bits [RT #63924].
+C<shmget> estaba limitado a un tama√±o de segmento de 32 bits en SO de 64 bits [RT #63924].
 
 =item *
 
@@ -1055,13 +1055,13 @@ En Windows, C<'.\foo'> y C<'..\foo'> eran tratados de manera diferente a C<'./fo
 
 =item *
 
-Asignando un formato a un expansor podrÌa corromper el formato; por ejemplo:
+Asignando un formato a un expansor podr√≠a corromper el formato; por ejemplo:
 
-     *bar=*foo{FORMAT}; # el formato foo ahora est· mal
+     *bar=*foo{FORMAT}; # el formato foo ahora est√° mal
 
 =item *
 
-El intento de convertir un typeglob a una cadena o un n˙mero podrÌa causar un error de aserciÛn. Ahora se genera un mensaje de error correcto, C<Can't coerce GLOB to I<$type>>.
+El intento de convertir un typeglob a una cadena o un n√∫mero podr√≠a causar un error de aserci√≥n. Ahora se genera un mensaje de error correcto, C<Can't coerce GLOB to I<$type>>.
 
 =item *
 
@@ -1069,19 +1069,19 @@ Bajo C<use filetest 'access'>, C<-x> estaba utiliza un modo de acceso incorrecto
 
 =item *
 
-C<length> en un escalar enlazado que devolvÌa un valor Unicode, podrÌa no ser correcto, en una primera vez. Esto ha sido corregido.
+C<length> en un escalar enlazado que devolv√≠a un valor Unicode, podr√≠a no ser correcto, en una primera vez. Esto ha sido corregido.
 
 =item *
 
-El uso de un array C<tie> en el interior de un array C<tie> podrÌa provocar SEGV. Esto ha sido corregido. [RT #51636]
+El uso de un array C<tie> en el interior de un array C<tie> podr√≠a provocar SEGV. Esto ha sido corregido. [RT #51636]
 
 =item *
 
-Una condiciÛn de carrera dentro de C<PerlIOStdio_close()> ha sido identificado y solucionado. Esto solÌa provocar diversos problemas de subprocesamiento, incluyendo SEGV.
+Una condici√≥n de carrera dentro de C<PerlIOStdio_close()> ha sido identificado y solucionado. Esto sol√≠a provocar diversos problemas de subprocesamiento, incluyendo SEGV.
 
 =item *
 
-En C<unpack>, el uso de grupos C<()> en contexto escalar, hacÌan que fueran internamente colocados en una lista en la pila del intÈrprete, que se manifiesta de varias maneras, incluyendo SEGV.  Esto ha sido arreglado [RT #50256].
+En C<unpack>, el uso de grupos C<()> en contexto escalar, hac√≠an que fueran internamente colocados en una lista en la pila del int√©rprete, que se manifiesta de varias maneras, incluyendo SEGV.  Esto ha sido arreglado [RT #50256].
 
 =item *
 
@@ -1090,24 +1090,24 @@ Han sido todos corregidos.
 
 =item *
 
-Una optimizaciÛn 5.10.0 para limpiar la pila temporal en el bucle implÌcito C<s///ge> ha sido revertido, ya que resultÛ ser la causa de los extraÒos errores en partes aparentemente sin relaciÛn con el intÈrprete [confirmaciÛn ef0d4e17921ee3de].
+Una optimizaci√≥n 5.10.0 para limpiar la pila temporal en el bucle impl√≠cito C<s///ge> ha sido revertido, ya que result√≥ ser la causa de los extra√±os errores en partes aparentemente sin relaci√≥n con el int√©rprete [confirmaci√≥n ef0d4e17921ee3de].
 
 =item *
 
-Ahora son correctos los n˙meros de lÌnea de advertencias dentro de C<elsif>.
+Ahora son correctos los n√∫meros de l√≠nea de advertencias dentro de C<elsif>.
 
 =item *
 
-El operador C<..> ahora funciona correctamente con rangos cuyos extremos se encuentran en o cerca de los valores de los n˙meros enteros m·s pequeÒos y m·s grandes.
+El operador C<..> ahora funciona correctamente con rangos cuyos extremos se encuentran en o cerca de los valores de los n√∫meros enteros m√°s peque√±os y m√°s grandes.
 
 =item *
 
-C<binmode STDIN, ':raw'> podrÌa dar lugar a fallos de segmentaciÛn en algunas plataformas.
+C<binmode STDIN, ':raw'> podr√≠a dar lugar a fallos de segmentaci√≥n en algunas plataformas.
 Esto ha sido corregido [RT #54828].
 
 =item *
 
-Un error del tipo por-uno-menos hacÌa que C<index $str, ...> era ejecutado efectivamente como C<index "$str\0", ...>. Esto ha sido corregido [RT #53746].
+Un error del tipo por-uno-menos hac√≠a que C<index $str, ...> era ejecutado efectivamente como C<index "$str\0", ...>. Esto ha sido corregido [RT #53746].
 
 =item *
 
@@ -1115,64 +1115,64 @@ Fugas memoria asociados con capturas con nombre en expresiones regulares han sid
 
 =item *
 
-Una referencia dÈbil a un hash podrÌa perderse. Esto afectaba a C<DBI> [RT #56908].
+Una referencia d√©bil a un hash podr√≠a perderse. Esto afectaba a C<DBI> [RT #56908].
 
 =item *
 
-Usando (?|) en una expresiÛn regular podrÌa causar una violaciÛn de segmento [RT #59734].
+Usando (?|) en una expresi√≥n regular podr√≠a causar una violaci√≥n de segmento [RT #59734].
 
 =item *
 
-El uso de UTF-8 C<tr//> dentro de una clausura podrÌa causar una violaciÛn de segmento [RT #61520].
+El uso de UTF-8 C<tr//> dentro de una clausura podr√≠a causar una violaci√≥n de segmento [RT #61520].
 
 =item *
 
-Llamando a C<sv_chop()> o, de lo contrario, la actualizaciÛn de un SV podrÌa resultar en un acceso desalineado de 64 bits en la arquitectura SPARC [RT #60574].
+Llamando a C<sv_chop()> o, de lo contrario, la actualizaci√≥n de un SV podr√≠a resultar en un acceso desalineado de 64 bits en la arquitectura SPARC [RT #60574].
 
 =item *
 
-En la versiÛn 5.10.0, C<inc_version_list> podrÌa, incorrectamente, listar C<5.10.*> despuÈs de C<5.8.*>; esto afectÛ al orden de b˙squeda de C<@INC> [RT #67628].
+En la versi√≥n 5.10.0, C<inc_version_list> podr√≠a, incorrectamente, listar C<5.10.*> despu√©s de C<5.8.*>; esto afect√≥ al orden de b√∫squeda de C<@INC> [RT #67628].
 
 =item *
 
-En 5.10.0, C<pack "a*", $tainted_value> devolvÌa un valor no contaminado [RT # 52552].
+En 5.10.0, C<pack "a*", $tainted_value> devolv√≠a un valor no contaminado [RT # 52552].
 
 =item *
 
-En 5.10.0, C<printf> y C<sprintf> podrÌan producir el error fatal C<panic: utf8_mg_pos_cache_update> a la hora de imprimir caracteres UTF-8 [RT #62666].
+En 5.10.0, C<printf> y C<sprintf> podr√≠an producir el error fatal C<panic: utf8_mg_pos_cache_update> a la hora de imprimir caracteres UTF-8 [RT #62666].
 
 =item *
 
-En la versiÛn 5.10.0, un mÈtodo C<AUTOLOAD> creado din·micamente podrÌa ser pasado por alto (problema con el cachÈ de mÈtodos) [RT #60220,60232].
+En la versi√≥n 5.10.0, un m√©todo C<AUTOLOAD> creado din√°micamente podr√≠a ser pasado por alto (problema con el cach√© de m√©todos) [RT #60220,60232].
 
 =item *
 
-En la versiÛn 5.10.0, una combinaciÛn de C<use feature> y C<//ee> podrÌa causar una fuga de memoria [RT #63110].
+En la versi√≥n 5.10.0, una combinaci√≥n de C<use feature> y C<//ee> podr√≠a causar una fuga de memoria [RT #63110].
 
 =item *
 
-C<-C> en la lÌnea shebang (C<#!>) est· una vez m·s permitido si tambiÈn es especificado en la lÌnea de comandos. C<-C> en la lÌnea shebang era una muda no-operaciÛn I<si> no estaba tambiÈn en la lÌnea de comandos, por lo que Perl 5.10.0 lo rechazaba, lo que provocaba la ruptura de algunos scripts. Ahora perl comprueba si est· tambiÈn en la lÌnea de comandos, y sÛlo muere si no es asÌ [RT #67880].
+C<-C> en la l√≠nea shebang (C<#!>) est√° una vez m√°s permitido si tambi√©n es especificado en la l√≠nea de comandos. C<-C> en la l√≠nea shebang era una muda no-operaci√≥n I<si> no estaba tambi√©n en la l√≠nea de comandos, por lo que Perl 5.10.0 lo rechazaba, lo que provocaba la ruptura de algunos scripts. Ahora perl comprueba si est√° tambi√©n en la l√≠nea de comandos, y s√≥lo muere si no es as√≠ [RT #67880].
 
 =item *
 
-En 5.10.0, ciertos tipos de expresiones regulares re-entrantes podrÌan hacer caer, o causar un fallo en la siguiente aserciÛn [RT #60508]:
+En 5.10.0, ciertos tipos de expresiones regulares re-entrantes podr√≠an hacer caer, o causar un fallo en la siguiente aserci√≥n [RT #60508]:
 
     Assertion rx->sublen >= (s - rx->subbeg) + i failed
 
 
 =back
 
-=head1 DiagnÛsticos nuevos y cambiados
+=head1 Diagn√≥sticos nuevos y cambiados
 
 =over 4
 
 =item C<panic: sv_chop %s>
 
-Este nuevo error fatal se produce cuando a la rutina de C C<Perl_sv_chop()> se le pasaba una posiciÛn que no estaba dentro del b˙fer de cadena del escalar. Esto podrÌa haber sido causado por cÛdigo XS errÛneo, y en este punto, la recuperaciÛn ya no es posible.
+Este nuevo error fatal se produce cuando a la rutina de C C<Perl_sv_chop()> se le pasaba una posici√≥n que no estaba dentro del b√∫fer de cadena del escalar. Esto podr√≠a haber sido causado por c√≥digo XS err√≥neo, y en este punto, la recuperaci√≥n ya no es posible.
 
 =item C<Can't locate package %s for the parents of %s>
 
-Esta advertencia ha sido eliminada. En general, sÛlo se generaba en conjunto con otras advertencias, y su eliminaciÛn permitÌa aÒadir una optimizaciÛn de b˙squeda de ISA.
+Esta advertencia ha sido eliminada. En general, s√≥lo se generaba en conjunto con otras advertencias, y su eliminaci√≥n permit√≠a a√±adir una optimizaci√≥n de b√∫squeda de ISA.
 
 =item C<v-string in use/require is non-portable>
 
@@ -1190,35 +1190,35 @@ Ahora es posible cambiar el umbral de profundidad de esta advertencia de la de p
 
 =item *
 
-Las citas de J.R.R. Tolkien al principio del archivo fuente en C han sido verificadas y aÒadido referencias apropiadas, gracias a un parche de Tom Christiansen.
+Las citas de J.R.R. Tolkien al principio del archivo fuente en C han sido verificadas y a√±adido referencias apropiadas, gracias a un parche de Tom Christiansen.
 
 =item *
 
-C<vcroak()> ahora acepta un primer argumento nulo. Adem·s, se realizÛ una auditorÌa completa de las anotaciones "not NULL" del compilador, y otras funciones varias internas se corrigieron.
+C<vcroak()> ahora acepta un primer argumento nulo. Adem√°s, se realiz√≥ una auditor√≠a completa de las anotaciones "not NULL" del compilador, y otras funciones varias internas se corrigieron.
 
 =item *
 
-Nuevos macros C<dSAVEDERRNO>, C<dSAVE_ERRNO>, C<SAVE_ERRNO>, C<RESTORE_ERRNO> han sido aÒadidos para formalizar el almacenamiento temporal de la variable C<errno>.
+Nuevos macros C<dSAVEDERRNO>, C<dSAVE_ERRNO>, C<SAVE_ERRNO>, C<RESTORE_ERRNO> han sido a√±adidos para formalizar el almacenamiento temporal de la variable C<errno>.
 
 =item *
 
-La funciÛn C<Perl_sv_insert_flags> ha sido aÒadida para aumentar C<Perl_sv_insert>.
+La funci√≥n C<Perl_sv_insert_flags> ha sido a√±adida para aumentar C<Perl_sv_insert>.
 
 =item *
 
-La funciÛn C<Perl_newSV_type(type)> ha sido aÒadida, lo que equivale a C<Perl_newSV()> seguido por C<Perl_sv_upgrade(type)>.
+La funci√≥n C<Perl_newSV_type(type)> ha sido a√±adida, lo que equivale a C<Perl_newSV()> seguido por C<Perl_sv_upgrade(type)>.
 
 =item *
 
-La funciÛn C<Perl_newSVpvn_flags()> ha sido aÒadida, lo que equivale a C<Perl_newSVpvn()> y luego realizando las acciones pertinentes en la bandera.
+La funci√≥n C<Perl_newSVpvn_flags()> ha sido a√±adida, lo que equivale a C<Perl_newSVpvn()> y luego realizando las acciones pertinentes en la bandera.
 
-Actualmente est·n soportados dos bit de esa bandera.
+Actualmente est√°n soportados dos bit de esa bandera.
 
 =over 4
 
 =item C<SVf_UTF8>
 
-Esto llamar· a C<SvUTF8_on()> por usted. (Note que esto no convierte una secuencia de caracteres ISO 8859-1 a UTF-8). Un envoltorio, C<newSVpvn_utf8()> est· disponible para ello.
+Esto llamar√° a C<SvUTF8_on()> por usted. (Note que esto no convierte una secuencia de caracteres ISO 8859-1 a UTF-8). Un envoltorio, C<newSVpvn_utf8()> est√° disponible para ello.
 
 =item C<SVs_TEMP>
 
@@ -1226,11 +1226,11 @@ Llama a C<sv_2mortal()> en el nuevo SV.
 
 =back
 
-TambiÈn hay un envoltorio que toma cadenas constantes, C<newSVpvs_flags()> .
+Tambi√©n hay un envoltorio que toma cadenas constantes, C<newSVpvs_flags()> .
 
 =item *
 
-La funciÛn C<Perl_croak_xs_usage> ha sido aÒadida como una envoltura para la C<Perl_croak>.
+La funci√≥n C<Perl_croak_xs_usage> ha sido a√±adida como una envoltura para la C<Perl_croak>.
 
 =item *
 
@@ -1238,70 +1238,70 @@ Las funciones C<PerlIO_find_layer> y C<PerlIO_list_alloc> ahora son exportadas.
 
 =item *
 
-C<PL_na> ha sido exterminada del cÛdigo principal, reemplazado por STRLEN locales temporales, o llamadas C<*_nolen()>. Cualquiera de estos enfoques es m·s r·pido que C<PL_na>, que es una desreferencia de un puntero en la estructura del intÈrprete bajo ithreads, y una variable global en caso contrario.
+C<PL_na> ha sido exterminada del c√≥digo principal, reemplazado por STRLEN locales temporales, o llamadas C<*_nolen()>. Cualquiera de estos enfoques es m√°s r√°pido que C<PL_na>, que es una desreferencia de un puntero en la estructura del int√©rprete bajo ithreads, y una variable global en caso contrario.
 
 =item *
 
-C<Perl_mg_free()> solÌa dejar la memoria libre accesible a travÈs de SvMAGIC(), en el escalar. Ahora actualiza la lista enlazada para eliminar cada pieza de la magia a medida de que es liberada.
+C<Perl_mg_free()> sol√≠a dejar la memoria libre accesible a trav√©s de SvMAGIC(), en el escalar. Ahora actualiza la lista enlazada para eliminar cada pieza de la magia a medida de que es liberada.
 
 =item *
 
-Bajo ithreads, ahora se actualiza el contador de referencias de la expresiÛn regular en C<PL_reg_curpm>. Esto elimina una gran cantidad de soluciones hacker para hacer frente a un contador de referencias mal sincronizado.
+Bajo ithreads, ahora se actualiza el contador de referencias de la expresi√≥n regular en C<PL_reg_curpm>. Esto elimina una gran cantidad de soluciones hacker para hacer frente a un contador de referencias mal sincronizado.
 
 =item *
 
-C<Perl_mg_magical()> podrÌa, a veces errÛneamente, activar C<SvRMAGICAL()>.
+C<Perl_mg_magical()> podr√≠a, a veces err√≥neamente, activar C<SvRMAGICAL()>.
 Esto ha sido corregido.
 
 =item *
 
-Las banderas I<p˙blicas> IV y NV, ahora no son establecidas si el valor de la cadena tiene "basura" detr·s. Este comportamiento es coherente con el no establecimiento de las banderas IV o NV si el valor est· fuera del rango para ese tipo.
+Las banderas I<p√∫blicas> IV y NV, ahora no son establecidas si el valor de la cadena tiene "basura" detr√°s. Este comportamiento es coherente con el no establecimiento de las banderas IV o NV si el valor est√° fuera del rango para ese tipo.
 
 =item *
 
-Se ha agregado rastreo de asignaciÛn SV a los diagnÛsticos habilitados por C<-Dm>.
-El trazado puede alternativamente salir vÌa el mecanismo de C<PERL_MEM_LOG>, si esto fue activado cuando el binario F<perl> fue compilado.
+Se ha agregado rastreo de asignaci√≥n SV a los diagn√≥sticos habilitados por C<-Dm>.
+El trazado puede alternativamente salir v√≠a el mecanismo de C<PERL_MEM_LOG>, si esto fue activado cuando el binario F<perl> fue compilado.
 
 =item *
 
-Usos de C<Nullav>, C<Nullcv>, C<Nullhv>, C<Nullop>, C<Nullsv>, etc, han sido sustituidos por C<NULL> en el cÛdigo principal, y en los mÛdulos sin vida dual, ya que C<NULL> es m·s claro para quienes no est·n familiarizados con el cÛdigo principal.
+Usos de C<Nullav>, C<Nullcv>, C<Nullhv>, C<Nullop>, C<Nullsv>, etc, han sido sustituidos por C<NULL> en el c√≥digo principal, y en los m√≥dulos sin vida dual, ya que C<NULL> es m√°s claro para quienes no est√°n familiarizados con el c√≥digo principal.
 
 =item *
 
-Una macro C<MUTABLE_PTR(p)> ha sido aÒadida, que en un (no pedante) gcc no convertir· en C<const>, devolviendo un C<void *>. Macros C<MUTABLE_SV(av)>, C<MUTABLE_SV(cv)>, etc, se basan en esto, convirtiendo a C<AV *>, etc, sin convertir C<const>. Esto permite adecuados tiempos de compilaciÛn de auditorÌa de la veracidad de C<const> en el n˙cleo, y ayudÛ a descubrir algunos errores (ahora arreglados).
+Una macro C<MUTABLE_PTR(p)> ha sido a√±adida, que en un (no pedante) gcc no convertir√° en C<const>, devolviendo un C<void *>. Macros C<MUTABLE_SV(av)>, C<MUTABLE_SV(cv)>, etc, se basan en esto, convirtiendo a C<AV *>, etc, sin convertir C<const>. Esto permite adecuados tiempos de compilaci√≥n de auditor√≠a de la veracidad de C<const> en el n√∫cleo, y ayud√≥ a descubrir algunos errores (ahora arreglados).
 
 =item *
 
-Macros C<mPUSHs()> y C<mXPUSHs()> han sido aÒadidas, para meter SV en la pila y hacerlos mortales.
+Macros C<mPUSHs()> y C<mXPUSHs()> han sido a√±adidas, para meter SV en la pila y hacerlos mortales.
 
 =item *
 
-El uso de la estructura privada C<mro_meta> ha cambiado ligeramente. De todos modos, nada fuera del n˙cleo debe acceder a Èl de manera directa.
+El uso de la estructura privada C<mro_meta> ha cambiado ligeramente. De todos modos, nada fuera del n√∫cleo debe acceder a √©l de manera directa.
 
 =item *
 
-Una nueva herramienta, F<Porting/expand-macro.pl> ha sido aÒadida, que permite ver cÛmo una macro del preprocesador C ser· ampliada cuando sea compilada.
-Esto es ˙til cuando se trata de descifrar el infierno de macros del que perl goza.
+Una nueva herramienta, F<Porting/expand-macro.pl> ha sido a√±adida, que permite ver c√≥mo una macro del preprocesador C ser√° ampliada cuando sea compilada.
+Esto es √∫til cuando se trata de descifrar el infierno de macros del que perl goza.
 
 =back
 
 =head1 Nuevas pruebas
 
-Muchos mÛdulos actualizados desde CPAN incorporan nuevas pruebas.
+Muchos m√≥dulos actualizados desde CPAN incorporan nuevas pruebas.
 
-Varias pruebas que tienen el potencial de colgarse para siempre en caso de fallo, ahora incorporan una funcionalidad "perro guardi·n" que les matar· despuÈs de un tiempo, lo que ayuda a asegurar que C<make test> y C<make test_harness> se ejecutan completamente de forma autom·tica. (Jerry Hedden).
+Varias pruebas que tienen el potencial de colgarse para siempre en caso de fallo, ahora incorporan una funcionalidad "perro guardi√°n" que les matar√° despu√©s de un tiempo, lo que ayuda a asegurar que C<make test> y C<make test_harness> se ejecutan completamente de forma autom√°tica. (Jerry Hedden).
 
-Algunas pruebas b·sicas especÌficas han sido aÒadidas:
+Algunas pruebas b√°sicas espec√≠ficas han sido a√±adidas:
 
 =over 4
 
 =item t/comp/retainedlines.t
 
-Comprueba que el depurador puede mantener lÌneas de cÛdigo fuente desde C<eval>.
+Comprueba que el depurador puede mantener l√≠neas de c√≥digo fuente desde C<eval>.
 
 =item t/io/perlio_fail.t
 
-Comprueba que fallan capas errÛneas.
+Comprueba que fallan capas err√≥neas.
 
 =item t/io/perlio_leaks.t
 
@@ -1317,7 +1317,7 @@ Pruebas generales PerlIO.
 
 =item t/io/pvbm.t
 
-Comprueba que no hay ninguna interacciÛn inesperada entre los tipos internos C<PVBM> y C<PVGV>.
+Comprueba que no hay ninguna interacci√≥n inesperada entre los tipos internos C<PVBM> y C<PVGV>.
 
 =item t/mro/package_aliases.t
 
@@ -1329,11 +1329,11 @@ Pruebas para C<dbmopen> y C<dbmclose>.
 
 =item t/op/index_thr.t
 
-Pruebas de la interacciÛn de C<index> y hebras.
+Pruebas de la interacci√≥n de C<index> y hebras.
 
 =item t/op/pat_thr.t
 
-Pruebas de la interacciÛn de patrones y hebras esotÈricos.
+Pruebas de la interacci√≥n de patrones y hebras esot√©ricos.
 
 =item t/op/qr_gc.t
 
@@ -1341,11 +1341,11 @@ Prueba que C<qr> no tenga fugas.
 
 =item t/op/reg_email_thr.t
 
-Pruebas de la interacciÛn de expresiones regulares y hebras.
+Pruebas de la interacci√≥n de expresiones regulares y hebras.
 
 =item t/op/regexp_qr_embed_thr.t
 
-Pruebas de la interacciÛn de patrones con C<qr//> embebido y hebras.
+Pruebas de la interacci√≥n de patrones con C<qr//> embebido y hebras.
 
 =item t/op/regexp_unicode_prop.t
 
@@ -1353,15 +1353,15 @@ Pruebas de las propiedades Unicode en expresiones regulares.
 
 =item t/op/regexp_unicode_prop_thr.t
 
-Pruebas de la interacciÛn de las propiedades Unicode y hebras.
+Pruebas de la interacci√≥n de las propiedades Unicode y hebras.
 
 =item t/op/reg_nc_tie.t
 
-Prueba los mÈtodos enlazados de C<Tie::Hash::NamedCapture>.
+Prueba los m√©todos enlazados de C<Tie::Hash::NamedCapture>.
 
 =item t/op/reg_posixcc.t 
 
-Comprueba que las clases car·cter POSIX se comportan de forma coherente.
+Comprueba que las clases car√°cter POSIX se comportan de forma coherente.
 
 =item t/op/re.t
 
@@ -1373,15 +1373,15 @@ Comprueba que C<setpgrp> funciona.
 
 =item t/op/substr_thr.t
 
-Pruebas de la interacciÛn de C<substr> y hebras.
+Pruebas de la interacci√≥n de C<substr> y hebras.
 
 =item t/op/upgrade.t
 
-Comprueba que la actualizaciÛn y asignaciÛn escalares funciona.
+Comprueba que la actualizaci√≥n y asignaci√≥n escalares funciona.
 
 =item t/uni/lex_utf8.t
 
-Comprueba que Unicode en el analizador lÈxico funciona.
+Comprueba que Unicode en el analizador l√©xico funciona.
 
 =item t/uni/tie.t
 
@@ -1397,81 +1397,81 @@ Esta es una lista de algunos errores importantes no arreglados, que son regresio
 
 =item *
 
-C<List::Util::first> se porta mal en presencia de un C<$_> lÈxico (normalmente introducido por un C<my $_> o implÌcitamente por C<given>). La variable que se establece para cada iteraciÛn es la variable de paquete C<$_>, no la lÈxico C<$_> [RT #67694].
+C<List::Util::first> se porta mal en presencia de un C<$_> l√©xico (normalmente introducido por un C<my $_> o impl√≠citamente por C<given>). La variable que se establece para cada iteraci√≥n es la variable de paquete C<$_>, no la l√©xico C<$_> [RT #67694].
 
-Un problema similar puede ocurrir en otros mÛdulos que proporcionan las funciones que tienen un bloque como primer argumento, al igual que
+Un problema similar puede ocurrir en otros m√≥dulos que proporcionan las funciones que tienen un bloque como primer argumento, al igual que
 
     foo { ... $_ ...} lista
 
 =item *
 
-El pragma C<charnames> puede generar un error en tiempo de ejecuciÛn cuando una expresiÛn regular es interpolada [RT #56444]:
+El pragma C<charnames> puede generar un error en tiempo de ejecuci√≥n cuando una expresi√≥n regular es interpolada [RT #56444]:
 
     use charnames ':full';
     my $r1 = qr/\N{THAI CHARACTER SARA I}/;
     "foo" =~ $r1;    # vale
-    "foo" =~ /$r1+/; # error en tiempo de ejecuciÛn
+    "foo" =~ /$r1+/; # error en tiempo de ejecuci√≥n
 
-Un arreglo moment·neo es generar el car·cter fuera de la expresiÛn regular:
+Un arreglo moment√°neo es generar el car√°cter fuera de la expresi√≥n regular:
 
     my $a = "\N{THAI CHARACTER SARA I}";
     my $r1 = qr/$a/;
 
 =item *
 
-Algunas expresiones regulares pueden funcionar mucho m·s despacio cuando se ejecuta en un subproceso secundario en comparaciÛn con el hilo donde fue compilado el patrÛn [RT #55600].
+Algunas expresiones regulares pueden funcionar mucho m√°s despacio cuando se ejecuta en un subproceso secundario en comparaci√≥n con el hilo donde fue compilado el patr√≥n [RT #55600].
 
 
 =back
 
 =head1 Obsolescencias
 
-Los siguientes artÌculos son ahora obsoletos.
+Los siguientes art√≠culos son ahora obsoletos.
 
 =over 4
 
 =item *
 
-C<Switch> es defectuoso y debe ser evitado. De Perl 5.11.0 en adelante, se pretende que el uso de la versiÛn principal de este mÛdulo emita una advertencia, y que el mÛdulo, con el tiempo, ser· eliminado del n˙cleo principal (probablemente en perl 5.14.0). Vea L<perlsyn/"Instrucciones Switch"> para ver sus reemplazos.
+C<Switch> es defectuoso y debe ser evitado. De Perl 5.11.0 en adelante, se pretende que el uso de la versi√≥n principal de este m√≥dulo emita una advertencia, y que el m√≥dulo, con el tiempo, ser√° eliminado del n√∫cleo principal (probablemente en perl 5.14.0). Vea L<perlsyn/"Instrucciones Switch"> para ver sus reemplazos.
 
 =item *
 
-C<suidperl> ser· eliminado en 5.12.0. Esto proporciona un mecanismo para emular los bits de permiso setuid en sistemas que no lo soportan correctamente.
+C<suidperl> ser√° eliminado en 5.12.0. Esto proporciona un mecanismo para emular los bits de permiso setuid en sistemas que no lo soportan correctamente.
 
 =back
 
 =head1 Agradecimientos
 
-Algo del trabajo realizado en esta publicaciÛn ha sido financiado con una ayuda de la TPF.
+Algo del trabajo realizado en esta publicaci√≥n ha sido financiado con una ayuda de la TPF.
 
-Nicholas Clark se retirÛ oficialmente del mantenimiento calabacero a finales de 2008, pero en realidad Èl ha puesto mucho esfuerzo desde entonces para ayudar a 5.10.1 a llegar a un estado apto para ser publicado, incluyendo la redacciÛn de una parte considerable de este perldelta.
+Nicholas Clark se retir√≥ oficialmente del mantenimiento calabacero a finales de 2008, pero en realidad √©l ha puesto mucho esfuerzo desde entonces para ayudar a 5.10.1 a llegar a un estado apto para ser publicado, incluyendo la redacci√≥n de una parte considerable de este perldelta.
 
-Steffen Mueller y David Golden, en particular, ayudaron a obtener mÛdulos CPAN pulidos y sincronizados con sus correspondientes versiones incluidas en la distribuciÛn.
+Steffen Mueller y David Golden, en particular, ayudaron a obtener m√≥dulos CPAN pulidos y sincronizados con sus correspondientes versiones incluidas en la distribuci√≥n.
 
-Craig Berry fue incansable en conseguir que se ejecutara maint en VMS, sin importar cu·ntas veces lo rompÌamos.
+Craig Berry fue incansable en conseguir que se ejecutara maint en VMS, sin importar cu√°ntas veces lo romp√≠amos.
 
-El otro grupo principal de colaboradores contribuyÛ con la mayor parte de los cambios, y aplicaron la mayorÌa de los parches enviados por cientos de colaboradores que figuran en F<AUTORES>.
+El otro grupo principal de colaboradores contribuy√≥ con la mayor parte de los cambios, y aplicaron la mayor√≠a de los parches enviados por cientos de colaboradores que figuran en F<AUTORES>.
 
-(PerdÛn por todas las personas que no he mencionado por su nombre).
+(Perd√≥n por todas las personas que no he mencionado por su nombre).
 
-Finalmente, gracias a Larry Wall, sin el cual, nada de esto serÌa necesario.
+Finalmente, gracias a Larry Wall, sin el cual, nada de esto ser√≠a necesario.
 
 =head1 Informar de errores
 
-Si encuentra algo que piensa que es un error, podrÌa verificar los artÌculos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay tambiÈn informaciÛn en la p·gina principal de Perl, http://www.perl.org/ .
+Si encuentra algo que piensa que es un error, podr√≠a verificar los art√≠culos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay tambi√©n informaci√≥n en la p√°gina principal de Perl, http://www.perl.org/ .
 
-Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuciÛn.  Aseg˙rese de reducir la apariciÛn del error en un programa que sea pequeÒo, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser·n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaciÛn de Perl.
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuci√≥n.  Aseg√∫rese de reducir la aparici√≥n del error en un programa que sea peque√±o, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser√°n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaci√≥n de Perl.
 
-Si el fallo que est· reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo p˙blica, por favor, envÌelo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripciÛn cerrada y no archivada, que incluye a todos los participantes principales, que podr·n ayudar a evaluar el impacto de los problemas, encontrar una resoluciÛn, y ayudar a coordinar la liberaciÛn de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl est· soportado. Por favor, utilice sÛlo esta direcciÛn para problemas de seguridad en el n˙cleo de Perl, no para los mÛdulos distribuidos de forma independiente en CPAN.
+Si el fallo que est√° reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo p√∫blica, por favor, env√≠elo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripci√≥n cerrada y no archivada, que incluye a todos los participantes principales, que podr√°n ayudar a evaluar el impacto de los problemas, encontrar una resoluci√≥n, y ayudar a coordinar la liberaci√≥n de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl est√° soportado. Por favor, utilice s√≥lo esta direcci√≥n para problemas de seguridad en el n√∫cleo de Perl, no para los m√≥dulos distribuidos de forma independiente en CPAN.
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
-El archivo F<Changes> (Cambios) para obtener m·s informaciÛn exhaustiva sobre lo que ha cambiado.
+El archivo F<Changes> (Cambios) para obtener m√°s informaci√≥n exhaustiva sobre lo que ha cambiado.
 
-El archivo F<INSTALL> (INSTALAR) de cÛmo construir Perl.
+El archivo F<INSTALL> (INSTALAR) de c√≥mo construir Perl.
 
 El archivo F<README> (LEEME) para asuntos generales.
 
-Los archivos F<Artistic> y F<Copying> para ver la informaciÛn sobre derechos de autor.
+Los archivos F<Artistic> y F<Copying> para ver la informaci√≥n sobre derechos de autor.
 
 =cut
