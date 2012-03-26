@@ -50,7 +50,7 @@ X<list operator> X<operator, list> X<term> X<operador lista> X<operador, lista> 
 
 Un TÉRMINO tiene la mayor precedencia en Perl.  Esto incluye a las variables, comillas y operadores de comillas, cualquier expresión entre paréntesis, y cualquier función cuyos argumentos estén entre paréntesis.  En realidad, no son realmente funciones en ese sentido, solo son operadores de lista y operadores unarios que se comportan como funciones porque usted pone paréntesis a los argumentos.  Están todas documentadas en L<perlfunc>.
 
-Si cualquier operador de lista (print(), etc) o cualquier otro operador unario (chdir(), etc) es seguido por un paréntesis de apertura como el siguiente token, el operador y los argumentos entre paréntesis se considera que son de mayor prioridad, como en una llamada a una función normal.
+Si cualquier operador de lista (print(), etc) o cualquier otro operador unario (chdir(), etc) es seguido por un paréntesis de apertura como el siguiente token, el operador y los argumentos entre paréntesis se considera que son de mayor precedencia, como en una llamada a una función normal.
 
 En ausencia de paréntesis, la precedencia de los operadores de lista como C<print>, C<sort>, o C<chmod> es, o muy alta o muy baja, dependiendo de si usted está mirando al lado izquierdo o al lado derecho del operador.
 Por ejemplo, en
@@ -132,7 +132,7 @@ Binario "**" es el operador de exponenciación.  Se une aún más estrechamente que
 =head2 Operadores unarios simbólicos
 X<unary operator> X<operator, unary> X<operador unario> X<operador, unario>
 
-El unario "!" realiza la negación lógica, es decir, "not".  Vea también C<not> para una versión de menor prioridad que ésta.
+El unario "!" realiza la negación lógica, es decir, "not".  Vea también C<not> para una versión de menor precedencia que ésta.
 X<!>
 
 Unario "-" lleva a cabo la negación aritmética si el operando es numérico, incluyendo cualquier string que se parezca a un número.  Si el operando es un identificador, es devuelta un string formado por un signo menos concatenado con el identificador.  De otra manera, si el string comienza con un signo más o un menos, se devuelve un string que comience con el signo opuesto.  Uno de los efectos de estas reglas es -palabra es equivalente a la cadena "-palabra".  Sin embargo, si la cadena comienza con un carácter no-alfabético (con exclusión de "+" o "-"), Perl tratará de convertir la cadena en un código numérico y se lleva a cabo la negación aritmética. Si la cadena no se puede convertir de una forma limpia a numérico, Perl mostrará la advertencia B<Argument "the string" isn't numeric in negation (-) at ...>.
@@ -225,7 +225,7 @@ X<operator, named unary> X<operador, unario con nombre>
 
 Los distintos operadores unarios con nombre son tratados como funciones con un argumento, con paréntesis opcionales.
 
-Si cualquier operador de lista (print(), etc) o cualquier otro operador unario (chdir(), etc) es seguido por un paréntesis de apertura como el siguiente token, el operador y los argumentos entre paréntesis se considera que son de mayor prioridad, como en una llamada a una función normal.  Por ejemplo, debido a que los operadores unarios con nombre tienen mayor precedencia que ||:
+Si cualquier operador de lista (print(), etc) o cualquier otro operador unario (chdir(), etc) es seguido por un paréntesis de apertura como el siguiente token, el operador y los argumentos entre paréntesis se considera que son de mayor precedencia, como en una llamada a una función normal.  Por ejemplo, debido a que los operadores unarios con nombre tienen mayor precedencia que ||:
 
     chdir $foo    || die;	# (chdir $foo) || die
     chdir($foo)   || die;	# (chdir $foo) || die
@@ -635,7 +635,7 @@ El operador C<< => >>  es útil para documentar la correspondencia entre claves y
 X<operator, list, rightward> X<list operator> X<operador, lista, por la derecha> X<operador de lista>
 
 En el lado derecho de un operador de lista, la coma tiene una precedencia muy baja, de forma que controla todas las expresiones separadas por comas que se encuentren allí.
-Los únicos operadores con menor prioridad son los operadores lógicos "and", "or", y "no", que pueden ser utilizados para evaluar las llamadas a los operadores de lista sin necesidad de paréntesis adicionales:
+Los únicos operadores con menor precedencia son los operadores lógicos "and", "or", y "no", que pueden ser utilizados para evaluar las llamadas a los operadores de lista sin necesidad de paréntesis adicionales:
 
     open HANDLE, "< $archivo"
 	or die "No puedo abrir $archivo: $!\n";

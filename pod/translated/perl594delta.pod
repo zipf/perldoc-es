@@ -154,7 +154,7 @@ El motor de expresiones regulares ya no es recursivo, lo que significa que los p
 
 Clases con un único carácter son ahora tratados como si el carácter fuera utilizado como un literal, lo que significa que el código que usa las clases carácter como un mecanismo de escape serán aceleradas. (Yves Orton)
 
-=item Optimización del árbol prefijado de las alternancias de cadenas literales
+=item Optimización Trie de alternativas de cadenas literales
 
 Las alternancias, siempre que sea posible, son optimizadas en estructuras de coincidencia más eficientes. Las alternancias de cadenas literales son remezcladas en un árbol prefijado (Trie) y se les hace coincidir de forma simultánea.  Esto significa que en lugar de un tiempo O(N) para hacer coincidir N alternancias en un punto dado, el nuevo código lo realiza en un tiempo O(1). (Yves Orton)
 

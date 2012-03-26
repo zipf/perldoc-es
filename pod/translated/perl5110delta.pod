@@ -67,9 +67,9 @@ El manejo de expresiones complejas por C<given>/C<when> de la instrucción switch
 
 Los operadores flip-flop C<..> y C<...> ahora son evaluados en contexto booleano, siguiendo su semántica normal; vea L<perlop/"Operadores de rango">.
 
-Tenga en cuenta que, como en Perl 5.10.0, C<when (1..10)> no va servirá para probar si un valor es un número entero entre 1 y 10, así que en su lugar debería usar C<when ([1..10])> (nótese la referencia al array).
+Tenga en cuenta que, como en Perl 5.10.0, C<when (1..10)> no servirá para probar si un valor es un número entero entre 1 y 10, así que en su lugar debería usar C<when ([1..10])> (nótese la referencia al array).
 
-Sin embargo, contrariamente a 5.10.0, la evaluación de los operadores flip-flop en contexto booleano asegura que ahora puede ser útil en un C<when()>, especialmente para implementar condiciones biestable, como en:
+Sin embargo, contrariamente a 5.10.0, la evaluación de los operadores flip-flop en contexto booleano asegura que ahora puede ser útil en un C<when()>, especialmente para implementar condiciones biestables, como en:
 
     when (/^=begin/ .. /^=end/) {
       # hacer algo
@@ -77,7 +77,7 @@ Sin embargo, contrariamente a 5.10.0, la evaluación de los operadores flip-flop 
 
 =item Operador definido-or
 
-Una expresión compuesta, que incluya al operador definido-or, como en C<when (expr1 // expr2)>, será tratada como booleana si la primera expresión es booleana. (Esto amplia la regla actual que se aplica al operador or normal, como en C<when (expr1 || expr2)>.)
+Una expresión compuesta, que incluya al operador definido-or, como en C<when (expr1 // expr2)>, será tratada como booleana si la primera expresión es booleana. (Esto amplia la regla actual que se aplica al operador C<or> normal, como en C<when (expr1 || expr2)>.)
 
 =back
 
@@ -94,12 +94,12 @@ El operador de coincidencia inteligente C<~~> ya no es conmutativo. El comportam
 
 =item *
 
-Referencias a código con un prototipo vacío ya no son tratados de forma especial.
+Referencias a código con un prototipo vacío ya no son tratadas de forma especial.
 Se les pasa un argumento como a otras referencias de código (incluso si deciden ignorarlo).
 
 =item *
 
-C<%hash ~~ sub {}> y C<@array ~~ sub {}> ahora prueban a que la subrutina devuelva un valor verdadero por cada clave del hash (o cada elemento del array), en lugar de pasar todo el hash o el array, como referencias, a la subrutina.
+C<%hash ~~ sub {}> y C<@array ~~ sub {}> ahora prueban que la subrutina devuelva un valor verdadero por cada clave del hash (o cada elemento del array), en lugar de pasar todo el hash o el array, como referencias, a la subrutina.
 
 =item *
 
@@ -207,7 +207,7 @@ Para adaptarse mejor a todas las demás sentencias de control de flujo, C<foreach
 
 =head2 Unicode Character Database 5.1.0
 
-La copia de la base de datos de caracteres Unicode incluidos en Perl 5.11 ha sido actualizado desde la 5.0.0 a la 5.1.0. Vea L<http://www.unicode.org/versions/Unicode5.1.0/#Notable_Changes> para consultar los cambios principales.
+La copia de la base de datos de caracteres Unicode incluidos en Perl 5.11 ha sido actualizada desde la 5.0.0 a la 5.1.0. Vea L<http://www.unicode.org/versions/Unicode5.1.0/#Notable_Changes> para consultar los cambios principales.
 
 =head2 Una interfaz adecuada para un Método de Resolución de Órdenes
 
@@ -773,7 +773,7 @@ Un error del tipo por-uno-menos hacía que C<index $str, ...> era ejecutado efect
 
 =item *
 
-Fugas memoria asociados con capturas con nombre en expresiones regulares han sido arregladas [RT #57024].
+Fugas de memoria asociadas con capturas con nombre en expresiones regulares han sido corregidas [RT #57024].
 
 =item *
 
@@ -1121,7 +1121,7 @@ Los siguientes artículos son ahora obsoletos.
 
 =item *
 
-C<Switch> es defectuoso y debe ser evitado. De Perl 5.11.0 en adelante, se pretende que el uso de la versión principal de este módulo emita una advertencia, y que el módulo, con el tiempo, será eliminado del núcleo principal (probablemente en perl 5.14.0). Vea L<perlsyn/"Instrucciones Switch"> para ver sus reemplazos.
+C<Switch> es defectuoso y debe ser evitado. De Perl 5.11.0 en adelante, se pretende que el uso de la versión principal de este módulo emita una advertencia, y que el módulo, con el tiempo, sea eliminado del núcleo principal (probablemente en perl 5.14.0). Vea L<perlsyn/"Instrucciones Switch"> para ver sus reemplazos.
 
 =item *
 
@@ -1235,14 +1235,14 @@ Algunos de los trabajos de esta versión ha sido financiado por una beca ofrecida
 
 Steffen Mueller y David Golden, en particular, ayudaron a obtener módulos CPAN pulidos y sincronizados con sus correspondientes versiones incluidas en la distribución.
 
-Craig Berry fue incansable en conseguir que se ejecutara maint en VMS, sin importar cuántas veces lo rompíamos.
+Craig Berry fue incansable en conseguir que se ejecutara maint en VMS, sin importar cuántas veces lo rompiéramos.
 
 El otro grupo principal de colaboradores contribuyó con la mayor parte de los cambios, y aplicaron la mayoría de los parches enviados por cientos de colaboradores que figuran en F<AUTORES>.
 
 Gran parte del trabajo de la categorización de los cambios en este archivo perldelta fue aportado por los siguientes aportadores que utilizaron changelogger.bestpractical.com:
 
 Nicholas Clark, leon, shawn, alexm, rjbs, rafl, Pedro Melo, brunorc,
-anonymous, â˜„, Tom Hukins, anonymous, Jesse, dagolden, Moritz Onken,
+anonymous, ?, Tom Hukins, anonymous, Jesse, dagolden, Moritz Onken,
 Mark Fowler, chorny, anonymous, tmtm
 
 Finalmente, gracias a Larry Wall, sin el cual, nada de esto sería necesario.
