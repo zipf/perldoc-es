@@ -35,7 +35,7 @@ Readonly my $TRANS_PATH  => "../../omegat_514/514/target";
 Readonly my $MEM_PATH    => "../../omegat_514/514/omegat/project_save.tmx";   
 # Target
 Readonly my $CLEAN_PATH  => "../../omegat_clean_prj/source";
-Readonly my $DISTR_PATH  => "../POD2-ES/POD2-ES/lib/POD2/ES";
+Readonly my $DISTR_PATH  => "../POD2-ES/lib/POD2/ES";
 Readonly my $POD_PATH    => "../pod/reviewed";
 Readonly my $CLEANM_PATH => "../../omegat_clean_prj/omegat/project_save.tmx";
 
@@ -46,7 +46,7 @@ Readonly my $TRANSLATORS_POD => <<'END';
 
 =over
 
-=item * JoaquÃ­n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaquí­n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
 
 =item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
 
