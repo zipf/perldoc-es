@@ -4,7 +4,7 @@ use strict;
 
 use base 'POD2::Base';
 
-our $VERSION = '5.14.2.05';
+our $VERSION = '5.14.2.06';
 
 sub search_perlfunc_re {
     return 'Lista de funciones de Perl en orden alfabético';
@@ -14,6 +14,7 @@ sub pod_info {{
     perl              => '5.14.2',
     perlbook          => '5.14.2',
     perlcheat         => '5.14.2',
+    perlcommunity     => '5.14.2',
     perldbmfilter     => '5.14.2',
     perldoc           => '5.14.2',
     perlfaq1          => '5.14.2',
@@ -166,20 +167,6 @@ de aplicar cada vez la revisión de F<Pod/Perldoc.pm>.
 
 =back
 
-=head1 PROYECTO
-
-Encontrará más información sobre el proyecto en
-L<http://github.com/zipf/perldoc-es>.
-
-=head1 AUTORES
-
-=over
-
-=item * Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
-
-=item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
-
-=back
 
 =head1 NOTAS SOBRE LA TRADUCCIÓN
 
@@ -225,9 +212,41 @@ Latinoamérica.
 =back
 
 
+=head1 AUTORES
+
+=over
+
+=item * Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+
+=item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
+
+=item * Jennifer Maldonado, C< jcmm986 + POD2ES at gmail.com >  
+
+=item * Manuel Gómez Olmedo, C< mgomez + POD2ES at decsai.ugr.es >
+
+=back
+
+=head1 PROYECTO
+
+Encontrará más información sobre el proyecto en
+L<http://github.com/zipf/perldoc-es>.
+
+
 =head1 VEA TAMBIÉN
 
 L<POD2::PT_BR>, L<POD2::IT>, L<POD2::FR>, L<POD2::LT>, L<perl>.
+
+
+=head1 DONATIVOS
+
+Por el elevado volumen de trabajo que representa y su larga duración, el
+proyecto de traducción de la documentación de Perl requiere un esfuerzo
+sostenido que sólo está al alcance de los espíritus más sólidos y altruistas.
+Los autores no exigen--pero tampoco rechazarán--compensaciones en forma de
+dinero, libros, quesos y productos derivados del cerdo (o chancho), o incluso
+viajes a la Polinesia, destinadas a reducir la fatiga del equipo y a mantener
+alta la moral. Todo será bienvenido.
+
 
 
 =head1 ERRORES
@@ -280,20 +299,9 @@ herramienta utilizada para la traducción.
 Proyecto OmegaT: L<http://omegat.org/>
 
 
-=head1 DONATIVOS
-
-Por el elevado volumen de trabajo que representa y su larga duración, el
-proyecto de traducción de la documentación de Perl requiere un esfuerzo
-sostenido que sólo está al alcance de los espíritus más sólidos y altruistas.
-Los autores no exigen--pero tampoco rechazarán--compensaciones en forma de
-dinero, libros, quesos y productos derivados del cerdo (o chancho), o incluso
-viajes a la Polinesia, destinadas a reducir la fatiga del equipo y a mantener
-alta la moral. Todo será bienvenido.
-
-
 =head1 LICENCIA Y COPYRIGHT
 
-Copyright 2011 Equipo de Perl en Español.
+Copyright (C) 2011-2012 Equipo de Perl en Español.
 
 Este programa es software libre; puede redistribuirlo o modificarlo bajo los
 términos de la licencia GNU General Public License publicada por la Free
