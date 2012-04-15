@@ -12,7 +12,7 @@ Esta documentación es para las personas que quieren descargar módulos de CPAN e 
 
 En primer lugar, ¿está seguro de que el módulo no está ya en su sistema?  Pruebe C<perl -MFoo -e 1>.  (Reemplace "Foo" con el nombre del módulo; por ejemplo, C<perl -MCGI::Carp -e 1>.
 
-Si no ve un mensaje de error, tiene el módulo instalado.  (Si ve un mensaje de error, aún es posible que tenga el módulo, pero que no esté en su ruta, que puede ver con C<perl -e "print qq(@INC)">.) Para el resto de este documento, vamos a suponer que realmente no tiene el módulo instalado, pero que lo ha encontrado en CPAN.
+Si no ve un mensaje de error, tiene el módulo instalado.  (Si ve un mensaje de error, aún es posible que tenga el módulo, pero que no esté en su ruta, que puede ver con C<perl -e "print qq(@INC)">). Para el resto de este documento, vamos a suponer que realmente no tiene el módulo instalado, pero que lo ha encontrado en CPAN.
 
 Así que ahora tiene un archivo con extensión .tar.gz (o, menos frecuente, .zip).  Sabe que hay un sabroso módulo en su interior.  Hay cuatro pasos que ahora debe tomar:
 
@@ -132,7 +132,7 @@ Si está utilizando untarzipme o StuffIt, el archivo deberá estar ya extraído.  B
 C. COMPILACIÓN
 
 Compruebe el contenido de la distribución.
-Lea la documentación del módulo, en busca de razones por las que pueda tener problemas para usarlo con MacPerl.  Busque por archivos F<.xs> y F<.c> que, normalmente, denotan que la distribución debe ser compilada, y no se pueden instalar "recién salido de la caja". (Vea L<"PORTABILIDAD">.)
+Lea la documentación del módulo, en busca de razones por las que pueda tener problemas para usarlo con MacPerl.  Busque por archivos F<.xs> y F<.c> que, normalmente, denotan que la distribución debe ser compilada, y no se pueden instalar "recién salido de la caja". (Vea L<"PORTABILIDAD">).
 
 D. INSTALAR
 
@@ -281,15 +281,15 @@ Lea la documentación para ver si el módulo funcionará en su sistema.  Hay básica
 
 =item *
 
-B<Los que deberían, pero no lo hacen.> Estos deben ser arreglados; considere ponerse en contacto con el autor y la posibilidad de escribir un parche.
+B<Los que deberían, pero no lo hacen>. Estos deben ser arreglados; considere ponerse en contacto con el autor y la posibilidad de escribir un parche.
 
 =item *
 
-B<Los que necesitan ser compilados, donde la plataforma destino no tiene compiladores fácilmente disponibles.> (Estos módulos contienen, por lo general, archivos F<.xs> o F<.c>). Quizás sea capaz de encontrar los binarios existentes en CPAN o en otro lugar, o es posible que desee intentar conseguir los compiladores e intentar la compilación por sí mismo, y luego publique el binario para que otras pobres almas lo usen.
+B<Los que necesitan ser compilados, donde la plataforma destino no tiene compiladores fácilmente disponibles>. (Estos módulos contienen, por lo general, archivos F<.xs> o F<.c>). Quizás sea capaz de encontrar los binarios existentes en CPAN o en otro lugar, o es posible que desee intentar conseguir los compiladores e intentar la compilación por sí mismo, y luego publique el binario para que otras pobres almas lo usen.
 
 =item *
 
-B<Los que están dirigidos a una plataforma específica.> (Como los módulos Win32::.) Si el módulo está dirigido específicamente a una plataforma diferente a la suya, lo más probable es que no tenga suerte.
+B<Los que están dirigidos a una plataforma específica>. (Como los módulos Win32::). Si el módulo está dirigido específicamente a una plataforma diferente a la suya, lo más probable es que no tenga suerte.
 
 =back
 

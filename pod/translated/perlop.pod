@@ -389,7 +389,7 @@ El operando de la derecha no es evaluado, mientras que el operador esté en el es
 
 Si alguno de los operandos del escalar ".." es una expresión constante, este operando es considerado cierto si es igual (C<==>) al número de línea actual de la entrada (la variable C<$.>).
 
-Para ser pedante, la comparación es en realidad C<int(EXPR) == int(EXPR)> , pero esto sólo es un problema si utiliza una expresión de punto flotante; cuando, implícitamente, está usando C<$.> como se describe en el párrafo anterior, la comparación es C<int(EXPR) == int($.)> que sólo es un problema cuando C$.> se establece en un valor de punto flotante y usted no está leyendo de un archivo.
+Para ser pedante, la comparación es en realidad C<int(EXPR) == int(EXPR)>, pero esto sólo es un problema si utiliza una expresión de punto flotante; cuando, implícitamente, está usando C<$.> como se describe en el párrafo anterior, la comparación es C<int(EXPR) == int($.)> que sólo es un problema cuando C<$.> se establece en un valor de punto flotante y usted no está leyendo de un archivo.
 Por otra parte, C<"span" .. "spat"> oo C<2.18 .. 3,14> no harán lo que quiere hacer en contexto escalar porque cada uno de los operandos son evaluados utilizando su representación entera.
 
 Ejemplos:
@@ -831,7 +831,7 @@ Si se encuentra un carácter que no es un dígito octal, se produce una advertenci
 
 El resultado es el carácter especificado por el número octal de tres dígitos en el rango 000 a 777 (pero es mejor no superar el 077, ver siguiente párrafo).  Vea L</[8]> más abajo, para detalles sobre este carácter.
 
-Algunos contextos permiten dos o incluso un dígito, pero cualquier otro uso, sin exactamente tres dígitos, siendo el primero un cero, puede dar resultados inesperados.  (Por ejemplo, vea L<perlrebackslash/Secuencias de escape octales>.) A partir de Perl v5.14, puede utilizar en su lugar C<\o{}>, toda vez que evita todos estos problemas.  De lo contrario, es mejor utilizar esta construcción sólo para los ordinales C<\077> e inferiores, recordando que hay que rellenar a la izquierda con ceros, para tener los tres dígitos.  Para ordinales más grandes, puede usar C<\o{}>, o convertirlo a otra cosa, como por ejemplo, a hexadecimal y usar C<\x{}> en su lugar.
+Algunos contextos permiten dos o incluso un dígito, pero cualquier otro uso, sin exactamente tres dígitos, siendo el primero un cero, puede dar resultados inesperados.  (Por ejemplo, vea L<perlrebackslash/Secuencias de escape octales>). A partir de Perl v5.14, puede utilizar en su lugar C<\o{}>, toda vez que evita todos estos problemas.  De lo contrario, es mejor utilizar esta construcción sólo para los ordinales C<\077> e inferiores, recordando que hay que rellenar a la izquierda con ceros, para tener los tres dígitos.  Para ordinales más grandes, puede usar C<\o{}>, o convertirlo a otra cosa, como por ejemplo, a hexadecimal y usar C<\x{}> en su lugar.
 
 Tener menos de 3 dígitos puede dar lugar a un mensaje de advertencia engañoso, que dice que lo que sigue es ignorado.  Por ejemplo, C<"\128"> en el juego de caracteres ASCII es equivalente a los dos caracteres C<"\n8">, pero se mostrará la advertencia I<Illegal octal digit '8' ignored> (C<Se ignora el carácter octal ilegal '8'>).  Para evitar la aparición de esta advertencia, asegúrese de rellenar su número octal con C<0>: C<"\0128">.
 
@@ -986,11 +986,11 @@ Hace algún tiempo, Perl hubiera recompilado expresiones regulares innecesariamen
 
 =item 1
 
-Las variables tienen miles y miles de caracteres de longitud y sabe que no cambiarán, y necesita exprimir hasta la última gota de la velocidad de Perl, obviando estas pruebas.  (Hay un castigo en el mantenimiento, al hacer esto, porque al usar C</o> constituye una promesa de que no va a cambiar las variables que hay dentro del patrón.  Si las cambia, Perl ni siquiera se dará cuenta.)
+Las variables tienen miles y miles de caracteres de longitud y sabe que no cambiarán, y necesita exprimir hasta la última gota de la velocidad de Perl, obviando estas pruebas.  (Hay un castigo en el mantenimiento, al hacer esto, porque al usar C</o> constituye una promesa de que no va a cambiar las variables que hay dentro del patrón.  Si las cambia, Perl ni siquiera se dará cuenta).
 
 =item 2
 
-desea que el patrón use los valores iniciales de las variables, independientemente de si van a cambiar o no.  (Pero hay formas más sanas de lograr esto que usando C</o>.)
+desea que el patrón use los valores iniciales de las variables, independientemente de si van a cambiar o no.  (Pero hay formas más sanas de lograr esto que usando C</o>).
 
 =back
 

@@ -17,7 +17,7 @@ B<perl>	S<[ B<-sTtuUWX> ]>
 
 =head1 DESCRIPCIÓN
 
-La forma normal de ejecutar un programa de Perl es haciéndolo directamente ejecutable, o bien pasando el nombre del código fuente como un argumento en la línea de comandos.  (Un entorno Perl interactivo también es posible -vea L<perldebug> para más detalles de cómo hacer esto-.) En el arranque, Perl busca por su programa en uno de los siguientes lugares:
+La forma normal de ejecutar un programa de Perl es haciéndolo directamente ejecutable, o bien pasando el nombre del código fuente como un argumento en la línea de comandos.  (Un entorno Perl interactivo también es posible -vea L<perldebug> para más detalles de cómo hacer esto-). En el arranque, Perl busca por su programa en uno de los siguientes lugares:
 
 =over 4
 
@@ -28,7 +28,7 @@ Especificado línea a línea por medio de las opciones B<-e> o B<-E> en la línea d
 =item 2.
 
 Contenido en el fichero especificado por el primer nombre de fichero en la línea de comandos.
-(Tenga en cuenta que los sistemas que soporten la notación C<#!>, invocan a los intérpretes de esta manera. Vea L<Emplazamiento de Perl>.)
+(Tenga en cuenta que los sistemas que soporten la notación C<#!>, invocan a los intérpretes de esta manera. Vea L<Emplazamiento de Perl>).
 
 =item 3.
 
@@ -36,7 +36,7 @@ Pasado implícitamente a través de la entrada estándar.  Esto sólo funciona si no
 
 =back
 
-Con los métodos 2 y 3, Perl inicia el análisis del fichero de entrada desde el comienzo, a menos que haya especificado una opción B<-x>, en cuyo caso escanea por la primera línea que comience por C<#!> y contenga la palabra "perl", y arrancará desde allí.  Esto es útil para ejecutar un programa incorporado en un correo grande.  (En este caso se indicará el final del programa, utilizando el I<token> C<__END__>.)
+Con los métodos 2 y 3, Perl inicia el análisis del fichero de entrada desde el comienzo, a menos que haya especificado una opción B<-x>, en cuyo caso escanea por la primera línea que comience por C<#!> y contenga la palabra "perl", y arrancará desde allí.  Esto es útil para ejecutar un programa incorporado en un correo grande.  (En este caso se indicará el final del programa, utilizando el I<token> C<__END__>).
 
 La línea C<#!> es siempre examinada para buscar las opciones mientras la línea está siendo analizada.  Por lo tanto, si está en una máquina que sólo permite un argumento con la línea C<#!>, o peor aún, ni siquiera reconoce la línea C<#!>, todavía puede obtener un comportamiento consistente de las opciones independientemente de cómo Perl haya sido invocado, incluso si B<-x> fue utilizado para encontrar el inicio del programa.
 
@@ -63,7 +63,7 @@ Los ejemplos anteriores usan una ruta relativa al intérprete perl, accediendo al
 
 Si la línea C<#!> no contiene la palabra "perl", el programa nombrado después del C<#!> es ejecutado en lugar del intérprete de Perl.  Esto es algo extraño, pero ayuda a personas en máquinas que no pueden trabajar con C<#!>, porque ellas pueden indicar a un programa que su SHELL es F</usr/bin/perl>, y Perl, entonces, despachará, por ellos, el programa al intérprete correcto.
 
-Después de localizar a su programa, Perl compila el programa entero a una forma interna.  Si existe algún error de compilación, ni se intenta la ejecución del programa.  (Esto es muy distinto del típico script shell, que se ejecutará sin pensarlo hasta encontrar el primer error de sintaxis.)
+Después de localizar a su programa, Perl compila el programa entero a una forma interna.  Si existe algún error de compilación, ni se intenta la ejecución del programa.  (Esto es muy distinto del típico script shell, que se ejecutará sin pensarlo hasta encontrar el primer error de sintaxis).
 
 Si el programa es sintácticamente correcto, es ejecutado.  Si el programa se ejecuta hasta el final sin llegar a un operador exit() o die(), se ejecuta un implícito C<exit(0)> para indicar un completado exitoso.
 
@@ -160,7 +160,7 @@ especifica el delimitador de registros de entrada (C<$/>) como un número en octa
 El valor especial 00 hará que Perl succione archivos en modo párrafo.
 Cualquier valor igual o superior a 0400 hará que Perl succione todo el fichero, pero, por convención, para este propósito se usa de forma normal el valor 0777.
 
-También puede especificar el carácter separador usando notación hexadecimal: B<-0xI<HHH...>>, donde C<I<H>> son dígitos hexadecimales válidos.  A diferencia de con la forma octal, ésta puede ser usada para especificar cualquier carácter Unicode, incluso lo que están más allá de 0xFF.  Así que si I<verdaderamente> quiere usar un separador de registro 0777, especifíquelo como B<-0x1FF>.  (Esto significa que no puede usar la opción B<-x> con un nombre de directorio que consista en dígitos hexadecimales, o sino, Perl pensará que ha especificado un número hex relativo a B<-0>.)
+También puede especificar el carácter separador usando notación hexadecimal: B<-0xI<HHH...>>, donde C<I<H>> son dígitos hexadecimales válidos.  A diferencia de con la forma octal, ésta puede ser usada para especificar cualquier carácter Unicode, incluso lo que están más allá de 0xFF.  Así que si I<verdaderamente> quiere usar un separador de registro 0777, especifíquelo como B<-0x1FF>.  (Esto significa que no puede usar la opción B<-x> con un nombre de directorio que consista en dígitos hexadecimales, o sino, Perl pensará que ha especificado un número hex relativo a B<-0>).
 
 =item B<-a>
 X<-a> X<autosplit>
@@ -219,7 +219,7 @@ Puede usar B<-C0> (o C<"0"> para C<PERL_UNICODE>) para desactivar explícitamente
 La variable mágica de solo lectura C<${^UNICODE}> refleja el valor numérico de este parámetro.  Esta variable se activa durante el arranque de Perl y, por lo tanto, es de solo lectura.  Si quiere efectos en tiempo de ejecución, use el open() de tres argumentos (vea L<perlfunc/open>), el binmode() de dos argumentos (vea L<perlfunc/binmode>), y el pragma C<open> (vea L<open>).
 
 (En Perl anteriores a 5.8.1, la opción B<-C> solo era una opción solo Win32 que activaba el uso de las "wide system call" de la API de Win32 relativo a la codificación Unicode.
-Esta característica, sin embargo, y en la práctica, no era usada, por lo que esta opción ha sido "reciclada".)
+Esta característica, sin embargo, y en la práctica, no era usada, por lo que esta opción ha sido "reciclada").
 
 B<Nota:> Desde perl 5.10.1, si la opción B<-C> es usada en la línea C<#!>, también debe ser especificada en la línea de comando, debido a que los flujos estándar son inicializados en ese punto, en la ejecución del intérprete perl.
 También puede usar binmode() para establecer la codificación de un flujo de E/S.
@@ -249,7 +249,7 @@ X<-D> X<DEBUGGING> X<-DDEBUGGING>
 
 =item B<-D>I<número>
 
-activa banderas de depuración.  Para mirar cómo se ejecuta su programa, use B<-Dtls>.  (Esto funciona solo si se compiló el soporte para depuración, dentro de su Perl.) Otro valor interesante es B<-Dx>, que lista el árbol de sintaxis compilado.  Y B<-Dr> muestra las expresiones regulares compiladas; el formato de salida es explicado en L<perldebguts>.
+activa banderas de depuración.  Para mirar cómo se ejecuta su programa, use B<-Dtls>.  (Esto funciona solo si se compiló el soporte para depuración, dentro de su Perl). Otro valor interesante es B<-Dx>, que lista el árbol de sintaxis compilado.  Y B<-Dr> muestra las expresiones regulares compiladas; el formato de salida es explicado en L<perldebguts>.
 
 Como alternativa, especifique un número en lugar de una lista de letras (ej., B<-D14> es equivalente a B<-Dtls>):
 
@@ -556,7 +556,7 @@ activa el modo "contaminación" para que pueda probarlo.  Por lo general, estos c
 X<-u>
 
 Esta opción hace que Perl vuelque su memoria después de compilar el programa.  A continuación, puede, en teoría, tomar ese volcado de memoria y convertirlo en un archivo ejecutable mediante el uso del programa I<undump> (no suministrado).
-Esto acelera el inicio a costa de espacio en disco (que puede minimizar mediante la eliminación de símbolos en el ejecutable).  (Sin embargo, un ejecutable "hola mundo" ocupa unos 200Kb en mi máquina.) Si desea ejecutar una parte de su programa antes del volcado de memoria, use en su lugar el operador dump().  Nota: La disponibilidad de I<undump> es específico de la plataforma y puede no estar disponible para una determinada adaptación de Perl.
+Esto acelera el inicio a costa de espacio en disco (que puede minimizar mediante la eliminación de símbolos en el ejecutable).  (Sin embargo, un ejecutable "hola mundo" ocupa unos 200Kb en mi máquina). Si desea ejecutar una parte de su programa antes del volcado de memoria, use en su lugar el operador dump().  Nota: La disponibilidad de I<undump> es específico de la plataforma y puede no estar disponible para una determinada adaptación de Perl.
 
 =item B<-U>
 X<-U>
@@ -591,7 +591,7 @@ Imprime a STDOUT el valor de la(s) variable(s) de configuración indicadas, o múl
 	libperl='libperl.a';
 	....
 
-Además, los caracteres de dos puntos adicionales se pueden utilizar para controlar el formato.  Un carácter dos puntos final suprime el salto de línea y el terminador ";", permitiendo integrar consultas en comandos shell.  (nemotécnico: separador ":" en PATH.)
+Además, los caracteres de dos puntos adicionales se pueden utilizar para controlar el formato.  Un carácter dos puntos final suprime el salto de línea y el terminador ";", permitiendo integrar consultas en comandos shell.  (nemotécnico: separador ":" en PATH).
 
     $ echo "¡ var. compresión: " `perl -V:z.*: ` " aquí están!"
     ¡ var. compresión:  zcat='' zip='zip'  aquí están!
@@ -705,7 +705,7 @@ Quizás estaba pensando en C<:crlf:bytes> o C<:perlio:bytes>.
 X<:crlf>
 
 Una capa que pone CRLF a C<"\n"> trasladando la distinción de los archivos de "texto" y "binarios", a la manera de MS-DOS y sistemas operativos similares.
-(En la actualidad, I<no> imita a MS-DOS en cuanto al tratamiento de Control-Z como un marcador de fin de archivo.)
+(En la actualidad, I<no> imita a MS-DOS en cuanto al tratamiento de Control-Z como un marcador de fin de archivo).
 
 =item :mmap
 X<:mmap>
@@ -842,7 +842,7 @@ Si se utiliza el pragma C<use encoding> sin un nombre de codificación explícito,
 =item PERL_HASH_SEED
 X<PERL_HASH_SEED>
 
-(Desde Perl 5.8.1.) Se utiliza para aleatorizar la función hash interna de Perl.
+(Desde Perl 5.8.1). Se utiliza para aleatorizar la función hash interna de Perl.
 Para emular el comportamiento pre-5.8.1, establezca a un número entero; C<"0"> significa exactamente el mismo orden que en 5.8.0.  "Pre-5.8.1" significa, entre otras cosas, que las claves de hash siempre tendrá el mismo orden entre las diferentes ejecuciones de Perl.
 
 La mayoría de los hashes, por defecto, devuelven elementos en el mismo orden que en Perl 5.8.0.
@@ -860,7 +860,7 @@ Vea L<perlsec/"Ataques de Complejidad Algorítmica"> y L</PERL_HASH_SEED_DEBUG> p
 =item PERL_HASH_SEED_DEBUG
 X<PERL_HASH_SEED_DEBUG>
 
-(Desde Perl 5.8.1.) Puesto a C<"1"> para mostrar (en STDERR) el valor de la semilla de hash al comienzo de la ejecución.  Esto, combinado con L</PERL_HASH_SEED> está destinado a ayudar a depurar el comportamiento no determinista causado por la aleatorización de los hash.
+(Desde Perl 5.8.1). Puesto a C<"1"> para mostrar (en STDERR) el valor de la semilla de hash al comienzo de la ejecución.  Esto, combinado con L</PERL_HASH_SEED> está destinado a ayudar a depurar el comportamiento no determinista causado por la aleatorización de los hash.
 
 B <Note que la semilla hash es información sensible>: conociéndolo, se puede elaborar un ataque de denegación de servicio contra el código Perl, incluso remotamente; vea L<perlsec/"Ataques de Complejidad Algorítmica"> para más información.
 B<No muestre la semilla hash> a personas que no necesiten conocerla.

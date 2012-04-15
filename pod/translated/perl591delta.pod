@@ -99,7 +99,7 @@ Ordenar arrays en el mismo sitio C<@a = sort @a> ha sido optimizado para evitar 
 
 Las operaciones relacionadas con el cambio de tamaño de caja en cadenas UTF-8 (uc(), lc(), C<//i>, etc) han sido muy aceleradas.
 
-Acceso a elementos de los arrays léxicos a través de una constante numérica entre 0 y 255 es ahora más rápido. (Esto sólo así para el caso de las arrays globales.)
+Acceso a elementos de los arrays léxicos a través de una constante numérica entre 0 y 255 es ahora más rápido. (Esto sólo así para el caso de las arrays globales).
 
 =head1 Arreglo de determinados errores
 
@@ -145,7 +145,7 @@ Estas noticias solamente son importantes para usted si, o escribe código XS o le
 
 =head2 Reordenando constantes de SVt_*
 
-El orden relativo de las constantes que definen los diferentes tipos de C<SV> ha sido cambiados; en particular, C<SVt_PVGV> ha sido movido antes de C<SVt_PVLV>, C<SVt_PVAV>, C<SVt_PVHV> y C<SVt_PVCV>.  Es poco probable que no haya ninguna diferencia a menos que tenga algún código que, explícitamente, haga suposiciones con respecto a este ordenamiento. (La jerarquía de la herencia de los objetos C<B::*> ha sido cambiada para reflejar esto.)
+El orden relativo de las constantes que definen los diferentes tipos de C<SV> ha sido cambiados; en particular, C<SVt_PVGV> ha sido movido antes de C<SVt_PVLV>, C<SVt_PVAV>, C<SVt_PVHV> y C<SVt_PVCV>.  Es poco probable que no haya ninguna diferencia a menos que tenga algún código que, explícitamente, haga suposiciones con respecto a este ordenamiento. (La jerarquía de la herencia de los objetos C<B::*> ha sido cambiada para reflejar esto).
 
 =head2 Eliminación de los símbolos CPP
 
@@ -168,7 +168,7 @@ La portabilidad y la limpieza de los archivos makefile en Win32 ha sido mejorada
 
 =head1 Problemas conocidos
 
-Todavía persisten un par de problemas en la implementación de la variable léxica C<$_>: no funciona dentro de los bloques C</(?{...})/> y con respecto a la función incorporada reverse() utilizada sin argumentos. (Vea las pruebas TODO en F<t/op/mydef.t>.)
+Todavía persisten un par de problemas en la implementación de la variable léxica C<$_>: no funciona dentro de los bloques C</(?{...})/> y con respecto a la función incorporada reverse() utilizada sin argumentos. (Vea las pruebas TODO en F<t/op/mydef.t>).
 
 =head2 Problemas específicos por plataforma
 
