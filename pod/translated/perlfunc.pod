@@ -6,7 +6,7 @@ perlfunc - Funciones integradas en Perl
 =head1 DESCRIPCIÓN
 
 Las funciones de esta sección pueden servir como términos en una expresión.
-Se agrupan en dos categorías principales: operadores de listas y operadores unarios con nombre.  Difieren en su relación de precedencia cuando son seguidos por una coma.  (Ver la tabla de precedencia en L<perlop>.)  Los operadores de listas toman más de un argumento, mientras que los operadores unarios nunca toman más de un argumento.  Así, una coma determina al argumento de un operador unario, pero sólo sirve de separación entre argumentos en un operador de listas.  Un operador unario generalmente proveé de un contexto escalar a su argumento, mientras que un operador de listas puede proveer tanto de un contexto escalar o de un contexto de lista, a sus argumentos.  Si aparecen ambos, los argumentos escalares van antes que el argumento de lista, y solo puede existir un argumento de lista.  Por ejemplo, splice() tiene tres argumentos escalares seguidos por una lista, mientras que gethostbyname() tiene cuatro argumentos escalares.
+Se agrupan en dos categorías principales: operadores de listas y operadores unarios con nombre.  Difieren en su relación de precedencia cuando son seguidos por una coma.  (Ver la tabla de precedencia en L<perlop>).  Los operadores de listas toman más de un argumento, mientras que los operadores unarios nunca toman más de un argumento.  Así, una coma determina al argumento de un operador unario, pero sólo sirve de separación entre argumentos en un operador de listas.  Un operador unario generalmente proveé de un contexto escalar a su argumento, mientras que un operador de listas puede proveer tanto de un contexto escalar o de un contexto de lista, a sus argumentos.  Si aparecen ambos, los argumentos escalares van antes que el argumento de lista, y solo puede existir un argumento de lista.  Por ejemplo, splice() tiene tres argumentos escalares seguidos por una lista, mientras que gethostbyname() tiene cuatro argumentos escalares.
 
 En las descripciones sintácticas que siguen a continuación, los operadores de listas que esperan una lista (y proveen de un contexto lista para los elementos de la lista) se muestran con un argumento así: LISTA.  Tal lista puede consistir en cualquier combinación de argumentos escalares o valores de lista; los valores de lista serán incluidos en la lista como si cada elemento individual fuera interpolado en ese punto en la lista, formando un largo y unidimensional valor de lista.
 Las comas deberían separar elementos literales de la LISTA.
@@ -105,7 +105,7 @@ C<goto>, C<last>, C<next>, C<redo>, C<return>, C<sub>, C<wantarray>
 C<break>, C<continue>, C<default>, C<given>, C<when>
 
 Estas están disponibles solo si activa la característica C<"switch">.
-Vea L<feature> y L<perlsyn/"Instrucciones Switch">.)  
+Vea L<feature> y L<perlsyn/"Instrucciones Switch").  
 O de otra forma, incluya un C<use v5.10> o posterior en el ámbito actual.
 
 =item Palabras clave relacionadas con el ámbito
@@ -1674,7 +1674,7 @@ X<hex> X<hexadecimal>
 =item hex
 
 Interpreta EXPR como una cadena en hexadecimal y devuelve el valor correspondiente.
-(Para convertir strings que pueden comenzar con C<0>, C<0x> o C<0b>, ver L</oct>.)  Si se omite EXPR, usa C<$_>.
+(Para convertir strings que pueden comenzar con C<0>, C<0x> o C<0b>, ver L</oct>). Si se omite EXPR, usa C<$_>.
 
     print hex '0xAf'; # imprime '175'
     print hex 'aF';   # lo mismo
@@ -2196,9 +2196,9 @@ y para escritura:
 
 (Lo siguiente es una referencia general a open(): para una introducción más suave puede considerar L<perlopentut>).
 
-Si IDENTIFICADOR_FICHERO es una variable escalar indefinida (o array o elemento hash), un nuevo identificador de archivo es autovivificado, significando que a la variable es asignada una referencia a un nuevo, anónimo y reservado identificador de archivo.  De lo contrario, si IDENTIFICADOR_ARCHIVO es una expresión, su valor es el identificador de archivo real.  (Esto se considera una referencia simbólica, por lo que C<use strict "refs"> I<no> debe estar activado.)
+Si IDENTIFICADOR_FICHERO es una variable escalar indefinida (o array o elemento hash), un nuevo identificador de archivo es autovivificado, significando que a la variable es asignada una referencia a un nuevo, anónimo y reservado identificador de archivo.  De lo contrario, si IDENTIFICADOR_ARCHIVO es una expresión, su valor es el identificador de archivo real.  (Esto se considera una referencia simbólica, por lo que C<use strict "refs"> I<no> debe estar activado).
 
-Si EXPR se omite, la variable escalar global (a nivel de paquete) del mismo nombre que el IDENTIFICADOR_ARCHIVO contiene el nombre del archivo.  (Tenga en cuenta que las variables léxicas -las declaradas con C<my> o C<state>- no servirán para este propósito; así que si está usando C<my> o C<state>, especifique EXPR en su llamada a open.)
+Si EXPR se omite, la variable escalar global (a nivel de paquete) del mismo nombre que el IDENTIFICADOR_ARCHIVO contiene el nombre del archivo.  (Tenga en cuenta que las variables léxicas -las declaradas con C<my> o C<state>- no servirán para este propósito; así que si está usando C<my> o C<state>, especifique EXPR en su llamada a open).
 
 Si se especifican tres (o más) argumentos, es tomado el modo de apertura (incluyendo un codificado opcional) del segundo argumento, a diferencia del nombre del archivo, que estará en el tercer argumento.  Si MODO es C<< < >> o nada, el archivo se abre para lectura.
 Si MODO es C<< > >>, el archivo es abierto para salida. Los archivos que ya existan serán truncados ("sobreescritos"); y los que no existan serán creados como nuevos archivos.
@@ -2479,7 +2479,7 @@ X<ord> X<encoding> X<codificación>
 
 Devuelve el valor numérico (en la codificación nativa de 8 bits, como ASCII o EBCDIC, o Unicode) del primer carácter de EXPR.  
 Si EXPR es una cadena vacía, devuelve 0.  Si se omite EXPR, se usa C<$_>.
-(Note que es un I<carácter>, no un byte.)
+(Note que es un I<carácter>, no un byte).
 
 Para lo contrario, vea L</chr>.
 Vea L<perlunicode> para más información acerca de Unicode.
@@ -3047,7 +3047,7 @@ X<print>
 =item print
 
 Imprime una cadena o una lista de cadenas.  Devuelve verdadero si tuvo éxito.
-IDENTIFICADOR_ARCHIVO puede ser una variable escalar conteniendo el nombre de o una referencia al identificador de archivo, introduciendo así un nivel más de indirección.  (NOTA: Si IDENTIFICADOR_ARCHIVO es una variable y el siguiente símbolo es un término, puede ser mal interpretado como un operador a menos que se interponga un C<+> o poner entre paréntesis los argumentos.) Si IDENTIFICADOR_ARCHIVO se omite, se imprime al canal de salida seleccionado por última vez (vea L</select>).  Si la LISTA se omite, se imprime C<$_> al actual canal de salida seleccionado.  Para utilizar solamente IDENTIFICADOR_ARCHIVO para imprimir en él, el contenido de C<$_>, debe ser un identificador de archivo real, como C<FH>, no uno indirecto como C<$fh>.  Para configurar el controlador de salida predeterminado a otro valor distinto que STDOUT, use el operador C<select>.
+IDENTIFICADOR_ARCHIVO puede ser una variable escalar conteniendo el nombre de o una referencia al identificador de archivo, introduciendo así un nivel más de indirección.  (NOTA: Si IDENTIFICADOR_ARCHIVO es una variable y el siguiente símbolo es un término, puede ser mal interpretado como un operador a menos que se interponga un C<+> o poner entre paréntesis los argumentos). Si IDENTIFICADOR_ARCHIVO se omite, se imprime al canal de salida seleccionado por última vez (vea L</select>).  Si la LISTA se omite, se imprime C<$_> al actual canal de salida seleccionado.  Para utilizar solamente IDENTIFICADOR_ARCHIVO para imprimir en él, el contenido de C<$_>, debe ser un identificador de archivo real, como C<FH>, no uno indirecto como C<$fh>.  Para configurar el controlador de salida predeterminado a otro valor distinto que STDOUT, use el operador C<select>.
 
 El valor actual de C<$,> (si lo tiene) es impreso entre cada elemento de la LISTA.  El valor actual de C<$\> (si lo tiene) es impreso después de que toda la LISTA haya sido impresa.  Debido a que print toma una LISTA, cualquier cosa en la LISTA es evaluada en contexto de lista, incluyendo cualquier subrutina que devuelva listas.  Tenga cuidado de no seguir la palabra clave print con un paréntesis de apertura a menos que desee que el correspondiente paréntesis de cierre ponga fin a los argumentos de la impresión; ponga paréntesis alrededor de todos los argumentos (o interponga un C<+>, pero esto no parece tan bonito).
 
@@ -4083,7 +4083,7 @@ Si usted tuviera el encabezado completo de un mensaje de correo electrónico Unix
     $encabezado =~ s/\n(?=\s)//g;  # arregla la continuación de líneas
     %cabeceras  =  (UNIX_FROM => split /^(\S*?):\s*/m, $encabezado);
 
-El patrón C</PATRÓN/> puede ser sustituido por una expresión para especificar patrones que varían en tiempo de ejecución.  (Para hacer la compilación en tiempo de ejecución sólo una vez, utilice C</$variable/o>.)
+El patrón C</PATRÓN/> puede ser sustituido por una expresión para especificar patrones que varían en tiempo de ejecución.  (Para hacer la compilación en tiempo de ejecución sólo una vez, utilice C</$variable/o>).
 
 Como caso especial, especificando un PATRÓN de un espacio (S<C<' '>>) dividirá en espacios en blanco al igual que lo hace C<split> sin argumentos.  Por lo tanto, S<C<split(' ')>> puede ser utilizado para emular el comportamiento por defecto de B<awk>, mientras que S<C<split(/ /)>> le dará tantos campos nulos iniciales (cadenas vacías) como espacios haya allí.
 Un C<split> con C</\s+/> es como un S<C<split(' ')>> excepto que cualquier espacio en blanco inicial produce un primer campo nulo.  Un C<split> sin argumentos realmente es internamente un S<C<split(' ', $_)>>.
@@ -5186,7 +5186,7 @@ X<values>
 
 =item values EXPR
 
-Devuelve una lista consistente de todas las claves del hash indicado, o los índices de un array. (En contexto escalar, devuelve el número de valores.)
+Devuelve una lista consistente de todas las claves del hash indicado, o los índices de un array. (En contexto escalar, devuelve el número de valores).
 
 Los valores son devueltos en un aparente orden aleatorio.  El actual orden aleatorio está sujeto a cambio en futuras versiones de Perl, pero se garantiza que sea el mismo orden que las funciones C<keys> o C<each> producirían (mientras que el hash no haya sido modificado).  Desde Perl 5.8.1 la ordenación es diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (ver L<perlsec/"Ataques por Complejidad Algorítmica">).
 

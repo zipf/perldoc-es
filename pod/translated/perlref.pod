@@ -13,7 +13,7 @@ Antes de la publicación de Perl 5, era difícil representar estructuras complejas
 Perl ahora no sólo hace que sea más fácil usar referencias simbólicas a variables, sino que también le permite tener referencias "duras" a cualquier trozo de datos o código.
 Cualquier escalar puede contener una referencia dura.  Dado que los arrays y los hashes contienen escalares, ahora puede fácilmente construir arrays de arrays, arrays de hashes, arrays de hashes de funciones, y así sucesivamente.
 
-Las referencias duras son inteligentes: hacen por usted un seguimiento de los recuentos de referencias, liberando automáticamente lo que es referido en cuanto su recuento de referencias llega a cero.  (Los recuentos de referencia para valores en las estructuras de datos auto referenciadas o cíclicas quizás no puedan llegar a cero sin un poco de ayuda, vea L<perlobj/"Recolección de basura en dos fases"> para una explicación detallada.) Si eso le pasa a un objeto, el objeto es destruido.  Vea L<perlobj> para más información sobre los objetos.  (En cierto sentido, todo en Perl es un objeto, pero por lo general se reserva la palabra para las referencias a objetos que han sido oficialmente "bendecidos" en una clase I<package>.)
+Las referencias duras son inteligentes: hacen por usted un seguimiento de los recuentos de referencias, liberando automáticamente lo que es referido en cuanto su recuento de referencias llega a cero.  (Los recuentos de referencia para valores en las estructuras de datos auto referenciadas o cíclicas quizás no puedan llegar a cero sin un poco de ayuda, vea L<perlobj/"Recolección de basura en dos fases"> para una explicación detallada). Si eso le pasa a un objeto, el objeto es destruido.  Vea L<perlobj> para más información sobre los objetos.  (En cierto sentido, todo en Perl es un objeto, pero por lo general se reserva la palabra para las referencias a objetos que han sido oficialmente "bendecidos" en una clase I<package>).
 
 Las referencias simbólicas son nombres de variables u otros objetos, igual que un enlace simbólico en un sistema de archivos Unix contiene sólo el nombre de un archivo.
 La notación C<*glob> es algo así como una referencia simbólica.  (Las referencias simbólicas a veces se llaman "referencias blandas" pero, por favor, no las llame así; las referencias son ya lo suficientemente confusas sin sinónimos inútiles)
@@ -41,7 +41,7 @@ Las referencias se pueden crear de varias maneras.
 X<\> X<backslash> X<contrabarra>
 
 Al utilizar el operador contrabarra en una variable, subrutina, o un valor.
-(Esto funciona como el operador & (dirección de) en C.) Esto normalmente crea I<otra> referencia a una variable, porque ya hay una referencia a la variable en la tabla de símbolos.  Sin embargo, la referencia de la tabla de símbolos podría desaparecer, y usted todavía tendría la referencia que la contrabarra devolvió.  Aquí hay algunos ejemplos:
+(Esto funciona como el operador & (dirección de) en C). Esto normalmente crea I<otra> referencia a una variable, porque ya hay una referencia a la variable en la tabla de símbolos.  Sin embargo, la referencia de la tabla de símbolos podría desaparecer, y usted todavía tendría la referencia que la contrabarra devolvió.  Aquí hay algunos ejemplos:
 
     $scalarref = \$foo;
     $arrayref  = \@ARGV;
@@ -62,7 +62,7 @@ Una referencia a un array anónimo se puede crear utilizando corchetes:
 
     $arrayref = [1, 2, ['a', 'b', 'c']];
 
-Aquí hemos creado una referencia a un array anónimo de tres elementos cuyo elemento final es en sí mismo una referencia a otro array anónimo de tres elementos.  (La sintaxis multidimensional descrita más adelante se puede utilizar para acceder a esta estructura.  Por ejempñlo, después de lo anterior, C<< $arrayref->[2][1] >> obtendría el valor "b".)
+Aquí hemos creado una referencia a un array anónimo de tres elementos cuyo elemento final es en sí mismo una referencia a otro array anónimo de tres elementos.  (La sintaxis multidimensional descrita más adelante se puede utilizar para acceder a esta estructura.  Por ejemplo, después de lo anterior, C<< $arrayref->[2][1] >> obtendría el valor "b").
 
 Tomar una referencia a una lista enumerada no es lo mismo que usar corchetes, sino que es lo mismo que ¡crear una lista de referencias!
 
@@ -111,7 +111,7 @@ Una referencia a una subrutina anónima puede ser creada mediante el uso de C<sub
 
     $coderef = sub { print "Boink!\n" };
 
-Preste atención al punto y coma.  Salvo porque el código en el interior no es ejecutado inmediatamente, una C<sub {}> no es tanto una declaración como un operador, al igual que C<do{}> o C<eval{}>.  (Sin embargo, no importa cuántas veces ejecute esa línea (a menos que esté en un C<eval("...")>), $coderef seguirá siendo una referencia a la I<misma> subrutina anónima.)
+Preste atención al punto y coma.  Salvo porque el código en el interior no es ejecutado inmediatamente, una C<sub {}> no es tanto una declaración como un operador, al igual que C<do{}> o C<eval{}>.  (Sin embargo, no importa cuántas veces ejecute esa línea (a menos que esté en un C<eval("...")>), $coderef seguirá siendo una referencia a la I<misma> subrutina anónima).
 
 Las subrutinas anónimas actúan como clausuras con respecto a las variables my(), es decir, variables léxicas visibles dentro del ámbito actual.  La clausura es una noción del mundo Lisp, que dice que si se define una función anónima en un particular contexto léxico, se pretende que se ejecute en ese contexto, incluso cuando es llamada fuera de ese contexto.
 
@@ -183,7 +183,7 @@ C<*foo{COSA}> devuelve undef si esta particular COSA todavía no ha sido usada, e
 
 C<*foo{IO}> es una alternativa al mecanismo C<*GESTOR> indicado en L<perldata/"Typeglobs and Filehandles"> para pasar gestores de archivo en o fuera de las subrutinas, o almacenar en grandes estructuras de datos.
 Su desventaja es que no va a crear un gestor de archivo nuevo para usted.
-Su ventaja es que tiene menos riesgo de embrollarse más de lo que pasaría con una asignación typeglob.  (Todavía confunde gestores de directorio y archivo.) Sin embargo, si se asigna el valor de entrada a un escalar en lugar de a un typeglob como hacemos en los ejemplos siguientes, no hay riesgo de que esto suceda.
+Su ventaja es que tiene menos riesgo de embrollarse más de lo que pasaría con una asignación typeglob.  (Todavía confunde gestores de directorio y archivo). Sin embargo, si se asigna el valor de entrada a un escalar en lugar de a un typeglob como hacemos en los ejemplos siguientes, no hay riesgo de que esto suceda.
 
     splutter(*STDOUT);		# pasa todo el glob
     splutter(*STDOUT{IO});	# pasa tanto los gestores de archivo como los de directorio
@@ -365,7 +365,7 @@ e incluso
 
     print ${ push } . "over";
 
-tendrán el mismo efecto.  (Esto habría sido un error de sintaxis en Perl 5.000, aunque Perl 4 lo permitió en el formato sin espacios.) Esta construcción I<no> es considerada una referencia simbólica cuando se está utilizando strict refs:
+tendrán el mismo efecto.  (Esto habría sido un error de sintaxis en Perl 5.000, aunque Perl 4 lo permitió en el formato sin espacios). Esta construcción I<no> es considerada una referencia simbólica cuando se está utilizando strict refs:
 
     use strict "refs";
     ${ bareword };	# Muy bien, significa $bareword.
