@@ -380,7 +380,7 @@ Si CAPA está presente es un único string, pero puede contener múltiples directiv
 Tiene sentido que CAPA esté presente, al usar binmode sobre un archivo de texto.
 
 Si se omite CAPA o se especifica como C<:raw> el identificador se prepara para pasar datos binarios. Esto incluye desactivar posibles traducciones CRLF y marcarlas como bytes (como opuesto a los caracteres Unicode).
-Note que, a pesar de estar implícito en I<"Programming Perl"> (el dromedario, 3ª edición) o en otro lugar, C<:raw> I<no> es el simplemente el inverso de C<:crlf>
+Note que, a pesar de estar implícito en I<"Programming Perl"> (el dromedario, 3.ª edición) o en otro lugar, C<:raw> I<no> es el simplemente el inverso de C<:crlf>
 -- otras capas que pudieran afectar la naturaleza binaria del flujo son I<también> desactivadas. Ver L<PerlIO>, L<perlrun> y la discusión sobre la variable de entorno PERLIO.
 
 C<:bytes>, C<:crlf>, C<:utf8>, y cualquier otra directiva de la forma C<:...>, se llaman I<capas> I/O.  El pragma C<open> puede ser usado para establecer las capas I/O por defecto.  Ver L<open>.
