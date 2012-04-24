@@ -20,7 +20,7 @@ C<mkdir()> sin argumentos ahora se refiere a C<$_>.
 
 =head2 goto y eval mágicos
 
-La construcción C<eval { goto &foo }> ya no está permitida. (Note que la construcción similar, pero usando C<eval("")>, ya estaba prohibida.)
+La construcción C<eval { goto &foo }> ya no está permitida. (Note que la construcción similar, pero usando C<eval("")>, ya estaba prohibida).
 
 =head2 C<$#> se ha eliminado
 
@@ -68,16 +68,16 @@ say() es una nueva función integrada; sólo está disponible cuando C<use feature 
 
 =head2 C<CLONE_SKIP()>
 
-Perl ahora tiene soporte para la subrutina especial C<CLONE_SKIP>. Al igual que C<CLONE>, C<CLONE_SKIP> es llamado una vez por paquete; sin embargo, es llamado justo antes de que comience la clonación, y en el contexto del hilo de ejecución del padre. Si devuelve un valor verdadero, entonces ningún objeto de esa clase se clonará. Vea L<perlmod> para los detalles. (Escrito por Dave Mitchell.)
+Perl ahora tiene soporte para la subrutina especial C<CLONE_SKIP>. Al igual que C<CLONE>, C<CLONE_SKIP> es llamado una vez por paquete; sin embargo, es llamado justo antes de que comience la clonación, y en el contexto del hilo de ejecución del padre. Si devuelve un valor verdadero, entonces ningún objeto de esa clase se clonará. Vea L<perlmod> para los detalles. (Escrito por Dave Mitchell).
 
 =head2 C<${^CHILD_ERROR_NATIVE}>
 
-Una nueva variable interna, C<${^CHILD_ERROR_NATIVE}>, indica el estado nativo devuelto por la última tubería cerrada, comando con acento grave, llamada exitosa a wait() o waitpid(), o desde el operador system(). Vea L<perlrun> para más detalles. (Escrito por Gisle Aas.)
+Una nueva variable interna, C<${^CHILD_ERROR_NATIVE}>, indica el estado nativo devuelto por la última tubería cerrada, comando con acento grave, llamada exitosa a wait() o waitpid(), o desde el operador system(). Vea L<perlrun> para más detalles. (Escrito por Gisle Aas).
 
 =head2 Aserciones
 
 El soporte para aserciones, introducida en Perl 5.9.0, se ha mejorado.
-La sintaxis del comando C<-A> ha cambiado; ahora acepta un nombre de módulo opcional, siendo por defecto C<assertions::activate>. Vea L<aserciones> y L<perlrun>. (Escrito por Salvador Fandiño García.)
+La sintaxis del comando C<-A> ha cambiado; ahora acepta un nombre de módulo opcional, siendo por defecto C<assertions::activate>. Vea L<aserciones> y L<perlrun>. (Escrito por Salvador Fandiño García).
 
 =head2 Unicode Character Database 4.1.0
 
@@ -246,7 +246,7 @@ C<use strict "refs"> hace caso omiso de una referencia dura en un argumento para
     my $x = "foo";
     if (defined $$x) {...}
 
-Esto ahora produce correctamente el error en tiempo de ejecución C<Can't use string as a SCALAR ref while "strict refs" in use>. (Sin embargo, C<defined @$foo> y C<defined %$foo> todavía están permitidos. Se desaconseja, de todas maneras, usar estas construcciones.)
+Esto ahora produce correctamente el error en tiempo de ejecución C<Can't use string as a SCALAR ref while "strict refs" in use>. (Sin embargo, C<defined @$foo> y C<defined %$foo> todavía están permitidos. Se desaconseja, de todas maneras, usar estas construcciones).
 
 =head2 Llamando a CORE::require()
 

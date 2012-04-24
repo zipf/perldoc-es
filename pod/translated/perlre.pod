@@ -213,7 +213,7 @@ X<\> X<^> X<.> X<$> X<|> X<(> X<()> X<[> X<[]>
     ()	Agrupación
     []	Clase carácter encorchetada
 
-Por defecto, el carácter "^" garantiza que coincidirá solo con el principio de la cadena, el carácter "$" solo con el final (o antes del nueva línea del final) y Perl hará ciertas optimizaciones asumiendo que la cadena solo contiene una línea.  Los caracteres de nueva línea incrustados dentro de la cadena no coincidirán con "^" o "$".  Puede, sin embargo, desear tratar a la cadena como un búfer de varias líneas, de modo que "^" coincidirá después de cualquier carácter nueva línea dentro de la cadena (excepto si el nueva línea es el último carácter en la cadena), y "$" coincidirá delante de cualquier carácter nueva línea.  A costa de una ligera sobrecarga, puede hacer esto usando el modificador /m en el patrón del operador de coincidencia.  (Antiguos programas hacían esto estableciendo C<$*>, pero esta opción ha sido eliminada en perl 5.9.)
+Por defecto, el carácter "^" garantiza que coincidirá solo con el principio de la cadena, el carácter "$" solo con el final (o antes del nueva línea del final) y Perl hará ciertas optimizaciones asumiendo que la cadena solo contiene una línea.  Los caracteres de nueva línea incrustados dentro de la cadena no coincidirán con "^" o "$".  Puede, sin embargo, desear tratar a la cadena como un búfer de varias líneas, de modo que "^" coincidirá después de cualquier carácter nueva línea dentro de la cadena (excepto si el nueva línea es el último carácter en la cadena), y "$" coincidirá delante de cualquier carácter nueva línea.  A costa de una ligera sobrecarga, puede hacer esto usando el modificador /m en el patrón del operador de coincidencia.  (Antiguos programas hacían esto estableciendo C<$*>, pero esta opción ha sido eliminada en perl 5.9).
 X<^> X<$> X</m>
 
 Para simplificar la sustitución de varias líneas, el carácter "."  no coincide con una nueva línea a menos que utilice el modificador C</s>, que en efecto dice a Perl que asuma que la cadena es una sola línea -incluso si no lo es-.
@@ -419,7 +419,7 @@ X<búfer captura nombre> X<expresión regular, búfer captura nombre>
 X<grupo captura nombre> X<expresión regular, grupo captura nombre>
 X<%+> X<$+{nombre}> X<< \k<nombre> >>
 No hay límite al número de subcadenas capturadas que puede usar.
-Los grupos son numerados siendo el paréntesis abierto más a la izquierda el número 1, etc. Si un grupo no se ha encontrado, la contrareferencia asociada no será inicializada. (Esto puede ocurrir si el grupo es opcional, o en una rama diferente de una alternancia.) Puede omitir la C<"g">, y escribir C<"\1">, etc, pero hay algunos problemas con este formato, como se describe más abajo.
+Los grupos son numerados siendo el paréntesis abierto más a la izquierda el número 1, etc. Si un grupo no se ha encontrado, la contrareferencia asociada no será inicializada. (Esto puede ocurrir si el grupo es opcional, o en una rama diferente de una alternancia). Puede omitir la C<"g">, y escribir C<"\1">, etc, pero hay algunos problemas con este formato, como se describe más abajo.
 
 También puede referirse a los grupos de captura, de forma relativa, usando un número negativo, por lo que C<\g-1> y C<\g{-1}> se refieren al grupo de captura inmediatamente anterior, y C<\g-2> y C<\g{-2}> se refieren al grupo anterior a éste.  Por ejemplo:
 
@@ -435,11 +435,11 @@ También puede referirse a los grupos de captura, de forma relativa, usando un nú
 coincidiría igual que con C</(Y) ( (X) \g3 \g1 )/x>.  Esto le permite interpolar expresiones regulares en grandes expresiones regulares y no tener que preocuparse por el cambio en la numeración de los grupos de captura.
 
 Puede prescindir de los números y crear grupos de captura con nombres.
-La notación es C<(?E<lt>I<nombre>E<gt>...)> para declararlo y C<\g{I<nombre>}> para referirse a él.  (Para ser compatible con las expresiones regulares .Net, C<\g{I<nombre>}> también se puede escribir como C<\k{I<nombre>}>, C<\kE<lt>I<nombre>E<gt>> o C<\k'I<nombre>'>.) I<nombre> no debe comenzar con un número, ni contener guiones.
+La notación es C<(?E<lt>I<nombre>E<gt>...)> para declararlo y C<\g{I<nombre>}> para referirse a él.  (Para ser compatible con las expresiones regulares .Net, C<\g{I<nombre>}> también se puede escribir como C<\k{I<nombre>}>, C<\kE<lt>I<nombre>E<gt>> o C<\k'I<nombre>'>). I<nombre> no debe comenzar con un número, ni contener guiones.
 Cuando diferentes grupos dentro del mismo patrón tienen el mismo nombre, cualquier referencia a ese nombre se supone que es al grupo definido que esté más a la izquierda.  Los grupos con nombre se numeran de forma absoluta y relativa, por lo que también se puede hacer referencia a ellos con esos números.
-(De este modo es posible hacer cosas con los grupos de captura con nombres que, de otro modo, requerirían código C<(??{})>.)
+(De este modo es posible hacer cosas con los grupos de captura con nombres que, de otro modo, requerirían código C<(??{})>).
 
-Los contenidos del grupo de captura están, dinámicamente, ajustados a un ámbito y disposición fuera del patrón hasta el final del bloque que lo contiene o hasta que la siguiente coincidencia con éxito, lo que ocurra primero.  (Vea L<perlsyn/"Instrucciones complejas">.) Puede referirse a ellos con un número absoluto (usando C<"$1"> en lugar de C<"\g1">, etc); o por nombre vía el hash C<%+>, usando C<"$+{I<nombre>}">.
+Los contenidos del grupo de captura están, dinámicamente, ajustados a un ámbito y disposición fuera del patrón hasta el final del bloque que lo contiene o hasta que la siguiente coincidencia con éxito, lo que ocurra primero.  (Vea L<perlsyn/"Instrucciones complejas">). Puede referirse a ellos con un número absoluto (usando C<"$1"> en lugar de C<"\g1">, etc); o por nombre vía el hash C<%+>, usando C<"$+{I<nombre>}">.
 
 Las llaves son necesarias al referirse a los grupos de captura de llamada, pero son opcionales para los números absolutos o relativos.  Las llaves son más seguras al crear una expresión regular mediante la concatenación de cadenas más pequeñas.  Por ejemplo, si tiene C<qr/$a$b/>, y C<$a> conteniendo C<"\g1"> y C<$b> conteniendo C<"37">, obtendrá C<\g137/>, que, probablemente, no será lo que pretendía.
 
@@ -486,7 +486,7 @@ Varias variables especiales también se refieren a porciones de la coincidencia a
 C<$&> devuelve toda la cadena coincidente.  (Hace un tiempo, C<$0> también lo hacía, pero ahora devuelve el nombre del programa).  C<$`> devuelve todo lo anterior a la cadena coincidente.  C<$'> devuelve todo lo posterior a la cadena coincidente. Y C<$^N> contiene aquello que coincidía con el más reciente grupo de captura (sub coincidencia). C<$^N> puede ser usado en patrones extendidos (ver abajo), por ejemplo para asignar una sub coincidencia a una variable.
 X<$+> X<$^N> X<$&> X<$`> X<$'>
 
-Estas variables especiales, como el hash C<%+> y las variables de coincidencia numeradas (C<$1>, C<$2>, C<$3>, etc.) están dinámicamente contextualizadas hasta el final del bloque actual o hasta la siguiente coincidencia exitosa; lo que ocurra primero.  (Vea L<perlsyn/"Instrucciones compuestas">.)
+Estas variables especiales, como el hash C<%+> y las variables de coincidencia numeradas (C<$1>, C<$2>, C<$3>, etc.) están dinámicamente contextualizadas hasta el final del bloque actual o hasta la siguiente coincidencia exitosa; lo que ocurra primero.  (Vea L<perlsyn/"Instrucciones compuestas">).
 X<$+> X<$^N> X<$&> X<$`> X<$'>
 X<$1> X<$2> X<$3> X<$4> X<$5> X<$6> X<$7> X<$8> X<$9>
 
@@ -936,8 +936,8 @@ Un ejemplo de cómo esto podría ser utilizado es lo siguiente:
 
   /(?<NOMBRE>(?&NOMBRE_PAT))(?<DIR>(?&DIRECCIÓN_PAT))
    (?(DEFINE)
-     (?<NOMBRE_PAT>....)
-     (?<DIRECCIÓN_PAT>....)
+     (?<NOMBRE_PAT>...)
+     (?<DIRECCIÓN_PAT>...)
    )/x
 
 Tenga en cuenta que los grupos de captura encontrados en el interior de la recursión no son accesibles después del regreso de la recursión, por lo que  es necesaria una capa extra de grupos de captura. Así C<$+{NOMBRE_PAT}> no será definido a pesar de que C<$+{NOMBRE}> sí lo será.
@@ -953,7 +953,7 @@ Por ejemplo: C<< ^(?>a*)ab >> nunca coincidirá, ya que C<< (?>a*) >> (anclada al
 C<< (?>patrón) >> no desactiva la vuelta atrás una vez que ha coincidido. Todavía es posible dar marcha atrás más allá de la construcción, pero no dentro de ella. Por tanto C<< ((?>a*)|(?>b*))ar >> aún lo haría con "bar".
 
 Un efecto similar a C<< (?>patrón) >> se puede conseguir escribiendo C<(?=(patrón))\g{-1}>.  Esto busca la misma subcadena como en C<a+>, y el siguiente C<\g{-1}> se come la cadena coincidente; por lo tanto, hace una aserción de longitud cero, como un análogo de C<< (?>...) >>.
-(La diferencia entre estas dos construcciones es que el segundo utiliza un grupo de captura, aumentando el número de contrareferencias en el resto de la expresión regular.)
+(La diferencia entre estas dos construcciones es que el segundo utiliza un grupo de captura, aumentando el número de contrareferencias en el resto de la expresión regular).
 
 Considere este patrón:
 
@@ -1319,7 +1319,7 @@ Cualquier carácter individual coincide consigo mismo, a menos que sea un I<metac
 
 Una serie de caracteres coincide con la serie de caracteres en la cadena objetivo, por lo que el patrón C<blurfl> coincidiría con "blurfl" en la cadena objetivo.
 
-Puede especificar una clase de caracteres, encerrando una lista de caracteres en C<[]>, que coincidirá con cualquier carácter de la lista.  Si el primer carácter después del "[" es "^", la clase coincide con cualquier carácter que no esté en la lista.  Dentro de una lista, el carácter "-" indica un intervalo, de modo que C<a-z> representa todos los caracteres entre "a" y "z", ambos inclusive.  Si desea que sean los propios "-" o "]" como miembros de una clase, póngalos al principio de la lista (posiblemente después de un "^"), o escápelos con una barra invertida.  "-" es también tomado literalmente cuando se encuentra al final de la lista, justo antes del "]" final.  (Los siguientes ejemplos especifican la misma clase de tres caracteres: C<[-az]>, C<[az-]> y C>[a\-z]>.  Todos son diferentes de C<[a-z]>, que especifica una clase que contiene veintiséis caracteres, incluso en los juegos de caracteres basados en EBCDIC.) Además, si intenta utilizar las clases de caracteres C<\w>, C<\W>, C<\s>, C<\S>, C<\d>, o C<\D> como criterios de valoración de una serie, el "-" es tomado de forma literal.
+Puede especificar una clase de caracteres, encerrando una lista de caracteres en C<[]>, que coincidirá con cualquier carácter de la lista.  Si el primer carácter después del "[" es "^", la clase coincide con cualquier carácter que no esté en la lista.  Dentro de una lista, el carácter "-" indica un intervalo, de modo que C<a-z> representa todos los caracteres entre "a" y "z", ambos inclusive.  Si desea que sean los propios "-" o "]" como miembros de una clase, póngalos al principio de la lista (posiblemente después de un "^"), o escápelos con una barra invertida.  "-" es también tomado literalmente cuando se encuentra al final de la lista, justo antes del "]" final.  (Los siguientes ejemplos especifican la misma clase de tres caracteres: C<[-az]>, C<[az-]> y C>[a\-z]>.  Todos son diferentes de C<[a-z]>, que especifica una clase que contiene veintiséis caracteres, incluso en los juegos de caracteres basados en EBCDIC). Además, si intenta utilizar las clases de caracteres C<\w>, C<\W>, C<\s>, C<\S>, C<\d>, o C<\D> como criterios de valoración de una serie, el "-" es tomado de forma literal.
 
 Tenga en cuenta también que la idea de rango es poco transportable entre conjuntos de caracteres; e incluso dentro de los mismos conjuntos de caracteres pueden causar resultados que probablemente no espera.  Un buen principio es el de usar rangos que sólo comiencen y terminen, de forma alfabética, con un mismo tamaño de caja ([a-e], [A-E]), o dígitos ([0-9]).  Cualquier otro caso no es seguro.  En caso de duda, explicite los conjuntos de caracteres completamente.
 
@@ -1327,7 +1327,7 @@ Los caracteres pueden ser especificados utilizando una sintaxis metacarácter al 
 
 Puede especificar una serie de alternativas para un patrón usando "|" para separarlos, por lo que C<fee|fie|foe> coincide con cualquier "fee", "fie", o "foe" en la cadena objetivo (al igual que C<f(e|i|o)e>).  La primera alternativa incluye todo, desde el último patrón delimitador ("(", "(?:", etc o el comienzo del patrón) hasta el primer "|", y la última alternativa contiene todo, desde el último "|" hasta el siguiente delimitador de cierre del patrón.  Es por eso que es una práctica común incluir las alternativas entre paréntesis: para minimizar la confusión acerca de dónde empiezan y terminan.
 
-Las alternativas son procesadas de izquierda a derecha, de modo que la primera alternativa encontrada que coincida con toda la expresión, es la que es elegida. Esto significa que las alternativas no son necesariamente codiciosas. Por ejemplo: cuando se compara C<foo|foot> contra "barefoot", sólo la parte "foo" coincidirá, ya que es la primera alternativa intentada, y coincide de forma exitosa con la cadena objetivo. (Esto puede no parecer importante, pero es importante cuando se está capturando texto usando paréntesis.)
+Las alternativas son procesadas de izquierda a derecha, de modo que la primera alternativa encontrada que coincida con toda la expresión, es la que es elegida. Esto significa que las alternativas no son necesariamente codiciosas. Por ejemplo: cuando se compara C<foo|foot> contra "barefoot", sólo la parte "foo" coincidirá, ya que es la primera alternativa intentada, y coincide de forma exitosa con la cadena objetivo. (Esto puede no parecer importante, pero es importante cuando se está capturando texto usando paréntesis).
 
 También recuerde que "|" es interpretado como un literal cuando está entre corchetes, por lo que si usted escribe C<[fee|fie|foe]> realmente está solo buscando C<[feio|]>.
 
@@ -1475,7 +1475,7 @@ Coincide con la mejor coincidencia de C<S> y sólo esa.
 
 =item C<(?=S)>, C<(?<=S)>
 
-Sólo es considerada la mejor coincidencia para C<S>.  (Esto es importante sólo si C<S> tiene paréntesis de captura, y las contrareferencias son utilizadas en otra parte de la expresión regular.)
+Sólo es considerada la mejor coincidencia para C<S>.  (Esto es importante sólo si C<S> tiene paréntesis de captura, y las contrareferencias son utilizadas en otra parte de la expresión regular).
 
 =item C<(?!S)>, C<(?<!S)>
 

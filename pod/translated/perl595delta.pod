@@ -18,10 +18,10 @@ Indefiniendo o borrando un gestor de señales con C<undef $SIG{FOO}> es ahora equ
 
 =head2 modo estricto y desreferenciando array/hash en defined()
 
-C<defined @$foo> y C<defined %$bar> ahora siguen las normas impuestas por C<strict 'refs'> (es decir, C<$foo> y C<$bar> deberán ser referencias correctas.)
+C<defined @$foo> y C<defined %$bar> ahora siguen las normas impuestas por C<strict 'refs'> (es decir, C<$foo> y C<$bar> deberán ser referencias correctas).
 (Nicholas Clark)
 
-(Sin embargo, C<defined(@foo)> y C<defined(%bar)> son siempre, de todos modos, construcciones no aconsejables.)
+(Sin embargo, C<defined(@foo)> y C<defined(%bar)> son siempre, de todos modos, construcciones no aconsejables).
 
 =head2 C<(?p{})> ha sido eliminado
 
@@ -29,7 +29,7 @@ La construcción basada en la expresión regular C<(?p{})>, que fue depreciada en 
 
 =head2 Los Pseudo-hashes han sido eliminados
 
-Soporte para pseudo-hashes ha sido eliminado a partir de Perl 5.9. (El pragma C<fields> se mantiene, pero utiliza una implementación alternativa.)
+Soporte para pseudo-hashes ha sido eliminado a partir de Perl 5.9. (El pragma C<fields> se mantiene, pero utiliza una implementación alternativa).
 
 =head2 Eliminación del compilador de bytecode  y de perlcc
 
@@ -80,7 +80,7 @@ Nota: los usuarios con experiencia con PCRE encontrarán que la implementación Pe
 
 =item Búferes de captura nombrados
 
-Ahora es posible poner nombres a los paréntesis de captura en un patrón, y referirse a los contenidos capturados por ese nombre. La sintaxis del nombrado es C<< (?<NOMBRE>....) >>.
+Ahora es posible poner nombres a los paréntesis de captura en un patrón, y referirse a los contenidos capturados por ese nombre. La sintaxis del nombrado es C<< (?<NOMBRE>...) >>.
 Es posible referirse a un búfer nombrado con la sintaxis C<< \k<NOMBRE> >>. En código, los nuevos hash mágicos C<%+> y C<%-> puede ser usados para acceder a los contenidos de los búfer de captura.
 
 Así, para reemplazar todos los caracteres duplicados, uno podría escribir
