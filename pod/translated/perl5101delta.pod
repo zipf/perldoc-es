@@ -30,7 +30,7 @@ Sin embargo, contrariamente a 5.10.0, la evaluación de los operadores flip-flop 
 
 =item Operador definido-or
 
-Una expresión compuesta, que incluya al operador definido-or, como en C<when (expr1 // expr2)>, será tratada como booleana si la primera expresión es booleana. (Esto amplia la regla actual que se aplica al operador C<or> normal, como en C<when (expr1 || expr2)>.)
+Una expresión compuesta, que incluya al operador definido-or, como en C<when (expr1 // expr2)>, será tratada como booleana si la primera expresión es booleana. (Esto amplia la regla actual que se aplica al operador C<or> normal, como en C<when (expr1 || expr2)>).
 
 =back
 
@@ -71,9 +71,9 @@ La tabla de combinaciones para el operador de coincidencia inteligente está en L
 
 =head3 Coincidencia inteligente y sobrecarga
 
-De acuerdo con la regla de reparto basada en el tipo del argumento de la derecha, cuando un objeto sobrecarga C<~~> aparece en el lado derecho del operador, la rutina de sobrecarga siempre será llamada (con un tercer argumento establecido a un valor verdadero, consulte L<overload>.) Sin embargo, cuando el objeto aparece a la izquierda, la rutina de sobrecarga será llamada sólo cuando el argumento de la derecha sea un escalar simple. De esta manera no se rompe la distribución del efecto de la coincidencia inteligente a través de arrays, así como otros comportamientos con los tipos complejos (referencias a código, hashes, expresiones regulares). Por lo tanto, los programadores de rutinas de sobrecarga de coincidencia inteligente solo tienen que preocuparse de la comparación contra un escalar, y posiblemente, con una sobrecarga de la operación de convertir en cadena de caracteres; los otros casos comunes serán automáticamente gestionados de forma coherente.
+De acuerdo con la regla de reparto basada en el tipo del argumento de la derecha, cuando un objeto sobrecarga C<~~> aparece en el lado derecho del operador, la rutina de sobrecarga siempre será llamada (con un tercer argumento establecido a un valor verdadero, consulte L<overload>). Sin embargo, cuando el objeto aparece a la izquierda, la rutina de sobrecarga será llamada sólo cuando el argumento de la derecha sea un escalar simple. De esta manera no se rompe la distribución del efecto de la coincidencia inteligente a través de arrays, así como otros comportamientos con los tipos complejos (referencias a código, hashes, expresiones regulares). Por lo tanto, los programadores de rutinas de sobrecarga de coincidencia inteligente solo tienen que preocuparse de la comparación contra un escalar, y posiblemente, con una sobrecarga de la operación de convertir en cadena de caracteres; los otros casos comunes serán automáticamente gestionados de forma coherente.
 
-C<~~> rechazará funcionar en objetos que no lo sobrecarguen (para no depender de la estructura subyacente del objeto) (Sin embargo, si el objeto sobrecarga la conversión en cadena de caracteres o los operadores de conversión en números, y si la sobrecarga de reserva está activa, será utilizada en su lugar, como de costumbre.)
+C<~~> rechazará funcionar en objetos que no lo sobrecarguen (para no depender de la estructura subyacente del objeto) (Sin embargo, si el objeto sobrecarga la conversión en cadena de caracteres o los operadores de conversión en números, y si la sobrecarga de reserva está activa, será utilizada en su lugar, como de costumbre).
 
 =head2 Otros cambios incompatibles
 
@@ -86,7 +86,7 @@ Vea L<"Módulos y Pragmata"> para más información.
 
 =item *
 
-Ahora es un error en tiempo de ejecución usar el operador de coincidencia inteligente C<~~> con un objeto que no tenga la sobrecarga definida para él. (De esta forma C<~~> no romperá la encapsulación al hacer la comparación con la representación interna del objeto a través de la referencia.)
+Ahora es un error en tiempo de ejecución usar el operador de coincidencia inteligente C<~~> con un objeto que no tenga la sobrecarga definida para él. (De esta forma C<~~> no romperá la encapsulación al hacer la comparación con la representación interna del objeto a través de la referencia).
 
 =item *
 

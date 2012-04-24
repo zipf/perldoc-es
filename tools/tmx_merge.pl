@@ -14,11 +14,11 @@ use XML::Twig;
 
 # Hard-coded paths relative to /perldoc-es/tools
 # Clean memory
-Readonly my $CLEAN_PATH  => '../tm/clean/omegat_clean_prj-omegat.tmx';
+Readonly my $CLEAN_PATH  => '../memory/clean/omegat_clean_prj-omegat.tmx';
 # Work memory
-Readonly my $WORK_PATH   => '../tm/work/perlspanish-omegat.explorer.tmx';
+Readonly my $WORK_PATH   => '../memory/work/perlspanish-omegat.explorer.tmx';
 # Merged memory
-Readonly my $MERGED_PATH => '../tm/work/current_work_memory.tmx';
+Readonly my $MERGED_PATH => '../memory/work/current_work_memory.tmx';
 
 
 # Read clean memory and fill %clean hash
