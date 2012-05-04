@@ -60,11 +60,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = POD2::ES
 NAME_SYM = POD2_ES
-VERSION = 5.14.2.06
+VERSION = 5.14.2.07
 VERSION_MACRO = VERSION
-VERSION_SYM = 5_14_2_06
+VERSION_SYM = 5_14_2_07
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 5.14.2.06
+XS_VERSION = 5.14.2.07
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -178,6 +178,7 @@ MAN3PODS = lib/POD2/ES.pm \
 	lib/POD2/ES/perlpragma.pod \
 	lib/POD2/ES/perlsource.pod \
 	lib/POD2/ES/perlstyle.pod \
+	lib/POD2/ES/perlunifaq.pod \
 	lib/POD2/ES/perlunitut.pod \
 	lib/POD2/ES/perlutil.pod
 
@@ -220,6 +221,7 @@ TO_INST_PM = lib/.DS_Store \
 	lib/POD2/ES/perlpragma.pod \
 	lib/POD2/ES/perlsource.pod \
 	lib/POD2/ES/perlstyle.pod \
+	lib/POD2/ES/perlunifaq.pod \
 	lib/POD2/ES/perlunitut.pod \
 	lib/POD2/ES/perlutil.pod
 
@@ -235,6 +237,8 @@ PM_TO_BLIB = lib/POD2/ES/perldbmfilter.pod \
 	blib/lib/POD2/ES/perlpragma.pod \
 	lib/POD2/ES/perlintro.pod \
 	blib/lib/POD2/ES/perlintro.pod \
+	lib/POD2/ES/perlunifaq.pod \
+	blib/lib/POD2/ES/perlunifaq.pod \
 	lib/POD2/ES/perlbook.pod \
 	blib/lib/POD2/ES/perlbook.pod \
 	lib/.DS_Store \
@@ -333,7 +337,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = POD2-ES
-DISTVNAME = POD2-ES-5.14.2.06
+DISTVNAME = POD2-ES-5.14.2.07
 
 
 # --- MakeMaker macro section:
@@ -491,6 +495,7 @@ manifypods : pure_all  \
 	lib/POD2/ES/perldoc.pod \
 	lib/POD2/ES/perlpragma.pod \
 	lib/POD2/ES/perlintro.pod \
+	lib/POD2/ES/perlunifaq.pod \
 	lib/POD2/ES/perlbook.pod \
 	lib/POD2/ES/perlnumber.pod \
 	lib/POD2/ES/perlfaq1.pod \
@@ -508,6 +513,7 @@ manifypods : pure_all  \
 	  lib/POD2/ES/perldoc.pod $(INST_MAN3DIR)/POD2::ES::perldoc.$(MAN3EXT) \
 	  lib/POD2/ES/perlpragma.pod $(INST_MAN3DIR)/POD2::ES::perlpragma.$(MAN3EXT) \
 	  lib/POD2/ES/perlintro.pod $(INST_MAN3DIR)/POD2::ES::perlintro.$(MAN3EXT) \
+	  lib/POD2/ES/perlunifaq.pod $(INST_MAN3DIR)/POD2::ES::perlunifaq.$(MAN3EXT) \
 	  lib/POD2/ES/perlbook.pod $(INST_MAN3DIR)/POD2::ES::perlbook.$(MAN3EXT) \
 	  lib/POD2/ES/perlnumber.pod $(INST_MAN3DIR)/POD2::ES::perlnumber.$(MAN3EXT) \
 	  lib/POD2/ES/perlfaq1.pod $(INST_MAN3DIR)/POD2::ES::perlfaq1.$(MAN3EXT) \
@@ -606,7 +612,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '  POD2::Base: 0.043' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Pod::Perldoc: 3.15' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Test::More: 0' >> META_new.yml
-	$(NOECHO) $(ECHO) 'version: v5.14.2.06' >> META_new.yml
+	$(NOECHO) $(ECHO) 'version: v5.14.2.07' >> META_new.yml
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
 	$(NOECHO) $(ECHO) Generating META.json
 	$(NOECHO) $(ECHO) '{' > META_new.json
@@ -650,7 +656,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      }' >> META_new.json
 	$(NOECHO) $(ECHO) '   },' >> META_new.json
 	$(NOECHO) $(ECHO) '   "release_status" : "stable",' >> META_new.json
-	$(NOECHO) $(ECHO) '   "version" : "v5.14.2.06"' >> META_new.json
+	$(NOECHO) $(ECHO) '   "version" : "v5.14.2.07"' >> META_new.json
 	$(NOECHO) $(ECHO) '}' >> META_new.json
 	-$(NOECHO) $(MV) META_new.json $(DISTVNAME)/META.json
 
@@ -946,7 +952,7 @@ testdb_static :: testdb_dynamic
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="5.14.2.06">' > $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="5.14.2.07">' > $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>Documentación de Perl en español</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Equipo de Perl en Español</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
@@ -969,6 +975,7 @@ pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	  lib/POD2/ES/perldoc.pod blib/lib/POD2/ES/perldoc.pod \
 	  lib/POD2/ES/perlpragma.pod blib/lib/POD2/ES/perlpragma.pod \
 	  lib/POD2/ES/perlintro.pod blib/lib/POD2/ES/perlintro.pod \
+	  lib/POD2/ES/perlunifaq.pod blib/lib/POD2/ES/perlunifaq.pod \
 	  lib/POD2/ES/perlbook.pod blib/lib/POD2/ES/perlbook.pod \
 	  lib/.DS_Store blib/lib/.DS_Store \
 	  lib/POD2/ES/perlnumber.pod blib/lib/POD2/ES/perlnumber.pod \
