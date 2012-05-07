@@ -1,0 +1,480 @@
+=head1 NOMBRE
+
+perlbot - Bolsa de Trucos sobre Objetos
+
+=head1 DESCRIPCIÓN
+
+La siguiente colección de trucos y consejos va dirigida a cubrir los deseos de los más curiosos sobre temas como el uso de instancias de variables y la mecánica de los objetos y de las relaciones entre las clases.  Se invita al lector a consultar los libros de texto sobre definiciones y metodologías de orientación a objetos.  Este documento no pretende ser un manual de programación en orientación a objetos ni una guía didáctica de las características de orientación a objetos en Perl; tampoco debe considerarse como una guía de estilo.  Si desea consultar manuales sobre estos temas, consulte L<perlboot>, L<perltoot> y L<perltooc>.
+
+Se mantiene el lema de Perl: hay más de una forma de hacerlo.
+
+=head1 OO CONSEJOS DE ESCALA
+
+=over 5
+
+=item 1
+
+No intente verificar el tipo de $self.  Esto no funcionará si la clase es heredada, cuando el tipo de $self es válido pero su paquete no es la respuesta esperada.  Vea la regla 5.
+
+=item 2
+
+Si se usa la sintaxis de orientación a objetos (OO) o de objetos indirectos (IO), entonces el objeto será probablemente del tipo correcto y no hay necesidad de volverse loco al respecto.  De todos modos, Perl no es un lenguaje paranoico.  Quien subvierte la sintaxix OO o IO seguramente lo hace de forma consciente y debería poder hacerlo.  Vea la regla 1.
+
+=item 3
+
+Use la forma de bless() con dos argumentos.  Permita que una subclase use su constructor.
+See L<HERENCIA DE CONSTRUCTORES>.
+
+=item 4
+
+Las subclases puede tener información sobre la superclase inmediata; la superclase no puede conocer nada de la subclase.
+
+=item 5
+
+No sea demasiado alegre con el uso de la herencia.  A menudo suele ser más adecuado usar relaciones "usa", "contiene" o "delega".  Vea L<RELACIONES DE OBJETOS>, L<USO DE RELACIONES CON SDBM>,
+y L<"DELEGACIÓN">.
+
+=item 6
+
+El objeto es el espacio de nombres.  Haga accesibles los datos globales de los paquetes mediante el objeto.  Esto evitará el trabajo de adivinar el paquete base de los símbolos.
+Consulte L<CONTEXTO DE CLASES Y EL OBJETO>.
+
+=item 7
+
+La sintaxis IO es menos confusa, pero también es propensa a la existencia de ambigüedades que pueden dificultar la detección de errores.  Dehe permitirse el uso de la sintaxis segura de OO incluso si no le gusta.
+
+=item 8
+
+No debe usarse la sintaxis de llamada a funciones sobre los métodos.  Esto puede ser problemático.  Alguien podría haber trasladado el método a una superclase y el código sería erróneo.  Además se está fomentando la paranoia de la regla 2.
+
+=item 9
+
+No debe asumir que conoce el paquete base de un método.  Al hacerlo se dificulta que alguien pueda sobrescribir el método.  Consulte L<PENSANDO EN REUTILIZAR EL CÓDIGO>.
+
+=back
+
+=head1 VARIABLES DE INSTANCIA
+
+Un array o tabla hash anónima pueden usarse para almacenar variables de instancia.  También pueden usarse parámetros con nombre.
+
+	package Foo;
+
+	sub new {
+		my $tipo = shift;
+		my %parametros = @_;
+		my $self = {};
+		$self->{'Alto'} = $parametros{'Alto'};
+		$self->{'Bajo'}  = $parametros{'Bajo'};
+		bless $self, $tipo;
+	}
+
+
+	package Bar;
+
+	sub new {
+		my $tipo = shift;
+		my %parametros = @_;
+		my $self = [];
+		$self->[0] = $parametros{'Izquierda'};
+		$self->[1] = $parametros{'Derecha'};
+		bless $self, $tipo;
+	}
+
+	package main;
+
+	$a = Foo->new( 'Alto' => 42, 'Bajo' => 11 );
+	print "Alto=$a->{'Alto'}\n";
+	print "Bajo=$a->{'Bajo'}\n";
+
+	$b = Bar->new( 'Izquierda' => 78, 'Derecha' => 40 );
+	print "Izquierda=$b->[0]\n";
+	print "Derecha=$b->[1]\n";
+
+=head1 VARIABLES DE INSTANCIA ESCALARES
+
+Un escalar anónimo puede usarse cuando se necesita únicamente una variable de instancia.
+
+	package Foo;
+
+	sub new {
+		my $tipo = shift;
+		my $self;
+		$self = shift;
+		bless $self, $tipo;
+	}
+
+	package main;
+
+	$a = Foo->new(42);
+	print "a=$$a\n";
+
+
+=head1 HERENCIA DE VARIABLES DE INSTANCIA
+
+Este ejemplo demuestra la forma de heredar variables de instancia de una superclase para incluirlas en una clase nueva.  Esto implica llamar al constructor de la superclase y agregar las variables de instancia propias del nuevo objeto.
+
+	package Bar;
+
+	sub new {
+		my $tipo = shift;
+		my $self = {};
+		$self->{'buz'} = 42;
+		bless $self, $tipo;
+	}
+
+	package Foo;
+	@ISA = qw( Bar );
+
+	sub new {
+		my $tipo = shift;
+		my $self = Bar->new;
+		$self->{'biz'} = 11;
+		bless $self, $tipo;
+	}
+
+	package main;
+
+	$a = Foo->new;
+	print "buz = ", $a->{'buz'}, "\n";
+	print "biz = ", $a->{'biz'}, "\n";
+
+
+
+=head1 RELACIONES ENTRE LOS OBJETOS
+
+El ejemplo siguiente muestra cómo se pueden implementar las relaciones "contiene" y "usa" entre objetos.
+
+	package Bar;
+
+	sub new {
+		my $tipo = shift;
+		my $self = {};
+		$self->{'buz'} = 42;
+		bless $self, $tipo;
+	}
+
+	package Foo;
+
+	sub new {
+		my $tipo = shift;
+		my $self = {};
+		$self->{'Bar'} = Bar->new;
+		$self->{'biz'} = 11;
+		bless $self, $tipo;
+	}
+
+	package main;
+
+	$a = Foo->new;
+	print "buz = ", $a->{'Bar'}->{'buz'}, "\n";
+	print "biz = ", $a->{'biz'}, "\n";
+
+
+
+=head1 SOBRESCRITURA DE LOS MÉTODOS DE LA SUPERCLASE
+
+El siguiente ejemplo demuestra cómo sobrescribir un método de la superclase y cómo invocarlo posteriormente.  La pseudo-clase B<SUPER> permite al programador llamar a un método sobrescrito de la superclase sin conocer realmente dónde está definido el método.
+
+	package Buz;
+	sub goo { print "aquí está el método goo\n" }
+
+	package Bar; @ISA = qw( Buz );
+	sub google { print "aquí está el método google\n" }
+
+	package Baz;
+	sub mumble { print "método numble\n" }
+
+	package Foo;
+	@ISA = qw( Bar Baz );
+
+	sub new {
+		my $tipo = shift;
+		bless [], $type;
+	}
+	sub grr { print "método grr\n" }
+	sub goo {
+		my $self = shift;
+		$self->SUPER::goo();
+	}
+	sub mumble {
+		my $self = shift;
+		$self->SUPER::mumble();
+	}
+	sub google {
+		my $self = shift;
+		$self->SUPER::google();
+	}
+
+	package main;
+
+	@foo = Foo->new;
+	$foo->mumble;
+	$foo->grr;
+	$foo->goo;
+	$foo->google;
+
+Observe que C<SUPER> se refiere a la superclase del paquete actual
+(C<Foo>) y no a la superclase de C<$self>.
+
+
+=head1 USO DE LAS RELACIONES CON SDBM
+
+Este ejemplo demuestra el uso de la interfaz de la clase SDBM.  Se crea un relación de uso entre la clase SDBM y la nueva clase Mydbm.
+
+	package Mydbm;
+
+	require SDBM_File;
+	require Tie::Hash;
+	@ISA = qw( Tie::Hash );
+
+	sub TIEHASH {
+	    my $tipo = shift;
+	    my $ref  = SDBM_File->new(@_);
+	    bless {'dbm' => $ref}, $type;
+	}
+	sub FETCH {
+	    my $self = shift;
+	    my $ref  = $self->{'dbm'};
+	    $ref->FETCH(@_);
+	}
+	sub STORE {
+	    my $self = shift;
+	    if (defined $_[0]){
+		my $ref = $self->{'dbm'};
+		$ref->STORE(@_);
+	    } else {
+		die "No puede ALMACENAR una clave no definida en Mydbm\n";
+	    }
+	}
+
+	package main;
+	use Fcntl qw( O_RDWR O_CREAT );
+
+	tie %foo, "Mydbm", "Sdbm", O_RDWR|O_CREAT, 0640;
+	$foo{'bar'} = 123;
+	print "foo-bar = $foo{'bar'}\n";
+
+	tie %bar, "Mydbm", "Sdbm2", O_RDWR|O_CREAT, 0640;
+	$bar{'Cathy'} = 456;
+	print "bar-Cathy = $bar{'Cathy'}\n";
+
+=head1 PENSANDO EN LA REUTILIZACIÓN DE CÓDIGO
+
+Una de las fortalezas de los lenguajes de orientación a objetos es la facilidad para usar código nuevo en el código ya implementado.  El siguiente ejemplo demostrará en primer lugar cómo se puede entorpecer la reutilización de código para mostrar a continuación cómo favorecerla.
+
+El primer ejemplo muestra una clase que usa una llamada a método con la forma totalmente cualificada para acceder al método privado BAZ().  El segundo ejemplo sirve para comprobar que es imposible sobrescribir el método BAZ().
+
+	package FOO;
+
+	sub new {
+		my $tipo = shift;
+		bless {}, $tipo;
+	}
+	sub bar {;
+		my $self = shift;
+		$self->FOO::private::BAZ;
+	}
+
+	package FOO::private;
+
+	sub BAZ {
+		print "en BAZ\n";
+	}
+
+	package main;
+
+	$a = FOO->new;
+	$a->bar;
+
+Ahora intentaremos sobrescribir el método BAZ().  Se podría desear que el método FOO::bar() llamara a
+GOOP::BAZ(), pero esto no es posible ya que FOO::bar() llama explícitamente a
+FOO::private::BAZ().
+
+	package FOO;
+
+	sub new {
+		my $tipo = shift;
+		bless {}, $tipo;
+	}
+	sub bar {;
+		my $self = shift;
+		$self->FOO::private::BAZ;
+	}
+
+	package FOO::private;
+
+	sub BAZ {
+		print "en BAZ\n";
+	}
+
+	package GOOP;
+	@ISA = qw(FOO);
+	sub new {
+		my $tipo = shift;
+		bless {}, $tipo;
+	}
+
+	sub BAZ {
+		print "en GOOP::BAZ\n";
+	}
+
+	package main;
+
+	$a = GOOP->new;
+	$a->bar;
+
+La creación de código reusable precisa modificar la clase FOO, evitando la llamada FOO::private.  El siguiente ejemplo muestra la forma de implementar esto con código reusable que permita la llamada al método GOOP::BAZ() en lugar de FOO::BAZ().
+
+	package FOO;
+
+	sub new {
+		my $tipo = shift;
+		bless {}, $tipo;
+	}
+	sub bar {;
+		my $self = shift;
+		$self->BAZ;
+	}
+
+	sub BAZ {
+		print "en BAZ\n";
+	}
+
+	package GOOP;
+	@ISA = qw(FOO);
+
+	sub new {
+		my $tipo = shift;
+		bless {}, $tipo;
+	}
+	sub BAZ {
+		print "en GOOP::BAZ\n";
+	}
+
+	package main;
+
+	$a = GOOP->new;
+	$a->bar;
+
+=head1 CONTEXTO DE CLASE Y OBJETO
+
+Utilice el objeto para resolver los problemas de contexto de clase y paquete.  Todo lo que un método precisa debería estar disponible mediante el objeto o debería pasarse como argumento al método.
+
+Las clases tendrán a veces datos estáticos o globales que podrán usar los métodos.  Una subclase podría desear sobrescribir los datos y reemplazarlos con tros nuevos.  Cuando esto ocurre la superclase podría no conocer cómo localizar la nueva copia de los datos.
+
+Este problema puede resolverse usando el objeto para definir el contexto del método.  Hagamos que el método examine el objeto para buscar una referencia a los datos.  La alternativa es forzar al método a salir de caza de los datos ("¿Está en mi clase o en alguna subclase?  ¿En qué subclase?"); esto no es adecuado y puede producir inconvenientes.  Es mejor dejar que el objeto diga al método dónde localizar los datos.
+
+	package Bar;
+
+	%fizzle = ( 'Contraseña' => 'XYZZY' );
+
+	sub new {
+		my $tipo = shift;
+		my $self = {};
+		$self->{'fizzle'} = \%fizzle;
+		bless $self, $tipo;
+	}
+
+	sub enter {
+		my $self = shift;
+
+		# No intente adivinar si debería usarse %Bar::fizzle
+		# o %Foo::fizzle.  El objeto siempre sabe cuál
+		# debería usarse, así que usemos esta característica.
+		#
+		my $fizzle = $self->{'fizzle'};
+
+		print "La palabra es ", $fizzle->{'Contraseña'}, "\n";
+	}
+
+	package Foo;
+	@ISA = qw( Bar );
+
+	%fizzle = ( 'Contraseña' => 'Arrugar' );
+
+	sub new {
+		my $tipo = shift;
+		my $self = Bar->new;
+		$self->{'fizzle'} = \%fizzle;
+		bless $self, $tipo;
+	}
+
+	package main;
+
+	$a = Bar->new;
+	$b = Foo->new;
+	$a->enter;
+	$b->enter;
+
+=head1 HERENCIA DE UN CONSTRUCTOR
+
+Un constructor que puede ser heredado debería usar la segunda forma de bless(), que permite la consagración directa en una clase específica.  Observe en este ejemplo que el objeto será de la clase BAR y no de la clase FOO, aunque el constructor esté en la clase FOO.
+
+	package FOO;
+
+	sub new {
+		my $tipo = shift;
+		my $self = {};
+		bless $self, $tipo;
+	}
+
+	sub baz {
+		print "en FOO::baz\n";
+	}
+
+	package BAR;
+	@ISA = qw(FOO);
+
+	sub baz {
+		print "en BAR::baz()\n";
+	}
+
+	package main;
+
+	$a = Bar->new;
+	$a->baz;
+
+=head1 DELEGACIÓN
+
+Algunas clases, como SDBM_File pueden no admitir herencia de forma efectiva porque crean objetos externos.  Estas clases pueden extenderse como algún tipo de técnica de agregación, como la relación "usa" ya mencionada mediante el uso de delegación.
+
+El siguiente ejemplo demuestra el uso de la delegación mediante una función AUTOLOAD() que realizar el envío de mensajes.  Esto permitirá que el objeto Mydbm se comporte exactamente como un objeto SDBM_File.  La clase Mydbm podría ahora extender el comportamiento agregando métodos específicos FETCH() and STORE(), si es necesario.
+
+	package Mydbm;
+
+	require SDBM_File;
+	require Tie::Hash;
+	@ISA = qw(Tie::Hash);
+
+	sub TIEHASH {
+		my $tipo = shift;
+		my $ref = SDBM_File->new(@_);
+		bless {'delegate' => $ref};
+	}
+
+	sub AUTOLOAD {
+		my $self = shift;
+
+		# El intérprete de Perl ubica el nombre del
+		# mensaje en una variable llamada $AUTOLOAD.
+
+		# No debería propagarse la llamada a DESTROY.
+		return if $AUTOLOAD =~ /::DESTROY$/;
+
+		# Elimina el nombre del paquete.
+		$AUTOLOAD =~ s/^Mydbm:://;
+
+		# Pasa el mensaje al delegado.
+		$self->{'delegate'}->$AUTOLOAD(@_);
+	}
+
+	package main;
+	use Fcntl qw( O_RDWR O_CREAT );
+
+	tie %foo, "Mydbm", "Sdbm", O_RDWR|O_CREAT, 0640;
+	$foo{'bar'} = 123;
+	print "foo-bar = $foo{'bar'}\n";
+
+=head1 VEA TAMBIÉN
+
+L<perlboot>, L<perltoot>, L<perltooc>.
