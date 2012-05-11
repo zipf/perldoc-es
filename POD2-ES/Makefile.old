@@ -60,11 +60,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = POD2::ES
 NAME_SYM = POD2_ES
-VERSION = 5.14.2.07
+VERSION = 5.14.2.08
 VERSION_MACRO = VERSION
-VERSION_SYM = 5_14_2_07
+VERSION_SYM = 5_14_2_08
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 5.14.2.07
+XS_VERSION = 5.14.2.08
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -337,7 +337,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = POD2-ES
-DISTVNAME = POD2-ES-5.14.2.07
+DISTVNAME = POD2-ES-5.14.2.08
 
 
 # --- MakeMaker macro section:
@@ -612,7 +612,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '  POD2::Base: 0.043' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Pod::Perldoc: 3.15' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Test::More: 0' >> META_new.yml
-	$(NOECHO) $(ECHO) 'version: v5.14.2.07' >> META_new.yml
+	$(NOECHO) $(ECHO) 'version: v5.14.2.08' >> META_new.yml
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
 	$(NOECHO) $(ECHO) Generating META.json
 	$(NOECHO) $(ECHO) '{' > META_new.json
@@ -656,7 +656,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      }' >> META_new.json
 	$(NOECHO) $(ECHO) '   },' >> META_new.json
 	$(NOECHO) $(ECHO) '   "release_status" : "stable",' >> META_new.json
-	$(NOECHO) $(ECHO) '   "version" : "v5.14.2.07"' >> META_new.json
+	$(NOECHO) $(ECHO) '   "version" : "v5.14.2.08"' >> META_new.json
 	$(NOECHO) $(ECHO) '}' >> META_new.json
 	-$(NOECHO) $(MV) META_new.json $(DISTVNAME)/META.json
 
@@ -952,7 +952,7 @@ testdb_static :: testdb_dynamic
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="5.14.2.07">' > $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="5.14.2.08">' > $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>Documentación de Perl en español</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Equipo de Perl en Español</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd

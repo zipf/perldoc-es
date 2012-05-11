@@ -41,7 +41,7 @@ Siempre que haya intercambio de texto con alguna entidad externa al proceso de p
 Siempre que la cadena binaria codificada se use junto con una cadena de texto, Perl
 supondrá que la cadena binaria se codificó con ISO-8859-1 (también llamada latin-1). Si la codificación no es latin-1, el resultado de la conversión de los datos no será lo que se esperaba. Por ejemplo, si la codificación es UTF-8, los bytes individuales de los caracteres multibyte se verán como caracteres independientes y se volverán a convertir a UTF-8. Esta codificación doble es similar a la codificación doble de HTML (C<&amp;gt;>) o de URI (C<%253E>).
 
-Se produce una descodificación implícita que no avisa y que se denomina "promoción". Es posible que este nombre sugiera algo positivo, pero es mejor evitar que suceda.
+Se produce una descodificación implícita sin aviso, denominada "promoción". Es posible que este nombre sugiera algo positivo, pero es mejor evitar que suceda.
 
 =head2 ¿Qué pasa si no codifico?
 
@@ -115,7 +115,7 @@ De esto debe encargarse el programador. Podría usar una notación "húngara" como 
 Primero debe convertir la cadena de bytes con la codificación A en una cadena de texto y después la cadena de texto en una cadena de bytes con la codificación B:
 
     my $cadena_texto = decode('A', $cadena_A);
-    my $cadena_B       = encode('B', $cadena_texto);
+    my $cadena_B     = encode('B', $cadena_texto);
 
 También puede omitir la parte de la cadena de texto y pasar directamente de una codificación binaria a otra:
 
@@ -149,7 +149,7 @@ Para evitar esta advertencia y evitar la mezcla de distintas codificaciones de s
 
 A menos que tenga que trabajar con los componentes internos o depurar cosas extrañas, olvídese de la marca UTF8. Esto significa que es muy probable que nunca tenga que usar C<is_utf8>, C<_utf8_on> y C<_utf8_off>.
 
-La marca UTF8, conocida también como SvUTF8, es una marca interna que indica que la representación interna actual es UTF-8. Sin esta marca, se supone que dicha representación es ISO-8859-1. Perl realiza la conversión entre estas codificaciones automáticamente.  (En realidad, generalmente Perl supone que la representación es ASCII; vea la sección L</¿Por qué algunas veces las clases de caracteres de expresiones regulares solo detectan caracteres ASCII?> anterior.)
+La marca UTF8, conocida también como SvUTF8, es una marca interna que indica que la representación interna actual es UTF-8. Sin esta marca, se supone que dicha representación es ISO-8859-1. Perl realiza la conversión entre estas codificaciones automáticamente.  (En realidad, generalmente Perl supone que la representación es ASCII; vea la sección L</¿Por qué algunas veces las clases de caracteres de expresiones regulares solo detectan caracteres ASCII?> anterior).
 
 Resulta que uno de los formatos internos de Perl es UTF-8. Como Perl no se calla nada, esto es de dominio público. Y crea muchas confusiones. Es mejor imaginar que el formato interno es alguna codificación desconocida y acostumbrarse a codificar y descodificar explícitamente siempre.
 
@@ -157,7 +157,7 @@ Resulta que uno de los formatos internos de Perl es UTF-8. Como Perl no se calla
 
 No lo use. No tiene sentido trabajar con bytes en una cadena de texto o trabajar con caracteres en una cadena de bytes. Realice las conversiones apropiadas (mediante descodificación o codificación) y todo saldrá bien: contará caracteres para los datos descodificados y bytes para los datos codificados.
 
-C <use bytes> suele ser un intento fallido de hacer algo útil. Olvide que existe.
+C<use bytes> suele ser un intento fallido de hacer algo útil. Olvide que existe.
 
 =head2 ¿Y el pragma C<use encoding>?
 
@@ -177,7 +177,7 @@ En lugar de C<decode> y C<encode>, puede usar C<_utf8_on> y C<_utf8_off>, pero e
 
 Existen algunos métodos abreviados para scripts de una línea (I<one-liners>); vea la descripción del modificador C<-C> en L<perlrun>.
 
-=head2 ¿Cuál es la diferencia entre C <UTF-8> y C<utf8>?
+=head2 ¿Cuál es la diferencia entre C<UTF-8> y C<utf8>?
 
 C<UTF-8> es el estándar oficial. C<utf8> es la manera que tiene Perl de mostrarse liberal al procesar la entrada. Si tiene que comunicarse con algo que no es tan liberal, es posible que sea mejor utilizar C<UTF-8>. Sin embargo, si tiene que comunicarse con algo que es demasiado liberal, puede que tenga que utilizar C<utf8>. Encontrará información detallada en L<Encode>.
 

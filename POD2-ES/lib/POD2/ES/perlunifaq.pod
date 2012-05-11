@@ -61,9 +61,8 @@ los bytes individuales de los caracteres multibyte se verán como caracteres
 independientes y se volverán a convertir a UTF-8. Esta codificación doble es
 similar a la codificación doble de HTML (C<&amp;gt;>) o de URI (C<%253E>).
 
-Se produce una descodificación implícita que no avisa y que se denomina
-"promoción". Es posible que este nombre sugiera algo positivo, pero es mejor
-evitar que suceda.
+Se produce una descodificación implícita sin aviso, denominada "promoción". Es
+posible que este nombre sugiera algo positivo, pero es mejor evitar que suceda.
 
 =head2 ¿Qué pasa si no codifico?
 
@@ -191,7 +190,7 @@ de texto y después la cadena de texto en una cadena de bytes con la
 codificación B:
 
     my $cadena_texto = decode('A', $cadena_A);
-    my $cadena_B       = encode('B', $cadena_texto);
+    my $cadena_B     = encode('B', $cadena_texto);
 
 También puede omitir la parte de la cadena de texto y pasar directamente de una
 codificación binaria a otra:
@@ -242,7 +241,7 @@ que la representación interna actual es UTF-8. Sin esta marca, se supone que
 dicha representación es ISO-8859-1. Perl realiza la conversión entre estas
 codificaciones automáticamente.  (En realidad, generalmente Perl supone que la
 representación es ASCII; vea la sección L</¿Por qué algunas veces las clases de
-caracteres de expresiones regulares solo detectan caracteres ASCII?> anterior.)
+caracteres de expresiones regulares solo detectan caracteres ASCII?> anterior).
 
 Resulta que uno de los formatos internos de Perl es UTF-8. Como Perl no se
 calla nada, esto es de dominio público. Y crea muchas confusiones. Es mejor
@@ -257,7 +256,7 @@ apropiadas (mediante descodificación o codificación) y todo saldrá bien:
 contará caracteres para los datos descodificados y bytes para los datos
 codificados.
 
-C <use bytes> suele ser un intento fallido de hacer algo útil. Olvide que
+C<use bytes> suele ser un intento fallido de hacer algo útil. Olvide que
 existe.
 
 =head2 ¿Y el pragma C<use encoding>?
@@ -295,7 +294,7 @@ resultar peligroso, por las mismas razones que el uso de C<:utf8>.
 Existen algunos métodos abreviados para scripts de una línea (I<one-liners>);
 vea la descripción del modificador C<-C> en L<perlrun>.
 
-=head2 ¿Cuál es la diferencia entre C <UTF-8> y C<utf8>?
+=head2 ¿Cuál es la diferencia entre C<UTF-8> y C<utf8>?
 
 C<UTF-8> es el estándar oficial. C<utf8> es la manera que tiene Perl de
 mostrarse liberal al procesar la entrada. Si tiene que comunicarse con algo que
