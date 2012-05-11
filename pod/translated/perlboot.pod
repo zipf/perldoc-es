@@ -482,7 +482,7 @@ Pero, ¿qué ocurre si se llama al método C<hablar> sobre una instancia?
 
 Se obtiene un mensaje del depurador:
 
-  Caballo=SCALAR(0xaca42ac) dice hiiii!
+  Caballo=SCALAR(0xaca42ac) dice ¡hiiii!
 
 ¿Por qué?  Porque el método C<Animal::hablar> espera recibir un nombre de clase como primer argumento, no una instancia.  Cuando la instancia se pasa como argumento se termina usando un referencia escalar consagrada como una cadena y por eso aparece el mensaje anterior.
 
