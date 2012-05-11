@@ -1,0 +1,677 @@
+=head1 NOMBRE
+
+perlboot - Tutorial Orientado a Objetos para principiantes
+
+=head1 DESCRIPCIÓN
+
+Si no está familiarizado con la orientación a objetos en otros lenguajes de programación, algunos de los documentos restantes sobre orientación a objetos podrían ser algo desalentadores. Este puede ser el caso de L<perlobj> (referencia básica para el uso de orientación a objetos) y L<perltoot> (manual de aprendizaje que introduce algunas de las características de la orientación a objetos en Perl).
+
+Para evitar estos problemas se asumirá que no se dispone de experiencia en el uso de orientación a objetos. Conviene tener conocimientos previos sobre subrutinas (L<perlsub>), referencias (L<perlref> y otros relacionados), y paquetes (L<perlmod>). Debe familiarizarse con estos conceptos antes de continuar con este documento.
+
+=head2 Si pudiéramos hablar con los animales...
+
+Por un momento, dejemos que los animales hablen:
+
+    sub Vaca::hablar {
+      print "Vaca dice ¡muuuu!\n";
+    }
+    sub Caballo::hablar {
+      print "Caballo dice ¡hiiii!\n";
+    }
+    sub Oveja::hablar {
+      print "Oveja dice ¡beeeeh!\n";
+    }
+
+    Vaca::hablar;
+    Caballo::hablar;
+    Oveja::hablar;
+
+Esto produce la siguiente salida:
+
+    Vaca dice ¡muuuu!
+    Caballo dice ¡hiiii!
+    Oveja dice ¡beeeeh!
+
+Nada espectacular hasta ahora.  Simples subrutinas, aunque de diferentes paquetes, llamadas usando el nombre completo del paquete.  Así que crearemos un prado completo:
+
+    # Vaca::hablar, Caballo::hablar, Oveja::hablar, como ya se vio.
+    @prado = qw(Vaca Vaca Caballo Oveja Oveja);
+    foreach $animal (@prado) {
+      &{$animal."::hablar"};
+    }
+
+Esto produce la siguiente salida:
+
+    Vaca dice ¡muuuu!
+    Vaca dice ¡muuuu!
+    Caballo dice ¡hiiii!
+    Oveja dice ¡beeeeh!
+    Oveja dice ¡beeeeh!
+
+Impresionante.  Esta forma de desreferenciar código simbólico es bastante desagradable.
+Contamos con que esté activo el modo C<no strict refs>, algo no recomendado, desde luego, para programas de gran tamaño.  ¿Y por qué es necesario?  Porque el nombre del paquete parece ser inseparable del nombre de la subrutina que queremos invocar dentro del paquete.
+
+Pero, ¿es así realmente?
+
+=head2 Introducción a la llamada a métodos mediante el operador flecha
+
+De momento, diremos que la sentencia C<< Clase->método >> llama a la subrutina C<método> en el paquete C<Clase>.  (Aquí "Clase" se usa con el significado de "categoría" y no con el sentido "escolar"). Esto no es muy formal, pero se irá avanzando paso a paso en el aprendizaje de estos conceptos.  Ahora se usará de la forma siguiente:
+
+    # Vaca::hablar, Caballo::hablar, Oveja::hablar, como ya se vio.
+    Vaca->hablar;
+    Caballo->hablar;
+    Oveja->hablar;
+
+Y de nuevo el resultado es:
+
+    Vaca dice ¡muuuu!
+    Caballo dice ¡hiiii!
+    Oveja dice ¡beeeeh!
+
+Esto no es demasiado divertido por ahora.  El mismo número de caracteres, todo constantes y sin variables.  Sin embargo, las partes son ahora separables.  Observe:
+
+    $a = "Vaca";
+    $a->hablar; # llama al método Vaca->hablar
+
+¡Interesante!  Ahora que el nombre del paquete se ha separado del nombre de la subrutina, se puede utilizar una variable como nombre de paquete.  Y esta vez se dispone de algo que funciona incluso cuando se habilita el modo C<use strict refs>.
+
+=head2 Invocando un corral
+
+Usaremos el operador flecha para trabajar en el ejemplo del corral:
+
+    sub Vaca::hablar {
+      print "Vaca dice ¡muuuu!\n";
+    }
+    sub Caballo::hablar {
+      print "Caballo dice ¡hiiii!\n";
+    }
+    sub Oveja::hablar {
+      print "Oveja dice ¡beeeeh!\n";
+    }
+
+    @prado = qw(Vaca Vaca Caballo Oveja Oveja);
+    foreach $animal (@prado) {
+      $animal->hablar;
+    }
+
+¡Bien!  Ahora los animales hablan, pero sin el uso de las referencias simbólicas.
+
+Pero resulta interesante apreciar el código común en este ejemplo.  Cada una de las rutinas C<hablar> tiene una estructura similar: una sentencia C<print> y una cadena que contiene texto común excepto para dos palabras.  Sería bueno poder extraer el factor común, lo que haría más sencillo algún cambio posterior, como sustituir C<dice> por C<habla>, por ejemplo.
+
+Y de hecho hay una forma de hacerlo sin demasiado esfuerzo, pero hay que aprender algo más sobre lo que el operador flecha, de invocación de métodos, está haciendo por nosotros.
+
+=head2 El parámetro extra de invocación de métodos
+
+La invocación de:
+
+    Clase->método(@argumentos)
+
+intenta llamar a la subrutina C<Clase::método> de la siguiente forma:
+
+    Clase::método("Clase", @argumentos);
+
+(Si no se encuentra la subrutina entra en juego la "herencia", pero esto se considerará después). Esto significa que se usa el nombre de la clase como primer argumento (el único argumento si no hubiera otros).  De esta forma puede modificar la subrutina para hablar de la clase C<Oveja> de la forma siguiente:
+
+    sub Oveja::hablar {
+      my $clase = shift;
+      print "$clase dice ¡beeeeh!\n";
+    }
+
+Y lo mismo con las otras dos clases de animales:
+
+    sub Vaca::hablar {
+      my $clase = shift;
+      print "$clase dice ¡muuuu!\n";
+    }
+    sub Caballo::hablar {
+      my $clase = shift;
+      print "$clase dice ¡hiiii!\n";
+    }
+
+En cada caso C<$clase> tendrá el valor apropiado para esta subrutina.  Pero, una vez más, aún hay mucha estructura similar.  ¿Podemos mejorar esto más?  Sí, mediante la llamada a otro método en la misma clase.
+
+=head2 Llamada a un segundo método para simplificar las cosas
+
+Desde el método C<hablar> se llamará a un método auxiliar denominado C<sonido>.
+Este método proporciona un texto constante para el sonido emitido por el animal.
+
+    { package Vaca;
+      sub sonido { "muuuu" }
+      sub hablar {
+        my $clase = shift;
+        print "$clase dice ¡", $clase->sonido, "!\n";
+      }
+    }
+
+Ahora, cuando se hace la llamada a C<< Vaca->hablar >>, obtenemos una C<$clase> que pertenece al tipo C<Vaca> en el método C<hablar>.  Esto, a su vez, hace que en última instancia se seleccione el método C<< Vaca->sonido >>, que devuelve C<muuuu>.  ¿Cómo sería para la clase C<Caballo>?
+
+    { package Caballo
+      sub sonido { "hiiii" }
+      sub hablar {
+        my $clase = shift;
+        print "$clase dice ¡", $clase->sonido, "!\n";
+      }
+    }
+
+Sólo cambian el nombre del paquete y el sonido específico.  De esta forma cabe plantearse si es posible compartir la definición de C<hablar> entre Vaca y Caballo, por ejemplo.  Y la respuesta es ¡sí, con herencia!
+
+=head2 Herencia de las tráqueas
+
+Se definirá un paquete llamado C<Animal> con subrutinas comunes incluyendo la definición de C<hablar>:
+
+    { package Animal;
+      sub hablar {
+      my $clase = shift;
+      print "$clase dice ¡", $clase->sonido, "!\n";
+      }
+    }
+
+De esta forma puede decirse que cada animal "hereda" de C<Animal>, y sólo habrá de aportar su sonido específico:
+
+    { package Vaca;
+      @ISA = qw(Animal);
+      sub sonido { "muuuu" }
+    }
+
+Observe que se ha agregado el array C<@ISA> (a interpretar como "es un").  Analizaremos su efecto en un minuto.
+
+Pero, ¿qué ocurre cuando se llama al método C<< Vaca->hablar >> ahora?
+
+En primer lugar, Perl construye la lista de argumentos.  En este caso se trata de un único argumento: C<Vaca>.  Después Perl busca la subrutina C<Vaca::hablar>.  Al no encontrarlo analiza el array de herencia C<@Vaca::ISA>.  Lo localiza y contiene el nombre C<Animal>.
+
+Después comprueba si está definido la subrutina C<hablar> en la clase C<Animal>, como
+C<Animal::hablar>.  Y lo encuentra, de forma que Perl llama a la subrutina con la lista de argumentos previamente indicada.
+
+Dentro de la subrutina C<Animal::hablar>, C<$clase> se convierte en C<Vaca> (el primer argumento).  Cuando se llega al momento de llamar al método C<< $clase->sonido >>, Perl buscará C<< Vaca->sonido >>, que se encuentra directamente sin necesidad de analizar el array C<@ISA>.  ¡Conseguido!
+
+=head2 Algunos comentarios sobre @ISA
+
+La variable mágica C<@ISA> ha declarado que C<Vaca> "es un" C<Animal>.
+Observe que se trata de un array, no un valor único, ya que en algunas ocasiones tiene sentido tener más de una clase como padre; en ellas se buscarán los métodos no encontrados.
+
+Si C<Animal> tiene a su vez un array C<@ISA>, entonce también habría que examinarlo.  La búsqueda en cada array C<@ISA> se hace de forma recursiva, comenzando con el nivel más alto en la línea de herencia y de izquierda a derecha, por defecto (vea L<mro> para considerar otras alternativas).  Usualmente cada array C<@ISA> dispone de un único elemento (múltiples elementos indican la existencia de herencia múltiple y también múltiples dolores de cabeza), de forma que es preferible contar con un árbol de herencia sencillo.
+
+Cuando activamos la directiva C<use strict>, la variable C<@ISA> producirá problemas, ya que no es una variable que contenga un nombre explícito de paquete, ni tampoco se trata de una variable léxica ("my").  Sin embargo, no se puede convertir en una variable léxica (debe pertenecer al paquete a explorar por el mecanismo de herencia), de forma que hay un par de formas directas de manejar esto.
+
+La más sencilla consiste en escribir el nombre del paquete:
+
+    @Vaca::ISA = qw(Animal);
+
+O declararla como una variable global en el paquete:
+
+    package Vaca;
+    our @ISA = qw(Animal);
+
+O permitir que sea una variable implícita del paquete:
+
+    package Vaca;
+    use vars qw(@ISA);
+    @ISA = qw(Animal);
+
+Si la clase C<Animal> proviene de algún otro módulo (orientado a objetos) entonces basta con usar C<use base> para indicar que C<Animal> debería servir como la clase base para la clase C<Vaca>:
+
+    package Vaca;
+    use base qw(Animal);
+
+¡Así que es simple!
+
+=head2 Sobrescritura de métodos
+
+Agreguemos un ratón, al que difícilmente podremos oír:
+
+    # Paquete Animal (como antes) 
+    { package Raton;
+      @ISA = qw(Animal);
+      sub sound { "rechinar" }
+      sub hablar {
+        my $clase = shift;
+        print "$clase dice ¡", $clase->sonido, "!\n";
+        print "[¡pero difícilmente podría oírlo!]\n";
+      }
+    }
+
+    Raton->hablar;
+
+que produce la siguiente salida:
+
+    Raton dice rechinar!
+    [¡pero difícilmente podría oírlo!]
+
+Aquí C<Raton> dispone de su propio subrutina para hablar, por lo que C<< Raton->hablar >> no produce la llamada directa al método C<< Animal->hablar >>. Esto se conoce como "sobrescritura". De hecho no es necesario decir que un C<Raton> es un C<Animal>, ya que todos los métodos necesarios para C<hablar> están totalmente definidos en C<Raton>; esto se conoce como "I<duck typing>": "Si camina como un pato y grazna como un pato, yo lo llamaría pato" (James Whitcomb). Sin embargo, probablemente sería beneficioso permitir un examen más minucioso para determinar que C<Raton> es verdaderamente un C<Animal>, por lo que es realmente mejor definir C<Raton> con C<Animal> como clase base (es decir, es mejor "derivar" C<Raton> de C<Animal>").
+
+Por otra parte, esta duplicación de código puede perjudicar el mantenimiento del código (aunque la reutilización de código no es realmente una buena razón para optar por la herencia; las buenas prácticas de diseño indican que una clase derivada debería poder usarse en cualquier situación en que pueda usarse la clase base, lo que podría no cumplirse si la reutilización del código fuese la única razón para usar herencia. Recuerde que un objeto de la clase C<Raton> debería actuar siempre como un objeto de la clase C<Animal>).
+
+Así que ¡hagamos que C<Raton> sea un C<Animal>!
+
+La solución obvia es llamar directamente al método C<Animal::hablar>:
+
+    # Paquete Animal (como antes) 
+    { package Raton;
+      @ISA = qw(Animal);
+      sub sound { "rechinar" }
+      sub hablar {
+        my $clase = shift;
+        Animal::hablar($clase);
+        print "[¡pero difícilmente podría oírlo!]\n";
+      }
+    }
+
+Observe el uso de C<Animal::hablar>. Si en su lugar se llamara al método C<< Animal->hablar >>, el primer parámetro de C<Animal::hablar> sería automáticamente C<"Animal"> en lugar de C<"Raton">, de forma que la llamada a << $clase->sonido >> en C<Animal::hablar> se convertiría en C<< Animal->sonido >> en vez de C<< Raton->sonido >>.
+
+Además, sin el uso del operador C<< -> >>, se hace necesario especificar el primer parámetro de C<Animal::hablar> de forma explícita, razón por la que C<$clase>
+se pasa de forma explícita: C<Animal::hablar($clase)>.
+
+Sin embargo, la llamada directa a C<Animal::hablar> es problemática: en primer lugar se asume que el método C<hablar> es un método miembro de la clase C<Animal>; ¿qué ocurriría si C<Animal> heredara el método C<hablar> de su propia clase base? Al no usar el operador C<< -> >> para acceder a C<hablar>, el mecanismo de búsqueda especial no se usaría, por lo que C<hablar> no se encontraría.
+
+El segundo problema es más sutil: C<Animal> está ahora completamente ligado a la selección de subrutina. Supongamos que existe el método C<Animal::hablar>. ¿Qué ocurre si, más tarde, alguien expanda la jerarquía de clases haciendo que C<Raton> herede de C<Mus> en lugar de C<Animal>? A no ser que se modifique la llamada C<Animal::hablar> por la llamada a C<Mus::hablar>, ¡podrían perderse siglos de clasificación taxonómica!
+
+Lo que ocurre en este caso es un ejemplo de abstracción mal empleada y que resultará ser el principio de una pesadilla para el mantenimiento del código. Lo que se precisa es la capacidad de buscar el método adecuado con el menor número posible de supuestos.
+
+=head2 Comienzo de la búsqueda desde un lugar diferente
+
+Una solución I<mejor> consiste en decir a Perl dónde debe comenzar la cadena de herencia la búsqueda de C<hablar>. Esto puede conseguirse con una versión modificada del método de llamada con el operador C<< -> >>:
+
+    NombreClase->PrimerLugarDondeBuscar::método
+
+Así, la clase C<Raton> tras la mejora es:
+
+    # Animal (como antes)
+    { package Raton;
+      # igual @ISA y &sonido
+      sub hablar {
+        my $clase = shift;
+        $clase->Animal::hablar;
+        print "[¡pero difícilmente podría oírlo!]\n";
+      }
+    }
+
+Usando esta sintaxis la búsqueda de C<hablar> empieza por la clase C<Animal> y después se usaría toda la cadena de herencia de la clase C<Animal> si no se encuentra inmediatamente.
+Como siempre, el primer parámetro de C<hablar> sería C<$clase>, por lo que no es necesario pasar explícitamente C<$clase> como argumento a C<hablar>.
+
+Pero, ¿qué ocurre con el segundo problema? Todavía la búsqueda de métodos está ligada a la clase C<Animal>.
+
+=head2 La forma SUPER de hacer las cosas
+
+Si C<Animal> se cambia por la palabra reservada especial C<SUPER> en la llamada, entonces los contenidos de C<@ISA> en la clase C<Raton> se usan para la búsqueda, comenzando con C<$ISA[0]>. De esta forma, algunos de los problemas pueden solucionarse de la forma siguiente:
+
+    # Animal (como antes)
+    { package Raton;
+      # igual @ISA y &sonido
+      sub hablar {
+        my $clase = shift;
+        $class->SUPER::hablar;
+        print "[¡pero difícilmente podría oírlo!]\n";
+      }
+    }
+
+En general, C<SUPER::hablar> significa buscar en el array C<@ISA> del paquete actual una clase que implemente el método C<hablar>, y hacer la llamada sobre el primer método que se encuentre.
+La palabra reservada es C<SUPER>, porque en muchos otros lenguajes se usa para indicar las "I<super>clases", y Perl prefiere ser ecléctico.
+
+Observe que una llamada como
+
+    $clase->SUPER::método;
+
+I<no> busca en C<@ISA> de C<$clase> a menos que C<$clase> aluda al paquete actual.
+
+=head2 Recapitulemos...
+
+Hasta ahora hemos visto la sintaxis de llamada a método mediante el operador flecha:
+
+  Clase->método(@argumentos)
+
+o de forma equivalente:
+
+  $a = "Clase";
+  $a->método(@argumentos);
+
+que construye una lista de argumentos de la forma siguiente:
+
+  ("Clase", @argumentos)
+
+e intenta la llamada:
+
+  Clase::método("Clase", @argumentos);
+
+Sin embargo, si C<Clase::método> no se encuentra, entonces se examina C<@Clase::ISA>
+(de forma recursiva) para localizar una clase (un paquete) que contenga al C<método>; y este se llamará en su lugar.
+
+Usando esta sintaxis simple tenemos métodos de clase, herencia (múltiple), sobrescritura y extensión. Usando lo visto hasta ahora ha sido posible extraer el código común (aunque esto no sea una buena razón para el uso de la herencia) y se ofrece una forma cómoda de reutilizar las implementaciones con variantes.
+
+Ahora, ¿qué ocurre con los datos?
+
+=head2 Un caballo es un caballo, o sí, o sí, ¿o no?
+
+Comencemos con el código de las clases C<Animal> y C<Caballo>:
+
+  { package Animal;
+    sub hablar {
+      my $clase = shift;
+      print "$clase dice ¡", $clase->sonido, "!\n";
+    }
+  }
+  { package Caballo
+    @ISA = qw(Animal);
+    sub sonido { "hiiii" }
+  }
+
+Esto permite hacer la llamada C<< Caballo->hablar >> y alcanzar el método
+C<Animal::hablar>, llamando a su vez al método C<Caballo::sonido> para obtener el sonido específico y la salida es:
+
+  Caballo dice ¡hiiii!
+
+Pero todos los objetos de la clase Caballo deberían ser idénticos.
+Si agregamos una subrutina, todos los caballos la comparten automáticamente. Este comportamiento es adecuado para hacer que todos los objetos sean idénticos, pero ¿cómo conseguir diferenciar objetos individuales?  Por ejemplo, supongamos que deseamos dar un nombre al primer objeto de la clase caballo. Debe haber una forma de mantener separados sus nombres.
+
+Es decir, se pretende que instancias particulares de C<Caballo> tengan nombres diferentes.
+
+En Perl, cualquier referencia puede ser una "instancia", así que empezaremos con la referencia más sencilla que pueda contener el nombre de un caballo: una referencia escalar.
+
+  my $nombre = "Mr. Ed";
+  my $caballo = \$nombre;
+
+Ahora C<$caballo> es una referencia a lo que será un dato específico de instancia (el nombre) El paso final para convertir esta referencia en una instancia real de C<Caballo> consiste en el uso del operador especial C<bless>:
+
+  bless $caballo, Caballo;
+
+Este operador almacena información sobre el paquete llamado C<Caballo> en el objeto apuntado por la referencia.  Ahora se dice que C<$caballo> es una instancia de C<Caballo>.  Es decir, es un caballo específico.  La referencia, por el contrario, se mantiene sin cambios y puede usarse con los operadores usuales de desreferencia.
+
+=head2 Llamada a los métodos de instancia
+
+El operador flecha puede usarse sobre instancias y sobre clases (los nombres de los paquetes). Volvamos ahora al sonido emitido por C<$caballo>:
+
+  my $sonido = $caballo->sonido("algunos", "argumentos", "innecesarios");
+
+Para llamar a C<sonido>, Perl observa en primer lugar que C<$caballo> es una referencia consagrada con "bless" (y, por tanto, una instancia).  Después construye una lista de argumentos, de la forma usual.
+
+Ahora consideremos la parte divertida: Perl toma la clase en la que la instancia fue creada, C<Caballo> en este caso, y usa la clase para localizar la subrutina. En este caso, C<Caballo::sonido> se encuentra directamente (sin usar herencia). Al final, es como si la línea inicial escrita fuera de esta forma:
+
+  my $sonido = Caballo::sonido($caballo, "algunos", "argumentos", "innecesarios");
+
+Observe que el primer argumento aquí es una instancia, no el nombre de la clase, como antes.  Se obtiene C<hiiii> como valor de salida y ese será el valor de variable C<$sonido>.
+
+Si Caballo::sonido no se hubiera encontrado, se buscaría en el array C<@Caballo::ISA>, intentando encontrar el método en alguna de las superclases. La única diferencia entre un método de clase y una instancia de método es si el primer parámetro es una instancia (una referencia consagrada) o un nombre de clase (una cadena).
+
+=head2 Acceso a los datos de instancia
+
+Ya que se obtiene la instancia como primer parámetro, es posible acceder a los datos específicos de la instancia.  En este caso se agrega una forma de acceder al nombre:
+
+  { package Caballo
+    @ISA = qw(Animal);
+    sub sonido { "hiiii" }
+    sub nombre {
+      my $self = shift;
+      $$self;
+    }
+  }
+
+En el método C<Caballo::nombre>, el array C<@_> contiene: 
+
+    ($caballo, "algunos", "parámetros", "innecesarios")
+
+de forma que C<shift> almacena C<$caballo> en C<$self>. Entonces, C<$self> produce la desreferencia con C<$$self> de la forma usual, produciendo C<"Mr. Ed">.
+
+Es habitual hacer que C<shift> ubique el primer parámetro en una variable llamada
+C<$self> para los métodos de instancia y en una variable llamada C<$clase> para los métodos de clase.
+
+Entonces la línea:
+
+  print $caballo->nombre, " dice ", $caballo->sonido, "\n";
+
+produce como salida:
+
+  Mr. Ed dice hiiii.
+
+=head2 ¿Cómo crear un caballo?
+
+Desde luego, si los objetos de la clase caballo se construyen "a mano", es más que probable que se produzcan errores de vez en cuando.  También estamos violando uno de los principios básicos de orientación a objetos: las tripas de la clase Caballo son visibles.  Esto es bueno para los veterinarios, pero no para los dueños de los caballos.  Por lo tanto, dejemos que la clase Caballo gestione sus detalles dentro de un método de la clase:
+
+  { package Caballo
+    @ISA = qw(Animal);
+    sub sonido { "hiiii" }
+    sub nombre {
+      my $self = shift;     # método de instancia: usamos $self
+      $$self;
+    }
+    sub llamado {
+      my $clase = shift;    # método de clase: usamos $clase
+      my $nombre = shift;
+      bless \$nombre, $clase;
+    }
+  }
+
+Ahora con el nuevo método C<llamado> podemos construir un objeto de la clase Caballo de la forma siguiente:
+
+  my $caballo = Caballo->llamado("Mr. Ed");
+
+Observe que ahora estamos en un método de clase, de forma que los dos argumentos del método C<Caballo::llamado> son C<Caballo> y C<Mr. Ed>.  El operador C<bless> no sólo consagra a C<\$nombre>, si no que también devuelve esa referencia.
+
+El método C<Caballo::llamado> se denomina "Constructor".
+
+Aquí se ha usado el nombre C<llamado> para el constructor, de forma que indique rápidamente que el argumento del constructor es el nombre del objeto particular de C<Caballo>.
+Se pueden usar varios constructores con nombres distintos para disponer de varias formas de crear objetos (como por ejemplo recordando su pedigrí o la fecha de nacimiento).  Sin embargo, la mayor parte de los programadores que llegan a Perl desde otros lenguajes más limitados usan únicamente un constructor llamado C<new>, con varias formas de interpretar los argumentos del método C<new>.  Cualquier estilo es válido, siempre y cuando esté bien documentada la forma particular de crear objetos.  (Y usted ya está haciéndolo ¿verdad?)
+
+=head2 Herencia del constructor
+
+Pero ¿hay algo específico a C<Caballo> en el método?  No.  Por eso, siempre se aplica la misma receta para construir algo más que heredar de
+C<Animal>, de forma que llevaremos C<nombre> y C<llamado> allí:
+
+  { package Animal;
+    sub hablar {
+      my $clase = shift;
+      print "$clase dice ¡", $clase->sonido, "!\n";
+    }
+    sub nombre {
+      my $self = shift;
+      $$self;
+    }
+    sub llamado {
+      my $clase = shift;
+      my $nombre = shift;
+      bless \$nombre, $clase;
+    }
+  }
+  { package Caballo
+    @ISA = qw(Animal);
+    sub sonido { "hiiii" }
+  }
+
+Pero, ¿qué ocurre si se llama al método C<hablar> sobre una instancia?
+
+  my $caballo = Caballo->llamado("Mr. Ed");
+  $caballo->hablar;
+
+Se obtiene un mensaje del depurador:
+
+  Caballo=SCALAR(0xaca42ac) dice ¡hiiii!
+
+¿Por qué?  Porque el método C<Animal::hablar> espera recibir un nombre de clase como primer argumento, no una instancia.  Cuando la instancia se pasa como argumento se termina usando un referencia escalar consagrada como una cadena y por eso aparece el mensaje anterior.
+
+=head2 Hacer que un método pueda trabajar con clases e instancias
+
+Todo lo que necesitamos es que el método pueda detectar si está siendo llamado sobre una clase o sobre una instancia.  La forma más directa de conseguirlo es mediante el operador C<ref>.  Este operador devuelve una cadena (el nombre de clase) cuando se usa sobre una instancia y una cadena vacía cuando se usa con una cadena (como el nombre de una clase).  Cambiaremos el método C<nombre> en primer lugar para apreciar el cambio:
+
+  sub nombre {
+    my $either = shift;
+    ref $either ? $$either : "Cualquier $either";
+  }
+
+Aquí se usa el operador C<?:> para seleccionar de forma sencilla la desreferencia o la cadena derivada.  Ahora podemos usar el método tanto con la instancia como con la clase.  Observe el cambio en el primer argumento a C<$either> para mostrar cuál es la intención:
+
+  my $caballo = Caballo->llamado("Mr. Ed");
+  print Caballo->nombre, "\n"; # imprime "Cualquier Caballo\n"
+  print $caballo->nombre, "\n"; # imprime "Mr. Ed.\n"
+
+y ahora modificaremos el método C<hablar> para usar esta característica:
+
+  sub hablar {
+    my $either = shift;
+    print $either->nombre, " dice ", $either->sonido, "\n";
+  }
+
+Y como C<sonido> funciona tanto con clases como con instancias no hay nada más que hacer.
+
+=head2 Agregar parámetros a un método
+
+Intentemos que los animales coman:
+
+  { package Animal;
+    sub llamado {
+      my $clase = shift;
+      my $nombre = shift;
+      bless \$nombre, $clase;
+    }
+    sub nombre {
+      my $either = shift;
+      ref $either ? $$either : "Cualquier $either";
+    }
+    sub hablar {
+      my $either = shift;
+      print $either->nombre, " dice ", $either->sonido, "\n";
+    }
+    sub come {
+      my $either = shift;
+      my $comida = shift;
+      print $either->nombre, " come $comida.\n";
+    }
+  }
+  { package Caballo
+    @ISA = qw(Animal);
+    sub sonido { "hiiii" }
+  }
+  { package Oveja;
+    @ISA = qw(Animal);
+    sub sound { "beeeeh" }
+  }
+
+Y ahora intentemos lo siguiente:
+
+  my $caballo = Caballo->llamado("Mr. Ed");
+  $caballo->come("heno");
+  Oveja->come("hierba");
+
+lo que imprime:
+
+  Mr. Ed come heno.
+  Cualquier Oveja come hierba;
+
+Un método de instancia con parámetros se llama con la instancia y con la lista de parámetros.  De forma que la primera llamada tiene la forma:
+
+  Animal::come($caballo, "heno");
+
+=head2 Instancias más interesantes
+
+¿Qué ocurre si una instancia necesita más datos?  Las instancias más interesantes son aquellas compuestas de muchos elementos, cada uno de los cuales podría ser una referencia e incluso otro objeto.  Usualmente, la forma más sencilla de almacenarlos es mediante una tabla hash.
+Las claves de la tabla hash sirven como los nombres de los elementos de un objeto (usualmente llamados "variables de instancia" o "variables miembro") y los valores correspondientes son sus valores.
+
+Pero, ¿cómo se introduce un caballo en una tabla hash?  Recordemos que un objeto era una referencia consagrada.  Se puede hacer que una instancia sea una referencia a una tabla hash como una referencia escalar, siempre que todo lo que parezca una referencia se cambie de la misma manera.
+
+Consideremos una oveja con nombre y color:
+
+  my $mala = bless { Nombre => "Malvada", Color => "negro" }, Oveja;
+
+de forma que C<< $mala->{nombre} >> tiene C<Malvada> como nombre y C<< $mala->{Color} >> tiene C<negro> como color.  Pero deseamos que C<< $mala->nombre >> acceda al nombre y eso no es sencillo porque se espera que sea una referencia escalar.  Pero no hay que preocuparse, ya que eso es fácil de solucionar.
+
+Una posible solución consiste en sobrescribir C<Animal::nombre> y C<Animal::llamado> por nuevas versiones en la clase C<Oveja>, pero entonces los métodos agregados posteriormente a la clase C<Animal> podrían producir ambigüedad y tendrían que ser sobrescritos también. Sin embargo, nunca es buena idea definir una estructura de datos en una clase que difiera de la estructura usada en las clases base. De hecho, es una buena idea usar las referencias a instancia en todos los casos. También esto justifica que los constructores hagan el trabajo de bajo nivel. De esta forma, redefinamos la clase C<Animal>:
+
+  ## en clase Animal
+  sub nombre {
+    my $either = shift;
+    ref $either ? $either->{Nombre} : "Cualquier $either";
+  }
+  sub llamado {
+    my $clase = shift;
+    my $nombre = shift;
+    my $self = { Nombre => $nombre };
+    bless $self, $clase;
+  }
+
+Por supuesto, todavía es preciso sobrescribir C<llamado> para conseguir construir un objeto C<Oveja> con un cierto color:
+
+  ## en la clase Oveja
+  sub llamado {
+    my ($clase, $nombre) = @_;
+    my $self = $clase->SUPER::llamado(@_);
+    $$self{Color} = $clase->default_color;
+    $self
+  }
+
+(Observe que C<@_> contiene los parámetros de C<llamado>.)
+
+¿Qué es C<default_color>?  Bien, si C<llamado> contiene únicamente el nombre, es preciso definir el color, de forma que habrá que disponer de un color por defecto.
+Para una oveja podría definirse por defecto el color blanco:
+
+  ## en la clase Oveja
+  sub default_color { "blanco" }
+
+Ahora:
+
+  my $oveja = Oveja->llamado("Mala");
+  print $oveja->{Color}, "\n";
+
+produce como salida:
+
+  blanco
+
+Ahora bien, no hay nada particularmente específico para C<Oveja> cuando se trata del color, de forma que puede quitarse C<Oveja::llamado> e implementar C<Animal::llamado> para gestionar el color en su lugar:
+
+  ## en clase Animal
+  sub llamado {
+    my ($clase, $nombre) = @_;
+    my $self = { Nombre => $nombre, Color => $clase->default_color };
+    bless $self, $clase;
+  }
+
+Y después de definir C<default_color> para cada clase adicional, definiremos un método que sirva como "default default" directamente en C<Animal>:
+
+  ## en clase Animal
+  sub default_color { "marrón" }
+
+Desde luego, ya que C<nombre> y C<llamado> fueron los únicos métodos que referencian a la "estructura" del objeto, el resto de los métodos pueden permanecer sin cambios, de forma que C<hablar> funciona igual que antes.
+
+=head2 Un caballo de color diferente
+
+Pero sería aburrido tener todos los caballos de color marrón.  De esta forma podemos agregar un método o dos para asignar el color.
+
+  ## en clase Animal
+  sub color {
+    $_[0]->{Color}
+  }
+  sub set_color {
+    $_[0]->{Color} = $_[1];
+  }
+
+Observe que se usa la forma alternativa de acceder a los argumentos: C<$_[0]>, en lugar de hacerlo con C<shift>.  (Esto permite ahorrar un poco de tiempo para aquellos métodos invocados con frecuencia). Y ahora podemos asignar el color para Mr. Ed:
+
+  my $caballo = Caballo->llamado("Mr. Ed");
+  $caballo->set_color("blanco-y-negro");
+  print $caballo->nombre, " tiene color ", $caballo->color, "\n";
+
+que produce la siguiente salida:
+
+  Mr. Ed tiene color blanco-y-negro
+
+=head1 RESUMEN
+
+Ahora ya tenemos métodos de clase, constructores, métodos de instancia, datos de instancia e incluso métodos de acceso. Pero esto es justo el principio de lo que Perl puede ofrecer. No hemos comenzado todavía a hablar acerca de los métodos de acceso como "getters" y "setters", destructores, notación indirecta de objetos, sobrecarga, pruebas "es un" y "puede", la clase C<UNIVERSAL> y otras cosas.
+Todo ello se tratará en el resto de la documentación de Perl. Esperamos que esto sea de ayuda para comenzar.
+
+=head1 VEA TAMBIÉN
+
+Para obtener más información consulte L<perlobj> (para todos los pequeños detalles sobre los objetos en Perl, una vez aprendidos los conceptos básicos), L<perltoot> (el manual para quienes ya conocen los objetos), L<perltooc> (tratamiento de datos de clase), L<perlbot> (para algunos detalles más sobre datos de clase), y libros como el excelente I<Object Oriented Perl> de Damian Conway.
+
+Algunos módulos que podrían ser interesantes son Class::Accessor,
+Class::Class, Class::Contract, Class::Data::Inheritable,
+Class::MethodMaker and Tie::SecureHash
+
+=head1 COPYRIGHT
+
+Copyright (c) 1999, 2000 por Randal L. Schwartz y Stonehenge
+Consulting Services, Inc.
+
+Copyright (c) 2009 por Michael F. Witten.
+
+Se concede permiso para distribuir este documento con la distribución Perl, de acuerdo con las licencias de la distribución de Perl; los documentos derivados deben incluir íntegra esta nota de derechos de autor.
+
+Algunos fragmentos de este texto se han usado en el material de enseñanza de Perl, en I<Paquetes, referencias, objetos y módulos>, parte de la documentación impartida por los instructores para Stonehenge Consulting Services, Inc. y usado con autorización.
+
+Partes de este texto provienen del material aparecido originalmente en I<Linux Magazine> y su uso está autorizado.
