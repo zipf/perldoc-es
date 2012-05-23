@@ -4,32 +4,32 @@ use strict;
 
 use base 'POD2::Base';
 
-our $VERSION = '5.14.2.08';
+our $VERSION = '5.16.0.01';
 
 sub search_perlfunc_re {
     return 'Lista de funciones de Perl en orden alfabético';
 }
 
 sub pod_info {{
-    perl              => '5.14.2',
-    perlbook          => '5.14.2',
-    perlcheat         => '5.14.2',
-    perlcommunity     => '5.14.2',
-    perldbmfilter     => '5.14.2',
-    perldoc           => '5.14.2',
-    perlfaq1          => '5.14.2',
-    perlfaq2          => '5.14.2',
-    perlintro         => '5.14.2',
-    perlnumber        => '5.14.2',
-    perlpragma        => '5.14.2',
-    perlsource        => '5.14.2',
-    perlstyle         => '5.14.2',
-    perlunifaq        => '5.14.2',
-    perlunitut        => '5.14.2',
-    perlutil          => '5.14.2',
-    'README.freebsd'  => '5.14.2',
-    'README.hurd'     => '5.14.2',
-    'README.openbsd'  => '5.14.2',
+    perl              => '5.16.0',
+    perlbook          => '5.16.0',
+    perlcheat         => '5.16.0',
+    perlcommunity     => '5.16.0',
+    perldbmfilter     => '5.16.0',
+    perldoc           => '5.16.0',
+    perlfaq1          => '5.16.0',
+    perlfaq2          => '5.16.0',
+    perlintro         => '5.16.0',
+    perlnumber        => '5.16.0',
+    perlpragma        => '5.16.0',
+    perlsource        => '5.16.0',
+    perlstyle         => '5.16.0',
+    perlunifaq        => '5.16.0',
+    perlunitut        => '5.16.0',
+    perlutil          => '5.16.0',
+    'README.freebsd'  => '5.16.0',
+    'README.hurd'     => '5.16.0',
+    'README.openbsd'  => '5.16.0',
 }};
 
 sub print_pod {
