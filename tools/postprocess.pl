@@ -30,9 +30,9 @@ if ( $ARGV[0] ) {
 
 # Hard-coded paths relative to /perldoc-es/tools
 # Source
-Readonly my $SOURCE_PATH => "../../omegat_514/514/source";
-Readonly my $TRANS_PATH  => "../../omegat_514/514/target";
-Readonly my $MEM_PATH    => "../../omegat_514/514/omegat/project_save.tmx";   
+Readonly my $SOURCE_PATH => "../../omegat_516/516/source";
+Readonly my $TRANS_PATH  => "../../omegat_516/516/target";
+Readonly my $MEM_PATH    => "../../omegat_516/516/omegat/project_save.tmx";   
 # Target
 Readonly my $CLEAN_PATH  => "../../omegat_clean_prj/source";
 Readonly my $DISTR_PATH  => "../POD2-ES/lib/POD2/ES";
