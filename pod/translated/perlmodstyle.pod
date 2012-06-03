@@ -211,49 +211,49 @@ Consideraciones para el diseño y codificación del módulo:
 
 Su módulo puede estar orientado a objetos (POO) o no, o puede tener ambos tipos de interfaces disponibles.  Hay pros y contras de cada técnica, lo que debería tenerse en cuenta al diseñar su API.
 
-De acuerdo con Damian Conway, debe considerar el uso de POO:
+En I<Perl Best Practices> (copyright 2004, publicado por O'Reilly Media, Inc.), Damian Conway ofrece una lista de criterios a utilizar cuando hay que decidir si OO es el sistema más adecuado para su problema:
 
 =over 4
 
-=item * 
+=item *
 
-Cuando el sistema es grande o que pueda llegar a serlo
-
-=item * 
-
-Cuando los datos se agregan en estructuras tan obvias que se convertirán en objetos 
-
-=item * 
-
-Cuando los tipos de datos forman una jerarquía natural que puede hacer uso de la herencia
+El sistema ha ser diseñado es grande o que pueda llegar a serlo.
 
 =item *
 
-Cuando las operaciones en los datos varían de acuerdo al tipo de datos (haciendo factible la invocación de métodos polimórficos)
+Los datos pueden ser agregados en estructuras obvias, especialmente si hay una gran cantidad de datos en cada agregado.
 
 =item *
 
-Cuando es probable que los nuevos tipos de datos pueden ser posteriormente introducidos en el sistema, y tendrán que ser manejados por el código existente
+Los distintos tipos de datos agregados forman una jerarquía natural que facilita el uso de la herencia y el polimorfismo.
 
 =item *
 
-Cuando las interacciones entre los datos están mejor representados por los operadores sobrecargados
+Tiene un montón de datos a los que se les debe aplicar muchas operaciones diferentes.
 
 =item *
 
-Cuando la implementación de los componentes del sistema es probable que cambie con el tiempo (y por lo tanto debe ser encapsulado)
+Es necesario llevar a cabo las mismas operaciones generales sobre tipos de datos relacionados, pero con ligeras variaciones dependiendo del tipo específico de datos de las operaciones que se les aplica.
 
 =item *
 
-Cuando el diseño del sistema es en sí orientado a objetos
+Es probable que tenga que agregar nuevos tipos de datos más adelante.
 
 =item *
 
-Cuando grandes cantidades de código del cliente utilizará el software (y debe estar aislado de los cambios en su implementación)
+Las interacciones típicas entre partes de los datos están mejor representados por los operadores.
 
 =item *
 
-Cuando muchas operaciones diferentes deberán aplicarse al mismo conjunto de datos
+La implementación de componentes individuales del sistema es probable que cambie con el tiempo.
+
+=item *
+
+El diseño del sistema ya se encuentra orientado a objetos.
+
+=item *
+
+Un gran número de programadores utilizará el código de sus módulos.
 
 =back
 

@@ -395,8 +395,8 @@ C<use strict 'refs'> hace caso omiso de una referencia dura en un argumento para
 
 Esto ahora produce correctamente el error en tiempo de ejecución C<Can't use string as a SCALAR ref while "strict refs" in use>.
 
-C<defined @$foo> y C<defined %$bar> también están ahora sujetos a C<strict 'refs'> (es decir, C<$foo> y C<$bar> deberán ser referencias apropiadas).
-(C<defined(@foo)> y C<defined(%bar)> son, de todos modos, construcciones no recomendables).
+C<defined @$foo> y C<defined %$bar> ahora siguen las normas impuestas por C<strict 'refs'> (es decir, C<$foo> y C<$bar> deberán ser referencias correctas).
+(De todos modos, C<defined(@foo)> y C<defined(%bar)> son siempre, de todos modos, construcciones no aconsejables).
 (Nicholas Clark)
 
 =head2 C<(?p{})> ha sido eliminado
@@ -596,7 +596,7 @@ C<Log::Message> y C<Log::Message::Simple> son utilizados por la característica d
 
 =item *
 
-C<Archive::Extract> es un mecanismo de extracción de archivo genérico para F<.tar> (normal, gzipeado o bzipeado) o archivos F<.zip>.
+C<Archive::Extract> es un mecanismo de extracción de archivo genérico para F<.tar> (normal, I<gzipeado> o I<bzipeado>) o archivos F<.zip>.
 
 =item *
 
@@ -1066,7 +1066,7 @@ C<perl -V> tiene varias mejoras, por lo que es más utilizable desde scripts de I
 
 En general, el código fuente de perl ha sido refactorizado, enlazado, y optimizado en muchos lugares. Además, la gestión de memoria y la asignación ha sido mejorados en varios puntos.
 
-Al compilar el núcleo de perl con gcc, se activan todas las banderas de advertencias de gcc como sea posible para esa plataforma.  (Esta búsqueda de la limpieza no se extiende al código XS, porque no podemos garantizar la pulcritud de código que no escribimos). Banderas similares que activan codificación estricta han sido añadidas o reforzadas para otros compiladores de C.
+Al compilar el núcleo de perl con gcc, se activan todas las banderas de advertencias de gcc como sea posible para esa plataforma.  (Esta búsqueda de la limpieza no se extiende al código XS, porque no podemos garantizar la pulcritud de código que no escribimos).  Banderas similares que activan codificación estricta han sido añadidas o reforzadas para otros compiladores de C.
 
 =head2 Reordenando constantes de SVt_*
 
@@ -1090,7 +1090,7 @@ La estructura C<BASEOP> ahora ocupa menos espacio. El campo C<op_seq> ha sido el
 
 =head2 Nuevo analizador
 
-El analizador de Perl ahora es generado por bison (que antes solía ser generado por byacc). Como resultado de ello, parece ser un poco más robusto.
+El analizador de perl ahora es generado por bison (que antes solía ser generado por byacc). Como resultado de ello, parece ser un poco más robusto.
 
 Además, Dave Mitchell mejoró la salida de depuración del analizador léxico con C<-DT>.
 
