@@ -1,0 +1,73 @@
+=encoding utf8
+
+=head1 NOMBRE
+
+perl5124delta - qué hay de nuevo para Perl 5.12.4
+
+=head1 DESCRIPCIÓN
+
+Este documento describe las diferencias entre la versión 5.12.3 y la versión 5.12.4.
+
+Si está actualizando desde una versión anterior como la 5.12.2, primero lea L<perl5123delta>, que describe las diferencias entre 5.12.2 y la 5.12.3. Los principales cambios realizados en 5.12.0 se describen en L<perl5120delta>.
+
+=head1 Cambios incompatibles
+
+No hay cambios intencionadamente incompatibles con 5.12.3. Si los hay, los errores e informes serán bienvenidos.
+
+=head1 Arreglo de determinados errores
+
+Cuando desactivado el modo C<strict "refs">, C<%{...}> en contexto rvalor devuelve C<undef> si su argumento es indefinido.  Una optimización introducida en Perl 5.12.0 para hacer C<keys %{...}> más rápida cuando se utiliza como un valor lógico, no tiene esto en cuenta, haciendo que C<keys %{+undef}> (y C<keys %$foo> cuando C<$foo> no está definido) sea un error, cuando debería serlo solo cuando esté activo el modo strict [perl # 81750].
+
+C<lc>, C<uc>, C<lcfirst>, y C<ucfirst> ya no devuelven cadenas descontaminadas cuando el argumento está contaminado. Esto se había estropeado desde Perl 5.8.9 [perl # 87336].
+
+Se ha corregido un caso en el que era posible que un búfer liberado podía ser leído cuando era analizado un documento incrustado.
+
+=head1 Módulos y Pragmata
+
+L<Module::CoreList> se ha actualizado de la versión 2.43 a la 2.50.
+
+=head1 Pruebas
+
+El script de prueba F<cpan/CGI/t/http.t> se arregló para trabajar cuando el entorno tiene variables de entorno HTTPS_*, como HTTPS_PROXY.
+
+=head1 Documentación
+
+Se ha actualizado la documentación de rand() en L<perlfunc> para destacar que no es criptográficamente seguro.
+
+=head1 Notas específicas por cada plataforma
+
+=over 4
+
+=item Linux
+
+Soporte al diseño de la nueva biblioteca multi-arquitectura de Ubuntu 11.04.
+
+=back
+
+=head1 Agradecimientos
+
+Perl 5.12.4 representa aproximadamente 5 meses de desarrollo desde Perl 5.12.3 y contiene aproximadamente 200 líneas de cambios en 11 archivos por parte de 8 autores.
+
+Perl sigue floreciendo en su tercera década gracias a una vibrante comunidad de usuarios y desarrolladores.  Las siguientes personas han contribuido con mejoras que se incorporaron en Perl 5.12.4:
+
+Andy Dougherty, David Golden, David Leadbeater, Father Chrysostomos, Florian Ragwitz, Jesse Vincent, Leon Brocard, Zsbán Ambrus.
+
+=head1 Informar de errores
+
+Si encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay también información en la página principal de Perl, http://www.perl.org/ .
+
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.
+
+Si el fallo que está reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo pública, por favor, envíelo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripción cerrada y no archivada, que incluye a todos los participantes principales, que podrán ayudar a evaluar el impacto de los problemas, encontrar una resolución, y ayudar a coordinar la liberación de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl está soportado. Por favor, utilice sólo esta dirección para problemas de seguridad en el núcleo de Perl, no para los módulos distribuidos de forma independiente en CPAN.
+
+=head1 VEA TAMBIÉN
+
+El archivo F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+
+El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+
+El archivo F<README> (LEEME) para asuntos generales.
+
+Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+
+=cut
