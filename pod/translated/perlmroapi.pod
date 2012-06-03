@@ -7,7 +7,7 @@ perlmroapi - Interfaz de complementos: resolución de métodos
 A partir de Perl 5.10.1 existe una nueva interfaz para la conexión y orden del método de resolución aparte del predeterminado (buscar primero en profundidad lineal).
 El método de resolución de orden C3 añadido en 5.10.0 se ha re-implementado como un complemento, sin cambiar su interfaz del espacio Perl.
 
-Cada complemento debe registrarse con C<Perl_mro_register> proporcionando la siguiente estructura
+Cada complemento debe registrarse él mismo proporcionando la siguiente estructura
 
     struct mro_alg {
         AV *(*resolve)(pTHX_ HV *stash, U32 level);
@@ -16,6 +16,10 @@ Cada complemento debe registrarse con C<Perl_mro_register> proporcionando la sig
         U16 kflags;
         U32 hash;
     };
+
+y llamar a C<Perl_mro_register>:
+
+    Perl_mro_register(aTHX_ &my_mro_alg);
 
 =over 4
 

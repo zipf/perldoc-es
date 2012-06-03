@@ -13,13 +13,15 @@ Antes de la publicación de Perl 5, era difícil representar estructuras complejas
 Perl ahora no sólo hace que sea más fácil usar referencias simbólicas a variables, sino que también le permite tener referencias "duras" a cualquier trozo de datos o código.
 Cualquier escalar puede contener una referencia dura.  Dado que los arrays y los hashes contienen escalares, ahora puede fácilmente construir arrays de arrays, arrays de hashes, arrays de hashes de funciones, y así sucesivamente.
 
-Las referencias duras son inteligentes: hacen por usted un seguimiento de los recuentos de referencias, liberando automáticamente lo que es referido en cuanto su recuento de referencias llega a cero.  (Los recuentos de referencia para valores en las estructuras de datos auto referenciadas o cíclicas quizás no puedan llegar a cero sin un poco de ayuda, vea L<perlobj/"Recolección de basura en dos fases"> para una explicación detallada). Si eso le pasa a un objeto, el objeto es destruido.  Vea L<perlobj> para más información sobre los objetos.  (En cierto sentido, todo en Perl es un objeto, pero por lo general se reserva la palabra para las referencias a objetos que han sido oficialmente "bendecidos" en una clase I<package>).
+Las referencias duras son inteligentes: hacen por usted un seguimiento de los recuentos de referencias, liberando automáticamente lo que es referido en cuanto su recuento de referencias llega a cero.  (Los recuentos de referencia para valores en estructuras de datos auto referenciadas o cíclicas quizás no puedan llegar a cero sin un poco de ayuda. Vea L<perlobj/"Recolección de basura en dos fases"> para una explicación detallada).
+Si eso le pasa a un objeto, el objeto es destruido.  Vea L<perlobj> para más información sobre los objetos.  (En cierto sentido, todo en Perl es un objeto, pero por lo general se reserva la palabra para las referencias a objetos que han sido oficialmente "bendecidos" en una clase I<package>).
 
 Las referencias simbólicas son nombres de variables u otros objetos, igual que un enlace simbólico en un sistema de archivos Unix contiene sólo el nombre de un archivo.
-La notación C<*glob> es algo así como una referencia simbólica.  (Las referencias simbólicas a veces se llaman "referencias blandas" pero, por favor, no las llame así; las referencias son ya lo suficientemente confusas sin sinónimos inútiles)
-X<reference, symbolic> X<reference, soft> X<symbolic reference> X<soft reference>
-X<referencia, simbólica> X<referencia, soft> X<referencia, blanda>
-X<simbólica referencia> X<soft referencia> X<referencia blanda>
+La notación C<*glob> es algo así como una referencia simbólica.  (Las referencias simbólicas a veces se llaman "referencias blandas", pero, por favor, no las llame así; las referencias son ya lo suficientemente confusas sin tener que usar sinónimos inútiles).
+X<reference, symbolic> X<reference, soft>
+X<symbolic reference> X<soft reference>
+X<referencia, simbólica> X<referencia, soft>
+X<referencia simbólica> X<referencia soft>
 
 Por el contrario, las referencias duras son como los vínculos duros de un sistema de archivos de Unix: se utilizan para acceder a un objeto subyacente, sin preocuparse por lo que su (otro) nombre sea.  Cuando la palabra "referencia" es utilizada sin adjetivo, como en el párrafo siguiente, por lo general se trata de una referencia dura.
 X<reference, hard> X<hard reference>
@@ -27,6 +29,12 @@ X<referencia, dura> X<referencia dura>
 
 
 Las referencias son fáciles de usar en Perl.  Sólo hay un principio fundamental: Perl no hace referencia o desreferencia de forma implícita.  Cuando un escalar almacena una referencia, siempre se comporta como un simple escalar.  Perl no lo convierte en un array o hash o subrutina; tiene que decirle explícitamente que lo haga, desreferenciandolo.
+
+Las referencias son fáciles de usar en Perl.  Sólo hay un principio fundamental: De forma general, Perl referencia o desreferencia de forma implícita.
+Cuando un escalar almacena una referencia, siempre se comporta como un simple escalar.
+No lo convierte en un array o hash o subrutina; usted tiene que decirle explícitamente que lo haga, desreferenciandolo.
+
+Dicho esto, tenga en cuenta que la versión de Perl 5.14 introduce una excepción a la regla, por conveniencia sintáctica.  Un comportamiento experimental de una función contenedora para array y hash, permite que las referencias a array y a hash sean manipulados por Perl como si hubieran sido explícitamente desreferenciadas sintácticamente.  Vea L<perl5140delta/"Mejoras sintácticas"> y L<perlfunc> para más detalles.
 
 =head2 Creando referencias
 X<reference, creation> X<referencing>
@@ -41,7 +49,8 @@ Las referencias se pueden crear de varias maneras.
 X<\> X<backslash> X<contrabarra>
 
 Al utilizar el operador contrabarra en una variable, subrutina, o un valor.
-(Esto funciona como el operador & (dirección de) en C). Esto normalmente crea I<otra> referencia a una variable, porque ya hay una referencia a la variable en la tabla de símbolos.  Sin embargo, la referencia de la tabla de símbolos podría desaparecer, y usted todavía tendría la referencia que la contrabarra devolvió.  Aquí hay algunos ejemplos:
+(Esto funciona como el operador & (dirección-de) en C).  
+Esto normalmente crea I<otra> referencia a una variable, porque ya hay una referencia a la variable en la tabla de símbolos.  Sin embargo, la referencia de la tabla de símbolos podría desaparecer, y usted todavía tendría la referencia que la contrabarra devolvió.  Aquí hay algunos ejemplos:
 
     $scalarref = \$foo;
     $arrayref  = \@ARGV;
@@ -183,7 +192,7 @@ C<*foo{COSA}> devuelve undef si esta particular COSA todavía no ha sido usada, e
 
 C<*foo{IO}> es una alternativa al mecanismo C<*GESTOR> indicado en L<perldata/"Typeglobs and Filehandles"> para pasar gestores de archivo en o fuera de las subrutinas, o almacenar en grandes estructuras de datos.
 Su desventaja es que no va a crear un gestor de archivo nuevo para usted.
-Su ventaja es que tiene menos riesgo de embrollarse más de lo que pasaría con una asignación typeglob.  (Todavía confunde gestores de directorio y archivo). Sin embargo, si se asigna el valor de entrada a un escalar en lugar de a un typeglob como hacemos en los ejemplos siguientes, no hay riesgo de que esto suceda.
+Su ventaja es que tiene menos riesgo de embrollarse más de lo que pasaría con una asignación typeglob.  (Todavía confunde gestores de directorio y archivo).  Sin embargo, si se asigna el valor de entrada a un escalar en lugar de a un typeglob como hacemos en los ejemplos siguientes, no hay riesgo de que esto suceda.
 
     splutter(*STDOUT);		# pasa todo el glob
     splutter(*STDOUT{IO});	# pasa tanto los gestores de archivo como los de directorio
@@ -311,6 +320,41 @@ Del mismo modo, una expresión que devuelve una referencia a un escalar puede des
 
     print "Esto produce ${\($n + 5)} widgets\n";
 
+=head2 Referencias circulares
+X<circular reference> X<reference, circular>
+X<referencia circular> X<referencia, circular>
+
+Es posible crear una "referencia circular" en Perl, que puede conducir a pérdidas de memoria. Una referencia circular se produce cuando dos referencias incluyan una referencia, de la una a la otra, de esta manera:
+
+    my $foo = {};
+    my $bar = { foo => $foo };
+    $foo->{bar} = $bar;
+
+También puede crear una referencia circular con una sola variable:
+
+    my $foo;
+    $foo = \$foo;
+
+En este caso, el recuento de referencia para las variables nunca alcanzará 0, y las referencias nunca serán eliminadas por el recolector de basura. Esto puede conducir a pérdidas de memoria.
+
+Dado que los objetos en Perl se implementan como referencias, es posible tener referencias circulares también con ellos. Imagina una clase TreeNode en la que cada nodo hace referencia a su padre y los nodos secundarios. Cualquier nodo con un padre va a ser parte de una referencia circular.
+
+Usted puede romper las referencias circulares mediante la creación de una "referencia débil". Una referencia débil no incrementa el número de referencia de una variable, lo que significa que el objeto puede salir de su ámbito y ser destruido. Usted puede debilitar una referencia con la función C<weaken> exportada por el módulo L<Scalar::Util>.
+
+Entonces así es como podemos hacer más seguro el primer ejemplo:
+
+    use Scalar::Util 'weaken';
+
+    my $foo = {};
+    my $bar = { foo => $foo };
+    $foo->{bar} = $bar;
+
+    weaken $foo->{bar};
+
+La referencia de C<$foo> a C<$bar> ha sido debilitada. Cuando la variable C<$bar> sale del ámbito, será recolectada. La próxima vez que miremos el valor de la clave de C<< $foo->{bar} >> será C<undef>.
+
+Esta acción a distancia puede ser confusa, por lo que hay que tener cuidado con el uso de weaken. Debe debilitar la referencia en la variable que I<primero> vaya a salir del ámbito. De esta manera, la variable de mayor duración incluirá la referencia esperada hasta que salga del ámbito.
+
 =head2 Referencias simbólicas
 X<reference, symbolic> X<reference, soft>
 X<symbolic reference> X<soft reference>
@@ -352,12 +396,12 @@ Esto seguirá imprimiendo 10, no 20.  Recuerde que el local() afecta a las variab
 
 =head2 Referencias No-tan-simbólicas
 
-Una nueva característica que contribuye a mejorar la legibilidad en la versión 5.001 de Perl es que las llaves alrededor de una referencia simbólica se comportan más como comillas, tal como siempre lo han hecho dentro de una cadena.  Es decir,
+Desde la versión Perl 5.001, llaves alrededor de una referencia simbólica solo sirve para aislar un identificador o nombre de variable del resto de una expresión, tal como siempre lo han hecho dentro de una cadena.  Por ejemplo,
 
     $push = "pop on ";
     print "${push}over";
 
-siempre ha significado imprimir "pop on over", incluso aunque push sea una palabra reservada.  Esto se ha generalizado para trabajar fuera del entrecomillado, por lo que
+siempre ha significado imprimir "pop on over", incluso aunque push sea una palabra reservada.  En 5.001, esto se generalizó para funcionar de la misma forma sin las comillas dobles que lo engloban, de modo que
 
     print ${push} . "over";
 
@@ -365,13 +409,14 @@ e incluso
 
     print ${ push } . "over";
 
-tendrán el mismo efecto.  (Esto habría sido un error de sintaxis en Perl 5.000, aunque Perl 4 lo permitió en el formato sin espacios). Esta construcción I<no> es considerada una referencia simbólica cuando se está utilizando strict refs:
+tendrán el mismo efecto.  (Esto habría sido un error de sintaxis en Perl 5.000, aunque Perl 4 lo permitió en el formato sin espacios).  Esta construcción I<no> es considerada una referencia simbólica cuando se está utilizando C<strict refs>:
 
     use strict "refs";
     ${ bareword };	# Muy bien, significa $bareword.
     ${ "bareword" };	# Error, referencia simbólica.
 
-Del mismo modo, debido a que todo subíndice se ha hecho usando palabras sueltas, hemos aplicado la misma regla a cualquier palabra suelta que sea utilizada como subíndice de un hash.  Así que ahora, en lugar de escribir
+Del mismo modo, debido a que todo subíndice se ha construido usando palabras sueltas, se aplica la misma regla a cualquier palabra suelta que sea utilizada como subíndice de un hash.
+Así que ahora, en lugar de escribir
 
     $array{ "aaa" }{ "bbb" }{ "ccc" }
 
@@ -473,4 +518,4 @@ El módulo estándar Tie::RefHash proporciona una solución conveniente para esto.
 Además de los documentos obvios, el código fuente puede ser instructivo.
 Algunos ejemplos patológicos de la utilización de referencias se pueden encontrar en las pruebas de regresión F<t/op/ref.t>, en el directorio fuente de Perl.
 
-Vea también L<perldsc> y L<perllol> sobre el uso de referencias para crear estructuras de datos complejas, y L<perltoot>, L<perlobj>, y L<perlbot> para saber cómo usarlos para crear objetos.
+Vea también L<perldsc> y L<perllol> sobre el uso de referencias para crear estructuras complejas de datos, y L<perlootut> y L<perlobj> para saber cómo usarlos para crear objetos.
