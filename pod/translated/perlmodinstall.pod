@@ -12,7 +12,7 @@ Esta documentación es para las personas que quieren descargar módulos de CPAN e 
 
 En primer lugar, ¿está seguro de que el módulo no está ya en su sistema?  Pruebe C<perl -MFoo -e 1>.  (Reemplace "Foo" con el nombre del módulo; por ejemplo, C<perl -MCGI::Carp -e 1>.
 
-Si no ve un mensaje de error, tiene el módulo instalado.  (Si ve un mensaje de error, aún es posible que tenga el módulo, pero que no esté en su ruta, que puede ver con C<perl -e "print qq(@INC)">). Para el resto de este documento, vamos a suponer que realmente no tiene el módulo instalado, pero que lo ha encontrado en CPAN.
+Si no ve un mensaje de error, tiene el módulo instalado.  (Si ve un mensaje de error, aún es posible que tenga el módulo, pero que no esté en su ruta, que puede ver con C<perl -e "print qq(@INC)">).  Para el resto de este documento, vamos a suponer que realmente no tiene el módulo instalado, pero que lo ha encontrado en CPAN.
 
 Así que ahora tiene un archivo con extensión .tar.gz (o, menos frecuente, .zip).  Sabe que hay un sabroso módulo en su interior.  Hay cuatro pasos que ahora debe tomar:
 
@@ -285,11 +285,11 @@ B<Los que deberían, pero no lo hacen>. Estos deben ser arreglados; considere pon
 
 =item *
 
-B<Los que necesitan ser compilados, donde la plataforma destino no tiene compiladores fácilmente disponibles>. (Estos módulos contienen, por lo general, archivos F<.xs> o F<.c>). Quizás sea capaz de encontrar los binarios existentes en CPAN o en otro lugar, o es posible que desee intentar conseguir los compiladores e intentar la compilación por sí mismo, y luego publique el binario para que otras pobres almas lo usen.
+B<Los que necesitan ser compilados, donde la plataforma destino no tiene compiladores fácilmente disponibles>. (Estos módulos contienen, por lo general, archivos F<.xs> o F<.c>).  Quizás sea capaz de encontrar los binarios existentes en CPAN o en otro lugar, o es posible que desee intentar conseguir los compiladores e intentar la compilación por sí mismo, y luego publique el binario para que otras pobres almas lo usen.
 
 =item *
 
-B<Los que están dirigidos a una plataforma específica>. (Como los módulos Win32::). Si el módulo está dirigido específicamente a una plataforma diferente a la suya, lo más probable es que no tenga suerte.
+B<Los que están dirigidos a una plataforma específica>. (Como los módulos Win32::).  Si el módulo está dirigido específicamente a una plataforma diferente a la suya, lo más probable es que no tenga suerte.
 
 =back
 
@@ -319,9 +319,4 @@ Primera versión 22 de julio de 1998; última revisión 21 de noviembre de 2001.
 
 Copyright (C) 1998, 2002, 2003 Jon Orwant.  Reservados todos los derechos.
 
-Se concede permiso para realizar y distribuir copias literales de este documento siempre y cuando el aviso de copyright y este aviso de permiso se conserven en todas las copias.
-
-Se concede permiso para copiar y distribuir versiones modificadas de esta documentación en las condiciones para la copia literal, siempre y cuando están marcadas claramente como versiones modificadas, que los nombres de los autores y el título no se hayan modificado (aunque los subtítulos y nombres de los autores adicionales pueden ser añadidos), y que todo el trabajo derivado resultante sea distribuido bajo los términos de una nota de permiso idéntica a ésta.
-
-Se concede permiso para copiar y distribuir traducciones de este documento en otro idioma, bajo las condiciones anteriores para versiones modificadas.
-
+Este documento puede ser distribuido bajo los mismos términos que los del propio Perl.

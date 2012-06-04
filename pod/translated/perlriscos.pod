@@ -1,0 +1,54 @@
+Puede leer este archivo en cualquier editor de texto (verá algunos caracteres extraños, pero puede ignorarlos).  Está escrito en formato POD (vea pod/perlpod.pod), un formato diseñado específicamente para ser legible tal cual.
+
+=head1 NOMBRE
+
+perlriscos - Perl versión 5 para sistemas operativos RISC
+
+=head1 DESCRIPCIÓN
+
+Este documento proporciona instrucciones para la construcción de Perl para sistemas operativos RISC. Es complicado, por la necesidad de hacer una compilación cruzada. Hay una versión binaria de perl disponible en L<http://www.cp15.org/perl/> que es posible que desee utilizar en lugar de tratar de compilarlo usted mismo.
+
+=head1 BUILD
+
+Necesita tener instalado y funcionando un compilador cruzado gccsdk L<http://gccsdk.riscos.info/> y REXEN L<http://www.cp15.org/programming/>
+
+En primer lugar, copiar el código fuente y crear una copia nativa de perl de su sistema principal.
+Luego, en el código fuente para ser compilado de forma cruzada:
+
+=over 4
+
+=item 1.
+
+    $ ./Configure
+
+=item 2.
+
+Seleccione el archivo de pistas para riscos. Suele ser suficiente tomar el valor por defecto para las respuestas del resto de las preguntas.
+
+Tenga en cuenta que, si desea ejecutar Configure de forma no interactiva (ver el documento INSTALL para más detalles), a su sugerencia de seleccionar el archivo correcto, tendrá que proporcionar el argumento -Dhintfile=riscos en la línea de comando para Configure.
+
+=item 3.
+
+    $ make miniperl
+
+=item 4.
+
+Esto debería construir miniperl y luego fallar cuando trate de ejecutarlo.
+
+=item 5.
+
+Copie el ejecutable miniperl desde la construcción nativa hecha antes, para reemplazar el miniperl compilado de forma cruzada.
+
+=item 6.
+
+    $ make
+
+=item 7.
+
+Esto utilizará miniperl para completar el resto de la construcción.
+
+=back
+
+=head1 AUTOR
+
+Alex Waugh <alex@alexwaugh.com>

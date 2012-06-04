@@ -79,7 +79,7 @@ Todo dato en Perl es un escalar, un array de escalares o un hash de escalares  U
 
 Los escalares no tienen que ser necesariamente una cosa o la otra.  No hay ninguna forma de declarar que una variable escalar sea de tipo "cadena", tipo "número", tipo "referencia" o de cualquier otro.  Debido a que la conversión de escalares es automática, las operaciones que los devuelven no necesitan tener en cuenta (y, de hecho, no pueden hacerlo), si quien ha hecho la petición está esperando una cadena, un número o una referencia.  Perl es un lenguaje contextualmente polimórfico según el contexto, cuyos escalares pueden ser cadenas, números o referencias (las cuales incluyen a los objetos).  Aunque las cadenas y los números son consideradas prácticamente la misma cosa para la mayoría de los propósitos, las referencias son punteros no convertibles y fuertemente tipificados, que llevan un contador de referencias incorporado y una invocación al destructor.
 
-Un valor escalar se interpreta como VERDADERO, en el sentido booleano, si no es la cadena nula ni el número 0 (ni su cadena equivalente "0").  El contexto booleano es simplemente un tipo especial de contexto escalar para el cual ni siquiera se llega a realizar ninguna conversión a cadena o a número.
+Un valor escalar se interpreta como FALSO, en el sentido booleano, si está indefinido, la cadena nula o el número 0 (o su cadena equivalente "0"), y VERDADERO si es cualquier otra cosa.  El contexto booleano es simplemente un tipo especial de contexto escalar para el cual ni siquiera se llega a realizar ninguna conversión a cadena o a número.
 X<boolean> X<bool> X<true> X<false> X<truth> X<booleano> X<verdadero> X<falso> X<verdad>
 
 Hay en realidad dos tipos de cadenas nulas (a las que algunas veces nos referimos como cadenas "vacías"); una definida, y otra, indefinida.  La versión definida es sólo una cadena de longitud cero, tal como C<"">.
@@ -105,7 +105,7 @@ Este método podría ser mejor porque de otro modo no podría tratar notaciones IEE
 
 La longitud de un array es un valor escalar.  Puede conocerse la longitud del array @días evaluando C<$#días>, como en B<csh>.  Sin embargo, esto no es la longitud del array, sino el subíndice del último elemento, que es un valor distinto ya que, ordinariamente, hay un elemento número 0.
 Asignar un valor a C<$#días> cambia realmente la longitud del array.
-Acortar un array de esta forma destruye los valores involucrados.  Alargar un array que ha sido acortado previamente no permite recuperar los valores que había en esos elementos.  (Así solía hacerse en Perl 4, aunque aunque tuvimos que cambiarlo para asegurar que los destructores eran llamados cuando se esperaba hacerlo).
+Acortar un array de esta forma destruye los valores involucrados.  Alargar un array que ha sido acortado previamente no permite recuperar los valores que había en esos elementos.  (Así solía hacerse en Perl 4, aunque tuvimos que cambiarlo para asegurar que los destructores eran llamados cuando se esperaba).
 X<$#> X<array, length> X<array, longitud>
 
 También se puede ganar una minúscula cantidad de eficiencia pre-extendiendo un array que va a hacerse grande.  También se puede extender un array haciendo una asignación a un elemento que esté más allá del final del array.  Puede truncarse un array para dejarlo vacío asignándole la lista nula ().  Lo siguiente es equivalente:
@@ -113,12 +113,8 @@ También se puede ganar una minúscula cantidad de eficiencia pre-extendiendo un a
     @loquesea  = ();
     $#loquesea = -1;
 
-Si se evalúa un array en un contexto escalar, éste devuelve la longitud del array.  (Note que esto no es cierto para las listas, que devuelven el último valor, como el operador coma de C, y tampoco para las funciones integradas, que devuelven lo que les parezca mejor devolver). Lo siguiente es siempre verdadero:
+Si se evalúa un array en un contexto escalar, éste devuelve la longitud del array.  (Note que esto no es cierto para las listas, que devuelven el último valor, como el operador coma de C, y tampoco para las funciones integradas, que devuelven lo que les parezca mejor devolver).  Lo siguiente es siempre verdadero:
 X<array, length> X<array, longitud>
-
-    scalar(@loquesea) == $#loquesea - $[ + 1;
-
-La versión 5 de Perl cambió la semántica de C<$[>: los archivos que no asignen un valor a C<$[> no necesitan preocuparse nunca más de si otro archivo ha cambiado su valor.  (En otras palabras, el uso de C<$[> es obsoleto). Por ello, en general, puede asumir que X<$[>
 
     scalar(@loquesea) == $#loquesea + 1;
 
@@ -149,7 +145,8 @@ Los literales numéricos se especifican en cualquiera de los siguientes formatos 
     0377                # octal (solo números, comenzando con 0)
     0b011011            # binario
 
-Está permitido el uso de guiones bajos en literales numéricos entre los dígitos para aumentar la legibilidad.  Podría, por ejemplo, agrupar los dígitos binarios en grupos de tres en tres (como si fuera, al estilo Unix, de un argumento de modo, como en 0b110_100_100) o de cuatro en cuatro (para representar nibbles, como en 0b1010_0110) o en otros grupos.
+Está permitido el uso de guiones bajos (subrayados) en literales numéricos entre los dígitos para aumentar la legibilidad (pero lo que está permitido son los múltiples guiones bajos seguidos: C<23__500> no es legal; C<23_500>, sí).
+Podría, por ejemplo, agrupar los dígitos binarios en grupos de tres en tres (como si fuera, al estilo Unix, de un argumento de modo, como en 0b110_100_100) o de cuatro en cuatro (para representar nibbles, como en 0b1010_0110) o en otros grupos.
 X<number, literal> X<número, literal>
 
 Los literales de cadena se suelen delimitar con comillas simples o dobles.  Funcionan de forma muy parecida a las comillas en las líneas de comandos Unix: literales de cadena entre comillas dobles están sujetos a la barra invertida y la sustitución de variables; cadenas entre comillas simples no lo están (a excepción de C<\'> y C<\\>).  Las reglas normales de la barra invertida en el estilo del C se aplican para la creación de caracteres como el salto de línea, tabuladores, etc, así como algunas formas más exóticas.  Vea L<perlop/"Comillas y Operadores de comillas"> para una lista de ellos.
@@ -157,7 +154,7 @@ X<string, literal> X<cadena, literal>
 
 Hexadecimal, octal o binario, representaciones en cadenas literales (por ejemplo, '0xff') no se convierten automáticamente en su representación en entero.  Las funciones hex() y oct() hacen estas conversiones por usted.  Vea L<perlfunc/hex> y L<perlfunc/oct> para más detalles.
 
-También puede incrustar directamente caracteres de nueva línea dentro de sus cadenas, es decir, que puede terminar en una línea diferente de cuando empezaron.  Esto es bueno, pero si se le olvida cerrar el entrecomillado, el error no será reportado hasta que Perl encuentre otra línea que contenga el carácter de comillas, que puede estar mucho más allá en el programa.  Sustitución de variables dentro de cadenas se limita a variables escalares, arrays y porciones de array y hash.  (En otras palabras, nombres que empiezan con $ o @, seguido de una opcional expresión entre corchetes como si fuera un subíndice). El segmento de código siguiente imprime "El precio es $Z<>100".
+También puede incrustar directamente caracteres de nueva línea dentro de sus cadenas, es decir, que puede terminar en una línea diferente de cuando empezaron.  Esto es bueno, pero si se le olvida cerrar el entrecomillado, el error no será reportado hasta que Perl encuentre otra línea que contenga el carácter de comillas, que puede estar mucho más allá en el programa.  Sustitución de variables dentro de cadenas se limita a variables escalares, arrays y porciones de array y hash.  (En otras palabras, los nombres que empiezan con $ o @, seguidos de una expresión opcional entre corchetes como si fuera un subíndice).  El segmento de código siguiente imprime "El precio es $Z<>100".
 X<interpolation> X<interpolación>
 
     $Precio = '$100';                 # no interpolado
@@ -198,12 +195,14 @@ V-strings multi números como C<v65.66> y C<65.66.67> siguen siendo v-strings.
 X<special literal> X<__END__> X<__DATA__> X<END> X<DATA>
 X<end> X<data> X<^D> X<^Z> X<literal especial>
 
-Los literales especiales __FILE__, __LINE__ y __PACKAGE__ representan el nombre del archivo actual, número de línea, y el nombre del paquete en ese punto de su programa.  Sólo podrán ser utilizados como símbolos aislados; no se interpolarán dentro de cadenas.  Si no hay paquete actual (debido a una directiva C<package;> vacía), __PACKAGE__ tiene el valor indefinido. (Pero el C<package;> vacío ya no está soportado, a partir de la versión 5.10).
-X<__FILE__> X<__LINE__> X<__PACKAGE__> X<line> X<file> X<package> X<línea> X<archivo> X<paquete>
+Los literales especiales __FILE__, __LINE__ y __PACKAGE__ representan el nombre del archivo actual, número de línea, y el nombre del paquete en ese punto de su programa.  __SUB__ devuelve una referencia a la subrutina actual.  Sólo podrán ser utilizados como símbolos aislados; no se interpolarán dentro de cadenas.  Si no hay paquete actual (debido a una directiva C<package;> vacía), __PACKAGE__ tiene el valor indefinido. (Pero el C<package;> vacío ya no está soportado, a partir de la versión 5.10).  Fuera de la subrutina, __SUB__ devuelve el valor indefinido.  __SUB__ solo está disponible en v5.16 o superior, y solo con un C<use v5.16> o una declaración C<use feature "current_sub">.
+X<__FILE__> X<__LINE__> X<__PACKAGE__> X<__SUB__>
+X<line> X<file> X<package>
+X<línea> X<archivo> X<paquete>
 
 Los dos caracteres de control ^D y ^Z, y los símbolos __END__ y __DATA__ pueden ser usados para indicar el fin lógico del programa antes del final real del archivo.  Cualquier texto que le siga, es ignorado.
 
-El texto después de __DATA__ se puede leer a través del identificador de archivo C<PAQUETE::DATA>, donde C<PAQUETE> es el paquete que estaba en curso cuando se encontró el símbolo __DATA__.  El gestor de archivo se deja abierto apuntando al contenido que hay después de __DATA__.  Es responsabilidad del programa hacer C<close DATA> cuando se termine la lectura del mismo.  Por compatibilidad con I<scripts> viejos escritos antes de la introducción de __DATA__, __END__ se comporta como __DATA__ en el script de nivel superior (pero no en los archivos cargados con C<require> o C<do>) y deja el resto del contenido del archivo accesible a través de C<main::DATA>.
+El texto después de __DATA__ se puede leer a través del identificador de archivo C<PAQUETE::DATA>, donde C<PAQUETE> es el paquete que estaba en curso cuando se encontró el símbolo __DATA__.  El identificador de archivo se deja abierto apuntando a la línea que hay después de __DATA__.  El programa debe hacer un C<close DATA> cuando termine la lectura del mismo.  (Dejándolo abierto deja colgados gestores de archivo si el módulo es recargado por alguna razón, así que es una buena práctica cerrarlo).  Por compatibilidad con I<scripts> viejos escritos antes de la introducción de __DATA__, __END__ se comporta como __DATA__ en el I<script> de nivel superior (pero no en los archivos cargados con C<require> o C<do>) y deja el resto del contenido del archivo accesible a través de C<main::DATA>.
 
 Ver L<Autocargador> para una mayor descripción de __DATA__, y ejemplos de su uso.  Tenga en cuenta que no puede leer desde el identificador de archivo de datos en un bloque BEGIN: el bloque BEGIN se ejecutará tan pronto como sea visto (durante la compilación), momento en que el correspondiente símbolo __DATA__ (o __END__) aún no se ha visto.
 
@@ -280,7 +279,7 @@ Para hacer referencia a una lista que <NO> interpole, vea L<perlref> .
 
 La lista nula se representa por ().  Interpolarla en una lista no tiene ningún efecto.  Así que ((),(),()) es equivalente a ().  Del mismo modo, la interpolación de un array sin elementos es lo mismo que si no se hubiera interpolado ningún array en ese punto.
 
-Esta interpolación se combina con el hecho de que la apertura y cierre de paréntesis son opcionales (excepto cuando sea necesario para la precedencia) y las listas pueden terminar con una coma opcional, significando que comas múltiples dentro de las listas es sintaxis legal. La lista C<1,,3> es una concatenación de dos listas, C<1,> y C<3>, la primera de las cuales termina con una coma opcional.  C<1,,3> es C<(1,),(3)> es C<1,3> (y similarmente para C<1,,,3> es C<(1,),(,),3> es C<1,3> y así sucesivamente). No le aconsejamos usar este tipo de ofuscación.
+Esta interpolación se combina con el hecho de que la apertura y cierre de paréntesis son opcionales (excepto cuando sea necesario para la precedencia) y las listas pueden terminar con una coma opcional, significando que comas múltiples dentro de las listas es sintaxis legal. La lista C<1,,3> es una concatenación de dos listas, C<1,> y C<3>, la primera de las cuales termina con una coma opcional.  C<1,,1> es C<(3,),(3)> es C<1,3> (y similarmente para C<1,,,1> es C<(3,),(,),3> es C<1,3> y así sucesivamente).  No le aconsejamos usar este tipo de ofuscación.
 
 Una lista de valores también pueden ser indexadas como un array normal.  Debe poner la lista entre paréntesis para evitar ambigüedades.  Por ejemplo:
 
@@ -391,6 +390,18 @@ Los índices en los Hash son similares, pero en lugar de usar corchetes se usan l
 También puede subindexar una lista para obtener un solo elemento de ella.
 
     $dir = (getpwnam("daemon"))[7];
+
+=head2 Emulación de matrices multidimensionales
+
+Matrices multidimensionales pueden ser emuladas usando listas como subíndices en un hash. Los elementos de la lista se unen con el separador de subíndice (vea L<perlvar/$;>).
+
+    $foo{$a,$b,$c}
+
+es equivalente a
+
+    $foo{join($;, $a, $b, $c)}
+
+El separador de subíndice por defecto es "\034", el mismo que en SUBSEP en B<awk>.
 
 =head2 Porciones
 X<slice> X<array, slice> X<hash, slice> X<porción> X<array, porción> X<hash, porción>
@@ -514,7 +525,7 @@ Todas las funciones que son capaces de crear identificadores de archivo (open(),
 Tenga en cuenta que si se usa una variable escalar ya inicializada, el resultado es diferente: C<my $fh='zzz'; open($fh, ...)> es equivalente a C<open( *{'zzz'}, ...)>.
 C<use strict 'refs'> prohíbe tal práctica.
 
-Otra forma de crear identificadores de archivo anónimos es con el módulo Symbol o con el módulo IO::Handle y sus acólitos.  Estos módulos tienen la ventaja de no ocultar diferentes tipos del mismo nombre durante el local().  Ver la parte inferior de L<perlfunc/"open IDENTIFICADOR_ARCHIVO"> para un ejemplo.
+Otra forma de crear identificadores de archivo anónimos es con el módulo Symbol o con el módulo IO::Handle y sus acólitos.  Estos módulos tienen la ventaja de no ocultar diferentes tipos del mismo nombre durante el local().  Vea la parte inferior de L<perlfunc/open> para un ejemplo.
 
 =head1 VEA TAMBIÉN
 

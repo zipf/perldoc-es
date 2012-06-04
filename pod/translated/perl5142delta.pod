@@ -1,0 +1,187 @@
+=encoding utf8
+
+=head1 NOMBRE
+
+perl5142delta - qué hay de nuevo para perl v5.14.2
+
+=head1 DESCRIPCIÓN
+
+Este documento describe las diferencias entre la versión 5.14.1 y la versión 5.14.2.
+
+Si está actualizando desde una versión anterior como la 5.14.0, primero lea L<perl5141delta>, que describe las diferencias entre 5.40.0 y la 5.14.1.
+
+=head1 Mejoras principales
+
+No hay cambios desde 5.14.0.
+
+=head1 Seguridad
+
+=head2 Error de memoria de C<File::Glob::bsd_glob()> con GLOB_ALTDIRFUNC (CVE-2011-2728).
+
+Llamar C<File::Glob::bsd_glob> con la bandera no soportada GLOB_ALTDIRFUNC podría causar una violación de acceso/I<segfault>.  Un programa Perl que acepta un valor de las banderas de una fuente externa podría exponerse a una denegación de servicio o ataques de ejecución de código arbitrario.  No se conocen ataques descontrolados.  El problema se ha corregido explícitamente desactivando todas las banderas no soportadas y el establecimiento de punteros a funciones sin uso, al valor nulo.  Error reportado por Clément Lecigne.
+
+=head2 Desbordamiento de pila de n bytes en decode_xs de C<Encode> (CVE-2011-2939)
+
+Un error en C <Encode> podría, con ciertos entradas, un desborde de la pila.
+Se ha solucionado este problema.  Error notificado por Robert Zacek.
+
+=head1 Cambios incompatibles
+
+No hay cambios intencionadamente incompatibles con 5.14.0. Si los hay, los errores e informes serán bienvenidos.
+
+=head1 Obsolescencias
+
+No hay obsolescencias desde 5.14.0.
+
+=head1 Módulos y Pragmata
+
+=head2 Nuevos módulos y pragmas
+
+Ninguna
+
+=head2 Módulos y Pragmata actualizados
+
+=over 4
+
+=item *
+
+L<CPAN> ha sido actualizado de la versión 1.9600 a la versión 1.9600_01.
+
+L<CPAN::Distribution> ha sido actualizado de la versión 1.9602 a la 1.9602_01.
+
+Portadas las correcciones de errores de la versión CPAN 1.9800.  Garantiza la detección adecuada de los prerequisitos C<configure_requires> desde los archivos Meta de CPAN en el caso de que C<dynamic_config> sea verdadero.  [rt.cpan.org #68835]
+
+También asegura que C<configure_requires> sólo es comprobado en los archivos META, no en los archivos MYMETA, por lo que protegen contra la generación de MYMETA que hace descartar C<configure_requires>.
+
+=item *
+
+Se ha actualizado L<Encode> desde la versión 2.42 a la versión 2.42_01.
+
+Vea L</Seguridad>.
+
+=item *
+
+Se ha actualizado L<File::Glob> desde la versión 1.12 a la versión 1.13.
+
+Vea L</Seguridad>.
+
+=item *
+
+Se ha actualizado L<PerlIO::scalar> de la versión 0.11 a la versión 0.11_01.
+
+Se corrige un problema con C<< open my $fh, ">", \$escalar >>, al no funciona si C<$escalar> es un escalar con copia-en-escritura.
+
+=back
+
+=head2 Módulos y pragmas retirados
+
+Ninguna
+
+=head1 Compatibilidad con plataformas
+
+=head2 Nuevas plataformas
+
+Ninguna
+
+=head2 Plataformas retiradas
+
+Ninguna
+
+=head2 Notas específicas de plataformas
+
+=over 4
+
+=item Ahora HP-UX PA-RISC/64 es compatible con gcc-4.x
+
+Una solución para corregir el tamaño del I<socket> hace que se pase sin problemas las pruebas en HP-UX PA-RISC para las versiones de 64bitall.
+
+=item Ya funciona la compilación en OS X 10.7 Lion y Xcode 4
+
+Se ha actualizado el sistema de compilación para que funcione con las herramientas de compilación de Mac OS X 10.7.
+
+=back
+
+=head1 Arreglo de errores
+
+=over 4
+
+=item *
+
+En filtros @INC (subrutinas devueltas por subrutinas en @INC), $_ se utiliza mal: si regresa de una subrutina, no será copiada, sino que la propia variable será devuelta; y la liberación de $_ (por ejemplo, con C<undef *_>) hará que perl se bloquee.  Esto se ha corregido [perl #91880].
+
+=item *
+
+Perl 5.10.0 introdujo una lógica defectuosa que hizo que "U*", en el medio de una plantilla pack, equivalga a "U0" si la cadena de entrada estaba vacía.  Esto se ha corregido [perl #90160].
+
+=item *
+
+C<caller> ya no agota la memoria cuando es llamada desde un paquete DB si C<@DB::args> fue asignada después de la primera llamada a C<caller>.  L<Carp> desencadenaba este error [perl #97010].
+
+=item *
+
+C<utf8::decode> tuvo un desagradable error que modificaría, en el mismo sitio, escalares copia-en-escritura que sean tampones de cadenas, (es decir, no haría la copia).  Esto permitía que un hash tuviera dos elementos con la misma clave [perl #91834].
+
+=item *
+
+Localización de una variable ligada utilizada para que sea de sólo lectura si contenía una cadena copia-en-escritura.
+
+=item *
+
+Elementos de hashes restringidos (vea el I<pragma> L<fields>) que contenga valores de copia-en-escritura no se pudo eliminar, ni estos hashes podían ser limpiados (C<%hash = ()>).
+
+=item *
+
+Bloqueo un elemento hash que es una copia expandida ya no provoca la asignación posterior de ésta para corromper la expansión.
+
+=item *
+
+Un pánico que implica la combinación de los modificadores de expresión regular C</aa> introducidos en 5.14.0 y la secuencia de escape C<\b>, ha sido arreglada [perl #95964].
+
+=back
+
+=head1 Problemas conocidos
+
+Esta lista contiene algunos errores importantes no corregidos que son regresiones de la versión 5.12.0.
+
+=over 4
+
+=item *
+
+C<PERL_GLOBAL_STRUCT> no funciona.
+
+Desde perl 5.14.0 no se puede compilar con C<-DPERL_GLOBAL_STRUCT>. Esto significa que actualmente perl no funciona en ninguna plataforma que deba compilarse de esta manera, como Symbian.
+
+Aunque C<PERL_GLOBAL_STRUCT> ya funciona en versiones de desarrollo recientes, aún no se ha comprobado que funcione realmente en Symbian.
+
+Nos gustaría recibir información de personas que trabajen con Perl en Symbian.
+
+=back
+
+=head1 Agradecimientos
+
+Perl 5.14.2 representa aproximadamente tres meses de desarrollo desde Perl 5.14.1 y contiene unas 1200 líneas de cambios implementados por 9 autores en 61 archivos.
+
+Perl sigue floreciendo en su tercera década gracias a una vibrante comunidad de usuarios y desarrolladores.  Las siguientes personas han aportado las mejoras incluidas en Perl 5.14.2:
+
+Craig A. Berry, David Golden, Father Chrysostomos, Florian Ragwitz, H.Merijn
+Brand, Karl Williamson, Nicholas Clark, Pau Amma y Ricardo Signes.
+
+=head1 Informar de errores
+
+Si encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay también información en la página principal de Perl, http://www.perl.org/ .
+
+Si cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.
+
+Si el fallo que está reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo pública, por favor, envíelo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripción cerrada y no archivada, que incluye a todos los participantes principales, que podrán ayudar a evaluar el impacto de los problemas, encontrar una resolución, y ayudar a coordinar la liberación de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl está soportado. Por favor, utilice sólo esta dirección para problemas de seguridad en el núcleo de Perl, no para los módulos distribuidos de forma independiente en CPAN.
+
+=head1 VEA TAMBIÉN
+
+El archivo F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+
+El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+
+El archivo F<README> (LEEME) para asuntos generales.
+
+Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+
+=cut
