@@ -349,7 +349,8 @@ La ubicación estándar de Perl en Unix, F</usr/bin/perl>, ya no es, por defecto, 
 
 Ahora se pueden especificar directorios de instalación para las páginas man y HTML, y scripts para el propio equipo y para el instalador del sistema.  Vea F<INSTALL>.
 
-Ahora se puede especificar un directorio destino para la instalación de Perl mediante la especificación de la variable DESTDIR para C<make install>.  (Esta característica es ligeramente diferente de la anterior C<Configure -Dinstallprefix=...>). Vea F<INSTALL>.
+Ahora se puede especificar un directorio destino para la instalación de Perl mediante la especificación de la variable DESTDIR para C<make install>.  (Esta característica es ligeramente diferente de la anterior C<Configure -Dinstallprefix=...>).
+Vea F<INSTALL>.
 
 versiones 3.x de gcc introdujeron una nueva advertencia que causaba mucho ruido en la compilación Perl: C<gcc -Ialreadyknowndirectory (advertencia: cambiando el órden de búsqueda)>.  Esta advertencia ha sido eliminada para no confundir a Configure de esos directorios antes de la compilación.
 
@@ -408,7 +409,7 @@ Métodos enlazados como FETCH, etc ahora pueden acceder de forma segura a los val
 En el arranque, Perl bloquea la señal SIGFPE, ya que no hay mucho que Perl pueda hacer al respecto.  Anteriormente, este bloqueo se encontraba en vigor también para los programas ejecutados desde dentro de Perl.  Ahora Perl restaura la rutina de manejo de SIGFPE original, fuera cual fuera, antes de ejecutar programas externos.
 
 Los números de línea en Perl ahora pueden ser mayores de 65536, o 2**16.
-(Los programas Perl siempre han sido capaces de tener más que eso, es sólo que los números de línea de los informes de errores y advertencias son "reiniciados"). Mientras que scripts tan grandes como estos, por lo general, indican la necesidad de repensar un poco el código, scripts de Perl como estos existen, por ejemplo, de resultas de un código generado.  Ahora, los números de línea puede ir hasta 4294967296, o 2**32.
+(Los programas Perl siempre han sido capaces de tener más que eso, es sólo que los números de línea de los informes de errores y advertencias son "reiniciados").  Mientras que I<scripts> tan grandes como estos, por lo general, indican la necesidad de repensar un poco el código, I<scripts> de Perl como estos existen, por ejemplo, de resultas de un código generado.  Ahora, los números de línea puede ir hasta 4294967296, o 2**32.
 
 =head2 Arreglos específicos por plataforma
 
@@ -596,7 +597,8 @@ El número exacto dependerá de la configuración de Perl y de la plataforma del si
 
 La asignación al azar de hash mencionado en L</Cambios incompatibles> es definitivamente un problema: despertará errores latentes y sacudirá a las malas suposiciones.
 
-Si desea utilizar mod_perl 2.x. con Perl 5.8.1, necesitará mod_perl-1.99_10 o superior.  Las versiones anteriores de mod_perl 2.x no funcionan con la función de aleatorización de los hashes.  (mod_perl 1.x funciona bien). También necesitará Apache::Test 1.04 o superior.
+Si desea utilizar mod_perl 2.x. con Perl 5.8.1, necesitará mod_perl-1.99_10 o superior.  Las versiones anteriores de mod_perl 2.x no funcionan con la función de aleatorización de los hashes.  (mod_perl 1.x funciona bien).
+También necesitará Apache::Test 1.04 o superior.
 
 Muchas de las plataformas más raras en las que funcionaba al 100% o muy cerca de ello con perl 5.8.0 se han quedado un poco descuidadas debido a que sus responsables se han ocupado últimamente de otras cosas, y por lo tanto habrá más fallos en esas plataformas.  En estas plataformas se incluyen a Mac OS Classic, IBM z/OS (y otras plataformas EBCDIC), y NetWare.  Las plataformas más comunes de Perl (Unix y familia, las plataformas Microsoft y VMS) tiene pruebas lo suficientemente grandes y una población de expertos que lo están haciendo bien.
 

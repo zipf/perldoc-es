@@ -118,7 +118,7 @@ Hace exactamente lo contrario a la opción B<-W>, es decir, desactiva todas las a
 
 =head2 Compatibilidad con versiones anteriores
 
-Si está acostumbrado a trabajar con una versión de Perl anterior a la introducción de las advertencias con alcance léxico, o si tiene código que utiliza tanto las advertencias léxicas y C<$^W>, esta sección se describirá la forma en que interactúan.
+Si está acostumbrado a trabajar con una versión de Perl anterior a la introducción de las advertencias con alcance léxico, o si tiene código que utiliza tanto las advertencias léxicas y C<$^W>, esta sección describirá la forma en que interactúan.
 
 Cómo interactúan las advertencias léxicas con B<-w>/C<$^W>:
 
@@ -126,7 +126,7 @@ Cómo interactúan las advertencias léxicas con B<-w>/C<$^W>:
 
 =item 1.
 
-Si no se usa ninguna de las tres opciones de línea de comandos (B<-w>, B<-W> o B<-X>) que controlan las advertencias, y ni C<$^W> o el pragma  C<warnings> son usados, entonces son activadas las advertencias predeterminadas, y desactivadas las advertencias opcionales.
+Si no usa ninguna de las tres opciones de línea de comandos (B<-w>, B<-W> o B<-X>) que controlan las advertencias, y ni C<$^W> o el I<pragma> C<warnings> son usados, entonces son activadas las advertencias predeterminadas, y desactivadas las advertencias opcionales.
 Esto significa que el código heredado que no trate de controlar a las advertencias, funcionará sin problemas.
 
 =item 2.

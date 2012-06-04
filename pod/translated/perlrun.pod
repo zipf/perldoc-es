@@ -17,7 +17,8 @@ B<perl>	S<[ B<-sTtuUWX> ]>
 
 =head1 DESCRIPCIÓN
 
-La forma normal de ejecutar un programa de Perl es haciéndolo directamente ejecutable, o bien pasando el nombre del código fuente como un argumento en la línea de comandos.  (Un entorno Perl interactivo también es posible -vea L<perldebug> para más detalles de cómo hacer esto-). En el arranque, Perl busca por su programa en uno de los siguientes lugares:
+La forma normal de ejecutar un programa de Perl es haciéndolo directamente ejecutable, o bien pasando el nombre del código fuente como un argumento en la línea de comandos.  (Un entorno Perl interactivo también está disponible -vea L<perldebug> para más detalles de cómo hacer esto-).
+En el arranque, Perl busca por su programa en uno de los siguientes lugares:
 
 =over 4
 
@@ -61,7 +62,7 @@ Un truco similar hay con el programa I<env>, si lo tiene instalado.
 
 Los ejemplos anteriores usan una ruta relativa al intérprete perl, accediendo al primero que se encuentre en la ruta del usuario, sin fijarse en qué versión sea.  Si necesita una versión específica de Perl, por ejemplo, la perl5.005_57, debe colocarla directamente en la ruta de la línea  C<#!>.
 
-Si la línea C<#!> no contiene la palabra "perl", el programa nombrado después del C<#!> es ejecutado en lugar del intérprete de Perl.  Esto es algo extraño, pero ayuda a personas en máquinas que no pueden trabajar con C<#!>, porque ellas pueden indicar a un programa que su SHELL es F</usr/bin/perl>, y Perl, entonces, despachará, por ellos, el programa al intérprete correcto.
+Si la línea C<#!> no contiene la palabra "perl" ni la palabra "indir", el programa nombrado después de C<#!> es ejecutado en lugar del intérprete de Perl.  Esto es algo extraño, pero ayuda a personas en máquinas que no pueden trabajar con C<#!>, porque ellas pueden indicar a un programa que su SHELL es F</usr/bin/perl>, y Perl, entonces, despachará, por ellos, el programa al intérprete correcto.
 
 Después de localizar a su programa, Perl compila el programa entero a una forma interna.  Si existe algún error de compilación, ni se intenta la ejecución del programa.  (Esto es muy distinto del típico script shell, que se ejecutará sin pensarlo hasta encontrar el primer error de sintaxis).
 
@@ -94,8 +95,8 @@ La instalación Win95/NT, cuando se usa el instalador de ActiveState para Perl, m
 
 Ponga
 
-    $ perl -mysw 'f$env("procedure")' 'p1' 'p2' 'p3' 'p4' 'p5' 'p6' 'p7' 'p8' !
-    $ exit++ + ++$status != 0 and $exit = $status = undef;
+ $ perl -mysw 'f$env("procedure")' 'p1' 'p2' 'p3' 'p4' 'p5' 'p6' 'p7' 'p8' !
+ $ exit++ + ++$status != 0 and $exit = $status = undef;
 
 al comienzo del programa, donde B<-mysw> es cualquier conjunto de opciones que quiera pasar a Perl.  Ahora puede invocar el programa directamente, diciendo C<perl programa>, o como un procedimiento DCL, diciendo C<@programa> (o, implícitamente vía F<DCL$PATH> usando simplemente el nombre del programa).
 
@@ -103,7 +104,7 @@ Esta llamada es más difícil de recordar, pero Perl se la mostrará si dice C<perl
 
 =back
 
-Los intérpretes de comando en sistemas Unix tienen diferentes ideas sobre el entrecomillado en los shells Unix.  Tendrá que aprender los caracteres especiales de su intérprete de comandos (C<*>, C<\> y C<"> son los más comunes) y la forma de proteger el espacio en blanco y estos caracteres para ejecutar scripts de una sola línea (vea B<-e> a continuación).
+Los intérpretes de comando en sistemas Unix tienen diferentes ideas sobre el entrecomillado en los shells Unix.  Tendrá que aprender los caracteres especiales de su intérprete de comandos (C<*>, C<\> y C<"> son los más comunes) y la forma de proteger el espacio en blanco y estos caracteres para ejecutar programas de una sola línea (vea L<-e|/-e línea de comando> más abajo).
 
 En algunos sistemas, quizás tenga que cambiar las comillas simples por las dobles, algo que I<no> debe hacer en sistemas Unix o Plan 9.  Quizás tenga que cambiar un simple % a un %%.
 
@@ -194,10 +195,10 @@ A partir de 5.8.1, el B<-C> puede ser seguido tanto por un número como una lista
     D    24   i + o
     A    32   los elementos @ARGV se espera que sean cadenas codificados
               en UTF-8
-    L    64   normalmente, el "IOEioA" es incondicional.
-              La L las hace condicionales según las variables de
-              entorno de configuración local (LC_ALL, LC_TYPE, y LANG,
-              en orden de precedencia decreciente) -- si las variables
+    L    64   normalmente, el "IOEioA" es incondicional, la L las hace
+              condicionales según las variables de entorno de
+              configuración local (LC_ALL, LC_TYPE, y LANG, en
+              orden de precedencia decreciente) Si las variables
               indican UTF-8, entonces toman efecto las opciones "IOEioA"
     a   256   Pone ${^UTF8CACHE} a -1, para ejecutar el código de caché
               UTF-8 en modo depuración.
@@ -213,6 +214,7 @@ Por ejemplo, B<-COE> y B<-C6> activarán el tratamiento UTF-8 tanto en STDOUT com
 Las opciones C<io> quieren decir que cualquier subsecuente open() (o similares operaciones de E/S) en el actual ámbito del archivo tendrá aplicado una implícita capa PerlIO C<:utf8>, en otras palabras, se espera UTF-8 en cualquier flujo de entrada, y UTF-8 es producido en cualquier flujo de salida.  Esto queda marcado como por defecto, mientras que las capas explícitas en open() y con binmode() se pueden manipular los flujos de la forma usual.
 
 Un solitario B<-C> (no seguido por ningún número ni lista de opciones), o la cadena vacía C<""> para la variable de entorno C<PERL_UNICODE>, tiene el mismo efecto que B<-CSDL>.  En otras palabras, los gestores de archivo estándares de E/S y la capa por defecto para C<open()> están en modo UTF I<pero> solo si las variables de entorno de configuración local indican que se está en un entorno local UTF-8.  Este comportamiento sigue el I<implícito> (y problemático) comportamiento de UTF-8 de Perl 5.8.0.
+(Vea L<perl581delta/UTF-8 ya no está predeterminado bajo configuraciones regionales UTF-8>).
 
 Puede usar B<-C0> (o C<"0"> para C<PERL_UNICODE>) para desactivar explícitamente todas las características Unicode anteriores.
 
@@ -249,7 +251,7 @@ X<-D> X<DEBUGGING> X<-DDEBUGGING>
 
 =item B<-D>I<número>
 
-activa banderas de depuración.  Para mirar cómo se ejecuta su programa, use B<-Dtls>.  (Esto funciona solo si se compiló el soporte para depuración, dentro de su Perl). Otro valor interesante es B<-Dx>, que lista el árbol de sintaxis compilado.  Y B<-Dr> muestra las expresiones regulares compiladas; el formato de salida es explicado en L<perldebguts>.
+activa banderas de depuración.  Para mirar cómo se ejecuta su programa, use B<-Dtls>.  (Esto funciona solo si el soporte para depuración fue compilado en su Perl).  Otro valor interesante es B<-Dx>, que lista el árbol de sintaxis compilado.  Y B<-Dr> muestra las expresiones regulares compiladas; el formato de salida es explicado en L<perldebguts>.
 
 Como alternativa, especifique un número en lugar de una lista de letras (ej., B<-D14> es equivalente a B<-Dtls>):
 
@@ -265,19 +267,22 @@ Como alternativa, especifique un número en lugar de una lista de letras (ej., B<
       512  r  Análisis y ejecución de expresiones regulares
      1024  x  Volcado del árbol sintáctico
      2048  u  Comprobaciones de contaminación
-     4096  U  No oficial, para hackeo del usuario (reservado para uso privado, y no distribuible)
+     4096  U  No oficial, para hackeo de usuarios (reservado para uso privado, y no distribuible)
      8192  H  Volcado de Hash -- usurpa values()
     16384  X  Reserva del Scratchpad
     32768  D  Limpieza
    131072  T  Simbolización
-   262144  R  Incluye el contador de referencias de las variables volcadas (ej. cuando se usa -Ds)
-   524288  J  muestra s,t,P-debug (no salta afuera) en códigos de operación dentro del paquee DB
+   262144  R  Incluye el contador de referencias de las variables
+              volcadas (ej. cuando se usa -Ds)
+   524288  J  muestra s,t,P-debug (no salta afuera) en códigos de
+              operación dentro del paquete DB
   1048576  v  Verboso: usar junto con otras banderas
   2097152  C  Copiar En Escritura
   4194304  A  Comprueba la consistencia en las estructuras internas
   8388608  q  silencio - actualmente solo suprime el mensaje "EXECUTING"
  16777216  M  traza la resolución de la coincidencia inteligente
- 33554432  B  vuelca las definiciones de suBrutinas, incluyendo los Bloques especiales como BEGIN
+ 33554432  B  vuelca las definiciones de suBrutinas, incluyendo los
+              Bloques especiales como BEGIN
 
 Todas estas banderas requieren B<-DDEBUGGING> cuando compile el ejecutable Perl (pero vea C<:opd> en L<Devel::Peek> o L<re/modo 'debug'> que puede cambiar esto).
 Vea el archivo F<INSTALL> en la distribución del código fuente para saber cómo hacerlo.  Esta bandera es automáticamente puesta si incluye la opción B<-g> cuando C<Configure> pregunte sobre banderas para el optimizador/depurador.
@@ -354,19 +359,21 @@ Si la extensión no contiene un C<*>, entonces es añadida al final del nombre de 
 Esto le permite añadir un prefijo al archivo de copia de seguridad, en vez de (o además de)
 un sufijo:
 
-    $ perl -pi'orig_*' -e 's/bar/baz/' fileA	# copia de seguridad a 'orig_fileA'
+ $ perl -pi'orig_*' -e 's/bar/baz/' fileA  # copia de seguridad
+                                           # a 'orig_fileA'
 
 O incluso para colocar copias de seguridad de los archivos originales en otro directorio (suponiendo que el directorio ya existe):
 
-    $ perl -pi'old/*.orig' -e 's/bar/baz/' fileA # copia de seguridad a 'old/fileA.orig'
+ $ perl -pi'old/*.orig' -e 's/bar/baz/' fileA  # copia de seguridad
+                                               # a 'old/fileA.orig'
 
 Este conjunto de una-líneas son equivalentes:
 
-    $ perl -pi -e 's/bar/baz/' fileA		# sobrescribe el archivo actual
-    $ perl -pi'*' -e 's/bar/baz/' fileA		# sobrescribe el archivo actual
+ $ perl -pi -e 's/bar/baz/' fileA          # sobrescribe el archivo actual
+ $ perl -pi'*' -e 's/bar/baz/' fileA       # sobrescribe el archivo actual
 
-    $ perl -pi'.orig' -e 's/bar/baz/' fileA	# copia de seguridad a 'fileA.orig'
-    $ perl -pi'*.orig' -e 's/bar/baz/' fileA	# copia de seguridad a 'fileA.orig'
+ $ perl -pi'.orig' -e 's/bar/baz/' fileA   # copia de seguridad a 'fileA.orig'
+ $ perl -pi'*.orig' -e 's/bar/baz/' fileA  # copia de seguridad a 'fileA.orig'
 
 Dese el shell, decir
 
@@ -473,7 +480,7 @@ hace que Perl asuma el bucle siguiente alrededor de su programa, el cual hace it
 	...		# su programa va aquí
     }
 
-Note que las líneas, por defecto, no son impresas.  Vea B<-p> para tener las líneas impresas.  Si un archivo nombrado por un argumento no puede ser abierto por alguna razón, Perl se lo advierte y pasa al archivo siguiente.
+Note que las líneas, por defecto, no son impresas.  Vea L</-p> para tener las líneas impresas.  Si un archivo nombrado por un argumento no puede ser abierto por alguna razón, Perl se lo advierte y pasa al archivo siguiente.
 
 También tenga en cuenta que C<< <> >> pasa los argumentos de la línea de comandos a L<perlfunc/open>, el cual, no necesariamente, les interpreta como nombres de archivo.
 Vea L<perlop> para las posibles implicaciones de seguridad.
@@ -556,7 +563,7 @@ activa el modo "contaminación" para que pueda probarlo.  Por lo general, estos c
 X<-u>
 
 Esta opción hace que Perl vuelque su memoria después de compilar el programa.  A continuación, puede, en teoría, tomar ese volcado de memoria y convertirlo en un archivo ejecutable mediante el uso del programa I<undump> (no suministrado).
-Esto acelera el inicio a costa de espacio en disco (que puede minimizar mediante la eliminación de símbolos en el ejecutable).  (Sin embargo, un ejecutable "hola mundo" ocupa unos 200Kb en mi máquina). Si desea ejecutar una parte de su programa antes del volcado de memoria, use en su lugar el operador dump().  Nota: La disponibilidad de I<undump> es específico de la plataforma y puede no estar disponible para una determinada adaptación de Perl.
+Esto acelera el inicio a costa de espacio en disco (que puede minimizar mediante la eliminación de símbolos en el ejecutable).  (Sin embargo, un ejecutable "hola mundo" ocupa unos 200Kb en mi máquina).  Si desea ejecutar una parte de su programa antes del volcado de memoria, use en su lugar el operador dump().  Nota: La disponibilidad de I<undump> es específico de la plataforma y puede no estar disponible para una determinada adaptación de Perl.
 
 =item B<-U>
 X<-U>
@@ -633,7 +640,8 @@ X<-x>
 
 le dice a Perl que el programa está incrustado en un pedazo más grande de texto, sin ninguna relación con él, como por ejemplo, en un mensaje de correo electrónico.  La basura inicial será descartada hasta la primera línea que comience con C<#!> y contenga la cadena "perl".  Se aplicará cualquier opción significativa de esa línea.
 
-Todas las referencias a números de línea en el programa (avisos, errores, ...) serán tratados como si la línea C<#!> fuera la primera línea.
+Todas las referencias a números de línea en el programa (avisos, errores, ...)
+serán tratados como si la línea C<#!> fuera la primera línea.
 Entonces, una advertencia en la línea 2 del programa, que está en la línea 100 en el archivo será reportada como la línea 2, no como la línea 100.
 Esto se puede anular mediante el uso de la directiva C<#line>.
 (Vea L<perlsyn/"Viejos y simples comentarios (¡No!)">)
@@ -842,7 +850,7 @@ Si se utiliza el pragma C<use encoding> sin un nombre de codificación explícito,
 =item PERL_HASH_SEED
 X<PERL_HASH_SEED>
 
-(Desde Perl 5.8.1). Se utiliza para aleatorizar la función hash interna de Perl.
+(Desde Perl 5.8.1.)  Se utiliza para aleatorizar la función hash interna de Perl.
 Para emular el comportamiento pre-5.8.1, establezca a un número entero; C<"0"> significa exactamente el mismo orden que en 5.8.0.  "Pre-5.8.1" significa, entre otras cosas, que las claves de hash siempre tendrá el mismo orden entre las diferentes ejecuciones de Perl.
 
 La mayoría de los hashes, por defecto, devuelven elementos en el mismo orden que en Perl 5.8.0.
@@ -860,7 +868,7 @@ Vea L<perlsec/"Ataques de Complejidad Algorítmica"> y L</PERL_HASH_SEED_DEBUG> p
 =item PERL_HASH_SEED_DEBUG
 X<PERL_HASH_SEED_DEBUG>
 
-(Desde Perl 5.8.1). Puesto a C<"1"> para mostrar (en STDERR) el valor de la semilla de hash al comienzo de la ejecución.  Esto, combinado con L</PERL_HASH_SEED> está destinado a ayudar a depurar el comportamiento no determinista causado por la aleatorización de los hash.
+(Desde Perl 5.8.1.)  Establecido a C<"1"> para mostrar (en STDERR) el valor de la semilla de hash al comienzo de la ejecución.  Esto, combinado con L</PERL_HASH_SEED> está destinado a ayudar a depurar el comportamiento no determinista causado por la aleatorización de los hash.
 
 B <Note que la semilla hash es información sensible>: conociéndolo, se puede elaborar un ataque de denegación de servicio contra el código Perl, incluso remotamente; vea L<perlsec/"Ataques de Complejidad Algorítmica"> para más información.
 B<No muestre la semilla hash> a personas que no necesiten conocerla.
