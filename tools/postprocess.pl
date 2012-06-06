@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Copyright 2011 by Enrique Nell
+# Copyright 2011-2012 by Enrique Nell
 #
 # Requires Pod::Simple::HTML
 
@@ -60,9 +60,32 @@ foreach my $pod_name (@names) {
 
     my $source = "$SOURCE_PATH/$pod_name";
     my $trans  = "$TRANS_PATH/$pod_name";
-    my $distr  = "$DISTR_PATH/$pod_name";
     my $pod    = "$POD_PATH/$pod_name";
     my $clean  = "$CLEAN_PATH/$pod_name";
+
+    # Get path components
+    my ($name, $path, $suffix) = fileparse($trans, qr{\.pod|\.pm|\..*});    
+    say $name;
+    say $path;
+    say $suffix;
+
+    my ( $ext ) = $suffix =~ /\.(.+)$/;
+
+    my ( $readme, $final_name );
+    if ( $name eq "README" ) {
+        
+        $readme++;
+        say "Readme file" if $readme;
+
+        $final_name = "perl$ext.pod"; # new name convention for READMEs in 5.16
+
+    } else {
+        
+        $final_name = $pod_name;
+
+    }
+    
+    my $distr  = "$DISTR_PATH/$final_name";
 
     # copy work memory to clean project => clean memory
     copy($MEM_PATH, $CLEANM_PATH);
@@ -77,17 +100,6 @@ foreach my $pod_name (@names) {
     copy($trans, $distr);
 
     
-    # Post-processing stage
-    
-    # Get path components
-    my ($name, $path, $suffix) = fileparse($trans, qr{\.pod|\.pm|\..*});    
-    say $name;
-    say $path;
-    say $suffix;
-
-    my $readme;
-    $readme++ if $name eq "README";
-    say "Readme file" if $readme;    
 
     # Replace double-spaces after full-stop with single space
     open my $dirty, '<:encoding(latin-1)', $distr;
