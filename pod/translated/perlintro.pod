@@ -15,7 +15,7 @@ En la documentación de Perl se incluyen muchos ejemplos que ilustran las caracte
 
 Los ejemplos de las distintas partes de la documentación reflejan el estilo y las preferencias de sus autores, y pueden ser más escuetos que una línea de código equivalente en un programa real.  Salvo si se indica lo contrario, debe suponer que al principio del "programa" se incluyen las instrucciones C<use strict> y C<use warnings>, y que todas las variables han sido declaradas, aunque se omitan las declaraciones para facilitar la lectura del ejemplo.
 
-Tenga en cuenta que los ejemplos han sido escritos por muchos autores distintos a lo largo de varias décadas. Por esta razón, habrá diversos estilos y técnicas, pero se ha procurado que en una misma sección los estilos no varíen demasiado. Ningún estilo es mejor que otro. No olvide que uno de los lemas de Perl es "Se puede hacer de varias maneras". Al fin y al cabo, en su vida profesional como programador se va a encontrar distintos estilos.
+Tenga en cuenta que los ejemplos han sido escritos por muchos autores distintos a lo largo de varias décadas.  Por esta razón, habrá diversos estilos y técnicas, pero se ha procurado que en una misma sección los estilos no varíen demasiado.  Ningún estilo es mejor que otro. No olvide que uno de los lemas de Perl es "Se puede hacer de varias maneras".  Al fin y al cabo, en su vida profesional como programador se va a encontrar distintos estilos.
 
 =head2 ¿Qué es Perl?
 
@@ -38,19 +38,19 @@ Como alternativa, puede colocar al principio del script la siguiente línea:
 
 ... y ejecutar el script como C</ruta/script.pl>.  Por supuesto, antes deberá marcarlo como ejecutable con el comando C<chmod 755 script.pl> (en Unix).
 
-(En esta línea se supone que dispone del programa B<env>. También puede especificar directamente la ruta de acceso a su ejecutable perl: C<#!/usr/bin/perl>).
+(En esta línea se supone que dispone del programa B<env>.  También puede especificar directamente la ruta de acceso a su ejecutable perl: C<#!/usr/bin/perl>).
 
 Para obtener más información e instrucciones para otras plataformas, como Windows y Mac OS, lea L<perlrun>.
 
 =head2 Red de seguridad
 
-Por su diseño, Perl es un lenguaje muy indulgente. Sin embargo, para trabajar de manera más segura se recomienda iniciar cada programa con las líneas siguientes:
+Por su diseño, Perl es un lenguaje muy indulgente.  Sin embargo, para trabajar de manera más segura se recomienda iniciar cada programa con las líneas siguientes:
 
     #!/usr/bin/perl
     use strict;
     use warnings;
 
-Estas dos líneas adicionales ordenan a perl que detecte diversos problemas comunes en el código. Comprueban cosas distintas, por lo que ambas deben ser incluidas. Un posible problema detectado por C<use strict;> hará que el código se detenga inmediatamente, mientras que C<use warnings;> (al igual que el modificador de línea de comandos B<-w>) sólo mostrará una advertencia y dejará que el código se ejecute.
+Estas dos líneas adicionales ordenan a perl que detecte diversos problemas comunes en el código.  Comprueban cosas distintas, por lo que ambas deben ser incluidas.  Un posible problema detectado por C<use strict;> hará que el código se detenga inmediatamente, mientras que C<use warnings;> (al igual que el modificador de línea de comandos B<-w>) sólo mostrará una advertencia y dejará que el código se ejecute.
 Para obtener más información, consulte las páginas de manual correspondientes a L<strict> y L<warnings>.
 
 =head2 Descripción general de la sintaxis básica
@@ -111,7 +111,7 @@ Un escalar representa un solo valor:
     my $animal = "camello";
     my $respuesta = 42;
 
-Los valores escalares pueden ser cadenas, enteros o números de punto flotante, y Perl los convertirá de un tipo a otro cuando sea necesario.  No es necesario predeclarar los tipos de las variables, pero éstas deben declararse con la palabra clave C<my> la primera vez que se usan. (Éste es uno de los requisitos de C<use strict;>.)
+Los valores escalares pueden ser cadenas, enteros o números de punto flotante, y Perl los convertirá de un tipo a otro cuando sea necesario.  No es necesario predeclarar los tipos de las variables, pero éstas deben declararse con la palabra clave C<my> la primera vez que se usan.  (Éste es uno de los requisitos de C<use strict;>.)
 
 Los valores escalares se pueden usar de varias maneras:
 
@@ -196,7 +196,7 @@ Encontrará información detallada sobre los escalares, arrays y hashes en L<perld
 
 Se pueden crear tipos de datos más complejos mediante referencias, que permiten generar listas y hashes dentro de listas y hashes.
 
-Una referencia es un valor escalar que puede apuntar a cualquier tipo de datos de Perl. Así, almacenando una referencia como el valor de un elemento de array o hash, puede crear fácilmente listas y hashes dentro de listas y hashes. En el ejemplo siguiente se muestra una estructura de hash de hashes de 2 niveles en la que se usan referencias de hash anónimas.
+Una referencia es un valor escalar que puede apuntar a cualquier tipo de datos de Perl.  Así, almacenando una referencia como el valor de un elemento de array o hash, puede crear fácilmente listas y hashes dentro de listas y hashes.  En el ejemplo siguiente se muestra una estructura de hash de hashes de 2 niveles en la que se usan referencias de hash anónimas.
 
     my $variables = {
         escalar  =>  {
@@ -317,6 +317,8 @@ El bucle for de C no se suele usar, ya que Perl proporciona una alternativa más 
         print "El valor de $clave es $hash{$clave}\n";
     }
 
+En realidad, la palabra clave C<foreach> es un sinónimo de la palabra clave C<for>.  Vea la sección sobre bucles C<foreach> en C<L<perlsyn>>.
+
 =back
 
 Para obtener más información sobre las estructuras de bucle (y otras estructuras que no se han mencionado en esta introducción ), consulte L<perlsyn>.
@@ -363,7 +365,7 @@ Encontrará información detallada sobre los operadores de Perl en L<perlop>; algu
     ||  or
     !   not
 
-(En la tabla anterior C<and>, C<or> y C<not> no son solo descripciones de los operadores. Son también operadores.  Ofrecen más legibilidad que los operadores tipo C correspondientes, como C<&&>, pero su precedencia es distinta.  Consulte L<perlop> para obtener más información.)
+(En la tabla anterior C<and>, C<or> y C<not> no son solo descripciones de los operadores.  Son también operadores.  Ofrecen más legibilidad que los operadores tipo C correspondientes, como C<&&>, pero su precedencia es distinta.  Consulte L<perlop> para obtener más información.)
 
 =item Otros operadores
 
@@ -394,7 +396,7 @@ Puede utilizar el operador C<< <> >> para leer de un identificador de archivo ab
     my $linea  = <$entrada>;
     my @lineas = <$entrada>;
 
-La lectura de un archivo completo se suele llamar "slurping" (succión). Puede resultar útil, pero esta operación consume mucha memoria. Gran parte de las tareas de procesamiento de archivos de texto se puede hacer de línea en línea con las estructuras de bucle de Perl.
+La lectura de un archivo completo se suele llamar "slurping" (succión).  Puede resultar útil, pero esta operación consume mucha memoria.  Gran parte de las tareas de procesamiento de archivos de texto se puede hacer de línea en línea con las estructuras de bucle de Perl.
 
 El operador C<< <> >> se suele utilizar en un bucle C<while>:
 
@@ -536,7 +538,7 @@ Para obtener más información sobre cómo escribir subrutinas, consulte L<perlsub>
 
 La programación orientada a objetos en Perl es relativamente sencilla y se implementa con referencias que "conocen" qué tipo de objeto son, basándose en el concepto de paquetes de Perl.
 Sin embargo, este tema queda fuera del ámbito de este documento.
-Lea L<perlboot>, L<perltoot>, L<perltooc> y L<perlobj> para obtener más información.
+Vea L<perlootut> y L<perlobj>.
 
 La aplicación que suelen hacer los programadores principiantes de la programación orientada a objetos en Perl es la utilización de módulos de terceros, que se describe a continuación.
 
