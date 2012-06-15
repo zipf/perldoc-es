@@ -1,36 +1,38 @@
 
-=head1 NOMBRE 
+=head1 NOMBRE
 
 perldoc - Consultar la documentación de Perl en formato Pod.
 
 =head1 SINOPSIS
 
-B<perldoc> [B<-h>] [B<-D>] [B<-t>] [B<-u>] [B<-m>] [B<-l>] [B<-F>]
-[B<-i>] [B<-V>] [B<-T>] [B<-r>]
-[B<-dI<archivo_destino>>]
-[B<-oI<nombre_formato>>]
-[B<-MI<NombreClaseFormateador>>]
-[B<-wI<opción_formateador:valor>>]
-[B<-n>I<sustituto_nroff>]
-[B<-X>]
-[B<-L> I<código_idioma>]
-NombrePágina|NombreMódulo|NombrePrograma
+    B<perldoc> [B<-h>] [B<-D>] [B<-t>] [B<-u>] [B<-m>] [B<-l>] [B<-F>]
+        [B<-i>] [B<-V>] [B<-T>] [B<-r>]
+        [B<-dI<archivo_destino>>]
+        [B<-oI<nombre_formato>>]
+        [B<-MI<NombreClaseFormateador>>]
+        [B<-wI<opción_formateador:valor>>]
+        [B<-n>I<sustituto_nroff>]
+        [B<-X>]
+        [B<-L> I<código_idioma>]
+        NombrePágina|NombreMódulo|NombrePrograma|DirecciónURL
 
-B<perldoc> B<-f> I<función predefinida>
+Ejemplos:
 
-B<perldoc> B<-L> it B<-f> I<función predefinida>
+    B<perldoc> B<-f> I<función predefinida>
 
-B<perldoc> B<-q> I<palabra clave de perlfaq>
+    B<perldoc> B<-L> it B<-f> I<función predefinida>
 
-B<perldoc> B<-L> es B<-q> I<palabra clave de perlfaq>
+    B<perldoc> B<-q> I<palabra clave de perlfaq>
 
-B<perldoc> B<-v> I<variable de Perl>
+    B<perldoc> B<-L> es B<-q> I<palabra clave de perlfaq>
+
+    B<perldoc> B<-v> I<variable de Perl>
 
 A continuación se muestra una descripción más detallada de los modificadores.
 
 =head1 DESCRIPCIÓN
 
-I<perldoc> busca un fragmento de documentación con formato .pod incluido en el árbol de instalación de perl o en un script perl, y ejecuta C<pod2man | nroff -man | $PAGER> para mostrarlo (en HP-UX se usa además C<col -x>). Este programa se usa principalmente para consultar la documentación de los módulos de biblioteca de perl.
+B<perldoc> busca un elemento de documentación con formato .pod incluido en el árbol de instalación de perl o en un script perl, y ejecuta C<groff -man | $PAGER> para mostrarlo (en HP-UX se usa además C<col -x>). Este programa se usa principalmente para consultar la documentación de los módulos de biblioteca de perl.
 
 Es posible que también estén instaladas en el sistema páginas de manual para esos módulos, en cuyo caso es probable que desee usar simplemente el comando man(1).
 
@@ -121,7 +123,7 @@ Por ejemplo: C<perldoc -MPod::Perldoc::ToChecker>.
 
 Puede especificar varias clases separándolas con comas o signos de punto y coma (por ejemplo, C<-MTk::SuperPod;Tk::Pod>).
 
-=item B<-w> I<opción:valor> o B<-w> I<opción> 
+=item B<-w> I<opción:valor> o B<-w> I<opción>
 
 Permite especificar una opción con ("w" viene de la palabra inglesa B<w>ith) la que desea llamar al formateador.  Por ejemplo, C<-w textsize:15> llamará a C<< $formatter->textsize(15) >> en el objeto formateador antes de que se use para aplicar formato al objeto.  Para que esto funcione, la clase de formateador debe proporcionar este método y el valor pasado debe ser válido
 (si C<textsize> espera un entero y se especifica C<-w textsize:big>, lo más seguro es que se produzca un error).
@@ -136,19 +138,19 @@ Usa un índice si existe. La opción B<-X> busca en el archivo C<$Config{archlib}/
 
 =item B<-L> I<código_idioma>
 
-Este modificador permite especificar el I<código de idioma> para obtener la traducción del documento en el idioma deseado. Si el paquete C<POD2::E<lt>código_idiomaE<gt>> no está instalado en el sistema, se ignorará el modificador. 
+Este modificador permite especificar el I<código de idioma> para obtener la traducción del documento en el idioma deseado. Si el paquete C<POD2::E<lt>código_idiomaE<gt>> no está instalado en el sistema, se ignorará el modificador.
 Todos los paquetes de traducción de la documentación se encuentran en el espacio de nombres C<POD2::>. Si desea saber cómo puede crear nuevos paquetes de documentación localizados (C<POD2::*>) e integrarlos en L<Pod::Perldoc>, vea L<POD2::ES> (o L<POD2::IT>, L<POD2::FR>).
 
-=item B<NombrePágina|NombreMódulo|NombrePrograma>
+=item B<NombrePágina|NombreMódulo|NombrePrograma|DirecciónURL>
 
-El elemento que desea buscar.  Los módulos anidados, como C<File::Basename>, se pueden especificar mediante C<File::Basename> o C<File/Basename>.  También puede especificar un nombre descriptivo de una página, como C<perlfunc>.
+El elemento que desea buscar.  Los módulos anidados, como C<File::Basename>, se pueden especificar mediante C<File::Basename> o C<< File/Basename >>.  También puede especificar un nombre descriptivo de una página, como C<perlfunc>.  Para direcciones URL, actualmente solo se admite HTTP y HTTPS.
 
 En el caso de nombres sencillos, como 'foo', si la búsqueda normal no encuentra una página coincidente, se realiza también una búsqueda con el prefijo "perl".
 Por ejemplo, "perldoc intro" es suficiente para encontrar y mostrar "perlintro.pod".
 
 =item B<-n> I<algún_formateador>
 
-Especifique el sustituto de nroff
+Especifique el sustituto de groff
 
 =item B<-r>
 
@@ -164,11 +166,9 @@ Muestra la versión de perldoc que se ejecuta actualmente.
 
 =back
 
-
-
 =head1 SEGURIDAD
 
-Como B<perldoc> no usa comprobaciones de seguridad y se sabe que tiene vulnerabilidades, cuando se ejecuta como superusuario intentará ceder privilegios estableciendo los identificadores efectivo y real en la cuenta nobody o nouser, o en -2 si dichas cuentas no están disponibles.  Si no puede renunciar a los privilegios, no se ejecutará.  
+Como B<perldoc> no usa comprobaciones de seguridad y se sabe que tiene vulnerabilidades, cuando se ejecuta como superusuario intentará ceder privilegios estableciendo los identificadores efectivo y real en la cuenta nobody o nouser, o en -2 si dichas cuentas no están disponibles.  Si no puede renunciar a los privilegios, no se ejecutará.
 
 
 =head1 ENTORNO
@@ -197,10 +197,13 @@ L<perlpod>, L<Pod::Perldoc>
 
 =head1 AUTOR
 
-Mantenedor actual: Adriano R. Ferreira <ferreira@cpan.org>
+Mantenedor actual: Mark Allen C<< <mallen@cpan.org> >>
 
 Anteriormente contribuyeron a este documento:
-Sean M. Burke <sburke@cpan.org>, Kenneth Albanowski <kjahds@kjahds.com>, Andy Dougherty <doughera@lafcol.lafayette.edu> y muchos otros.
+brian d foy C<< <bdfoy@cpan.org> >> 
+Adriano R. Ferreira C<< <ferreira@cpan.org> >>,
+Sean M. Burke C<< <sburke@cpan.org> >>,
+Kenneth Albanowski C<< <kjahds@kjahds.com> >>,
+Andy Dougherty  C<< <doughera@lafcol.lafayette.edu> >> y muchos otros.
 
 =cut
-

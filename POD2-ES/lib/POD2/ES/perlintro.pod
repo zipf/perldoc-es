@@ -5,10 +5,10 @@ perlintro -- Breve introducción y descripción general de Perl
 =head1 DESCRIPCIÓN
 
 Este documento proporciona una introducción rápida al lenguaje de programación
-Perl e incluye referencias a documentación adicional. Es una guía de
-iniciación para los nuevos usuarios del lenguaje que proporciona la información
-necesaria para poder leer el código Perl de otras personas y comprender a
-grandes rasgos su funcionamiento, o para escribir scripts sencillos.
+Perl e incluye referencias a documentación adicional. Es una guía de iniciación
+para los nuevos usuarios del lenguaje que proporciona la información necesaria
+para poder leer el código Perl de otras personas y comprender a grandes rasgos
+su funcionamiento, o para escribir scripts sencillos.
 
 Es un documento introductorio, no una guía completa. Tampoco explica el
 lenguaje en detalle. En algunos casos se ha sacrificado la precisión para
@@ -162,7 +162,7 @@ Un escalar representa un solo valor:
 Los valores escalares pueden ser cadenas, enteros o números de punto flotante,
 y Perl los convertirá de un tipo a otro cuando sea necesario. No es necesario
 predeclarar los tipos de las variables, pero éstas deben declararse con la
-palabra clave C<my> la primera vez que se usan. (Éste es uno de los requisitos
+palabra clave C<my> la primera vez que se usan.  (Éste es uno de los requisitos
 de C<use strict;>.)
 
 Los valores escalares se pueden usar de varias maneras:
@@ -173,8 +173,8 @@ Los valores escalares se pueden usar de varias maneras:
 
 Hay varios escalares "mágicos" con nombres que recuerdan conjuntos de signos de
 puntuación (o "ruido de señal"). Estas variables especiales se usan para
-diversos fines y se describen en L<perlvar>. La única que tiene que conocer
-por ahora es C<$_>, la "variable predeterminada". Se usa como argumento
+diversos fines y se describen en L<perlvar>. La única que tiene que conocer por
+ahora es C<$_>, la "variable predeterminada". Se usa como argumento
 predeterminado de varias funciones de Perl y su valor se establece
 implícitamente en determinadas estructuras de bucle.
 
@@ -199,9 +199,9 @@ array:
     print $mezcla[$#mezcla];  # último elemento, imprime 1.23 en pantalla
 
 Podría sentirse tentado de usar C<$#array + 1> para determinar el número de
-elementos de un array. No es necesario. Si utiliza C<@array> donde Perl
-espera encontrar un valor escalar ("en contexto escalar"), obtendrá el número
-de elementos del array:
+elementos de un array. No es necesario. Si utiliza C<@array> donde Perl espera
+encontrar un valor escalar ("en contexto escalar"), obtendrá el número de
+elementos del array:
 
     if (@animales < 5) { ... }
 
@@ -223,7 +223,7 @@ Puede hacer varias cosas útiles con las listas:
     my @orden_inverso = reverse @numeros;
 
 También hay dos arrays especiales: C<@ARGV> (los argumentos de línea de
-comandos pasados al script) y C<@_> (los argumentos pasados a una subrutina). 
+comandos pasados al script) y C<@_> (los argumentos pasados a una subrutina).
 Se describen en L<perlvar>.
 
 =item Hashes
@@ -254,7 +254,7 @@ En los hashes no hay un orden interno específico, aunque puede ordenar las
 claves antes de recorrerlas en un bucle.
 
 De la misma manera que hay escalares y arrays especiales, también hay hashes
-especiales. El más conocido es C<%ENV>, que contiene variables de entorno. 
+especiales. El más conocido es C<%ENV>, que contiene variables de entorno.
 Encontrará información sobre este hash (y sobre otras variables especiales) en 
 L<perlvar>.
 
@@ -274,7 +274,7 @@ la que se usan referencias de hash anónimas.
 
     my $variables = {
         escalar  =>  {
-                     descripcion => "elemento invidivual",
+                     descripcion => "elemento individual",
                      sigilo => '$',
                     },
         array   =>  {
@@ -319,16 +319,15 @@ de instrucciones entre llaves) en el que se definen.
 
 Si escribe C<use strict;> al principio de los scripts de Perl y usa C<my>, el
 intérprete detectará determinados errores frecuentes de programación. Así, en
-el ejemplo anterior, la última instrucción C<print $y> provocará una error en
+el ejemplo anterior, la última instrucción C<print $y> provocará un error en
 tiempo de compilación que impedirá la ejecución del programa. Es muy
 recomendable usar C<strict>.
 
 =head2 Estructuras condicionales y de bucle
 
 Perl ofrece las estructuras condiciones y de bucle habituales. En Perl 5.10,
-incluso ofrece una instrucción case/switch (llamada C<given>/C<when>). 
-Consulte "Instrucciones switch" en L<perlsyn> para obtener información
-detallada.
+incluso ofrece una instrucción case/switch (llamada C<given>/C<when>). Consulte
+"Instrucciones switch" en L<perlsyn> para obtener información detallada.
 
 Una condición puede ser cualquier expresión Perl. Consulte la lista de
 operadores de la siguiente sección para obtener información sobre los
@@ -407,6 +406,9 @@ sencilla para recorrer listas, el bucle C<foreach>.
     foreach my $clave (keys %hash) {
         print "El valor de $clave es $hash{$clave}\n";
     }
+
+En realidad, la palabra clave C<foreach> es un sinónimo de la palabra clave
+C<for>. Vea la sección sobre bucles C<foreach> en C<L<perlsyn>>.
 
 =back
 
@@ -538,9 +540,9 @@ otros. Se incluye a continuación un resumen:
     if (/foo/)       { ... }  # verdadero si $_ contiene "foo"
     if ($a =~ /foo/) { ... }  # verdadero si $a contiene "foo"
 
-El operador de detección de coincidencias C<//> se describe en L<perlop>. 
-Opera en C<$_> de manera predeterminada, o se puede enlazar a otra variable con
-el operador de enlace C<=~> (que también se describe en L<perlop>).
+El operador de detección de coincidencias C<//> se describe en L<perlop>. Opera
+en C<$_> de manera predeterminada, o se puede enlazar a otra variable con el
+operador de enlace C<=~> (que también se describe en L<perlop>).
 
 =item Sustitución simple
 
@@ -613,7 +615,7 @@ posteriormente. Los resultados se almacenan en C<$1>, C<$2>, etc.
 =item Otras características de las expresiones regulares
 
 Las expresiones regulares de Perl también ofrecen referencias a capturas
-previas, inspección hacia adelante, y muchas otras funcionalidades complejas. 
+previas, inspección hacia adelante, y muchas otras funcionalidades complejas.
 Encontrará más información en L<perlrequick>, L<perlretut> y L<perlre>.
 
 =back
@@ -632,7 +634,7 @@ Ahora podemos usar la subrutina como cualquier función integrada:
 
     registrador("Tenemos una subrutina para registrar.");
 
-¿Qué hace C<shift>? Los argumentos pasados a una subrutina están disponibles
+¿Qué hace C<shift>?  Los argumentos pasados a una subrutina están disponibles
 en un array especial denominado C<@_> (consulte L<perlvar> para obtener más
 información). El argumento predeterminado de la función C<shift> es C<@_>. Así,
 C<my $mensaje_registro= shift;> quita el primer elemento de la lista de
@@ -663,8 +665,7 @@ L<perlsub>.
 La programación orientada a objetos en Perl es relativamente sencilla y se
 implementa con referencias que "conocen" qué tipo de objeto son, basándose en
 el concepto de paquetes de Perl. Sin embargo, este tema queda fuera del ámbito
-de este documento. Lea L<perlboot>, L<perltoot>, L<perltooc> y L<perlobj> para
-obtener más información.
+de este documento. Vea L<perlootut> y L<perlobj>.
 
 La aplicación que suelen hacer los programadores principiantes de la
 programación orientada a objetos en Perl es la utilización de módulos de
@@ -706,7 +707,7 @@ Kirrily "Skud" Robert <skud@cpan.org>
 
 =over
 
-=item * Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaquí­n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
 
 =item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
 

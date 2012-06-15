@@ -1,4 +1,4 @@
-=head1 NOMBRE 
+=head1 NOMBRE
 
 perlutil - Utilidades incluidas en la distribución de Perl
 
@@ -63,7 +63,7 @@ detectar errores de marcas POD.
 F<splain> es una interfaz de L<perldiag>; si le pasa un mensaje de error
 mostrará una descripción más completa.
 
-=item L<roffitall|roffitall>
+=item C<roffitall>
 
 La utilidad C<roffitall> no se instala en el sistema, pero puede encontrarla en
 el directorio F<pod/> del kit de código fuente de Perl. Esta utilidad convierte
@@ -163,7 +163,7 @@ La manera recomendada de notificar errores del intérprete perl o de cualquier
 módulo de la biblioteca estándar a sus programadores es usar F<perlbug>; pero
 antes de usar F<perlbug> debe leer con atención su documentación.
 
-=item L<perlthanks|perlthanks>
+=item L<perlthanks|perlbug>
 
 Este programa proporciona una manera sencilla de enviar un mensaje de
 agradecimiento a las personas que se encargan de desarrollar y mantener perl.
@@ -210,12 +210,6 @@ F<xsubpp> compila el código XS y genera código C; para ello, incrusta las
 construcciones necesarias para que las funciones C puedan manipular valores
 Perl y agregar el código necesario para que Perl pueda acceder a esas
 funciones.
-
-=item L<dprofpp|dprofpp>
-
-Perl incluye un perfilador, el módulo F<Devel::DProf>. La utilidad F<dprofpp>
-analiza los resultados del perfilador e indica cuáles son las subrutinas que
-consumen más tiempo. Consulte L<Devel::DProf> para obtener más información.
 
 =item L<prove>
 
@@ -265,6 +259,12 @@ archivo de almacenamiento tar.
 Esta utilidad, que se incluye con el módulo C<Digest::SHA>, se usa para
 imprimir o comprobar sumas de control SHA.
 
+=item L<zipdetails>
+
+L<zipdetails> muestra información sobre la estructura de registros interna de
+un archivo zip. No muestra detalles sobre los datos comprimidos que se
+encuentran almacenados en dicho archivo zip.
+
 =back
 
 =head2 Instalación
@@ -308,12 +308,11 @@ archivo de almacenamiento tar a partir de un módulo instalado.
 
 L<perldoc|perldoc>, L<pod2man|pod2man>, L<perlpod>, L<pod2html|pod2html>,
 L<pod2usage|pod2usage>, L<podselect|podselect>, L<podchecker|podchecker>,
-L<splain|splain>, L<perldiag>, L<roffitall|roffitall>, L<a2p|a2p>, L<s2p|s2p>,
+L<splain|splain>, L<perldiag>, C<roffitall|roffitall>, L<a2p|a2p>, L<s2p|s2p>,
 L<find2perl|find2perl>, L<File::Find|File::Find>, L<pl2pm|pl2pm>,
-L<perlbug|perlbug>, L<h2ph|h2ph>, L<c2ph|c2ph>, L<h2xs|h2xs>,
-L<dprofpp|dprofpp>, L<Devel::DProf>, L<enc2xs>, L<xsubpp>, L<cpan>, L<cpanp>,
-L<cpan2dist>, L<instmodsh>, L<piconv>, L<prove>, L<corelist>, L<ptar>,
-L<ptardiff>, L<shasum>
+L<perlbug|perlbug>, L<h2ph|h2ph>, L<c2ph|c2ph>, L<h2xs|h2xs>, L<enc2xs>,
+L<xsubpp>, L<cpan>, L<cpanp>, L<cpan2dist>, L<instmodsh>, L<piconv>, L<prove>,
+L<corelist>, L<ptar>, L<ptardiff>, L<shasum>, L<zipdetails>
 
 =cut
 
@@ -321,7 +320,7 @@ L<ptardiff>, L<shasum>
 
 =over
 
-=item * Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaquí­n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
 
 =item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
 

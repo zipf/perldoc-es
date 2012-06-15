@@ -2,7 +2,7 @@
 
 perlfaq1 - Preguntas generales sobre Perl
 
-=head1 DESCRIPCIÓN 
+=head1 DESCRIPCIÓN
 
 En esta sección de las preguntas más frecuentes se proporcionan respuestas a
 preguntas muy generales sobre Perl.
@@ -10,44 +10,41 @@ preguntas muy generales sobre Perl.
 =head2 ¿Qué es Perl?
 
 Perl es un lenguaje de programación de alto nivel con una herencia ecléctica,
-creado por Larry Wall con la ayuda de miles de programadores. Se deriva del
-extendido lenguaje de programación C y, en menor medida, de sed, awk, la shell
-de Unix, y al menos una docena más de lenguajes y herramientas. Las
-características de manipulación de texto, archivos y procesos que ofrece Perl
-lo convierten en un lenguaje especialmente adecuado para tareas que requieren
-crear rápidamente prototipos, utilidades del sistema, herramientas de software,
-tareas de administración de sistemas, acceso a bases de datos, programación
-gráfica, conexión a redes y programación web. Por estas cualidades es muy
-popular entre los administradores de sistemas y los programadores de scripts
-CGI, pero también lo usan matemáticos, expertos en ingeniería genética,
-periodistas e incluso directivos. Es posible que a usted también le resulte
-útil.
+creado por Larry Wall con la ayuda de miles de programadores.
+
+Las características de manipulación de texto, archivos y procesos que ofrece
+Perl lo convierten en un lenguaje especialmente adecuado para tareas que
+requieren crear rápidamente prototipos, utilidades del sistema, herramientas de
+software, tareas de administración de sistemas, acceso a bases de datos,
+programación gráfica, conexión a redes y programación web.
+
+Se deriva del extendido lenguaje de programación C y, en menor medida, de sed,
+awk, la shell de Unix, y de muchos otros lenguajes y herramientas.
+
+Por estas cualidades es muy popular entre los desarrolladores de sitios web y
+los administradores de sistemas. Pero también lo usan matemáticos, expertos en
+ingeniería genética, periodistas, directivos, y otros profesionales de muchos
+campos.
 
 =head2 ¿Quién respalda a Perl? ¿Quién lo desarrolla? ¿Por qué es gratis?
 
 La cultura de Internet existente antes de que "la red" se convirtiera en un
 fenómeno de masas, y las firmes convicciones de Larry Wall, el creador de Perl,
 dieron lugar a la política de distribución libre y abierta de perl. El soporte
-de Perl lo ofrecen sus usuarios. El núcleo, la biblioteca Perl estándar, los
-módulos opcionales y esta documentación han sido desarrollados por voluntarios.
-Para obtener más información, consulte la nota personal que se incluye al final
- del archivo README de la distribución del código fuente de perl. En
-L<perlhist> (nuevo desde la versión 5.005) está registrado el historial de
-lanzamiento de versiones de Perl.
+de Perl lo ofrecen sus usuarios. Los componentes del núcleo, la biblioteca Perl
+estándar, los módulos opcionales y esta documentación han sido desarrollados
+por voluntarios.
 
-En concreto, el núcleo del equipo de desarrollo (denominado Perl Porters) está
-integrado por un grupo variopinto de personas de gran altruismo, dedicadas a
-producir gratuitamente software de mejor calidad que el que se podría obtener
-pagando. Si desea curiosear los desarrollos pendientes, puede consultar el
-archivo mensajes de la lista de correo en
-http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/ y
-http://archive.develooper.com/perl5-porters@perl.org/, o el grupo de noticias
-nntp://nntp.perl.org/perl.perl5.porters (también está disponible a través de
-una interfaz web en http://nntp.perl.org/group/perl.perl5.porters), o bien leer
-las preguntas más frecuentes en http://dev.perl.org/perl5/docs/p5p-faq.html.
-También puede suscribirse a la lista de correo enviando una solicitud de
-suscripción a  perl5-porters-subscribe@perl.org (solo tiene que enviar un
-mensaje vacío sin asunto).
+El equipo de desarrollo principal (denominado Perl Porters) está integrado por
+un grupo de personas de gran altruismo, dedicadas a producir gratuitamente
+software de mejor calidad que el que se podría obtener pagando. Si desea
+curiosear los desarrollos pendientes, puede consultar el L<archivo de mensajes
+de la lista de correo|http://www.nntp.perl.org/group/perl.perl5.porters/> o
+leer las L<preguntas más
+frecuentes|http://dev.perl.org/perl5/docs/p5p-faq.html>. También puede
+suscribirse a la lista de correo enviando una solicitud de suscripción a
+perl5-porters-subscribe@perl.org (solo tiene que enviar un mensaje vacío sin
+asunto).
 
 Aunque el proyecto GNU incluye Perl en sus distribuciones, no existe "GNU
 Perl". La Free Software Foundation no tiene nada que ver con el desarrollo y el
@@ -65,8 +62,8 @@ más información.
 
 Esto suele ser una cuestión de opinión y gusto, y no hay una respuesta
 definitiva para todos. En general, conviene usar la versión estable actual o la
-versión estable inmediatamente anterior. En la actualidad, éstas son perl5.14.x
-y perl5.12.x respectivamente.
+versión estable inmediatamente anterior. En la actualidad, éstas son perl5.16.x
+y perl5.14.x respectivamente.
 
 Si desea usar otras versiones, para decidir cuál es la que más le conviene debe
 tener en cuenta varias cosas, como las siguientes:
@@ -101,7 +98,7 @@ problemas detectan los usuarios.
 
 =item *
 
-Las versiones anteriores más recientes (en este caso, perl5.10.x) suelen
+Las versiones anteriores más recientes (en este caso, perl5.14.x) suelen
 mantenerse durante un tiempo, aunque en menor medida que las versiones
 actuales.
 
@@ -113,11 +110,10 @@ o erosionados, solo se asemejan vagamente a un esqueleto.
 
 =item *
 
-Aún no está prevista una fecha de lanzamiento de Perl 6. La nueva versión
-estará disponible cuando llegue el momento. Decimos en broma que saldrá en
-Navidad, pero no confirmamos el año de lanzamiento. Puede seguir su desarrollo,
-pero no debe preocuparse por tener que actualizar Perl; nadie va a quitarle
-Perl 5.
+El equipo que trabaja en Rakudo, la implementación más avanzada actualmente de
+Perl 6, publicó en julio de 2010 una distribución de Perl 6 "útil y utilizable,
+para pioneros", denominada Rakudo Star. Encontrará más información en
+L<http://rakudo.org/>.
 
 =item *
 
@@ -131,65 +127,47 @@ impar (p. ej., perl5.9.x, donde 9 es la versión secundaria).
 
 =back
 
-
 =head2 ¿Qué son Perl 4, Perl 5 y Perl 6?
 
-(contribución de brian d foy)
-
-Se puede resumir de la siguiente manera: Perl 4 es el pasado, Perl 5 es el
-presente y Perl 6 es el futuro.
+Se puede resumir de la siguiente manera: Perl 4 es el antecesor de Perl 5 y
+Perl 6. Perl 5 es el hermano mayor de Perl 6 y, aunque son lenguajes distintos,
+quien conozca uno de estos lenguajes observará muchas similitudes en el otro.
 
 El número que va detrás de Perl (el 5 de Perl 5) es la versión principal del
 intérprete de Perl (es decir, perl), así como la versión del lenguaje. Cada
 versión principal incorpora diferencias importantes que no son compatibles con
 las versiones anteriores.
 
-La versión principal actual de Perl es Perl 5, y se lanzó en 1994. Permite
-ejecutar scripts de la versión principal anterior, Perl 4 (lanzada en marzo de
-1991), pero incluye diferencias importantes. Perl 5 incorpora referencias,
-estructuras de datos complejas y módulos. El intérprete de Perl 5 fue una
-reescritura completa del código fuente de perl.
+Actualmente, la versión principal de Perl es Perl 5, que se lanzó en 1994.
+Permite ejecutar scripts de la versión principal anterior, Perl 4 (lanzada en
+marzo de 1991), pero incluye diferencias importantes.
 
-Perl 6 es la siguiente versión principal de Perl, pero no es un sustituto de
-Perl 5. Su sintaxis y su diseño aún están en fase de desarrollo. El trabajo se
-inició en 2002 y sigue en curso. Algunas de las características más
-interesantes de Perl 6 se han incluido en las versiones más recientes de Perl
-5, y algunos módulos de Perl 5 le permiten usar la sintaxis de Perl 6 en sus
-programas. Actualmente la implementación más avanzada de Perl 6 es Rakudo (
-http://rakudo.org ).
+Perl 6 es una reinvención de Perl. Es un lenguaje del mismo linaje, pero
+incompatible. Estos dos lenguajes no son mutuamente excluyentes, sino que se
+complementan. Perl 6 no sustituye a Perl 5, y viceversa. Vea L</"¿Qué es
+CPAN?"> a continuación para obtener más información.
 
 En L<perlhist> encontrará el historial de revisiones de Perl.
 
-=head2 ¿Qué es Ponie?
-
-(contribución de brian d foy)
-
-Ponie significa "Perl On the New Internal Engine" (Perl en el nuevo motor
-interno). Este proyecto lo inició Arthur Bergman (de Fotango) en 2003, y
-posteriormente lo adoptó The Perl Foundation. Se abandonó en 2006 (
-http://www.nntp.perl.org/group/perl.ponie.dev/487 ).
-
-La idea de Ponie era renovar los componentes internos de Perl para traducir
-código Perl 5 a Perl 6 (o a cualquier otro lenguaje compatible con Parrot).
-Esto permitiría seguir utilizando Perl 5 con Parrot, la máquina virtual que
-compilará y ejecutará bytecode de Perl 6.
-
 =head2 ¿Qué es Perl 6?
 
-En la Segunda Convención de Software Open Source de O'Reilly, Larry Wall
-anunció que el desarrollo de Perl 6 iba a empezar en serio. Perl 6 era un
-nombre que se solía usar para hacer referencia a un proyecto de Chip
-Salzenberg, con nombre clave Topaz, consistente en reescribir Perl en C++. La
-experiencia proporcionada por Topaz resultó muy útil para la siguiente versión
-de Perl y su implementación, pero el proyecto acabó por abandonarse.
+Perl 6 se describió I<originalmente> como la reescritura de Perl 5 hecha por la
+comunidad. Su desarrollo comenzó en 2002; actualmente se sigue trabajando en su
+sintaxis y su diseño. A medida que el lenguaje evolucionaba, se empezó a ver
+con claridad que se trataba de un lenguaje independiente, incompatible con Perl
+5 pero perteneciente a la misma familia de lenguajes.
 
-Si desea obtener más información sobre Perl 6 o ayudar en la cruzada para
-mejorar Perl, visite la página para desarrolladores de Perl 6 en
-http://dev.perl.org/perl6/ y anímese a participar en el proyecto.
+En contra de la creencia popular, Perl 6 y Perl 5 coexisten pacíficamente. Perl
+6 ha resultado ser una fuente de ideas fascinante para los usuarios de Perl 5
+(el sistema de objetos L<Moose> es un ejemplo bien conocido). Las comunidades
+se solapan, y este solapamiento fomenta la tradición de compartir y tomar
+prestado que ha sido clave para el éxito de Perl. Actualmente la implementación
+más avanzada de Perl 6 es Rakudo. Puede obtener más información en
+L<http://rakudo.org>.
 
-El lanzamiento de Perl 6 aún no está programado, pero recuerde que Perl 5
-seguirá vivo mucho tiempo después de que esto ocurra. No espere a que salga
-Perl 6 para hacer lo que tenga que hacer.
+Si desea aprender más sobre Perl 6 o ayudarnos en nuestra cruzada por mejorar
+Perl, vea la página para programadores de Perl 6 en L<http://www.perl6.org/> e
+involúcrese en su desarrollo.
 
 "Cuando hablamos de reinventar todo lo que sea necesario, no lo decimos en
 broma." --Larry Wall
@@ -198,26 +176,23 @@ broma." --Larry Wall
 
 Las versiones de producción, que incorporan correcciones de errores y
 funcionalidad nueva, se someten a pruebas intensivas antes de su lanzamiento.
-Desde el lanzamiento de la versión 5.000 no hemos lanzado más de una versión de
+Desde el lanzamiento de la versión 5.000, hemos lanzado una versión de
 producción al año (en promedio).
 
-Ocasionalmente, Larry y el equipo de desarrollo de Perl realizan cambios en los
+Ocasionalmente, el equipo de desarrollo de Perl realiza cambios en los
 componentes internos del lenguaje, pero siempre se hace lo posible por mantener
-la compatibilidad con las versiones anteriores. Aunque no todos los scripts de
-Perl 4 se ejecutan sin errores en Perl 5, una actualización de perl no
-invalidará casi nunca un programa escrito para una versión anterior de perl
-(salvo correcciones de errores accidentales o una palabra clave nueva).
+la compatibilidad con las versiones anteriores.
 
 =head2 ¿Es difícil aprender a programar en Perl?
 
-No. Es fácil adquirir los conocimientos básicos; y también lo es seguir
-aprendiendo. Perl se parece a la mayoría de los lenguajes de programación con
-los que es probable que tenga experiencia, por lo que si ya ha escrito
-programas en C, scripts en awk o de shell, o incluso un programa en BASIC, no
-le costará adaptarse.
+No. Es fácil L<adquirir los conocimientos básicos|http://learn.perl.org/>; y
+también lo es seguir aprendiendo. Perl se parece a la mayoría de los lenguajes
+de programación con los que es probable que tenga experiencia, por lo que si ya
+ha escrito programas en C, scripts en awk o de shell, o incluso un programa en
+BASIC, no le costará adaptarse.
 
-La mayoría de las tareas sólo requieren conocer un pequeño subconjunto del
-lenguaje Perl. Uno de los lemas que dirigen el desarrollo de Perl es "se puede
+La mayoría de las tareas solo requieren conocer un pequeño subconjunto del
+lenguaje Perl. Uno de los lemas que guían el desarrollo de Perl es "se puede
 hacer de varias maneras", que es la traducción de "there's more than one way to
 do it" (o TMTOWTDI, que en inglés se pronuncia como "tim toady"). Así, la curva
 de aprendizaje de Perl tiene una pendiente suave (es fácil de aprender) y larga
@@ -235,32 +210,38 @@ entender el código de otros programadores, le costará menos aprender Perl.
 Cuando se enfrente a un problema, es probable que pueda obtener un ejemplo que
 funciona (generalmente gratis) de alguien que lo haya hecho ya. Y no olvidemos
 los módulos Perl. Se describen en la parte 3 de este conjunto de documentos
-sobre preguntas más frecuentes. CPAN se describe en la parte 2.
+sobre preguntas más frecuentes. L<CPAN|http://www.cpan.org/> se describe en la
+parte 2.
 
 =head2 ¿Cómo es Perl en comparación con otros lenguajes como Java, Python, REXX, Scheme o Tcl?
 
-Gana en algunos aspectos y pierde en otros. Precisamente las áreas en las que
-es bueno o malo suelen ser una opción personal, por lo que hacer esta pregunta
-en Usenet conlleva un riesgo elevado de iniciar una guerra santa inútil.
+Perl se puede usar para solucionar prácticamente cualquier problema de
+programación, incluso los que requieren integrar código C especializado para
+aumentar la velocidad de ejecución. Como toda herramienta, se puede usar bien o
+mal. Perl tiene muchos puntos fuertes y algunos puntos débiles. Los aspectos en
+los que es bueno o malo suelen ser una opción personal.
 
-Probablemente lo mejor sea escribir código equivalente para realizar una serie
-de tareas. Estos lenguajes tienen sus propios grupos de noticias, en los que
-puede obtener más información sobre ellos (preferiblemente sin herir
-sensibilidades).
+Al elegir un lenguaje también debe tener en cuenta los
+L<recursos|http://www.cpan.org/>, la L<cultura de ejecución de
+pruebas|http://www.cpantesters.org/> y la
+L<comunidad|http://www.perl.org/community.html> del lenguaje.
 
-Si no puede contener su curiosidad, en
-http://www.perl.com/doc/FMTEYEWTK/versus/ encontrará algunos documentos con
-comparaciones.
+Para realizar comparaciones con otro lenguaje específico, lo mejor suele ser
+crear un proyecto pequeño en ambos lenguajes y analizar los resultados.
+Asegúrese de usar todos los L<recursos|http://www.cpan.org/> disponibles para
+cada lenguaje; no olvide que un lenguaje es mucho más que la sintaxis.
 
 =head2 ¿Puedo hacer [tarea] en Perl?
 
 Por su flexibilidad y capacidad de ampliación, Perl se puede usar prácticamente
 para cualquier tarea, desde el procesamiento de archivos en una línea hasta el
-desarrollo de sistemas grandes y complejos. Para muchas personas, Perl es un
-buen sustituto de los scripts de shell. Para otros, es un cómodo sustituto de
-alto nivel para la mayor parte de los programas que desarrollarían en lenguajes
-de bajo nivel como C o C++. En última instancia, el usuario (y posiblemente sus
-jefes) deberán decidir para qué tareas pueden usar Perl, y para cuáles no.
+desarrollo de sistemas grandes y complejos.
+
+Para muchas personas, Perl es un buen sustituto de los scripts de shell. Para
+otros, es un cómodo sustituto de alto nivel para realizar la mayor parte de los
+programas que desarrollarían en lenguajes de bajo nivel como C o C++. En última
+instancia, el usuario (y posiblemente sus jefes) deberán decidir para qué
+tareas pueden usar Perl, y para cuáles no.
 
 Si tiene una biblioteca que proporciona una API, puede hacer que cualquier
 componente de la misma esté disponible como cualquier otra función o variable
@@ -277,71 +258,22 @@ especializados son prolog y matlab.
 
 =head2 ¿Cuándo no debo elegir Perl?
 
-Cuando su jefe se lo prohíba; en ese caso, debe pensar en reemplazarlo (a su
-jefe) :-).
+Una buena razón es tener una aplicación escrita en otro lenguaje que funciona
+bien y está bien programada, o disponer de un lenguaje para aplicaciones
+diseñado específicamente para una tarea determinada (como prolog o make).
 
-La verdad, una buena razón es tener una aplicación escrita en otro lenguaje que
-funciona bien y está bien programada, o disponer de un lenguaje para
-aplicaciones diseñado específicamente para una tarea determinada (como prolog o
-make).
-
-Por diversos motivos, es probable que Perl no sea adecuado para sistemas
-incrustados en tiempo real, trabajo de desarrollo de sistemas operativos a bajo
-nivel, como controladores de dispositivos o código de cambio de contexto de
-hilos de ejecución, aplicaciones complejas de memoria compartida y múltiples
-hilos de ejecución, o aplicaciones extremadamente grandes. Notará que perl no
-está programado en Perl.
-
-En esencia, Perl es un lenguaje de tipos dinámicos, no de tipos estáticos.
-Nadie le reprochará que no lo utilice para desarrollar código de control de
-centrales nucleares o neurocirugía. Larry también dormirá mejor (si logra no
-pensar en los programas que se crean para Wall Street).
+Si necesita acelerar una parte específica de una aplicación Perl (algo que
+normalmente no necesitará) es posible que desee usar código C, pero podrá
+acceder a dicho código desde el código Perl mediante L<perlxs>.
 
 =head2 ¿Cuál es la diferencia entre "perl" y "Perl"?
 
-Un bit. ¡Ah, no se refería a ASCII! :-) Larry usa "Perl" para designar el
-lenguaje y "perl" para designar su implementación (es decir, el intérprete).
-Ésta es la razón por la que Tom dice que "solo perl puede analizar Perl".
+"Perl" es el nombre del lenguaje. Solo se escribe la "P" inicial en mayúsculas.
+El nombre del intérprete (el programa que ejecuta el script Perl) es "perl" (se
+escribe con "p" minúscula).
 
-Antes de la primera edición de I<Programming perl>, el lenguaje se solía llamar
-"perl", y su nombre aparecía así en el título porque hacía referencia al
-intérprete. En el libro, Randal Schwartz escribió el nombre del lenguaje con
-inicial mayúscula para que destacara más en la composición tipográfica. La
-comunidad adoptó esta convención y la segunda edición pasó a llamarse
-I<Programming Perl>, con la versión con inicial mayúscula en el nombre para
-referirse al lenguaje.
-
-Usted puede elegir adoptarla o no. Por ejemplo, por paralelismo podemos intuir
-que "awk y perl" y "Python y Perl" son aceptables, mientras que "awk y Perl" y
-"Python y perl" no lo son. Pero nunca escriba "PERL", ya que perl no es un
-acrónimo (pese al folclore apócrifo y los desarrollos inventados
-posteriormente).
-
-=head2 ¿Se debe decir programa Perl o script Perl?
-
-A Larry le da igual. Dice (medio en broma) que "un script (guión) es lo que se
-le da a los actores, y que un programa es lo que se ofrece al público."
-
-Originalmente, un script era una secuencia cerrada de comandos normalmente
-interactivos (es decir, un script de chat). Algo como un script de chat UUCP o
-PPP, o un script de automatización con la utilidad expect, se ajusta muy bien a
-esta definición, igual que los scripts de configuración ejecutados en el inicio
-de un programa, como F<.cshrc> o F<.ircrc>, por ejemplo. Los scripts de chat
-sólo eran activadores de programas existentes, no programas autónomos por
-derecho propio.
-
-Un científico de computación puede explicarle correctamente que, en realidad,
-todos los programas son interpretados y solo se diferencian en el grado en que
-lo son. Pero si hace esta pregunta a alguien que no es un científico de
-computación, pueden decirle que un I<programa> se compila para generar código
-máquina físico que se puede ejecutar repetidamente, mientras que un I<script>
-debe ser traducido por un programa cada vez que se ejecuta.
-
-Ahora que mercaderes sin escrúpulos ni conocimientos se han apropiado de los
-términos "script" y "scripting" para sus viles propósitos, se les ha empezado a
-asociar significados extraños, generalmente peyorativos, como "programación
-poco seria" o "programación menor". Como consecuencia, algunos programadores de
-Perl prefieren evitarlos.
+Puede elegir seguir esta convención o no, pero no debe escribir "PERL", ya que
+perl no es un acrónimo.
 
 =head2 ¿Qué es un JAPH?
 
@@ -353,27 +285,14 @@ usenet. Previamente había utilizado esta frase con muchos sujetos distintos
 ("Just another x hacker,"), así que para distinguir su JAPH decidió empezar a
 escribir la firma como un programa Perl:
 
-	print "Just another Perl hacker,";
+    print "Just another Perl hacker,";
 
 Otras personas adoptaron esta tendencia y empezaron a escribir programas
 astutos o enrevesados para producir el mismo resultado, y se descontroló el
 asunto, lo que proporcionó grandes momentos de diversión a sus creadores y
 lectores.
 
-En CPAN encontrará varios programas JAPH, en http://www.cpan.org/misc/japh.
-
-=head2 ¿Dónde puedo obtener una lista de citas ingeniosas de Larry Wall?
-
-(contribución de brian d foy)
-
-Busque "larry wall quotes" en Google. Incluso puede probar el botón "Voy a
-tener suerte" :)
-
-En Wikiquote están registradas las citas ingeniosas de Larry, junto con su
-fuente. Se incluyen mensajes de usenet y comentarios de códigos fuente.
-
-Si prefiere un archivo de texto simple, puede descargarlo desde 
-http://www.cpan.org/misc/lwall-quotes.txt.gz .
+En CPAN encontrará varios programas JAPH, en L<http://www.cpan.org/misc/japh>.
 
 =head2 ¿Cómo puedo animar a otros programadores a probar Perl?
 
@@ -388,14 +307,14 @@ pruebas).
 En general, las ventajas que ofrece un lenguaje están muy relacionadas con la
 destreza de los usuarios del lenguaje. Si con Perl usted y su equipo pueden
 desarrollar de manera más rápida y mejor, su productividad aumentará. Recuerde
-que las personas suelen ser más receptivas cuando reciben algo. Si le oponen
-resistencia, averigüe qué necesitan y hágales ver en qué medida Perl podría
-cubrir sus necesidades.
+que las personas suelen ser más receptivas cuando algo les proporciona un
+beneficio. Si le oponen resistencia, averigüe qué necesitan y hágales ver en
+qué medida Perl podría cubrir sus necesidades.
 
 No tiene que preocuparse de buscar o pagar por usar Perl; está disponible
 gratuitamente y varios sistemas operativos populares lo incluyen. La comunidad
-ofrece soporte en foros como Perlmonks ( http://www.perlmonks.com ) y las
-distintas listas de correo de Perl ( http://lists.perl.org ). Generalmente,
+ofrece soporte en foros como Perlmonks ( L<http://www.perlmonks.com> ) y las
+distintas listas de correo de Perl ( L<http://lists.perl.org> ). Generalmente,
 siempre que plantee algún problema recibirá rápidamente ayuda para
 solucionarlo.
 
@@ -410,9 +329,9 @@ Es posible que estos vínculos le resulten de utilidad:
 
 =over 4
 
-=item * http://perltraining.com.au/whyperl.html
+=item * L<http://www.perl.org/about.html>
 
-=item * http://www.perl.org/advocacy/whyperl.html
+=item * L<http://perltraining.com.au/whyperl.html>
 
 =back
 
@@ -435,7 +354,7 @@ documentos de preguntas más frecuentes, pero no le exigimos que lo haga.
 
 =over
 
-=item * Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaquí­n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
 
 =item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
 
