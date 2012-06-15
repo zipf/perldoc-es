@@ -1,4 +1,4 @@
-=head1 NOMBRE 
+=head1 NOMBRE
 
 perl - El intérprete del lenguaje Perl 5
 
@@ -25,238 +25,241 @@ más puede hacer con <perldoc>.
 
 Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
 
+=begin buildtoc
+
+# Porting/pod_lib.pl analiza esta sección, cuyo contenido se usará en
+pod/buildtoc, etc.
+
+flag =g  perluniprops perlmodlib perlapi perlintern flag =go perltoc flag =ro
+perlcn perljp perlko perltw flag =   perlvms
+
+path perlfaq.*               cpan/perlfaq/lib/ path perlglossary           
+cpan/perlfaq/lib/ path perlxs(?:tut|typemap)?  dist/ExtUtils-ParseXS/lib/ path
+perldoc                 cpan/Pod-Perldoc/lib/
+
+aux a2p c2ph h2ph h2xs perlbug pl2pm pod2html pod2man s2p splain xsubpp
+
+=end buildtoc
+
 =head2 Introducción
 
-    perl		Información general sobre Perl (esta sección)
-    perlintro		Introducción a Perl para principiantes
-    perltoc		Tabla de contenido de la documentación de Perl
+    perl             Información general sobre Perl (esta sección)
+    perlintro        Introducción a Perl para principiantes
+    perltoc          Tabla de contenido de la documentación de Perl
 
 =head2 Tutoriales
 
-    perlreftut		Breve introducción a las referencias
-    perldsc		Introducción a las estructuras de datos
-    perllol		Estructuras de datos: arrays de arrays
+    perlreftut       Breve introducción a las referencias
+    perldsc          Introducción a las estructuras de datos
+    perllol          Estructuras de datos: arrays de arrays
 
-    perlrequick 	Guía rápida de las expresiones regulares
-    perlretut		Tutorial de expresiones regulares
+    perlrequick      Guía rápida de las expresiones regulares
+    perlretut        Tutorial de expresiones regulares
 
-    perlboot		Programación orientada a objetos para principiantes
-    perltoot		Programación orientada a objetos, parte 1
-    perltooc		Programación orientada a objetos, parte 2
-    perlbot		Trucos y ejemplos de POO
+    perlootut        Tutorial de POO para principiantes
 
-    perlperf		Rendimiento y técnicas de optimización
+    perlperf         Rendimiento y técnicas de optimización
 
-    perlstyle		Guía de estilo
+    perlstyle        Guía de estilo
 
-    perlcheat		Referencia rápida de Perl
-    perltrap		Trampas para los incautos
-    perldebtut		Tutorial de depuración
+    perlcheat        Referencia rápida de Perl
+    perltrap         Trampas para los incautos
+    perldebtut       Tutorial de depuración
 
-    perlfaq		Preguntas más frecuentes
-      perlfaq1		Preguntas generales sobre Perl
-      perlfaq2		Cómo obtener y aprender a utilizar Perl
-      perlfaq3		Herramientas de programación
-      perlfaq4		Manipulación de datos
-      perlfaq5		Archivos y formatos
-      perlfaq6		Expresiones regulares
-      perlfaq7		Problemas del lenguaje Perl
-      perlfaq8		Interacción con el sistema
-      perlfaq9		Conexión a redes
+    perlfaq          Preguntas más frecuentes
+      perlfaq1         Preguntas generales sobre Perl
+      perlfaq2         Cómo obtener y aprender a utilizar Perl
+      perlfaq3         Herramientas de programación
+      perlfaq4         Manipulación de datos
+      perlfaq5         Archivos y formatos
+      perlfaq6         Expresiones regulares
+      perlfaq7         Problemas del lenguaje Perl
+      perlfaq8         Interacción con el sistema
+      perlfaq9         Conexión a redes
 
 =head2 Manual de referencia
 
-    perlsyn		Sintaxis
-    perldata		Estructuras de datos
-    perlop		Operadores y precedencia
-    perlsub		Subrutinas
-    perlfunc		Funciones integradas
-      perlopentut	Tutorial de open()
-      perlpacktut	Tutorial de pack() y unpack()
-    perlpod		Documentación en texto simple (POD)
-    perlpodspec 	Especificación del formato POD
-    perlpodstyle	Guía de estilo para POD
-    perlrun		Ejecución y opciones de ejecución
-    perldiag		Mensajes de diagnóstico
-    perllexwarn 	Advertencias y control de advertencias
-    perldebug		Depuración
-    perlvar		Variables predefinidas
-    perlre		Expresiones regulares: el resto de la historia
-    perlrebackslash	Secuencias de escape en expresiones regulares
-    perlrecharclass	Clases de caracteres en expresiones regulares
-    perlreref		Referencia rápida de expresiones regulares
-    perlref		Referencias: el resto de la historia
-    perlform		Formatos
-    perlobj		Objetos
-    perltie		Objetos Perl ocultos en variables simples
-      perldbmfilter	Filtros DBM
+    perlsyn          Sintaxis
+    perldata         Estructuras de datos
+    perlop           Operadores y precedencia
+    perlsub          Subrutinas
+    perlfunc         Funciones integradas
+      perlopentut      Tutorial de open()
+      perlpacktut      Tutorial de pack() y unpack()
+    perlpod	         Documentación en texto simple (POD)
+    perlpodspec      Especificación del formato POD
+    perlpodstyle     Guía de estilo para POD
+    perlrun          Ejecución y opciones de ejecución
+    perldiag         Mensajes de diagnóstico
+    perllexwarn      Advertencias y control de advertencias
+    perldebug        Depuración
+    perlvar          Variables predefinidas
+    perlre           Expresiones regulares: el resto de la historia
+    perlrebackslash	 Secuencias de escape en expresiones regulares
+    perlrecharclass  Clases de caracteres en expresiones regulares
+    perlreref        Referencia rápida de expresiones regulares
+    perlref          Referencias: el resto de la historia
+    perlform         Formatos
+    perlobj          Objetos
+    perltie          Objetos Perl ocultos en variables simples
+      perldbmfilter    Filtros DBM
 
-    perlipc		Comunicación entre procesos
-    perlfork		Información sobre fork()
-    perlnumber		Semántica de números
+    perlipc          Comunicación entre procesos
+    perlfork         Información sobre fork()
+    perlnumber       Semántica de números
 
-    perlthrtut		Tutorial de uso de hilos de ejecución
+    perlthrtut       Tutorial de uso de hilos de ejecución
 
-    perlport		Guía de portabilidad
-    perllocale		Compatibilidad con la configuración regional
-    perluniintro	Introducción a Unicode
-    perlunicode 	Compatibilidad con Unicode
-    perlunifaq		Preguntas más frecuentes sobre Unicode
-    perluniprops	Índice de propiedades de Unicode versión 6.0.0
-    perlunitut		Tutorial de Unicode
-    perlebcdic		Ejecución de Perl en plataformas EBCDIC
+    perlport         Guía de portabilidad
+    perllocale       Compatibilidad con la configuración regional
+    perluniintro     Introducción a Unicode
+    perlunicode      Compatibilidad con Unicode
+    perlunifaq       Preguntas más frecuentes sobre Unicode
+    perluniprops     Índice de propiedades de Unicode versión 6.0.0
+    perlunitut       Tutorial de Unicode
+    perlebcdic       Ejecución de Perl en plataformas EBCDIC
 
-    perlsec		Seguridad
+    perlsec          Seguridad
 
-    perlmod		Funcionamiento de un módulo Perl
-    perlmodlib		Programación y utilización de módulos Perl
-    perlmodstyle	Cómo programar módulos Perl con estilo
-    perlmodinstall	Instalación de módulos de CPAN
-    perlnewmod		Preparar la distribución de un módulo Perl nuevo
-    perlpragma		Programación de un pragma de usuario
+    perlmod          Funcionamiento de un módulo Perl
+    perlmodlib       Programación y utilización de módulos Perl
+    perlmodstyle     Cómo programar módulos Perl con estilo
+    perlmodinstall   Instalación de módulos de CPAN
+    perlnewmod       Preparar la distribución de un módulo Perl nuevo
+    perlpragma       Programación de un pragma de usuario
 
-    perlutil		Utilidades empaquetadas en una distribución Perl
+    perlutil         Utilidades incluidas en una distribución Perl
 
-    perlcompile 	Herramientas de compilación de Perl
+    perlfilter       Filtros de código fuente
 
-    perlfilter		Filtros de código fuente
+    perldtrace       Compatibilidad con DTrace
 
-    perlglossary	Glosario
+    perlglossary     Glosario
 
 =head2 Componentes e interfaz con el lenguaje C
 
-    perlembed		Formas de integrar Perl en una aplicación C o C++
-    perldebguts 	Componentes y consejos para la depuración
-    perlxstut		Tutorial de XS
-    perlxs		Interfaz de programación de aplicaciones XS
-    perlclib		Sustitutos internos de la biblioteca de C estándar
-    perlguts		Funciones internas para crear extensiones
-    perlcall		Convenciones de llamada desde C
-    perlmroapi		Interfaz de complementos: resolución de métodos
-    perlreapi		Interfaz de complementos: expresiones regulares
-    perlreguts		Componentes del motor de expresiones regulares
+    perlembed        Formas de integrar Perl en una aplicación C o C++
+    perldebguts      Componentes y consejos para la depuración
+    perlxstut        Tutorial de XS
+    perlxs           Interfaz de programación de aplicaciones XS
+    perlxstypemap    Herramientas de conversión de tipos XS C/Perl
+    perlclib         Sustitutos internos de la biblioteca de C estándar
+    perlguts         Funciones internas para crear extensiones
+    perlcall         Convenciones de llamada desde C
+    perlmroapi       Interfaz de complementos: resolución de métodos
+    perlreapi        Interfaz de complementos: expresiones regulares
+    perlreguts       Componentes del motor de expresiones regulares
 
-    perlapi		Lista de API
-    perlintern		Funciones internas de Perl
-    perliol		API en C para implementar en Perl las capas de E/S
-    perlapio		Interfaz de abstracción de E/S interna
+    perlapi          Lista de API
+    perlintern       Funciones internas de Perl
+    perliol          API en C para implementar en Perl las capas de E/S
+    perlapio         Interfaz de abstracción de E/S interna
 
-    perlhack		Guía para hackers
-    perlsource		Guía del árbol de código fuente
-    perlinterp		Descripción del código fuente y el funcionamiento del intérprete de Perl
-    perlhacktut 	Tutorial de creación de una revisión sencilla de código C
-    perlhacktips	Consejos para modificar el código C del núcleo de Perl
-    perlpolicy		Directivas de desarrollo de Perl
-    perlgit		Uso de git con el repositorio de Perl
+    perlhack         Guía para hackers
+    perlsource       Guía del árbol de código fuente
+    perlinterp       Descripción del código fuente y el funcionamiento del intérprete
+    perlhacktut      Tutorial de creación de una revisión sencilla de código C
+    perlhacktips     Consejos para modificar el código C del núcleo de Perl
+    perlpolicy       Directivas de desarrollo de Perl
+    perlgit          Uso de git con el repositorio de Perl
 
 =head2 Varios
 
-    perlbook		Información de libros sobre Perl
-    perlcommunity	Información sobre la comunidad Perl
-    perltodo		Tareas pendientes
+    perlbook         Información de libros sobre Perl
+    perlcommunity    Información sobre la comunidad Perl
 
-    perldoc		Consulta de la documentación de Perl en formato Pod
+    perldoc          Consulta de la documentación de Perl en formato Pod
 
-    perlhist		Registros históricos de Perl
-    perldelta		Cambios con respecto a la versión anterior
-    perl5141delta	Cambios en la versión 5.14.1
-    perl5140delta	Cambios en la versión 5.14.0
-    perl51311delta	Cambios en la versión 5.13.11
-    perl51310delta	Cambios en la versión 5.13.10
-    perl5139delta	Cambios en la versión 5.13.9
-    perl5138delta	Cambios en la versión 5.13.8
-    perl5137delta	Cambios en la versión 5.13.7
-    perl5136delta	Cambios en la versión 5.13.6
-    perl5135delta	Cambios en la versión 5.13.5
-    perl5134delta	Cambios en la versión 5.13.4
-    perl5133delta	Cambios en la versión 5.13.3
-    perl5132delta	Cambios en la versión 5.13.2
-    perl5131delta	Cambios en la versión 5.13.1
-    perl5130delta	Cambios en la versión 5.13.0
-    perl5123delta	Cambios en la versión 5.12.3
-    perl5122delta	Cambios en la versión 5.12.2
-    perl5121delta	Cambios en la versión 5.12.1
-    perl5120delta	Cambios en la versión 5.12.0
-    perl5115delta	Cambios en la versión 5.11.5
-    perl5114delta	Cambios en la versión 5.11.4
-    perl5113delta	Cambios en la versión 5.11.3
-    perl5112delta	Cambios en la versión 5.11.2
-    perl5111delta	Cambios en la versión 5.11.1
-    perl5110delta	Cambios en la versión 5.11.0
-    perl5101delta	Cambios en la versión 5.10.1
-    perl5100delta	Cambios en la versión 5.10.0
-    perl595delta	Cambios en la versión 5.9.5
-    perl594delta	Cambios en la versión 5.9.4
-    perl593delta	Cambios en la versión 5.9.3
-    perl592delta	Cambios en la versión 5.9.2
-    perl591delta	Cambios en la versión 5.9.1
-    perl590delta	Cambios en la versión 5.9.0
-    perl589delta	Cambios en la versión 5.8.9
-    perl588delta	Cambios en la versión 5.8.8
-    perl587delta	Cambios en la versión 5.8.7
-    perl586delta	Cambios en la versión 5.8.6
-    perl585delta	Cambios en la versión 5.8.5
-    perl584delta	Cambios en la versión 5.8.4
-    perl583delta	Cambios en la versión 5.8.3
-    perl582delta	Cambios en la versión 5.8.2
-    perl581delta	Cambios en la versión 5.8.1
-    perl58delta 	Cambios en la versión 5.8.0
-    perl573delta	Cambios en la versión 5.7.3
-    perl572delta	Cambios en la versión 5.7.2
-    perl571delta	Cambios en la versión 5.7.1
-    perl570delta	Cambios en la versión 5.7.0
-    perl561delta	Cambios en la versión 5.6.1
-    perl56delta 	Cambios en la versión 5.6
-    perl5005delta	Cambios en la versión 5.005
-    perl5004delta	Cambios en la versión 5.004
+    perlhist         Registros históricos de Perl
+    perldelta        Cambios con respecto a la versión anterior
+    perl5160delta    Cambios en la versión 5.16.0
+    perl5142delta    Cambios en la versión 5.14.2
+    perl5141delta    Cambios en la versión 5.14.1
+    perl5140delta    Cambios en la versión 5.14.0
+    perl5124delta    Cambios en la versión 5.12.4
+    perl5123delta    Cambios en la versión 5.12.3
+    perl5122delta    Cambios en la versión 5.12.2
+    perl5121delta    Cambios en la versión 5.12.1
+    perl5120delta    Cambios en la versión 5.12.0
+    perl5101delta    Cambios en la versión 5.10.1
+    perl5100delta    Cambios en la versión 5.10.0
+    perl589delta     Cambios en la versión 5.8.9
+    perl588delta     Cambios en la versión 5.8.8
+    perl587delta     Cambios en la versión 5.8.7
+    perl586delta     Cambios en la versión 5.8.6
+    perl585delta     Cambios en la versión 5.8.5
+    perl584delta     Cambios en la versión 5.8.4
+    perl583delta     Cambios en la versión 5.8.3
+    perl582delta     Cambios en la versión 5.8.2
+    perl581delta     Cambios en la versión 5.8.1
+    perl58delta      Cambios en la versión 5.8.0
+    perl561delta     Cambios en la versión 5.6.1
+    perl56delta      Cambios en la versión 5.6
+    perl5005delta    Cambios en la versión 5.005
+    perl5004delta    Cambios en la versión 5.004
 
-    perlartistic	Licencia Artistic de Perl
-    perlgpl		Licencia GNU General Public License
+    perlexperiment	Lista de funcionalidades experimentales de Perl
+
+    perlartistic    Licencia Artistic de Perl
+    perlgpl         Licencia GNU General Public License
 
 =head2 Idiomas específicos
 
-    perlcn		Perl para chino simplificado (en EUC-CN)
-    perljp		Perl para japonés (en EUC-JP)
-    perlko		Perl para coreano (en EUC-KR)
-    perltw		Perl para chino tradicional (en Big5)
+=for buildtoc flag +r
+
+    perlcn           Perl para chino simplificado (en EUC-CN)
+    perljp           Perl para japonés (en EUC-JP)
+    perlko           Perl para coreano (en EUC-KR)
+    perltw           Perl para chino tradicional (en Big5)
 
 =head2 Información específica de plataformas
 
-    perlaix		Notas para AIX
-    perlamiga		Notas para AmigaOS
-    perlbeos		Notas para BeOS
-    perlbs2000		Notas para POSIX-BC BS2000
-    perlce		Notas para WinCE
-    perlcygwin		Notas para Cygwin
-    perldgux		Notas para DG/UX
-    perldos		Notas para DOS
-    perlepoc		Notas para EPOC
-    perlfreebsd 	Notas para FreeBSD
-    perlhaiku		Notas para Haiku
-    perlhpux		Notas para HP-UX
-    perlhurd		Notas para Hurd
-    perlirix		Notas para Irix
-    perllinux		Notas para Linux
-    perlmacos		Notas para Mac OS (Classic)
-    perlmacosx		Notas para Mac OS X
-    perlmpeix		Notas para MPE/iX
-    perlnetware 	Notas para NetWare
-    perlopenbsd 	Notas para OpenBSD
-    perlos2		Notas para OS/2
-    perlos390		Notas para OS/390
-    perlos400		Notas para OS/400
-    perlplan9		Notas para Plan 9
-    perlqnx		Notas para QNX
-    perlriscos		Notas para RISC OS
-    perlsolaris 	Notas para Solaris
-    perlsymbian 	Notas para Symbian
-    perltru64		Notas para Tru64
-    perluts		Notas para UTS
-    perlvmesa		Notas para VM/ESA
-    perlvms		Notas para VMS
-    perlvos		Notas para Stratus VOS
-    perlwin32		Notas para Windows
+    perlaix          Notas para AIX
+    perlamiga        Notas para AmigaOS
+    perlbeos         Notas para BeOS
+    perlbs2000       Notas para POSIX-BC BS2000
+    perlce           Notas para WinCE
+    perlcygwin       Notas para Cygwin
+    perldgux         Notas para DG/UX
+    perldos          Notas para DOS
+    perlepoc         Notas para EPOC
+    perlfreebsd      Notas para FreeBSD
+    perlhaiku        Notas para Haiku
+    perlhpux         Notas para HP-UX
+    perlhurd         Notas para Hurd
+    perlirix         Notas para Irix
+    perllinux        Notas para Linux
+    perlmacos        Notas para Mac OS (Classic)
+    perlmacosx       Notas para Mac OS X
+    perlmpeix        Notas para MPE/iX
+    perlnetware      Notas para NetWare
+    perlopenbsd      Notas para OpenBSD
+    perlos2          Notas para OS/2
+    perlos390        Notas para OS/390
+    perlos400        Notas para OS/400
+    perlplan9        Notas para Plan 9
+    perlqnx          Notas para QNX
+    perlriscos       Notas para RISC OS
+    perlsolaris      Notas para Solaris
+    perlsymbian      Notas para Symbian
+    perltru64        Notas para Tru64
+    perluts          Notas para UTS
+    perlvmesa        Notas para VM/ESA
+    perlvms          Notas para VMS
+    perlvos          Notas para Stratus VOS
+    perlwin32        Notas para Windows
 
+=for buildtoc flag -r
+
+=head2 Avisos sobre documentos eliminados
+
+    perlboot		
+    perlbot		
+    perltodo
+    perltooc		
+    perltoot		
+
+=for buildtoc __END__
 
 En un sistema Unix, esta documentación estará también disponible, por lo
 general, en forma de páginas de manual que se pueden consultar con el programa
@@ -284,11 +287,11 @@ que estético (reducido, elegante, minimalista).
 
 Perl combina (en opinión del autor) algunas de las mejores características de
 C, B<sed>, B<awk> y B<sh>, por lo que las personas familiarizadas con estos
-lenguajes aprenderán Perl fácilmente  (los historiadores de los lenguajes
-también destacarán algunos vestigio de B<csh>, Pascal e incluso BASIC-PLUS). La
-sintaxis de expresiones es muy parecida a la de C. A diferencia de la mayoría
-de las utilidades Unix, Perl no limita de forma arbitraria el tamaño de los
-datos; si el sistema dispone de memoria suficiente, puede "succionar" un
+lenguajes aprenderán Perl fácilmente (los historiadores de los lenguajes
+también destacarán algunos vestigios de B<csh>, Pascal e incluso BASIC-PLUS).
+La sintaxis de expresiones es muy parecida a la de C. A diferencia de la
+mayoría de las utilidades Unix, Perl no limita de forma arbitraria el tamaño de
+los datos; si el sistema dispone de memoria suficiente, puede "succionar" un
 archivo completo como una sola cadena. La profundidad de recursión es
 ilimitada. Y las tablas usadas por los hashes (a veces denominados "arrays
 asociativos") se expanden cuando es necesario para que el rendimiento no se vea
@@ -314,8 +317,8 @@ Se describe en L<perlmod>, L<perlmodlib> y L<perlmodinstall>.
 
 capacidad de integración y ampliación
 
-Se describe en L<perlembed>, L<perlxstut>, L<perlxs>, L<perlcall>, L<perlguts>
-y L<xsubpp>.
+Se describe en L<perlembed>, L<perlxstut>, L<perlxs>, L<perlxstypemap>,
+L<perlcall>, L<perlguts> y L<xsubpp>.
 
 =item *
 
@@ -340,7 +343,7 @@ Se describe en L<perlreftut>, L<perlref>, L<perldsc> y L<perllol>.
 
 programación orientada a objetos
 
-Se describe en L<perlobj>, L<perlboot>, L<perltoot>, L<perltooc> y L<perlbot>.
+Se describe en L<perlobj> y L<perlootut>.
 
 =item *
 
@@ -475,7 +478,7 @@ concreto, camello arábigo, o dromedario) para averiguar por qué.
 
 =over
 
-=item * Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaquí­n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
 
 =item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
 

@@ -1,4 +1,4 @@
-=head1 NOMBRE 
+=head1 NOMBRE
 
 perlpragma - Crear un pragma de usuario
 
@@ -85,17 +85,17 @@ C<entero>:
     use warnings;
     
     sub import {
-        $^H{entero} = 1;
+        $^H{"entero/in_effect"} = 1;
     }
     
     sub unimport {
-        $^H{entero} = 0;
+        $^H{"entero/in_effect"} = 0;
     }
     
     sub in_effect {
         my $nivel = shift // 0;
         my $hash_pistas = (caller($nivel))[10];
-        return $hash_pistas->{entero};
+        return $hash_pistas->{"entero/in_effect"};
     }
     
     1;
@@ -126,9 +126,27 @@ en el índice 10 de la lista de resultados devueltos. En el pragma de ejemplo,
 la recuperación se encapsula en la rutina C<in_effect()>, que usa como
 parámetro el número de marcos de llamadas que hay que subir para encontrar el
 valor del pragma en el script del usuario. La rutina usa C<caller()> para
-determinar el valor que tenía C<$^H{entero}> cuando se llamó a cada línea del
-script del usuario y, por tanto, proporcionar la semántica correcta en la
-subrutina que implementa la suma sobrecargada.
+determinar el valor que tenía C<$^H{"entero/in_effect"}> cuando se llamó a cada
+línea del script del usuario y, por tanto, proporcionar la semántica correcta
+en la subrutina que implementa la suma sobrecargada.
+
+=head1 Nomenclatura de claves
+
+Solo hay un único hash C<%^H>, pero puede haber muchos módulos que deseen usar
+su semántica de definición de ámbito. Para evitar conflictos, deben asegurarse
+de usar claves distintas en el hash. Por ello, se sigue la convención de que en
+un módulo deben usarse únicamente claves que empiecen por el nombre del módulo
+(el nombre del paquete principal) seguido de un carácter "/". A continuación de
+este prefijo de identificación de módulo, el resto de la clave queda a
+discreción del programador del módulo y puede incluir cualquier carácter. Por
+ejemplo, un módulo llamado C<Foo::Bar> debe usar claves como C<Foo::Bar/baz> o
+C<Foo::Bar/$%/_!>. Los módulos que sigan esta convención no provocarán
+conflictos.
+
+En el núcleo de Perl se usan unas cuantas claves de C<%^H> que no siguen esta
+convención, ya que se definieron antes de que esta se estableciera. Las claves
+que sigan la convención no provocarán conflictos con las claves antiguas del
+núcleo.
 
 =head1 Detalles de la implementación
 
@@ -158,7 +176,7 @@ operaciones.
 
 =over
 
-=item * Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaquí­n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
 
 =item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
 

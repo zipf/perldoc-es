@@ -4,32 +4,40 @@ use strict;
 
 use base 'POD2::Base';
 
-our $VERSION = '5.16.0.01';
+our $VERSION = '5.16.0.02';
 
 sub search_perlfunc_re {
     return 'Lista de funciones de Perl en orden alfabético';
 }
 
+# NOTE: Excluded percheat.pod until v5.16.1, since it seems
+# that it will undergo massive changes
+
 sub pod_info {{
     perl              => '5.16.0',
     perlbook          => '5.16.0',
-    perlcheat         => '5.16.0',
+    perlboot          => '5.16.0',
+    perlbot           => '5.16.0',
     perlcommunity     => '5.16.0',
     perldbmfilter     => '5.16.0',
     perldoc           => '5.16.0',
+    perlexperiment    => '5.16.0',
     perlfaq1          => '5.16.0',
     perlfaq2          => '5.16.0',
+    perlfreebsd       => '5.16.0',
+    perlhurd          => '5.16.0',
     perlintro         => '5.16.0',
     perlnumber        => '5.16.0',
+    perlopenbsd       => '5.16.0',
     perlpragma        => '5.16.0',
     perlsource        => '5.16.0',
     perlstyle         => '5.16.0',
+    perltodo          => '5.16.0',
+    perltooc          => '5.16.0',
+    perltoot          => '5.16.0',
     perlunifaq        => '5.16.0',
     perlunitut        => '5.16.0',
     perlutil          => '5.16.0',
-    'README.freebsd'  => '5.16.0',
-    'README.hurd'     => '5.16.0',
-    'README.openbsd'  => '5.16.0',
 }};
 
 sub print_pod {

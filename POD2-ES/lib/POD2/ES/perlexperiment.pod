@@ -1,0 +1,319 @@
+=head1 NOMBRE
+
+perlexperiment - Lista de funcionalidades experimentales de Perl
+
+=head1 DESCRIPCIÓN
+
+En este documento se muestran las funcionalidades experimentales actuales y
+anteriores del núcleo de perl. Aunque están documentadas en los temas
+correspondientes de la documentación, esta lista abreviada presenta una
+introducción y datos básicos sobre su estado de desarrollo actual.
+
+De momento solo hemos intentado recopilar las funcionalidades experimentales y
+establecer su origen, versiones, etc. En gran parte nos hemos basado en
+especulaciones.
+
+=head2 Experimentos actuales
+
+=over 8
+
+=item Emulación de fork()
+
+Se incluyó en Perl 5.6.1
+
+Vea también L<perlfork>
+
+=item Referencias débiles
+
+Se incluyó en Perl 5.6.0
+
+=item Implementación interna de expansión de patrones de archivos
+
+Se incluyó en Perl 5.6.0
+
+Se aprobó en XXX
+
+=item Compatibilidad con 64 bits
+
+Se incluyó en Perl 5.005
+
+Se aprobó en XXX
+
+=item die acepta una referencia
+
+Se incluyó en Perl 5.005
+
+Se aprobó en Perl XXX
+
+=item Compatibilidad con Unicode
+
+Se incluyó en Perl 5.6.0
+
+Se aprobó en Perl 5.8.0 XXX
+
+=item -Dusemultiplicity -Dusethreads
+
+Se incluyó en Perl 5.6.0
+
+=item Los valores Long Double siguen sin funcionar en Solaris
+
+Se incluyó en Perl 5.7.0
+
+=item Capacidad de las opciones de GetOpt::Long para consumir varios valores a la vez (experimental)
+
+Se actualizó C<Getopt::Long> a la versión 2.35
+
+Se eliminó en Perl 5.8.8
+
+=item Hilos de ejecución de tipo 5.005
+
+Se incluyó en Perl 5.005
+
+Se eliminó en Perl 5.10 XXX
+
+=item Test::Harness::Straps
+
+Se eliminó en Perl 5.10.1
+
+=item perlcc
+
+Se incluyó en Perl 5.005
+
+Se eliminó en Perl 5.9.0
+
+=item Atributo opcional experimental C<unique> para C<our>
+
+Se incluyó en Perl 5.8.0
+
+Obsoleta en Perl 5.10.0
+
+=item Aserciones
+
+El modificador de línea de comandos C<-A>
+
+Se incluyó en Perl 5.9.0
+
+Se eliminó en Perl 5.9.5
+
+=item Sockets Linux abstractos en el dominio Unix
+
+Se incluyó en Perl 5.9.2
+
+Vea también L<Socket>
+
+=item L<Pod::HTML2Pod|Pod::HTML2Pod>
+
+=item L<Pod::PXML|Pod::PXML>
+
+=item threads
+
+=item La seudocapa de E/S <:pop>
+
+Vea también L<perlrun>
+
+=item la seudocapa de E/S <:win32>
+
+Vea también L<perlrun>
+
+=item MLDBM
+
+Vea también L<perldsc>
+
+=item Funciones internas con la marca M
+
+Vea también L<perlguts>
+
+=item API lex_start
+
+Se incluyó en Perl 5.13.7
+
+=item API interna para C<%H>
+
+Se incluyó en Perl 5.13.7
+
+Vea también C<cophh_> en L<perlapi>.
+
+=item av_create_and_push
+
+=item av_create_and_unshift_one
+
+=item av_create_and_unshift_one
+
+=item PL_keyword_plugin
+
+=item hv_iternext_flags
+
+=item lex_bufutf8
+
+=item lex_discard_to
+
+=item lex_grow_linestr
+
+=item lex_next_chunk
+
+=item lex_peek_unichar
+
+=item lex_read_space
+
+=item lex_read_to
+
+=item lex_read_unichar
+
+=item lex_stuff_pv
+
+=item lex_stuff_pvn
+
+=item lex_stuff_pvs
+
+=item lex_stuff_sv
+
+=item lex_unstuff
+
+=item parse_fullstmt
+
+=item parse_stmtseq
+
+=item PL_parser-E<gt>bufend
+
+=item PL_parser-E<gt>bufptr
+
+=item PL_parser-E<gt>linestart
+
+=item PL_parser-E<gt>linestr
+
+=item Perl_signbit
+
+=item pad_findmy
+
+=item sv_utf8_decode
+
+=item sv_utf8_downgrade
+
+=item bytes_from_utf8
+
+=item bytes_to_utf8
+
+=item utf8_to_bytes
+
+=item Módulo DB
+
+Se incluyó en Perl 5.6.0
+
+Vea también L<perldebug>, L<perldebtut>
+
+=item El tipo de datos seudohash
+
+Se incluyó en Perl 5.6.0
+
+=item Subrutinas en el lado izquierdo de una asignación
+
+Se incluyó en Perl 5.6.0
+
+Vea también L<perlsub>
+
+=item Destino C<installhtml> en Makefile.
+
+=item Unicode en Perl para EBCDIC
+
+=item C<(?{código})>
+
+Vea también L<perlre>
+
+=item C<(??{ código })>
+
+Vea también L<perlre>
+
+=item Verbos de control de vuelta atrás
+
+C<(*ACCEPT)>
+
+Se incluyó en Perl 5.10
+
+Vea también: L<perlre/"Verbos especiales para el control de la vuelta atrás">
+
+=item Expresiones de código, expresiones condicionales y expresiones independientes en expresiones regulares
+
+=item La clase de caracteres C<\N> para expresiones regulares
+
+La clase de caracteres C<\N>, que no debe confundirse con la secuencia de
+caracteres con nombre C<\N{NAME}>, se usa en expresiones regulares para denotar
+cualquier carácter que no sea de nueva línea.
+
+Se incluyó en Perl 5.12
+
+Vea también:
+
+=item gv_try_downgrade
+
+Vea también L<perlintern>
+
+=item Compatibilidad experimental con compiladores Sun Studio para el sistema operativo Linux
+
+Vea también L<perllinux>
+
+=item Capacidad de agregar palabras clave
+
+Vea L<perlapi/PL_keyword_plugin> para obtener más información sobre el
+mecanismo.
+
+Se incluyó en Perl 5.11.2
+
+=back
+
+=head2 Funcionalidades aprobadas
+
+Estas funcionalidades han tenido tanto éxito e interactúan tan bien con otros
+componentes que hemos decido dejar de considerarlas experimentales y aprobarlas
+como funcionalidades completas y estables en Perl, con todas las ventajas y
+regalías que eso conlleva.  También les hemos concedido 5 puntos por
+estabilidad y 3 por carisma.
+
+=over 8
+
+=item (aún no se ha identificado ninguna)
+
+=back
+
+=head2 Funcionalidades suprimidas
+
+Estas funcionalidades ya no se consideran experimentales y se han suprimido. Si
+después de que le indicáramos explícitamente que estas funcionalidades no se
+deben usar en programas de producción decidió hacerlo, la responsabilidad es
+suya (vea L<perlpolicy>).
+
+=over 8
+
+=item C<legacy>
+
+El pragma C<legacy> experimental fue absorbido por el pragma C<feature>.
+
+Se incluyó en 5.11.2
+
+Se eliminó en 5.11.3
+
+=back
+
+=head1 AUTORES
+
+brian d foy C<< <brian.d.foy@gmail.com> >>
+
+=head1 COPYRIGHT
+
+Copyright 2010, brian d foy C<< <brian.d.foy@gmail.com> >>
+
+=head1 LICENCIA
+
+Puede usar y redistribuir este documento en los mismos términos que Perl.
+
+=cut
+
+=head1 TRADUCTORES
+
+=over
+
+=item * Joaquí­n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+
+=item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
+
+=back
+
