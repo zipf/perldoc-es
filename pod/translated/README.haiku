@@ -3,7 +3,7 @@ Está escrito en formato POD (vea pod/perlpod.pod), un formato diseñado específic
 
 =head1 NOMBRE
 
-README.haiku - Perl versión 5.10+ en Haiku
+perlhaiku - Perl version 5.10+ en Haiku
 
 =head1 DESCRIPCIÓN
 
@@ -20,9 +20,9 @@ El procedimiento de construcción es completamente estándar:
 Hace a perl ejecutable y crea un enlace simbólico para libperl:
 
   chmod a+x /boot/common/bin/perl
-  cd /boot/common/lib; ln -s perl5/5.14.2/BePC-haiku/CORE/libperl.so .
+  cd /boot/common/lib; ln -s perl5/5.16.0/BePC-haiku/CORE/libperl.so .
 
-Reemplace C<5.14.2> con su respectiva versión de Perl.
+Reemplace C<5.16.0> con su respectiva versión de Perl.
 
 =head1 PROBLEMAS CONOCIDOS
 
@@ -36,15 +36,15 @@ Perl no puede ser compilado con soporte multihilo ATM.
 
 =item *
 
-El test C<ext/Socket/t/socketpair.t> falla. Precisando más: las subpruebas usando sockets de datagramas fallan. Los datagramas sockect Unix aún no están implementados en Haiku.
+El test F<ext/Socket/t/socketpair.t> falla. Precisando más: las subpruebas usando sockets de datagramas fallan. Los datagramas sockect Unix aún no están implementados en Haiku.
 
 =item *
 
-Una subprueba del test C<ext/Sys/Syslog/t/syslog.t> falla. Esto se debe a que Haiku aún no implementa soporte para C</dev/log>.
+Una subprueba del test F<ext/Sys/Syslog/t/syslog.t> falla. Esto se debe a que Haiku aún no implementa soporte para C</dev/log>.
 
 =item *
 
-Los test C<lib/Net/Ping/t/450_service.t> y C<lib/Net/Ping/t/510_ping_udp.t> fallan. Esto se debe a errores en la implementación de la pila del sistema de red de Haiku.
+Los test F<lib/Net/Ping/t/450_service.t> y F<lib/Net/Ping/t/510_ping_udp.t> fallan. Esto se debe a errores en la implementación de la pila del sistema de red de Haiku.
 
 =back
 
