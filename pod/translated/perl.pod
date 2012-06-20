@@ -23,6 +23,24 @@ Si nunca ha programado en Perl, debe empezar por ejecutar C<perldoc perlintro> p
 
 Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
 
+=begin buildtoc
+
+# Porting/pod_lib.pl analiza esta sección, cuyo contenido se usará en pod/buildtoc, etc.
+
+flag =g  perluniprops perlmodlib perlapi perlintern
+flag =go perltoc
+flag =ro perlcn perljp perlko perltw
+flag =   perlvms
+
+path perlfaq.*               cpan/perlfaq/lib/
+path perlglossary            cpan/perlfaq/lib/
+path perlxs(?:tut|typemap)?  dist/ExtUtils-ParseXS/lib/
+path perldoc                 cpan/Pod-Perldoc/lib/
+
+aux a2p c2ph h2ph h2xs perlbug pl2pm pod2html pod2man s2p splain xsubpp
+
+=end buildtoc
+
 =head2 Introducción
 
     perl		Información general sobre Perl (esta sección)
@@ -38,10 +56,7 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
     perlrequick 	Guía rápida de las expresiones regulares
     perlretut		Tutorial de expresiones regulares
 
-    perlboot		Programación orientada a objetos para principiantes
-    perltoot		Programación orientada a objetos, parte 1
-    perltooc		Programación orientada a objetos, parte 2
-    perlbot		Trucos y ejemplos de POO
+    perlootut        Tutorial de POO para principiantes
 
     perlperf		Rendimiento y técnicas de optimización
 
@@ -115,9 +130,9 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
 
     perlutil		Utilidades empaquetadas en una distribución Perl
 
-    perlcompile 	Herramientas de compilación de Perl
-
     perlfilter		Filtros de código fuente
+
+    perldtrace       Compatibilidad con DTrace
 
     perlglossary	Glosario
 
@@ -127,6 +142,7 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
     perldebguts 	Componentes y consejos para la depuración
     perlxstut		Tutorial de XS
     perlxs		Interfaz de programación de aplicaciones XS
+    perlxstypemap    Herramientas de conversión de tipos XS C/Perl
     perlclib		Sustitutos internos de la biblioteca de C estándar
     perlguts		Funciones internas para crear extensiones
     perlcall		Convenciones de llamada desde C
@@ -141,7 +157,7 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
 
     perlhack		Guía para hackers
     perlsource		Guía del árbol de código fuente
-    perlinterp		Descripción del código fuente y el funcionamiento del intérprete de Perl
+    perlinterp		Visión general al código fuente del intérprete Perl, y cómo funciona
     perlhacktut 	Tutorial de creación de una revisión sencilla de código C
     perlhacktips	Consejos para modificar el código C del núcleo de Perl
     perlpolicy		Directivas de desarrollo de Perl
@@ -151,44 +167,22 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
 
     perlbook		Información de libros sobre Perl
     perlcommunity	Información sobre la comunidad Perl
-    perltodo		Tareas pendientes
 
     perldoc		Consulta de la documentación de Perl en formato Pod
 
     perlhist		Registros históricos de Perl
     perldelta		Cambios con respecto a la versión anterior
+    perl5160delta    Cambios en la versión 5.16.0
+    perl5142delta    Cambios en la versión 5.14.2
     perl5141delta	Cambios en la versión 5.14.1
     perl5140delta	Cambios en la versión 5.14.0
-    perl51311delta	Cambios en la versión 5.13.11
-    perl51310delta	Cambios en la versión 5.13.10
-    perl5139delta	Cambios en la versión 5.13.9
-    perl5138delta	Cambios en la versión 5.13.8
-    perl5137delta	Cambios en la versión 5.13.7
-    perl5136delta	Cambios en la versión 5.13.6
-    perl5135delta	Cambios en la versión 5.13.5
-    perl5134delta	Cambios en la versión 5.13.4
-    perl5133delta	Cambios en la versión 5.13.3
-    perl5132delta	Cambios en la versión 5.13.2
-    perl5131delta	Cambios en la versión 5.13.1
-    perl5130delta	Cambios en la versión 5.13.0
+    perl5124delta	Cambios en la versión 5.12.4
     perl5123delta	Cambios en la versión 5.12.3
     perl5122delta	Cambios en la versión 5.12.2
     perl5121delta	Cambios en la versión 5.12.1
     perl5120delta	Cambios en la versión 5.12.0
-    perl5115delta	Cambios en la versión 5.11.5
-    perl5114delta	Cambios en la versión 5.11.4
-    perl5113delta	Cambios en la versión 5.11.3
-    perl5112delta	Cambios en la versión 5.11.2
-    perl5111delta	Cambios en la versión 5.11.1
-    perl5110delta	Cambios en la versión 5.11.0
     perl5101delta	Cambios en la versión 5.10.1
     perl5100delta	Cambios en la versión 5.10.0
-    perl595delta	Cambios en la versión 5.9.5
-    perl594delta	Cambios en la versión 5.9.4
-    perl593delta	Cambios en la versión 5.9.3
-    perl592delta	Cambios en la versión 5.9.2
-    perl591delta	Cambios en la versión 5.9.1
-    perl590delta	Cambios en la versión 5.9.0
     perl589delta	Cambios en la versión 5.8.9
     perl588delta	Cambios en la versión 5.8.8
     perl587delta	Cambios en la versión 5.8.7
@@ -199,19 +193,19 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
     perl582delta	Cambios en la versión 5.8.2
     perl581delta	Cambios en la versión 5.8.1
     perl58delta 	Cambios en la versión 5.8.0
-    perl573delta	Cambios en la versión 5.7.3
-    perl572delta	Cambios en la versión 5.7.2
-    perl571delta	Cambios en la versión 5.7.1
-    perl570delta	Cambios en la versión 5.7.0
     perl561delta	Cambios en la versión 5.6.1
     perl56delta 	Cambios en la versión 5.6
     perl5005delta	Cambios en la versión 5.005
     perl5004delta	Cambios en la versión 5.004
 
+    perlexperiment	Lista de funcionalidades experimentales de Perl
+
     perlartistic	Licencia Artistic de Perl
     perlgpl		Licencia GNU General Public License
 
 =head2 Idiomas específicos
+
+=for buildtoc flag +r
 
     perlcn		Perl para chino simplificado (en EUC-CN)
     perljp		Perl para japonés (en EUC-JP)
@@ -255,6 +249,17 @@ Para facilitar el acceso, el manual de perl se ha dividido en varias secciones.
     perlvos		Notas para Stratus VOS
     perlwin32		Notas para Windows
 
+=for buildtoc flag -r
+
+=head2 Avisos sobre documentos eliminados
+
+    perlboot		
+    perlbot		
+    perltodo
+    perltooc		
+    perltoot		
+
+=for buildtoc __END__
 
 En un sistema Unix, esta documentación estará también disponible, por lo general, en forma de páginas de manual que se pueden consultar con el programa F<man>.
 
@@ -268,7 +273,7 @@ Perl se creó como un lenguaje optimizado para procesar archivos de texto, a fin 
 
 El lenguaje se diseñó para ser práctico (fácil de usar, eficaz, completo), más que estético (reducido, elegante, minimalista).
 
-Perl combina (en opinión del autor) algunas de las mejores características de C, B<sed>, B<awk> y B<sh>, por lo que las personas familiarizadas con estos lenguajes aprenderán Perl fácilmente  (los historiadores de los lenguajes también destacarán algunos vestigio de B<csh>, Pascal e incluso BASIC-PLUS). La sintaxis de expresiones es muy parecida a la de C.  A diferencia de la mayoría de las utilidades Unix, Perl no limita de forma arbitraria el tamaño de los datos; si el sistema dispone de memoria suficiente, puede "succionar" un archivo completo como una sola cadena.  La profundidad de recursión es ilimitada.  Y las tablas usadas por los hashes (a veces denominados "arrays asociativos") se expanden cuando es necesario para que el rendimiento no se vea afectado.  Perl puede utilizar sofisticadas técnicas de detección de patrones para analizar rápidamente grandes cantidades de datos.  Aunque está optimizado para el procesamiento de texto, también incluye muchas herramientas magníficas para procesar datos binarios.
+Perl combina (en opinión del autor) algunas de las mejores características de C, B<sed>, B<awk> y B<sh>, por lo que las personas familiarizadas con estos lenguajes aprenderán Perl fácilmente  (los historiadores de los lenguajes también destacarán algunos vestigios de B<csh>, Pascal e incluso BASIC-PLUS).  La sintaxis de expresiones es muy parecida a la de C.  A diferencia de la mayoría de las utilidades Unix, Perl no limita de forma arbitraria el tamaño de los datos; si el sistema dispone de memoria suficiente, puede "succionar" un archivo completo como una sola cadena.  La profundidad de recursión es ilimitada.  Y las tablas usadas por los hashes (a veces denominados "arrays asociativos") se expanden cuando es necesario para que el rendimiento no se vea afectado.  Perl puede utilizar sofisticadas técnicas de detección de patrones para analizar rápidamente grandes cantidades de datos.  Aunque está optimizado para el procesamiento de texto, también incluye muchas herramientas magníficas para procesar datos binarios.
 
 Pero esto no es todo.
 
@@ -286,7 +291,8 @@ Se describe en L<perlmod>, L<perlmodlib> y L<perlmodinstall>.
 
 capacidad de integración y ampliación 
 
-Se describe en L<perlembed>, L<perlxstut>, L<perlxs>, L<perlcall>, L<perlguts> y L<xsubpp>.
+Se describe en L<perlembed>, L<perlxstut>, L<perlxs>, L<perlxstypemap>,
+L<perlcall>, L<perlguts> y L<xsubpp>.
 
 =item *
 
@@ -310,7 +316,7 @@ Se describe en L<perlreftut>, L<perlref>, L<perldsc> y L<perllol>.
 
 programación orientada a objetos
 
-Se describe en L<perlobj>, L<perlboot>, L<perltoot>, L<perltooc> y L<perlbot>.
+Se describe en L<perlobj> y L<perlootut>.
 
 =item *
 
