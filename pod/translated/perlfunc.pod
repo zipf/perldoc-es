@@ -1166,7 +1166,7 @@ En la primera forma, el valor devuelto por EXPR es interpretado y ejecutado como
 Note que el valor es interpretado cada vez que se ejecuta C<eval>.
 Si EXPR se omite, se evalúa C<$_>.  Esta forma es típicamente usada para retrasar el interpretado subsecuente ejecución del texto de EXPR hasta el momento de la ejecución.
 
-Si la característica C<unicode_eval> está habilitada (que lo es por defecto con una declaración C<use 5.16> o superior), EXPR o C<$_> es tratado como una cadena de caracteres, así que las declaraciones C<use utf8> no tienen efecto, y los filtros de código fuente quedan prohibidos.  En ausencia de la característica C<unicode_eval>, la cadena a veces será tratada como caracteres y, otras veces como bytes, dependiendo de la codificación interna, y los filtros de código fuente activados dentro de C<eval> muestran el comportamiento errático, pero histórico, comportamiento de afectar a algún archivo externo que todavía se está compilando.  Vea también la palabra clave L</evalbytes>, que siempre trata su entrada como un flujo de bytes y funciona correctamente con filtros de código fuente, y el I<pragma> L<feature>.
+Si la característica C<unicode_eval> está habilitada (que lo es por defecto con una declaración C<use 5.16> o superior), EXPR o C<$_> es tratado como una cadena de caracteres, así que las declaraciones C<use utf8> no tienen efecto, y los filtros de código fuente quedan prohibidos.  En ausencia de la característica C<unicode_eval>, la cadena a veces será tratada como caracteres y, otras veces como bytes, dependiendo de la codificación interna, y los filtros de código fuente activados dentro de C<eval> muestran el comportamiento errático, pero histórico, comportamiento de afectar a algún archivo externo que todavía se está compilando.  Vea también la palabra clave L</evalbytes>, que siempre trata su entrada como un flujo de bytes y funciona correctamente con filtros de código fuente, y el pragma L<feature>.
 
 En la segunda forma, el código dentro del BLOQUE es interpretado sólo una vez -al mismo tiempo que el código que rodea al mismo C<eval> es interpretado- y ejecutado dentro del contexto del actual programa Perl.  Esta forma es típicamente usada para atrapar excepciones más eficientemente que la primera forma (ver arriba), mientras que también provee del beneficio de comprobar el código dentro del BLOQUE en tiempo de compilación.
 
@@ -1419,7 +1419,7 @@ Para más información sobre plegado de caja, consulte el Estándar Unicode, especí
 
 Si se omite EXPR, se usa C<$_>.
 
-Esta función se comporta de la misma manera bajo varios I<pragma>, como por ejemplo en una configuración regional, como lo hace L</lc>.
+Esta función se comporta de la misma manera bajo varios pragma, como por ejemplo en una configuración regional, como lo hace L</lc>.
 
 Mientras que el Estándar Unicode define dos formas adicionales de plegado de caja, una para las lenguas turcas y otra que nunca asigna un carácter en múltiples caracteres, éstas no son proporcionadas por el núcleo de Perl; sin embargo, el módulo CPAN C<Unicode::Casing> se puede utilizar para proporcionar una implementación.
 
@@ -2974,7 +2974,7 @@ Múltiples declaraciones C<our> con el mismo nombre en el mismo ámbito léxico son
 
 Una declaración C<our> también puede tener una lista de atributos asociados a ella.
 
-La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO está vinculado al uso del I<pragma> C<fields>, y los atributos se manejan con el I<pragma> C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
+La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO está vinculado al uso del I<pragma> C<fields>, y los atributos se manejan con el pragma C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
 
 =item pack PLANTILLA,LISTA
 X<pack>
@@ -5234,7 +5234,7 @@ C<state> declara una variable de ámbito léxico, como lo hace C<my>.
 Sin embargo, estas variables no se reinicializan, a diferencia de las variables léxicas que se reinicializan cada vez que entran en un bloque.
 Vea L<perlsub/"Variables privadas persistentes"> para los detalles.
 
-Variables C<state> sólo se activan cuando el I<pragma> C<use feature "state"> está en vigor, a menos que el identificador está escrito como C<CORE::state>.
+Variables C<state> sólo se activan cuando el pragma C<use feature "state"> está en vigor, a menos que el identificador está escrito como C<CORE::state>.
 Vea también L<feature>.
 
 =item study ESCALAR
@@ -5699,7 +5699,7 @@ No intentará hacer un mapeo de mayúsculas con tilder en las letras iniciales.  V
 
 Si se omite EXPR, se usa C<$_>.
 
-Esta función se comporta de la misma manera bajo varios I<pragma>, como por ejemplo en una configuración regional, como lo hace L</lc>.
+Esta función se comporta de la misma manera bajo varios pragma, como por ejemplo en una configuración regional, como lo hace L</lc>.
 
 =item ucfirst EXPR
 X<ucfirst> X<uppercase> X<mayúscula>
@@ -5712,7 +5712,7 @@ Devuelve el valor de EXPR con el primer carácter en mayúsculas.  Esta es la func
 
 Si se omite EXPR, se usa C<$_>.
 
-Esta función se comporta de la misma manera bajo varios I<pragma>, como por ejemplo en una configuración regional, como lo hace L</lc>.
+Esta función se comporta de la misma manera bajo varios pragma, como por ejemplo en una configuración regional, como lo hace L</lc>.
 
 =item umask EXPR
 X<umask>
@@ -5887,7 +5887,7 @@ Especificando VERSIÓN como un literal de la forma v5.6.1, debe, generalmente, ev
 Suele ser útil si necesita comprobar la versión actual de Perl antes de que C<use> módulos que no funcionarán con versiones anteriores de Perl.
 (Tratamos de no hacer esto no más de lo necesario).
 
-C<use VERSIÓN> también activará todas las características disponibles en la versión solicitada tal como son definidas por el I<pragma> C<feature>, desactivando cualquier característica no incluida en la versión solicitada.  Ver L<feature>.
+C<use VERSIÓN> también activará todas las características disponibles en la versión solicitada tal como son definidas por el pragma C<feature>, desactivando cualquier característica no incluida en la versión solicitada.  Ver L<feature>.
 Del mismo modo, si la versión especificada de Perl es mayor o igual a 5.11.0, el modo de trabajo estricto quedará activado léxicamente, igual a como lo hace C<use strict>.  Cualquier uso explícito de C<use strict> o C<no strict> anula C<use VERSIÓN>, incluso si se coloca antes de él.  En ambos casos, los archivos F<feature.pm> y F<strict.pm> no son cargados.
 
 El C<BEGIN> fuerza a ejecutar a C<require> e C<import> en tiempo de compilación.  El C<require> se asegura que el módulo esté cargado en memoria, si todavía no lo está.  El C<import> no es una orden interna; es sólo una llamada al método estático ordinario en el paquete C<Módulo> para indicar al módulo que importe la lista de características en el paquete actual.  El módulo puede implementar su propio método C<import> de la forma que desee, aunque la mayoría de los módulos sólo eligen derivar su método C<import> vía herencia desde la clase C<Exporter> que se define en el módulo C<Exporter>.  Ver L<Exporter>.  Si no se puede encontrar ningún método C<import> entonces la llamada se pasa por alto, incluso si hay un método AUTOLOAD.
