@@ -2256,7 +2256,7 @@ Devuelve el valor de EXPR con el primer carácter en minúsculas.  Esta es la func
 
 Si se omite EXPR, se usa C<$_>.
 
-Esta función se comporta de la misma manera bajo varios I<pragma>, como por ejemplo en una configuración regional, como lo hace L</lc>.
+Esta función se comporta de la misma manera bajo varios pragma, como por ejemplo en una configuración regional, como lo hace L</lc>.
 
 =item length EXPR
 X<length> X<size> X<longitud> X<tamaño>
@@ -2487,7 +2487,7 @@ MÁSCARA está puesto por defecto a 0777, si no se indica, y ARCHIVO es por defect
 En general, es mejor crear directorios con una MÁSCARA permisiva y dejar que el usuario lo modifique con su C<umask> que suministrar una MÁSCARA restrictiva y no darle al usuario una forma de ser más permisivo.
 Las excepciones a esta regla son cuando el archivo o directorio debe mantenerse privados (archivos de correo, por ejemplo).  La entrada perlfunc(1) sobre C<umask> discute la elección de la máscara con más detalles.
 
-Tenga en cuenta que de acuerdo con POSIX 1.003.1-1996, el nombre de archivo puede tener cualquier número de barras inclinadas.  Algunos sistemas operativos y de sistemas de archivos no interpretan esto de forma correcta, por lo que Perl automáticamente elimina todas las barras inclinadas finales para tener a todo el mundo feliz.
+Tenga en cuenta que de acuerdo con POSIX 1.003.1-1996, el nombre de archivo puede tener cualquier número de barras diagonales.  Algunos sistemas operativos y de sistemas de archivos no interpretan esto de forma correcta, por lo que Perl automáticamente elimina todas las barras diagonales finales para tener a todo el mundo feliz.
 
 Para, recursivamente, crear una estructura de directorios, mire la función C<mkpath> del módulo L<File::Path>.
 
@@ -2974,7 +2974,7 @@ Múltiples declaraciones C<our> con el mismo nombre en el mismo ámbito léxico son
 
 Una declaración C<our> también puede tener una lista de atributos asociados a ella.
 
-La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO está vinculado al uso del I<pragma> C<fields>, y los atributos se manejan con el pragma C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
+La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO está vinculado al uso del pragma C<fields>, y los atributos se manejan con el pragma C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
 
 =item pack PLANTILLA,LISTA
 X<pack>
@@ -3610,7 +3610,7 @@ X<quotemeta> X<metacharacter> X<metacarácter>
 
 =for Pod::Functions quote regular expression magic characters
 
-Devuelve el valor de EXPR con todos los caracteres ASCII que no formen parte de una "palabra" escapados con una barra invertida.  (Es decir, todos los caracteres ASCII que no se ajusten a C</[A-Za-z_0-9]/> serán precedidos por una barra invertida en la cadena devuelta, con independencia de cualquier configuración regional).
+Devuelve el valor de EXPR con todos los caracteres ASCII que no formen parte de una "palabra" escapados con una barra diagonal inversa.  (Es decir, todos los caracteres ASCII que no se ajusten a C</[A-Za-z_0-9]/> serán precedidos por una barra diagonal inversa en la cadena devuelta, con independencia de cualquier configuración regional).
 Esta es la función interna que implementa el escapado de C<\Q> en las cadenas con doble entrecomillado.
 (Vea más abajo para el comportamiento en puntos de código que no son ASCII).
 
