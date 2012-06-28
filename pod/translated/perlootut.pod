@@ -2,7 +2,7 @@
 
 =for comment
 Para aplicar un formato uniforme a este archivo, use:
-  perl ./Porting/podtidy pod/perlsource.pod
+  perl ./Porting/podtidy pod/perlootut.pod
 
 =head1 NOMBRE
 
@@ -14,10 +14,10 @@ Este documento fue creado en febrero de 2011.
 
 =head1 DESCRIPCIÓN
 
-Este documento proporciona una introducción a la programación orientada a objetos en Perl. Comienza con una breve descripción sobre los conceptos relacionados con el diseño orientado a objetos. También introduce varios sistemas diferentes de orientación a objetos presentes en
+Este documento proporciona una introducción a la programación orientada a objetos en Perl. Comienza con una breve descripción sobre los conceptos relacionados con el diseño orientado a objetos. Luego se introduce en varios sistemas diferentes de orientación a objetos presentes en
 L<CPAN|http://search.cpan.org> que se construyen sobre los elementos ofrecidos por Perl.
 
-El sistema de orientación a objetos ofrecido por defecto en Perl es mínimo, dejándole al usuario la mayor parte del trabajo. Este minimalismo tenía sentido en 1994, pero en los años cercanos a Perl 5.0 se han producido muchos patrones comunes en orientación a objetos en Perl. Afortunadamente, la flexibilidad de Perl ha permitido que florezca un rico ecosistema de sistemas orientado a objetos en Perl.
+El sistema de orientación a objetos ofrecido por defecto en Perl es mínimo, dejándole al usuario la mayor parte del trabajo. Este minimalismo tenía sentido en 1994, pero a partir de Perl 5.0 hemos visto emerger un cierto número de patrones comunes en la orientación a objetos en Perl. Afortunadamente, la flexibilidad de Perl ha permitido que florezca un rico ecosistema de sistemas orientado a objetos en Perl.
 
 Si desea conocer el funcionamiento interno de la orientación a objetos en Perl, este documento explica los detalles esenciales.
 
@@ -34,23 +34,18 @@ El sistema de orientación a objetos de Perl se basa en las clases. La orientació
 
 Un B<objeto> es una estructura de datos que empaqueta datos y subrutinas que operan sobre ellos. Los datos de un objeto se denominan B<atributos>, y las subrutinas se denominan B<métodos>. Un objeto puede verse como un nombre (una persona, un servicio web, un ordenador).
 
-Un objeto representa una única cosa. Por ejemplo, un objeto podría representar un archivo. Los atributos de un objeto representando un archivo podrían incluir su ruta, su contenido y la hora de su última modificación. Si se crea un objeto para representar el archivo F</etc/hostname> en una máquina llamada "foo.example.com",
-la ruta del objeto sería "/etc/hostname", su contenido
-"foo\n" y la hora de la última modificación podría ser de 1304974868 segundos desde el principio de la época.
+Un objeto representa una única cosa. Por ejemplo, un objeto podría representar un archivo. Los atributos de un objeto representando un archivo podrían incluir su ruta, su contenido y la hora de su última modificación. Si se crea un objeto para representar el archivo F</etc/hostname> en una máquina llamada "foo.example.com", la ruta del objeto sería "/etc/hostname", su contenido "foo\n" y la hora de la última modificación podría ser de 1304974868 segundos desde el principio de la época.
 
 Los métodos asociados con un archivo podrían incluir C<renombrar()> y
 C<escribir()>.
 
 En Perl la mayoría de los objetos son tablas hash, pero los sistemas de orientación a objetos recomendados evitan tener que preocuparse de estos detalles. En la práctica es mejor considerar opaca la estructura interna de los objetos.
 
-= Head2 Clase
+=head2 Clase
 
 Una B<clase> define el comportamiento de una categoría de objetos. Una clase es un nombre para una categoría (como "Archivo"); una clase también define el comportamiento de los objetos de esa categoría.
 
-Todos los objetos pertenecen a una clase específica. Por ejemplo, nuestro objeto
-F</etc/hostname> pertenece a la clase C<Archivo>. >Cuando se desea construir un objeto específico se comienza con la clase asociada y se B<construye> o
-B<instancia> un objeto. Los objetos específicos se denominan a menudo
-B<instancias> de la clase.
+Todos los objetos pertenecen a una clase específica. Por ejemplo, nuestro objeto F</etc/hostname> pertenece a la clase C<Archivo>. >Cuando se desea construir un objeto específico se comienza con la clase asociada y se B<construye> o B<instancia> un objeto. Los objetos específicos se denominan a menudo B<instancias> de la clase.
 
 En Perl, cualquier paquete puede ser una clase. La diferencia entre un paquete que es una clase y uno que no lo es radica únicamente en cómo se utiliza. Aquí se muestra la "declaración de la clase" C<Archivo>:
 
