@@ -1,10 +1,16 @@
 package POD2::ES;
+use v5.10;
+use base 'POD2::Base';
+
 use warnings;
 use strict;
 
-use base 'POD2::Base';
+use open ':locale';
 
-our $VERSION = '5.16.0.02';
+use base qw(Exporter);
+our @EXPORT = qw(print_pod print_pods);
+
+our $VERSION = '5.16.0.03';
 
 sub search_perlfunc_re {
     return 'Lista de funciones de Perl en orden alfabético';
@@ -28,6 +34,7 @@ sub pod_info {{
     perlhurd          => '5.16.0',
     perlintro         => '5.16.0',
     perlnumber        => '5.16.0',
+    perlootut         => '5.16.0',
     perlopenbsd       => '5.16.0',
     perlpragma        => '5.16.0',
     perlsource        => '5.16.0',
@@ -42,18 +49,38 @@ sub pod_info {{
 
 sub print_pod {
     my $self = shift;
+
     my @args = @_ ? @_ : @ARGV;
 
+    unless (ref $self) {
+        if (defined $self) {
+            if ($self ne __PACKAGE__) {
+                unshift @args, $self;
+                $self = __PACKAGE__;
+            }
+        }
+        else {
+            $self = __PACKAGE__;
+        }
+    }
+
     my $pods = $self->pod_info;
+
     while (@args) {
         (my $pod = lc(shift @args)) =~ s/\.pod$//;
         if ( exists $pods->{$pod} ) {
-            print "\t'$pod' traducido correspondiente a Perl $pods->{$pod}\n";
+            say "\t'$pod' traducido correspondiente a Perl $pods->{$pod}";
         }
         else {
-            print "\t'$pod' todavía no existe\n";
+            say "\t'$pod' todavía no existe";
         }
     }
+}
+
+sub print_pods {
+    my $self = shift // __PACKAGE__;
+
+    $self->SUPER::print_pods;
 }
 
 1;
@@ -66,21 +93,26 @@ POD2::ES - Documentación de Perl en español
 
 =head1 SINOPSIS
 
-  %> perldoc POD2::ES::<nombre_de_pod>	
-
-  use POD2::ES;
-  print_pods();
-  print_pod('pod_foo', 'pod_baz', ...); 
+  %> perldoc POD2::ES::<nombre_de_pod>
 
   %> perl -MPOD2::ES -e print_pods
   %> perl -MPOD2::ES -e print_pod <nombre_de_pod1> <nombre_de_pod2> ...
 
+  use POD2::ES;
+  print_pods();
+  print_pod('pod_foo', 'pod_baz');
+
+  use POD2::ES;
+  my $pod2 = POD2::ES->new();
+  $pod2->print_pods();
+  $pod2->print_pod('perlfunc');
+                                                                                          
+
 =head1 DESCRIPCIÓN
 
-pod2es es el proyecto de traducción al español de la documentación básica de
-Perl. Por su dimensión, es un proyecto a largo plazo.
-
-Vea L<http://github.com/zipf/perldoc-es> para obtener más información.
+Este módulo contiene los documentos revisados hasta la fecha del proyecto de 
+traducción al español de la documentación básica de Perl, que se aloja en 
+L<http://github.com/zipf/perldoc-es>. 
 
 Cuando haya instalado el paquete, puede utilizar el siguiente comando para
 consultar la documentación:
@@ -166,14 +198,6 @@ expresión regular) para omitir la introducción, a fin de que el archivo de
 revisión funcione con otros idiomas con la opción C<-L>, hemos utilizado un
 mecanismo sencillo, similar a un complemento.
 
-El paquete de idioma C<POD2::E<lt>idiomaE<gt>> debe exportar
-C<search_perlfunc_re> para devolver una traducción de la cadena mencionada en
-el párrafo anterior. Esta cadena se usará para omitir la introducción de
-F<perlfunc.pod>. Si C<POD2::E<lt>idiomaE<gt>-E<gt>search_perlfunc_re> genera un
-error (o no existe), se restablece el comportamiento predeterminado. Este
-mecanismo permite agregar traducciones de C<POD2::*> adicionales sin necesidad
-de aplicar cada vez la revisión de F<Pod/Perldoc.pm>.
-
 =back
 
 
@@ -243,7 +267,7 @@ L<http://github.com/zipf/perldoc-es>.
 
 =head1 VEA TAMBIÉN
 
-L<POD2::PT_BR>, L<POD2::IT>, L<POD2::FR>, L<POD2::LT>, L<perl>.
+L<POD2::PT_BR>, L<POD2::IT>, L<POD2::FR>, L<POD2::LT>.
 
 
 =head1 DONATIVOS
