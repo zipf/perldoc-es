@@ -58,7 +58,7 @@ Los metacaracteres son
 
     {}[]()^$.|*+?\
 
-Un metacarácter puede ser buscado poniendo una contrabarra delante de él:
+Un metacarácter puede ser buscado poniendo una barra diagonal inversa delante de él:
 
     "2+2=4" =~ /2+2/;                       # no coincide, + es un metacarácter
     "2+2=4" =~ /2\+2/;                      # coincide, \+ es tratado como un + cualquiera
@@ -127,7 +127,7 @@ El carácter especial C<^> en la primera posición de una clase de caracteres deno
     /[a^]at/;  # coincide con 'aat' o '^at'; aquí, '^' es un carácter normal
 
 Perl tiene varias abreviaturas para las clases de caracteres más comunes. (Estas definiciones son las que usa Perl en el modo seguro ASCII con el modificador C</a>.
-De lo contrario podría coincidir con muchos más caracteres Unicode no ASCII.  Vea L<perlrecharclass/Secuencias con contrabarra> para más detalles).
+De lo contrario podría coincidir con muchos más caracteres Unicode no ASCII.  Vea L<perlrecharclass/Secuencias con barra diagonal inversa> para más detalles).
 
 =over 4
 

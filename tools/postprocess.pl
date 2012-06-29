@@ -10,22 +10,32 @@ use File::Copy;
 use File::Basename;
 use Readonly;
 use Pod::Tidy qw( tidy_files );
-use utf8;
+use Getopt::Long;
+#use Encode;
+#use utf8;
 
-my @names;
+$|++;
 
-if ( $ARGV[0] ) {
+my (@names, $translator);
 
-    while (@ARGV) {
-        my $name = shift @ARGV;
-        push @names, $name;
-    }
+my $result = GetOptions(
+                        "pod=s"   => \@names,
+                        "trans=s" => \$translator,
+                       );
 
-} else {
- 
-    die "Usage: perl postprocess.pl <pod_name1> <pod_name2> ... # e.g., perldata.pod\n";
 
-}
+#if ( $ARGV[0] ) {
+
+#    while (@ARGV) {
+#        my $name = shift @ARGV;
+#        push @names, $name;
+#    }
+
+#} else {
+# 
+#    die "Usage: perl postprocess.pl <pod_name1> <pod_name2> ... # e.g., perldata.pod\n";
+#
+#}
 
 
 # Hard-coded paths relative to /perldoc-es/tools
@@ -39,21 +49,25 @@ Readonly my $DISTR_PATH  => "../POD2-ES/lib/POD2/ES";
 Readonly my $POD_PATH    => "../pod/reviewed";
 Readonly my $CLEANM_PATH => "../../omegat_clean_prj/omegat/project_save.tmx";
 
-# Translators section for POD
-Readonly my $TRANSLATORS_POD => <<'END';
+# read team from __DATA__ section
+my %team;
 
-=head1 TRADUCTORES
+while ( <DATA> ) {
+    chomp;
 
-=over
+    next if '';
 
-=item * Joaquí­n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+    my ($alias, $details) = split /,/;
+   
+    #$alias   = encode("iso-8859-1", $alias);
+    #$details = encode("iso-8859-1", $details);
 
-=item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
+    say $alias;
+    say $details;
 
-=back
+    $team{$alias} = $details;
 
-END
-
+}
 
 
 foreach my $pod_name (@names) {
@@ -110,7 +124,20 @@ foreach my $pod_name (@names) {
 
     $text =~ s/(?<=\.)  (?=[A-Z])/ /g; # two white spaces after full stop
 
-    open my $fixed, '>:encoding(latin-1)', $distr;
+    # Check if there is a =encoding utf8 command
+    my $utf8;
+    $utf8++ if $text =~ /^=encoding utf8/;
+    
+    say "UTF-8-encoded file";
+
+    my $encoding;
+    if ( $utf8 ) {
+        $encoding = "UTF-8";
+    } else {
+        $encoding = "latin-1";
+    }
+
+    open my $fixed, ">:encoding($encoding)", $distr;
     
     if ($readme) {
      
@@ -137,7 +164,7 @@ foreach my $pod_name (@names) {
     if ($readme) {
         
         # Remove added pod formatting from README files 
-        open my $dirty, '<:encoding(latin-1)', $distr;
+        open my $dirty, "<:encoding($encoding)", $distr;
    
         my $text = do { local $/; <$dirty> };
     
@@ -145,7 +172,7 @@ foreach my $pod_name (@names) {
 
         $text =~ s/^=head1 FOO\n\n//;
 
-        open my $fixed, '>:encoding(latin-1)', $distr;
+        open my $fixed, ">:encoding($encoding)", $distr;
 
         print $fixed $text;
 
@@ -154,9 +181,18 @@ foreach my $pod_name (@names) {
 
 
     # Add TRANSLATORS section to distribution file
-    open my $out, '>>:encoding(latin-1)', $distr;
+    open my $out, ">>:encoding($encoding)", $distr;
 
-    print $out $TRANSLATORS_POD;
+    my $translators_section =  "\n=head1 TRADUCTORES\n\n=over\n\n";
+    
+    my @file_team = ("explorer", "zipf"); # default team
+
+    unshift(@file_team, $translator) if $translator;
+    
+    $translators_section .= "=item * $team{$_}\n\n" foreach @file_team;
+    $translators_section .= "=back\n\n";
+    
+    print $out $translators_section;
     
     close $out;
     
@@ -168,3 +204,9 @@ foreach my $pod_name (@names) {
     unlink "$distr~";
 
 }
+
+__DATA__
+j3nnn1,Jennifer Maldonado, C< jcmm986 + POD2ES at gmail.com >
+mgomez,Manuel Gómez Olmedo, C< mgomez + POD2ES at decsai.ugr.es >
+explorer,Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+zipf,Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >   

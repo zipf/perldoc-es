@@ -810,7 +810,7 @@ Si se establece a un valor verdadero, indica al depurador que el código que se e
 =item PERL5SHELL (específico a la adaptación Win32)
 X<PERL5SHELL>
 
-En las adaptaciones Win32, se puede establecer un shell alternativo que Perl debe utilizar internamente para la ejecución de comandos en "comillas invertidas" o system().  Por defecto es C<cmd.exe /x/d/c> en Windows NT y C<command.com /c> en Windows 95.  El valor es considerado que está separado por espacios.  Preceda cualquier carácter que necesite ser protegido, como un espacio o una barra invertida, con otra barra invertida.
+En las adaptaciones Win32, se puede establecer un shell alternativo que Perl debe utilizar internamente para la ejecución de comandos en "comillas invertidas" o system().  Por defecto es C<cmd.exe /x/d/c> en Windows NT y C<command.com /c> en Windows 95.  El valor es considerado que está separado por espacios.  Preceda cualquier carácter que necesite ser protegido, como un espacio o una barra diagonal inversa, con otra barra diagonal inversa.
 
 Tenga en cuenta que Perl no utiliza COMSPEC para este propósito porque COMSPEC tiene un alto grado de variabilidad entre los usuarios, lo que se traduce en problemas de portabilidad.  Además, Perl puede utilizar un shell que no pueda ser apto para el uso interactivo, y el establecimiento de COMSPEC a un shell puede interferir con el buen funcionamiento de otros programas (que sí suelen mirar en COMSPEC para encontrar un shell para el uso interactivo).
 
