@@ -15,8 +15,8 @@ que se ha integrado en FreeBSD 4.6.
 
 =head2 En FreeBSD, $^X no siempre contiene una ruta de acceso completa
 
-perl establece C<$^X> a una ruta completa cuando sea posible preguntando al sistema operativo. En FreeBSD la ruta completa del intérprete perl es encontrada usando C<sysctl> con C<KERN_PROC_PATHNAME>, si está soportado, o leyendo el enlace simbólico F</proc/curproc/file>. FreeBSD 7 y anteriores tienen un error en que esta solución, algunas veces, devuelve un valor incorrecto (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=35703 ).
-En estos casos, perl vuelve al comportamiento anterior (utilizar el valor argv[0] de C en C<$^X>).
+Siempre que es posible, perl establece como valor de C<$^X> una ruta completa; para ello, consulta al sistema operativo. En FreeBSD la ruta completa del intérprete perl es encontrada usando C<sysctl> con C<KERN_PROC_PATHNAME>, si está soportado, o leyendo el enlace simbólico F</proc/curproc/file>. En FreeBSD 7 y versiones anteriores había un error que hacía que, a veces, cualquiera de las dos formas mencionadas de obtener la ruta devolviera un valor incorrecto (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=35703 ).
+En estos casos, perl vuelve al comportamiento anterior (utilizar el valor argv[0] de C como valor de C<$^X>).
 
 =head1 AUTOR
 
