@@ -46,11 +46,11 @@ Las referencias se pueden crear de varias maneras.
 =over 4
 
 =item 1.
-X<\> X<backslash> X<contrabarra>
+X<\> X<backslash> X<barra diagonal inversa>
 
-Al utilizar el operador contrabarra en una variable, subrutina, o un valor.
+Al utilizar el operador barra diagonal inversa en una variable, subrutina, o un valor.
 (Esto funciona como el operador & (dirección-de) en C).  
-Esto normalmente crea I<otra> referencia a una variable, porque ya hay una referencia a la variable en la tabla de símbolos.  Sin embargo, la referencia de la tabla de símbolos podría desaparecer, y usted todavía tendría la referencia que la contrabarra devolvió.  Aquí hay algunos ejemplos:
+Esto normalmente crea I<otra> referencia a una variable, porque ya hay una referencia a la variable en la tabla de símbolos.  Sin embargo, la referencia de la tabla de símbolos podría desaparecer, y usted todavía tendría la referencia que la barra diagonal inversa devolvió.  Aquí hay algunos ejemplos:
 
     $scalarref = \$foo;
     $arrayref  = \@ARGV;
@@ -58,7 +58,7 @@ Esto normalmente crea I<otra> referencia a una variable, porque ya hay una refer
     $coderef   = \&handler;
     $globref   = \*foo;
 
-No es posible crear una verdadera referencia a un gestor de E/S (gestor de archivo o gestor de directorio) utilizando el operador contrabarra.  Lo más que puede conseguir es una referencia a un I<typeglob>, que en realidad es una entrada en la tabla de símbolos.
+No es posible crear una verdadera referencia a un gestor de E/S (gestor de archivo o gestor de directorio) utilizando el operador barra diagonal inversa.  Lo más que puede conseguir es una referencia a un I<typeglob>, que en realidad es una entrada en la tabla de símbolos.
 Sin embargo, vea la explicación de la sintaxis C<*foo{COSA}> más abajo.  Sin embargo, aún puede utilizar I<globs> y I<globrefs> como si fueran gestores de E/S.
 
 =item 2.

@@ -1,0 +1,521 @@
+=encoding utf8
+
+=for comment
+Para aplicar un formato uniforme a este archivo, use:
+  perl ./Porting/podtidy pod/perlootut.pod
+
+=head1 NOMBRE
+
+perlootut - Manual de programación orientada a objetos en Perl
+
+=head1 FECHA
+
+Este documento fue creado en febrero de 2011.
+
+=head1 DESCRIPCIÓN
+
+Este documento proporciona una introducción a la programación orientada a objetos en Perl. Comienza con una breve descripción sobre los conceptos relacionados con el diseño orientado a objetos. Luego se introduce en varios sistemas diferentes de orientación a objetos presentes en
+L<CPAN|http://search.cpan.org> que se construyen sobre los elementos ofrecidos por Perl.
+
+El sistema de orientación a objetos ofrecido por defecto en Perl es mínimo, dejándole al usuario la mayor parte del trabajo. Este minimalismo tenía sentido en 1994, pero a partir de Perl 5.0 hemos visto emerger un cierto número de patrones comunes en la orientación a objetos en Perl. Afortunadamente, la flexibilidad de Perl ha permitido que florezca un rico ecosistema de sistemas orientado a objetos en Perl.
+
+Si desea conocer el funcionamiento interno de la orientación a objetos en Perl, este documento explica los detalles esenciales.
+
+Este documento asume que ya comprende las bases de la sintaxis de Perl, los tipos de variables y las llamadas a subrutinas. De no ser así, por favor, lea primero L<perlintro>. También debería leer los documentos L<perlsyn>, L<perlop> y L<perlsub>.
+
+=head1 FUNDAMENTOS DE LA ORIENTACIÓN A OBJETOS
+
+La mayoría de los sistemas orientados a objetos comparten una serie de conceptos comunes. Probablemente ya habrá oído términos como "clase", "objeto", "método" y "atributo".
+La comprensión de estos conceptos hará más fácil la lectura y escritura de código orientado a objetos. Si ya está familiarizado con estos conceptos, podría pasar esta sección ya que explica cada concepto en términos de la implementación a objetos con Perl.
+
+El sistema de orientación a objetos de Perl se basa en las clases. La orientación a objetos basada en clases en bastante común. Se usa en Java, C++, C#, Python, Ruby y otros muchos lenguajes. También hay otros paradigmas de orientación a objetos. JavaScript es el lenguaje más popular que usa un paradigma diferente. El sistema de orientación a objetos de JavaScript se basa en prototipos.
+
+=head2 Objeto
+
+Un B<objeto> es una estructura de datos que empaqueta datos y subrutinas que operan sobre ellos. Los datos de un objeto se denominan B<atributos>, y las subrutinas se denominan B<métodos>. Un objeto puede verse como un nombre (una persona, un servicio web, un ordenador).
+
+Un objeto representa una única cosa. Por ejemplo, un objeto podría representar un archivo. Los atributos de un objeto representando un archivo podrían incluir su ruta, su contenido y la hora de su última modificación. Si se crea un objeto para representar el archivo F</etc/hostname> en una máquina llamada "foo.example.com", la ruta del objeto sería "/etc/hostname", su contenido "foo\n" y la hora de la última modificación podría ser de 1304974868 segundos desde el principio de la época.
+
+Los métodos asociados con un archivo podrían incluir C<renombrar()> y
+C<escribir()>.
+
+En Perl la mayoría de los objetos son tablas hash, pero los sistemas de orientación a objetos recomendados evitan tener que preocuparse de estos detalles. En la práctica es mejor considerar opaca la estructura interna de los objetos.
+
+=head2 Clase
+
+Una B<clase> define el comportamiento de una categoría de objetos. Una clase es un nombre para una categoría (como "Archivo"); una clase también define el comportamiento de los objetos de esa categoría.
+
+Todos los objetos pertenecen a una clase específica. Por ejemplo, nuestro objeto F</etc/hostname> pertenece a la clase C<Archivo>. >Cuando se desea construir un objeto específico se comienza con la clase asociada y se B<construye> o B<instancia> un objeto. Los objetos específicos se denominan a menudo B<instancias> de la clase.
+
+En Perl, cualquier paquete puede ser una clase. La diferencia entre un paquete que es una clase y uno que no lo es radica únicamente en cómo se utiliza. Aquí se muestra la "declaración de la clase" C<Archivo>:
+
+  package Archivo;
+
+En Perl no hay palabra reservada especial para construir un objeto.
+Sin embargo, la mayoría de los módulos orientados a objetos en CPAN usan el método C<new()> para construir un nuevo objeto:
+
+  my $hostname = Archivo->new(
+      ruta          => '/etc/hostname',
+      contenido       => "foo\n",
+      tiempo_ult_mod => 1304974868,
+  );
+
+(No se preocupe por el operador C<< -> >>; se explicará más adelante).
+
+= Head3 Bendición
+
+Como se ha indicado anteriormente, la mayoría de los objetos de Perl son tablas hash, pero un objeto puede ser una instancia de cualquier tipo de datos de Perl (escalar, matriz, etc). La conversión de una estructura de datos normal en un objeto se realiza mediante B<bendición> de la misma mediante la función <bless> de Perl.
+
+Aunque se recomienda que no construyan objetos a partir de cero, usted debe conocer el término B<bendición> . Una estructura de datos B<dendita> (también conocida como "referente") es un objeto. A veces se dice que un objeto ha sido "bendecido a una clase".
+
+Una vez que un referente ha sido bendecido, la función C<blessed> del módulo
+L<Scalar::Util> indicará el nombre de la clase asociada. Esta subrutina devuelve una clase cuando se pasa como argumento un objeto y falso en otro caso.
+
+  use Scalar::Util 'blessed';
+
+  print blessed($hash);      # undef
+  print blessed($hostname);  # Archivo
+
+=head3 Constructor
+
+Un B<constructor> crea un nuevo objeto. En Perl, los constructores de las clases son otros métodos más; en otros lenguajes de programación hay sintaxis especial para ellos. La mayoría de las clases Perl usan C<new> como nombre del constructor:
+
+  my $archivo = Archivo->new(...);
+
+=head2 Métodos
+
+Ya se ha indicado que un B<método> es una subrutina que opera sobre un objeto. Se puede pensar en un método como en las operaciones que un objeto puede
+I<hacer>. Si se usan nombres para los objetos, para los métodos se emplean verbos (guardar, imprimir, abrir).
+
+En Perl, los métodos no son más que subrutinas que pertenecen al paquete de una clase.
+Los métodos siempre se escriben para recibir al objeto como primer argumento:
+
+  sub imprimir_info {
+      my $self = shift;
+
+      print "Ruta del archivo ", $self->ruta, "\n";
+  }
+
+  $archivo->imprimir_info;
+  # Ruta del archivo /etc/hostname
+
+Lo que hace especiales a los métodos es I<la forma de llamarlos>. El operador flecha (C<< -> >>) le indica a Perl que se está llamando a un método.
+
+Cuando se hace la llamada a un método, Perl hace que el objeto B<llamante> sea pasado como primer argumento. B<Llamante> es un nombre elegante para denotar a lo que se encuentra a la izquierda de la flecha. El llamante puede sert o una clase o un objeto. También pueden pasarse argumentos adicionales al método:
+
+  sub imprimir_info {
+      my $self = shift;
+      my $prefix = shift // "Ruta del archivo ";
+
+      print $prefix, ", ", $self->ruta, "\n";
+  }
+
+  $file->imprimir_info("Ruta del archivo ");
+  # Ruta del archivo /etc/hostname
+
+=head2 Atributos
+
+Cada clase puede definir sus B<atributos>. Cuando se instancia un objeto se asignan valores a sus atributos. Por ejemplo, cada objeto de la clase C<Archivo> tiene su propia ruta. A veces los atributos se denominan también B<propiedades>.
+
+Perl no dispone de sintaxis especial para los atributos. Internamente los atributos a menudo se almacenan como claves en una tabla hash subyacente, pero no debe preocuparse de estos detalles.
+
+Se recomienda que sólo se acceda a los atributos mediante los métodos de B<acceso>.
+Estos son métodos que pueden obtener o fijar el valor de cada atributo. Ya se vio esto antes en el ejemplo C<imprimir_info()>, que llama a C<<
+$self->ruta >>.
+
+También debería consultar los términos B<getter> y B<setter>. Son dos tipos de métodos de acceso. El método "getter" obtiene el valor del atributo, mientras que el método "setter" lo asigna. Otra forma de llamar a un método "setter" es B<mutator>
+
+Los atributos se definen típicamente como de sólo lectura o de lectura escritura. Los atributos de sólo lectura sólo pueden asignarse en el momento en que se crea el objeto; los de lectura y escritura pueden modificarse en cualquier momento.
+
+El valor de un atributo puede ser a su vez otro objeto. Por ejemplo, en lugar de devolver la hora de última modificación como un número, la clase C<Archivo> podría devolver un objeto de clase L<DateTime> para representar a este valor.
+
+Es posible tener una clase donde no pueda modificarse ningún atributo. No todas las clases tienen atributos y métodos.
+
+=head2 Polimorfismo
+
+El B<polimorfismo> es una forma elegante de decir que los objetos de dos clases distintas comparten un API. Por ejemplo, podríamos tener las clases C<Archivo> y
+C<PaginaWeb> que compartan el método C<imprimir_contenido()>. Este método podría producir diferentes salidas para cada clase, pero comparten una interfaz común.
+
+Las dos clases pueden ser distintas por diferentes razones, pero en lo que se refiere el método
+C<imprimir_contenido()> se comportan de la misma forma. Esto significa que podemos intentar llamar al método C<imprimir_contenido()> mediante objetos de ambas clases y
+B<¡y no es preciso saber a qué clase pertenece el objeto!>
+
+El polimorfismo es uno de los conceptos clase en el diseño orientado a objetos.
+
+=head2 Herencia
+
+La B<herencia> permite crear una versión especializada de una clase existente. La herencia permite que las nuevas clases reutilicen los métodos y atributos de otra clase.
+
+Por ejemplo, podríamos crear una clase C<Archivo::MP3> que B<herede>
+de C<Archivo>. Un objeto de la clase C<Archivo::MP3> B<es-un> tipo de objeto I<más específico> que los objetos de la clase C<Archivo>.
+Todos los archivos mp3 son archivos, pero no todos los archivos son archivos mp3.
+
+A menudo se alude a las relaciones de herencia como relaciones B<padre-hijo> o
+C<superclase/subclase>. Algunas veces se dice que la clase hija tiene una relación B<es-un> con sus clases padre.
+
+C<Archivo> es una B<superclase> de C<Archivo::MP3> y C<Archivo::MP3> es una
+B<subclase> de C<Archivo>.
+
+  package Archivo::MP3;
+
+  use parent 'Archivo';
+
+El módulo L<parent> es una de las muchas formas que Perl admite para definir relaciones de herencia.
+
+Perl permite la herencia múltiple: una clase puede heredar de múltiples padres. Aunque esto es posible, se recomienda rotundamente no hacerlo. Generalmente pueden usarse B<roles> para conseguir todo lo ofrecido por la herencia múltiple, pero de forma mucho más clara.
+
+Observe que no hay nada erróneo definiendo múltiples subclases de una clase. Esto es habitual y seguro. Por ejemplo, podríamos definir las clases
+C<Archivo::MP3::FixedBitrate> y C<Archivo::MP3::VariableBitrate> para distinguir entre diferentes tipos de archivos mp3.
+
+=head3 Sobrescritura de métodos y resolución de métodos
+
+La herencia permite que dos clases compartan código. Por defecto, cada método en la clase padre también está disponible en las clases hijas. La clase hija puede B<sobrescribir> un método de la clase padre para ofrecer su propia implementación. Por ejemplo, si tenemos un objeto de la clase C<Archivo::MP3>, hereda
+el método C<imprimir_info()> de la clase C<Archivo>:
+
+  my $caja = Archivo::MP3->new(
+      ruta          => 'mp3s/My-Body-Is-a-Cage.mp3',
+      contenido     => $mp3_data,
+      tiempo_ult_mod => 1304974868,
+      titulo         => 'My Body Is a Cage',
+  );
+
+  $cage->imprimir_info;
+  # Ruta del archivo mp3s/My-Body-Is-a-Cage.mp3
+
+Si deseamos incluir el título mp3 en el saludo se podría sobrescribir el método:
+
+  package Archivo::MP3;
+
+  use parent 'Archivo';
+
+  sub imprimir_info {
+      my $self = shift;
+
+      print "Ruta del archivo ", $self->ruta, "\n";
+      print "El título es ", $self->titulo, "\n";
+  }
+
+  $cage->imprimir_info;
+  # Ruta del archivo mp3s/My-Body-Is-a-Cage.mp3
+  # El titulo es My Body Is a Cage
+
+El proceso de determinar qué método debe usarse se denomina
+B<resolución de métodos>. Perl busca en primer lugar en la clase del objeto (C<Archivo::MP3> en este caso). Si la clase define el método entonces se llama a la versión del método en la misma. Si no, Perl busca en cada clase padre por turno. La única clase padre de C<Archivo::MP3> es C<Archivo>. Si la clase C<Archivo::MP3> no define el método, pero sí lo hace la clase C<Archivo>, entonces Perl llamará al método de la clase C<Archivo>.
+
+Si C<Archivo> hereda de C<OrigenDatos>, que hereda, a su vez, de C<Cosa>,
+entonces Perl debería mirar a la parte superior de la cadena en caso de ser necesario.
+
+Es posible llamar explícitamente a un método de la clase padre desde una clase hija
+
+  package Archivo::MP3;
+
+  use parent 'Archivo';
+
+  sub imprimir_info {
+      my $self = shift;
+
+      $self->SUPER::imprimir_info();
+      print "El título es ", $self->titulo, "\n";
+  }
+
+El bit C<SUPER::> le indica a Perl que busque el método C<imprimir_info()> en la cadena de herencia de la clase C<Archivo::MP3>. Cuando encuentra la clase padre que implementa este método, se llama al método.
+
+Se ha hablado ya de la herencia múltiple. El problema con la herencia múltiple es que complica enormemente la resolución de métodos.
+Consulte L<perlobj> para obtener más información.
+
+=head2 Encapsulación
+
+B<Encapsulación> expresa la idea de que los objetos son opacos. Cuando otros desarrolladores usen su clase no necesitan saber I<cómo> se ha implementado; sólo necesita saber I<qué> hace.
+
+La encapsulación es importante por varias razones. En primer lugar, permite separar la interfaz pública de la implementación privada. Esto indica que se puede cambiar la implementación sin cambiar la interfaz.
+
+En segundo lugar, cuando las clases están bien encapsuladas se hace más fácil la herencia a partir de ellas. Idealmente, una subclase usa la misma interfaz para acceder a los datos del objeto que la usada por la clase base. En realidad, la herencia implica que se viole la encapsulación en la subclase, pero disponer de una buena interfaz minimiza la posibilidad de que esto ocurra.
+
+Ya se ha mencionado previamente que la mayoría de los objetos Perl se implementan internamente como tablas hash. El principio de encapsulación nos indica que esto no deberíamos basarnos en esta característica. En lugar de esto, deberíamos usar métodos de acceso para acceder a los datos en la tabla hash. Los sistemas de orientación a objetos que se recomiendan a continuación automatizan la generación de los métodos de acceso. Si se usa alguno de ellos no será preciso acceder directamente a la tabla hash.
+
+=head2 Composición
+
+Es habitual en el código orientado a objetos que un objeto contenga referencias a otro objeto. Esto se denomina B<composición> o relación B<tiene-un>.
+
+Se ha mencionado previamente que en la clase C<Archivo> el método de acceso al miembro C<tiempo_ult_mod>podría devolver un objeto de la clase L<DateTime>. Este es un ejemplo perfecto de composición. Incluso podría hacerse, avanzando un paso más, que los métodos de acceso a C<ruta> and C<contenido> devolvieran también objetos. La clase C<Archivo> podría estar B<compuesta> de otros objetos diferentes.
+
+=head2 Roles
+
+Los B<roles> representan lo que la clase I<hace> y no lo que la clase I<es>. Los roles son algo relativamente reciente en Perl, pero su uso se ha popularizado. Los roles se B<aplican> a las clases. A veces se dice que las clases B<consumen> roles.
+
+Los roles son una alternativa a la herencia para ofrecer polimorfismo.
+Asumamos que tenemos dos clases: C<Radio> y C<Ordenador>. Ambos aparatos tienen interruptores encendido/apagado. Queremos expresar esto en las definiciones de las clases.
+
+Podríamos hacer que ambas clases heredasen de un padre común, como
+C<Maquina>, aunque no todas las máquinas tienen estos interruptores. Podríamos crear una clase padre llamada C<TieneInterruptor>, pero es algo muy artificial.
+Las radios y los ordenadores no son casos especiales de este padre. Este padre es una creación realmente ridícula.
+
+Aquí es donde entran en juego los roles. Tiene sentido crear un role
+C<TieneInterruptor> y aplicarlo a ambas clases. Este rol podría definir una interfaz conocida ofreciendo los métodos C<encender()> y C<apagar()>.
+
+Perl no dispone de ningún mecanismo para expresar roles. En el pasado, los programadores solían evitar este problema usando herencia múltiple. Ahora hay varias opciones buenas en CPAN para usar roles.
+
+=head2 Cuándo usar orientación a objetos
+
+La orientación a objetos no es la mejor solución para todos los problemas. En en libro I<Perl Best Practices> (derechos de autor 2004, publicado por O'Reilly Media, Inc.) Damian Conway proporciona una lista de criterios para usar a la hora de decidir si la orientación a objetos se ajusta a nuestro problema:
+
+=over 4
+
+=item *
+
+El sistema ha ser diseñado es grande o que pueda llegar a serlo.
+
+=item *
+
+Los datos pueden ser agregados en estructuras obvias, especialmente si hay una gran cantidad de datos en cada agregado.
+
+=item *
+
+Los distintos tipos de datos agregados forman una jerarquía natural que facilita el uso de la herencia y el polimorfismo.
+
+=item *
+
+Tiene un montón de datos a los que se les debe aplicar muchas operaciones diferentes.
+
+=item *
+
+Es necesario llevar a cabo las mismas operaciones generales sobre tipos de datos relacionados, pero con ligeras variaciones dependiendo del tipo específico de datos de las operaciones que se les aplica.
+
+=item *
+
+Es probable que tenga que agregar nuevos tipos de datos más adelante.
+
+=item *
+
+Las interacciones típicas entre partes de los datos están mejor representados por los operadores.
+
+=item *
+
+La implementación de componentes individuales del sistema es probable que cambie con el tiempo.
+
+=item *
+
+El diseño del sistema ya se encuentra orientado a objetos.
+
+=item *
+
+Un gran número de programadores utilizará el código de sus módulos.
+
+=back
+
+=head1 Sistemas orientados a objetos en Perl
+
+Como ya se ha mencionado antes, el sistema de orientación a objetos de Perl es mínimo, pero también muy flexible. A lo largo de los años, muchas personas han desarrollado sistemas que se construyen sobre el sistema predefinido de Perl para proporcionar más características y facilidades.
+
+Se recomienda que use alguno de estos sistemas. Incluso los más simples de ellos eliminan un montón de repeticiones. No hay ningún razón para empezar a escribir sus clases desde cero.
+
+Si está interesado en conocer los detalles de estos sistemas, consulte L<perlobj>.
+
+=head2 Moose
+
+L<Moose> se anuncia a sí mismo como un "sistema postmoderno de orientación a objetos para Perl 5".. No se asuste, la etiqueta "postmoderno" es una referencia a la descripción de Perl debida a Larry: "el primer lenguaje de ordenador postmoderno".
+
+C<Moose> proporciona un completo y moderno sistema de orientación a objetos. Su principal influencia se debe al sistema de orientación a objetos de Common Lisp, pero también toma ideas de Smalltalk y de otros lenguajes. C<Moose> fue creado por Stevan Little y se basa en su trabajo sobre el diseño de orientación a objetos de Perl 6.
+
+Aquí está nuestra clase C<Archivo> usando C<Moose>:
+
+  package Archivo;
+  use Moose;
+
+  has ruta          => ( is => 'ro' );
+  has contenido       => ( is => 'ro' );
+  has tiempo_ult_mod => ( is => 'ro' );
+
+  sub imprimir_info {
+      my $self = shift;
+
+      print "Ruta del archivo ", $self->ruta, "\n";
+  }
+
+C<Moose> proporciona diferentes características:
+
+=over 4
+
+=item * "Azúcar" declarativa
+
+C<Moose> proporciona una capa de "azúcar" declarativa para definir las clases.
+Este azúcar es un conjunto de funciones exportadas que hacen que la declaración de las clases sea más simples y agradable.  Esto permite describir
+I<qué> es la clase, en lugar de tener que decir a Perl I<cómo> implementar la clase.
+
+Las subrutinas C<has()> declara un atributo y C<Moose>
+crea automáticamente los métodos de acceso para ellos. También se preocupa de crear un método C<new()>. Este constructor tiene información sobre los atributos declarados, de forma que puedan asignarse al crear un nuevo C<Archivo>.
+
+=item * Roles predefinidos
+
+C<Moose> permite definir roles de la misma forma en que se definen las clases:
+
+  package TieneInterruptor;
+  use Moose::Role;
+
+  has encendido => (
+      is  => 'rw',
+      isa => 'Bool',
+  );
+
+  sub encender {
+      my $self = shift;
+      $self->encendido(1);
+  }
+
+  sub apagar {
+      my $self = shift;
+      $self->encendido(0);
+  }
+
+=item * Un sistema tipo miniatura
+
+En el ejemplo anterior se aprecia que se pasa un valor C<< isa => 'Bool' >>
+a C<has()> en el momento en que se crear el atributo C<encendido>. Esto le dice a C<Moose> que este atributo debe ser un valor booleano. Si se intenta asignar un valor no válido el código generará un error.
+
+=item * Introspección completa y manipulación
+
+Las características predefinidas de introspección son mínimas. C<Moose>
+se basa en ellas y crea una capa completa de introspección para sus clases. Esto permite contestar a preguntas como "¿qué métodos implementa la clase Archivo?". También permite modificar sus clases mediante programación.
+
+=item * Auto-contenido y extensible
+
+C<Moose> se describe a sí mismo usando su propia interfaz de introspección. Además de ser un truco novedoso, significa que puede extender C<Moose> mediante C<Moose>.
+
+=item * Rico ecosistema
+
+Hay un rico ecosistema de extensiones de C<Moose> en CPAN, bajo el espacio de nombres
+L<MooseX|http://search.cpaThere is a rich ecosystem ofn.org/search?query=MooseX&mode=dist>. Además, muchos módulos de CPAN ya usan C<Moose>,
+lo que ofrece montones de ejemplos de los que aprender.
+
+=item * Muchas más características
+
+C<Moose> es una herramienta muy potente y no pueden cubrirse todas sus características aquí. Le animamos a aprender más mediante la lectura de la documentación de C<Moose>, comenzando con 
+L<Moose::Manual|http://search.cpan.org/perldoc?Moose::Manual>.
+
+=back
+
+Desde luego que C<Moose> no es perfecto.
+
+C<Moose> puede hacer que su código tarde más tiempo en cargar. C<Moose> no es pequeño y genera una I<gran> cantidad de código cuando el usuario define sus propias clases. Este código generado implica que el código de tiempo de ejecución sea lo más eficiente posible, pero tendrá un coste cuando todo este código se cargue por primera vez.
+
+Este incremento en el tiempo de carga puede ser problemático cuando la velocidad de inicio es importante, en scripts de línea de comando o scripts que deban cargarse cada vez que se ejecuten.
+
+Antes de asustarse debe saber que mucha gente usa C<Moose> para construir herramientas de línea de comandos y código con necesidades específicas de tiempo de inicio. Le animamos a probar C<Moose> antes de preocuparse de la velocidad de inicio.
+
+C<Moose> tiene también dependencias con otros módulos. La mayoría son módulos independientes y generados a partir de C<Moose>. C<Moose> y algunas de sus dependencias precisan un compilador. Si debe instalar su software en un sistema sin compilador, o bien si tener I<alguna> dependencia es un problema, entonces C<Moose>
+podría no ser la solución adecuada.
+
+=head3 Mouse
+
+Si prueba C<Moose> y encuentra que algunas de estas características impide su uso, le recomendamos entonces el uso de L<Mouse>.
+C<Mouse> implementa un subconjunto de la funcionalidad de C<Moose> en un paquete
+más simple. La interfaz final es la misma para todas las características que implementa, de forma que es posible cambiar de C<Mouse> a
+C<Moose> de forma sencilla.
+
+C<Mouse> no implementa la mayor parte de la interfaz de introspección de C<Moose>, por lo que la carga de módulos resulta más rápida. Además, todas las dependencias
+I<necesarias> se refieren al núcleo de Perl, de forma que puede ejecutarse sin necesidad de compilador. Si dispone de compilador C<Mouse> lo usará para compilar parte de su código o bien para aumentar la velocidad.
+
+Finalmente, dispone de un módulo C<Mouse::Tiny> que consta de la mayoría de las características de C<Mouse> y que se empaqueta en un único archivo de módulo. Puede copiar este archivo de módulo en el directorio de librerías de su aplicación para facilitar su empaquetamiento.
+
+Los autores de C<Moose> esperan que algún día C<Mouse> puede quedar obsoleto cuando C<Moose> haya mejorado lo suficiente, pero ahora proporciona una sólida alternativa a C<Moose>.
+
+=head2 Class::Accessor
+
+L<Class::Accessor> es el polo opuesto a C<Moose>. Proporciona muy pocas características y tampoco es auto-contenido.
+
+Es, sin embargo, muy simple, Perl puto y no tiene dependencias con nada externo al núcleo. También proporciona una interfaz "estilo-Moose" para las características que admite.
+
+A pesar de todo, es preferible escribir sus propias clases desde cero.
+
+Aquí dispone de la clase C<Archivo> usando C<Class::Accessor>:
+
+  package Archivo;
+  use Class::Accessor 'antlers';
+
+  has ruta          => ( is => 'ro' );
+  has contenido       => ( is => 'ro' );
+  has tiempo_ult_mod => ( is => 'ro' );
+
+  sub imprimir_info {
+      my $self = shift;
+
+      print "Ruta del archivo ", $self->ruta, "\n";
+  }
+
+La bandera de importación C<antlers>  indica a la clase C<Class::Accessor> que desea definir los atributos usando el estilo de sintaxis de C<Moose>. El único parámetro que puede pasar a C<has> es C<is>. Recomendamos el uso del estilo de sintaxis de Moose si elige C<Class::Accessor>, ya que así es más sencillo el trabajo de migración si posteriormente decide usar C<Moose>.
+C<Moose>.
+
+Al igual que C<Moose>, C<Class::Accessor> genera los métodos de acceso y un constructor para sus clases.
+
+=head2 Object::Tiny
+
+También se dispone de L<Object::Tiny>. Este módulo se ajusta realmente a su nombre. Tiene una interfaz de programación realmente mínima y carece de dependencias (con el núcleo o con cualquier otro módulo). Pensamos que es mucho más sencillo de usar que escribir su código orientado a objetos desde cero.
+
+Aquí está nuestra clase C<Archivo> una vez más:
+
+  package Archivo;
+  use Object::Tiny qw( ruta contenido tiempo_ult_mod );
+
+  sub imprimir_info {
+      my $self = shift;
+
+      print "Ruta del archivo ", $self->ruta, "\n";
+  }
+
+¡Eso es todo!
+
+Con C<Object::Tiny> todos los métodos de acceso son sólo de lectura. También genera un constructor y todos los métodos de acceso para los datos miembro que defina.
+
+=head2 Role::Tiny
+
+Como se mencionó con anterioridad, los roles proporcionan un alternativa a la herencia, pero Perl no dispone de soporte propio para esta característica. Si desea usar Moose, dispondrá de una implementación completa de estas características. Sin embargo, si usa alguno de los otros sistemas recomendados, también podrá usar roles con L<Role::Tiny>
+
+C<Role::Tiny> ofrece algunas de las características que el sistema Moose, pero mediante un paquete mucho más pequeño. En particular, no admite ningún tipo de declaración de atributo, por lo que tendrá que hacerlo a mano.
+Aun así es útil y funciona bien con C<Class::Accessor> y
+C<Object::Tiny>
+
+=head2 Resumen del sistema de orientación a objetosSystem Summary
+
+Aquí se ofrece una breve resumen de las opciones consideradas:
+
+=over 4
+
+=item * L<Moose>
+
+C<Moose> es la opción máxima (más completa). Dispone de muchas carac.terísticas, un gran ecosistema y una importante base de usuarios. También se ha considerado brevemente L<Mouse>.
+C<Mouse> es una reducción de  C<Moose> y una alternativa razonable cuando Moose no funciona en su aplicación.
+
+=item * L<Class::Accessor>
+
+C<Class::Accessor> es mucho más reducida que C<Moose> y una alternativa interesante si piensa que C<Moose> es aplastante. Ha sido utilizado durante mucho tiempo y está bien probado en la batalla. También ofrece compatibilidad mínima con el modo C<Moose>, lo que hace que migrar de C<Class::Accessor> a
+C<Moose> sea sencillo.
+
+=item * L<Object::Tiny>
+
+C<Object::Tiny> es la opción absolutamente mínima. No presenta dependencias y casi no hay sintaxis que aprender. Es una buena opción para entornos mínimos y para lanzar el sistema junto con otros sin preocuparse de los detalles.
+
+=item * L<Role::Tiny>
+
+Use C<Role::Tiny> con C<Class::Accessor> o C<Object::Tiny> si desea usar herencia múltiple. Si decide usar
+C<Moose>, dispone de su propia implementación de roles.
+
+=back
+
+=head2 Otros sistemas de orientación a objetos
+
+Hay literalmente docenas de otros módulos orientados a objetos en CPAN, además de los considerados aquí, y es posible que use uno o más de ellos en su propio trabajo o con el código de otros.
+
+Además, hay mucho código que usa orientación a objetos "a mano", usando únicamente las características de orientación a objetos disponibles directamente en Perl. Si necesita mantener código así, debería leer L<perlobj> para comprender exactamente cómo funciona la orientación a objetos ofrecida por Perl.
+
+=head1 CONCLUSIÓN
+
+Como se indicó con anterioridad, el sistema de orientación a objetos de Perl es mínimo y ha hecho que aparezcan muchos sistemas orientados a objetos en CPAN. Aunque puede prescindir de todos ellos y escribir sus propias clases a mano, no hay razón verdadera para hacerlo con las versiones modernas de Perl.
+
+Para sistemas pequeños tanto L<Object::Tiny> como L<Class::Accessor> ofrecen sistemas mínimos que se ocupan de las tareas repetitivas. y simplifican el trabajo.
+
+Para proyectos mayores L<Moose> proporciona un rico conjunto de características que le permitirán centrarse en la implementación de la lógica de su sistema.
+
+Le recomendamos el uso de L<Moose>,
+L<Class::Accessor> yL<Object::Tiny> para comprobar que sistema de orientación a objetos es el adecuado para usted.
+
+=cut
