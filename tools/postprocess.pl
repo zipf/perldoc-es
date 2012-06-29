@@ -11,7 +11,6 @@ use File::Basename;
 use Readonly;
 use Pod::Tidy qw( tidy_files );
 use Getopt::Long;
-#use Encode;
 #use utf8;
 
 $|++;
@@ -24,18 +23,8 @@ my $result = GetOptions(
                        );
 
 
-#if ( $ARGV[0] ) {
-
-#    while (@ARGV) {
-#        my $name = shift @ARGV;
-#        push @names, $name;
-#    }
-
-#} else {
-# 
-#    die "Usage: perl postprocess.pl <pod_name1> <pod_name2> ... # e.g., perldata.pod\n";
-#
-#}
+die "Usage: perl postprocess.pl --pod <pod_name1> <pod_name2> ... [--trans <translator_name>]\n" 
+    unless $names[0];
 
 
 # Hard-coded paths relative to /perldoc-es/tools
@@ -47,25 +36,24 @@ Readonly my $MEM_PATH    => "../../omegat_516/516/omegat/project_save.tmx";
 Readonly my $CLEAN_PATH  => "../../omegat_clean_prj/source";
 Readonly my $DISTR_PATH  => "../POD2-ES/lib/POD2/ES";
 Readonly my $POD_PATH    => "../pod/reviewed";
+Readonly my $WORK_PATH   => "../memory/work/perlspanish-omegat.zipf.tmx";
 Readonly my $CLEANM_PATH => "../../omegat_clean_prj/omegat/project_save.tmx";
 
 # read team from __DATA__ section
 my %team;
 
 while ( <DATA> ) {
+
     chomp;
 
     next if '';
 
-    my ($alias, $details) = split /,/;
+    my ($alias, @details) = split /,/;
    
-    #$alias   = encode("iso-8859-1", $alias);
-    #$details = encode("iso-8859-1", $details);
-
     say $alias;
-    say $details;
+    say @details;
 
-    $team{$alias} = $details;
+    $team{$alias} = $details[0];  # Name
 
 }
 
@@ -103,6 +91,9 @@ foreach my $pod_name (@names) {
 
     # copy work memory to clean project => clean memory
     copy($MEM_PATH, $CLEANM_PATH);
+    
+    # copy work memory to /memory/work and rename it to perlspanish-omegat.zipf.tmx
+    copy($MEM_PATH, $WORK_PATH);
 
     # copy source file to clean project => clean memory
     copy($source, $clean);
@@ -139,7 +130,7 @@ foreach my $pod_name (@names) {
 
     open my $fixed, ">:encoding($encoding)", $distr;
     
-    if ($readme) {
+    if ( $readme ) {
      
         # Add pod formatting to the first paragraph, to help Pod::Tidy 
         print $fixed "=head1 FOO\n\n$text";
@@ -161,7 +152,7 @@ foreach my $pod_name (@names) {
                                          );
 
 
-    if ($readme) {
+    if ( $readme ) {
         
         # Remove added pod formatting from README files 
         open my $dirty, "<:encoding($encoding)", $distr;
@@ -206,7 +197,7 @@ foreach my $pod_name (@names) {
 }
 
 __DATA__
-j3nnn1,Jennifer Maldonado, C< jcmm986 + POD2ES at gmail.com >
-mgomez,Manuel Gómez Olmedo, C< mgomez + POD2ES at decsai.ugr.es >
-explorer,Joaquín Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
-zipf,Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >   
+j3nnn1,Jennifer Maldonado,C< jcmm986 + POD2ES at gmail.com >
+mgomez,Manuel Gómez Olmedo,C< mgomez + POD2ES at decsai.ugr.es >
+explorer,Joaquín Ferrero (Tech Lead),C< explorer + POD2ES at joaquinferrero.com >
+zipf,Enrique Nell (Language Lead),C< blas.gordon + POD2ES at gmail.com >   
