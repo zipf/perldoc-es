@@ -19,8 +19,7 @@ Tenga en cuenta que los ejemplos han sido escritos por muchos autores distintos 
 
 =head2 ¿Qué es Perl?
 
-Perl es un lenguaje de programación de propósito general desarrollado originalmente para la manipulación de texto y que, en la actualidad, se usa para una amplia gama de tareas, como administración de sistemas, desarrollo web, programación de red, 
-desarrollo de interfaces gráficas de usuario, etc.
+Perl es un lenguaje de programación de propósito general desarrollado originalmente para la manipulación de texto y que, en la actualidad, se usa para una amplia gama de tareas, como administración de sistemas, desarrollo web, programación de red, desarrollo de interfaces gráficas de usuario, etc.
 
 El lenguaje se diseñó para ser práctico (fácil de usar, eficaz, completo), más que estético (reducido, elegante, minimalista).  Se caracteriza principalmente por su facilidad de uso (permite programar tanto de manera procedural como orientada a objetos (OO)), su magnífica capacidad para procesamiento de texto y por tener una de las colecciones de módulos de terceros más impresionantes del mundo.
 
@@ -200,7 +199,7 @@ Una referencia es un valor escalar que puede apuntar a cualquier tipo de datos d
 
     my $variables = {
         escalar  =>  {
-                     descripcion => "elemento invidivual",
+                     descripcion => "elemento individual",
                      sigilo => '$',
                     },
         array   =>  {
@@ -239,7 +238,7 @@ Sin embargo, el uso anterior creará variables globales en todo el programa, algo
     print $x;               # imprime "foo" en pantalla
     print $y;               # no imprime nada; $y está fuera del ámbito
 
-Si escribe C<use strict;> al principio de los scripts de Perl y usa C<my>, el intérprete detectará determinados errores frecuentes de programación.  Así, en el ejemplo anterior, la última instrucción C<print $y> provocará una error en tiempo de compilación que impedirá la ejecución del programa.  Es muy recomendable usar C<strict>.
+Si escribe C<use strict;> al principio de los scripts de Perl y usa C<my>, el intérprete detectará determinados errores frecuentes de programación.  Así, en el ejemplo anterior, la última instrucción C<print $y> provocará un error en tiempo de compilación que impedirá la ejecución del programa.  Es muy recomendable usar C<strict>.
 
 =head2 Estructuras condicionales y de bucle
 

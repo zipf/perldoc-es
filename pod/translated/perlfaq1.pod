@@ -18,7 +18,7 @@ Por estas cualidades es muy popular entre los desarrolladores de sitios web y lo
 
 =head2 ¿Quién respalda a Perl? ¿Quién lo desarrolla? ¿Por qué es gratis?
 
-La cultura de Internet existente antes de que "la red" se convirtiera en un fenómeno de masas, y las firmes convicciones de Larry Wall, el creador de Perl, dieron lugar a la política de distribución libre y abierta de perl. El soporte de Perl lo ofrecen sus usuarios. El núcleo, la biblioteca Perl estándar, los módulos opcionales y esta documentación han sido desarrollados por voluntarios.
+La cultura de Internet existente antes de que "la red" se convirtiera en un fenómeno de masas, y las firmes convicciones de Larry Wall, el creador de Perl, dieron lugar a la política de distribución libre y abierta de perl. El soporte de Perl lo ofrecen sus usuarios. Los componentes del núcleo, la biblioteca Perl estándar, los módulos opcionales y esta documentación han sido desarrollados por voluntarios.
 
 El equipo de desarrollo principal (denominado Perl Porters) está integrado por un grupo de personas de gran altruismo, dedicadas a producir gratuitamente software de mejor calidad que el que se podría obtener pagando. Si desea curiosear los desarrollos pendientes, puede consultar el L<archivo de mensajes de la lista de correo|http://www.nntp.perl.org/group/perl.perl5.porters/> o leer las L<preguntas más frecuentes|http://dev.perl.org/perl5/docs/p5p-faq.html>. También puede suscribirse a la lista de correo enviando una solicitud de suscripción a perl5-porters-subscribe@perl.org (solo tiene que enviar un mensaje vacío sin asunto).
 
@@ -31,7 +31,7 @@ Si lo desea, puede obtener soporte comercial para Perl, pero a la mayoría de los
 (contribución de brian d foy)
 
 Esto suele ser una cuestión de opinión y gusto, y no hay una respuesta definitiva para todos. En general, conviene usar la versión estable actual o la versión estable inmediatamente anterior.
-En la actualidad, éstas son perl5.14.x y perl5.12.x respectivamente.
+En la actualidad, éstas son perl5.16.x y perl5.14.x respectivamente.
 
 Si desea usar otras versiones, para decidir cuál es la que más le conviene debe tener en cuenta varias cosas, como las siguientes:
 
@@ -60,7 +60,7 @@ Las versiones más recientes suelen estar menos implementadas y probadas. Si no l
 
 =item *
 
-Las versiones anteriores más recientes (en este caso, perl5.10.x) suelen mantenerse durante un tiempo, aunque en menor medida que las versiones actuales.
+Las versiones anteriores más recientes (en este caso, perl5.14.x) suelen mantenerse durante un tiempo, aunque en menor medida que las versiones actuales.
 
 =item *
 
@@ -111,8 +111,7 @@ Ocasionalmente, el equipo de desarrollo de Perl realizan cambios en los componen
 
 No. Es fácil L<adquirir los conocimientos básicos|http://learn.perl.org/>; y también lo es seguir aprendiendo. Perl se parece a la mayoría de los lenguajes de programación con los que es probable que tenga experiencia, por lo que si ya ha escrito programas en C, scripts en awk o de shell, o incluso un programa en BASIC, no le costará adaptarse.
 
-La mayoría de las tareas sólo requieren conocer un pequeño subconjunto del lenguaje Perl. Uno de los lemas que dirigen el desarrollo de Perl es "se puede hacer de varias maneras", que es la traducción de "there's more than one way
-to do it" (o TMTOWTDI, que en inglés se pronuncia como "tim toady"). Así, la curva de aprendizaje de Perl tiene una pendiente suave (es fácil de aprender) y larga (si desea seguir profundizando, puede aprender a hacer muchas cosas).
+La mayoría de las tareas solo requieren conocer un pequeño subconjunto del lenguaje Perl. Uno de los lemas que guían el desarrollo de Perl es "se puede hacer de varias maneras", que es la traducción de "there's more than one way to do it" (o TMTOWTDI, que en inglés se pronuncia como "tim toady"). Así, la curva de aprendizaje de Perl tiene una pendiente suave (es fácil de aprender) y larga (si desea seguir profundizando, puede aprender a hacer muchas cosas).
 
 Por último, como Perl es frecuentemente un lenguaje interpretado (aunque no siempre y, desde luego, no por definición), puede escribir sus programas y probarlos sin un paso de compilación intermedia, lo que le permite experimentar y probar/depurar de manera rápida y sencilla. Esta facilidad para realizar experimentos también allana la curva de aprendizaje.
 
@@ -133,7 +132,7 @@ Para comparar con un lenguaje específico, lo mejor suele ser crear un proyecto p
 Por su flexibilidad y capacidad de ampliación, Perl se puede usar prácticamente para cualquier tarea, desde el procesamiento de archivos en una línea hasta el desarrollo de sistemas grandes y complejos.
 
 Para muchas personas, Perl es un buen sustituto de los scripts de shell.
-Para otros, es un cómodo sustituto de alto nivel para la mayor parte de los programas que desarrollarían en lenguajes de bajo nivel como C o C++. En última instancia, el usuario (y posiblemente sus jefes) deberán decidir para qué tareas pueden usar Perl, y para cuáles no.
+Para otros, es un cómodo sustituto de alto nivel para realizar la mayor parte de los programas que desarrollarían en lenguajes de bajo nivel como C o C++. En última instancia, el usuario (y posiblemente sus jefes) deberán decidir para qué tareas pueden usar Perl, y para cuáles no.
 
 Si tiene una biblioteca que proporciona una API, puede hacer que cualquier componente de la misma esté disponible como cualquier otra función o variable de Perl mediante una extensión programada en C o C++, y vinculada dinámicamente al intérprete perl principal. También puede optar por trabajar en sentido contrario: desarrollar el programa principal en C o C++, y después vincular código Perl sobre la marcha para crear una aplicación eficaz. Vea L<perlembed>.
 
@@ -151,7 +150,7 @@ Si necesita acelerar una parte específica de una aplicación Perl (algo que norma
 El nombre del intérprete (el programa que ejecuta el script Perl)
 es "perl" (se escribe con "p" minúscula).
 
-Usted puede elegir adoptarla o no. Pero no debe escribir "PERL", ya que perl no es un acrónimo.
+Puede elegir seguir esta convención o no, Pero no debe escribir "PERL", ya que perl no es un acrónimo.
 
 =head2 ¿Qué es un JAPH?
 
@@ -171,7 +170,7 @@ En CPAN encontrará varios programas JAPH, en L<http://www.cpan.org/misc/japh>.
 
 Hágales ver que es por su propio interés. Si nunca han utilizado Perl y se sienten inseguros, busque alguna tarea en la que Perl les pueda ayudar. Esta ayuda puede implicar un ahorro (de tiempo, dinero o dolores de cabeza) o una aportación (en forma de flexibilidad, eficacia o facilidad para realizar pruebas).
 
-En general, las ventajas que ofrece un lenguaje están muy relacionadas con la destreza de los usuarios del lenguaje. Si con Perl usted y su equipo pueden desarrollar de manera más rápida y mejor, su productividad aumentará. Recuerde que las personas suelen ser más receptivas cuando reciben algo. Si le oponen resistencia, averigüe qué necesitan y hágales ver en qué medida Perl podría cubrir sus necesidades.
+En general, las ventajas que ofrece un lenguaje están muy relacionadas con la destreza de los usuarios del lenguaje. Si con Perl usted y su equipo pueden desarrollar de manera más rápida y mejor, su productividad aumentará. Recuerde que las personas suelen ser más receptivas cuando algo les proporciona un beneficio. Si le oponen resistencia, averigüe qué necesitan y hágales ver en qué medida Perl podría cubrir sus necesidades.
 
 No tiene que preocuparse de buscar o pagar por usar Perl; está disponible gratuitamente y varios sistemas operativos populares lo incluyen. La comunidad ofrece soporte en foros como Perlmonks ( L<http://www.perlmonks.com> )
 y las distintas listas de correo de Perl ( L<http://lists.perl.org> ). Generalmente, siempre que plantee algún problema recibirá rápidamente ayuda para solucionarlo.
