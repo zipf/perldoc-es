@@ -1,0 +1,910 @@
+=head1 NOMBRE
+
+perldata - Tipos de datos de Perl
+
+=head1 DESCRIPCIÓN
+
+=head2 Nombres de variables
+X<variable, name> X<variable name> X<data type> X<type>
+X<variable, nombre> X<nombre de variable> X<tipo de datos> X<tipo>
+
+Perl tiene tres tipos de datos predefinidos: escalares, arrays de escalares y
+arrays asociativos de escalares (denominados "hashes"). Un escalar es una
+cadena (de cualquier tamaño, limitado únicamente por la memoria disponible), un
+número o una referencia a algo (las referencias se describen en L<perlref>).
+Los arrays normales son listas ordenadas de escalares indexadas por números,
+empezando por 0. Los hashes son colecciones no ordenadas de valores escalares
+indexadas por sus claves asociadas, que son cadenas de caracteres.
+
+A los valores se accede normalmente por su nombre, o a través de una referencia
+con nombre. El primer carácter del nombre nos indica el tipo de la estructura
+de datos. El resto del nombre indica a qué valor concreto se accede.
+Normalmente, este nombre es un I<identificador>, es decir, una palabra que
+comienza por una letra o un guión bajo, y que contiene letras, guiones bajos o
+dígitos. En ciertos casos, puede ser una serie de identificadores separados por
+C<::> (o por el separador C<'>, algo anticuado), donde todos los
+identificadores menos el último se interpretan como nombres de paquetes que
+determinan el espacio de nombres en el que se buscará el identificador final
+(encontrará más detalles en la sección "Paquetes" de L<perlmod>). También es
+posible sustituir un identificador simple por una expresión que produzca una
+referencia al valor en tiempo de ejecución. Esto se describe con mayor
+detalle más abajo y en L<perlref>. X<identifier> X<identificador>
+
+Perl también tiene sus propias variables predefinidas, cuyos nombres no siguen
+estas reglas. Estas variables tienen nombres extraños para evitar conflictos
+accidentales con las variables normales. Las cadenas que coinciden con las
+partes encerradas entre paréntesis de una expresión regular se guardan con
+nombres que contienen solo dígitos después del símbolo C<$> (véase L<perlre> y
+L<perlop>). Por otra parte, varias variables especiales que proporcionan acceso
+al medio interno de Perl tienen nombres que contienen caracteres de puntuación
+y caracteres de control. Se describen en L<perlvar>. X<variable, built-in>
+X<variable, predefinida>
+
+Si un nombre de variable empieza por "$", indica que la variable contiene un
+valor escalar; puede ser un escalar que forma parte de un array o un hash.
+Desde el punto de vista semántico, el signo "$" desempeña la misma función que
+la palabra "el" o "la" en español; es decir, indica que se espera un único
+valor. X<scalar> X<escalar>
+
+    $jornadas        # el valor escalar único llamado "jornadas"
+    $jornadas[28]    # el elemento número 29 del array @jornadas
+    $jornadas{'Feb'} # el valor 'Feb' del hash %jornadas
+    $#jornadas       # el último índice del array @jornadas
+
+Se usa el carácter "@" para indicar que una variable es un array completo (o
+una porción de array o hash). Funciona de manera parecida a las palabras
+"estos/estos" o "estas/esas" del español, que indican que se esperan múltiples
+valores. X<array>
+
+    @jornadas		# ($jornadas[0], $jornadas[1],... $jornadas[n])
+    @jornadas[3,4,5]	# igual que ($jornadas[3],$jornadas[4],$jornadas[5])
+    @jornadas{'a','c'}	# igual que ($jornadas{'a'},$jornadas{'c'})
+
+Para designar variables que contienen hashes completos, se usa el carácter "%":
+X<hash>
+
+    %jornadas		# (clave1, valor1, clave2, valor2 ...)
+
+Por otra parte, se usa el carácter "&" para designar subrutinas, aunque esto es
+opcional cuando no haya ambigüedad, igual que el sujeto de una frase en español
+es a menudo redundante cuando va implícito en el verbo, como en "(yo) tengo lo
+que usted necesita". Las entradas de la tabla de símbolos pueden designarse con
+un carácter "*" inicial, aunque no hace falta que se preocupe por esto de
+momento (y quizá no tenga que hacerlo nunca:-)).
+
+Cada tipo de variable tiene su propio espacio de nombres, al igual que otros
+tipos de identificadores que no designan variables. Esto significa que se puede
+utilizar el mismo nombre para una variable escalar, un array o un hash sin que
+se produzcan conflictos; o, por la misma razón, se puede utilizar el mismo
+nombre para un identificador de archivo, un identificador de directorio, el
+nombre de una subrutina, un nombre de formato o una etiqueta. Esto quiere decir
+que $foo y @foo son dos variables distintas. También significa que C<$foo[1]>
+forma parte de @foo, no de $foo. Esto puede parecerle un poco raro, pero no
+debe preocuparse: es raro. X<namespace> X<espacio de nombres>
+
+Puesto que los nombres de variables siempre empiezan por "$", "@" o "%", las
+palabras "reservadas", de hecho, no están reservadas con respecto a los nombres
+de variables. Sin embargo, I<sí están reservadas> con respecto a las etiquetas
+y los identificadores de archivo, ya que los nombres de estos no requieren usar
+un carácter especial inicial. Por ejemplo, no se puede usar un identificador de
+archivo llamado "log". Un consejo: es mejor escribir C<open(LOG,'archivo_log')>
+que C<open(log,'archivo_log')>. El uso de identificadores de archivo en
+mayúsculas mejora la legibilidad de los programas y les protege de conflictos
+con futuras palabras reservadas. Se distinguen mayúsculas de minúsculas: "FOO",
+"Foo" y "foo" se consideran nombres diferentes. Los nombres que empiezan por
+una letra o un guión bajo pueden incluir también dígitos y otros guiones bajos.
+X<identifier, case sensitivity> X<case> X<identificador, distinguir mayúsculas
+de minúsculas> X<mayúsculas y minúsculas>
+
+Es posible sustituir cualquier nombre alfanumérico por una expresión que
+devuelva una referencia al tipo apropiado. Encontrará una descripción de esto
+en L<perlref>.
+
+Los nombres que comienzan con un dígito solo pueden contener otros dígitos. Los
+nombres que no empiecen por una letra, un guión bajo, un dígito o el símbolo de
+intercalación "^" (es decir, un carácter de control) están limitados a un solo
+carácter, como por ejemplo C<$%> o C<$$> (la mayor parte de estos nombres de
+un solo carácter tienen un significado predefinido para Perl; por ejemplo,
+C<$$> es el ID del proceso actual).
+
+=head2 Contexto
+X<context> X<scalar context> X<list context> X<contexto> X<contexto de escalar> X<contexto de lista>
+
+La interpretación de las operaciones y los valores en Perl depende a veces de
+las necesidades del contexto en el que se encuentra la operación o el valor.
+Hay dos tipos principales de contexto: lista y escalar. Algunas operaciones
+devuelven una lista de valores en contextos que esperan una lista, y un valor
+escalar en caso contrario. Si esto es así para una operación determinada, se
+indicará en la documentación correspondiente a esa operación. Es decir, Perl
+sobrecarga ciertas operaciones basándose en si el valor de retorno esperado es
+singular o plural. Existen algunas palabras en español que funcionan de esa
+manera, como "crisis", "ciempiés" o "lunes", que se usan como singular o plural
+en función del contexto.
+
+De forma recíproca, cualquier operación establece un contexto de escalar o un
+contexto de lista para cada uno de sus argumentos. Por ejemplo, si escribe
+
+    int( <STDIN> )
+
+la operación int establece un contexto de escalar para el operador <>, que
+responde leyendo una sola línea de STDIN y pasándosela a la operación int, que
+a su vez calcula el valor entero de esa línea y lo devuelve. Por otra parte, si
+escribe
+
+    sort( <STDIN> )
+
+entonces la operación sort establece un contexto de lista para <>, el cual
+procede a leer todas las líneas disponibles hasta alcanzar el final del
+archivo, y pasa esa lista de líneas a la subrutina sort, que ordena las líneas
+y las devuelve como una lista al contexto en que se use sort.
+
+La asignación es un poco especial en el sentido de que utiliza el argumento de
+la izquierda para determinar el contexto del argumento de la derecha. La
+asignación a un escalar evalúa lo que hay en el lado derecho en contexto de
+escalar, mientras que la asignación a un array o a un hash evalúa el lado
+derecho en contexto de lista. La asignación a una lista (o a una porción, que
+también es una lista después de todo) también evalúa el lado derecho en
+contexto de lista.
+
+Si se utiliza el pragma C<use warnings> o la opción de línea de comandos B<-w>,
+pueden aparecer advertencias sobre el uso inútil de constantes o funciones en
+contexto vacío ("I<void>"). El contexto vacío significa simplemente que se ha
+descartado el valor, como por ejemplo en una instrucción que consista
+únicamente en una cadena (p. ej., C<"alfredo";>) o una llamada a función (p.
+ej., C<getpwuid(0);>). Cuenta como contexto de escalar para las funciones a las
+que les interesa saber si han sido llamadas en contexto de lista o no.
+
+Para las subrutinas definidas por el usuario existe la opción de considerar si
+la llamada se realiza en contexto vacío, escalar o de lista. Sin embargo, no es
+necesario para la mayoría de las subrutinas. Esto se debe a que ambos tipos,
+escalares y listas, se interpolan automáticamente en listas. Para saber cómo se
+puede averiguar dinámicamente el contexto de llamada de una función, vea la
+sección sobre C<wantarray> de L<perlfunc>.
+
+=head2 Valores escalares
+X<scalar> X<number> X<string> X<reference> X<escalar> X<número> X<cadena> X<referencia>
+
+En Perl, todos los elementos de datos son escalares, arrays de escalares o
+hashes de escalares. Un escalar puede contener un único valor perteneciente a
+uno de tres tipos posibles: número, cadena o referencia. En general, la
+conversión de un tipo a otro es transparente. Aunque un escalar no puede
+contener directamente múltiples valores, podría contener una referencia a un
+array o un hash, que sí pueden contener múltiples valores.
+
+Los escalares no tienen que ser necesariamente una cosa u otra. No hay ninguna
+forma de declarar que una variable escalar sea de tipo "cadena", "número",
+"referencia" o cualquier otra cosa. Como la conversión de escalares es
+automática, las operaciones que los devuelven no necesitan tener en cuenta (y,
+de hecho, no pueden hacerlo) si el autor de la llamada espera una cadena, un
+número o una referencia. Perl es un lenguaje contextualmente polimórfico, cuyos
+escalares pueden ser cadenas, números o referencias (entre las que se incluyen
+los objetos). Aunque las cadenas y los números se consideran prácticamente la
+misma cosa para la mayoría de los propósitos, las referencias son punteros no
+convertibles y fuertemente tipados, que llevan un contador de referencias
+incorporado y una invocación al destructor.
+
+Un valor escalar se interpreta como FALSO, en el sentido booleano, si está
+indefinido, es la cadena nula o el número 0 (o su cadena equivalente, "0"), y
+como VERDADERO si es cualquier otra cosa. El contexto booleano es simplemente
+un tipo especial de contexto de escalar para el cual no se realiza ninguna
+conversión a cadena o a número. X<boolean> X<bool> X<true> X<false> X<truth>
+X<booleano> X<verdadero> X<falso> X<verdad>
+
+En realidad hay dos variantes de cadena nula (a las que algunas veces llamamos
+cadenas "vacías"): una definida y otra indefinida. La versión definida es solo
+una cadena de longitud cero, como C<"">. La versión indefinida es el valor que
+indica que no existe ningún valor real para algo, como cuando se produce un
+error, se alcanza el final de un archivo, o cuando se hace referencia a una
+variable o un elemento de array o hash no inicializados. Aunque en las
+versiones anteriores de Perl un escalar no definido podía llegar a ser definido
+la primera vez que se usaba en cualquier lugar que esperase un valor definido,
+esto ya no es así, salvo en los raros casos de "autovivificación" que se
+describen en L<perlref>. Se puede usar el operador defined() para determinar si
+un valor escalar está definido (no tiene sentido aplicar esto a arrays o
+hashes), y el operador undef() para producir un valor no definido. X<defined>
+X<definido> X<undefined> X<indefinido> X<undef> X<null> X<nulo> X<string, null>
+X<cadena, nulo>
+
+Para averiguar si una cadena determinada es un número válido distinto de cero,
+a veces basta con compararla con el 0 numérico y también con el "0" léxico
+(aunque esto provocará ruido si las advertencias están activadas). La razón de
+esto es que las cadenas que no son números cuentan como 0, igual que en B<awk>:
+
+    if ($str == 0 && $str ne "0")  {
+	warn "Esto no parece un número";
+    }
+
+Este método puede ser mejor, ya que de otro modo no se pueden tratar notaciones
+IEEE como C<Nan> o C<Infinity>. En otros casos, es posible que sea preferible
+determinar si se puede usar una cadena de datos numéricamente llamando a la
+función POSIX::strtod() o inspeccionando la cadena con una expresión regular
+(como se explica en L<perlre>).
+
+    warn "contiene caracteres que no son dígitos" if /\D/;
+    warn "no es número natural" unless /^\d+$/;             # rechaza -3
+    warn "no es un entero"      unless /^-?\d+$/;           # rechaza +3
+    warn "no es un entero"      unless /^[+-]?\d+$/;
+    warn "no es número decimal" unless /^-?\d+\.?\d*$/;     # rechaza .2
+    warn "no es número decimal" unless /^-?(?:\d+(?:\.\d*)?|\.\d+)$/;
+    warn "no es flotante en C"
+	unless /^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/;
+
+El número de elementos (que llamaremos "longitud") de un array es un valor
+escalar. Para conocer la longitud del array @jornadas, puede evaluar
+C<$#jornadas>, como en B<csh>. Sin embargo, esto no es el número de elementos
+del array, sino el subíndice del último elemento, que es un valor distinto, ya
+que normalmente hay un elemento número 0. Asignar un valor a C<$#jornadas>
+cambia la longitud del array. Acortar un array de esta forma destruye los
+valores involucrados. Alargar un array que ha sido acortado previamente no
+permite recuperar los valores que había en esos elementos (esto se hacía en
+Perl 4, pero tuvimos que suprimir esta característica para asegurarnos de que
+se llamara a los destructores en el momento esperado). X<$#> X<array, length>
+X<array, longitud>
+
+También se puede obtener un pequeño aumento de eficiencia ampliando previamente
+un array que va a crecer. Otra forma de ampliar un array es hacer una
+asignación a un elemento que esté más allá del final del array. Para truncar un
+array y dejarlo vacío, puede asignarle la lista nula (). Las instrucciones
+siguientes son equivalentes:
+
+    @algo = ();
+    $#algo = -1;
+
+Si se evalúa un array en contexto de escalar, el valor devuelto es la longitud
+del array (tenga en cuenta que esto no es cierto para las listas, que
+devuelven el último valor, como el operador coma de C; tampoco es cierto para
+las funciones predefinidas, que devuelven lo que les parezca mejor devolver).
+La siguiente expresión siempre es verdadera:
+
+X<array, length> X<array, longitud>
+
+    scalar(@algo) == $#algo + 1;
+
+Algunos programadores eligen usar una conversión explícita para que no haya
+ninguna duda:
+
+    $contador_elementos = scalar(@algo);
+
+Si se evalúa un hash en contexto de escalar, devuelve falso si el hash está
+vacío. Si contiene algún par clave/valor, devuelve verdadero; dicho con mayor
+exactitud, el valor devuelto es una cadena que consiste en el número de
+casillas utilizadas y el número de casillas asignadas, separados por una barra
+diagonal. Esto solo es útil para averiguar si el algoritmo interno de
+almacenamiento en hash de Perl está teniendo un bajo rendimiento para un
+conjunto de datos. Por ejemplo, si insertamos 10 000 valores en un hash, pero
+al evaluar %HASH en contexto de escalar nos devuelve C<"1/16">, significa que
+solo se ha ocupado una de dieciséis casillas, que probablemente contiene los 10
+000 elementos. Se supone que esto no debe de ocurrir. Si se evalúa un hash
+enlazado en contexto de escalar, se llama al método C<SCALAR> (con una
+retrollamada a C<FIRSTKEY>). X<hash, scalar context> X<hash, contexto de
+escalar> X<hash, bucket> X<hash, casilla> X<bucket> X<casillas>
+
+Puede reservar espacio para un hash mediante una asignación a la función
+keys(). Esto redondea el número de casillas reservadas a la siguiente potencia
+de dos:
+
+    keys(%usuarios) = 1000;		# asigna 1024 casillas
+
+=head2 Constructores de valores escalares
+X<scalar, literal> X<scalar, constant> X<escalar, literal> X<escalar, constante>
+
+Los literales numéricos se especifican en cualquiera de los siguientes formatos
+de punto flotante o entero:
+
+    12345
+    12345.67
+    .23E-10             # un número muy pequeño
+    3.14_15_92          # un número muy grande
+    4_294_967_296       # guión bajo para mejor legibilidad
+    0xff                # hex
+    0xdead_beef         # más hex   
+    0377                # octal (solo números, a partir de 0)
+    0b011011            # binario
+
+Está permitido el uso de guiones bajos (caracteres de subrayado) entre dígitos
+en literales numéricos para mejorar la legibilidad (pero no se permite usar
+varios guiones bajos seguidos: C<23__500> no es válido; C<23_500>, sí). Por
+ejemplo, puede agrupar los dígitos binarios en grupos de tres (como para un
+argumento de modo estilo Unix, p. ej., 0b110_100_100) o de cuatro (para
+representar nibbles, como en 0b1010_0110), o bien en grupos de otros tamaños.
+X<number, literal> X<número, literal>
+
+Los literales de cadena se suelen delimitar con comillas simples o dobles.
+Estas comillas funcionan de forma muy parecida a las comillas en las shell
+estándar de Unix: los literales de cadena entre comillas dobles están sujetos
+al uso de la barra diagonal inversa y la sustitución de variables; en cambio,
+las cadenas entre comillas simples no lo están (a excepción de C<\'> y C<\\>).
+Se aplican las reglas normales de barra diagonal inversa estilo C para crear
+caracteres como el salto de línea, tabulaciones, etc., y algunas formas más
+exóticas. Encontrará una lista en la sección "Comillas y operadores de
+comillas" de L<perlop>. X<string, literal> X<cadena, literal>
+
+Las representaciones hexadecimales, octales o binarias en cadenas literales
+(por ejemplo, '0xff') no se convierten automáticamente en su representación en
+enteros. Las funciones hex() y oct() hacen estas conversiones. Vea "hex" y
+"oct" en L<perlfunc> para obtener más información.
+
+También puede incrustar directamente caracteres de nueva línea en las cadenas;
+es decir, las cadenas pueden terminar en una línea distinta. Esto está bien,
+pero si se le olvida cerrar el entrecomillado, no se notificará el error hasta
+que Perl encuentre otra línea que contenga el carácter de comilla, que puede
+estar mucho más abajo en el programa. La sustitución de variables dentro de
+cadenas se limita a variables escalares, arrays y porciones de array o hash 
+(es decir, los nombres que empiezan por $ o @, seguidos de una expresión
+opcional de subíndice entre corchetes). El segmento de código siguiente imprime
+en pantalla "El precio es $100". X<interpolation> X<interpolación>
+
+    $precio = '$100';                 # no se interpola
+    print "El precio es $precio.\n";  # se interpola
+
+No hay doble interpolación en Perl, por lo que C<$100> queda tal como está.
+
+De forma predeterminada, los números de punto flotante sustituidos dentro de
+cadenas usan el punto (".") como separador decimal. Si C<use locale> está
+activo y se llama a POSIX::setlocale(), la configuración regional LC_NUMERIC
+determina el carácter que se utiliza como separador decimal. Vea L<perllocale>
+y L<POSIX>.
+
+Al igual que en algunos entornos de líneas de comandos, puede escribir el
+nombre de la variable entre llaves para eliminar la ambigüedad de los
+ulteriores caracteres alfanuméricos (y guiones bajos). También debe hacer esto
+al interpolar una variable en una cadena para separar el nombre de una variable
+de un signo de dos puntos doble o un apóstrofo, a fin de evitar que se traten
+como separadores de paquete: X<interpolation> X<interpolación>
+
+    $usuario = "Larry";
+    print PASSWD "${usuario}::0:0:Superuser:/:/bin/perl\n";
+    print "Pasamos a hablar en el idiolecto ${usuario}nés cuando el australiano chilla '${usuario}'s coming!'.\n";
+
+Sin las llaves, Perl buscaría las variables $usuarionés, C<$usuario::0> y
+C<$usuario's>. Las dos últimas serían las variables $0 y $s del paquete
+C<usuario>, que probablemente no exista.
+
+De hecho, cuando se escribe un identificador entre llaves, se le fuerza a ser
+una cadena, como cualquier identificador en un subíndice de hash. En ninguno de
+estos casos hay que usar comillas. En un ejemplo anterior, C<$jornadas{'Feb'}>
+puede escribirse como C<$jornadas{Feb}> y las comillas se agregarán
+automáticamente. Pero cualquier otra cosa más complicada en el subíndice se
+interpretará como una expresión. Esto significa, por ejemplo, que
+C<$version{2.0}++> es equivalente a C<$version{2}++>, no a
+C<$version{'2.0'}++>.
+
+=head3 Cadenas de versión
+X<version string> X<vstring> X<v-string> X<cadena de versión>
+
+Un literal de la forma C<v1.20.300.4000> se analiza como una cadena compuesta
+de caracteres con los valores ordinales especificados. Esta forma, conocida
+como "v-string", ofrece una alternativa para crear cadenas más legible que una
+forma de interpolación como C<"\x{1}\x{14}\x{12c}\x{fa0}">. Esto es útil para
+la representación de cadenas Unicode, y para comparar los "números" de versión
+que utilizan los operadores de comparación de cadenas, C<cmp>, C<gt>, C<lt>,
+etc. Si hay dos o más puntos en el literal, se puede omitir el prefijo C<v>.
+
+    print v9786;              # imprime en pantalla un emoticono, "\x{263a}"
+    print v102.111.111;       # imprime en pantalla "foo"
+    print 102.111.111;        # lo mismo
+
+C<require> y C<use> aceptan estos literales para realizar una comprobación de
+versión. Tenga en cuenta que el uso de v-strings para las direcciones IPv4 no
+es portable a menos que también utilice las rutinas inet_aton()/inet_ntoa() del
+paquete Socket.
+
+También debe tener en cuenta que, desde la versión Perl 5.8.1, las cadenas
+v-string de un solo número (como C<v65>) no son v-strings delante del operador
+C<< => >> (que se utiliza normalmente para separar una clave hash de un valor
+hash), sino que se interpretan como cadenas literales ('v65'). Fueron v-strings
+desde Perl 5.6.0 a Perl 5.8.0, pero su uso causaba confusión y problemas. Las
+v-strings con varios números, como C<v65.66> y C<65.66.67>, siguen siendo
+v-strings.
+
+=head3 Literales especiales
+X<special literal> X<__END__> X<__DATA__> X<END> X<DATA>
+X<end> X<data> X<^D> X<^Z> X<literal especial>
+
+Los literales especiales __FILE__, __LINE__ y __PACKAGE__ representan el nombre
+del archivo, el número de línea y el nombre del paquete actuales en ese punto
+del programa.  __SUB__ devuelve una referencia a la subrutina actual. Solo se
+pueden utilizar como símbolos aislados; no se interpolan dentro de cadenas. Si
+no hay ningún paquete actual (debido a una directiva C<package;> vacía),
+__PACKAGE__ tiene el valor indefinido (aunque desde la versión 5.10 se dejó de
+admitir la directiva C<package;> vacía). Fuera de una subrutina, __SUB__
+devuelve el valor indefinido.  __SUB__ solo está disponible en la versión 5.16
+o superior, y solo con un C<use v5.16> o una declaración C<use feature
+"current_sub">. X<__FILE__> X<__LINE__> X<__PACKAGE__> X<__SUB__> X<line>
+X<file> X<package> X<línea> X<archivo> X<paquete>
+
+Se pueden usar los dos caracteres de control ^D y ^Z, y los símbolos __END__ y
+__DATA__, para indicar el final lógico del programa antes del final real del
+archivo. Se omitirá el texto que haya a continuación.
+
+El texto que hay a continuación de __DATA__ se puede leer mediante el
+identificador de archivo C<PAQUETE::DATA>, donde C<PAQUETE> es el paquete que
+estaba activo cuando se encontró el símbolo __DATA__. El identificador de
+archivo se deja abierto apuntando a la línea que hay a continuación de
+__DATA__. El programa debe ejecutar C<close DATA> cuando termine de leer. (Si
+se deja abierto el identificador de archivo, provoca una pérdida de
+identificadores de archivos en caso de que se vuelva a cargar el módulo por
+alguna razón, así que es recomendable cerrarlo). Por compatibilidad con
+I<scripts> antiguos, escritos antes de la introducción de __DATA__, __END__ se
+comporta como __DATA__ en el I<script> de nivel superior (pero no en los
+archivos cargados con C<require> o C<do>) y deja el resto del contenido del
+archivo accesible a través de C<main::DATA>.
+
+Encontrará una descripción más detallada y ejemplos de uso de __DATA__ en
+L<Autocargador>. Tenga en cuenta que no puede leer el identificador de archivo
+DATA en un bloque BEGIN: el bloque BEGIN se ejecutará tan pronto como se
+encuentre (durante la compilación), momento en que aún no se ha visto el
+símbolo __DATA__ (o __END__) correspondiente.
+
+=head3 Palabras sueltas
+X<palabra suelta>
+
+Una palabra que no tiene ninguna interpretación en la gramática se tratará como
+si fuera una cadena entrecomillada. En Perl, estas palabras se denominan
+"I<barewords>" (palabras sueltas). Al igual que con los identificadores de
+archivo y las etiquetas, una palabra suelta formada por un conjunto de letras
+minúsculas supone un riesgo de conflicto con futuras palabras reservadas, por
+lo que si se usa el pragma C<use warnings> o la opción B<-w>, Perl mostrará una
+advertencia. Perl limita la longitud de las palabras sueltas a cerca de 250
+caracteres (igual que los identificadores). Es probable que estas limitaciones
+arbitrarias se eliminen en futuras versiones de Perl.
+
+Es posible que algunos programadores prefieran prohibir el uso de palabras
+sueltas. Si escribe
+
+    use strict 'subs';
+
+cualquier palabra suelta que NO se pueda interpretar como una llamada de
+subrutina, generará un error en tiempo de compilación. La restricción dura
+hasta el final del bloque en que se encuentre. En un bloque interno se puede
+revocar esto mediante C<no strict 'subs'>.
+
+=head3 Interpolación de arrays
+X<array, interpolation> X<interpolation, array> X<$"> X<array, interpolación> X<interpolación, array>
+
+Dentro de cadenas escritas entre comillas dobles, los arrays y las porciones se
+interpolan uniendo los elementos con el delimitador especificado en la variable
+<C$"> (C<$LIST_SEPARATOR> si se especifica "use English;"); el valor
+predeterminado es un espacio en blanco. Las instrucciones siguientes son
+equivalentes:
+
+    $temporal = join($", @ARGV);
+    system "echo $temporal";
+
+    system "echo @ARGV";
+
+Dentro de los patrones de búsqueda (donde también se realiza la sustitución del
+entrecomillado doble) existe una desafortunada ambigüedad: ¿Debe C</$foo[bar]/>
+ser interpretado como C</${foo}[bar]/> (donde C<[bar]> es una clase de
+caracteres para la expresión regular) o como C</${foo[bar]}/> (donde C<[bar]>
+es el subíndice del array @foo)? Si @foo no existe, entonces es evidente que
+se trata de una clase de caracteres. Si @foo existe, Perl tiene una buena pista
+acerca de C<[bar]>, y casi siempre acierta. Por si se equivoca, o para evitar
+ataques de paranoia, puede forzar la interpretación correcta con llaves, como
+se indicó arriba.
+
+Si busca información acerca de cómo usar documentos incrustados, que solía
+estar en este documento, debe saber que ahora se encuentra en la sección
+"Comillas y operadores de comillas" de L<perlop>.
+
+=head2 Constructores de listas
+X<list> X<lista>
+
+Una lista se especifica escribiendo los valores individuales separados por
+comas (si la precedencia lo requiere, la lista debe escribirse entre
+paréntesis):
+
+    (LISTA)
+
+En un contexto que no requiera una lista, el valor de lo que parece ser un
+literal de lista es simplemente el valor del último elemento, igual que con el
+operador coma en C. Por ejemplo,
+
+    @foo = ('cc', '-E', $bar);
+
+asigna la lista completa al array @foo, pero
+
+    $foo = ('cc', '-E', $bar);
+
+asigna el valor de la variable $bar a la variable escalar $foo. Tenga en cuenta
+que el valor de un array en contexto de escalar es la longitud del array; la
+línea siguiente asigna el valor 3 a $foo:
+
+    @foo = ('cc', '-E', $bar);
+    $foo = @foo;                # se asigna 3 a $foo
+
+Opcionalmente, puede agregar una coma antes del paréntesis de cierre en una
+lista literal, de modo que puede escribir:
+
+    @foo = (
+        1,
+        2,
+        3,
+    );
+
+Para usar un documento incrustado con el fin de asignar un array (una línea por
+elemento), puede hacer esto:
+
+    @salsas = <<Fin =~ m/(\S.*\S)/g;
+        tomate normal
+        tomate especiado
+        chile verde
+        pesto
+        vino blanco
+    Fin
+
+En una LISTA se interpolan automáticamente las sublistas. Es decir, cuando se
+evalúa una LISTA, cada uno de sus elementos se evalúa en contexto de lista, y
+el valor de lista resultante se interpola en LISTA como si cada elemento
+individual fuera un miembro de LISTA. Así, los arrays y hashes pierden su
+identidad en una LISTA: la lista
+
+    (@foo,@bar,&AlgunaSub,%glarch)
+
+contiene todos los elementos de @foo, seguidos de todos los elementos de @bar,
+seguidos de todos los elementos devueltos por la subrutina AlgunaSub llamada en
+contexto de lista, seguidos de los pares clave/valor de %glarch. Para crear una
+referencia de lista que I<NO> se interpole, vea L<perlref>.
+
+La lista nula se representa por (). Interpolarla en una lista no surte ningún
+efecto. Así que ((),(),()) es equivalente a (). Del mismo modo, interpolar un
+array sin elementos produce el mismo resultado que no interpolar ningún array.
+
+Esta interpolación combinada con el hecho de que los paréntesis de apertura y
+cierre son opcionales (salvo cuando sea necesario por razones de precedencia) y
+que las listas pueden terminar con una coma opcional, indica que el uso de
+comas múltiples dentro de las listas es sintaxis válida. La lista C<1,,3> es
+una concatenación de dos listas, C<1,> y C<3>, la primera de las cuales termina
+con una coma opcional. C<1,,3> es C<(1,),(3)> y C<1,3> (y, de manera similar,
+C<1,,,3> es C<(1,),(,),3> y C<1,3>, y así sucesivamente). Le recomendamos que
+no use este tipo de ofuscación.
+
+Una lista de valores también se puede indexar como un array normal. Debe
+escribir la lista entre paréntesis para evitar ambigüedades. Por ejemplo:
+
+    # stat devuelve una lista.
+    $time = (stat($archivo))[8];
+
+    # ERROR DE SINTAXIS.
+    $acceso = stat($archivo)[8];  # VAYA, OLVIDÓ LOS PARÉNTESIS
+
+    # Buscar un dígito hexadecimal.
+    $digitohex = ('a','b','c','d','e','f')[$digito-10];
+
+    # Un "operador coma inverso".
+    return (pop(@foo),pop(@foo))[0];
+
+Solo se puede asignar a una lista si cada elemento de la lista permite la
+asignación:
+
+    ($a, $b, $c) = (1, 2, 3);
+
+    ($mapa{'rojo'}, $mapa{'azul'}, $mapa{'verde'}) = (0x00f, 0x0f0, 0xf00);
+
+Una excepción a esto es que se puede asignar a C<undef> en una lista. Esto es
+útil para descartar algunos de los valores devueltos por una función:
+
+    ($dev, $ino, undef, undef, $uid, $gid) = stat($archivo);
+
+La asignación de una lista en contexto de escalar devuelve el número de
+elementos producidos por la expresión en el lado derecho de la asignación:
+
+    $x = (($foo,$bar) = (3,2,1));       # asigna 3 a $x, no 2
+    $x = (($foo,$bar) = f());           # asigna a $x el número de valores devueltos por f()
+
+Esto es útil cuando se quiere hacer una asignación de lista en un contexto
+booleano, ya que la mayoría de funciones de lista, al terminar de ejecutarse
+devuelven una lista nula que, al asignarse, produce un 0, lo que se interpreta
+como FALSO.
+
+Es también el origen de un modismo muy útil para ejecutar una función o
+realizar una operación en contexto de lista, y luego contar el número de
+valores devueltos, mediante la asignación a una lista vacía y el uso posterior
+de esa asignación en contexto de escalar. Por ejemplo, este código:
+
+    $recuento = () = $cadena =~ /\d+/g;
+
+pondrá en $recuento el número de grupos de dígitos que se encuentren en
+$cadena. Esto sucede porque la expresión regular está en contexto de lista (ya
+que se asigna a la lista vacía) y, por lo tanto, se obtendrá una lista de todas
+las coincidencias encontradas en la cadena. La asignación de lista en contexto
+de escalar se traducirá en el número de elementos (en este caso, el número de
+veces que se detecta el patrón), que se asignará a $recuento. Tenga en cuenta
+que el simple uso de
+
+    $recuento = $cadena =~ /\d+/g;
+
+no habría funcionado, ya que la detección de patrones mediante una expresión
+regular en contexto de escalar sólo devolverá verdadero o falso, en lugar de un
+recuento de coincidencias detectadas.
+
+El último elemento de una asignación de lista puede ser un array o un hash:
+
+    ($a, $b, @resto) = split;
+    my($a, $b, %resto) = @_;
+
+En realidad, se puede colocar un array o un hash en cualquier lugar de la
+lista, pero el primero que figure en la lista absorberá todos los valores, y lo
+que venga después quedará indefinido. Esto puede ser útil para my() o local().
+
+Un hash se puede inicializar con una lista literal que contenga pares de
+elementos que deben interpretarse como pares clave/valor:
+
+    # la misma asignación de antes
+    %mapa = ('rojo',0x00f,'azul',0x0f0,'verde',0xf00);
+
+Aunque las listas literales y los arrays con nombre suelen ser intercambiables,
+no ocurre así con los hashes. Solo porque se pueda indexar una lista de valores
+como un array normal no significa que se pueda indexar una lista de valores
+como un hash. Del mismo modo, los hashes incluidos como parte de otras listas
+(incluidas las listas de parámetros y las listas de retorno de funciones)
+siempre se extienden en pares clave/valor. Es por eso que, en algunas
+situaciones, es recomendable utilizar referencias.
+
+El operador C<< => >> entre los pares clave/valor suele mejorar la legibilidad.
+Este operador es más que nada un distintivo visual sinónimo de una coma, pero
+también se encarga de que el operando de la izquierda se interprete como una
+cadena, si es una palabra suelta que se pudiera considerar como un
+identificador simple válido. C<< => >> no entrecomilla identificadores
+compuestos que contengan signos de dos puntos dobles. Este operador es cómodo
+para inicializar un hash:
+
+    %mapa = (
+                 rojo  => 0x00f,
+                 azul  => 0x0f0,
+                 verde => 0xf00,
+   );
+
+o para inicializar referencias de hash que se usarán como registros:
+
+    $reg = {
+                bruja => 'La implacable Piruja',
+                gato  => 'Fofito Feroz',
+                fecha => '10/31/1776',
+    };
+
+o para utilizar llamadas mediante parámetros con nombre para funciones
+complicadas:
+
+   $campo = $consulta->opciones(
+               nombre      => 'nombre_grupo',
+               valores    => ['panchos','sanchos','juanchos'],
+               predeterminado   => 'sanchos',
+               salto_linea => 'true',
+               etiquetas    => \%etiquetas
+   );
+
+Tenga en cuenta que aunque un hash se inicialice en ese orden, sus valores no
+tienen por qué salir en el mismo orden. En la sección "sort" de L<perlfunc>
+encontrará ejemplos de cómo generar una salida ordenada.
+
+=head2 Subíndices
+
+Se puede acceder a un array de escalar en escalar, especificando un signo dólar
+(C<$>) seguido del nombre del array (sin el signo C<@> inicial) y el subíndice
+entre corchetes. Por ejemplo:
+
+    @miarray = (5, 50, 500, 5000);
+    print "El tercer elemento es", $miarray[2], "\n";
+
+Los índices de array empiezan por 0. Un subíndice negativo devuelve un valor
+contando desde el final. En nuestro ejemplo, C<$miarray[-1]> es 5000 y
+C<$miarray[-2]> es 500.
+
+Los índices en los hashes son similares, pero en lugar de corchetes se usan
+llaves. Por ejemplo:
+
+    %cientificos = 
+    (
+        "Newton"  => "Isaac",
+        "Einstein"=> "Albert",
+        "Darwin"  => "Charles",
+        "Feynman" => "Richard",
+    );
+
+    print "El nombre de Darwin es", $cientificos{"Darwin"}, "\n";
+
+También puede subindexar una lista para obtener un solo elemento de ella.
+
+    $dir = (getpwnam("daemon"))[7];
+
+=head2 Emulación de matrices multidimensionales
+
+Puede emular matrices multidimensionales utilizando listas como subíndices de
+un hash. Los elementos de la lista se unen con el separador de subíndice (vea
+"$;" en L<perlvar>).
+
+    $foo{$a,$b,$c}
+
+es equivalente a
+
+    $foo{join($;, $a, $b, $c)}
+
+El separador de subíndice predeterminado es "\034", el mismo que SUBSEP en
+B<awk>.
+
+=head2 Porciones
+X<slice> X<array, slice> X<hash, slice> X<porción> X<array, porción> X<hash, porción>
+
+Una porción permite acceder de forma simultánea a varios elementos de una
+lista, un array o un hash, mediante una lista de subíndices. Esto es más cómodo
+que escribir los elementos individuales como una lista de valores escalares.
+
+    ($el, $ella)        = @gente[0,-1];              # porción de array
+    @ellos              = @gente[0 .. 3];            # porción de array
+    ($usuario, $inicio) = @ENV{"USER", "HOME"};      # porción de hash
+    ($uid, $dir)        = (getpwnam("daemon"))[2,7]; # porción de lista
+
+Como podemos asignar a una lista de variables, también podemos a una porción de
+array o de hash.
+
+    @jornadas[3..5] = qw/Mié Jue Vie/;
+    @colores{'rojo','azul','verde'} 
+                    = (0xff0000, 0x0000ff, 0x00ff00);
+    @gente[0, -1]   = @gente[-1, 0];
+
+Las asignaciones anteriores equivalen exactamente a
+
+    ($jornadas[3], $jornadas[4], $jornadas[5]) = qw/Mié Jue Vie/;
+    ($colores{'rojo'}, $colores{'azul'}, $colores{'verde'})
+                   = (0xff0000, 0x0000ff, 0x00ff00);
+    ($gente[0], $gente[-1]) = ($gente[-1], $gente[0]);
+
+Como al modificar una porción se modifica el array o hash original, una
+construcción C<foreach> modificará algunos (o incluso todos) los valores del
+array o hash.
+
+    foreach (@array[ 4 .. 10 ]) { s/pedro/pablo/ } 
+
+    foreach (@hash{qw[clave1 clave2]}) {
+        s/^\s+//;           # quitar espacios iniciales
+        s/\s+$//;           # quitar espacios finales
+        s/(\w+)/\u\L$1/g;   # escribir letras iniciales en mayúsculas
+    }
+
+Una porción de una lista vacía es también una lista vacía. Por lo tanto:
+
+    @a = ()[1,0];           # @a no tiene elementos
+    @b = (@a)[0,1];         # @b no tiene elementos
+    @c = (0,1)[2,3];        # @c no tiene elementos
+
+Sin embargo:
+
+    @a = (1)[1,0];          # @a tiene dos elementos
+    @b = (1,undef)[1,0,2];  # @b tiene tres elementos
+
+Esto facilita la escritura de bucles que terminan cuando se devuelve una lista
+vacía:
+
+    while ( ($inicio, $usuario) = (getpwent)[7,0]) {
+        printf "%-8s %s\n", $usuario, $inicio;
+    }
+
+Como se ha señalado anteriormente en este documento, el sentido escalar de una
+asignación de lista es el número de elementos en el lado derecho de la
+asignación. La lista vacía no contiene elementos, así que cuando se acaba el
+archivo de contraseñas, el resultado es 0, no 2.
+
+En contexto de escalar, las porciones devuelven el último elemento de la
+porción.
+
+    @a = qw/primero segundo tercero/;
+    %h = (primero => 'A', segundo => 'B');
+    $t = @a[0, 1];                     # Ahora $t es 'segundo'
+    $u = @h{'primero', 'segundo'};     # Ahora $u es 'B'
+
+Si se está preguntando por qué se usa un signo '@' en una porción de hash en
+lugar de un signo '%', piense en esto: el tipo de delimitador (corchete o
+llave) indica si se trata de un array o un hash. Por otra parte, el símbolo
+inicial ('$' o '@') del nombre del array o hash indica si se va a obtener un
+solo valor (un escalar) o varios (una lista).
+
+=head2 Typeglobs e identificadores de archivo
+X<typeglob> X<filehandle> X<*> X<identificador de archivo>
+
+Perl utiliza un tipo interno denominado I<typeglob> para mantener una entrada
+completa en la tabla de símbolos. El prefijo de tipo de un typeglob es C<*>, ya
+que representa todos los tipos. En el pasado, esta era la forma preferida de
+pasar arrays y hashes por referencia a una función, pero como ahora tenemos
+referencias de verdad, ya no se suele usar un typeglob para este fin.
+
+El uso principal de los typeglobs en Perl moderno es crear alias en la tabla de
+símbolos. La siguiente asignación:
+
+    *este = *ese;
+
+hace que $este sea un alias de $ese, @este sea un alias de @ese, %este sea un
+alias de %ese, etc. Es mucho más seguro usar una referencia. La línea
+siguiente:
+
+    local *este::azul = \$este::verde;
+
+hace que $este::azul sea temporalmente un alias de $ese::verde, pero no hace
+que @este::azul sea un alias de @ese::verde, o que %este::azul sea un alias de
+%ese::verde, etc. Encontrará más ejemplos en la sección "Tablas de símbolos" de
+L<perlmod>. Por extraño que pueda parecer, esta es la base de todo el sistema
+de importación/exportación de módulos.
+
+Otro uso de los typeglobs es pasar identificadores de archivo a una función o
+crear nuevos identificadores de archivo. Si tiene que usar un typeglob para
+guardar un identificador de archivo, hágalo de esta manera:
+
+    $id_archivo = *STDOUT;
+
+o tal vez como una referencia real, de esta manera:
+
+    $id_archivo = \*STDOUT;
+
+En L<perlsub> encontrará más ejemplos de uso de typeglobs como identificadores
+de archivos indirectos en funciones.
+
+Los typeglobs también proporcionan una manera de crear un identificador de
+archivo local con el operador local(). Durará hasta que se salga del bloque,
+pero se puede volver a pasar. Por ejemplo:
+
+    sub nuevoopen {
+        my $ruta = shift;
+        local  *ARCHIVO;  # en lugar de "my"
+        open   (ARCHIVO, $ruta)          or  return undef;
+        return *ARCHIVO;
+    }
+    $id_archivo = nuevoopen('/etc/passwd');
+
+Ahora que tenemos la notación C<*foo{COSA}> ya no se usan tanto los typeglobs
+para la manipulación de identificadores de archivo, aunque siguen siendo
+necesarios para pasar identificadores de archivo y de directorio a (o desde)
+funciones. Esto se debe a que C<*IDENTIFICADOR{IO}> solo funciona si ya se ha
+utilizado IDENTIFICADOR como un identificador. Es decir, se debe usar
+C<*ARCHIVO> para crear nuevas entradas de en la tabla de símbolos; no se puede
+hacer con C<*foo{COSA}>. En caso de duda, use C<*ARCHIVO>.
+
+Todas las funciones capaces de crear identificadores de archivo (open(),
+opendir(), pipe(), socketpair(), sysopen(), socket() y accept()) crean
+automáticamente un identificador de archivo anónimo si el identificador que se
+les pasa es una variable escalar sin inicializar. Esto permite utilizar
+instrucciones como C<open(my $archivo, ...)> y C<open(local $archivo,...)> para
+crear identificadores de archivo que convenientemente se cerrarán
+automáticamente cuando termine el ámbito de aplicación, siempre que no haya
+otras referencias a ellos. Esto elimina en gran medida la necesidad de usar
+typeglobs al abrir identificadores de archivo que hay que pasar de un lugar a
+otro, como en el ejemplo siguiente:
+
+    sub miopen {
+        open my $archivo, "@_"
+             or die "No puedo abrir '@_': $!";
+        return $archivo;
+    }
+
+    {
+        my $f = miopen("</etc/motd");
+        print <$f>;
+        # $f se cierra aquí implícitamente
+    }
+
+Tenga en cuenta que si se usa una variable escalar ya inicializada, el
+resultado es diferente: C<my $archivo='zzz'; open($archivo, ...)> es
+equivalente a C<open( *{'zzz'}, ...)>. C<use strict 'refs'> prohíbe hacer esto.
+
+Otra forma de crear identificadores de archivo anónimos es usar el módulo
+Symbol o IO::Handle y sus acólitos. Estos módulos tienen la ventaja de no
+ocultar diferentes tipos del mismo nombre mientras local() esté activo.
+Encontrará un ejemplo al final de la sección "open" de L<perlfunc>.
+
+=head1 VEA TAMBIÉN
+
+En L<perlvar> verá una descripción de las variables predefinidas de Perl y de
+las normas de nomenclatura de variables. Para obtener más información sobre los
+typeglobs y la sintaxis de C<*foo{COSA}>, vea L<perlref>, L<perlsub> y "Tablas
+de símbolos" en L<perlmod>.
+
+
+=head1 TRADUCTORES
+
+=over
+
+=item * Joaquín Ferrero (Tech Lead)
+
+=item * Enrique Nell (Language Lead)
+
+=back
+

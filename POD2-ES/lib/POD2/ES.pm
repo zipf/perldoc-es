@@ -10,7 +10,7 @@ use open ':locale';
 use base qw(Exporter);
 our @EXPORT = qw(print_pod print_pods);
 
-our $VERSION = '5.16.0.03';
+our $VERSION = '5.16.0.04';
 
 sub search_perlfunc_re {
     return 'Lista de funciones de Perl en orden alfabético';
@@ -25,6 +25,7 @@ sub pod_info {{
     perlboot          => '5.16.0',
     perlbot           => '5.16.0',
     perlcommunity     => '5.16.0',
+    perldata          => '5.16.0',
     perldbmfilter     => '5.16.0',
     perldoc           => '5.16.0',
     perlexperiment    => '5.16.0',

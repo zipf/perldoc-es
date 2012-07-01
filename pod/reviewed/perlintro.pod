@@ -140,7 +140,7 @@ La variable especial C<$#array> indica el índice del último elemento de un array
 
     print $mezcla[$#mezcla];  # último elemento, imprime 1.23 en pantalla
 
-Podría sentirse tentado de usar C<$#array + 1> para determinar el número de elementos de un array.  No es necesario.  Si utiliza C<@array> donde Perl espera encontrar un valor escalar ("en contexto escalar"), obtendrá el número de elementos del array:
+Podría sentirse tentado de usar C<$#array + 1> para determinar el número de elementos de un array.  No es necesario.  Si utiliza C<@array> donde Perl espera encontrar un valor escalar ("en contexto de escalar"), obtendrá el número de elementos del array:
 
     if (@animales < 5) { ... }
 
@@ -390,7 +390,7 @@ Esta función se describe de forma muy detallada en L<perlfunc> y L<perlopentut>.
     open(my $salida, ">",  "salida.txt") or die "No se puede abrir salida.txt: $!";
     open(my $registro, ">>", "mi.registro")     or die "No se puede abrir mi.registro: $!";
 
-Puede utilizar el operador C<< <> >> para leer de un identificador de archivo abierto.  En contexto escalar, este operador lee una sola línea del identificador de archivo, mientras que en contexto de lista lee todo el archivo y asigna cada línea a un elemento de la lista:
+Puede utilizar el operador C<< <> >> para leer de un identificador de archivo abierto.  En contexto de escalar, este operador lee una sola línea del identificador de archivo, mientras que en contexto de lista lee todo el archivo y asigna cada línea a un elemento de la lista:
 
     my $linea  = <$entrada>;
     my @lineas = <$entrada>;
