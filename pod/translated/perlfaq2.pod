@@ -4,11 +4,11 @@ perlfaq2 - Cómo obtener Perl y dónde buscar información sobre Perl
 
 =head1 DESCRIPCIÓN
 
-Esta sección de preguntas más frecuentes indica dónde se puede obtener el código fuente y la documentación de Perl, cómo obtener soporte técnico, y ofrece información sobre otros temas relacionados.
+En esta sección de preguntas más frecuentes se indica dónde se puede obtener el código fuente y la documentación de Perl, cómo obtener soporte técnico, y se incluye información sobre otros temas relacionados.
 
 =head2 ¿Qué equipos son compatibles con perl? ¿Dónde puedo obtener perl?
 
-La versión estándar de perl (la mantenida por el equipo de desarrollo de perl) sólo se distribuye en forma de código fuente. Encontrará las versiones más recientes en http://www.cpan.org/src/>.
+La versión estándar de perl (la mantenida por el equipo de desarrollo de perl) sólo se distribuye en forma de código fuente. Encontrará las versiones más recientes en L<http://www.cpan.org/src/>.
 
 Perl se puede compilar y ejecutar en una gran variedad de plataformas. Es compatible con prácticamente todos los sistemas operativos derivados de Unix (la plataforma nativa de perl) conocidos y actuales, así como con otros sistemas como VMS, DOS, OS/2, Windows, QNX, BeOS, OS X, MPE/iX y Amiga.
 
@@ -16,7 +16,7 @@ En el directorio L<http://www.cpan.org/ports/> encontrará distribuciones binaria
 
 =head2 ¿Cómo puedo obtener una versión binaria de perl?
 
-Vea L<Adaptaciones de CPAN|http://www.cpan.org/ports/>
+Vea L<Adaptaciones de Perl en CPAN|http://www.cpan.org/ports/>
 
 =head2 No dispongo de un compilador de C. ¿Cómo puedo compilar mi propio intérprete de Perl?
 
@@ -29,7 +29,7 @@ Si prefiere compilar Perl, lo primero que debe hacer es obtener una versión bina
 =head2 He copiado el binario perl de una máquina a otra, pero los scripts no funcionan.
 
 Probablemente se deba a que olvidó copiar las bibliotecas, o a que las rutas de acceso de las bibliotecas difieren.
-Es muy recomendable compilar toda la distribución en el equipo en el que se va a instalar y después ejecutar el comando C<make install>. La probabilidad de éxito de las demás opciones es escasa.
+Es muy recomendable compilar toda la distribución en el equipo en el que se va a instalar y después ejecutar el comando C<make install>. La probabilidad de éxito de las demás opciones es baja.
 
 Una manera sencilla de comprobar que todo está en su sitio es imprimir en pantalla la variable C<@INC> incrustada en el programa, en la que perl busca las bibliotecas:
 
@@ -53,12 +53,12 @@ CPAN es la sigla de Comprehensive Perl Archive Network, un repositorio que ocupa
 Puede hacer búsquedas en CPAN a través de L<http://metacpan.org> o
 L<http://search.cpan.org/>.
 
-The master web site for CPAN is L<http://www.cpan.org/>,
-L<http://www.cpan.org/SITES.html> lists all mirrors.
+El sitio web principal de CPAN está en L<http://www.cpan.org/>.
+En L<http://www.cpan.org/SITES.html> encontrará una lista de todos los servidores reflejados.
 
 En la sección FAQ (preguntas más frecuentes) de CPAN (en L<http://www.cpan.org/misc/cpan-faq.html> ) encontrará respuestas a las preguntas más frecuentes sobre CPAN.
 
-El módulo L<Task::Kensho> incluye una lista de módulos recomendados que debe revisar, como buen punto de partida.
+El módulo L<Task::Kensho> incluye una lista de módulos recomendados que debe revisar; es un buen punto de partida.
 
 =head2 ¿Dónde puedo obtener información sobre Perl?
 
@@ -73,8 +73,7 @@ El módulo L<Task::Kensho> incluye una lista de módulos recomendados que debe rev
 =back
 
 La distribución de Perl incluye la documentación completa de Perl.
-Si ha instalado Perl localmente, es probable que también haya instalado la documentación: escriba C<perldoc perl> en el terminal. También puede
-L<consultar la documentación en línea|http://perldoc.perl.org/perl.html>.
+Si ha instalado Perl localmente, es probable que también haya instalado la documentación: escriba C<perldoc perl> en el terminal. Como alternativa, puede L<consultar la documentación en línea|http://perldoc.perl.org/perl.html>.
 
 (Las distribuciones para algunos sistemas operativos pueden incluir la documentación en un paquete distinto; por ejemplo, en Debian, debe instalar el paquete C<perl-doc>.)
 
@@ -84,7 +83,7 @@ Se han escrito muchos libros buenos sobre Perl. Encontrará más información en un
 
 Anteriormente, Perl.com ( L<http://www.perl.com/> ) formaba parte de O'Reilly Network, una subsidiaria de O'Reilly Media. Aunque conserva la mayor parte del contenido original de O'Reilly Network, ahora se hospeda en L<The Perl Foundation|http://www.perlfoundation.org/>.
 
-The Perl Foundation es una organización que respalda al lenguaje Perl y mantiene el sitio web L<http://www.perl.org/> como recurso general de apoyo a Perl. Usa el dominio para proporcionar servicios generales de soporte a la comunidad Perl, como el alojamiento de listas de correo y sitios web, entre otros. Además, existen muchos subdominios dedicados a temas específicos, como el aprendizaje de Perl, o puestos de trabajo para programadores Perl. Por ejemplo:
+The Perl Foundation es una organización que respalda al lenguaje Perl y mantiene el sitio web L<http://www.perl.org/> como recurso general de apoyo a Perl. Usa el dominio para proporcionar servicios generales de soporte a la comunidad Perl, como el alojamiento de listas de correo y sitios web, entre otros. Además, existen muchos subdominios dedicados a temas específicos, como el aprendizaje de Perl, o anuncios de puestos de trabajo para programadores Perl. Por ejemplo:
 
 =over 4
 
@@ -98,10 +97,10 @@ The Perl Foundation es una organización que respalda al lenguaje Perl y mantiene
 
 =back
 
-L<Perl Mongers|http://www.pm.org/> usa el dominio pm.org para ofrecer servicios relacionados para grupos de usuarios de Perl, como el alojamiento de listas de correo y sitios web. Visite el L<sitio web de Perl Mongers|http://www.pm.org/> para obtener más información sobre servicios relacionados con los grupos de usuarios de Perl: cómo unirse a un grupo, cómo iniciar un grupo o cómo solicitar servicios para un grupo.
+L<Perl Mongers|http://www.pm.org/> usa el dominio pm.org para ofrecer servicios relacionados con grupos de usuarios de Perl, como el alojamiento de listas de correo y sitios web. Visite el L<sitio web de Perl Mongers|http://www.pm.org/> para obtener más información sobre servicios relacionados con los grupos de usuarios de Perl: cómo unirse a un grupo, cómo iniciar un grupo o cómo solicitar servicios para un grupo.
 
 CPAN, o Comprehensive Perl Archive Network ( L<http://www.cpan.org/> ), es un repositorio de software Perl replicado en todo el mundo.
-Vea L<¿Qué es CPAN?|/"¿Qué módulos y extensiones están disponibles para Perl? ¿Qué es CPAN? ¿Qué significa CPANE<sol>srcE<sol>... ?">.
+Vea L<¿Qué es CPAN?|/"¿Qué módulos y extensiones están disponibles para Perl? ¿Qué es CPAN? ">.
 
 =head2 ¿Dónde puedo publicar preguntas?
 
@@ -118,13 +117,11 @@ Se han publicado muchos L<libros sobre Perl|http://www.perl.org/books/library.ht
 
 I<$foo Magazin> ( http://www.foo-magazin.de ) es una revista dedicada a Perl, escrita en alemán. I<Perl-Zeitung> es otra revista en alemán para programadores Perl principiantes (visite L<http://perl-zeitung.at.tf> ).
 
-Diversas revistas sobre unix/linux incluyen frecuentemente artículos sobre Perl.
+Diversas revistas dedicadas a unix/linux incluyen frecuentemente artículos sobre Perl.
 
 =head2 ¿Qué blogs sobre Perl debo seguir?
 
-L<Perl News|http://perlnews.org/> covers some of the major events in the Perl
-world, L<Perl Weekly|http://perlweekly.com/> is a weekly e-mail
-(and RSS feed) of hand-picked Perl articles.
+L<Perl News|http://perlnews.org/> cubre los principales eventos del mundo Perl. L<Perl Weekly|http://perlweekly.com/> es un boletín de correo electrónico (y canal RSS) semanal que incluye artículos sobre Perl seleccionados.
 
 L<http://blogs.perl.org/> hospeda muchos blogs sobre Perl. También hay varios agregadores de blogs, como L<Perlsphere|http://perlsphere.net/> o L<IronMan|http://ironman.enlightenedperl.org/>.
 
