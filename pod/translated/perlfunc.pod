@@ -885,7 +885,7 @@ Ejemplos:
     sub foo { defined &$bar ? &$bar(@_) : die "No bar"; }
     $debugging = 0 unless defined $debugging;
 
-Nota: mucha gente tiende a sobrevalorar C<defined> y, para su sorpresa, descubren que el número C<0> y C<""> (la cadena de longitud cero) son, de hecho, valores definidos.  Por ejemplo, si dice
+Nota: mucha gente tiende a sobrevalorar C<defined> y, para su sorpresa, descubren que el número C<0> y C<""> (la cadena de longitud cero) son, de hecho, valores definidos.  Por ejemplo, si escribe
 
     "ab" =~ /a(.*)b/;
 
@@ -3544,7 +3544,7 @@ X<printf>
 
 =for Pod::Functions output a formatted list to a filehandle
 
-Equivalente a C<print IDENTIFICADOR_ARCHIVO sprintf(FORMATO, LISTA)>, excepto que C<$\> (el separador de registro a la salida) no es añadida.  El primer argumento de la lista será interpretado como el formato para C<printf>.  Vea L<sprintf|/sprintf FORMATO, LISTA> para una explicación del argumento de formato.  Si omite la LISTA, se usará C<$_>; para usar un IDENTIFICADOR_ARCHIVO sin una LISTA, debe usar un identificador de archivo real, como C<FH>, no uno indirecto como C<$fh>.  Si C<use locale> (incluyendo C<use locale ':not_characters'>) está activo y POSIX::setlocale() ha sido llamada, el carácter utilizado para el separador decimal en números formateados en punto flotante se ve afectado por la configuración regional de LC_NUMERIC.  Ver L<perllocale> y L<POSIX>.
+Equivalente a C<print IDENTIFICADOR_ARCHIVO sprintf(FORMATO, LISTA)>, excepto que C<$\> (el separador de registro a la salida) no es añadida.  El primer argumento de la lista será interpretado como el formato para C<printf>.  Vea L<sprintf|/sprintf FORMATO, LISTA> para una explicación del argumento de formato.  Si omite la LISTA, se usará C<$_>; para usar un IDENTIFICADOR_ARCHIVO sin una LISTA, debe usar un identificador de archivo real, como C<FH>, no uno indirecto como C<$fh>.  Si C<use locale> (incluyendo C<use locale ':not_characters'>) está activo y POSIX::setlocale() ha sido llamada, el carácter utilizado para el separador decimal en números formateados en punto flotante se ve afectado por la configuración regional de LC_NUMERIC.  Vea L<perllocale> y L<POSIX>.
 
 No caiga en la trampa de utilizar un C<printf> cuando un simple C<print> valdría.  El C<print> es más eficiente y menos propenso a errores.
 
