@@ -10,6 +10,7 @@ use File::Copy;
 use File::Basename;
 use Readonly;
 use Pod::Tidy qw( tidy_files );
+use Pod::Checker;
 use Getopt::Long;
 #use utf8;
 
@@ -50,12 +51,14 @@ while ( <DATA> ) {
 
     my ($alias, @details) = split /,/;
    
-    say $alias;
-    say @details;
+    #say $alias;
+    #say @details;
 
     $team{$alias} = $details[0];  # Name
 
 }
+
+close DATA;
 
 
 foreach my $pod_name (@names) {
@@ -186,7 +189,10 @@ foreach my $pod_name (@names) {
     print $out $translators_section;
     
     close $out;
-    
+
+    # Check POD sintax/formatting
+    podchecker($distr);
+
 
     # Generate HTML file for proofreading;
     my $html = "$POD_PATH/$name$suffix.html";
