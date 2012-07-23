@@ -61,6 +61,15 @@ while ( <DATA> ) {
 close DATA;
 
 
+
+# copy work memory to clean project => clean memory
+copy($MEM_PATH, $CLEANM_PATH);
+
+# copy work memory to /memory/work and rename it to perlspanish-omegat.zipf.tmx
+copy($MEM_PATH, $WORK_PATH);
+
+
+
 foreach my $pod_name (@names) {
 
     my $source = "$SOURCE_PATH/$pod_name";
@@ -91,12 +100,6 @@ foreach my $pod_name (@names) {
     }
     
     my $distr  = "$DISTR_PATH/$final_name";
-
-    # copy work memory to clean project => clean memory
-    copy($MEM_PATH, $CLEANM_PATH);
-    
-    # copy work memory to /memory/work and rename it to perlspanish-omegat.zipf.tmx
-    copy($MEM_PATH, $WORK_PATH);
 
     # copy source file to clean project => clean memory
     copy($source, $clean);
