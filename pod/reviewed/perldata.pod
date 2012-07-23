@@ -26,7 +26,7 @@ X<scalar> X<escalar>
     $jornadas{'Feb'} # el valor 'Feb' del hash %jornadas
     $#jornadas       # el último índice del array @jornadas
 
-Se usa el carácter "@" para indicar que una variable es un array completo (o una porción de array o hash). Funciona de manera parecida a las palabras "estos/estos" o "estas/esas" del español, que indican que se esperan múltiples valores.
+Se usa el carácter "@" para indicar que una variable es un array completo (o una porción de array o hash). Funciona de manera parecida a las palabras "estos/esos" o "estas/esas" del español, que indican que se esperan múltiples valores.
 X<array>
 
     @jornadas		# ($jornadas[0], $jornadas[1],... $jornadas[n])
@@ -139,11 +139,11 @@ Los literales numéricos se especifican en cualquiera de los siguientes formatos 
     12345
     12345.67
     .23E-10             # un número muy pequeño
-    3.14_15_92          # un número muy grande
+    3.14_15_92          # un número muy importante
     4_294_967_296       # guión bajo para mejor legibilidad
     0xff                # hex
     0xdead_beef         # más hex   
-    0377                # octal (solo números, a partir de 0)
+    0377                # octal (solo números, comienza con 0)
     0b011011            # binario
 
 Está permitido el uso de guiones bajos (caracteres de subrayado) entre dígitos en literales numéricos para mejorar la legibilidad (pero no se permite usar varios guiones bajos seguidos: C<23__500> no es válido; C<23_500>, sí).
@@ -167,7 +167,7 @@ De forma predeterminada, los números de punto flotante sustituidos dentro de cad
 Vea L<perllocale> y L<POSIX>.
 
 Al igual que en algunos entornos de líneas de comandos, puede escribir el nombre de la variable entre llaves para eliminar la ambigüedad de los ulteriores caracteres alfanuméricos (y guiones bajos).
-También debe hacer esto al interpolar una variable en una cadena para separar el nombre de una variable de un signo de dos puntos doble o un apóstrofo, a fin de evitar que se traten como separadores de paquete:
+También debe hacer esto al interpolar una variable en una cadena para separar el nombre de una variable de un doble signo de dos puntos o un apóstrofo, a fin de evitar que se traten como separadores de paquete:
 X<interpolation> X<interpolación>
 
     $usuario = "Larry";
@@ -204,7 +204,7 @@ Se pueden usar los dos caracteres de control ^D y ^Z, y los símbolos __END__ y _
 
 El texto que hay a continuación de __DATA__ se puede leer mediante el identificador de archivo C<PAQUETE::DATA>, donde C<PAQUETE> es el paquete que estaba activo cuando se encontró el símbolo __DATA__.  El identificador de archivo se deja abierto apuntando a la línea que hay a continuación de __DATA__.  El programa debe ejecutar C<close DATA> cuando termine de leer.  (Si se deja abierto el identificador de archivo, provoca una pérdida de identificadores de archivos en caso de que se vuelva a cargar el módulo por alguna razón, así que es recomendable cerrarlo).  Por compatibilidad con I<scripts> antiguos, escritos antes de la introducción de __DATA__, __END__ se comporta como __DATA__ en el I<script> de nivel superior (pero no en los archivos cargados con C<require> o C<do>) y deja el resto del contenido del archivo accesible a través de C<main::DATA>.
 
-Encontrará una descripción más detallada y ejemplos de uso de __DATA__ en L<Autocargador>.  Tenga en cuenta que no puede leer el identificador de archivo DATA en un bloque BEGIN: el bloque BEGIN se ejecutará tan pronto como se encuentre (durante la compilación), momento en que aún no se ha visto el símbolo __DATA__ (o __END__) correspondiente.
+Encontrará una descripción más detallada y ejemplos de uso de __DATA__ en L<SelfLoader>.  Tenga en cuenta que no puede leer el identificador de archivo DATA en un bloque BEGIN: el bloque BEGIN se ejecutará tan pronto como se encuentre (durante la compilación), momento en que aún no se ha visto el símbolo __DATA__ (o __END__) correspondiente.
 
 =head3 Palabras sueltas
 X<palabra suelta>
@@ -220,7 +220,7 @@ cualquier palabra suelta que NO se pueda interpretar como una llamada de subruti
 =head3 Interpolación de arrays
 X<array, interpolation> X<interpolation, array> X<$"> X<array, interpolación> X<interpolación, array>
 
-Dentro de cadenas escritas entre comillas dobles, los arrays y las porciones se interpolan uniendo los elementos con el delimitador especificado en la variable <C$"> (C<$LIST_SEPARATOR> si se especifica "use English;"); el valor predeterminado es un espacio en blanco.  Las instrucciones siguientes son equivalentes:
+Dentro de cadenas escritas entre comillas dobles, los arrays y las porciones se interpolan uniendo los elementos con el delimitador especificado en la variable C<$"> (C<$LIST_SEPARATOR> si se especifica "use English;"); el valor predeterminado es un espacio en blanco.  Las instrucciones siguientes son equivalentes:
 
     $temporal = join($", @ARGV);
     system "echo $temporal";
@@ -351,17 +351,17 @@ o para inicializar referencias de hash que se usarán como registros:
     $reg = {
                 bruja => 'La implacable Piruja',
                 gato  => 'Fofito Feroz',
-                fecha => '10/31/1776',
+                fecha => '31/10/1776',
     };
 
 o para utilizar llamadas mediante parámetros con nombre para funciones complicadas:
 
    $campo = $consulta->opciones(
-               nombre      => 'nombre_grupo',
-               valores    => ['panchos','sanchos','juanchos'],
-               predeterminado   => 'sanchos',
-               salto_linea => 'true',
-               etiquetas    => \%etiquetas
+               name      => 'nombre_grupo',
+               values    => ['panchos','sanchos','juanchos'],
+               default   => 'sanchos',
+               linebreak => 'true',
+               labels    => \%etiquetas
    );
 
 Tenga en cuenta que aunque un hash se inicialice en ese orden, sus valores no tienen por qué salir en el mismo orden.  En la sección "sort" de L<perlfunc> encontrará ejemplos de cómo generar una salida ordenada.
@@ -480,7 +480,7 @@ La siguiente asignación:
 hace que $este sea un alias de $ese, @este sea un alias de @ese, %este sea un alias de %ese, etc. Es mucho más seguro usar una referencia.
 La línea siguiente:
 
-    local *este::azul = \$este::verde;
+    local *este::azul = \$ese::verde;
 
 hace que $este::azul sea temporalmente un alias de $ese::verde, pero no hace que @este::azul sea un alias de @ese::verde, o que %este::azul sea un alias de %ese::verde, etc. Encontrará más ejemplos en la sección "Tablas de símbolos" de L<perlmod>.  Por extraño que pueda parecer, esta es la base de todo el sistema de importación/exportación de módulos.
 
@@ -506,7 +506,7 @@ Por ejemplo:
     $id_archivo = nuevoopen('/etc/passwd');
 
 Ahora que tenemos la notación C<*foo{COSA}> ya no se usan tanto los typeglobs para la manipulación de identificadores de archivo, aunque siguen siendo necesarios para pasar identificadores de archivo y de directorio a (o desde) funciones. Esto se debe a que C<*IDENTIFICADOR{IO}> solo funciona si ya se ha utilizado IDENTIFICADOR como un identificador.
-Es decir, se debe usar C<*ARCHIVO> para crear nuevas entradas de en la tabla de símbolos; no se puede hacer con C<*foo{COSA}>.  En caso de duda, use C<*ARCHIVO>.
+Es decir, se debe usar C<*ARCHIVO> para crear nuevas entradas en la tabla de símbolos; no se puede hacer con C<*foo{COSA}>.  En caso de duda, use C<*ARCHIVO>.
 
 Todas las funciones capaces de crear identificadores de archivo (open(), opendir(), pipe(), socketpair(), sysopen(), socket() y accept()) crean automáticamente un identificador de archivo anónimo si el identificador que se les pasa es una variable escalar sin inicializar. Esto permite utilizar instrucciones como C<open(my $archivo, ...)> y C<open(local $archivo,...)> para crear identificadores de archivo que convenientemente se cerrarán automáticamente cuando termine el ámbito de aplicación, siempre que no haya otras referencias a ellos. Esto elimina en gran medida la necesidad de usar typeglobs al abrir identificadores de archivo que hay que pasar de un lugar a otro, como en el ejemplo siguiente:
 

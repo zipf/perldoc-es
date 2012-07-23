@@ -53,7 +53,7 @@ valor. X<scalar> X<escalar>
 
 Se usa el carácter "@" para indicar que una variable es un array completo (o
 una porción de array o hash). Funciona de manera parecida a las palabras
-"estos/estos" o "estas/esas" del español, que indican que se esperan múltiples
+"estos/esos" o "estas/esas" del español, que indican que se esperan múltiples
 valores. X<array>
 
     @jornadas		# ($jornadas[0], $jornadas[1],... $jornadas[n])
@@ -294,11 +294,11 @@ de punto flotante o entero:
     12345
     12345.67
     .23E-10             # un número muy pequeño
-    3.14_15_92          # un número muy grande
+    3.14_15_92          # un número muy importante
     4_294_967_296       # guión bajo para mejor legibilidad
     0xff                # hex
     0xdead_beef         # más hex   
-    0377                # octal (solo números, a partir de 0)
+    0377                # octal (solo números, comienza con 0)
     0b011011            # binario
 
 Está permitido el uso de guiones bajos (caracteres de subrayado) entre dígitos
@@ -349,7 +349,7 @@ Al igual que en algunos entornos de líneas de comandos, puede escribir el
 nombre de la variable entre llaves para eliminar la ambigüedad de los
 ulteriores caracteres alfanuméricos (y guiones bajos). También debe hacer esto
 al interpolar una variable en una cadena para separar el nombre de una variable
-de un signo de dos puntos doble o un apóstrofo, a fin de evitar que se traten
+de un doble signo de dos puntos o un apóstrofo, a fin de evitar que se traten
 como separadores de paquete: X<interpolation> X<interpolación>
 
     $usuario = "Larry";
@@ -431,7 +431,7 @@ archivos cargados con C<require> o C<do>) y deja el resto del contenido del
 archivo accesible a través de C<main::DATA>.
 
 Encontrará una descripción más detallada y ejemplos de uso de __DATA__ en
-L<Autocargador>. Tenga en cuenta que no puede leer el identificador de archivo
+L<SelfLoader>. Tenga en cuenta que no puede leer el identificador de archivo
 DATA en un bloque BEGIN: el bloque BEGIN se ejecutará tan pronto como se
 encuentre (durante la compilación), momento en que aún no se ha visto el
 símbolo __DATA__ (o __END__) correspondiente.
@@ -464,7 +464,7 @@ X<array, interpolation> X<interpolation, array> X<$"> X<array, interpolación> X<
 
 Dentro de cadenas escritas entre comillas dobles, los arrays y las porciones se
 interpolan uniendo los elementos con el delimitador especificado en la variable
-<C$"> (C<$LIST_SEPARATOR> si se especifica "use English;"); el valor
+C<$"> (C<$LIST_SEPARATOR> si se especifica "use English;"); el valor
 predeterminado es un espacio en blanco. Las instrucciones siguientes son
 equivalentes:
 
@@ -477,7 +477,7 @@ Dentro de los patrones de búsqueda (donde también se realiza la sustitución del
 entrecomillado doble) existe una desafortunada ambigüedad: ¿Debe C</$foo[bar]/>
 ser interpretado como C</${foo}[bar]/> (donde C<[bar]> es una clase de
 caracteres para la expresión regular) o como C</${foo[bar]}/> (donde C<[bar]>
-es el subíndice del array @foo)? Si @foo no existe, entonces es evidente que
+es el subíndice del array @foo)?  Si @foo no existe, entonces es evidente que
 se trata de una clase de caracteres. Si @foo existe, Perl tiene una buena pista
 acerca de C<[bar]>, y casi siempre acierta. Por si se equivoca, o para evitar
 ataques de paranoia, puede forzar la interpretación correcta con llaves, como
@@ -660,18 +660,18 @@ o para inicializar referencias de hash que se usarán como registros:
     $reg = {
                 bruja => 'La implacable Piruja',
                 gato  => 'Fofito Feroz',
-                fecha => '10/31/1776',
+                fecha => '31/10/1776',
     };
 
 o para utilizar llamadas mediante parámetros con nombre para funciones
 complicadas:
 
    $campo = $consulta->opciones(
-               nombre      => 'nombre_grupo',
-               valores    => ['panchos','sanchos','juanchos'],
-               predeterminado   => 'sanchos',
-               salto_linea => 'true',
-               etiquetas    => \%etiquetas
+               name      => 'nombre_grupo',
+               values    => ['panchos','sanchos','juanchos'],
+               default   => 'sanchos',
+               linebreak => 'true',
+               labels    => \%etiquetas
    );
 
 Tenga en cuenta que aunque un hash se inicialice en ese orden, sus valores no
@@ -794,7 +794,7 @@ porción.
     $u = @h{'primero', 'segundo'};     # Ahora $u es 'B'
 
 Si se está preguntando por qué se usa un signo '@' en una porción de hash en
-lugar de un signo '%', piense en esto: el tipo de delimitador (corchete o
+lugar de un signo '%', piense en esto:  el tipo de delimitador (corchete o
 llave) indica si se trata de un array o un hash. Por otra parte, el símbolo
 inicial ('$' o '@') del nombre del array o hash indica si se va a obtener un
 solo valor (un escalar) o varios (una lista).
@@ -817,7 +817,7 @@ hace que $este sea un alias de $ese, @este sea un alias de @ese, %este sea un
 alias de %ese, etc. Es mucho más seguro usar una referencia. La línea
 siguiente:
 
-    local *este::azul = \$este::verde;
+    local *este::azul = \$ese::verde;
 
 hace que $este::azul sea temporalmente un alias de $ese::verde, pero no hace
 que @este::azul sea un alias de @ese::verde, o que %este::azul sea un alias de
@@ -855,7 +855,7 @@ para la manipulación de identificadores de archivo, aunque siguen siendo
 necesarios para pasar identificadores de archivo y de directorio a (o desde)
 funciones. Esto se debe a que C<*IDENTIFICADOR{IO}> solo funciona si ya se ha
 utilizado IDENTIFICADOR como un identificador. Es decir, se debe usar
-C<*ARCHIVO> para crear nuevas entradas de en la tabla de símbolos; no se puede
+C<*ARCHIVO> para crear nuevas entradas en la tabla de símbolos; no se puede
 hacer con C<*foo{COSA}>. En caso de duda, use C<*ARCHIVO>.
 
 Todas las funciones capaces de crear identificadores de archivo (open(),
