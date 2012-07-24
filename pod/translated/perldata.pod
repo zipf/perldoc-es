@@ -167,7 +167,7 @@ De forma predeterminada, los números de punto flotante sustituidos dentro de cad
 Vea L<perllocale> y L<POSIX>.
 
 Al igual que en algunos entornos de líneas de comandos, puede escribir el nombre de la variable entre llaves para eliminar la ambigüedad de los ulteriores caracteres alfanuméricos (y guiones bajos).
-También debe hacer esto al interpolar una variable en una cadena para separar el nombre de una variable de un signo de dos puntos dobles o un apóstrofo, a fin de evitar que se traten como separadores de paquete:
+También debe hacer esto al interpolar una variable en una cadena para separar el nombre de una variable de un doble signo de dos puntos o un apóstrofo, a fin de evitar que se traten como separadores de paquete:
 X<interpolation> X<interpolación>
 
     $usuario = "Larry";
@@ -480,9 +480,9 @@ La siguiente asignación:
 hace que $este sea un alias de $ese, @este sea un alias de @ese, %este sea un alias de %ese, etc. Es mucho más seguro usar una referencia.
 La línea siguiente:
 
-    local *este::azul = \$este::verde;
+    local *este::azul = \$ese::verde;
 
-hace que $este::azul sea temporalmente un alias de $este::verde, pero no hace que @este::azul sea un alias de @ese::verde, o que %este::azul sea un alias de %este::verde, etc. Encontrará más ejemplos en la sección "Tablas de símbolos" de L<perlmod>.  Por extraño que pueda parecer, esta es la base de todo el sistema de importación/exportación de módulos.
+hace que $este::azul sea temporalmente un alias de $ese::verde, pero no hace que @este::azul sea un alias de @ese::verde, o que %este::azul sea un alias de %ese::verde, etc. Encontrará más ejemplos en la sección "Tablas de símbolos" de L<perlmod>.  Por extraño que pueda parecer, esta es la base de todo el sistema de importación/exportación de módulos.
 
 Otro uso de los typeglobs es pasar identificadores de archivo a una función o crear nuevos identificadores de archivo.  Si tiene que usar un typeglob para guardar un identificador de archivo, hágalo de esta manera:
 
