@@ -125,7 +125,7 @@ foreach my $pod_name (@names) {
     my $utf8;
     $utf8++ if $text =~ /^=encoding utf8/;
     
-    say "UTF-8-encoded file";
+    say "UTF-8-encoded file" if $utf8;
 
     my $encoding;
     if ( $utf8 ) {
@@ -194,6 +194,7 @@ foreach my $pod_name (@names) {
     close $out;
 
     # Check POD sintax/formatting
+    say "Checking POD syntax...";
     podchecker($distr);
 
 
