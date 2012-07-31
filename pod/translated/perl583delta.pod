@@ -12,7 +12,7 @@ Si está actualizando desde una versión anterior como la 5.6.1, primero lea L<per
 
 No hay cambios incompatibles con 5.8.2.
 
-=head1 Mejoras principales
+=head1 Mejoras en los componentes
 
 Un método C<SCALAR> está ahora disponible para los hash enlazados. Esto se activa cuando un hash enlazado se utiliza en contexto escalar, como
 
@@ -23,7 +23,7 @@ Un método C<SCALAR> está ahora disponible para los hash enlazados. Esto se activ
 
 El comportamiento anterior era que %hash_enlazado devolvería todo la que hubiera devuelto este hash antes de ser enlazado (por lo general, 0). El nuevo comportamiento en ausencia de un método SCALAR es retornar verdadero si está en medio de una iteración C<each>, y de otra manera, llamar a FIRSTKEY para comprobar si el hash está vacío (asegurarse de que una posterior C<each> también comenzará llamando FIRSTKEY). Por favor, vea L<perltie/SCALAR> para ver todos los detalles y advertencias.
 
-=head1 Módulos y Pragmata
+=head1 Módulos y pragmas
 
 =over 4
 
@@ -67,7 +67,7 @@ C<cond_wait> tiene una nueva forma de dos argumentos. Se ha añadido C<cond_timed
 
 =back
 
-=head1 Cambios en las herramientas
+=head1 Cambios en utilidades
 
 C<find2perl> ahora asume C<-print> como una acción por defecto. Anteriormente, era necesario que se especificara de forma explícita.
 
@@ -139,7 +139,7 @@ Código congelado para la próxima versión de mantenimiento (5.8.4) será el 31 de 
 Iain 'Spoon' Truskett, Perl hacker, autor de L<perlreref> y contribuidor a CPAN, murió repentinamente el 29 de diciembre de 2003, a la edad de 24 años.
 Le echaremos de menos.
 
-=head1 Informar de errores
+=head1 Notificación de errores
 
 Si usted encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  También puede haber información en http://www.perl.org/, la página oficial de Perl.
 
@@ -149,10 +149,10 @@ Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<
 
 El archivo de F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
 
-El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+El archivo F<INSTALL> contiene instrucciones para compilar Perl.
 
-El archivo F<README> (LEEME) para asuntos generales.
+El archivo F<README> contiene información general.
 
-Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+En los archivos F<Artistic> y F<Copying> encontrará información de copyright.
 
 =cut

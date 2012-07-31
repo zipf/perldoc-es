@@ -120,7 +120,7 @@ Una corrección de errores relacionados con el manejo del modificador C</m> y C<q
 
 =back
 
-=head1 Mejoras principales
+=head1 Mejoras en los componentes
 
 =head2 Unicode Character Database 5.1.0
 
@@ -128,14 +128,14 @@ La copia de la base de datos de caracteres Unicode incluidos en Perl 5.10.1 ha s
 
 =head2 Una interfaz adecuada para un Método de Resolución de Órdenes
 
-A partir de Perl 5.10.1 existe una nueva interfaz para la conexión y orden del método de resolución aparte del predeterminado (buscar primero en profundidad lineal).
-El método de resolución de orden C3 añadido en 5.10.0 se ha re-implementado como un complemento, sin cambiar su interfaz del espacio Perl. Vea L<perlmroapi> para obtener más información.
+En Perl 5.10.1 se incluyó una nueva interfaz para conectar y usar órdenes de resolución de métodos distintos del predeterminado (búsqueda lineal en profundidad).
+El orden de resolución de métodos C3 agregado en 5.10.0 se ha reimplementado como un complemento sin cambiar su interfaz del espacio Perl. Vea L<perlmroapi> para obtener más información.
 
 =head2 El pragma C<overloading>
 
 Este pragma le permite desactivar o activar localmente la sobrecarga de algunas o todas las operaciones. (Yuval Kogman)
 
-=head2 Pruebas en paralelo
+=head2 Tests paralelos
 
 La distribución principal ahora puede ejecutar sus pruebas de regresión en paralelo en las plataformas de tipo Unix. En lugar de ejecutar C<make test>, ponga en su entorno la variable C<TEST_JOBS> al número de pruebas que se deben ejecutar en paralelo, y ejecute C<make test_harness>. En un shell de la familia Bourne, esto se puede hacer así
 
@@ -156,7 +156,7 @@ Esto permite a los autores de la distribución especificar los requisitos previos
 
 Consulte la documentación de C<ExtUtils::MakeMaker> o C<Module::Build> para más información sobre cómo especificar C<configure_requires> cuando se crea una distribución para CPAN.
 
-=head1 Módulos y Pragmata
+=head1 Módulos y pragmas
 
 =head2 Nuevos módulos y pragmas
 
@@ -781,7 +781,7 @@ Actualizado desde la versión 0.08 a la 0.10.
 
 =back
 
-=head1 Cambios en las herramientas
+=head1 Cambios en utilidades
 
 =over 4
 
@@ -1456,22 +1456,22 @@ El otro grupo principal de colaboradores contribuyó con la mayor parte de los ca
 
 Finalmente, gracias a Larry Wall, sin el cual, nada de esto sería necesario.
 
-=head1 Informar de errores
+=head1 Notificación de errores
 
 Si encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay también información en la página principal de Perl, http://www.perl.org/ .
 
 Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.
 
-Si el fallo que está reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo pública, por favor, envíelo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripción cerrada y no archivada, que incluye a todos los participantes principales, que podrán ayudar a evaluar el impacto de los problemas, encontrar una resolución, y ayudar a coordinar la liberación de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl está soportado. Por favor, utilice sólo esta dirección para problemas de seguridad en el núcleo de Perl, no para los módulos distribuidos de forma independiente en CPAN.
+Si el fallo que está reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo pública, por favor, envíelo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripción cerrada y no archivada, que incluye a todos los participantes principales, que podrán ayudar a evaluar el impacto de los problemas, encontrar una resolución, y ayudar a coordinar la liberación de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl está soportado. Debe usar esta dirección únicamente para problemas de seguridad relacionados con el núcleo de Perl, no para módulos que se distribuyan por separado en CPAN.
 
 =head1 VEA TAMBIÉN
 
-El archivo F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
+En el archivo F<Changes> encontrará una explicación de cómo obtener información detallada de los cambios.
 
-El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+El archivo F<INSTALL> contiene instrucciones para compilar Perl.
 
-El archivo F<README> (LEEME) para asuntos generales.
+El archivo F<README> contiene información general.
 
-Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+En los archivos F<Artistic> y F<Copying> encontrará información de copyright.
 
 =cut
