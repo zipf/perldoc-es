@@ -1,5 +1,5 @@
 =head1 NAME
-X<data structure> X<complex data structure> X<struct> X<estructura de datos> X<estructura compleja de datos> X<estructura>
+X<data structure> X<complex data structure> X<struct>
 
 perldsc - Introducción a las estructuras de datos
 
@@ -186,7 +186,7 @@ Si esto está empezando a sonar más aterrador de lo que parece, relájese.  Perl t
 De esta forma, estará obligado a declarar todas las variables con my(), y también no permite que exista ninguna "desreferencia simbólica" accidental.  Por lo tanto, si hubiera hecho:
 
     my $aref = [
-	[ "pedro", "pablo", "pebbles", "bambam", "dino", ],
+	[ "fred", "barney", "pebbles", "bambam", "dino", ],
 	[ "homer", "bart", "marge", "maggie", ],
 	[ "george", "jane", "elroy", "judy", ],
     ];
@@ -246,7 +246,7 @@ X<array of arrays> X<AoA> X<array de arrays>
 =head2 Generación de un ARRAY DE ARRAYS
 
  # leyendo desde un archivo
- while( <> ) {
+ while ( <> ) {
      push @AoA, [ split ];
  }
 
@@ -304,7 +304,7 @@ X<hash of arrays> X<HoA> X<hash de arrays>
 
  # leyendo desde un archivo
  # picapiedra: pedro pablo wilma dino
- while( <> ) {
+ while ( <> ) {
      next unless s/^(.*?):\s*//;
      $HoA{$1} = [ split ];
  }
@@ -394,7 +394,7 @@ X<array of hashes> X<AoH> X<array de hashes>
 
  # leyendo desde un archivo
  # formato: LIDER=pedro AMIGO=pablo
- while( <> ) {
+ while ( <> ) {
      $reg = {};
      for $campo ( split ) {
          ($clave, $valor) = split /=/, $campo;
@@ -407,7 +407,7 @@ X<array of hashes> X<AoH> X<array de hashes>
  # leyendo desde un archivo
  # formato: LIDER=pedro AMIGO=pablo
  # sin temporales
- while( <> ) {
+ while ( <> ) {
      push @AoH, { split /[\s+=]/ };
  }
 
@@ -485,7 +485,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
 
  # leyendo desde un archivo
  # picapiedra: lider=pedro amigo=pablo esposa=wilma mascota=dino
- while( <> ) {
+ while ( <> ) {
      next unless s/^(.*?):\s*//;
      $quien = $1;
      for $campo ( split ) {
@@ -495,7 +495,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
 
 
  # leyendo desde un archivo; más temporales
- while( <> ) {
+ while ( <> ) {
      next unless s/^(.*?):\s*//;
      $quien = $1;
      $reg = {};

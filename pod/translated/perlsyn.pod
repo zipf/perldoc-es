@@ -1,11 +1,11 @@
-=head1 NOMBRE
-X<syntax> X<sintaxis>
+=head1 NAME
+X<syntax>
 
 perlsyn - Sintaxis de Perl
 
 =head1 DESCRIPCIÓN
 
-Un programa Perl consiste en una secuencia de declaraciones e instrucciones que se ejecutan de arriba hacia abajo.  Bucles, subrutinas y otras estructuras de control le permiten saltar a lo largo del código.
+Un programa Perl consiste en una secuencia de declaraciones y sentencias que se ejecutan de arriba hacia abajo.  Bucles, subrutinas y otras estructuras de control le permiten saltar a lo largo del código.
 
 Perl es un lenguaje de B<estructura libre>: puede formatearlo y sangrarlo como quiera.  El espacio en blanco sirve para separar los elementos, a diferencia de lenguajes como Python donde es una parte importante de la sintaxis, o de Fortran, donde es inmaterial.
 
@@ -31,8 +31,8 @@ Una declaración puede ponerse en cualquier sitio, como si fuera una instrucción,
 
 Declarar una subrutina permite que su nombre sea usado como si fuera un operador de lista, desde el punto de vista del programa.  Puede declarar una subrutina sin definirla diciendo C<sub nombre>, como: X<subrutina, declaración>
 
-    sub minombre;
-    $me = minombre $0 		or die "no puedo obtener minombre";
+    sub mi_nombre;
+    $yo = mi_nombre $0 		or die "no puedo obtener mi_name";
 
 Una declaración simple como ésta declara que la función es un operador de lista, no un operador unario, así que tiene que tener cuidado a la hora de usar paréntesis (o C<or> en lugar de C<||>).  El operador C<||> se enlaza con firmeza al final de la lista de operadores; se convierte en parte del último elemento.  Siempre puede usar paréntesis alrededor de los argumentos de los operadores de lista para convertir el operador de lista de nuevo en algo que se comporta más como una llamada de función.  De forma alternativa, puede utilizar el prototipo C<($)> para convertir la subrutina en un operador unario:
 
@@ -180,7 +180,7 @@ La declaración experimental C<given> I<no se activa automáticamente>; vea L</"In
 A diferencia del C y Pascal, en Perl están definidas en términos de BLOQUES, no de instrucciones.  Esto significa que las llaves son I<necesarias>: no se permiten instrucciones sueltas.  Si quiere escribir condicionales sin llaves hay otras formas de hacerlo.  Todo lo siguiente hace lo mismo:
 
     if (!open(FOO)) { die "No puedo abrir $FOO: $!" }
-    die "No puedo abrir $FOO: $!" unless open(FOO);
+    die "No se puede abrir $FOO: $!" unless open(FOO);
     open(FOO)  || die "No puedo abrir $FOO: $!";
     open(FOO) ? () : die "No puedo abrir $FOO: $!";
 			# Un poco exótico, este último
@@ -216,7 +216,7 @@ El comando C<last> sale inmediatamente del bucle en cuestión.  El bloque C<conti
 	...
     }
 
-El comando C<redo> reinicia la iteración sin evaluar de nuevo la condición.  El bloque C<continue>, si está, no es ejecutado.
+El comando C<redo> reinicia la iteración sin evaluar de nuevo la condición.  El bloque C<continue>, si está presente, I<no> se ejecuta.
 Este comando se usa, normalmente, por los programas que quieren engañarse a sí mismos sobre lo que fue introducido.
 
 Por ejemplo, cuando se procesa un archivo como F</etc/termcap>.
@@ -228,7 +228,7 @@ Si las líneas de entrada acaban en barras diagonales inversas para indicar conti
 	    $_ .= <>;
 	    redo unless eof();
 	}
-	# ahora, procesa $_
+	# ahora se procesa $_
     }
 
 que es la forma corta que tiene Perl de la siguiente versión escrita de manera más explícita:
@@ -307,7 +307,7 @@ X<readline> X<< <> >>
         # hacer algo
     }
 
-=head2 Bucles Foreach
+=head2 Bucles foreach
 X<for> X<foreach>
 
 El bucle C<foreach> itera sobre los valores de una lista normal y pone la variable VAR a cada uno de los elementos de la lista.  Si la variable es precedida por la palabra clave C<my>, entonces su ámbito es léxicamente local y por eso es visible sólo dentro del bucle.  Dicho de otra forma, la variable es implícitamente local al bucle y recupera su valor anterior al salir del bucle.  Si la variable fue previamente declarada con C<my>, usará esta variable en vez de la global, pero sigue siendo local en el bucle.  Esta implícita localización ocurre I<solamente> en un bucle C<foreach>.
@@ -328,7 +328,7 @@ Ejemplos:
 
     for (@array) { s/foo/bar/ }
 
-    for my $elemento (@elementos) {
+    for my $elem (@elementos) {
 	$elemento *= 2;
     }
 
@@ -565,7 +565,7 @@ Note que los traductores pod suelen mirar sólo en los párrafos que comiencen por
     $a=3;
     =material secreto
      warn "Ni POD ni CÓDIGO!?"
-    =cut regreso
+    =cut back
     print "tengo $a\n";
 
 Probablemente no se dará cuenta de que el C<warn()> ha sido comentado para siempre.
@@ -814,7 +814,7 @@ O en una versión más reciente:
     }
     print "\@array contiene $cuenta copias de 'foo'\n";
 
-Al final de todos los bloques C<when>, hay un implícito C<next>.
+Al final de todos los bloques C<when>, hay una instrucción C<next> implícita.
 Puede invalidarlo con un explícito C<last> si está interesado sólo en la primera coincidencia.
 
 Esto no funciona si especifica explícitamente una variable de bucle, como en C<for $item (@array)>.  Tiene que usar la variable por defecto C<$_>.

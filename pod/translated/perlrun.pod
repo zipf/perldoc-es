@@ -79,7 +79,7 @@ La técnica C<#!> del Unix puede ser simulada en otros sistemas:
 
 Ponga
 
-    extproc perl -S -sus_opciones
+    extproc perl -S -sus_modificadores
 
 como primera línea en el archivo C<*.cmd> (B<-S> si sale un error en el manejo de `extproc' del cmd.exe).
 
@@ -111,17 +111,17 @@ En algunos sistemas, quizás tenga que cambiar las comillas simples por las doble
 Por ejemplo:
 
     # Unix
-    perl -e 'print "Hello world\n"'
+    perl -e 'print "Hola a todos\n"'
 
     # MS-DOS, etc.
-    perl -e "print \"Hello world\n\""
+    perl -e "print \"Hola a todos\n\""
 
     # VMS
-    perl -e "print ""Hello world\n"""
+    perl -e "print ""Hola a todos\n"""
 
 El problema es que nada de esto es fiable: depende del comando e es incluso posible que nada funcione.  Si I<4DOS> fuera el shell de comandos, esto serviría mejor:
 
-    perl -e "print <Ctrl-x>"Hello world\n<Ctrl-x>""
+    perl -e "print <Ctrl-x>"Hola a todos\n<Ctrl-x>""
 
 B<CMD.EXE> en Windows NT tomó mucha de las funcionalidades estándar de Unix cuando nadie estaba mirando, pero intente encontrar documentación sobre sus reglas de entrecomillado.
 

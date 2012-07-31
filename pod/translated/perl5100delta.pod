@@ -10,7 +10,7 @@ Este documento describe las diferencias entre la versión 5.8.8 y la versión 5.10
 
 Muchas de las correcciones de errores en 5.10.0 ya se observaban en las versiones de mantenimiento de 5.8.x; no se duplicarán aquí y están documentadas en el conjunto de páginas de manual llamadas perl58[1-8]?delta.
 
-=head1 Mejoras principales
+=head1 Mejoras en los componentes
 
 =head2 El pragma C<feature>
 
@@ -389,7 +389,7 @@ Indefiniendo o borrando un gestor de señales con C<undef $SIG{FOO}> es ahora equ
 
 C<use strict 'refs'> hace caso omiso de una referencia dura en un argumento para defined(), como en:
 
-    use strict "refs";
+    use strict 'refs';
     my $x = 'foo';
     if (defined $$x) {...}
 
@@ -439,7 +439,7 @@ En 5.8.x, el código advierte cuando Foo::Bar contiene C<use warnings;> No le imp
 
 En 5.10.0 y posteriores, el código advierte cuando principal contiene C<use warnings;> No importa si Foo::Base o Foo::Bar tienen las advertencias activadas para desactivar la advertencia de que tiene que modificar principal.
 
-=head1 Módulos y Pragmata
+=head1 Módulos y pragmas
 
 =head2 Actualizando módulos principales de forma individual
 
@@ -637,7 +637,7 @@ A medida que el viejo modelo de hilado del 5005 ha sido eliminado en favor del s
 
 =back
 
-=head1 Cambios en las herramientas
+=head1 Cambios en utilidades
 
 =over 4
 
@@ -1136,7 +1136,7 @@ El manejo de Unicode aún no está claro en varios lugares, donde es dependiente d
 
 Cuando se compila con g++ y soporte para hebras en Linux, se ha informado que C<$!> deja de funcionar correctamente. Esto se relaciona con el hecho de que la glibc proporciona dos implementaciones strerror_r(3), y perl selecciona la incorrecta.
 
-=head1 Informar de errores
+=head1 Notificación de errores
 
 Si encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/rt3/ . Hay también información en la página principal de Perl, http://www.perl.org/ .
 
@@ -1146,10 +1146,10 @@ Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<
 
 El archivo F<Changes> y las páginas de manual perl590delta a perl595delta para un exhaustivos detalles sobre lo que ha cambiado.
 
-El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+El archivo F<INSTALL> contiene instrucciones para compilar Perl.
 
-El archivo F<README> (LEEME) para asuntos generales.
+El archivo F<README> contiene información general.
 
-Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+En los archivos F<Artistic> y F<Copying> encontrará información de copyright.
 
 =cut
