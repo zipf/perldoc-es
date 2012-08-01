@@ -10,11 +10,11 @@ La estructura de datos a dos niveles más simple que se puede construir en Perl e
 
 Un array de un array es justo un array @AoA normal sobre la que se puede aplicar dos subíndices, como C<$AoA[3][2]>.  Aquí hay una declaración del array:
 
-    use 5.010;  # para que podamos usar say()
+    use 5.010;  # so we can use say()
 
     # asignar a nuestro array, un array de referencias a array
     @AoA = (
-	   [ "pedro", "pablo", "pebbles", "bambam", "dino", ],
+	   [ "fred", "barney", "pebbles", "bambam", "dino", ],
 	   [ "george", "jane", "elroy", "judy", ],
 	   [ "homer", "bart", "marge", "maggie", ],
     );
@@ -25,7 +25,7 @@ Ahora, debe tener mucho cuidado de que el paréntesis externo debe ser eso: un pa
 
     # asignar una referencia a un array de referencias de array
     $ref_a_AoA = [
-	[ "pedro", "pablo", "pebbles", "bambam", "dino", ],
+	[ "fred", "barney", "pebbles", "bambam", "dino", ],
 	[ "george", "jane", "elroy", "judy", ],
 	[ "homer", "bart", "marge", "maggie", ],
     ];
@@ -236,7 +236,7 @@ El primero es el que el depurador de Perl utiliza, mientras que el segundo gener
     push $AoA[0], "wilma", "betty";
     show @AoA;
 
-imprimirá:
+imprimirá en pantalla:
 
     0  0..3  "pedro" "pablo" "wilma" "betty"
     1  0..2  "george" "jane" "elroy"
@@ -322,4 +322,4 @@ L<perldata>, L<perlref>, L<perldsc>
 
 Tom Christiansen <F<tchrist@perl.com>>
 
-Última actualización: Mar Abr 26 18:30:55 MDT 2011
+Última actualización: Martes, 26 de abril 18:30:55 MDT 2011

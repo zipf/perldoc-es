@@ -1,13 +1,13 @@
 =head1 NOMBRE
 
-perlmod - Perl modules (packages and symbol tables)
+perlmod - Módulos Perl (paquetes y tablas de símbolos)
 
 =head1 DESCRIPCIÓN
 
 =head2 Paquetes
-X<package> X<namespace> X<variable, global> X<global variable> X<global>
+X<package> X<paquete> X<namespace> X<espacio de nombres> X<variable, global> X<global, variable> X<global variable> X<variable global> X<global>
 
-Perl proporciona un mecanismo para los espacios de nombres alternativos, de forma que se evite que los paquetes se pisen unos a otros sus variables.  De hecho, no hay nada parecido a variables globales en Perl.  La sentencia del paquete declara la unidad de compilación a usar en el espacio de nombres dado.  El ámbito de la declaración de paquete alcanza desde la declaración misma hasta el final del bloque de cierre, C<<eval> o archivo, el primero que aparezca (el mismo ámbito que el de los operadores my() y local()).  Los identificadores dinámicos inhábiles estarán en el mismo espacio de nombres, excepto aquellos pocos identificadores que si no son hábiles, se usan por defecto los del paquete principal en lugar de los del actual, tal y como se indica a continuación.  Una sentencia de paquete afecta únicamente a las variables dinámicas, incluyendo aquellas usadas mediante local(), pero I<o> las variables léxicas creadas con my().  Normalmente será la primera declaración en un archivo incluido por medio de los operadores C<do>, C<require> o C<use>.  Puede cambiar a un paquete en más de un lugar; únicamente influye en qué tabla de símbolos se usa en el resto del bloque.  Puede referirse a variables y gestores de archivo en otros paquetes usando el prefijo en el identificador con el nombre del paquete y dos puntos: C<$Paquete::Variable>.  Si el nombre del paquete se omite, se asume que el paquete es C<main>.  Es decir, C<$::vela> equivale a C<$main::vela>.
+Perl proporciona un mecanismo para espacios de nombres alternativos, de forma que se evite que los paquetes se pisen unos a otros sus variables.  De hecho, en Perl no hay nada parecido a variables globales.  La instrucción package declara que la unidad de compilación está en el espacio de nombres especificado.  El ámbito de la declaración de paquete alcanza desde la declaración misma hasta el final del bloque de cierre, C<<eval> o archivo, el primero que aparezca (el mismo ámbito que el de los operadores my() y local()).  Los identificadores dinámicos sin calificar estarán en el mismo espacio de nombres, excepto aquellos pocos identificadores que, si no están calificados, corresponderán por defecto al paquete principal en lugar de al actual, como se indica a continuación.  Una instrucción package solo afecta a las variables dinámicas, incluidas aquellas en las que se usa local(), pero I<no> variables léxicas creadas con my().  Normalmente será la primera declaración en un archivo incluida por medio de los operadores C<do>, C<require> o C<use>.  Puede cambiar a un paquete en más de un lugar; únicamente influye en qué tabla de símbolos usa el compilador para el resto del bloque.  Puede hacer referencia a variables e identificadores de archivo en otros paquetes usando el prefijo en el identificador con el nombre del paquete y doble signo de dos puntos: C<$Paquete::Variable>.  Si el nombre del paquete se omite, se asume que el paquete es C<main>.  Es decir, C<$::vela> equivale a C<$main::vela>.
 
 El antiguo delimitador de paquete era una simple comilla, pero los dos puntos (dobles) es ahora el delimitador usado, en parte porque es más legible para los humanos y en parte por que más legible para las macros de B<emacs>.  También hace que los programadores de C++ se sientan más cómodos, más que si se usara la comilla, que se parece más al estilo seguido por los programadores de Ada.  Ya que la sintaxis previa todavía se admite para mantener la compatibilidad con versiones previas, si intenta usar una cadena como C<"Este es el $amo's de la casa"> se accederá a C<$amo::s>; es decir, la variable $s en el paquete C<owner>, que seguramente no es lo que desea.
 Use braces to disambiguate, as in C<"This is ${owner}'s house">.
@@ -301,7 +301,7 @@ Los módulos de Perl se incluyen en su programa mediante la sentencia
 
     use Module;
 
-o
+o bien
 
     use Module LIST;
 
@@ -309,7 +309,7 @@ Eso es exactamente equivalente a
 
     BEGIN { require 'Module.pm'; 'Module'->import; }
 
-o
+o bien
 
     BEGIN { require 'Module.pm'; 'Module'->import(LIST); }
 

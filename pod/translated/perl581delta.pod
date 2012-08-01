@@ -34,7 +34,9 @@ La aleatoriedad añadida puede afectar a las aplicaciones.
 Un posible escenario es cuando la salida de una aplicación ha incluido datos hash.  Por ejemplo, si ha utilizado el módulo Data::Dumper para volcar los datos en diferentes archivos, y luego comparó los archivos para ver si los datos han cambiado, ahora tendrá falsos positivos ya que el orden en que los hashes se vuelcan pueden variar.  En general, la cura es ordenar las claves (o valores); en particular para Data::Dumper use la opción C<Sortkeys>.  Si un determinado orden es muy importante, utilice hashes enlazados: por ejemplo, el módulo Tie::IxHash, que por defecto preserva el orden en que los elementos de un hash han sido añadidos.
 
 Un problema más sutil es la confianza en el orden de la "destrucción global".
-Eso es lo que ocurre al final de la ejecución: Perl destruye todas las estructuras de datos, incluyendo los datos del usuario.  Si sus destructores (las subrutinas DESTROY) han asumido cualquier tipo de orden para la destrucción global, podrían ocurrir problemas más adelante.  Por ejemplo, en un destructor de un objeto no puede asumir que los objetos de cualquier otra clase todavía están disponibles, a menos que mantenga una referencia a ellos.
+Eso es lo que ocurre al final de la ejecución: Perl destruye todas las estructuras de datos, incluyendo los datos del usuario.  If your destructors (the DESTROY
+subroutines) have assumed any particular ordering to the global
+destruction, there might be problems ahead.  Por ejemplo, en un destructor de un objeto no puede asumir que los objetos de cualquier otra clase todavía están disponibles, a menos que mantenga una referencia a ellos.
 Si la variable de entorno PERL_DESTRUCT_LEVEL se establece a un valor distinto de cero, o si Perl está saliendo de un hilo, también destruirá las referencias comunes y las tablas de símbolos que ya no están en uso.
 No puede llamar a un método de clase o a una función ordinaria en una clase que se haya destruido de esa manera.
 
@@ -74,7 +76,7 @@ Para la nueva vida de esta opción, vea L<"UTF-8 ya no está por defecto bajo la c
 
 Perl 5.8.1 usa el modificador /d cuando se ejecuta el shell cmd.exe, internamente, para system(), comillas invertidas, y al abrir tuberías hacia programas externos.  Esta opción adicional deshabilita la ejecución de los comandos AutoRun del registro, que generalmente se considera indeseable cuando se ejecutan programas externos.  Si desea mantener la compatibilidad con el antiguo comportamiento, establezca PERL5SHELL en su entorno a C<cmd /x/c>.
 
-=head1 Mejoras principales
+=head1 Mejoras en los componentes
 
 =head2 UTF-8 ya no está por defecto bajo la configuración regional de UTF-8
 
@@ -153,7 +155,7 @@ Las capas PerlIO::via pueden tener ahora un método UTF8 opcional para indicar cu
 
 utf8::is_utf8() ha sido añadido como una forma rápida de comprobar cuándo un escalar está codificado internamente en UTF-8 (Unicode).
 
-=head1 Módulos y Pragmata
+=head1 Módulos y pragmas
 
 =head2 Módulos y Pragmata actualizados
 
@@ -314,7 +316,7 @@ Ahora devuelve información adicional.
 
 =back
 
-=head1 Cambios en las herramientas
+=head1 Cambios en utilidades
 
 La utilidad C<h2xs> produce ahora un diseño más moderno: F<Foo-Bar/lib/Foo/Bar.pm> en lugar de F<Foo/Bar/Bar.pm>.
 Además, la prueba reutilizable se llama ahora F<t/Foo-Bar.t> en lugar de F<t/1.t>.
@@ -622,7 +624,7 @@ El soporte de compilador generador de C, B::C (la interfaz que hay por detrás de
 
 =head1 Problemas en plataformas específicas
 
-=head2 EBCDIC Platforms
+=head2 Plataformas EBCDIC
 
 IBM z/OS y otras plataformas EBCDIC siguen siendo problemáticas en relación con la compatibilidad con Unicode.  Muchas pruebas de Unicode se omiten cuando en realidad deberían ser arregladas.
 
@@ -686,7 +688,7 @@ en lugar de
 
    defined $a ? $a : $b
 
-and
+y
 
    $c //= $d;
 
@@ -736,7 +738,7 @@ Pseudo-hashes serán eliminados
 
 =back
 
-=head1 Informar de errores
+=head1 Notificación de errores
 
 Si encuentra algo que piensa que es un error, debe revisar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/ . Hay también información en la página principal de Perl, http://www.perl.org/ .
 
@@ -746,10 +748,10 @@ Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<
 
 El archivo de F<Changes> (Cambios) para obtener más información exhaustiva sobre lo que ha cambiado.
 
-El archivo F<INSTALL> (INSTALAR) de cómo construir Perl.
+El archivo F<INSTALL> contiene instrucciones para compilar Perl.
 
-El archivo F<README> (LEEME) para asuntos generales.
+El archivo F<README> contiene información general.
 
-Los archivos F<Artistic> y F<Copying> para ver la información sobre derechos de autor.
+En los archivos F<Artistic> y F<Copying> encontrará información de copyright.
 
 =cut

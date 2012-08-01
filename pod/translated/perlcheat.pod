@@ -8,70 +8,70 @@ Esta 'hoja resumen' es una referencia útil para programadores principiantes. No 
 
 =head2 La hoja
 
-  CONTEXTO  CARACT. ref        ARRAYS        HASHES
-  vacío     $scalar SCALAR     @array        %hash
-  escalar   @array  ARRAY      @array[0, 2]  @hash{'a', 'b'}
-  lista     %hash   HASH       $array[0]     $hash{'a'}
-            &sub    CODE
+  CONTEXTOS  SIGILOS  ref        ARRAYS        HASHES
+  void      $escalar ESCALAR     @array        %hash
+  escalar    @array  ARRAY      @array[0, 2]  @hash{'a', 'b'}
+  lista      %hash   HASH       $array[0]     $hash{'a'}
+            &sub    CÓDIGO
             *glob   GLOB       VALORES ESCALARES
-                    FORMAT     número, string, ref, glob, undef
+                    FORMATO     número, cadena, ref, glob, undef
   REFERENCIAS
-  \      referencia      $$foo[1]   igual a $foo->[1]
-  $@%&*  desreferencia   $$foo{bar} igual a $foo->{bar}
-  []     array anónimo    ${$$foo[1]}[2] equivale a $foo->[1]->[2]
-  {}     hash anónimo     ${$$foo[1]}[2] equivale a $foo->[1][2]
-  \()    lista de ref.
-                         NÚMEROS vs CADENAS    ENLACES
-  OPERADOR PRECEDENCIA   =          =          perldoc.perl.org
+  \      referencia       $$foo[1]       equiv. $foo->[1]
+  $@%&*  resolver referencia     $$foo{bar}     equivale a $foo->{bar}
+  []     anon. anónimo    ${$$foo[1]}[2] equivale a $foo->[1]->[2]
+  {}     anon. anónimo     ${$$foo[1]}[2] equivale a $foo->[1][2]
+  \()    lista de refs
+                         NÚMEROS frente a CADENAS    VÍNCULOS
+  PRIORIDAD OPERADORES      =          =          perldoc.perl.org
   ->                     +          .           search.cpan.org
   ++ --                  == !=      eq ne              cpan.org
   **                     < > <= >=  lt gt le ge          pm.org
   ! ~ \ u+ u-            <=>        cmp                p3rl.org
   =~ !~                                           perlmonks.org
   * / % x                SINTAXIS
-  + - .                  foreach (LISTA) { }    for (a;b;c) { }
+  + - .                  foreach (LISTA) { }     for (a;b;c) { }
   << >>                  while   (e) { }        until (e)   { }
-  operadores             if      (e) { } elsif (e) { } else { }
+  ops unarios con nombre if      (e) { } elsif (e) { } else { }
   < > <= >= lt gt le ge  unless  (e) { } elsif (e) { } else { }
   == != <=> eq ne cmp ~~ given   (e) { when (e) {} default {} }
   &
-  | ^             REGEX METACARACTERES           REGEX MODIFICADORES
-  &&              ^      inicio cad.             /i no caja de letras
-  || //           $      fin cad. (antes de \n)  /m basado en líneas ^$
-  .. ...          +      uno o más               /s . incluye \n
-  ?:              *      cero o más              /x ignora espacios
-  = += -= *= etc  ?      cero o más              /p preserva
-  , =>            {3,7}  repite en rango         /a ASCII  /aa seguro
-  op. lista       |      alternativa             /l local  /d  dual
-  not             []     clase carácter          /u Unicode
-  and             \b     borde palabra           /e evalúa /ee rep.
-  or xor          \z     fin cad.                /g global
-                  ()     captura                 /o compila una vez
-  DEBUG           (?:p)  no captura
-   -MO=Deparse    (?#t)  comentario           REGEX CLASES CAR.
-   -MO=Terse      (?=p)  ancho 0, adelante    .   [^\n]
-   -D##           (?!p)  ancho 0, adel. neg.  \s  whitespace
-   -d:Trace       (?<=p) ancho 0 detrás \K    \w  car. palabra
-                  (?<!p) ancho 0 det. neg.    \d  dígitos
-  CONFIGURACIÓN   (?>p)  no backtrack         \pP propiedad nominada
-  perl -V:ivsize  (?|p|p)reset ramas          \h  espacio horiz.
-                  (?&NM) capt. con nombre     \R  rupt. línea
-                                              \S \W \D \H negados
+  | ^             METACARACTERES EXP. REG.          MODIFICADORES EXP. REG.
+  &&              ^      principio cadena      /i no distingue may./min.
+  || //           $      fin cadena (antes \n)  /m basado en líneas ^$
+  .. ...          +      una o más       /s . incluye \n
+  ?:              *      cero o más      /x ignorar espacios
+  = += -= *= etc  ?      cero o una       /p preservar
+  , =>            {3,7}  repeticiones en rango   /a ASCII    /aa safe
+  ops lista        |      alternancia       /l config. regional   /d  dual
+  not             []     clase caracteres  /u Unicode
+  and             \b     límite de palabra     /e evaluar /ee reevaluar
+  or xor          \z     fin cadena        /g global
+                  ()     capturar           /o compilar patrón una vez
+  DEPURACIÓN           (?:p)  sin captura
+   -MO=Deparse    (?#t)  comentario           CLASES CARACTERES EXP. REG.
+   -MO=Terse      (?=p)  inspec. pos. hacia delante      .   [^\n]
+   -D##           (?!p)  inspec. neg hacia delante      \s  espacio en blanco
+   -d:Trace       (?<=p) inspec. pos. hacia atrás \K  \w  caracteres palabra
+                  (?<!p) inspec. neg. hacia atrás     \d  dígitos
+  CONFIGURACIÓN   (?>p)  sin vuelta atrás      \pP propiedad con nombre
+  perl -V:ivsize  (?|p|p) reinicio bifurcación      \h  espacio en blanco horiz.
+                  (?<NM>) capturar en nombre      \R  salto de línea
+                                           \S \W \D \H negar
   LISTAS RETORNO FUNCIONES
   stat      localtime    caller            VARIABLES ESPECIALES
-   0 dev    0 segundo     0 paquete     $_    variable por def.
-   1 ino    1 minuto      1 nom. arch.  $0    nombre programa
-   2 mode   2 hora        2 línea       $/    sep. entrada
-   3 nlink  3 día         3 subrutina   $\    sep. salida
-   4 uid    4 mes-1       4 hasargs     $|    autoflush
-   5 gid    5 año-1900    5 wantarray   $!    error de sys/libcall
-   6 rdev   6 día semana  6 evaltext    $@    eval error
-   7 size   7 día año     7 is_require  $$    ID proc.
-   8 atime  8 es_dst      8 hints       $.    número de línea
-   9 mtime                9 bitmask     @ARGV args. línea com.
-  10 ctime               10 hinthash    @INC  rutas de inclusión
-  11 blksz  POSIX::      3..9 solo      @_    args. subrutina
-  12 blcks               con EXPR       %ENV  entorno
+   0 dev    0 segundo    0 paquete         $_    variable predeterminada
+   1 ino    1 minuto     1 nombre archivo  $0    nombre programa
+   2 mode   2 hora       2 línea           $/    separador entrada
+   3 nlink  3 día        3 subrutina       $\    separador entrada
+   4 uid    4 mes-1      4 hasargs         $|    volcado automático
+   5 gid    5 año-1900   5 wantarray       $!    error de sys/libcall
+   6 rdev   6 día semana     6 evaltext    $@    error eval
+   7 size   7 día año     7 is_require  $$    Id. proceso
+   8 atime  8 is_dst      8 hints       $.    número de línea
+   9 mtime                9 máscara bits     @ARGV args línea comandos
+  10 ctime               10 hash de pistas    @INC  rutas de inclusión
+  11 blksz               3..10 solo     @_    args subroutina
+  12 blcks               con EXPR      %ENV  entorno
 
 =head1 AGRADECIMIENTOS
 
