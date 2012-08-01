@@ -1,4 +1,5 @@
-X<referencia> X<puntero> X<estructura de datos> X<estructura> X<struct>
+=head1 NAME
+X<reference> X<pointer> X<data structure> X<structure> X<struct>
 
 perlref - Estructuras de datos y referencias en Perl
 
@@ -377,7 +378,7 @@ A menudo la gente espera que funcione de esta manera.  Y así lo hace.
 
 Esto es de gran potencia, y ligeramente peligroso, ya que es posible que la intención sea (con la mayor sinceridad) utilizar una referencia dura y, sin querer, utilizar en su lugar una referencia simbólica.  Para protegerse contra esto, se puede decir
 
-    use strict "refs";
+    use strict 'refs';
 
 y entonces sólo se permitirá usar referencias duras para el resto del bloque actual.  Un bloque interior puede revocar la orden, con
 
@@ -411,7 +412,7 @@ e incluso
 
 tendrán el mismo efecto.  (Esto habría sido un error de sintaxis en Perl 5.000, aunque Perl 4 lo permitió en el formato sin espacios).  Esta construcción I<no> es considerada una referencia simbólica cuando se está utilizando C<strict refs>:
 
-    use strict "refs";
+    use strict 'refs';
     ${ bareword };	# Muy bien, significa $bareword.
     ${ "bareword" };	# Error, referencia simbólica.
 

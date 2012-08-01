@@ -1,5 +1,5 @@
-=head1 NOMBRE
-X<function> X<función>
+=head1 NAME
+X<function>
 
 perlfunc - Funciones integradas en Perl
 
@@ -2769,16 +2769,16 @@ Si especifica C<< '<&=X' >>, donde C<X> es un número de descriptor de archivo o 
     # abrir para lectura, reutilizando el número de descriptor de $fd
     open(FILEHANDLE, "<&=$fd")
 
-o
+o bien
 
     open(FILEHANDLE, "<&=", $fd)
 
-o
+o bien
 
     # Abrir para añadir, usando el número de descriptor de OLDFH
     open(FH, ">>&=", OLDFH)
 
-o
+o bien
 
     open(FH, ">>&=OLDFH")
 
@@ -2796,7 +2796,7 @@ Por ejemplo, utilice esto
 
     $child_pid = open(DESDE_HIJO, "|-") // die "no puedo hacer fork: $!";
 
-o
+o bien
     $child_pid = open(AL_HIJO, "|-")	// die "no puedo hacer fork: $!";
 
 seguido por 
@@ -4970,7 +4970,7 @@ Actualmente, no se puede conseguir la precisión de un número determinado, pero e
 
   printf "<%.*2$x>", 1, 6;   # INVÁLIDO, pero en el futuro imprimirá "<000001>"
 
-=item tamaño
+=item size
 
 Para conversiones numéricas, se puede especificar el tamaño del número a interpretar usando C<l>, C<h>, C<V>, C<q>, C<L>, o C<ll>.  Para las conversiones de entero (C<d u o x X b i D U O>), se asume que los números son, por lo general, de un tamaño, por defecto, de un entero de su plataforma (normalmente 32 or 64 bits), pero esto se puede reemplazar usando en su lugar uno de los tipos estándares de C, soportados por el compilador usado para construir Perl:
 

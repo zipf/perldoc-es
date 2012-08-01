@@ -514,19 +514,19 @@ Perl no puede protegerlo de todas las posibilidades que aparecen en los ejemplos
 
 =over 4
 
-=item *
+=item  *
 
 B<Operadores de comparación> (C<lt>, C<le>, C<ge>, C<gt> y C<cmp>):
 
 Resultado escalar verdadero/falso (o menor/igual/mayor) que nunca es contaminado.
 
-=item *
+=item  *
 
 B<Interpolación de tamaño de caja> (con C<\l>, C<\L>, C<\u> o C<\U>)
 
 La cadena resultante conteniendo material interpolado queda contaminada si C<use locale> (pero no S<C<use locale ':not_characters'>>) está en vigor.
 
-=item *
+=item  *
 
 B<Operador de coincidencia> (C<m//>):
 
@@ -536,7 +536,7 @@ Subpatrones, tanto si son entregados como resultado de un contexto lista o como 
 quedan contaminados si C<use locale> (pero no S<C<use locale ':not_characters'>>) está en vigor, y el subpatrón de la expresión regular contiene C<\w> (para coincidir con un carácter alfanumérico), C<\W> (carácter no-alfanumérico), C<\s> (carácter espacio en blanco), o C<\S>
 (carácter no-espacio en blanco).  La variable de patrón coincidente, $&, $` (pre-coincidente), $' (pos-coincidente), y $+ (última coincidencia) también quedan contaminados si C<use locale> está en vigor y la expresión regular contiene C<\w>, C<\W>, C<\s>, o C<\S>.
 
-=item *
+=item  *
 
 B<Operador de sustitución> (C<s///>):
 
