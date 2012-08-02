@@ -33,7 +33,7 @@ donde la secuencia C<1100> se repite una y otra vez.  Además de esta limitación,
 Como consecuencia, Perl no puede almacenar un número como 12345678901234567 en forma de número de punto flotante para estas arquitecturas sin pérdida de información.
 
 De manera similar, las cadenas decimales solo pueden representar números que tengan una expansión decimal finita.  Al ser cadenas y, por tanto, al tener una longitud arbitraria, no existe un límite práctico para el exponente o el número de dígitos decimales para estos números.  (Pero no olvide que lo que estamos describiendo son solo las normas del I<almacenamiento> de estos números.  El hecho de poder almacenar números tan "grandes" no significa que en las I<operaciones> con estos números se usen todos los dígitos significativos.
-Encontrará información detallada en L<"Operadores numéricos y conversiones numéricas">.)
+Encontrará información detallada en L<"Operadores numéricos y conversiones numéricas">).
 
 De hecho, los números almacenados en formato de entero nativo se pueden almacenar en forma nativa con signo o sin signo.  Así, los límites para números Perl almacenados como enteros nativos serán normalmente -2**31..2**32-1, con las modificaciones correspondientes en el caso de los enteros de 64 bits.  Insistimos: esto no significa que Perl sólo puede realizar operaciones con enteros de este intervalo; es posible almacenar muchos más enteros en formato de punto flotante.
 

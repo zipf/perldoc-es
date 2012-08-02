@@ -163,7 +163,7 @@ Los valores escalares pueden ser cadenas, enteros o números de punto flotante,
 y Perl los convertirá de un tipo a otro cuando sea necesario. No es necesario
 predeclarar los tipos de las variables, pero éstas deben declararse con la
 palabra clave C<my> la primera vez que se usan.  (Éste es uno de los requisitos
-de C<use strict;>.)
+de C<use strict;>).
 
 Los valores escalares se pueden usar de varias maneras:
 
@@ -185,18 +185,18 @@ implícitamente en determinadas estructuras de bucle.
 Un array representa una lista de valores:
 
     my @animales = ("camello", "llama", "búho");
-    my @numeros = (23, 42, 69);
+    my @numeros  = (23, 42, 69);
     my @mezcla   = ("camello", 42, 1.23);
 
 El índice de un array empieza en cero. Para obtener los elementos de un array:
 
-    print $animales[0];  # imprime "camello" en pantalla
-    print $animales[1];  # imprime "llama" en pantalla
+    print $animales[0];  # imprime "camello"
+    print $animales[1];  # imprime "llama"
 
 La variable especial C<$#array> indica el índice del último elemento de un
 array:
 
-    print $mezcla[$#mezcla];  # último elemento, imprime 1.23 en pantalla
+    print $mezcla[$#mezcla];  # último elemento, imprime 1.23
 
 Podría sentirse tentado de usar C<$#array + 1> para determinar el número de
 elementos de un array. No es necesario. Si utiliza C<@array> donde Perl espera
@@ -211,15 +211,15 @@ escalar.
 
 Para obtener varios elementos de un array:
 
-    @animales[0,1];  # devuelve ("camello", "llama");
-    @animales[0..2];  # devuelve ("camello", "llama", "búho");
+    @animales[0,1];            # devuelve ("camello", "llama");
+    @animales[0..2];           # devuelve ("camello", "llama", "búho");
     @animales[1..$#animales];  # devuelve todos excepto el primero
 
 Esto se denomina una "porción de array".
 
 Puede hacer varias cosas útiles con las listas:
 
-    my @ordenados    = sort @animales;
+    my @ordenados     = sort @animales;
     my @orden_inverso = reverse @numeros;
 
 También hay dos arrays especiales: C<@ARGV> (los argumentos de línea de
@@ -236,7 +236,7 @@ Puede usar espacio en blanco y el operador C<< => >> para expresarlos de manera
 más clara:
 
     my %color_fruta = (
-        manzana=> "rojo",
+        manzana => "rojo",
         plátano => "amarillo",
     );
 
@@ -247,8 +247,8 @@ Para obtener los elementos de un hash:
 Puede obtener una lista de las claves y los valores con C<keys()> y 
 C<values()> respectivamente.
 
-    my @frutas = keys %colores_fruta;
-    my @colores = values %colores_fruta;
+    my @frutas  = keys %color_fruta;
+    my @colores = values %color_fruta;
 
 En los hashes no hay un orden interno específico, aunque puede ordenar las
 claves antes de recorrerlas en un bucle.
@@ -273,7 +273,7 @@ ejemplo siguiente se muestra una estructura de hash de hashes de 2 niveles en
 la que se usan referencias de hash anónimas.
 
     my $variables = {
-        escalar  =>  {
+        escalar =>  {
                      descripcion => "elemento individual",
                      sigilo => '$',
                     },
@@ -311,10 +311,10 @@ de instrucciones entre llaves) en el que se definen.
     my $una_condicion = 1;
     if ($una_condicion) {
         my $y = "bar";
-        print $x;           # imprime "foo" en pantalla
-        print $y;           # imprime "bar" en pantalla
+        print $x;           # imprime "foo"
+        print $y;           # imprime "bar"
     }
-    print $x;               # imprime "foo" en pantalla
+    print $x;               # imprime "foo"
     print $y;               # no imprime nada; $y está fuera del ámbito
 
 Si escribe C<use strict;> al principio de los scripts de Perl y usa C<my>, el
@@ -468,7 +468,7 @@ determinar si debe ordenar numéricamente (99 menor que 100) o alfabéticamente
 (En la tabla anterior C<and>, C<or> y C<not> no son solo descripciones de los
 operadores. Son también operadores. Ofrecen más legibilidad que los operadores
 tipo C correspondientes, como C<&&>, pero su precedencia es distinta. Consulte
-L<perlop> para obtener más información.)
+L<perlop> para obtener más información).
 
 =item Otros operadores
 
@@ -491,9 +491,9 @@ La función C<open()> abre un archivo para entrada o salida. Esta función se
 describe de forma muy detallada en L<perlfunc> y L<perlopentut>. A continuación
 se muestra un resumen de cómo se usa:
 
-    open(my $entrada,  "<",  "entrada.txt")  or die "No se puede abrir entrada.txt: $!";
-    open(my $salida, ">",  "salida.txt") or die "No se puede abrir salida.txt: $!";
-    open(my $registro, ">>", "mi.registro")     or die "No se puede abrir mi.registro: $!";
+    open(my $entrada,  "<",  "entrada.txt") or die "No se puede abrir entrada.txt: $!";
+    open(my $salida,   ">",  "salida.txt" ) or die "No se puede abrir salida.txt: $!";
+    open(my $registro, ">>", "mi.registro") or die "No se puede abrir mi.registro: $!";
 
 Puede utilizar el operador C<< <> >> para leer de un identificador de archivo
 abierto. En contexto de escalar, este operador lee una sola línea del
@@ -546,9 +546,9 @@ operador de enlace C<=~> (que también se describe en L<perlop>).
 
 =item Sustitución simple
 
-    s/foo/bar/;  # reemplaza foo por bar en $_
+    s/foo/bar/;        # reemplaza foo por bar en $_
     $a =~ s/foo/bar/;  # reemplaza foo por bar en $a
-    $a =~ s/foo/bar/g;  # reemplaza todas las coincidencias de foo por bar en $a
+    $a =~ s/foo/bar/g; # reemplaza todas las coincidencias de foo por bar en $a
 
 El operador de sustitución, C<s///>, se describe en L<perlop>.
 
@@ -589,7 +589,7 @@ Algunos ejemplos breves:
     /^\d+/              cadena que empieza por uno o varios dígitos
     /^$/                cadena vacía (principio y final contiguos)
     /(\d\s){3}/         tres dígitos, cada uno seguido de un espacio
-              	(p. ej. "3 4 5 ")
+                        (p. ej. "3 4 5 ")
     /(a.)+/             cadena en la que cada letra impar
                         es "a" (p. ej., "abacadaf")
 
@@ -637,7 +637,7 @@ Ahora podemos usar la subrutina como cualquier función integrada:
 ¿Qué hace C<shift>?  Los argumentos pasados a una subrutina están disponibles
 en un array especial denominado C<@_> (consulte L<perlvar> para obtener más
 información). El argumento predeterminado de la función C<shift> es C<@_>. Así,
-C<my $mensaje_registro= shift;> quita el primer elemento de la lista de
+C<my $mensaje_registro = shift;> quita el primer elemento de la lista de
 argumentos y se lo asigna a C<$mensaje_registro>.
 
 También podemos manipular C<@_> de otras maneras:
@@ -707,9 +707,9 @@ Kirrily "Skud" Robert <skud@cpan.org>
 
 =over
 
-=item * Joaquí­n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaquín Ferrero (Tech Lead)
 
-=item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
+=item * Enrique Nell (Language Lead)
 
 =back
 
