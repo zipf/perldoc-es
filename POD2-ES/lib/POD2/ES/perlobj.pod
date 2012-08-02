@@ -240,13 +240,13 @@ Parece el mismo operador, pero en realidad estas dos operaciones son
 diferentes.
 
 Cuando se llama a un método, lo que hay a la izquierda de la flecha se pasa
-como primer argumento al método. Esto significa que la llamada C<<Bicho->new()
->>, hace que el método C<new()> reciba la cadena C<"Bicho"> como primer
-argumento. En la llamada C<< $alfredo->decir() >>, la variable C<$alfredo> se
-pasa a C<decir()> como primer argumento.
+como primer argumento al método. Esto significa que la llamada C<<
+Bicho->new() >>, hace que el método C<new()> reciba la cadena C<"Bicho"> como
+primer argumento. En la llamada C<< $alfredo->decir() >>, la variable
+C<$alfredo> se pasa a C<decir()> como primer argumento.
 
 Al igual que cualquier subrutina en Perl, todos los argumentos pasados en C<@_>
-son alias del argumento original. Esto incluye al propio objeto. Si asigna
+son alias del argumento original. Esto incluye al propio objeto. Si asigna un
 valor directamente a C<$_[0]>, cambiará el contenido de la variable que
 contiene la referencia al objeto. Recomendamos no hacer esto, a no ser que sepa
 exactamente qué está haciendo.
@@ -273,7 +273,7 @@ buscará también en las clases primarias del objeto.
   package Archivo::MP3;
   use parent 'Archivo';    # establece @Archivo::MP3::ISA = ('Archivo');
 
-  my $mp3 = File::MP3->new( 'Andvari.mp3', $datos );
+  my $mp3 = Archivo::MP3->new( 'Andvari.mp3', $datos );
   $mp3->guardar();
 
 Como no se ha definido el método C<guardar()> en la clase C<Archivo::MP3>,
@@ -305,8 +305,8 @@ puede usar para llamadas normales a subrutinas ni para métodos de clase:
   SUPER->guardar($algo);     # ERROR: busca el método guardar() en la
                              #       clase SUPER
 
-  $$algo->SUPER::guardar();   # CORRECTO: busca el método guardar() en las
-                              #       clases primarias
+  $algo->SUPER::guardar();  # CORRECTO: busca el método guardar() en las
+                             #       clases primarias
 
 
 =head3 Forma de resolución de SUPER
@@ -638,9 +638,9 @@ llamada a un método. Suena complicado, así que veamos algunos ejemplos de
 código:
 
   $archivo->${ \'guardar' };
-  $archivo->${ returns_scalar_ref() };
-  $archivo->${ \( returns_scalar() ) };
-  $archivo->${ returns_sub_ref() };
+  $archivo->${ devuelve_ref_a_escalar() };
+  $archivo->${ \( devuelve_escalar() ) };
+  $archivo->${ devuelve_ref_a_sub() };
 
 Esto funciona si la desreferencia produce una cadena I<o> una referencia a una
 subrutina.
@@ -833,9 +833,9 @@ automáticamente.
     #implicará:
     Paquete->VERSION(1.2);
 
-Le recomendamos que use este método para acceder a otra versión del paquete,
-en lugar de mirar directamente en C<$Paquete::VERSION>. El paquete en que se
-comprueba podría haber sobrescrito el método C<VERSION>.
+Le recomendamos que use este método para acceder a la versión de otro
+paquete, en lugar de mirar directamente en C<$Paquete::VERSION>. El paquete en
+que se comprueba podría haber sobrescrito el método C<VERSION>.
 
 También le recomendamos que use este método para comprobar si un módulo
 tiene la versión necesaria. La implementación interna usa el módulo
@@ -937,7 +937,7 @@ objetos contenidos:
   sub DESTROY {
       my $self = shift;
 
-      $self->{controlador}->cerrar() if $self->{identificador};
+      $self->{controlador}->cerrar() if $self->{controlador};
   }
 
 Puede usar la variable C<${^GLOBAL_PHASE}> para comprobar si está actualmente
@@ -956,8 +956,8 @@ está en la fase de destrucción global en versiones anteriores de Perl, puede
 usar el módulo C<Devel::GlobalDestruction>, disponible en CPAN.
 
 Si el método C<DESTROY> genera una advertencia durante la fase de destrucción
-global, el intérprete de Perl agregará la cadena "during global destruction"
-(durante la destrucción global) a la advertencia.
+global, el intérprete de Perl agregará la cadena "I<during global
+destruction>" (durante la destrucción global) a la advertencia.
 
 Durante la fase de destrucción global, Perl siempre reclamará la memoria
 usada por los objetos antes que la de las referencias no bendecidas.
@@ -981,7 +981,7 @@ Veamos un ejemplo de módulo basado en un escalar bendecido:
   sub new {
       my $clase = shift;
 
-      my $hora= time;
+      my $hora = time;
       return bless \$hora, $clase;
   }
 
@@ -1008,7 +1008,7 @@ forma universal. El módulo L<Object::InsideOut> de CPAN proporciona una
 implementación completa de esta técnica y puede que encuentre esta
 implementación u otras en código de otros programadores.
 
-Veamos un ejemplo simple de esta técnica, basado en módulo
+Veamos un ejemplo simple de esta técnica, basado en el módulo
 L<Hash::Util::FieldHash> del núcleo. Este módulo se agregó al núcleo para
 permitir implementaciones de objetos I<inside-out>.
 
@@ -1026,7 +1026,7 @@ permitir implementaciones de objetos I<inside-out>.
 
       my $self = bless \( my $objeto ), $clase;
 
-      $hora_para{$self} = hora;
+      $hora_para{$self} = time;
 
       return $self;
   }
