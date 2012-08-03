@@ -168,10 +168,10 @@ La parte a la izquierda del operador de invocación de método (flecha) es el obje
 
 La sintaxis C<< -> >> también se usa para desreferenciar una referencia.  Parece el mismo operador, pero se trata en realidad de dos operaciones diferentes.
 
-Cuando se llama a un método, lo que hay a la izquierda de la flecha se pasa como primer argumento al método. Esto significa que la llamada C<<Bicho->new() >>, hace que el método C<new()> reciba la cadena C<"Bicho"> como primer argumento. En la llamada C<< $alfredo->hablar() >>, la variable C<$alfredo> se pasa a C<hablar()> como primer argumento.
+Cuando se llama a un método, lo que hay a la izquierda de la flecha se pasa como primer argumento al método. Esto significa que la llamada C<< Bicho->new() >>, hace que el método C<new()> reciba la cadena C<"Bicho"> como primer argumento. En la llamada C<< $alfredo->hablar() >>, la variable C<$alfredo> se pasa a C<hablar()> como primer argumento.
 
 Al igual que cualquier subrutina en Perl, todos los argumentos pasados en C<@_> son alias del argumento original. Esto incluye al propio objeto.
-Si asigna valor directamente a C<$_[0]>, cambiará el contenido de la variable que contiene la referencia al objeto. Recomendamos no hacer esto, a no ser que sepa exactamente qué está haciendo.
+Si asigna un valor directamente a C<$_[0]>, cambiará el contenido de la variable que contiene la referencia al objeto. Recomendamos no hacer esto, a no ser que sepa exactamente qué está haciendo.
 
 Perl sabe a qué paquete pertenece el método mirando en el lado izquierdo del operador flecha. Si el lado izquierdo es el nombre de un paquete, busca el método en dicho paquete. Si el lado izquierdo es un objeto, entonces Perl busca el método en el paquete usado para bendecirlo.
 
@@ -210,7 +210,7 @@ El modificador C<SUPER> I<solo> se puede usar para llamar a métodos. No se puede
   SUPER->guardar($algo);     # ERROR: busca el método guardar() en la
                            #       clase SUPER
 
-  $$algo->SUPER::guardar();   # CORRECTO: busca el método guardar() en las
+  $algo->SUPER::guardar();   # CORRECTO: busca el método guardar() en las
                            #       clases primarias
 
 
@@ -466,9 +466,9 @@ Esto equivale exactamente a escribir C<< $sub->($archivo) >>. Esto puede observa
 Perl también permite usar la desreferencia de una referencia escalar en la llamada a un método. Esto suena complicado, así que vamos a ver un ejemplo de código:
 
   $archivo->${ \'guardar' };
-  $archivo->${ returns_scalar_ref() };
-  $archivo->${ \( returns_scalar() ) };
-  $archivo->${ returns_sub_ref() };
+  $archivo->${ devuelve_ref_a_escalar() };
+  $archivo->${ \( devuelve_escalar() ) };
+  $archivo->${ devuelve_ref_a_sub() };
 
 Esto funciona si la desreferencia produce una cadena I<o> una referencia a una subrutina.
 
@@ -663,7 +663,7 @@ El orden en que se destruyen los objetos durante la destrucción global antes de 
   sub DESTROY {
       my $self = shift;
 
-      $self->{handle}->close() if $self->{handle};
+      $self->{gestor}->close() if $self->{gestor};
   }
 
 Puede usar el variable C<${^GLOBAL_PHASE}> para comprobar si está actualmente en la fase de destrucción global:
