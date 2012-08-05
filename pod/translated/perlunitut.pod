@@ -109,7 +109,7 @@ La sintaxis para codificar cadenas de texto en cadenas binarias es tan sencilla 
 
     $cuerpo_texto = encode('UTF-8', $cuerpo_texto);
 
-Si necesita averiguar la longitud de la cadena en bytes, ahora es el momento de hacerlo. Como C<$cuerpo_texto> es una cadena de bytes, C<length> devolverá el número de bytes, en lugar del número de caracteres. Ya no se sabe cuál es el número de caracteres, puesto que los caracteres solo existen en las cadenas de texto.
+Si necesita averiguar la longitud de la cadena en bytes, ahora es el momento de hacerlo. Como C<$cuerpo_texto> es una cadena de bytes, C<length> devolverá el número de bytes, en lugar del número de caracteres. Ya no se podrá saber cuál es el número de caracteres, puesto que los caracteres solo existen en las cadenas de texto.
 
     my $numero_bytes = length $cuerpo_texto;
 
