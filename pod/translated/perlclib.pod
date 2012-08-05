@@ -1,0 +1,182 @@
+=head1 NOMBRE
+
+perlclib - reemplazos internos para las funciones de la biblioteca estándar C
+
+=head1 DESCRIPCIÓN
+
+Una cosa que los I<Perl porters> deben tener en cuenta es que F<perl> no tienden a utilizar internamente la mayor parte de la biblioteca estándar de C; verá muy poco uso de ella de, por ejemplo, las funciones F<ctype.h>. Esto se debe a que Perl tiende a reimplementar o abstraer funciones de la biblioteca estándar, y así sabemos exactamente cómo van a operar.
+
+Esta es una tarjeta de referencia para las personas que están familiarizados con la biblioteca C y que quieren hacer cosas al estilo Perl; decirles qué funciones deben usar en lugar de las funciones de C más comunes. 
+
+=head2 Convenciones
+
+En las tablas siguientes:
+
+=over 3
+
+=item C<t>
+
+es un tipo.
+
+=item C<p>
+
+es un puntero.
+
+=item C<n>
+
+es un número.
+
+=item C<s>
+
+es una cadena.
+
+=back
+
+C<sv>, C<av>, C<hv>, etc. representan variables de sus tipos respectivos.
+
+=head2 Operaciones con archivos
+
+En lugar de las funciones de F<stdio.h> debe usar la capa de abstracción de Perl. En vez de los tipos C<FILE*>, tiene que manejar los tipos C<PerlIO*>.  No hay que olvidar que con la nueva capa de abstracción PerlIO, los tipos C<FILE*> pueden incluso estar no disponibles. Vea también la documentación C<perlapio> para obtener más información acerca de las siguientes funciones:
+
+    En lugar de:                 Use:
+
+    stdin                       PerlIO_stdin()
+    stdout                      PerlIO_stdout()
+    stderr                      PerlIO_stderr()
+
+    fopen(fn, modo)             PerlIO_open(fn, modo)
+    freopen(fn, modo, flujo)    PerlIO_reopen(fn, modo, perlio) (obsoleta)
+    fflush(flujo)               PerlIO_flush(perlio)
+    fclose(flujo)               PerlIO_close(perlio)
+
+=head2 Entrada y salida de archivos
+
+    En lugar de:                 Use:
+
+    fprintf(flujo, fmt, ...)    PerlIO_printf(perlio, fmt, ...)
+
+    [f]getc(flujo)              PerlIO_getc(perlio)
+    [f]putc(flujo, n)           PerlIO_putc(perlio, n)
+    ungetc(n, flujo)            PerlIO_ungetc(perlio, n)
+
+Nótese que los equivalentes de PerlIO C<fread> y C<fwrite> son ligeramente diferentes de sus homólogos de la biblioteca de C:
+
+    fread(p, tamaño, n, flujo)  PerlIO_read(perlio, búfer, númerobytes)
+    fwrite(p, tamaño, n, flujo) PerlIO_write(perlio, búfer, númerobytes)
+
+    fputs(s, flujo)             PerlIO_puts(perlio, s)
+
+No hay un equivalente a C<fgets>; uno debe usar en su lugar C<sv_gets>:
+
+    fgets(s, n, flujo)          sv_gets(sv, perlio, añadido)
+
+=head2 Posicionamiento en archivos
+
+    En lugar de:                 Use:
+
+    feof(flujo)                 PerlIO_eof(perlio)
+    fseek(flujo, n, desde)      PerlIO_seek(perlio, n, desde)
+    rewind(flujo)               PerlIO_rewind(perlio)
+
+    fgetpos(flujo, p)           PerlIO_getpos(perlio, sv)
+    fsetpos(flujo, p)           PerlIO_setpos(perlio, sv)
+
+    ferror(flujo)               PerlIO_error(perlio)
+    clearerr(flujo)             PerlIO_clearerr(perlio)
+
+=head2 Gestión de memoria y manejo de cadenas de caracteres
+
+    En lugar de:                 	Use:
+
+    t* p = malloc(n)            	Newx(id, p, n, t)
+    t* p = calloc(n, s)         	Newxz(id, p, n, t)
+    p = realloc(p, n)           	Renew(p, n, t)
+    memcpy(dst, src, n)         	Copy(src, dst, n, t)
+    memmove(dst, src, n)        	Move(src, dst, n, t)
+    memcpy(dst, src, sizeof(t))         StructCopy(src, dst, t)
+    memset(dst, 0, n * sizeof(t))       Zero(dst, n, t)
+    memzero(dst, 0)			Zero(dst, n, char)
+    free(p)             	        Safefree(p)
+
+    strdup(p)                   savepv(p)
+    strndup(p, n)               savepvn(p, n) (¡Eh, strndup no existe!)
+
+    strstr(grande, pequeño)     instr(grande, pequeño)
+    strcmp(s1, s2)              strLE(s1, s2) / strEQ(s1, s2) / strGT(s1,s2)
+    strncmp(s1, s2, n)          strnNE(s1, s2, n) / strnEQ(s1, s2, n)
+
+Observe el diferente orden de los argumentos de C<Copy> y C<Move> de los que se usan en C<memcpy> y C<memmove>.
+
+La mayoría de las veces, sin embargo, querrá estar tratando con SV internamente en lugar de con crudas cadenas de caracteres C<char *>:
+
+    strlen(s)                   sv_len(sv)
+    strcpy(dt, src)             sv_setpv(sv, s)
+    strncpy(dt, src, n)         sv_setpvn(sv, s, n)
+    strcat(dt, src)             sv_catpv(sv, s)
+    strncat(dt, src)            sv_catpvn(sv, s)
+    sprintf(s, fmt, ...)        sv_setpvf(sv, fmt, ...)
+
+Tenga en cuenta también la existencia de C<sv_catpvf> y C<sv_vcatpvfn> , que combina la concatenación con el formateo.
+
+A veces, en lugar de poner a cero el montón asignado mediante el uso de Newxz() podría considerar el caso del "envenenamiento" de datos.  Esto significa escribir un patrón de bits dentro de él, que debería formar punteros (y números de punto flotante) ilegales, y también esperamos algo lo suficientemente sorprendente, como números enteros, de modo que cualquier código de intente utilizar esos datos sin precaución se rompa lo más pronto posible.  El envenenamiento puede hacerse utilizando las macros Poison(), que tienen argumentos similares a Zero():
+
+    PoisonWith(dst, n, t, b)    garabatea la memoria con el byte b
+    PoisonNew(dst, n, t)        igual a PoisonWith(dst, n, t, 0xAB)
+    PoisonFree(dst, n, t)       igual a PoisonWith(dst, n, t, 0xEF)
+    Poison(dst, n, t)           igual a PoisonFree(dst, n, t)
+
+=head2 Pruebas en clases de caracteres
+
+Hay dos tipos de pruebas de clases de caracteres que Perl implementa: un tipo maneja C<char> y por tanto B<no> son compatibles con Unicode (y por lo tanto, obsoletas a menos que B<sepa> que debe usarlas) y el otro tipo maneja los C<UV> y conoce las propiedades Unicode. En la siguiente tabla, C<c> es un C<char> y C<u> es un punto de código Unicode.
+
+    En lugar de:                Use:            Pero mejor use:
+
+    isalnum(c)                  isALNUM(c)      isALNUM_uni(u)
+    isalpha(c)                  isALPHA(c)      isALPHA_uni(u)
+    iscntrl(c)                  isCNTRL(c)      isCNTRL_uni(u)
+    isdigit(c)                  isDIGIT(c)      isDIGIT_uni(u)
+    isgraph(c)                  isGRAPH(c)      isGRAPH_uni(u)
+    islower(c)                  isLOWER(c)      isLOWER_uni(u)
+    isprint(c)                  isPRINT(c)      isPRINT_uni(u)
+    ispunct(c)                  isPUNCT(c)      isPUNCT_uni(u)
+    isspace(c)                  isSPACE(c)      isSPACE_uni(u)
+    isupper(c)                  isUPPER(c)      isUPPER_uni(u)
+    isxdigit(c)                 isXDIGIT(c)     isXDIGIT_uni(u)
+
+    tolower(c)                  toLOWER(c)      toLOWER_uni(u)
+    toupper(c)                  toUPPER(c)      toUPPER_uni(u)
+
+=head2 Funciones de F<stdlib.h>
+
+    En lugar de:                 Use: 
+
+    atof(s)                     Atof(s)
+    atol(s)                     Atol(s)
+    strtod(s, &p)               Ninguno.  No la use.
+    strtol(s, &p, n)            Strtol(s, &p, n)
+    strtoul(s, &p, n)           Strtoul(s, &p, n)
+
+Tenga en cuenta también las funciones C<grok_bin>, C<grok_hex> y C<grok_oct> en F<numeric.c> para convertir cadenas que representan números en sus respectivas bases dentro de los C<NV>.
+
+En teoría C<Strtol> y C<Strtoul> pueden no estar definidas si la máquina que contiene el perl compilado en realidad no tiene a strtol y strtoul. Pero como esas 2 funciones son parte de la especificación 1989 ANSI C, sospechamos que, por ahora, las encontrará en todas partes.
+
+    int rand()                  double Drand01()
+    srand(n)                    { seedDrand01((Rand_seed_t)n); 
+                                  PL_srand_called = TRUE; }
+
+    exit(n)                     my_exit(n)
+    system(s)                   No. Mire en pp_system o use my_popen
+
+    getenv(s)                   PerlEnv_getenv(s)
+    setenv(s, val)              my_putenv(s, val)
+
+=head2 Funciones varias
+
+Ni siquiera debería B<querer> usar las funciones F<setjmp.h>, pero si piensa hacerlo, utilice en su lugar la pila C<JMPENV> de F<scope.h>.
+
+Para C<signal>/C<sigaction>, use C<rsignal(signo, handler)>.
+
+=head1 VEA TAMBIÉN
+
+L<perlapi>, L<perlapio>, L<perlguts>
+
