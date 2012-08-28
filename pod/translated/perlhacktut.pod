@@ -1,0 +1,146 @@
+=encoding utf8
+
+=for comment
+Para aplicar un formato uniforme a este archivo, use:
+  perl ./Porting/podtidy pod/perlhacktut.pod
+
+=head1 NOMBRE
+
+perlhacktut - Tutorial de creación de una revisión sencilla de código C
+
+=head1 DESCRIPCIÓN
+
+Este documento le lleva a través del ejemplo de un parche simple.
+
+Si todavía no ha leído L<perlhack>, ¡es lo primero que debe de hacer! También debería leer L<perlsource>.
+
+Una vez que haya terminado, eche a continuación un vistazo a L<perlhacktips>.
+
+=head1 EJEMPLO DE REVISIÓN SENCILLA
+
+Construiremos un simple parche de principio a fin.
+
+Aquí hay algo que Larry propuso: si C<U>es el primer formato activo durante una C<pack>, (por ejemplo, C<pack "U3C8", @stuff>) entonces la cadena resultante debe ser entendida como que está en codificación UTF-8.
+
+Si está trabajando con un clon del repositorio git de Perl, tendrá que crear una rama para incorporar sus cambios. Esto hará que la creación de un parche sea mucho más simple. Vea L<perlgit> para obtener detalles sobre cómo hacer esto.
+
+=head2 Escribir la revisión
+
+¿Cómo nos preparamos para arreglar esto? En primer lugar, localizamos el código en cuestión: la función C<pack> sucede en tiempo de ejecución, por lo que va a estar en uno de los archivos F<pp>. Lo más seguro, C<pp_pack> que está en F<pp.c>. Puesto que vamos a estar alterando este archivo, vamos a copiarlo a F<pp.c~>.
+
+[Bueno, cuando se escribió este manual era en F<pp.c>. Ahora se ha escindido de C<pp_unpack> en su propio archivo, F<pp_pack.c>]
+
+Ahora vamos a mirar por encima C<pp_pack>: tenemos un patrón en C<pat>, y luego un bucle sobre el patrón, teniendo cada carácter de formato a su vez en C<datum_type>. Luego, para cada formato de caracteres posible, nos comemos los otros argumentos en el patrón (un campo de ancho, un asterisco, y así sucesivamente) y convertir el fragmento de entrada siguiente en el formato especificado, añadiéndolo a la salida de SV C<cat>.
+
+¿Cómo sabemos si el C<U> es el primer formato en el C<pat>? Bueno, si tenemos un puntero al comienzo de C<pat> entonces, si vemos un C<U> podemos comprobar si aún estamos al inicio de la cadena. Así pues, aquí es donde se establece C<pat>:
+
+    STRLEN fromlen;
+    register char *pat = SvPVx(*++MARK, fromlen);
+    register char *patend = pat + fromlen;
+    register I32 len;
+    I32 datumtype;
+    SV *fromstr;
+
+Vamos a tener otro puntero de cadena:
+
+    STRLEN fromlen;
+    register char *pat = SvPVx(*++MARK, fromlen);
+    register char *patend = pat + fromlen;
+ +  char *patcopy;
+    register I32 len;
+    I32 datumtype;
+    SV *fromstr;
+
+Y justo antes de empezar el bucle, vamos a establecer C<patcopy> al comienzo de C<pat>:
+
+    items = SP - MARK;
+    MARK++;
+    sv_setpvn(cat, "", 0);
+ +  patcopy = pat;
+    while (pat < patend) {
+
+Ahora bien, si vemos una C<U> que se encontraba al principio de la cadena, activamos la bandera C<UTF8> para la salida SV C<cat>:
+
+ +  if (datumtype == 'U' && pat==patcopy+1)
+ +      SvUTF8_on(cat);
+    if (datumtype == '#') {
+        while (pat < patend && *pat != '\n')
+            pat++;
+
+¡Recuerde que tiene que ser C<patcopy+1> porque el primer carácter de la cadena es el C<U> que fue ingerido en C<datumtype>!
+
+Vaya, nos olvidamos de una cosa: ¿qué pasa si hay espacios al inicio del patrón? C<pack("  U*", @stuff)> tendrá C<U> como primer carácter activo, aunque no es lo primero en el patrón. En este caso, tenemos que avanzar C<patcopy> junto con C<pat> cuando veamos espacios:
+
+    if (isSPACE(datumtype))
+        continue;
+
+necesita convertirse en
+
+    if (isSPACE(datumtype)) {
+        patcopy++;
+        continue;
+    }
+
+OK. Esa es la parte C terminada. Ahora tenemos que hacer dos cosas adicionales antes de que este parche quede listo para enviarse: hemos cambiado el comportamiento de Perl, por lo que debe documentar el cambio. También debe proporcionar algunas pruebas de regresión para asegurarnos de que nuestro parche funciona y no crea un error en otro lugar a lo largo de la línea.
+
+=head2 Probar la revisión
+
+Las pruebas de regresión para cada operador se encuentran en F<t/op/>, por lo que hacemos una copia de F<t/op/pack.t> en F<t/op/pack.t~>. Ahora podemos agregar nuestras pruebas al final. En primer lugar, comprobaremos que C<U> crea realmentne cadenas Unicode.
+
+t/op/pack.t tiene una función ok() sensible, pero si no podemos usarla, lo haremos con t/test.pl.
+
+ require './test.pl';
+ plan( tests => 159 );
+
+así que en vez de esto:
+
+ print 'not ' unless "1.20.300.4000" eq sprintf "%vd",
+                                               pack("U*",1,20,300,4000);
+ print "ok $test\n"; $test++;
+
+podemos escribir una prueba más sensible (vea L<Test::More> para una explicación completa de is() y otras funciones de prueba).
+
+ is( "1.20.300.4000", sprintf "%vd", pack("U*",1,20,300,4000),
+                                       "U* produce Unicode" );
+
+Ahora vamos a probar que también es correcto para el asunto del espacio al comienzo:
+
+ is( "1.20.300.4000", sprintf "%vd", pack("  U*",1,20,300,4000),
+                                     "  con espacios al comienzo" );
+
+Y finalmente vamos a comprobar que no creamos cadenas Unicode si C<U> B<no> es el primer formato activo:
+
+ isnt( v1.20.300.4000, sprintf "%vd", pack("C0U*",1,20,300,4000),
+                                       "U* no es primero, luego no es Unicode" );
+
+No hay que olvidarse de cambiar el número de pruebas que aparece en la parte superior, o el comprobador automatizado quedará confundido. Esto se verá así:
+
+ print "1..156\n";
+
+o así:
+
+ plan( tests => 156 );
+
+Ahora compilamos Perl, y lo ejecutamos a través de la serie de pruebas. Nuestras nuevas pruebas pasan correctamente, ¡Hurra!
+
+=head2 Documentar el parche
+
+Por último, la documentación. El trabajo nunca está terminado hasta que el papeleo se acaba, así que vamos a describir el cambio que acaba de hacer. El lugar relevante es F<pod/perlfunc.pod>; de nuevo, hacemos una copia, y luego vamos a insertar este texto en la descripción de C<pack>:
+
+ =item *
+
+ Si el patrón comienza con una C<U>, la cadena resultante será tratada
+ como codificada en UTF-8 Unicode. Puede forzar una codificación UTF-8 en una cadena
+ con una C<U0> inicial, y los bytes que siguen se interpretarán como
+ caracteres Unicode. Si no desea que ocurra esto, puede comenzar
+ su patrón con C<C0> (o cualquier otra cosa) para forzar a Perl a no codificar en UTF-8
+ su cadena, y luego continúe con una C<U*> más adelante en su
+ patrón.
+
+=head2 Enviar
+
+Vea L<perlhack> para obtener más información sobre cómo presentar este parche.
+
+=head1 AUTOR
+
+Este documento fue escrito originalmente por Nathan Torkington, y es mantenido por la lista de correo perl5-porters.
