@@ -2,72 +2,72 @@
 
 =head1 NOMBRE
 
-perl5124delta - quÈ hay de nuevo para Perl 5.12.4
+perl5124delta - qu√© hay de nuevo para Perl 5.12.4
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Este documento describe las diferencias entre la versiÛn 5.12.3 y la versiÛn 5.12.4.
+Este documento describe las diferencias entre la versi√≥n 5.12.3 y la versi√≥n 5.12.4.
 
-Si est· actualizando desde una versiÛn anterior como la 5.12.2, primero lea L<perl5123delta>, que describe las diferencias entre 5.12.2 y la 5.12.3. Los principales cambios realizados en 5.12.0 se describen en L<perl5120delta>.
+Si est√° actualizando desde una versi√≥n anterior como la 5.12.2, primero lea L<perl5123delta>, que describe las diferencias entre 5.12.2 y la 5.12.3. Los principales cambios realizados en 5.12.0 se describen en L<perl5120delta>.
 
 =head1 Cambios incompatibles
 
-No hay cambios intencionadamente incompatibles con 5.12.3. Si los hay, los errores e informes ser·n bienvenidos.
+No hay cambios intencionadamente incompatibles con 5.12.3. Si los hay, los errores e informes ser√°n bienvenidos.
 
 =head1 Arreglo de determinados errores
 
-Cuando desactivado el modo C<strict "refs">, C<%{...}> en contexto rvalor devuelve C<undef> si su argumento es indefinido.  Una optimizaciÛn introducida en Perl 5.12.0 para hacer C<keys %{...}> m·s r·pida cuando se utiliza como un valor lÛgico, no tiene esto en cuenta, haciendo que C<keys %{+undef}> (y C<keys %$foo> cuando C<$foo> no est· definido) sea un error, cuando deberÌa serlo solo cuando estÈ activo el modo strict [perl # 81750].
+Cuando desactivado el modo C<strict "refs">, C<%{...}> en contexto rvalor devuelve C<undef> si su argumento es indefinido.  Una optimizaci√≥n introducida en Perl 5.12.0 para hacer C<keys %{...}> m√°s r√°pida cuando se utiliza como un valor l√≥gico, no tiene esto en cuenta, haciendo que C<keys %{+undef}> (y C<keys %$foo> cuando C<$foo> no est√° definido) sea un error, cuando deber√≠a serlo solo cuando est√© activo el modo strict [perl # 81750].
 
-C<lc>, C<uc>, C<lcfirst>, y C<ucfirst> ya no devuelven cadenas descontaminadas cuando el argumento est· contaminado. Esto se habÌa estropeado desde Perl 5.8.9 [perl # 87336].
+C<lc>, C<uc>, C<lcfirst>, y C<ucfirst> ya no devuelven cadenas descontaminadas cuando el argumento est√° contaminado. Esto se hab√≠a estropeado desde Perl 5.8.9 [perl # 87336].
 
-Se ha corregido un caso en el que era posible que un b˙fer liberado podÌa ser leÌdo cuando era analizado un documento incrustado.
+Se ha corregido un caso en el que era posible que un b√∫fer liberado pod√≠a ser le√≠do cuando era analizado un documento incrustado.
 
-=head1 MÛdulos y pragmas
+=head1 M√≥dulos y pragmas
 
-L<Module::CoreList> se ha actualizado de la versiÛn 2.43 a la 2.50.
+L<Module::CoreList> se ha actualizado de la versi√≥n 2.43 a la 2.50.
 
 =head1 Pruebas
 
-El script de prueba F<cpan/CGI/t/http.t> se arreglÛ para trabajar cuando el entorno tiene variables de entorno HTTPS_*, como HTTPS_PROXY.
+El script de prueba F<cpan/CGI/t/http.t> se arregl√≥ para trabajar cuando el entorno tiene variables de entorno HTTPS_*, como HTTPS_PROXY.
 
-=head1 DocumentaciÛn
+=head1 Documentaci√≥n
 
-Se ha actualizado la documentaciÛn de rand() en L<perlfunc> para destacar que no es criptogr·ficamente seguro.
+Se ha actualizado la documentaci√≥n de rand() en L<perlfunc> para destacar que no es criptogr√°ficamente seguro.
 
-=head1 Notas especÌficas por cada plataforma
+=head1 Notas espec√≠ficas por cada plataforma
 
 =over 4
 
 =item Linux
 
-Soporte al diseÒo de la nueva biblioteca multi-arquitectura de Ubuntu 11.04.
+Soporte al dise√±o de la nueva biblioteca multi-arquitectura de Ubuntu 11.04.
 
 =back
 
 =head1 Agradecimientos
 
-Perl 5.12.4 representa aproximadamente 5 meses de desarrollo desde Perl 5.12.3 y contiene aproximadamente 200 lÌneas de cambios en 11 archivos por parte de 8 autores.
+Perl 5.12.4 representa aproximadamente 5 meses de desarrollo desde Perl 5.12.3 y contiene aproximadamente 200 l√≠neas de cambios en 11 archivos por parte de 8 autores.
 
-Perl sigue floreciendo en su tercera dÈcada gracias a una vibrante comunidad de usuarios y desarrolladores.  Las siguientes personas han contribuido con mejoras que se incorporaron en Perl 5.12.4:
+Perl sigue floreciendo en su tercera d√©cada gracias a una vibrante comunidad de usuarios y desarrolladores.  Las siguientes personas han contribuido con mejoras que se incorporaron en Perl 5.12.4:
 
-Andy Dougherty, David Golden, David Leadbeater, Father Chrysostomos, Florian Ragwitz, Jesse Vincent, Leon Brocard, Zsb·n Ambrus.
+Andy Dougherty, David Golden, David Leadbeater, Father Chrysostomos, Florian Ragwitz, Jesse Vincent, Leon Brocard, Zsb√°n Ambrus.
 
-=head1 NotificaciÛn de errores
+=head1 Notificaci√≥n de errores
 
-Si encuentra algo que piensa que es un error, podrÌa verificar los artÌculos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay tambiÈn informaciÛn en la p·gina principal de Perl, http://www.perl.org/ .
+Si encuentra algo que piensa que es un error, podr√≠a verificar los art√≠culos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay tambi√©n informaci√≥n en la p√°gina principal de Perl, http://www.perl.org/ .
 
-Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuciÛn.  Aseg˙rese de reducir la apariciÛn del error en un programa que sea pequeÒo, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser·n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaciÛn de Perl.
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuci√≥n.  Aseg√∫rese de reducir la aparici√≥n del error en un programa que sea peque√±o, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser√°n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaci√≥n de Perl.
 
-Si el fallo que est· reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo p˙blica, por favor, envÌelo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripciÛn cerrada y no archivada, que incluye a todos los participantes principales, que podr·n ayudar a evaluar el impacto de los problemas, encontrar una resoluciÛn, y ayudar a coordinar la liberaciÛn de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl est· soportado. Debe usar esta direcciÛn ˙nicamente para problemas de seguridad relacionados con el n˙cleo de Perl, no para mÛdulos que se distribuyan por separado en CPAN.
+Si el fallo que est√° reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo p√∫blica, por favor, env√≠elo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripci√≥n cerrada y no archivada, que incluye a todos los participantes principales, que podr√°n ayudar a evaluar el impacto de los problemas, encontrar una resoluci√≥n, y ayudar a coordinar la liberaci√≥n de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl est√° soportado. Debe usar esta direcci√≥n √∫nicamente para problemas de seguridad relacionados con el n√∫cleo de Perl, no para m√≥dulos que se distribuyan por separado en CPAN.
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
-En el archivo F<Changes> encontrar· una explicaciÛn de cÛmo obtener informaciÛn detallada de los cambios.
+En el archivo F<Changes> encontrar√° una explicaci√≥n de c√≥mo obtener informaci√≥n detallada de los cambios.
 
 El archivo F<INSTALL> contiene instrucciones para compilar Perl.
 
-El archivo F<README> contiene informaciÛn general.
+El archivo F<README> contiene informaci√≥n general.
 
-En los archivos F<Artistic> y F<Copying> encontrar· informaciÛn de copyright.
+En los archivos F<Artistic> y F<Copying> encontrar√° informaci√≥n de copyright.
 
 =cut

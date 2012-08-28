@@ -4,66 +4,66 @@
 
 perldelta - Novedades de perl v5.14.1
 
-=head1 DESCRIPCIÓN
+=head1 DESCRIPCIÃ“N
 
-En este documento se describen las diferencias entre la versión 5.14.0 y la versión 5.14.1.
+En este documento se describen las diferencias entre la versiÃ³n 5.14.0 y la versiÃ³n 5.14.1.
 
-Si va a actualizar desde una versión anterior, como la 5.12.0, debe leer primero 
+Si va a actualizar desde una versiÃ³n anterior, como la 5.12.0, debe leer primero 
 L<perl5140delta>, donde se describen las diferencias entre las versiones 5.12.0 y 5.14.0.
 
 =head1 Mejoras en los componentes
 
-Ningún cambio con respecto a la versión 5.14.0.
+NingÃºn cambio con respecto a la versiÃ³n 5.14.0.
 
 =head1 Seguridad
 
-Ningún cambio con respecto a la versión 5.14.0.
+NingÃºn cambio con respecto a la versiÃ³n 5.14.0.
 
 =head1 Cambios incompatibles
 
-No hay cambios intencionadamente incompatibles con 5.14.0. Si los hay, los errores e informes serán bienvenidos.
+No hay cambios intencionadamente incompatibles con 5.14.0. Si los hay, los errores e informes serÃ¡n bienvenidos.
 
 =head1 Obsolescencias
 
 No hay obsolescencias desde 5.14.0.
 
-=head1 Módulos y pragmas
+=head1 MÃ³dulos y pragmas
 
-=head2 Nuevos módulos y pragmas
+=head2 Nuevos mÃ³dulos y pragmas
 
-Ningún cambio
+NingÃºn cambio
 
-=head2 Módulos y pragmas actualizados
+=head2 MÃ³dulos y pragmas actualizados
 
 =over 4
 
 =item *
 
-Se ha actualizado L<B::Deparse> de la versión 1.03 a la 1.04, para ///solucionar dos regresiones en Perl 5.14.0:
+Se ha actualizado L<B::Deparse> de la versiÃ³n 1.03 a la 1.04, para ///solucionar dos regresiones en Perl 5.14.0:
 
-El análisis del operador C<glob> y su form diamante (C<< <> >>) funcionan de nuevo. [perl #90898]
+El anÃ¡lisis del operador C<glob> y su form diamante (C<< <> >>) funcionan de nuevo. [perl #90898]
 
 La presencia de subrutinas llamadas C<::::> o C<::::::> ya no provoca cuelgues en B::Deparse.
 
 =item *
 
-Se ha actualizado L<Pod::Perldoc> de la versión 3.15_03 a 3.15_04.
+Se ha actualizado L<Pod::Perldoc> de la versiÃ³n 3.15_03 a 3.15_04.
 
-Corrije las rutas de búsqueda en VMS. [perl #90640]
+Corrije las rutas de bÃºsqueda en VMS. [perl #90640]
 
 =back
 
-=head2 Módulos y pragmas retirados
+=head2 MÃ³dulos y pragmas retirados
 
-Ningún cambio
+NingÃºn cambio
 
-=head1 Documentación
+=head1 DocumentaciÃ³n
 
-=head2 Nueva documentación
+=head2 Nueva documentaciÃ³n
 
-Ningún cambio
+NingÃºn cambio
 
-=head2 Cambios en la documentación existente
+=head2 Cambios en la documentaciÃ³n existente
 
 =head3 L<perlfunc>
 
@@ -75,7 +75,7 @@ Se han incluido C<given>, C<when> y C<default> en L<perlfunc>.
 
 =item *
 
-Ahora la documentación de C<use> incluye una referencia a F<if.pm>.
+Ahora la documentaciÃ³n de C<use> incluye una referencia a F<if.pm>.
 
 =back
 
@@ -95,15 +95,15 @@ Se ha ampliado L<perllol> con ejemplos en los que se usa la nueva sintaxis C<pus
 
 =item *
 
-La descripción de los operadores bit a bit se ha ampliado para explicar cómo funcionan en cadenas Unicode.
+La descripciÃ³n de los operadores bit a bit se ha ampliado para explicar cÃ³mo funcionan en cadenas Unicode.
 
 =item *
 
-La sección sobre el operador tres puntos o blablablá se ha movido hacia arriba, ya que se utiliza para separar dos secciones estrechamente relacionadas entre sí sobre el operador coma.
+La secciÃ³n sobre el operador tres puntos o blablablÃ¡ se ha movido hacia arriba, ya que se utiliza para separar dos secciones estrechamente relacionadas entre sÃ­ sobre el operador coma.
 
 =item *
 
-Se han agregado más ejemplos de uso de C<m//g>.
+Se han agregado mÃ¡s ejemplos de uso de C<m//g>.
 
 =item *
 
@@ -117,7 +117,7 @@ La sintaxis C<<< <<\FOO >>> en los documentos incrustados ha sido documentada.
 
 =item *
 
-L<perlrun> ha experimentado una significativa limpieza.  En particular, la forma B<-0x...> de la bandera B<-0> se ha clarificado, y la sección final sobre las variables de entorno ha sido corregida y ampliada.
+L<perlrun> ha experimentado una significativa limpieza.  En particular, la forma B<-0x...> de la bandera B<-0> se ha clarificado, y la secciÃ³n final sobre las variables de entorno ha sido corregida y ampliada.
 
 =back
 
@@ -127,34 +127,34 @@ L<perlrun> ha experimentado una significativa limpieza.  En particular, la forma
 
 =item *
 
-Se ha corregido la documentación sobre invocación para C<WIFEXITED>, C<WEXITSTATUS>, C<WIFSIGNALED>, C<WTERMSIG>, C<WIFSTOPPED> y C<WSTOPSIG>.
+Se ha corregido la documentaciÃ³n sobre invocaciÃ³n para C<WIFEXITED>, C<WEXITSTATUS>, C<WIFSIGNALED>, C<WTERMSIG>, C<WIFSTOPPED> y C<WSTOPSIG>.
 
 =back
 
 
-=head1 Diagnósticos
+=head1 DiagnÃ³sticos
 
-Las siguientes adiciones o cambios han sido realizados en la salida de diagnóstico, incluyendo advertencias y mensajes de errores fatales.  En L<perldiag> encontrará la lista completa de mensajes de diagnóstico.
+Las siguientes adiciones o cambios han sido realizados en la salida de diagnÃ³stico, incluyendo advertencias y mensajes de errores fatales.  En L<perldiag> encontrarÃ¡ la lista completa de mensajes de diagnÃ³stico.
 
-=head2 Nuevos diagnósticos
+=head2 Nuevos diagnÃ³sticos
 
-Ningún cambio
+NingÃºn cambio
 
-=head2 Cambios en diagnósticos existentes
+=head2 Cambios en diagnÃ³sticos existentes
 
-Ningún cambio
+NingÃºn cambio
 
 =head1 Cambios en utilidades
 
-Ningún cambio
+NingÃºn cambio
 
-=head1 Configuración y compilación
+=head1 ConfiguraciÃ³n y compilaciÃ³n
 
 =over 4
 
 =item *
 
-Se ha modificado F<regexp.h> por compatibilidad con la opción C<-Werror>
+Se ha modificado F<regexp.h> por compatibilidad con la opciÃ³n C<-Werror>
 de GCC, usada en algunos proyectos que incluyen los archivos de encabezado de perl.
 
 =back
@@ -165,7 +165,7 @@ de GCC, usada en algunos proyectos que incluyen los archivos de encabezado de pe
 
 =item *
 
-Algunos fallos de las pruebas en F<dist/Locale-Maketext/t/09_compile.t> que podrían ocurrir en función del entorno, han sido corregidos. [perl #89896]
+Algunos fallos de las pruebas en F<dist/Locale-Maketext/t/09_compile.t> que podrÃ­an ocurrir en funciÃ³n del entorno, han sido corregidos. [perl #89896]
 
 =item * 
 
@@ -178,13 +178,13 @@ Un temporizador de vigilancia para F<t/re/re.t> fue alargado para dar cabida a s
 
 =head2 Nuevas plataformas
 
-Ningún cambio
+NingÃºn cambio
 
 =head2 Plataformas retiradas
 
-Ningún cambio
+NingÃºn cambio
 
-=head2 Notas específicas de plataformas
+=head2 Notas especÃ­ficas de plataformas
 
 =head3 Solaris
 
@@ -192,7 +192,7 @@ Ningún cambio
 
 =item *
 
-Se ha corregido la documentación que indica los paquetes de Solaris necesarios para compilar Perl en Solaris 9 y Solaris 10.
+Se ha corregido la documentaciÃ³n que indica los paquetes de Solaris necesarios para compilar Perl en Solaris 9 y Solaris 10.
 
 =back
 
@@ -202,11 +202,11 @@ Se ha corregido la documentación que indica los paquetes de Solaris necesarios p
 
 =item * 
 
-El I<script> de prueba F<lib/locale.t> ha sido actualizado para trabajar en la publicación del próximo Lion.
+El I<script> de prueba F<lib/locale.t> ha sido actualizado para trabajar en la publicaciÃ³n del prÃ³ximo Lion.
 
 =item * 
 
-Se han aclarado las instrucciones de compilación específicas de Mac OS X.
+Se han aclarado las instrucciones de compilaciÃ³n especÃ­ficas de Mac OS X.
 
 =back
 
@@ -216,7 +216,7 @@ Se han aclarado las instrucciones de compilación específicas de Mac OS X.
 
 =item *
 
-Se ha actualizado el proceso de instalación de L<ODBM_File> con las nuevas rutas de acceso a bibliotecas de Ubuntu ///natty.
+Se ha actualizado el proceso de instalaciÃ³n de L<ODBM_File> con las nuevas rutas de acceso a bibliotecas de Ubuntu ///natty.
 
 =back
 
@@ -226,31 +226,31 @@ Se ha actualizado el proceso de instalación de L<ODBM_File> con las nuevas rutas
 
 =item *
 
-La representación compilada de formatos ahora es guardada a través del mg_ptr de PERL_MAGIC_fm. Anteriormente era almacenada en el búfer de cadena, más allá de SvLEN(), el final normal de la cadena. Ahora SvCOMPILED() y SvCOMPILED_{on,off}() sólo existen por compatibilidad con el código XS.
+La representaciÃ³n compilada de formatos ahora es guardada a travÃ©s del mg_ptr de PERL_MAGIC_fm. Anteriormente era almacenada en el bÃºfer de cadena, mÃ¡s allÃ¡ de SvLEN(), el final normal de la cadena. Ahora SvCOMPILED() y SvCOMPILED_{on,off}() sÃ³lo existen por compatibilidad con el cÃ³digo XS.
 El primero es siempre 0, los otros dos ahora son no-ops.
 
 =back
 
-=head1 Corrección de errores
+=head1 CorrecciÃ³n de errores
 
 =over 4
 
 =item *
 
-Se ha sido corregido un error que podría causar un error "uso del valor liberado en la iteración" si los próximos dos elementos hash en los que se puede iterar, son borrados. [perl #85026]
+Se ha sido corregido un error que podrÃ­a causar un error "uso del valor liberado en la iteraciÃ³n" si los prÃ³ximos dos elementos hash en los que se puede iterar, son borrados. [perl #85026]
 
 =item *
 
-Pasando la misma subrutina constante a C<index> y a C<formline>, ya no provoca ningún fallo en ninguna de las dos. [perl #89218]
+Pasando la misma subrutina constante a C<index> y a C<formline>, ya no provoca ningÃºn fallo en ninguna de las dos. [perl #89218]
 
 =item *
 
-5.14.0 introdujo algunas pérdidas de memoria en las clases de caracteres de las expresiones regulares, como C<[\w\s]>, que ahora han sido corregidas.
+5.14.0 introdujo algunas pÃ©rdidas de memoria en las clases de caracteres de las expresiones regulares, como C<[\w\s]>, que ahora han sido corregidas.
 
 =item *
 
-Un caso extremo en la concordancia en expresiones regulares podría potencialmente entrar en un bucle infinito.
-Esto sucedió sólo bajo C</i> en las clases de caracteres entre corchetes que tuvieran caracteres con plegados multi-carácter, y la cadena de destino con la qué coincidir incluyera la primera parte del plegado, seguido de otro carácter que tuviera un plegado multi-carácter que comenzara con la parte restante del plegado, seguido de algo más.
+Un caso extremo en la concordancia en expresiones regulares podrÃ­a potencialmente entrar en un bucle infinito.
+Esto sucediÃ³ sÃ³lo bajo C</i> en las clases de caracteres entre corchetes que tuvieran caracteres con plegados multi-carÃ¡cter, y la cadena de destino con la quÃ© coincidir incluyera la primera parte del plegado, seguido de otro carÃ¡cter que tuviera un plegado multi-carÃ¡cter que comenzara con la parte restante del plegado, seguido de algo mÃ¡s.
 
  "s\N{U+DF}" =~ /[\x{DF}foo]/i
 
@@ -258,11 +258,11 @@ es uno de esos casos.  C<\xDF> se pliega en C<"ss">.
 
 =item * 
 
-Varios errores de plegado de tamaño de caja Unicode han sido corregidos.
+Varios errores de plegado de tamaÃ±o de caja Unicode han sido corregidos.
 
 =item *
 
-El nuevo (en 5.14.0) modificador de expresión regular C</a>, cuando se repite como en C</aa> prohíbe a los caracteres fuera del rango ASCII, que coincidan con caracteres dentro del rango de coincidencia bajo C</i>  Esto no funcionaba en algunas circunstancias, todas en las que intervenía la alternancia, como por ejemplo:
+El nuevo (en 5.14.0) modificador de expresiÃ³n regular C</a>, cuando se repite como en C</aa> prohÃ­be a los caracteres fuera del rango ASCII, que coincidan con caracteres dentro del rango de coincidencia bajo C</i>  Esto no funcionaba en algunas circunstancias, todas en las que intervenÃ­a la alternancia, como por ejemplo:
 
  "\N{KELVIN SIGN}" =~ /k|foo/iaa;
 
@@ -270,38 +270,38 @@ era exitoso, inapropiadamente.  Esto ha sido arreglado.
 
 =item *
 
-Se ha corregido un caso en el que era posible que un búfer liberado podía ser leído cuando era analizado un documento incrustado.
+Se ha corregido un caso en el que era posible que un bÃºfer liberado podÃ­a ser leÃ­do cuando era analizado un documento incrustado.
 
 =back
 
 =head1 Agradecimientos
 
-Perl 5.14.1 representa aproximadamente cuatro semanas de desarrollo desde la versión Perl 5.14.0 y contiene unas 3500 líneas de cambios realizados en 38 archivos por 17 autores.
+Perl 5.14.1 representa aproximadamente cuatro semanas de desarrollo desde la versiÃ³n Perl 5.14.0 y contiene unas 3500 lÃ­neas de cambios realizados en 38 archivos por 17 autores.
 
-Perl sigue floreciendo en su tercera década gracias a una vibrante comunidad de usuarios y desarrolladores.  Las siguientes personas han contrubuido las mejoras que se incorporaron en Perl 5.14.1:
+Perl sigue floreciendo en su tercera dÃ©cada gracias a una vibrante comunidad de usuarios y desarrolladores.  Las siguientes personas han contrubuido las mejoras que se incorporaron en Perl 5.14.1:
 
 Bo Lindbergh, Claudio Ramirez, Craig A. Berry, David Leadbeater, Father
 Chrysostomos, Jesse Vincent, Jim Cromie, Justin Case, Karl Williamson,
 Leo Lapworth, Nicholas Clark, Nobuhiro Iwamatsu, smash, Tom Christiansen,
-Ton Hospel, Vladimir Timofeev, y Zsbán Ambrus.
+Ton Hospel, Vladimir Timofeev, y ZsbÃ¡n Ambrus.
 
 
-=head1 Notificación de errores
+=head1 NotificaciÃ³n de errores
 
-Si encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay también información en la página principal de Perl, http://www.perl.org/ .
+Si encuentra algo que piensa que es un error, podrÃ­a verificar los artÃ­culos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay tambiÃ©n informaciÃ³n en la pÃ¡gina principal de Perl, http://www.perl.org/ .
 
-Si cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.
+Si cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuciÃ³n.  AsegÃºrese de reducir la apariciÃ³n del error en un programa que sea pequeÃ±o, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serÃ¡n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaciÃ³n de Perl.
 
-Si el fallo que está reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo pública, por favor, envíelo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripción cerrada y no archivada, que incluye a todos los participantes principales, que podrán ayudar a evaluar el impacto de los problemas, encontrar una resolución, y ayudar a coordinar la liberación de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl está soportado. Debe usar esta dirección únicamente para problemas de seguridad relacionados con el núcleo de Perl, no para módulos que se distribuyan por separado en CPAN.
+Si el fallo que estÃ¡ reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo pÃºblica, por favor, envÃ­elo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripciÃ³n cerrada y no archivada, que incluye a todos los participantes principales, que podrÃ¡n ayudar a evaluar el impacto de los problemas, encontrar una resoluciÃ³n, y ayudar a coordinar la liberaciÃ³n de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl estÃ¡ soportado. Debe usar esta direcciÃ³n Ãºnicamente para problemas de seguridad relacionados con el nÃºcleo de Perl, no para mÃ³dulos que se distribuyan por separado en CPAN.
 
-=head1 VEA TAMBIÉN
+=head1 VEA TAMBIÃ‰N
 
-En el archivo F<Changes> encontrará una explicación de cómo obtener información detallada de los cambios.
+En el archivo F<Changes> encontrarÃ¡ una explicaciÃ³n de cÃ³mo obtener informaciÃ³n detallada de los cambios.
 
 El archivo F<INSTALL> contiene instrucciones para compilar Perl.
 
-El archivo F<README> contiene información general.
+El archivo F<README> contiene informaciÃ³n general.
 
-En los archivos F<Artistic> y F<Copying> encontrará información de copyright.
+En los archivos F<Artistic> y F<Copying> encontrarÃ¡ informaciÃ³n de copyright.
 
 =cut

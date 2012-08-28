@@ -1,18 +1,18 @@
 =head1 NAME
 X<warning, lexical> X<warnings> X<warning>
 
-perllexwarn - Advertencias léxicas de Perl
+perllexwarn - Advertencias lÃ©xicas de Perl
 
-=head1 DESCRIPCIÓN
+=head1 DESCRIPCIÃ“N
 
-El pragma C<use warnings> permite controlar con precisión qué advertencias han de ser habilitadas en un programa Perl. Es una alternativa más flexible, tanto para la opción de la línea de comandos B<-w> como para la variable de Perl equivalente, C<$^W>.
+El pragma C<use warnings> permite controlar con precisiÃ³n quÃ© advertencias han de ser habilitadas en un programa Perl. Es una alternativa mÃ¡s flexible, tanto para la opciÃ³n de la lÃ­nea de comandos B<-w> como para la variable de Perl equivalente, C<$^W>.
 
 Este pragma funciona igual que el pragma C<strict>.
-Esto significa que el ámbito del pragma warning está limitado al bloque que lo alberga. También significa que el ajuste para este pragma no se escapará a través de los archivos (a través de C<use>, C<require> o C<do>). Esto permite a los autores, de forma independiente, definir el grado de control de advertencia que se aplicará a su módulo.
+Esto significa que el Ã¡mbito del pragma warning estÃ¡ limitado al bloque que lo alberga. TambiÃ©n significa que el ajuste para este pragma no se escaparÃ¡ a travÃ©s de los archivos (a travÃ©s de C<use>, C<require> o C<do>). Esto permite a los autores, de forma independiente, definir el grado de control de advertencia que se aplicarÃ¡ a su mÃ³dulo.
 
-De forma predeterminada, las advertencias opcionales están desactivadas, por lo que cualquier código heredado que no intente controlar las advertencias, funcionará sin problemas.
+De forma predeterminada, las advertencias opcionales estÃ¡n desactivadas, por lo que cualquier cÃ³digo heredado que no intente controlar las advertencias, funcionarÃ¡ sin problemas.
 
-Todas las advertencias están habilitadas en un bloque, usando cualquiera de estas formas:
+Todas las advertencias estÃ¡n habilitadas en un bloque, usando cualquiera de estas formas:
 
     use warnings;
     use warnings 'all';
@@ -22,7 +22,7 @@ Del mismo modo todos las advertencias se desactivan en un bloque, usando cualqui
     no warnings;
     no warnings 'all';
 
-Por ejemplo, considere el código siguiente:
+Por ejemplo, considere el cÃ³digo siguiente:
 
     use warnings;
     my @a;
@@ -32,30 +32,30 @@ Por ejemplo, considere el código siguiente:
     }
     my $c = @a[0];
 
-El código en el bloque que lo alberga tiene las advertencias activadas, pero el bloque más interno las ha desactivado. En este caso, eso significa que la asignación al escalar C<$c> se disparará la advertencia C<"Scalar value @a[0] better written as $a[0]"> ("Valor escalar @a[0] queda mejor escrito como $a[0]"), pero la asignación al escalar C<$b>, no lo hará.
+El cÃ³digo en el bloque que lo alberga tiene las advertencias activadas, pero el bloque mÃ¡s interno las ha desactivado. En este caso, eso significa que la asignaciÃ³n al escalar C<$c> se dispararÃ¡ la advertencia C<"Scalar value @a[0] better written as $a[0]"> ("Valor escalar @a[0] queda mejor escrito como $a[0]"), pero la asignaciÃ³n al escalar C<$b>, no lo harÃ¡.
 
 =head2 Advertencias predeterminadas y Advertencias opcionales
 
-Antes de la introducción de las advertencias léxicas, Perl tenía dos clases de advertencias: obligatorias y opcionales. 
+Antes de la introducciÃ³n de las advertencias lÃ©xicas, Perl tenÃ­a dos clases de advertencias: obligatorias y opcionales. 
 
-Como su nombre indica, si su código disparó una advertencia obligatoria, obtendrá una advertencia tanto si lo quería como si no.
-Por ejemplo, el código siguiente, siempre producirá una advertencia C<"isn't numeric"> ("no es numérico") sobre el "2:".
+Como su nombre indica, si su cÃ³digo disparÃ³ una advertencia obligatoria, obtendrÃ¡ una advertencia tanto si lo querÃ­a como si no.
+Por ejemplo, el cÃ³digo siguiente, siempre producirÃ¡ una advertencia C<"isn't numeric"> ("no es numÃ©rico") sobre el "2:".
 
     my $a = "2:" + 3;
 
-Con la introducción de las advertencias léxicas, las advertencias obligatorias ahora se han convertido en advertencias I<predeterminadas>. La diferencia es que a pesar de que las advertencias que previamente eran obligatorias siguen estando activadas por defecto, pueden ser activadas o desactivadas posteriormente con el pragma warning léxico. Por ejemplo, en el código siguiente, una advertencia C<"isn't numeric"> ("no es numérico") sólo será emitida para la variable C<$a>.
+Con la introducciÃ³n de las advertencias lÃ©xicas, las advertencias obligatorias ahora se han convertido en advertencias I<predeterminadas>. La diferencia es que a pesar de que las advertencias que previamente eran obligatorias siguen estando activadas por defecto, pueden ser activadas o desactivadas posteriormente con el pragma warning lÃ©xico. Por ejemplo, en el cÃ³digo siguiente, una advertencia C<"isn't numeric"> ("no es numÃ©rico") sÃ³lo serÃ¡ emitida para la variable C<$a>.
 
     my $a = "2:" + 3;
     no warnings;
     my $b = "2:" + 3;
 
-Tenga en cuenta que ni la opción B<-w> ni la C<$^W> pueden ser utilizados para activar/desactivar las advertencias predeterminadas. Siguen siendo obligatorias, en este caso.
+Tenga en cuenta que ni la opciÃ³n B<-w> ni la C<$^W> pueden ser utilizados para activar/desactivar las advertencias predeterminadas. Siguen siendo obligatorias, en este caso.
 
-=head2 Qué hay de malo con B<-w> y C<$^W>
+=head2 QuÃ© hay de malo con B<-w> y C<$^W>
 
-Aunque es muy útil, el gran problema con el uso de B<-w> en la línea de comandos para activar las advertencias, es que es un "todo o nada". Tome el caso típico de cuando escribe un programa en Perl. Hay partes del código que va a escribir usted mismo, pero es muy probable que vaya a usar módulos Perl pre-escritos. Si utiliza la opción B<-w>, en este caso, lo que estará haciendo es activar las advertencias en partes de código que usted no ha escrito.
+Aunque es muy Ãºtil, el gran problema con el uso de B<-w> en la lÃ­nea de comandos para activar las advertencias, es que es un "todo o nada". Tome el caso tÃ­pico de cuando escribe un programa en Perl. Hay partes del cÃ³digo que va a escribir usted mismo, pero es muy probable que vaya a usar mÃ³dulos Perl pre-escritos. Si utiliza la opciÃ³n B<-w>, en este caso, lo que estarÃ¡ haciendo es activar las advertencias en partes de cÃ³digo que usted no ha escrito.
 
-Del mismo modo, usar C<$^W> para deshabilitar o habilitar bloques de código es, fundamentalmente, erróneo. Para empezar, digamos que desea deshabilitar las advertencias en un bloque de código. Se podría esperar que esto sea suficiente para hacer el truco:
+Del mismo modo, usar C<$^W> para deshabilitar o habilitar bloques de cÃ³digo es, fundamentalmente, errÃ³neo. Para empezar, digamos que desea deshabilitar las advertencias en un bloque de cÃ³digo. Se podrÃ­a esperar que esto sea suficiente para hacer el truco:
 
      {
          local ($^W) = 0;
@@ -63,9 +63,9 @@ Del mismo modo, usar C<$^W> para deshabilitar o habilitar bloques de código es, 
 	 my $b; chop $b;
      }
 
-Cuando este código se ejecuta con la opción B<-w>, una advertencia se produce para C<$a> en la línea: C<"Reversed += operator"> ("operador += invertido").
+Cuando este cÃ³digo se ejecuta con la opciÃ³n B<-w>, una advertencia se produce para C<$a> en la lÃ­nea: C<"Reversed += operator"> ("operador += invertido").
 
-El problema es que Perl tiene advertencias tanto en tiempo de compilación como en tiempo de ejecución. Para desactivar las advertencias en tiempo de compilación, necesita volver a escribir el código así:
+El problema es que Perl tiene advertencias tanto en tiempo de compilaciÃ³n como en tiempo de ejecuciÃ³n. Para desactivar las advertencias en tiempo de compilaciÃ³n, necesita volver a escribir el cÃ³digo asÃ­:
 
      {
          BEGIN { $^W = 0 }
@@ -73,7 +73,7 @@ El problema es que Perl tiene advertencias tanto en tiempo de compilación como e
 	 my $b; chop $b;
      }
 
-El otro gran problema con C<$^W> es la forma en que, usted, sin darse cuenta, puede cambiar la configuración de advertencias en los lugares más inesperados de su código. Por ejemplo, cuando el código siguiente se ejecuta (sin la opción B<-w>), la segunda llamada a C<hazlo> disparará una advertencia C<"Use of uninitialized value"> ("Uso de un valor no inicializado"), mientras que el primero no.
+El otro gran problema con C<$^W> es la forma en que, usted, sin darse cuenta, puede cambiar la configuraciÃ³n de advertencias en los lugares mÃ¡s inesperados de su cÃ³digo. Por ejemplo, cuando el cÃ³digo siguiente se ejecuta (sin la opciÃ³n B<-w>), la segunda llamada a C<hazlo> dispararÃ¡ una advertencia C<"Use of uninitialized value"> ("Uso de un valor no inicializado"), mientras que el primero no.
 
     sub hazlo
     {
@@ -87,50 +87,50 @@ El otro gran problema con C<$^W> es la forma en que, usted, sin darse cuenta, pu
         hazlo()
     }
 
-Este es un efecto secundario de C<$^W> al ser dinámicamente activado en un cierto ámbito.
+Este es un efecto secundario de C<$^W> al ser dinÃ¡micamente activado en un cierto Ã¡mbito.
 
-Las advertencias léxicas superan estas limitaciones, permitiendo un mayor control sobre dónde las advertencias pueden o no tropezar.
+Las advertencias lÃ©xicas superan estas limitaciones, permitiendo un mayor control sobre dÃ³nde las advertencias pueden o no tropezar.
 
-=head2 Controlando las advertencias desde la línea de comandos
+=head2 Controlando las advertencias desde la lÃ­nea de comandos
 
-Hay tres opciones de línea de comandos que pueden ser utilizadas para controlar cuándo las advertencias deben ser (o no) producidas:
+Hay tres opciones de lÃ­nea de comandos que pueden ser utilizadas para controlar cuÃ¡ndo las advertencias deben ser (o no) producidas:
 
 =over 5
 
 =item B<-w>
 X<-w>
 
-Esta es la opción actual. Si el pragma léxico warning B<no> es utilizado en ninguna parte de su código, o en ninguno de los módulos que está usando, esta opción activará las advertencias en todas partes. Ver L<Compatibilidad con versiones anteriores> para más información sobre cómo esta opción interactúa con las advertencias léxicas.
+Esta es la opciÃ³n actual. Si el pragma lÃ©xico warning B<no> es utilizado en ninguna parte de su cÃ³digo, o en ninguno de los mÃ³dulos que estÃ¡ usando, esta opciÃ³n activarÃ¡ las advertencias en todas partes. Ver L<Compatibilidad con versiones anteriores> para mÃ¡s informaciÃ³n sobre cÃ³mo esta opciÃ³n interactÃºa con las advertencias lÃ©xicas.
 
 =item B<-W>
 X<-W>
 
-Si la opción B<-W> es utilizada en la línea de comandos, activará todas las advertencias de todo el programa, independientemente de si las advertencias fueron inhabilitadas de forma local utilizando C<no warnings> o C<$^W =0>. Esto incluye todos los archivos que hayan sido incluidos a través de C<use>, C<require> o C<do>.
+Si la opciÃ³n B<-W> es utilizada en la lÃ­nea de comandos, activarÃ¡ todas las advertencias de todo el programa, independientemente de si las advertencias fueron inhabilitadas de forma local utilizando C<no warnings> o C<$^W =0>. Esto incluye todos los archivos que hayan sido incluidos a travÃ©s de C<use>, C<require> o C<do>.
 Piense en ello como el equivalente Perl del comando "lint".
 
 =item B<-X>
 X<-X>
 
-Hace exactamente lo contrario a la opción B<-W>, es decir, desactiva todas las advertencias.
+Hace exactamente lo contrario a la opciÃ³n B<-W>, es decir, desactiva todas las advertencias.
 
 =back
 
 =head2 Compatibilidad con versiones anteriores
 
-Si está acostumbrado a trabajar con una versión de Perl anterior a la introducción de las advertencias con alcance léxico, o si tiene código que utiliza tanto las advertencias léxicas y C<$^W>, esta sección describirá la forma en que interactúan.
+Si estÃ¡ acostumbrado a trabajar con una versiÃ³n de Perl anterior a la introducciÃ³n de las advertencias con alcance lÃ©xico, o si tiene cÃ³digo que utiliza tanto las advertencias lÃ©xicas y C<$^W>, esta secciÃ³n describirÃ¡ la forma en que interactÃºan.
 
-Cómo interactúan las advertencias léxicas con B<-w>/C<$^W>:
+CÃ³mo interactÃºan las advertencias lÃ©xicas con B<-w>/C<$^W>:
 
 =over 5
 
 =item 1.
 
-Si no usa ninguna de las tres opciones de línea de comandos (B<-w>, B<-W> o B<-X>) que controlan las advertencias, y ni C<$^W> o el pragma C<warnings> son usados, entonces son activadas las advertencias predeterminadas, y desactivadas las advertencias opcionales.
-Esto significa que el código heredado que no trate de controlar a las advertencias, funcionará sin problemas.
+Si no usa ninguna de las tres opciones de lÃ­nea de comandos (B<-w>, B<-W> o B<-X>) que controlan las advertencias, y ni C<$^W> o el pragma C<warnings> son usados, entonces son activadas las advertencias predeterminadas, y desactivadas las advertencias opcionales.
+Esto significa que el cÃ³digo heredado que no trate de controlar a las advertencias, funcionarÃ¡ sin problemas.
 
 =item 2.
 
-La opción B<-w> sólo establece la variable global C<$^W>, como en 5.005. Esto significa que cualquier código heredado que en la actualidad se base en la manipulación de C<$^W> para controlar el comportamiento de las advertencias, seguirá funcionando tal cual. 
+La opciÃ³n B<-w> sÃ³lo establece la variable global C<$^W>, como en 5.005. Esto significa que cualquier cÃ³digo heredado que en la actualidad se base en la manipulaciÃ³n de C<$^W> para controlar el comportamiento de las advertencias, seguirÃ¡ funcionando tal cual. 
 
 =item 3.
 
@@ -138,23 +138,23 @@ Aparte de que ahora es un valor booleano, la variable C<$^W> funciona exactament
 
 =item 4.
 
-Si una parte del código está bajo el control del pragma C<warnings>, tanto la variable C<$^W> como la opción B<-w> serán ignoradas para el ámbito del warning léxico.
+Si una parte del cÃ³digo estÃ¡ bajo el control del pragma C<warnings>, tanto la variable C<$^W> como la opciÃ³n B<-w> serÃ¡n ignoradas para el Ã¡mbito del warning lÃ©xico.
 
 =item 5.
 
-La única manera de anular un ajuste de las advertencias léxicas es con las opciones B<-W> o B<-X> de la línea de comandos.
+La Ãºnica manera de anular un ajuste de las advertencias lÃ©xicas es con las opciones B<-W> o B<-X> de la lÃ­nea de comandos.
 
 =back
 
-El efecto combinado de 3 y 4 es que permitirá que el código que utiliza el pragma C<warnings> controle el comportamiento de las advertencias del código de tipo $^W (utilizando un C<local $^W=0>) si realmente lo quiere así, pero no al contrario.
+El efecto combinado de 3 y 4 es que permitirÃ¡ que el cÃ³digo que utiliza el pragma C<warnings> controle el comportamiento de las advertencias del cÃ³digo de tipo $^W (utilizando un C<local $^W=0>) si realmente lo quiere asÃ­, pero no al contrario.
 
-=head2 Jerarquía de categorías
+=head2 JerarquÃ­a de categorÃ­as
 X<warning, categories>
 X<advertencia, categorias>
 
-Una jerarquía de "categorías" han sido definidas para permitir que grupos de advertencias sean activados/desactivados de forma independiente.
+Una jerarquÃ­a de "categorÃ­as" han sido definidas para permitir que grupos de advertencias sean activados/desactivados de forma independiente.
 
-La jerarquía actual es la siguiente:
+La jerarquÃ­a actual es la siguiente:
 
   all -+
        |
@@ -258,29 +258,29 @@ La jerarquía actual es la siguiente:
        |
        +- void
 
-Al igual que en el pragma "strict", ninguna de estas categorías pueden ser combinadas
+Al igual que en el pragma "strict", ninguna de estas categorÃ­as pueden ser combinadas
 
     use warnings qw(void redefine);
     no warnings qw(io syntax untie);
 
-También como en el pragma "strict", si hay más de una instancia del pragma C<warnings> en un determinado ámbito, el efecto acumulativo es aditivo. 
+TambiÃ©n como en el pragma "strict", si hay mÃ¡s de una instancia del pragma C<warnings> en un determinado Ã¡mbito, el efecto acumulativo es aditivo. 
 
-    use warnings qw(void); # solo están activas las advertencias "void"
+    use warnings qw(void); # solo estÃ¡n activas las advertencias "void"
     ...
     use warnings qw(io);   # solo activas advertencias "void" y "io"
     ...
     no warnings qw(void);  # solo activas advertencias "io"
 
-Para determinar a qué categoría ha sido asignada una advertencia específica, vea L<perldiag>.
+Para determinar a quÃ© categorÃ­a ha sido asignada una advertencia especÃ­fica, vea L<perldiag>.
 
-Nota: En Perl 5.6.1, la categoría de las advertencias léxicas I<deprecated> ("obsoleto") era una sub-categoría de la categoría I<syntax> ("sintaxis"). Ahora es una categoría de nivel superior por derecho propio.
+Nota: En Perl 5.6.1, la categorÃ­a de las advertencias lÃ©xicas I<deprecated> ("obsoleto") era una sub-categorÃ­a de la categorÃ­a I<syntax> ("sintaxis"). Ahora es una categorÃ­a de nivel superior por derecho propio.
 
 
 =head2 Advertencias fatales
 X<warning, fatal>
 X<advertencia, fatal>
 
-La presencia de la palabra "FATAL" en la lista de categorías, escalará cualquier advertencia detectada a partir de las categorías especificadas en el ámbito léxico, a errores fatales. En el código siguiente, el uso de C<time>, C<length> y C<join> pueden producir todos ellos una advertencia C<"Useless use of xxx in void context"> ("Uso inútil de xxx en contexto vacío").
+La presencia de la palabra "FATAL" en la lista de categorÃ­as, escalarÃ¡ cualquier advertencia detectada a partir de las categorÃ­as especificadas en el Ã¡mbito lÃ©xico, a errores fatales. En el cÃ³digo siguiente, el uso de C<time>, C<length> y C<join> pueden producir todos ellos una advertencia C<"Useless use of xxx in void context"> ("Uso inÃºtil de xxx en contexto vacÃ­o").
 
     use warnings;
 
@@ -300,24 +300,24 @@ Cuando se ejecuta se produce esta salida
     Useless use of time in void context at fatal line 3.
     Useless use of length in void context at fatal line 7.  
 
-El ámbito donde C<length> es utilizado ha escalado la categoría de advertencias C<void>, a un error grave, por lo que el programa termina de inmediato cuando se encuentra con la advertencia.
+El Ã¡mbito donde C<length> es utilizado ha escalado la categorÃ­a de advertencias C<void>, a un error grave, por lo que el programa termina de inmediato cuando se encuentra con la advertencia.
 
-Para activar de forma explícita una advertencia "FATAL" solo tiene que desactivar la advertencia a la que estaba asociada.  Así, por ejemplo, para desactivar la advertencia "void" del ejemplo anterior, cualquiera de los siguientes hará el truco:
+Para activar de forma explÃ­cita una advertencia "FATAL" solo tiene que desactivar la advertencia a la que estaba asociada.  AsÃ­, por ejemplo, para desactivar la advertencia "void" del ejemplo anterior, cualquiera de los siguientes harÃ¡ el truco:
 
     no warnings qw(void);
     no warnings FATAL => qw(void);
 
-Si desea degradar una advertencia que ha sido escalada a un error fatal, de nuevo a una advertencia normal, puede usar la palabra clave "NONFATAL". Por ejemplo, el código siguiente, promocionará todas las advertencias en errores fatales, a excepción de los de la categoría "syntax".
+Si desea degradar una advertencia que ha sido escalada a un error fatal, de nuevo a una advertencia normal, puede usar la palabra clave "NONFATAL". Por ejemplo, el cÃ³digo siguiente, promocionarÃ¡ todas las advertencias en errores fatales, a excepciÃ³n de los de la categorÃ­a "syntax".
 
     use warnings FATAL => 'all', NONFATAL => 'syntax';
 
-=head2 Reportando advertencias desde un módulo
+=head2 Reportando advertencias desde un mÃ³dulo
 X<warning, reporting> X<warning, registering>
 X<advertencia, reportar> X<advertencia, registrar>
 
-El pragma C<warnings> proporciona una serie de funciones que son útiles para los autores de módulos. Estos son utilizados cuando desea informar de una advertencia específica del módulo, a un módulo que lo llama, y que tenga las advertencias activadas por medio del pragma C<warnings>.
+El pragma C<warnings> proporciona una serie de funciones que son Ãºtiles para los autores de mÃ³dulos. Estos son utilizados cuando desea informar de una advertencia especÃ­fica del mÃ³dulo, a un mÃ³dulo que lo llama, y que tenga las advertencias activadas por medio del pragma C<warnings>.
 
-Considere el módulo C<MiMod::Abc> siguiente.
+Considere el mÃ³dulo C<MiMod::Abc> siguiente.
 
     package MiMod::Abc;
 
@@ -334,14 +334,14 @@ Considere el módulo C<MiMod::Abc> siguiente.
 
     1;
 
-La llamada a C<warnings::register> creará una nueva categoría de advertencias llamada "MiMod::Abc", es decir, el nuevo nombre de la categoría coincide con el nombre del paquete actual. La función C<open> en el módulo mostrará un mensaje de advertencia si se da una ruta relativa como parámetro. Esta advertencia sólo será mostrará si el código que utiliza C<MiMod::Abc> tiene activado el pragma C<warnings> como se indica a continuación.
+La llamada a C<warnings::register> crearÃ¡ una nueva categorÃ­a de advertencias llamada "MiMod::Abc", es decir, el nuevo nombre de la categorÃ­a coincide con el nombre del paquete actual. La funciÃ³n C<open> en el mÃ³dulo mostrarÃ¡ un mensaje de advertencia si se da una ruta relativa como parÃ¡metro. Esta advertencia sÃ³lo serÃ¡ mostrarÃ¡ si el cÃ³digo que utiliza C<MiMod::Abc> tiene activado el pragma C<warnings> como se indica a continuaciÃ³n.
 
     use MiMod::Abc;
     use warnings 'MiMod::Abc';
     ...
     abc::open("../fred.txt");
 
-También es posible comprobar si las categorías pre-definidas de advertencias están establecidas en el módulo que lo llama, con la función C<warnings::enabled>. Considere el siguiente fragmento de código:
+TambiÃ©n es posible comprobar si las categorÃ­as pre-definidas de advertencias estÃ¡n establecidas en el mÃ³dulo que lo llama, con la funciÃ³n C<warnings::enabled>. Considere el siguiente fragmento de cÃ³digo:
 
     package MiMod::Abc;
 
@@ -355,23 +355,23 @@ También es posible comprobar si las categorías pre-definidas de advertencias est
     ...
     1;
 
-La función C<open> ha quedado obsoleta, por lo que contiene código que muestra un mensaje de advertencia cada vez que el módulo que la llama tiene (al menos) la categoría de las advertencias "deprecated" habilitada. Algo como esto, por ejemplo.
+La funciÃ³n C<open> ha quedado obsoleta, por lo que contiene cÃ³digo que muestra un mensaje de advertencia cada vez que el mÃ³dulo que la llama tiene (al menos) la categorÃ­a de las advertencias "deprecated" habilitada. Algo como esto, por ejemplo.
 
     use warnings 'deprecated';
     use MiMod::Abc;
     ...
     MiMod::Abc::open($archivo);
 
-En realidad, se debe usar, tanto la función C<warnings::warn> o la C<warnings::warnif> para mostrar el mensaje de la advertencia. Esto es debido a que pueden hacer uso de la característica que permite a las advertencias ser escaladas a errores fatales. Así, en este caso
+En realidad, se debe usar, tanto la funciÃ³n C<warnings::warn> o la C<warnings::warnif> para mostrar el mensaje de la advertencia. Esto es debido a que pueden hacer uso de la caracterÃ­stica que permite a las advertencias ser escaladas a errores fatales. AsÃ­, en este caso
 
     use MiMod::Abc;
     use warnings FATAL => 'MiMod::Abc';
     ...
     MiMod::Abc::open('../fred.txt');
 
-la función C<warnings::warnif> lo detectará y morirá después de mostrar el mensaje de advertencia.
+la funciÃ³n C<warnings::warnif> lo detectarÃ¡ y morirÃ¡ despuÃ©s de mostrar el mensaje de advertencia.
 
-Las tres funciones de advertencia, C<warnings::warn>, C<warnings::warnif> y C<warnings::enabled> pueden, opcionalmente, tomar una referencia a un objeto en lugar de un nombre de categoría. En este caso, las funciones utilizarán el nombre de la clase del objeto como la categoría de las advertencias.
+Las tres funciones de advertencia, C<warnings::warn>, C<warnings::warnif> y C<warnings::enabled> pueden, opcionalmente, tomar una referencia a un objeto en lugar de un nombre de categorÃ­a. En este caso, las funciones utilizarÃ¡n el nombre de la clase del objeto como la categorÃ­a de las advertencias.
 
 Considere este ejemplo:
 
@@ -392,7 +392,7 @@ Considere este ejemplo:
         my $valor = shift;
 
         if ($valor % 2 && warnings::enabled($self))
-          { warnings::warn($self, "Los números impares son inseguros") }
+          { warnings::warn($self, "Los nÃºmeros impares son inseguros") }
     }
 
     sub hazlo
@@ -419,7 +419,7 @@ Considere este ejemplo:
 
     1;
 
-El código siguiente hace uso de ambos módulos, pero sólo activa las advertencias de C<Derivado>.
+El cÃ³digo siguiente hace uso de ambos mÃ³dulos, pero sÃ³lo activa las advertencias de C<Derivado>.
 
     use Original;
     use Derivado;
@@ -429,13 +429,13 @@ El código siguiente hace uso de ambos módulos, pero sólo activa las advertencias
     my $b = Derivado->new();
     $a->hazlo(1);
 
-Cuando este código es ejecutado, sólo el objeto C<Derivado>, C<$b>, generará una advertencia. 
+Cuando este cÃ³digo es ejecutado, sÃ³lo el objeto C<Derivado>, C<$b>, generarÃ¡ una advertencia. 
 
-    Los números impares son inseguros at main.pl line 7
+    Los nÃºmeros impares son inseguros at main.pl line 7
 
-Nótese también que la advertencia es reportada en la línea donde es usado el objeto por primera vez.
+NÃ³tese tambiÃ©n que la advertencia es reportada en la lÃ­nea donde es usado el objeto por primera vez.
 
-Al registrar nuevas categorías de advertencias, puede proporcionar más nombres warnings::register, así:
+Al registrar nuevas categorÃ­as de advertencias, puede proporcionar mÃ¡s nombres warnings::register, asÃ­:
 
     package MiModulo;
     use warnings::register qw(format precision);
@@ -444,7 +444,7 @@ Al registrar nuevas categorías de advertencias, puede proporcionar más nombres w
 
     warnings::warnif('MiModulo::format', '...');
 
-=head1 VEA TAMBIÉN
+=head1 VEA TAMBIÃ‰N
 
 L<warnings>, L<perldiag>.
 

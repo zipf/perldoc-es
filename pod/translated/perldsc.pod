@@ -1,13 +1,13 @@
 =head1 NAME
 X<data structure> X<complex data structure> X<struct>
 
-perldsc - IntroducciÛn a las estructuras de datos
+perldsc - Introducci√≥n a las estructuras de datos
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-La ˙nica caracterÌstica con m·s carencias que tenÌa el lenguaje de programaciÛn Perl antes de la versiÛn 5.0 eran las complejas estructuras de datos.  Incluso sin tener soporte directo en el lenguaje, algunos valientes programadores se las arreglaron para emularlas, pero era un trabajo duro y no para los dÈbiles de corazÛn.  De vez en cuando se podÌa solventar este asunto con la notaciÛn C<$m{$AoA,$b}> tomado del B<awk> en el que las claves son en realidad m·s como una sola cadena concatenada C<"$AoA$b">, pero el recorrido y ordenaciÛn eran muy dificultosos.  Los programadores m·s desesperados incluso hackearon la tabla de sÌmbolos internos de Perl, directamente, una estrategia que demostrÛ ser difÌcil de desarrollar y mantener -por decirlo suavemente-.
+La √∫nica caracter√≠stica con m√°s carencias que ten√≠a el lenguaje de programaci√≥n Perl antes de la versi√≥n 5.0 eran las complejas estructuras de datos.  Incluso sin tener soporte directo en el lenguaje, algunos valientes programadores se las arreglaron para emularlas, pero era un trabajo duro y no para los d√©biles de coraz√≥n.  De vez en cuando se pod√≠a solventar este asunto con la notaci√≥n C<$m{$AoA,$b}> tomado del B<awk> en el que las claves son en realidad m√°s como una sola cadena concatenada C<"$AoA$b">, pero el recorrido y ordenaci√≥n eran muy dificultosos.  Los programadores m√°s desesperados incluso hackearon la tabla de s√≠mbolos internos de Perl, directamente, una estrategia que demostr√≥ ser dif√≠cil de desarrollar y mantener -por decirlo suavemente-.
 
-La versiÛn 5.0 de Perl nos permite tener complejas estructuras de datos.  Ahora puede escribir algo como lo siguiente, y de repente, °tiene una matriz de tres dimensiones!
+La versi√≥n 5.0 de Perl nos permite tener complejas estructuras de datos.  Ahora puede escribir algo como lo siguiente, y de repente, ¬°tiene una matriz de tres dimensiones!
 
     for $x (1 .. 10) {
 	for $y (1 .. 10) {
@@ -18,13 +18,13 @@ La versiÛn 5.0 de Perl nos permite tener complejas estructuras de datos.  Ahora 
 	}
     }
 
-Sin embargo, tan simple que puede parecer esto, °esconde una construcciÛn mucho m·s elaborada de lo que el ojo ve!
+Sin embargo, tan simple que puede parecer esto, ¬°esconde una construcci√≥n mucho m√°s elaborada de lo que el ojo ve!
 
-øCÛmo se imprime?  øPor quÈ no podemos decir C<print @AoA>?  øCÛmo se ordena?  øCÛmo se puede pasar a una funciÛn u obtener uno de estas construcciones desde una funciÛn?  øEs un objeto?  øSe puede guardar en disco para leerlo m·s tarde?  øCÛmo accedes a las filas o columnas de esta matriz?  øTodos los valores tienen que ser numÈricos?
+¬øC√≥mo se imprime?  ¬øPor qu√© no podemos decir C<print @AoA>?  ¬øC√≥mo se ordena?  ¬øC√≥mo se puede pasar a una funci√≥n u obtener uno de estas construcciones desde una funci√≥n?  ¬øEs un objeto?  ¬øSe puede guardar en disco para leerlo m√°s tarde?  ¬øC√≥mo accedes a las filas o columnas de esta matriz?  ¬øTodos los valores tienen que ser num√©ricos?
 
-Como puede ver, es muy f·cil quedar confuso.  Mientras que una pequeÒa porciÛn de la culpa de esto se puede atribuir a la implementaciÛn basada en referencias, en realidad es m·s debido a la falta de documentaciÛn existente con ejemplos diseÒados para el principiante.
+Como puede ver, es muy f√°cil quedar confuso.  Mientras que una peque√±a porci√≥n de la culpa de esto se puede atribuir a la implementaci√≥n basada en referencias, en realidad es m√°s debido a la falta de documentaci√≥n existente con ejemplos dise√±ados para el principiante.
 
-Este documento intenta ser un detallado pero entendible tratamiento de las diferentes maneras con las que puede trabajar con estructuras de datos.  TambiÈn deberÌa servir como libro de recetas con ejemplos.  De esta manera, cuando necesite crear una estructura compleja de datos, puede pellizcar, robar, hurtar, o sustraer alguno de los ejemplos que estÈn por aquÌ.
+Este documento intenta ser un detallado pero entendible tratamiento de las diferentes maneras con las que puede trabajar con estructuras de datos.  Tambi√©n deber√≠a servir como libro de recetas con ejemplos.  De esta manera, cuando necesite crear una estructura compleja de datos, puede pellizcar, robar, hurtar, o sustraer alguno de los ejemplos que est√©n por aqu√≠.
 
 Echemos un vistazo a cada una de estas construcciones posibles en detalle.  Hay separaciones separada para cada una de las siguientes:
 
@@ -38,30 +38,30 @@ Echemos un vistazo a cada una de estas construcciones posibles en detalle.  Hay 
 
 =item * hashes de hashes
 
-=item * construcciones m·s elaboradas
+=item * construcciones m√°s elaboradas
 
 =back
 
-Pero por ahora, miremos los problemas genÈricos a todos estos tipos de estructuras de datos.
+Pero por ahora, miremos los problemas gen√©ricos a todos estos tipos de estructuras de datos.
 
 =head1 REFERENCIAS
 X<reference> X<dereference> X<dereferencing> X<pointer>
 X<referencia> X<desreferencia> X<desreferenciando> X<puntero>
 
-La cosa m·s importante que hay que entender sobre todas las estructuras de datos en Perl -incluyendo los arrays multidimensionales- es que incluso aunque no lo parezcan, los C<@ARRAY>s y C<%HASH>es de Perl, son todos, internamente, unidimensionales.  SÛlo pueden almacenar valores escalares (es decir, una cadena, un n˙mero o un referencia).  No pueden contener, directamente, otros arrays o hashes, sino que, en su lugar, contienen I<referencias> a otros arrays o hashes.
+La cosa m√°s importante que hay que entender sobre todas las estructuras de datos en Perl -incluyendo los arrays multidimensionales- es que incluso aunque no lo parezcan, los C<@ARRAY>s y C<%HASH>es de Perl, son todos, internamente, unidimensionales.  S√≥lo pueden almacenar valores escalares (es decir, una cadena, un n√∫mero o un referencia).  No pueden contener, directamente, otros arrays o hashes, sino que, en su lugar, contienen I<referencias> a otros arrays o hashes.
 X<multidimensional array> X<array, multidimensional> X<array multidimensional>
 
-No puede utilizar una referencia a un array o a un hash de la misma forma que lo harÌa con un array o un hash real.  Para los programadores de C o C++ acostumbrados a distinguir entre arrays y punteros a ellos, esto puede resultarles algo confuso.  Si es asÌ, sÛlo piense en ello como la diferencia que hay entre una estructura y un puntero a una estructura.
+No puede utilizar una referencia a un array o a un hash de la misma forma que lo har√≠a con un array o un hash real.  Para los programadores de C o C++ acostumbrados a distinguir entre arrays y punteros a ellos, esto puede resultarles algo confuso.  Si es as√≠, s√≥lo piense en ello como la diferencia que hay entre una estructura y un puntero a una estructura.
 
-Usted puede (y debe) leer m·s acerca de las referencias en L<perlref>.
-En pocas palabras, las referencias son como punteros que saben a lo que apunta.  (Los objetos son tambiÈn un tipo de referencia, pero no vamos a necesitarles de inmediato -si acaso-).  Esto significa que cuando usted tiene algo que se parece a un acceso a un array y/o hash de dos o m·s dimensiones, lo que realmente est· sucediendo es que el tipo b·sico no es m·s que una entidad de una dimensiÛn que contiene referencias al siguiente nivel.  Es sÛlo que puede I<usarlo> como si se tratara de una entidad bidimensional.  Esto es, en realidad, casi de la misma forma en que funcionan casi todas las matrices multidimensionales en C.
+Usted puede (y debe) leer m√°s acerca de las referencias en L<perlref>.
+En pocas palabras, las referencias son como punteros que saben a lo que apunta.  (Los objetos son tambi√©n un tipo de referencia, pero no vamos a necesitarles de inmediato -si acaso-).  Esto significa que cuando usted tiene algo que se parece a un acceso a un array y/o hash de dos o m√°s dimensiones, lo que realmente est√° sucediendo es que el tipo b√°sico no es m√°s que una entidad de una dimensi√≥n que contiene referencias al siguiente nivel.  Es s√≥lo que puede I<usarlo> como si se tratara de una entidad bidimensional.  Esto es, en realidad, casi de la misma forma en que funcionan casi todas las matrices multidimensionales en C.
 
     $array[7][12]			# array de arrays
     $array[7]{cadena}			# array de hashes
     $hash{cadena}[7]			# hash de arrays
     $hash{cadena}{'otra cadena'}	# hash de hashes
 
-Ahora, debido a que el nivel superior sÛlo contiene referencias, si trata de imprimir su array con una simple funciÛn print(), obtendr· algo que no se ve muy bien, algo como esto:
+Ahora, debido a que el nivel superior s√≥lo contiene referencias, si trata de imprimir su array con una simple funci√≥n print(), obtendr√° algo que no se ve muy bien, algo como esto:
 
     @AoA = ( [2, 3], [4, 5, 7], [0] );
     print $AoA[1][2];
@@ -70,36 +70,36 @@ Ahora, debido a que el nivel superior sÛlo contiene referencias, si trata de imp
   ARRAY(0x83c38)ARRAY(0x8b194)ARRAY(0x8b1d0)
 
 
-Esto es debido a que Perl no (nunca), implÌcitamente, desreferencia sus variables.
-Si lo que quiere es obtener aquello a lo que la referencia apunta, entonces debe hacerlo por sÌ mismo usando los prefijos indicadores de tipos, como C<${$bla}>, C<@{$bla}>, C<@{$bla[$i]}>, o usar los punteros flecha pos-fijas, como C<$a-E<gt>[3]>, C<$h-E<gt>{pedro}>, o incluso C<$ob-E<gt>metodo()-E<gt>[3]>.
+Esto es debido a que Perl no (nunca), impl√≠citamente, desreferencia sus variables.
+Si lo que quiere es obtener aquello a lo que la referencia apunta, entonces debe hacerlo por s√≠ mismo usando los prefijos indicadores de tipos, como C<${$bla}>, C<@{$bla}>, C<@{$bla[$i]}>, o usar los punteros flecha pos-fijas, como C<$a-E<gt>[3]>, C<$h-E<gt>{pedro}>, o incluso C<$ob-E<gt>metodo()-E<gt>[3]>.
 
 =head1 ERRORES COMUNES
 
-Los dos errores m·s comunes en la construcciÛn de algo asÌ como un array de arrays, es tanto accidentalmente obtener el n˙mero de elementos, o bien tomar una referencia a la misma posiciÛn de memoria, de forma repetida.  AquÌ hay un ejemplo en el que usted obtiene el n˙mero de elementos en lugar de un array anidado:
+Los dos errores m√°s comunes en la construcci√≥n de algo as√≠ como un array de arrays, es tanto accidentalmente obtener el n√∫mero de elementos, o bien tomar una referencia a la misma posici√≥n de memoria, de forma repetida.  Aqu√≠ hay un ejemplo en el que usted obtiene el n√∫mero de elementos en lugar de un array anidado:
 
     for $i (1..10) {
 	@array = algunafuncion($i);
-	$AoA[$i] = @array;	# °ERROR!
+	$AoA[$i] = @array;	# ¬°ERROR!
     }
 
-Eso no es m·s que la sencilla asignaciÛn de un array a un escalar, obteniendo su n˙mero de elementos.  Si eso es lo que real y verdaderamente desea hacer, entonces harÌa bien en considerar ser un poco m·s explÌcito al respecto, asÌ:
+Eso no es m√°s que la sencilla asignaci√≥n de un array a un escalar, obteniendo su n√∫mero de elementos.  Si eso es lo que real y verdaderamente desea hacer, entonces har√≠a bien en considerar ser un poco m√°s expl√≠cito al respecto, as√≠:
 
     for $i (1..10) {
 	@array = algunafuncion($i);
 	$cuantos[$i] = scalar @array;
     }
 
-AquÌ est· el caso de tomar una referencia a la misma ubicaciÛn de memoria, una y otra vez:
+Aqu√≠ est√° el caso de tomar una referencia a la misma ubicaci√≥n de memoria, una y otra vez:
 
     for $i (1..10) {
 	@array = algunafuncion($i);
-	$AoA[$i] = \@array;	# °ERROR!
+	$AoA[$i] = \@array;	# ¬°ERROR!
     }
 
-Entonces, ødÛnde est· el problema?  Se ve bien, øno?
-DespuÈs de todo, te acabo de decir que necesitas un array de referencias, asÌ que, mira por dÛnde, °me has dado uno!
+Entonces, ¬ød√≥nde est√° el problema?  Se ve bien, ¬øno?
+Despu√©s de todo, te acabo de decir que necesitas un array de referencias, as√≠ que, mira por d√≥nde, ¬°me has dado uno!
 
-Lamentablemente, si bien esto es cierto, sigue estando mal.  Todas las referencias en @AoA se refieren a la I<misma posiciÛn>, y por lo tanto, todos almacenan lo que el ˙ltimo @array contenÌa!  Es similar al problema demostrado en el siguiente programa en C:
+Lamentablemente, si bien esto es cierto, sigue estando mal.  Todas las referencias en @AoA se refieren a la I<misma posici√≥n>, y por lo tanto, todos almacenan lo que el √∫ltimo @array conten√≠a!  Es similar al problema demostrado en el siguiente programa en C:
 
     #include <pwd.h>
     main() {
@@ -111,12 +111,12 @@ Lamentablemente, si bien esto es cierto, sigue estando mal.  Todas las referenci
 		dp->pw_name, rp->pw_name);
     }
 
-que imprimir·
+que imprimir√°
 
     nombre del demonio es daemon
     nombre del root es daemon
 
-El problema es que tanto C<rp> como C<dp> son punteros °a la misma posiciÛn de memoria!  En C, tiene que recordar que debe hacer un malloc() para reservar un poco de memoria.  En Perl querr· usar, en su lugar, el constructor de array C<[]> o el constructor de hash C<{}>.   AquÌ est· la forma correcta de proceder con el fragmento de cÛdigo errÛneo anterior:
+El problema es que tanto C<rp> como C<dp> son punteros ¬°a la misma posici√≥n de memoria!  En C, tiene que recordar que debe hacer un malloc() para reservar un poco de memoria.  En Perl querr√° usar, en su lugar, el constructor de array C<[]> o el constructor de hash C<{}>.   Aqu√≠ est√° la forma correcta de proceder con el fragmento de c√≥digo err√≥neo anterior:
 X<[]> X<{}>
 
     for $i (1..10) {
@@ -124,42 +124,42 @@ X<[]> X<{}>
 	$AoA[$i] = [ @array ];
     }
 
-Los corchetes hacen referencia a un nuevo array con una I<copia> de lo que est· en @array en el momento de la asignaciÛn.  Esto es lo que realmente quiere.
+Los corchetes hacen referencia a un nuevo array con una I<copia> de lo que est√° en @array en el momento de la asignaci√≥n.  Esto es lo que realmente quiere.
 
-Tenga en cuenta que esto produce algo similar, pero es mucho m·s difÌcil de leer:
+Tenga en cuenta que esto produce algo similar, pero es mucho m√°s dif√≠cil de leer:
 
     for $i (1..10) {
 	@array = 0 .. $i;
 	@{$AoA[$i]} = @array;
     }
 
-øEs lo mismo?  Bueno, quiz·s sÌ, quiz·s no.  La diferencia sustancial es que cuando asigna algo con corchetes, est· seguro que es siempre una nueva referencia con un nueva I<copia> de los datos.
-Otra cosa podrÌa estar pasando, en este nuevo caso, con la desreferencia C<@{$AoA[$i]}> en el lado izquierdo de la asignaciÛn.  Todo depende de si C<$AoA[$i]> era indefinido en el momento de empezar, o si ya contenÌa una referencia.  Si usted ya habÌa poblado @AoA con referencias, como en
+¬øEs lo mismo?  Bueno, quiz√°s s√≠, quiz√°s no.  La diferencia sustancial es que cuando asigna algo con corchetes, est√° seguro que es siempre una nueva referencia con un nueva I<copia> de los datos.
+Otra cosa podr√≠a estar pasando, en este nuevo caso, con la desreferencia C<@{$AoA[$i]}> en el lado izquierdo de la asignaci√≥n.  Todo depende de si C<$AoA[$i]> era indefinido en el momento de empezar, o si ya conten√≠a una referencia.  Si usted ya hab√≠a poblado @AoA con referencias, como en
 
     $AoA[3] = \@otro_array;
 
-entonces la asignaciÛn con la indirecciÛn en el lado izquierdo podrÌa usar la referencia actual que estaba allÌ:
+entonces la asignaci√≥n con la indirecci√≥n en el lado izquierdo podr√≠a usar la referencia actual que estaba all√≠:
 
     @{$AoA[3]} = @array;
 
-Naturalmente, esto I<podrÌa> tener el "interesante" efecto de sobreescribir @otro_array.  (øAlguna vez ha notado que cuando un programador dice que algo es "interesante" en lugar de decir "intrigante", inquietantemente quiere decir que es algo "molesto", "difÌcil", o ambas cosas?   
+Naturalmente, esto I<podr√≠a> tener el "interesante" efecto de sobreescribir @otro_array.  (¬øAlguna vez ha notado que cuando un programador dice que algo es "interesante" en lugar de decir "intrigante", inquietantemente quiere decir que es algo "molesto", "dif√≠cil", o ambas cosas?   
 
-AsÌ que recuerde siempre utilizar constructores de array o hash con C<[]> o C<{}>, y todo ir· bien, aunque no siempre sea Ûptimamente eficiente.
+As√≠ que recuerde siempre utilizar constructores de array o hash con C<[]> o C<{}>, y todo ir√° bien, aunque no siempre sea √≥ptimamente eficiente.
 
-Sorprendentemente, la siguiente construcciÛn, aparentemente peligrosa, se desenvolver· realmente bien:
+Sorprendentemente, la siguiente construcci√≥n, aparentemente peligrosa, se desenvolver√° realmente bien:
 
     for $i (1..10) {
         my @array = somefunc($i);
         $AoA[$i] = \@array;
     }
 
-Esto es asÌ porque my() es m·s una sentencia en tiempo de ejecuciÛn que una declaraciÛn en tiempo de compilaciÛn.  Esto significa que la variable my() es rehecha de nuevo cada vez que se reinicia el bucle.  AsÌ que, aunque I<parezca> como si se almacenara cada vez la misma referencia a la misma variable, °en realidad no lo hace!  Esta es una distinciÛn sutil que puede generar un cÛdigo m·s eficiente con el riesgo de inducir a error a todos los lectores excepto a los programadores m·s experimentados.  AsÌ que, por lo general, se desaconseja su enseÒanza a los principiantes.  De hecho, excepto para pasar argumentos a las funciones, raramente me gustarÌa ver el operador dame-una-referencia (barra diagonal inversa) a lo largo de todo el cÛdigo.  En su lugar, les aconsejo a los principiantes que ellos (y la mayorÌa de nosotros) deberÌa tratar de utilizar los constructores, mucho m·s f·ciles de entender, C<[]> y C<{}>, en lugar de confiar en contextos lÈxicos (o din·micos) y en referencia ocultas, esperando que hagan las cosas correctas detr·s del telÛn.
+Esto es as√≠ porque my() es m√°s una sentencia en tiempo de ejecuci√≥n que una declaraci√≥n en tiempo de compilaci√≥n.  Esto significa que la variable my() es rehecha de nuevo cada vez que se reinicia el bucle.  As√≠ que, aunque I<parezca> como si se almacenara cada vez la misma referencia a la misma variable, ¬°en realidad no lo hace!  Esta es una distinci√≥n sutil que puede generar un c√≥digo m√°s eficiente con el riesgo de inducir a error a todos los lectores excepto a los programadores m√°s experimentados.  As√≠ que, por lo general, se desaconseja su ense√±anza a los principiantes.  De hecho, excepto para pasar argumentos a las funciones, raramente me gustar√≠a ver el operador dame-una-referencia (barra diagonal inversa) a lo largo de todo el c√≥digo.  En su lugar, les aconsejo a los principiantes que ellos (y la mayor√≠a de nosotros) deber√≠a tratar de utilizar los constructores, mucho m√°s f√°ciles de entender, C<[]> y C<{}>, en lugar de confiar en contextos l√©xicos (o din√°micos) y en referencia ocultas, esperando que hagan las cosas correctas detr√°s del tel√≥n.
 
 En resumen:
 
     $AoA[$i] = [ @array ];	# generalmente, el mejor
-    $AoA[$i] = \@array;		# peligroso; øcÛmo era el my() de este array?
-    @{ $AoA[$i] } = @array;	# demasiado complicado para la mayorÌa de los programadores
+    $AoA[$i] = \@array;		# peligroso; ¬øc√≥mo era el my() de este array?
+    @{ $AoA[$i] } = @array;	# demasiado complicado para la mayor√≠a de los programadores
 
 
 =head1 ADVERTENCIA SOBRE LA PRECEDENCIA
@@ -172,18 +172,18 @@ X<< -> >>
     $aref->[2][2]	# claro
     $$aref[2][2]	# confuso
 
-°Eso es porque las reglas de precedencia de Perl, con sus cinco prefijos de desreferencia (que se parecen a alguien jurando: C<$ @ * % &>) tienen m·s prioridad que los subÌndices con llaves o corchetes post-fijos!  Esto, sin duda, ser· una gran sorpresa para el programador de C o C++, que est· bastante acostumbrado a usar C<*a[i]> para referirse al I<i>-Èsimo elemento de C<a>.  Es decir, primero toman el subÌndice, y sÛlo entonces, desreferencian el elemento apuntado por ese subÌndice.  Eso est· bien en C, pero esto no es C.
+¬°Eso es porque las reglas de precedencia de Perl, con sus cinco prefijos de desreferencia (que se parecen a alguien jurando: C<$ @ * % &>) tienen m√°s prioridad que los sub√≠ndices con llaves o corchetes post-fijos!  Esto, sin duda, ser√° una gran sorpresa para el programador de C o C++, que est√° bastante acostumbrado a usar C<*a[i]> para referirse al I<i>-√©simo elemento de C<a>.  Es decir, primero toman el sub√≠ndice, y s√≥lo entonces, desreferencian el elemento apuntado por ese sub√≠ndice.  Eso est√° bien en C, pero esto no es C.
 
-La construcciÛn aparentemente equivalente en Perl, C<$$aref[$i]>, primero hace la desreferencia de $aref, tomando a $aref como una referencia a un array, y luego lo desreferencia para, finalmente, darnos el I<i>-Èsimo valor del array que apuntaba a $AoA. Si quiere seguir la misma notaciÛn que en C, tendrÌa que escribir C<${$AoA[$i]}> para forzar a que C<$AoA[$i]> sea evaluado antes del primer C<$> desreferenciador.
+La construcci√≥n aparentemente equivalente en Perl, C<$$aref[$i]>, primero hace la desreferencia de $aref, tomando a $aref como una referencia a un array, y luego lo desreferencia para, finalmente, darnos el I<i>-√©simo valor del array que apuntaba a $AoA. Si quiere seguir la misma notaci√≥n que en C, tendr√≠a que escribir C<${$AoA[$i]}> para forzar a que C<$AoA[$i]> sea evaluado antes del primer C<$> desreferenciador.
 
-=head1 POR QU… DEBE SIEMPRE USAR C<use strict>
+=head1 POR QU√â DEBE SIEMPRE USAR C<use strict>
 
-Si esto est· empezando a sonar m·s aterrador de lo que parece, rel·jese.  Perl tiene algunas caracterÌsticas que le ayudar·n a evitar sus trampas m·s comunes.  La mejor manera de evitar la confusiÛn es comenzar cada programa como este de aquÌ:
+Si esto est√° empezando a sonar m√°s aterrador de lo que parece, rel√°jese.  Perl tiene algunas caracter√≠sticas que le ayudar√°n a evitar sus trampas m√°s comunes.  La mejor manera de evitar la confusi√≥n es comenzar cada programa como este de aqu√≠:
 
     #!/usr/bin/perl -w
     use strict;
 
-De esta forma, estar· obligado a declarar todas las variables con my(), y tambiÈn no permite que exista ninguna "desreferencia simbÛlica" accidental.  Por lo tanto, si hubiera hecho:
+De esta forma, estar√° obligado a declarar todas las variables con my(), y tambi√©n no permite que exista ninguna "desreferencia simb√≥lica" accidental.  Por lo tanto, si hubiera hecho:
 
     my $aref = [
 	[ "fred", "barney", "pebbles", "bambam", "dino", ],
@@ -193,7 +193,7 @@ De esta forma, estar· obligado a declarar todas las variables con my(), y tambiÈ
 
     print $aref[2][2];
 
-El compilador, de inmediato, marcarÌa esto como un error I<en tiempo de compilaciÛn>, porque usted estaba, accidentalmente, accediendo a C<@aref>, una variable no declarada, y por lo tanto le hace recordar que debe escribirlo asÌ:
+El compilador, de inmediato, marcar√≠a esto como un error I<en tiempo de compilaci√≥n>, porque usted estaba, accidentalmente, accediendo a C<@aref>, una variable no declarada, y por lo tanto le hace recordar que debe escribirlo as√≠:
 
     print $aref->[2][2]
 
@@ -202,12 +202,12 @@ X<data structure, debugging> X<complex data structure, debugging>
 X<AoA, debugging> X<HoA, debugging> X<AoH, debugging> X<HoH, debugging>
 X<array of arrays, debugging> X<hash of arrays, debugging>
 X<array of hashes, debugging> X<hash of hashes, debugging>
-X<estructura de datos, depuraciÛn> X<estructura compleja de datos, depuraciÛn>
-X<AoA, depuraciÛn> X<HoA, depuraciÛn> X<AoH, depuraciÛn> X<HoH, depuraciÛn>
-X<array de arrays, depuraciÛn> X<hash de arrays, depuraciÛn>
-X<array de hashes, depuraciÛn> X<hash de hashes, depuraciÛn>
+X<estructura de datos, depuraci√≥n> X<estructura compleja de datos, depuraci√≥n>
+X<AoA, depuraci√≥n> X<HoA, depuraci√≥n> X<AoH, depuraci√≥n> X<HoH, depuraci√≥n>
+X<array de arrays, depuraci√≥n> X<hash de arrays, depuraci√≥n>
+X<array de hashes, depuraci√≥n> X<hash de hashes, depuraci√≥n>
 
-Antes de la versiÛn 5.002, el depurador est·ndar de Perl no hacÌa un buen trabajo a la hora de imprimir complejas estructuras de datos.  A partir de la 5.002, el depurador incluye nuevas caracterÌsticas, incluyendo la ediciÛn en lÌnea de comandos, asÌ como el comando C<x> para volcar las complejas estructuras de datos.  Por ejemplo, dada la asignaciÛn a $AoA de m·s arriba, aquÌ est· la salida del depurador:
+Antes de la versi√≥n 5.002, el depurador est√°ndar de Perl no hac√≠a un buen trabajo a la hora de imprimir complejas estructuras de datos.  A partir de la 5.002, el depurador incluye nuevas caracter√≠sticas, incluyendo la edici√≥n en l√≠nea de comandos, as√≠ como el comando C<x> para volcar las complejas estructuras de datos.  Por ejemplo, dada la asignaci√≥n a $AoA de m√°s arriba, aqu√≠ est√° la salida del depurador:
 
     DB<1> x $AoA
     $AoA = ARRAY(0x13b5a0)
@@ -228,14 +228,14 @@ Antes de la versiÛn 5.002, el depurador est·ndar de Perl no hacÌa un buen trabaj
 	  2  'elroy'
 	  3  'judy'
 
-=head1 EJEMPLOS DE C”DIGO
+=head1 EJEMPLOS DE C√ìDIGO
 
-Presentado con un pequeÒo comentario (que tendr·n, alg˙n dÌa, su propia p·gina de manual) aquÌ hay unos ejemplos de cÛdigos cortos que ilustran el acceso a los distintos tipos de estructuras de datos.
+Presentado con un peque√±o comentario (que tendr√°n, alg√∫n d√≠a, su propia p√°gina de manual) aqu√≠ hay unos ejemplos de c√≥digos cortos que ilustran el acceso a los distintos tipos de estructuras de datos.
 
 =head1 ARRAYS DE ARRAYS
 X<array of arrays> X<AoA> X<array de arrays>
 
-=head2 DeclaraciÛn de un ARRAY DE ARRAYS
+=head2 Declaraci√≥n de un ARRAY DE ARRAYS
 
  @AoA = (
         [ "pedro", "pablo" ],
@@ -243,14 +243,14 @@ X<array of arrays> X<AoA> X<array de arrays>
         [ "homer", "marge", "bart" ],
       );
 
-=head2 GeneraciÛn de un ARRAY DE ARRAYS
+=head2 Generaci√≥n de un ARRAY DE ARRAYS
 
  # leyendo desde un archivo
  while ( <> ) {
      push @AoA, [ split ];
  }
 
- # llamando a una funciÛn
+ # llamando a una funci√≥n
  for $i ( 1 .. 10 ) {
      $AoA[$i] = [ algunafuncion($i) ];
  }
@@ -261,10 +261,10 @@ X<array of arrays> X<AoA> X<array de arrays>
      $AoA[$i] = [ @tmp ];
  }
 
- # aÒadir a una fila actual
+ # a√±adir a una fila actual
  push @{ $AoA[0] }, "wilma", "betty";
 
-=head2 Acceso e impresiÛn de un ARRAY DE ARRAYS
+=head2 Acceso e impresi√≥n de un ARRAY DE ARRAYS
 
  # un elemento
  $AoA[0][0] = "Pedro";
@@ -277,7 +277,7 @@ X<array of arrays> X<AoA> X<array de arrays>
      print "\t [ @$aref ],\n";
  }
 
- # imprime todo usando Ìndices
+ # imprime todo usando √≠ndices
  for $i ( 0 .. $#AoA ) {
      print "\t [ @{$AoA[$i]} ],\n";
  }
@@ -292,7 +292,7 @@ X<array of arrays> X<AoA> X<array de arrays>
 =head1 HASHES DE ARRAYS
 X<hash of arrays> X<HoA> X<hash de arrays>
 
-=head2 DeclaraciÛn de un HASH DE ARRAYS
+=head2 Declaraci√≥n de un HASH DE ARRAYS
 
  %HoA = (
         picapiedra         => [ "pedro", "pablo" ],
@@ -300,7 +300,7 @@ X<hash of arrays> X<HoA> X<hash de arrays>
         simpsons           => [ "homer", "marge", "bart" ],
       );
 
-=head2 GeneraciÛn de un HASH DE ARRAYS
+=head2 Generaci√≥n de un HASH DE ARRAYS
 
  # leyendo desde un archivo
  # picapiedra: pedro pablo wilma dino
@@ -309,7 +309,7 @@ X<hash of arrays> X<HoA> X<hash de arrays>
      $HoA{$1} = [ split ];
  }
 
- # leyendo desde un archivo; m·s temporales
+ # leyendo desde un archivo; m√°s temporales
  # picapiedra: pedro pablo wilma dino
  while ( $linea = <> ) {
      ($quien, $resto) = split /:\s*/, $linea, 2;
@@ -317,7 +317,7 @@ X<hash of arrays> X<HoA> X<hash de arrays>
      $HoA{$quien} = [ @campos ];
  }
 
- # llamando a una funciÛn que devuelve una lista
+ # llamando a una funci√≥n que devuelve una lista
  for $grupo ( "simpsons", "jetsons", "picapiedra" ) {
      $HoA{$group} = [ obtener_familia($grupo) ];
  }
@@ -328,10 +328,10 @@ X<hash of arrays> X<HoA> X<hash de arrays>
      $HoA{$grupo} = [ @miembros ];
  }
 
- # aÒadir nuevos miembros a una familia actual
+ # a√±adir nuevos miembros a una familia actual
  push @{ $HoA{"picapiedra"} }, "wilma", "betty";
 
-=head2 Acceso e impresiÛn de un HASH DE ARRAYS
+=head2 Acceso e impresi√≥n de un HASH DE ARRAYS
 
  # un elemento
  $HoA{picapiedra}[0] = "Pedro";
@@ -344,7 +344,7 @@ X<hash of arrays> X<HoA> X<hash de arrays>
      print "$familia: @{ $HoA{$familia} }\n"
  }
 
- # imprime todo usando Ìndices
+ # imprime todo usando √≠ndices
  foreach $familia ( keys %HoA ) {
      print "familia: ";
      foreach $i ( 0 .. $#{ $HoA{$familia} } ) {
@@ -353,12 +353,12 @@ X<hash of arrays> X<HoA> X<hash de arrays>
      print "\n";
  }
 
- # imprime todo ordenado por el n˙mero de miembros
+ # imprime todo ordenado por el n√∫mero de miembros
  foreach $familia ( sort { @{$HoA{$b}} <=> @{$HoA{$a}} } keys %HoA ) {
      print "$familia: @{ $HoA{$familia} }\n"
  }
 
- # imprime todo ordenado por el n˙mero de miembros y por el nombre
+ # imprime todo ordenado por el n√∫mero de miembros y por el nombre
  foreach $familia ( sort {
 			    @{$HoA{$b}} <=> @{$HoA{$a}}
 					||
@@ -371,7 +371,7 @@ X<hash of arrays> X<HoA> X<hash de arrays>
 =head1 ARRAYS DE HASHES
 X<array of hashes> X<AoH> X<array de hashes>
 
-=head2 DeclaraciÛn de un ARRAY DE HASHES
+=head2 Declaraci√≥n de un ARRAY DE HASHES
 
  @AoH = (
         {
@@ -390,7 +390,7 @@ X<array of hashes> X<AoH> X<array de hashes>
         }
   );
 
-=head2 GeneraciÛn de un ARRAY DE HASHES
+=head2 Generaci√≥n de un ARRAY DE HASHES
 
  # leyendo desde un archivo
  # formato: LIDER=pedro AMIGO=pablo
@@ -411,8 +411,8 @@ X<array of hashes> X<AoH> X<array de hashes>
      push @AoH, { split /[\s+=]/ };
  }
 
- # llamando a una funciÛn que devuelve una lista de parejas clave/valor, como
- # "lÌder","pedro","hija","pebbles"
+ # llamando a una funci√≥n que devuelve una lista de parejas clave/valor, como
+ # "l√≠der","pedro","hija","pebbles"
  while ( %campos = obtenersiguientepareja() ) {
      push @AoH, { %campos };
  }
@@ -422,11 +422,11 @@ X<array of hashes> X<AoH> X<array de hashes>
      push @AoH, { obtenerparejas($_) };
  }
 
- # aÒadir una clave/valor a un elemento
+ # a√±adir una clave/valor a un elemento
  $AoH[0]{mascota} = "dino";
- $AoH[2]{mascota} = "pequeÒo ayudante de Santa Claus";
+ $AoH[2]{mascota} = "peque√±o ayudante de Santa Claus";
 
-=head2 Acceso e impresiÛn de un ARRAY DE HASHES
+=head2 Acceso e impresi√≥n de un ARRAY DE HASHES
 
  # un elemento
  $AoH[0]{lider} = "pedro";
@@ -443,7 +443,7 @@ X<array of hashes> X<AoH> X<array de hashes>
      print "}\n";
  }
 
- # imprime todo usando Ìndices
+ # imprime todo usando √≠ndices
  for $i ( 0 .. $#AoH ) {
      print "$i es { ";
      for $rol ( keys %{ $AoH[$i] } ) {
@@ -462,7 +462,7 @@ X<array of hashes> X<AoH> X<array de hashes>
 =head1 HASHES DE HASHES
 X<hash of hashes> X<HoH> X<hash de hashes>
 
-=head2 DeclaraciÛn de un HASH DE HASHES
+=head2 Declaraci√≥n de un HASH DE HASHES
 
  %HoH = (
         picapiedra => {
@@ -481,7 +481,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
 	},
  );
 
-=head2 GeneraciÛn de un HASH DE HASHES
+=head2 Generaci√≥n de un HASH DE HASHES
 
  # leyendo desde un archivo
  # picapiedra: lider=pedro amigo=pablo esposa=wilma mascota=dino
@@ -494,7 +494,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
      }
 
 
- # leyendo desde un archivo; m·s temporales
+ # leyendo desde un archivo; m√°s temporales
  while ( <> ) {
      next unless s/^(.*?):\s*//;
      $quien = $1;
@@ -506,7 +506,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
      }
  }
 
- # llamando a una funciÛn que devuelve un hash con una clave y un valor
+ # llamando a una funci√≥n que devuelve un hash con una clave y un valor
  for $grupo ( "simpsons", "jetsons", "picapiedra" ) {
      $HoH{$grupo} = { obtener_familia($grupo) };
  }
@@ -517,7 +517,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
      $HoH{$grupo} = { %miembros };
  }
 
- # aÒadir nuevos miembros a una familia actual
+ # a√±adir nuevos miembros a una familia actual
  %nuevos_miembros = (
      esposa  => "wilma",
      mascota => "dino",
@@ -527,7 +527,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
      $HoH{picapiedra}{$que} = $nuevos_miembros{$que};
  }
 
-=head2 Acceso e impresiÛn de un HASH DE HASHES
+=head2 Acceso e impresi√≥n de un HASH DE HASHES
 
  # un elemento
  $HoH{picapiedra}{esposa} = "wilma";
@@ -544,7 +544,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
      print "}\n";
  }
 
- # imprime todo de forma un poco m·s ordenada
+ # imprime todo de forma un poco m√°s ordenada
  foreach $familia ( sort keys %HoH ) {
      print "$familia: { ";
      for $rol ( sort keys %{ $HoH{$familia} } ) {
@@ -554,7 +554,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
  }
 
 
- # imprime todo ordenado por el n˙mero de miembros
+ # imprime todo ordenado por el n√∫mero de miembros
  foreach $familia ( sort { keys %{$HoH{$b}} <=> keys %{$HoH{$a}} } keys %HoH ) {
      print "$familia: { ";
      for $rol ( sort keys %{ $HoH{$familia} } ) {
@@ -563,11 +563,11 @@ X<hash of hashes> X<HoH> X<hash de hashes>
      print "}\n";
  }
 
- # establece un orden (rango) de ordenaciÛn por cada rol
+ # establece un orden (rango) de ordenaci√≥n por cada rol
  $i = 0;
  for ( qw(lider esposa hijo hija amigo mascota) ) { $rango{$_} = ++$i }
 
- # ahora imprime todo ordenado por el n˙mero de miembros
+ # ahora imprime todo ordenado por el n√∫mero de miembros
  foreach $familia ( sort { keys %{ $HoH{$b} } <=> keys %{ $HoH{$a} } } keys %HoH ) {
      print "$familia: { ";
      # e imprime estos de acuerdo al orden del rango
@@ -578,13 +578,13 @@ X<hash of hashes> X<HoH> X<hash de hashes>
  }
 
 
-=head1 REGISTROS M¡S ELABORADOS
+=head1 REGISTROS M√ÅS ELABORADOS
 X<record> X<structure> X<struct>
 X<registro> X<estructura>
 
-=head2 DeclaraciÛn de REGISTROS M¡S ELABORADOS
+=head2 Declaraci√≥n de REGISTROS M√ÅS ELABORADOS
 
-AquÌ hay un ejemplo que muestra cÛmo crear y usar un registro cuyos campos pueden ser ordenados de diferentes formas:
+Aqu√≠ hay un ejemplo que muestra c√≥mo crear y usar un registro cuyos campos pueden ser ordenados de diferentes formas:
 
      $rec = {
 	 TEXT      => $cadena,
@@ -613,14 +613,14 @@ AquÌ hay un ejemplo que muestra cÛmo crear y usar un registro cuyos campos puede
      $rec->{HANDLE}->autoflush(1);
      $rec->{HANDLE}->print(" una cadena\n");
 
-=head2 DeclaraciÛn de un HASH DE REGISTROS COMPLEJOS
+=head2 Declaraci√≥n de un HASH DE REGISTROS COMPLEJOS
 
      %TV = (
         picapiedra => {
             series   => "picapiedra",
             noches   => [ qw(lunes jueves viernes) ],
             miembros => [
-                { nombre => "pedro",   rol => "lÌder",  edad => 36, },
+                { nombre => "pedro",   rol => "l√≠der",  edad => 36, },
                 { nombre => "wilma",   rol => "esposa", edad => 31, },
                 { nombre => "pebbles", rol => "hijo",   edad =>  4, },
             ],
@@ -628,9 +628,9 @@ AquÌ hay un ejemplo que muestra cÛmo crear y usar un registro cuyos campos puede
 
         jetsons     => {
             series   => "jetsons",
-            noches   => [ qw(miÈrcoles s·bado) ],
+            noches   => [ qw(mi√©rcoles s√°bado) ],
             miembros => [
-                { nombre => "george", rol => "lÌder",  edad  => 41, },
+                { nombre => "george", rol => "l√≠der",  edad  => 41, },
                 { nombre => "jane",   rol => "esposa", edad  => 39, },
                 { nombre => "elroy",  rol => "hijo",   edad  =>  9, },
             ],
@@ -640,20 +640,20 @@ AquÌ hay un ejemplo que muestra cÛmo crear y usar un registro cuyos campos puede
             series   => "simpsons",
             noches   => [ qw(lunes) ],
             miembros => [
-                { nombre => "homer", rol => "lÌder",  edad  => 34, },
+                { nombre => "homer", rol => "l√≠der",  edad  => 34, },
                 { nombre => "marge", rol => "esposa", edad  => 37, },
                 { nombre => "bart",  rol => "hijo",   edad  => 11, },
             ],
          },
       );
 
-=head2 GeneraciÛn de un HASH DE REGISTROS COMPLEJOS
+=head2 Generaci√≥n de un HASH DE REGISTROS COMPLEJOS
 
      # leyendo desde un archivo
-     # es m·s f·cil hacerlo teniendo en el fichero
+     # es m√°s f√°cil hacerlo teniendo en el fichero
      # los datos en el formato en crudo mostrado antes.  perl es feliz
-     # de analizar complejas estructuras de datos si son declaradas como datos, asÌ que
-     # algunas veces es m·s f·cil hacer esto que
+     # de analizar complejas estructuras de datos si son declaradas como datos, as√≠ que
+     # algunas veces es m√°s f√°cil hacer esto que
 
      # construirlo pieza a pieza
      $reg = {};
@@ -673,7 +673,7 @@ AquÌ hay un ejemplo que muestra cÛmo crear y usar un registro cuyos campos puede
 
      ###########################################################
      # ahora, es posible que desee crear interesantes campos adicionales que
-     # incluyan punteros hacia la misma estructura, asÌ que si
+     # incluyan punteros hacia la misma estructura, as√≠ que si
      # cambia una parte, cambia todo, como por ejemplo
      # si quiere que un campo {hijos} sea una referencia
      # a un array con los registros de los hijos, sin tener que duplicar
@@ -687,26 +687,26 @@ AquÌ hay un ejemplo que muestra cÛmo crear y usar un registro cuyos campos puede
                  push @hijos, $persona;
              }
          }
-         # RECUERDE: °°°$reg y $TV{$familia} apuntan a los mismos datos!!!
+         # RECUERDE: ¬°¬°¬°$reg y $TV{$familia} apuntan a los mismos datos!!!
          $reg->{hijos} = [ @hijos ];
      }
 
-     # copio el array, pero el propio array contiene en sÌ mismo punteros
+     # copio el array, pero el propio array contiene en s√≠ mismo punteros
      # a objetos no copiados. esto significa que si hace que Bart sea
-     # algo m·s viejo, por medio de
+     # algo m√°s viejo, por medio de
 
      $TV{simpsons}{hijos}[0]{edad}++;
 
-     # entonces esto tambiÈn cambiar·
+     # entonces esto tambi√©n cambiar√°
      print $TV{simpsons}{miembros}[2]{edad};
 
      # porque $TV{simpsons}{hijos}[0] y $TV{simpsons}{miembros}[2]
-     # los dos apuntan a la misma tabla hash anÛnima subyacente
+     # los dos apuntan a la misma tabla hash an√≥nima subyacente
 
      # imprimirlo todo
      foreach $familia ( keys %TV ) {
          print "la $familia";
-         print " est· durante @{ $TV{$familia}{noches} }\n";
+         print " est√° durante @{ $TV{$familia}{noches} }\n";
          print "sus miembros son:\n";
          for $quien ( @{ $TV{$familia}{miembros} } ) {
              print " $quien->{nombre} ($quien->{rol}), de edad $quien->{edad}\n";
@@ -719,9 +719,9 @@ AquÌ hay un ejemplo que muestra cÛmo crear y usar un registro cuyos campos puede
 
 =head1 Enlace con las bases de datos
 
-No es f·cil enlazar una estructura de datos de m˙ltiples niveles (por ejemplo, un hash de hashes) a un archivo dbm.  El primer problem es que todas, excepto las BD GDBM y Berkeley tienen limitaciones de tamaÒo; pero aparte de eso, tambiÈn tiene problemas con cÛmo las referencias son representadas en disco.  Un mÛdulo experimental que intenta, parcialmente, resolver esto es el mÛdulo MLDBM.  Revise su sitio CPAN m·s cercano, como se describe en L<perlmodlib>, para obtener el cÛdigo fuente de MLDBM.
+No es f√°cil enlazar una estructura de datos de m√∫ltiples niveles (por ejemplo, un hash de hashes) a un archivo dbm.  El primer problem es que todas, excepto las BD GDBM y Berkeley tienen limitaciones de tama√±o; pero aparte de eso, tambi√©n tiene problemas con c√≥mo las referencias son representadas en disco.  Un m√≥dulo experimental que intenta, parcialmente, resolver esto es el m√≥dulo MLDBM.  Revise su sitio CPAN m√°s cercano, como se describe en L<perlmodlib>, para obtener el c√≥digo fuente de MLDBM.
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
 L<perlref>, L<perllol>, L<perldata>, L<perlobj>
 
@@ -729,5 +729,5 @@ L<perlref>, L<perllol>, L<perldata>, L<perlobj>
 
 Tom Christiansen <F<tchrist@perl.com>>
 
-⁄ltima actualizaciÛn:
+√öltima actualizaci√≥n:
 Wed Oct 23 04:57:50 MET DST 1996

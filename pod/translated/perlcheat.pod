@@ -2,9 +2,9 @@
 
 perlcheat - Hoja resumen de Perl 5
 
-=head1 DESCRIPCIÓN
+=head1 DESCRIPCIÃ“N
 
-Esta 'hoja resumen' es una referencia útil para programadores principiantes. No abarca todo, pero incluye 195 características del lenguaje; no es mal comienzo.
+Esta 'hoja resumen' es una referencia Ãºtil para programadores principiantes. No abarca todo, pero incluye 195 caracterÃ­sticas del lenguaje; no es mal comienzo.
 
 =head2 La hoja
 
@@ -12,16 +12,16 @@ Esta 'hoja resumen' es una referencia útil para programadores principiantes. No 
   void      $escalar ESCALAR     @array        %hash
   escalar    @array  ARRAY      @array[0, 2]  @hash{'a', 'b'}
   lista      %hash   HASH       $array[0]     $hash{'a'}
-            &sub    CÓDIGO
+            &sub    CÃ“DIGO
             *glob   GLOB       VALORES ESCALARES
-                    FORMATO     número, cadena, ref, glob, undef
+                    FORMATO     nÃºmero, cadena, ref, glob, undef
   REFERENCIAS
   \      referencia       $$foo[1]       equiv. $foo->[1]
   $@%&*  resolver referencia     $$foo{bar}     equivale a $foo->{bar}
-  []     anon. anónimo    ${$$foo[1]}[2] equivale a $foo->[1]->[2]
-  {}     anon. anónimo     ${$$foo[1]}[2] equivale a $foo->[1][2]
+  []     anon. anÃ³nimo    ${$$foo[1]}[2] equivale a $foo->[1]->[2]
+  {}     anon. anÃ³nimo     ${$$foo[1]}[2] equivale a $foo->[1][2]
   \()    lista de refs
-                         NÚMEROS frente a CADENAS    VÍNCULOS
+                         NÃšMEROS frente a CADENAS    VÃNCULOS
   PRIORIDAD OPERADORES      =          =          perldoc.perl.org
   ->                     +          .           search.cpan.org
   ++ --                  == !=      eq ne              cpan.org
@@ -37,66 +37,66 @@ Esta 'hoja resumen' es una referencia útil para programadores principiantes. No 
   &
   | ^             METACARACTERES EXP. REG.          MODIFICADORES EXP. REG.
   &&              ^      principio cadena      /i no distingue may./min.
-  || //           $      fin cadena (antes \n)  /m basado en líneas ^$
-  .. ...          +      una o más       /s . incluye \n
-  ?:              *      cero o más      /x ignorar espacios
+  || //           $      fin cadena (antes \n)  /m basado en lÃ­neas ^$
+  .. ...          +      una o mÃ¡s       /s . incluye \n
+  ?:              *      cero o mÃ¡s      /x ignorar espacios
   = += -= *= etc  ?      cero o una       /p preservar
   , =>            {3,7}  repeticiones en rango   /a ASCII    /aa safe
   ops lista        |      alternancia       /l config. regional   /d  dual
   not             []     clase caracteres  /u Unicode
-  and             \b     límite de palabra     /e evaluar /ee reevaluar
+  and             \b     lÃ­mite de palabra     /e evaluar /ee reevaluar
   or xor          \z     fin cadena        /g global
-                  ()     capturar           /o compilar patrón una vez
-  DEPURACIÓN           (?:p)  sin captura
+                  ()     capturar           /o compilar patrÃ³n una vez
+  DEPURACIÃ“N           (?:p)  sin captura
    -MO=Deparse    (?#t)  comentario           CLASES CARACTERES EXP. REG.
    -MO=Terse      (?=p)  inspec. pos. hacia delante      .   [^\n]
    -D##           (?!p)  inspec. neg hacia delante      \s  espacio en blanco
-   -d:Trace       (?<=p) inspec. pos. hacia atrás \K  \w  caracteres palabra
-                  (?<!p) inspec. neg. hacia atrás     \d  dígitos
-  CONFIGURACIÓN   (?>p)  sin vuelta atrás      \pP propiedad con nombre
-  perl -V:ivsize  (?|p|p) reinicio bifurcación      \h  espacio en blanco horiz.
-                  (?<NM>) capturar en nombre      \R  salto de línea
+   -d:Trace       (?<=p) inspec. pos. hacia atrÃ¡s \K  \w  caracteres palabra
+                  (?<!p) inspec. neg. hacia atrÃ¡s     \d  dÃ­gitos
+  CONFIGURACIÃ“N   (?>p)  sin vuelta atrÃ¡s      \pP propiedad con nombre
+  perl -V:ivsize  (?|p|p) reinicio bifurcaciÃ³n      \h  espacio en blanco horiz.
+                  (?<NM>) capturar en nombre      \R  salto de lÃ­nea
                                            \S \W \D \H negar
   LISTAS RETORNO FUNCIONES
   stat      localtime    caller            VARIABLES ESPECIALES
    0 dev    0 segundo    0 paquete         $_    variable predeterminada
    1 ino    1 minuto     1 nombre archivo  $0    nombre programa
-   2 mode   2 hora       2 línea           $/    separador entrada
-   3 nlink  3 día        3 subrutina       $\    separador entrada
-   4 uid    4 mes-1      4 hasargs         $|    volcado automático
-   5 gid    5 año-1900   5 wantarray       $!    error de sys/libcall
-   6 rdev   6 día semana     6 evaltext    $@    error eval
-   7 size   7 día año     7 is_require  $$    Id. proceso
-   8 atime  8 is_dst      8 hints       $.    número de línea
-   9 mtime                9 máscara bits     @ARGV args línea comandos
-  10 ctime               10 hash de pistas    @INC  rutas de inclusión
+   2 mode   2 hora       2 lÃ­nea           $/    separador entrada
+   3 nlink  3 dÃ­a        3 subrutina       $\    separador entrada
+   4 uid    4 mes-1      4 hasargs         $|    volcado automÃ¡tico
+   5 gid    5 aÃ±o-1900   5 wantarray       $!    error de sys/libcall
+   6 rdev   6 dÃ­a semana     6 evaltext    $@    error eval
+   7 size   7 dÃ­a aÃ±o     7 is_require  $$    Id. proceso
+   8 atime  8 is_dst      8 hints       $.    nÃºmero de lÃ­nea
+   9 mtime                9 mÃ¡scara bits     @ARGV args lÃ­nea comandos
+  10 ctime               10 hash de pistas    @INC  rutas de inclusiÃ³n
   11 blksz               3..10 solo     @_    args subroutina
   12 blcks               con EXPR      %ENV  entorno
 
 =head1 AGRADECIMIENTOS
 
-La primera versión de este documento se publicó en Perl Monks, donde muchas personas realizaron útiles sugerencias. Gracias, Perl Monks.
+La primera versiÃ³n de este documento se publicÃ³ en Perl Monks, donde muchas personas realizaron Ãºtiles sugerencias. Gracias, Perl Monks.
 
-Debemos un agradecimiento especial a Damian Conway, quien no sólo sugirió importantes cambios, sino que también se entretuvo en contar el número de características incluidas y creó una versión para Perl 6 con el fin de demostrar que Perl seguirá siendo Perl.
+Debemos un agradecimiento especial a Damian Conway, quien no sÃ³lo sugiriÃ³ importantes cambios, sino que tambiÃ©n se entretuvo en contar el nÃºmero de caracterÃ­sticas incluidas y creÃ³ una versiÃ³n para Perl 6 con el fin de demostrar que Perl seguirÃ¡ siendo Perl.
 
 =head1 AUTOR
 
 Juerd Waalboer <#####@juerd.nl>, con la ayuda de muchos Perl Monks.
 
-=head1 VEA TAMBIÉN
+=head1 VEA TAMBIÃ‰N
 
 =over 4
 
 =item *
 
-L<http://perlmonks.org/?node_id=216602> - Artículo original de PM
+L<http://perlmonks.org/?node_id=216602> - ArtÃ­culo original de PM
 
 =item *
 
-L<http://perlmonks.org/?node_id=238031> - Versión para Perl 6 de Damian Conway
+L<http://perlmonks.org/?node_id=238031> - VersiÃ³n para Perl 6 de Damian Conway
 
 =item *
 
-L<http://juerd.nl/site.plp/perlcheat> - Página de la hoja resumen de Perl
+L<http://juerd.nl/site.plp/perlcheat> - PÃ¡gina de la hoja resumen de Perl
 
 =back
