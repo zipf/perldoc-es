@@ -2,35 +2,35 @@
 
 =head1 NOMBRE
 
-perl5123delta - quÈ hay de nuevo en perl v5.12.3
+perl5123delta - qu√© hay de nuevo en perl v5.12.3
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Este documento describe las diferencias entre la versiÛn 5.12.2 y la versiÛn 5.12.3.
+Este documento describe las diferencias entre la versi√≥n 5.12.2 y la versi√≥n 5.12.3.
 
-Si est· actualizando desde una versiÛn anterior como la 5.12.1, primero lea L<perl5122delta>, que describe las diferencias entre 5.12.1 y la 5.12.2.  Los principales cambios realizados en 5.12.0 se describen en L<perl5120delta>.
+Si est√° actualizando desde una versi√≥n anterior como la 5.12.1, primero lea L<perl5122delta>, que describe las diferencias entre 5.12.1 y la 5.12.2.  Los principales cambios realizados en 5.12.0 se describen en L<perl5120delta>.
 
 =head1 Cambios incompatibles
 
     No hay cambios intencionadamente incompatibles con 5.12.2. Si los
-    hay, los errores e informes ser·n bienvenidos.
+    hay, los errores e informes ser√°n bienvenidos.
 
 =head1 Mejoras en los componentes
 
 =head2 C<keys>, C<values> funcionan con arrays
 
-Ahora puede usar las funciones incorporadas C<keys>, C<values>, C<each> con arrays (anteriormente sÛlo se podÌa utilizar con los hashes).  Vea L<perlfunc> para m·s detalles.
-Esto es realmente un cambio introducido en Perl 5.12.0, pero no se incluyÛ en el perldelta del lanzamiento.
+Ahora puede usar las funciones incorporadas C<keys>, C<values>, C<each> con arrays (anteriormente s√≥lo se pod√≠a utilizar con los hashes).  Vea L<perlfunc> para m√°s detalles.
+Esto es realmente un cambio introducido en Perl 5.12.0, pero no se incluy√≥ en el perldelta del lanzamiento.
 
-=head1 CorrecciÛn de errores
+=head1 Correcci√≥n de errores
 
-"no VERSION" ser· ahora correctamente decompilado con B::Deparse, asÌ como ciertas expresiones constantes.
+"no VERSION" ser√° ahora correctamente decompilado con B::Deparse, as√≠ como ciertas expresiones constantes.
 
-Module::Build deberÌa ser m·s fiable a la hora de pasar sus test, en cygwin.
+Module::Build deber√≠a ser m√°s fiable a la hora de pasar sus test, en cygwin.
 
-Las subrutinas ivalue pueden, nuevamente, devolver escalares por copia-en-escritura.  Esto se habÌa roto desde la versiÛn 5.10.0.
+Las subrutinas ivalue pueden, nuevamente, devolver escalares por copia-en-escritura.  Esto se hab√≠a roto desde la versi√≥n 5.10.0.
 
-=head1 Notas especÌficas por cada plataforma
+=head1 Notas espec√≠ficas por cada plataforma
 
 =over 4
 
@@ -40,45 +40,45 @@ Ahora se construye un DTrace aparte, para miniperl. Esto quiere decir que perl p
 
 =item VMS
 
-Una serie de regresiones en VMS han sido corregidas.  Adem·s de una limpieza de menor importancia de cuestionables expresiones en F<vms.c>, los permisos de archivo ya no deberÌan ser distorsionados por la capa PerlIO, y los espurios lÌmites de registro ya no deberÌan ser introducidos por la capa PerlIO durante la salida.
+Una serie de regresiones en VMS han sido corregidas.  Adem√°s de una limpieza de menor importancia de cuestionables expresiones en F<vms.c>, los permisos de archivo ya no deber√≠an ser distorsionados por la capa PerlIO, y los espurios l√≠mites de registro ya no deber√≠an ser introducidos por la capa PerlIO durante la salida.
 
-Para obtener m·s detalles y discusiÛn sobre esto ˙ltimo, vea:
+Para obtener m√°s detalles y discusi√≥n sobre esto √∫ltimo, vea:
 
     http://www.nntp.perl.org/group/perl.vmsperl/2010/11/msg15419.html
 
 =item VOS
 
-Algunos cambios muy pequeÒos se hicieron para el proceso de la construcciÛn en VOS para mejorar el soporte en esta plataforma.  Nombre de archivo Longer-than-32-character ahora est·n soportados en OpenVOS, y se construye apropiadamente sin soporte IPv6.
+Algunos cambios muy peque√±os se hicieron para el proceso de la construcci√≥n en VOS para mejorar el soporte en esta plataforma.  Nombre de archivo Longer-than-32-character ahora est√°n soportados en OpenVOS, y se construye apropiadamente sin soporte IPv6.
 
 =back
 
 =head1 Agradecimientos
 
-Perl 5.12.3 representa aproximadamente cuatro meses de desarrollo desde Perl 5.12.2 y contiene aproximadamente 2500 lÌneas de cambios en 54 archivos de 16 autores.
+Perl 5.12.3 representa aproximadamente cuatro meses de desarrollo desde Perl 5.12.2 y contiene aproximadamente 2500 l√≠neas de cambios en 54 archivos de 16 autores.
 
-Perl sigue floreciendo en su tercera dÈcada gracias a una vibrante comunidad de usuarios y desarrolladores.  De las siguientes personas se sabe que han contribuido con mejoras que hicieron posible Perl 5.12.3:
+Perl sigue floreciendo en su tercera d√©cada gracias a una vibrante comunidad de usuarios y desarrolladores.  De las siguientes personas se sabe que han contribuido con mejoras que hicieron posible Perl 5.12.3:
 
 Craig A. Berry, David Golden, David Leadbeater, Father Chrysostomos, Florian
 Ragwitz, Jesse Vincent, Karl Williamson, Nick Johnston, Nicolas Kaiser, Paul
 Green, Rafael Garcia-Suarez, Rainer Tammer, Ricardo Signes, Steffen Mueller,
-Zsb·n Ambrus, ∆var Arnfjˆr Bjarmason
+Zsb√°n Ambrus, √Üvar Arnfj√∂r√∞ Bjarmason
 
-=head1 NotificaciÛn de errores
+=head1 Notificaci√≥n de errores
 
-Si encuentra algo que piensa que es un error, podrÌa verificar los artÌculos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay tambiÈn informaciÛn en la p·gina principal de Perl, http://www.perl.org/ .
+Si encuentra algo que piensa que es un error, podr√≠a verificar los art√≠culos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/bugs . Hay tambi√©n informaci√≥n en la p√°gina principal de Perl, http://www.perl.org/ .
 
-Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuciÛn.  Aseg˙rese de reducir la apariciÛn del error en un programa que sea pequeÒo, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser·n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaciÛn de Perl.
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuci√≥n.  Aseg√∫rese de reducir la aparici√≥n del error en un programa que sea peque√±o, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser√°n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaci√≥n de Perl.
 
-Si el fallo que est· reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo p˙blica, por favor, envÌelo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripciÛn cerrada y no archivada, que incluye a todos los participantes principales, que podr·n ayudar a evaluar el impacto de los problemas, encontrar una resoluciÛn, y ayudar a coordinar la liberaciÛn de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl est· soportado. Debe usar esta direcciÛn ˙nicamente para problemas de seguridad relacionados con el n˙cleo de Perl, no para mÛdulos que se distribuyan por separado en CPAN.
+Si el fallo que est√° reportando tiene implicaciones de seguridad, que lo hace inadecuado para ser enviado a una lista de correo p√∫blica, por favor, env√≠elo a perl5-security-report@perl.org. Esto apunta a una lista de correo de suscripci√≥n cerrada y no archivada, que incluye a todos los participantes principales, que podr√°n ayudar a evaluar el impacto de los problemas, encontrar una resoluci√≥n, y ayudar a coordinar la liberaci√≥n de parches para mitigar o solucionar el problema en todas las plataformas en las que Perl est√° soportado. Debe usar esta direcci√≥n √∫nicamente para problemas de seguridad relacionados con el n√∫cleo de Perl, no para m√≥dulos que se distribuyan por separado en CPAN.
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
-En el archivo F<Changes> encontrar· una explicaciÛn de cÛmo obtener informaciÛn detallada de los cambios.
+En el archivo F<Changes> encontrar√° una explicaci√≥n de c√≥mo obtener informaci√≥n detallada de los cambios.
 
 El archivo F<INSTALL> contiene instrucciones para compilar Perl.
 
-El archivo F<README> contiene informaciÛn general.
+El archivo F<README> contiene informaci√≥n general.
 
-En los archivos F<Artistic> y F<Copying> encontrar· informaciÛn de copyright.
+En los archivos F<Artistic> y F<Copying> encontrar√° informaci√≥n de copyright.
 
 =cut

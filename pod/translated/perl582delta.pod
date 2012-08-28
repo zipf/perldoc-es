@@ -1,38 +1,38 @@
 =head1 NOMBRE
 
-perl582delta - QuÈ hay de nuevo en perl v5.8.2
+perl582delta - Qu√© hay de nuevo en perl v5.8.2
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Este documento describe las diferencias entre la versiÛn 5.8.1 y la versiÛn 5.8.2.
+Este documento describe las diferencias entre la versi√≥n 5.8.1 y la versi√≥n 5.8.2.
 
-Si est· actualizando desde una versiÛn anterior como la 5.6.1, primero lea L<perl58delta>, que describe las diferencias entre 5.6.0 y 5.8.0, y L<perl581delta>, que describe las diferencias entre 5.8.0 y 5.8.1.
+Si est√° actualizando desde una versi√≥n anterior como la 5.6.1, primero lea L<perl58delta>, que describe las diferencias entre 5.6.0 y 5.8.0, y L<perl581delta>, que describe las diferencias entre 5.8.0 y 5.8.1.
 
 =head1 Cambios incompatibles
 
-Se perdiÛ, accidentalmente, la compatibilidad binaria entre 5.8.0 y 5.8.1, en la construcciÛn de mÛdulos en paralelo, al llamar a ciertas llamadas del sistema reentrantes.
+Se perdi√≥, accidentalmente, la compatibilidad binaria entre 5.8.0 y 5.8.1, en la construcci√≥n de m√≥dulos en paralelo, al llamar a ciertas llamadas del sistema reentrantes.
 La compatibilidad binaria con 5.8.0 ha sido restaurada en 5.8.2, que requiere romper la compatibilidad con 5.8.1. Vemos esto como el menor de dos males.
 
-Esto sÛlo afectar· a las personas que tienen un perl 5.8.1 multihilo, y los mÛdulos compilados que utilizan estas llamadas, y ahora intenta ejecutar los mÛdulos compilados con 5.8.2. La soluciÛn es volver a compilar y volver a instalar los mÛdulos usando 5.8.2.
+Esto s√≥lo afectar√° a las personas que tienen un perl 5.8.1 multihilo, y los m√≥dulos compilados que utilizan estas llamadas, y ahora intenta ejecutar los m√≥dulos compilados con 5.8.2. La soluci√≥n es volver a compilar y volver a instalar los m√≥dulos usando 5.8.2.
 
 =head1 Mejoras en los componentes
 
-=head2 AleatorizaciÛn Hash
+=head2 Aleatorizaci√≥n Hash
 
-La asignaciÛn al azar hash introducido con 5.8.1 ha sido modificado. Se constatÛ que, aunque la implementaciÛn fue introducida en 5.8.1, compatible a nivel de cÛdigo fuente con 5.8.0, no era compatible a nivel binario, en ciertos casos. 5.8.2 contiene una implementaciÛn mejorada que es a la vez compatible a nivel de cÛdigo fuente y binario con 5.8.0 y 5.8.1, y se mantiene robusto contra la forma de ataque que provocÛ el cambio de 5.8.1.
+La asignaci√≥n al azar hash introducido con 5.8.1 ha sido modificado. Se constat√≥ que, aunque la implementaci√≥n fue introducida en 5.8.1, compatible a nivel de c√≥digo fuente con 5.8.0, no era compatible a nivel binario, en ciertos casos. 5.8.2 contiene una implementaci√≥n mejorada que es a la vez compatible a nivel de c√≥digo fuente y binario con 5.8.0 y 5.8.1, y se mantiene robusto contra la forma de ataque que provoc√≥ el cambio de 5.8.1.
 
-Estamos muy agradecidos con el proyecto Debian por sus aportaciones en este ·mbito.
-Vea L<perlsec/"Ataques de complejidad algorÌtmica"> para la justificaciÛn original de este cambio.
+Estamos muy agradecidos con el proyecto Debian por sus aportaciones en este √°mbito.
+Vea L<perlsec/"Ataques de complejidad algor√≠tmica"> para la justificaci√≥n original de este cambio.
 
 =head2 Multihilos
 
 Varias agotamientos de memoria, asociados con variables compartidas entre hilos han sido corregidos.
 
-=head1 MÛdulos y pragmas
+=head1 M√≥dulos y pragmas
 
-=head2 MÛdulos y Pragmata actualizados
+=head2 M√≥dulos y Pragmata actualizados
 
-Los siguientes mÛdulos y pragmata se han actualizado desde Perl 5.8.1:
+Los siguientes m√≥dulos y pragmata se han actualizado desde Perl 5.8.1:
 
 =over 4
 
@@ -50,11 +50,11 @@ Los siguientes mÛdulos y pragmata se han actualizado desde Perl 5.8.1:
 
 =item strict
 
-Mejor documentaciÛn
+Mejor documentaci√≥n
 
 =item Tie::Hash
 
-Mejor documentaciÛn
+Mejor documentaci√≥n
 
 =item Time::HiRes
 
@@ -64,7 +64,7 @@ Mejor documentaciÛn
 
 =item UNIVERSAL
 
-Mejor documentaciÛn
+Mejor documentaci√≥n
 
 =back
 
@@ -74,55 +74,55 @@ Algunos errores de sintaxis involucrados en no reconocer operadores de test de a
 
 =head1 Cambios internos
 
-El IntÈrprete de inicializaciÛn es m·s completo cuando -DMULTIPLICITY est· desactivado.
-Esto deberÌa resolver los problemas con la inicializaciÛn y destrucciÛn del intÈrprete de Perl presente m·s de una vez en un ˙nico proceso.                      
+El Int√©rprete de inicializaci√≥n es m√°s completo cuando -DMULTIPLICITY est√° desactivado.
+Esto deber√≠a resolver los problemas con la inicializaci√≥n y destrucci√≥n del int√©rprete de Perl presente m√°s de una vez en un √∫nico proceso.                      
 
-=head1 Problemas en plataformas especÌficas
+=head1 Problemas en plataformas espec√≠ficas
 
-Las banderas del enlazador din·mico han sido modificados para Solaris y OS X, lo que deberÌa solucionar los mismos problemas que aparecen en la construcciÛn de algunos mÛdulos XS.
+Las banderas del enlazador din√°mico han sido modificados para Solaris y OS X, lo que deber√≠a solucionar los mismos problemas que aparecen en la construcci√≥n de algunos m√≥dulos XS.
 
 Errores corregidos en sockets en OS/2 y tmpfile.
 
-En OS X, C<setreuid> y amigos, son molestos; perl ahora trabajar· en torno a sus problemas de la mejor manera posible.
+En OS X, C<setreuid> y amigos, son molestos; perl ahora trabajar√° en torno a sus problemas de la mejor manera posible.
 
 =head1 Direcciones futuras
 
-A partir de 5.8.3 tenemos la intenciÛn de hacer el mantenimiento m·s frecuente, con un menor n˙mero de cambios en cada uno. La intenciÛn es propagar la correcciÛn de errores a versiones estables con mayor rapidez y hacer esas actualizaciones menos problem·ticas. Esto deberÌa dar a los usuarios finales una mayor flexibilidad en su elecciÛn del momento de la actualizaciÛn, y permitir una evaluaciÛn m·s sencilla de los efectos de las actualizaciones. El plan actual es que el cÛdigo quede congelado de la siguiente manera
+A partir de 5.8.3 tenemos la intenci√≥n de hacer el mantenimiento m√°s frecuente, con un menor n√∫mero de cambios en cada uno. La intenci√≥n es propagar la correcci√≥n de errores a versiones estables con mayor rapidez y hacer esas actualizaciones menos problem√°ticas. Esto deber√≠a dar a los usuarios finales una mayor flexibilidad en su elecci√≥n del momento de la actualizaci√≥n, y permitir una evaluaci√≥n m√°s sencilla de los efectos de las actualizaciones. El plan actual es que el c√≥digo quede congelado de la siguiente manera
 
 =over 4
 
 =item *
 
-5.8.3 23:59:59 GMT miÈrcoles, 31 de diciembre 2003
+5.8.3 23:59:59 GMT mi√©rcoles, 31 de diciembre 2003
 
 =item *
 
-5.8.4 23:59:59 GMT miÈrcoles, 31 de marzo 2004
+5.8.4 23:59:59 GMT mi√©rcoles, 31 de marzo 2004
 
 =item *
 
-5.8.5 23:59:59 GMT miÈrcoles, 30 de junio 2004
+5.8.5 23:59:59 GMT mi√©rcoles, 30 de junio 2004
 
 =back
 
-con el consiguiente comunicado poco despuÈs, cuando se complete los test.
+con el consiguiente comunicado poco despu√©s, cuando se complete los test.
 
 Ver L<perl581delta/"Direcciones futuras"> para tener una mayor perspectiva.
 
-=head1 NotificaciÛn de errores
+=head1 Notificaci√≥n de errores
 
-Si usted encuentra algo que piensa que es un error, podrÌa verificar los artÌculos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  TambiÈn puede haber informaciÛn en http://www.perl.com/, la p·gina oficial de Perl.
+Si usted encuentra algo que piensa que es un error, podr√≠a verificar los art√≠culos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  Tambi√©n puede haber informaci√≥n en http://www.perl.com/, la p√°gina oficial de Perl.
 
-Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuciÛn.  Aseg˙rese de reducir la apariciÛn del error en un programa que sea pequeÒo, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser·n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaciÛn de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuci√≥n.  Aseg√∫rese de reducir la aparici√≥n del error en un programa que sea peque√±o, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser√°n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaci√≥n de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
-El archivo de F<Changes> (Cambios) para obtener m·s informaciÛn exhaustiva sobre lo que ha cambiado.
+El archivo de F<Changes> (Cambios) para obtener m√°s informaci√≥n exhaustiva sobre lo que ha cambiado.
 
 El archivo F<INSTALL> contiene instrucciones para compilar Perl.
 
-El archivo F<README> contiene informaciÛn general.
+El archivo F<README> contiene informaci√≥n general.
 
-En los archivos F<Artistic> y F<Copying> encontrar· informaciÛn de copyright.
+En los archivos F<Artistic> y F<Copying> encontrar√° informaci√≥n de copyright.
 
 =cut

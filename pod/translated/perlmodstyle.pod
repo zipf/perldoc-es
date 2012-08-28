@@ -1,24 +1,24 @@
 =head1 NOMBRE
 
-perlmodstyle - Guía de estilo de los módulos Perl
+perlmodstyle - GuÃ­a de estilo de los mÃ³dulos Perl
 
-=head1 INTRODUCCIÓN
+=head1 INTRODUCCIÃ“N
 
-Este documento intenta describir las "mejores prácticas" de la Comunidad Perl para la escritura de módulos Perl.  Extiende las recomendaciones que se encuentran en L<perlstyle>, que debe ser considerado de lectura obligatoria antes de leer este documento.
+Este documento intenta describir las "mejores prÃ¡cticas" de la Comunidad Perl para la escritura de mÃ³dulos Perl.  Extiende las recomendaciones que se encuentran en L<perlstyle>, que debe ser considerado de lectura obligatoria antes de leer este documento.
 
-Aunque este documento está destinado a ser útil a todos los autores de módulos, está especialmente dirigido a autores que desean publicar sus módulos en CPAN.
+Aunque este documento estÃ¡ destinado a ser Ãºtil a todos los autores de mÃ³dulos, estÃ¡ especialmente dirigido a autores que desean publicar sus mÃ³dulos en CPAN.
 
-La atención se centra en los elementos de estilo que son visibles para los usuarios de un módulo, en lugar de aquellas partes que sólo son vistos por los desarrolladores del módulo.  Sin embargo, muchas de las directrices que se presentan en este documento puede ser extrapoladas y aplicadas con éxito a un módulo de uso particular.
+La atenciÃ³n se centra en los elementos de estilo que son visibles para los usuarios de un mÃ³dulo, en lugar de aquellas partes que sÃ³lo son vistos por los desarrolladores del mÃ³dulo.  Sin embargo, muchas de las directrices que se presentan en este documento puede ser extrapoladas y aplicadas con Ã©xito a un mÃ³dulo de uso particular.
 
-Este documento se diferencia de L<perlnewmod> en que se trata de una guía de estilo en lugar de un manual sobre la creación de módulos de CPAN.  Proporciona una lista de control contra el que los módulos se pueden comparar para determinar si se ajustan a las mejores prácticas, sin que necesariamente se describe en detalle cómo lograrlo.  
+Este documento se diferencia de L<perlnewmod> en que se trata de una guÃ­a de estilo en lugar de un manual sobre la creaciÃ³n de mÃ³dulos de CPAN.  Proporciona una lista de control contra el que los mÃ³dulos se pueden comparar para determinar si se ajustan a las mejores prÃ¡cticas, sin que necesariamente se describe en detalle cÃ³mo lograrlo.  
 
-Todos los consejos que figuran en este documento ha sido obtenidos de largas conversaciones con autores experimentados CPAN y los usuarios.  Cada consejo que aquí se da es el resultado de errores anteriores.  Esta información está aquí para ayudarle a evitar los mismos errores y el trabajo extra que, inevitablemente, tendría que invertir en arreglarlos.
+Todos los consejos que figuran en este documento ha sido obtenidos de largas conversaciones con autores experimentados CPAN y los usuarios.  Cada consejo que aquÃ­ se da es el resultado de errores anteriores.  Esta informaciÃ³n estÃ¡ aquÃ­ para ayudarle a evitar los mismos errores y el trabajo extra que, inevitablemente, tendrÃ­a que invertir en arreglarlos.
 
-La primera sección de este documento ofrece una lista detallada; las secciones siguientes proporcionan una descripción más detallada de los elementos de la lista.  La sección final, "Errores comunes", describe algunos de los errores más populares hechas por los autores de CPAN.
+La primera secciÃ³n de este documento ofrece una lista detallada; las secciones siguientes proporcionan una descripciÃ³n mÃ¡s detallada de los elementos de la lista.  La secciÃ³n final, "Errores comunes", describe algunos de los errores mÃ¡s populares hechas por los autores de CPAN.
 
 =head1 RESUMEN LISTA DE CONTROL
 
-Para más detalles sobre cada elemento de esta lista, vea más adelante.
+Para mÃ¡s detalles sobre cada elemento de esta lista, vea mÃ¡s adelante.
 
 =head2 Antes de empezar
 
@@ -30,11 +30,11 @@ No vuelva a reinventar la rueda
 
 =item *
 
-Parchee, amplíe o derive de un módulo existente siempre que sea posible
+Parchee, amplÃ­e o derive de un mÃ³dulo existente siempre que sea posible
 
 =item *
 
-Haga una cosa y hágala bien
+Haga una cosa y hÃ¡gala bien
 
 =item *
 
@@ -52,7 +52,7 @@ La API debe ser comprensible para un programador medio
 
 =item *
 
-Métodos sencillos para tareas sencillas
+MÃ©todos sencillos para tareas sencillas
 
 =item *
 
@@ -60,11 +60,11 @@ Separe la funcionalidad de la salida
 
 =item *
 
-Denominación consistente de subrutinas o métodos
+DenominaciÃ³n consistente de subrutinas o mÃ©todos
 
 =item *
 
-Use parámetros nominados (un hash o referencia a un hash) cuando haya más de dos parámetros
+Use parÃ¡metros nominados (un hash o referencia a un hash) cuando haya mÃ¡s de dos parÃ¡metros
 
 =back
 
@@ -74,41 +74,41 @@ Use parámetros nominados (un hash o referencia a un hash) cuando haya más de dos
 
 =item *
 
-Asegúrese de que su módulo funciona bajo C<use strict> y C<-w>
+AsegÃºrese de que su mÃ³dulo funciona bajo C<use strict> y C<-w>
 
 =item *
 
-Módulos estables deben mantener la compatibilidad hacia atrás
+MÃ³dulos estables deben mantener la compatibilidad hacia atrÃ¡s
 
 =back
 
-=head2 Documentación
+=head2 DocumentaciÃ³n
 
 =over 4
 
 =item *
 
-Escriba documentación en POD
+Escriba documentaciÃ³n en POD
 
 =item *
 
-Documente el propósito, ámbito y las aplicaciones objetivo
+Documente el propÃ³sito, Ã¡mbito y las aplicaciones objetivo
 
 =item *
 
-Documente cada método públicamente accesible o subrutina, incluyendo parámetros y valores de retorno
+Documente cada mÃ©todo pÃºblicamente accesible o subrutina, incluyendo parÃ¡metros y valores de retorno
 
 =item *
 
-Dé ejemplos de uso en la documentación
+DÃ© ejemplos de uso en la documentaciÃ³n
 
 =item *
 
-Proporcione un archivo README y quizás también notas de la versión, de cambios, etc
+Proporcione un archivo README y quizÃ¡s tambiÃ©n notas de la versiÃ³n, de cambios, etc
 
 =item *
 
-Ofrezca enlaces a información adicional (URL, correo electrónico)
+Ofrezca enlaces a informaciÃ³n adicional (URL, correo electrÃ³nico)
 
 =back
 
@@ -122,102 +122,102 @@ Especifique los prerequisitos previos en Makefile.PL o Build.PL
 
 =item *
 
-Especifique los requisitos de la versión de Perl con C<use>
+Especifique los requisitos de la versiÃ³n de Perl con C<use>
 
 =item *
 
-Incluya test con su módulo
+Incluya test con su mÃ³dulo
 
 =item *
 
-Elija una sensata y coherente esquema de numeración de versiones (X.YY es el esquema de numeración normal para los módulos Perl)
+Elija una sensata y coherente esquema de numeraciÃ³n de versiones (X.YY es el esquema de numeraciÃ³n normal para los mÃ³dulos Perl)
 
 =item *
 
-Incremente el número de versión para cada cambio, por pequeño que sea
+Incremente el nÃºmero de versiÃ³n para cada cambio, por pequeÃ±o que sea
 
 =item *
 
-Empaquete el módulo con "make dist"
+Empaquete el mÃ³dulo con "make dist"
 
 =item *
 
-Elija una licencia adecuada (GPL/Artística es un buen valor por defecto)
+Elija una licencia adecuada (GPL/ArtÃ­stica es un buen valor por defecto)
 
 =back
 
-=head1 ANTES DE COMENZAR A ESCRIBIR UN MÓDULO
+=head1 ANTES DE COMENZAR A ESCRIBIR UN MÃ“DULO
 
-Trate de no poner en marcha, de memoria, el desarrollo de su módulo, sin pasar en primer lugar algún tiempo pensándolo.  Un poco de previsión puede ahorrar una gran cantidad de esfuerzo más adelante.
+Trate de no poner en marcha, de memoria, el desarrollo de su mÃ³dulo, sin pasar en primer lugar algÃºn tiempo pensÃ¡ndolo.  Un poco de previsiÃ³n puede ahorrar una gran cantidad de esfuerzo mÃ¡s adelante.
 
-=head2 ¿Se ha hecho antes?
+=head2 Â¿Se ha hecho antes?
 
-Puede que ni siquiera tenga que escribir el módulo.  Compruebe si ya se ha hecho en Perl, y evitará tener que volver a inventar la rueda, a menos que tenga una buena razón.
+Puede que ni siquiera tenga que escribir el mÃ³dulo.  Compruebe si ya se ha hecho en Perl, y evitarÃ¡ tener que volver a inventar la rueda, a menos que tenga una buena razÃ³n.
 
-Un buen lugar para buscar módulos pre-existentes incluye http://search.cpan.org/ y preguntar en modules@perl.org
+Un buen lugar para buscar mÃ³dulos pre-existentes incluye http://search.cpan.org/ y preguntar en modules@perl.org
 
-Si un ya existente módulo B<casi> hace lo que quiere, considere escribir un parche, escribir una subclase o, de otra manera, extienda el módulo actual en lugar de reescribirlo.
+Si un ya existente mÃ³dulo B<casi> hace lo que quiere, considere escribir un parche, escribir una subclase o, de otra manera, extienda el mÃ³dulo actual en lugar de reescribirlo.
 
-=head2 Haga una cosa y hágala bien
+=head2 Haga una cosa y hÃ¡gala bien
 
-A riesgo de afirmar lo obvio, los módulos están destinados a ser modulares.
-Un programador de Perl debe ser capaz de utilizar módulos para armar los bloques de construcción de su aplicación.  Sin embargo, es importante que los bloques estén en la forma correcta, y que el desarrollador no debería tener que utilizar un bloque grande cuando todo lo que necesita es uno pequeño.
+A riesgo de afirmar lo obvio, los mÃ³dulos estÃ¡n destinados a ser modulares.
+Un programador de Perl debe ser capaz de utilizar mÃ³dulos para armar los bloques de construcciÃ³n de su aplicaciÃ³n.  Sin embargo, es importante que los bloques estÃ©n en la forma correcta, y que el desarrollador no deberÃ­a tener que utilizar un bloque grande cuando todo lo que necesita es uno pequeÃ±o.
 
-Su módulo debe tener un ámbito claramente definido que no es más que una sola instrucción.  ¿Puede su módulo dividirse en una familia de módulos relacionados?
+Su mÃ³dulo debe tener un Ã¡mbito claramente definido que no es mÃ¡s que una sola instrucciÃ³n.  Â¿Puede su mÃ³dulo dividirse en una familia de mÃ³dulos relacionados?
 
 Mal ejemplo:
 
-"FooBar.pm proporciona una implementación del protocolo FOO y la norma BAR relacionada".
+"FooBar.pm proporciona una implementaciÃ³n del protocolo FOO y la norma BAR relacionada".
 
 Buen ejemplo:
 
-"Foo.pm proporciona una implementación del protocolo FOO.  Bar.pm implementa el protocolo relacionado BAR."
+"Foo.pm proporciona una implementaciÃ³n del protocolo FOO.  Bar.pm implementa el protocolo relacionado BAR."
 
-Esto significa que si un desarrollador sólo necesita un módulo para el estándar BAR, no debe verse obligado a instalar las bibliotecas para FOO.
+Esto significa que si un desarrollador sÃ³lo necesita un mÃ³dulo para el estÃ¡ndar BAR, no debe verse obligado a instalar las bibliotecas para FOO.
 
-=head2 ¿Qué hay en un nombre?
+=head2 Â¿QuÃ© hay en un nombre?
 
-Asegúrese de elegir un nombre apropiado para el módulo desde el principio.  Esto ayudará a la gente a encontrar y recordar su módulo, y hacer la programación con el módulo de forma más intuitiva.
+AsegÃºrese de elegir un nombre apropiado para el mÃ³dulo desde el principio.  Esto ayudarÃ¡ a la gente a encontrar y recordar su mÃ³dulo, y hacer la programaciÃ³n con el mÃ³dulo de forma mÃ¡s intuitiva.
 
-Al escribir el nombre del módulo, considere lo siguiente:
+Al escribir el nombre del mÃ³dulo, considere lo siguiente:
 
 =over 4
 
 =item *
 
-Sea descriptivo (es decir, describa con precisión el propósito del módulo).
+Sea descriptivo (es decir, describa con precisiÃ³n el propÃ³sito del mÃ³dulo).
 
 =item * 
 
-Sea consistente con los módulos existentes.
+Sea consistente con los mÃ³dulos existentes.
 
 =item *
 
-Refleje la funcionalidad del módulo, no la implementación.
+Refleje la funcionalidad del mÃ³dulo, no la implementaciÃ³n.
 
 =item *
 
-Evite comenzar una nueva jerarquía de nivel superior, sobre todo si una jerarquía adecuada ya existe en virtud del cual se puede colocar su módulo.
+Evite comenzar una nueva jerarquÃ­a de nivel superior, sobre todo si una jerarquÃ­a adecuada ya existe en virtud del cual se puede colocar su mÃ³dulo.
 
 =back
 
-Debería ponerse en contacto con modules@perl.org para preguntarles acerca del nombre de su módulo antes de publicarlo.  También debería tratar de pedir a las personas que ya están familiarizadas con el dominio de aplicación del módulo y el sistema de nombres de CPAN.  Los autores de los módulos similares, o módulos con nombres similares, puede ser un buen lugar para comenzar.
+DeberÃ­a ponerse en contacto con modules@perl.org para preguntarles acerca del nombre de su mÃ³dulo antes de publicarlo.  TambiÃ©n deberÃ­a tratar de pedir a las personas que ya estÃ¡n familiarizadas con el dominio de aplicaciÃ³n del mÃ³dulo y el sistema de nombres de CPAN.  Los autores de los mÃ³dulos similares, o mÃ³dulos con nombres similares, puede ser un buen lugar para comenzar.
 
-=head1 DISEÑANDO Y ESCRIBIENDO SU MÓDULO
+=head1 DISEÃ‘ANDO Y ESCRIBIENDO SU MÃ“DULO
 
-Consideraciones para el diseño y codificación del módulo:
+Consideraciones para el diseÃ±o y codificaciÃ³n del mÃ³dulo:
 
-=head2 ¿POO o no POO?
+=head2 Â¿POO o no POO?
 
-Su módulo puede estar orientado a objetos (POO) o no, o puede tener ambos tipos de interfaces disponibles.  Hay pros y contras de cada técnica, lo que debería tenerse en cuenta al diseñar su API.
+Su mÃ³dulo puede estar orientado a objetos (POO) o no, o puede tener ambos tipos de interfaces disponibles.  Hay pros y contras de cada tÃ©cnica, lo que deberÃ­a tenerse en cuenta al diseÃ±ar su API.
 
-En I<Perl Best Practices> (copyright 2004, publicado por O'Reilly Media, Inc.), Damian Conway ofrece una lista de criterios a utilizar cuando hay que decidir si OO es el sistema más adecuado para su problema:
+En I<Perl Best Practices> (copyright 2004, publicado por O'Reilly Media, Inc.), Damian Conway ofrece una lista de criterios a utilizar cuando hay que decidir si OO es el sistema mÃ¡s adecuado para su problema:
 
 =over 4
 
 =item *
 
-El sistema que se está diseñando es grande o puede llegar a serlo.
+El sistema que se estÃ¡ diseÃ±ando es grande o puede llegar a serlo.
 
 =item *
 
@@ -225,7 +225,7 @@ Los datos se pueden agregar en estructuras obvias, especialmente si hay una gran
 
 =item *
 
-Los distintos tipos de datos agregados forman una jerarquía natural que facilita el uso de la herencia y el polimorfismo.
+Los distintos tipos de datos agregados forman una jerarquÃ­a natural que facilita el uso de la herencia y el polimorfismo.
 
 =item *
 
@@ -233,34 +233,34 @@ Tiene datos a los que hay que aplicar muchas operaciones diferentes.
 
 =item *
 
-Es necesario llevar a cabo las mismas operaciones generales sobre tipos de datos relacionados, pero con ligeras variaciones en función del tipo de datos específico al que se aplican estas operaciones.
+Es necesario llevar a cabo las mismas operaciones generales sobre tipos de datos relacionados, pero con ligeras variaciones en funciÃ³n del tipo de datos especÃ­fico al que se aplican estas operaciones.
 
 =item *
 
-Es probable que tenga que agregar nuevos tipos de datos más adelante.
+Es probable que tenga que agregar nuevos tipos de datos mÃ¡s adelante.
 
 =item *
 
-Las interacciones típicas entre elementos de datos se representan mejor mediante operadores.
+Las interacciones tÃ­picas entre elementos de datos se representan mejor mediante operadores.
 
 =item *
 
-Es probable que la implementación de componentes individuales del sistema cambie con el tiempo.
+Es probable que la implementaciÃ³n de componentes individuales del sistema cambie con el tiempo.
 
 =item *
 
-El diseño del sistema ya es orientado a objetos.
+El diseÃ±o del sistema ya es orientado a objetos.
 
 =item *
 
-Muchos programadores van a utilizar sus módulos de código.
+Muchos programadores van a utilizar sus mÃ³dulos de cÃ³digo.
 
 =back
 
-Piense con cuidado acerca de si la POO es apropiada para su módulo.
-Una orientación a objetos injustificada resulta en unas API complejas que serán difíciles de comprender o utilizar para el usuario medio del módulo.
+Piense con cuidado acerca de si la POO es apropiada para su mÃ³dulo.
+Una orientaciÃ³n a objetos injustificada resulta en unas API complejas que serÃ¡n difÃ­ciles de comprender o utilizar para el usuario medio del mÃ³dulo.
 
-=head2 El diseño de su API
+=head2 El diseÃ±o de su API
 
 Su interfaz debe ser comprensible para un programador promedio de Perl.  
 Las siguientes pautas pueden ayudar a juzgar si su API es suficientemente clara:
@@ -269,40 +269,40 @@ Las siguientes pautas pueden ayudar a juzgar si su API es suficientemente clara:
 
 =item Escriba rutinas sencillas para hacer cosas simples.
 
-Es mejor tener muchas rutinas sencillas que unas pocas monolíticas.
-Si su rutina cambia su comportamiento de manera significativa sobre la base de sus argumentos, es una señal de que debe tener dos (o más) rutinas separadas.
+Es mejor tener muchas rutinas sencillas que unas pocas monolÃ­ticas.
+Si su rutina cambia su comportamiento de manera significativa sobre la base de sus argumentos, es una seÃ±al de que debe tener dos (o mÃ¡s) rutinas separadas.
 
 =item Separe la funcionalidad de la salida.  
 
-Muestre los resultados en su forma más genérica posible y permita al usuario elegir la forma de utilizarlos.  La forma más genérica posible, es por lo general una estructura de datos Perl, que puede ser utilizado para generar un informe de texto, HTML, XML, una consulta de base de datos o cualquier otra cosa que necesiten los usuarios.
+Muestre los resultados en su forma mÃ¡s genÃ©rica posible y permita al usuario elegir la forma de utilizarlos.  La forma mÃ¡s genÃ©rica posible, es por lo general una estructura de datos Perl, que puede ser utilizado para generar un informe de texto, HTML, XML, una consulta de base de datos o cualquier otra cosa que necesiten los usuarios.
 
-Si la rutina se repite a través de algún tipo de lista (por ejemplo, una lista de archivos o registros en una base de datos), puede considerar la posibilidad de una retrollamada (I<callback>) para que los usuarios puedan manipular cada elemento de la lista cada vez.
+Si la rutina se repite a travÃ©s de algÃºn tipo de lista (por ejemplo, una lista de archivos o registros en una base de datos), puede considerar la posibilidad de una retrollamada (I<callback>) para que los usuarios puedan manipular cada elemento de la lista cada vez.
 File::Find ofrece un ejemplo de esto con su sintaxis C<find(\&buscado, $dir)>.
 
 =item Proporcione atajos y valores por defecto razonables.
 
-No exija a cada usuario del módulo saltar a través de los mismos aros para lograr un resultado sencillo.  Siempre puede incluir parámetros opcionales o rutinas para un comportamiento más complejo o no estándar.  Si la mayoría de los usuarios tienen que escribir unas pocas líneas casi idénticas de código cuando empiezan a usar su módulo, es una señal de que debería haber hecho este comportamiento por defecto.
+No exija a cada usuario del mÃ³dulo saltar a travÃ©s de los mismos aros para lograr un resultado sencillo.  Siempre puede incluir parÃ¡metros opcionales o rutinas para un comportamiento mÃ¡s complejo o no estÃ¡ndar.  Si la mayorÃ­a de los usuarios tienen que escribir unas pocas lÃ­neas casi idÃ©nticas de cÃ³digo cuando empiezan a usar su mÃ³dulo, es una seÃ±al de que deberÃ­a haber hecho este comportamiento por defecto.
 Otro buen indicador de que debe usar valores por defecto es si la mayor parte de los usuarios llama a sus rutinas con los mismos argumentos.
 
 =item Convenciones de nombres
 
 Su nombramiento debe ser coherente.  Por ejemplo, es mejor tener:
 
-	muestra_día();
+	muestra_dÃ­a();
 	muestra_semana();
-	muestra_año();
+	muestra_aÃ±o();
 
 que
 
-	muestra_día();
+	muestra_dÃ­a();
 	semana_muestra();
 	show_year();
 
-Esto se aplica igualmente a los nombres de los métodos, los nombres de los parámetros, y cualquier otra cosa que sea visible para el usuario (¡y la mayoría de cosas que no lo son!)
+Esto se aplica igualmente a los nombres de los mÃ©todos, los nombres de los parÃ¡metros, y cualquier otra cosa que sea visible para el usuario (Â¡y la mayorÃ­a de cosas que no lo son!)
 
-=item Paso de parámetros
+=item Paso de parÃ¡metros
 
-Use parámetros con nombre. Es más fácil utilizar un hash de esta manera:
+Use parÃ¡metros con nombre. Es mÃ¡s fÃ¡cil utilizar un hash de esta manera:
 
     $obj->hacer_algo(
 	    nombre => "wibble",
@@ -310,33 +310,33 @@ Use parámetros con nombre. Es más fácil utilizar un hash de esta manera:
 	    size => 1024,
     );
 
-... que tener una larga lista de parámetros sin nombre, como este:
+... que tener una larga lista de parÃ¡metros sin nombre, como este:
 
     $obj->hacer_algo("wibble", "texto", 1024);
 
-Si bien la lista de argumentos puede funcionar bien para uno, dos o incluso tres argumentos, los siguientes argumentos le serán más difícil de recordar para el usuario del módulo, y difícil de mantener para el autor del módulo.  Si desea agregar un nuevo parámetro lo tendrá que añadir al final de la lista, para mantener la compatibilidad con versiones anteriores, y esto probablemente hará que su orden de lista sea poco intuitivo.  Además, si muchos elementos pueden estar indefinidos puede ver las siguientes poco atractivas llamadas de métodos:
+Si bien la lista de argumentos puede funcionar bien para uno, dos o incluso tres argumentos, los siguientes argumentos le serÃ¡n mÃ¡s difÃ­cil de recordar para el usuario del mÃ³dulo, y difÃ­cil de mantener para el autor del mÃ³dulo.  Si desea agregar un nuevo parÃ¡metro lo tendrÃ¡ que aÃ±adir al final de la lista, para mantener la compatibilidad con versiones anteriores, y esto probablemente harÃ¡ que su orden de lista sea poco intuitivo.  AdemÃ¡s, si muchos elementos pueden estar indefinidos puede ver las siguientes poco atractivas llamadas de mÃ©todos:
 
     $obj->hacer_algo(undef, undef, undef, undef, undef, undef, 1024);
 
-Proporcione parámetros por defecto para los parámetros que los tengan.  No haga que los usuarios especifiquen parámetros que casi siempre sean los mismos.
+Proporcione parÃ¡metros por defecto para los parÃ¡metros que los tengan.  No haga que los usuarios especifiquen parÃ¡metros que casi siempre sean los mismos.
 
-La cuestión de si se debe pasar los argumentos en un hash o una referencia a un hash es en gran medida una cuestión de estilo personal. 
+La cuestiÃ³n de si se debe pasar los argumentos en un hash o una referencia a un hash es en gran medida una cuestiÃ³n de estilo personal. 
 
-El uso de claves hash comenzando con un guión (C<-name>) o totalmente en mayúsculas (C<NOMBRE>) es una reliquia de las versiones anteriores de Perl en el que las cadenas en minúscula no se manejaban correctamente por el operador C<=E<gt>>.  Si bien algunos módulos retienen los argumentos en mayúsculas o con guión por razones históricas o como una cuestión de estilo personal, la mayoría de los nuevos módulos deberían utilizar las claves escritas en minúsculas.  Lo que elija, ¡debe ser coherente!
+El uso de claves hash comenzando con un guiÃ³n (C<-name>) o totalmente en mayÃºsculas (C<NOMBRE>) es una reliquia de las versiones anteriores de Perl en el que las cadenas en minÃºscula no se manejaban correctamente por el operador C<=E<gt>>.  Si bien algunos mÃ³dulos retienen los argumentos en mayÃºsculas o con guiÃ³n por razones histÃ³ricas o como una cuestiÃ³n de estilo personal, la mayorÃ­a de los nuevos mÃ³dulos deberÃ­an utilizar las claves escritas en minÃºsculas.  Lo que elija, Â¡debe ser coherente!
 
 =back
 
 =head2 Rigor y advertencias
 
-Su módulo debe funcionar con éxito bajo el pragma strict y debe funcionar sin generar ninguna advertencia.  El módulo también debe manejar comprobaciones de pringue, aunque esto puede causar dificultades en muchos casos.
+Su mÃ³dulo debe funcionar con Ã©xito bajo el pragma strict y debe funcionar sin generar ninguna advertencia.  El mÃ³dulo tambiÃ©n debe manejar comprobaciones de pringue, aunque esto puede causar dificultades en muchos casos.
 
 =head2 Compatibilidad con versiones anteriores
 
-Los módulos que sean "estables" no deben romper la compatibilidad hacia atrás sin al menos una larga fase de transición y un cambio importante en el número de versión.
+Los mÃ³dulos que sean "estables" no deben romper la compatibilidad hacia atrÃ¡s sin al menos una larga fase de transiciÃ³n y un cambio importante en el nÃºmero de versiÃ³n.
 
 =head2 Control de errores y mensajes
 
-Cuando el módulo se encuentre con un error debe hacer uno o más de:
+Cuando el mÃ³dulo se encuentre con un error debe hacer uno o mÃ¡s de:
 
 =over 4
 
@@ -346,7 +346,7 @@ Devolver un valor indefinido.
 
 =item *
 
-poner C<$Module::errstr> o similar (C<errstr> es un nombre común usado por DBI y otros módulos populares; si elije otro, asegúrese de documentarlo claramente).
+poner C<$Module::errstr> o similar (C<errstr> es un nombre comÃºn usado por DBI y otros mÃ³dulos populares; si elije otro, asegÃºrese de documentarlo claramente).
 
 =item *
 
@@ -354,38 +354,38 @@ Un mensaje C<warn()> o C<carp()> a STDERR.
 
 =item *
 
-C<croak()> solo cuando el módulo no puede averiguar, de forma absoluta, qué debe de hacer.  (C<croak()> es una versión mejorada de C<die()> para usar dentro de los módulos, que reporta sus errores desde la perspectiva del llamador.  
-Vea L<Carp> para más detalles sobre C<croak()>, C<carp()> y otras rutinas útiles).
+C<croak()> solo cuando el mÃ³dulo no puede averiguar, de forma absoluta, quÃ© debe de hacer.  (C<croak()> es una versiÃ³n mejorada de C<die()> para usar dentro de los mÃ³dulos, que reporta sus errores desde la perspectiva del llamador.  
+Vea L<Carp> para mÃ¡s detalles sobre C<croak()>, C<carp()> y otras rutinas Ãºtiles).
 
 =item *
 
-Como alternativa a lo anterior, es posible que prefiera lanzar excepciones utilizando el módulo Error.
+Como alternativa a lo anterior, es posible que prefiera lanzar excepciones utilizando el mÃ³dulo Error.
 
 =back
 
-Una gestión configurable de errores puede ser muy útil para los usuarios.  Considere la posibilidad de ofrecer una selección de niveles de alerta y mensajes de depuración, una opción para enviar mensajes a un archivo separado, una forma de especificar una rutina de control de errores, o de otras características.  Asegúrese de que todas estas opciones estén puestas, por defecto, para el uso más común.
+Una gestiÃ³n configurable de errores puede ser muy Ãºtil para los usuarios.  Considere la posibilidad de ofrecer una selecciÃ³n de niveles de alerta y mensajes de depuraciÃ³n, una opciÃ³n para enviar mensajes a un archivo separado, una forma de especificar una rutina de control de errores, o de otras caracterÃ­sticas.  AsegÃºrese de que todas estas opciones estÃ©n puestas, por defecto, para el uso mÃ¡s comÃºn.
 
-=head1 DOCUMENTANDO SU MÓDULO
+=head1 DOCUMENTANDO SU MÃ“DULO
 
 =head2 POD
 
-Su módulo debe incluir la documentación dirigida a los desarrolladores de Perl.
-Debe usar "documentación simple y llana" de Perl (POD) para su documentación técnica en general, aunque es posible que desee escribir documentación adicional (papeles, manuales, etc) en algún otro formato.  
+Su mÃ³dulo debe incluir la documentaciÃ³n dirigida a los desarrolladores de Perl.
+Debe usar "documentaciÃ³n simple y llana" de Perl (POD) para su documentaciÃ³n tÃ©cnica en general, aunque es posible que desee escribir documentaciÃ³n adicional (papeles, manuales, etc) en algÃºn otro formato.  
 Es necesario que cubra los siguientes temas:
 
 =over 4
 
 =item *
 
-Una sinopsis de los usos comunes del módulo
+Una sinopsis de los usos comunes del mÃ³dulo
 
 =item *
 
-El propósito, ámbito y las aplicaciones objetivo de su módulo
+El propÃ³sito, Ã¡mbito y las aplicaciones objetivo de su mÃ³dulo
 
 =item *
 
-El uso de cada método o subrutina públicamente accesible, incluidos los parámetros y valores devueltos
+El uso de cada mÃ©todo o subrutina pÃºblicamente accesible, incluidos los parÃ¡metros y valores devueltos
 
 =item *
 
@@ -393,19 +393,19 @@ Ejemplos de uso
 
 =item *
 
-Fuentes de información adicional
+Fuentes de informaciÃ³n adicional
 
 =item *
 
-Una dirección de correo electrónico de contacto del autor/mantenedor
+Una direcciÃ³n de correo electrÃ³nico de contacto del autor/mantenedor
 
 =back
 
-El nivel de detalle en la documentación general del módulo Perl, va de menos a más detallada.  Su sección SINOPSIS debe contener un ejemplo mínimo de uso (quizás tan sólo una línea de código; evitar los casos de uso inusuales o cualquier cosa que no sea necesaria para la mayoría de los usuarios); la DESCRIPCIÓN debe describir el módulo en términos generales, por lo general en sólo unos pocos párrafos; más detalles de las rutinas del módulo o métodos, ejemplos con código más largo, u otro material en profundidad se debe dar en las secciones siguientes.
+El nivel de detalle en la documentaciÃ³n general del mÃ³dulo Perl, va de menos a mÃ¡s detallada.  Su secciÃ³n SINOPSIS debe contener un ejemplo mÃ­nimo de uso (quizÃ¡s tan sÃ³lo una lÃ­nea de cÃ³digo; evitar los casos de uso inusuales o cualquier cosa que no sea necesaria para la mayorÃ­a de los usuarios); la DESCRIPCIÃ“N debe describir el mÃ³dulo en tÃ©rminos generales, por lo general en sÃ³lo unos pocos pÃ¡rrafos; mÃ¡s detalles de las rutinas del mÃ³dulo o mÃ©todos, ejemplos con cÃ³digo mÃ¡s largo, u otro material en profundidad se debe dar en las secciones siguientes.
 
-Lo ideal sería que alguien que está un poco familiarizado con el módulo debería ser capaz de refrescar su memoria sin tener que pulsar el "avance de página".  A medida que el lector siga a través del documento, debe recibir una cantidad cada vez mayor de conocimientos.
+Lo ideal serÃ­a que alguien que estÃ¡ un poco familiarizado con el mÃ³dulo deberÃ­a ser capaz de refrescar su memoria sin tener que pulsar el "avance de pÃ¡gina".  A medida que el lector siga a travÃ©s del documento, debe recibir una cantidad cada vez mayor de conocimientos.
 
-El orden recomendado de las secciones de documentación de un módulo Perl es:
+El orden recomendado de las secciones de documentaciÃ³n de un mÃ³dulo Perl es:
 
 =over 4
 
@@ -419,11 +419,11 @@ SINOPSIS
 
 =item *
 
-DESCRIPCIÓN
+DESCRIPCIÃ“N
 
 =item *
 
-Una o más secciones o subsecciones dando mayor detalle de los métodos disponibles y las rutinas y cualquier otra información pertinente.
+Una o mÃ¡s secciones o subsecciones dando mayor detalle de los mÃ©todos disponibles y las rutinas y cualquier otra informaciÃ³n pertinente.
 
 =item *
 
@@ -435,7 +435,7 @@ AUTOR
 
 =item *
 
-VEA TAMBIÉN
+VEA TAMBIÃ‰N
 
 =item *
 
@@ -443,13 +443,13 @@ COPYRIGHT y LICENCIA
 
 =back
 
-Mantenga la documentación cerca del código que documenta (documentación "en línea").  Incluya POD para un determinado método justo por encima de la subrutina del método.  Esto hace que sea más fácil mantener la documentación al día, y evita tener que documentar cada pieza de código dos veces (una en POD y otra vez en los comentarios).
+Mantenga la documentaciÃ³n cerca del cÃ³digo que documenta (documentaciÃ³n "en lÃ­nea").  Incluya POD para un determinado mÃ©todo justo por encima de la subrutina del mÃ©todo.  Esto hace que sea mÃ¡s fÃ¡cil mantener la documentaciÃ³n al dÃ­a, y evita tener que documentar cada pieza de cÃ³digo dos veces (una en POD y otra vez en los comentarios).
 
 =head2 README, INSTALL, notas de lanzamiento, changelogs
 
-El módulo también debe incluir un archivo README que describa el módulo y dé consejos para obtener más información (página web, correo electrónico del autor).  
+El mÃ³dulo tambiÃ©n debe incluir un archivo README que describa el mÃ³dulo y dÃ© consejos para obtener mÃ¡s informaciÃ³n (pÃ¡gina web, correo electrÃ³nico del autor).  
 
-Un archivo INSTALL debe ser incluido, y debe contener las más sencillas instrucciones de instalación. Cuando se utiliza ExtUtils::MakeMaker serán algo así:
+Un archivo INSTALL debe ser incluido, y debe contener las mÃ¡s sencillas instrucciones de instalaciÃ³n. Cuando se utiliza ExtUtils::MakeMaker serÃ¡n algo asÃ­:
 
 =over 4
 
@@ -463,7 +463,7 @@ Un archivo INSTALL debe ser incluido, y debe contener las más sencillas instrucc
 
 =back
 
-Al utilizar el Module::Build, suele ser así:
+Al utilizar el Module::Build, suele ser asÃ­:
 
 =over 4
 
@@ -477,116 +477,116 @@ Al utilizar el Module::Build, suele ser así:
 
 =back
 
-Notas de versión o las listas de cambios deben producirse para cada versión de su software que describa los cambios visibles de su módulo, en términos relevantes para el usuario.
+Notas de versiÃ³n o las listas de cambios deben producirse para cada versiÃ³n de su software que describa los cambios visibles de su mÃ³dulo, en tÃ©rminos relevantes para el usuario.
 
 =head1 CONSIDERACIONES DEL LANZAMIENTO
 
-=head2 Numerado de versión
+=head2 Numerado de versiÃ³n
 
-Los números de versión deben indicar al menos las versiones principales y secundarias, y posiblemente, versiones menores.  Una versión principal es aquella en la que la mayor parte de la funcionalidad ha cambiado, o en los que se ha añadido una nueva funcionalidad importante.  Una versión menor es aquella en la que una pequeña cantidad de funcionalidad ha sido añadida o cambiada.  Números de versión de menor importancia se utilizan generalmente para los cambios que no afectan a la funcionalidad, tales como los parches en la documentación.
+Los nÃºmeros de versiÃ³n deben indicar al menos las versiones principales y secundarias, y posiblemente, versiones menores.  Una versiÃ³n principal es aquella en la que la mayor parte de la funcionalidad ha cambiado, o en los que se ha aÃ±adido una nueva funcionalidad importante.  Una versiÃ³n menor es aquella en la que una pequeÃ±a cantidad de funcionalidad ha sido aÃ±adida o cambiada.  NÃºmeros de versiÃ³n de menor importancia se utilizan generalmente para los cambios que no afectan a la funcionalidad, tales como los parches en la documentaciÃ³n.
 
-El esquema de numeración de versiones más común en CPAN es el siguiente:
+El esquema de numeraciÃ³n de versiones mÃ¡s comÃºn en CPAN es el siguiente:
 
     1.00, 1.10, 1.11, 1.20, 1.30, 1.31, 1.32
 
-Un número correcto de versión en CPAN es un número de punto flotante con al menos dos dígitos después del decimal. Se puede comprobar si se ajusta a CPAN utilizando
+Un nÃºmero correcto de versiÃ³n en CPAN es un nÃºmero de punto flotante con al menos dos dÃ­gitos despuÃ©s del decimal. Se puede comprobar si se ajusta a CPAN utilizando
 
     perl -MExtUtils::MakeMaker -le 'print MM->parse_version(shift)' 'Foo.pm'
 
-Si desea liberar una versión 'beta' o 'alfa' de un módulo, pero no quiere que CPAN.pm lo liste, use un '_' después del número de versión normal seguido por al menos dos dígitos, por ejemplo. 1.20_01. Si hace esto, se recomienda usar el siguiente modismo:
+Si desea liberar una versiÃ³n 'beta' o 'alfa' de un mÃ³dulo, pero no quiere que CPAN.pm lo liste, use un '_' despuÃ©s del nÃºmero de versiÃ³n normal seguido por al menos dos dÃ­gitos, por ejemplo. 1.20_01. Si hace esto, se recomienda usar el siguiente modismo:
 
   $VERSION = "1.12_01";
-  $XS_VERSION = $VERSION; # solo necesario si tiene código XS
+  $XS_VERSION = $VERSION; # solo necesario si tiene cÃ³digo XS
   $VERSION = eval $VERSION;
 
-Con este truco MakeMaker sólo leerá la primera línea y, por tanto, leerá el guión bajo, mientras que el intérprete de perl evaluará la $VERSION y convertirá la cadena en un número. Operaciones ulteriores que traten con $VERSION como un número, podrán hacerlo sin provocar una advertencia sobre si $VERSION no es un número.
+Con este truco MakeMaker sÃ³lo leerÃ¡ la primera lÃ­nea y, por tanto, leerÃ¡ el guiÃ³n bajo, mientras que el intÃ©rprete de perl evaluarÃ¡ la $VERSION y convertirÃ¡ la cadena en un nÃºmero. Operaciones ulteriores que traten con $VERSION como un nÃºmero, podrÃ¡n hacerlo sin provocar una advertencia sobre si $VERSION no es un nÃºmero.
 
-Nunca lance nada (ni siquiera un parche de documentación de una sola palabra) sin incrementar el número.  Incluso una revisión de documentación de una sola palabra debe dar lugar a un cambio en la versión de nivel más bajo.
+Nunca lance nada (ni siquiera un parche de documentaciÃ³n de una sola palabra) sin incrementar el nÃºmero.  Incluso una revisiÃ³n de documentaciÃ³n de una sola palabra debe dar lugar a un cambio en la versiÃ³n de nivel mÃ¡s bajo.
 
 =head2 Pre-requisitos
 
-Los autores de módulos deben considerar cuidadosamente si se basan en otros módulos, y en qué módulos quieren confiar.
+Los autores de mÃ³dulos deben considerar cuidadosamente si se basan en otros mÃ³dulos, y en quÃ© mÃ³dulos quieren confiar.
 
-Lo más importante es elegir los módulos que sean lo más estables posible.  En orden de preferencia: 
+Lo mÃ¡s importante es elegir los mÃ³dulos que sean lo mÃ¡s estables posible.  En orden de preferencia: 
 
 =over 4
 
 =item *
 
-Módulos pertenecientes al núcleo de Perl
+MÃ³dulos pertenecientes al nÃºcleo de Perl
 
 =item *
 
-Módulos estables de CPAN
+MÃ³dulos estables de CPAN
 
 =item *
 
-Módulos inestables de CPAN
+MÃ³dulos inestables de CPAN
 
 =item *
 
-Módulos no disponibles en CPAN
+MÃ³dulos no disponibles en CPAN
 
 =back
 
-Especifique los requisitos de versión para otros módulos Perl en los pre-requisitos de su Makefile.PL o Build.PL.
+Especifique los requisitos de versiÃ³n para otros mÃ³dulos Perl en los pre-requisitos de su Makefile.PL o Build.PL.
 
-Asegúrese de especificar los requisitos de la versión de Perl, tanto en Makefile.PL o Build.PL y con C<require 5.6.1> o similar. Vea la sección C<use VERSION> de L<perlfunc/require> para más detalles.
+AsegÃºrese de especificar los requisitos de la versiÃ³n de Perl, tanto en Makefile.PL o Build.PL y con C<require 5.6.1> o similar. Vea la secciÃ³n C<use VERSION> de L<perlfunc/require> para mÃ¡s detalles.
 
 =head2 Pruebas
 
-Todos los módulos deben ser probados antes de su distribución (con "make disttest"), y las pruebas también deben estar disponibles para la gente que instala los módulos (con "make test").  
+Todos los mÃ³dulos deben ser probados antes de su distribuciÃ³n (con "make disttest"), y las pruebas tambiÃ©n deben estar disponibles para la gente que instala los mÃ³dulos (con "make test").  
 Para Module::Build debe utilizar el equivalente de C<make test>: C<perl Build test>.
 
-La importancia de estas pruebas es proporcional a la supuesta estabilidad de un módulo. Un módulo que pretende ser estable o que se espera lograr un uso amplio debe cumplir con un régimen estricto de pruebas tanto como sea posible.
+La importancia de estas pruebas es proporcional a la supuesta estabilidad de un mÃ³dulo. Un mÃ³dulo que pretende ser estable o que se espera lograr un uso amplio debe cumplir con un rÃ©gimen estricto de pruebas tanto como sea posible.
 
-Módulos útiles que le ayudarán a escribir las pruebas (con un impacto mínimo en el proceso de desarrollo o de su tiempo) son Test::Simple, Carp::Assert y Test::Inline.
-Para obtener más bancos de pruebas sofisticadas use Test::More y Test::MockObject.
+MÃ³dulos Ãºtiles que le ayudarÃ¡n a escribir las pruebas (con un impacto mÃ­nimo en el proceso de desarrollo o de su tiempo) son Test::Simple, Carp::Assert y Test::Inline.
+Para obtener mÃ¡s bancos de pruebas sofisticadas use Test::More y Test::MockObject.
 
 =head2 Empaquetado
 
-Los módulos deben estar empaquetados con una de las herramientas de empaquetado estándar.
-Actualmente tiene la posibilidad de elegir entre ExtUtils::MakeMaker y la más independiente de la plataforma, Module::Build, permitiendo módulos que se instalen de una forma coherente.
-Cuando se utiliza ExtUtils::MakeMaker, puede usar "make dist" para crear el paquete. Existen herramientas para ayudarle a construir su módulo en un estilo MakeMaker. Estos incluyen ExtUtils::ModuleMaker y h2xs.  Vea también L<perlnewmod>.
+Los mÃ³dulos deben estar empaquetados con una de las herramientas de empaquetado estÃ¡ndar.
+Actualmente tiene la posibilidad de elegir entre ExtUtils::MakeMaker y la mÃ¡s independiente de la plataforma, Module::Build, permitiendo mÃ³dulos que se instalen de una forma coherente.
+Cuando se utiliza ExtUtils::MakeMaker, puede usar "make dist" para crear el paquete. Existen herramientas para ayudarle a construir su mÃ³dulo en un estilo MakeMaker. Estos incluyen ExtUtils::ModuleMaker y h2xs.  Vea tambiÃ©n L<perlnewmod>.
 
 =head2 Licencias
 
-Asegúrese de que el módulo tiene una licencia, y que el texto completo de la misma está incluida en la distribución (a menos que sea muy común y los términos de la licencia no requieran que la incluya).
+AsegÃºrese de que el mÃ³dulo tiene una licencia, y que el texto completo de la misma estÃ¡ incluida en la distribuciÃ³n (a menos que sea muy comÃºn y los tÃ©rminos de la licencia no requieran que la incluya).
 
-Si no sabe qué licencia usar, es una buena idea el licenciamiento dual bajo la GPL y la licencia Artistic (la misma que Perl).
+Si no sabe quÃ© licencia usar, es una buena idea el licenciamiento dual bajo la GPL y la licencia Artistic (la misma que Perl).
 Vea L<perlgpl> y L<perlartistic>.
 
 =head1 ERRORES COMUNES
 
 =head2 Reinventando la rueda
 
-Hay ciertos espacios de aplicación que ya están muy, muy bien servidos por CPAN.  Un ejemplo es el sistema de plantillas, otro son los módulos de fecha y hora, y hay muchos más.  Si bien es un rito de paso escribir su propia versión de estas cosas, por favor, considere cuidadosamente si el mundo de Perl realmente lo necesita.
+Hay ciertos espacios de aplicaciÃ³n que ya estÃ¡n muy, muy bien servidos por CPAN.  Un ejemplo es el sistema de plantillas, otro son los mÃ³dulos de fecha y hora, y hay muchos mÃ¡s.  Si bien es un rito de paso escribir su propia versiÃ³n de estas cosas, por favor, considere cuidadosamente si el mundo de Perl realmente lo necesita.
 
 =head2 Tratar de hacer demasiado
 
-Su módulo será parte del conjunto de herramientas del desarrollador.  No formará, en sí mismo, el kit de herramientas B<entero>.  Es tentador añadir características adicionales hasta que su código sea un sistema monolítico en lugar de un conjunto de bloques de construcción modulares.
+Su mÃ³dulo serÃ¡ parte del conjunto de herramientas del desarrollador.  No formarÃ¡, en sÃ­ mismo, el kit de herramientas B<entero>.  Es tentador aÃ±adir caracterÃ­sticas adicionales hasta que su cÃ³digo sea un sistema monolÃ­tico en lugar de un conjunto de bloques de construcciÃ³n modulares.
 
-=head2 Documentación inapropiada
+=head2 DocumentaciÃ³n inapropiada
 
-No caiga en la trampa de escribir para el público equivocado.  Su público principal es un desarrollador bastante experimentado con al menos un conocimiento moderado del dominio de aplicación de su módulo, que acaba de descargar su módulo y quiere empezar a utilizarlo tan pronto como sea posible.
+No caiga en la trampa de escribir para el pÃºblico equivocado.  Su pÃºblico principal es un desarrollador bastante experimentado con al menos un conocimiento moderado del dominio de aplicaciÃ³n de su mÃ³dulo, que acaba de descargar su mÃ³dulo y quiere empezar a utilizarlo tan pronto como sea posible.
 
-Manuales, documentación de usuario final, documentos de investigación, P+F (I<FAQ>), etc, no son apropiadas en la documentación principal de un módulo.  Si realmente quieres escribirlos, inclúyalos como sub-documentos, tales como C<My::Module::Tutorial> o C<My::Module::FAQ> y proporcione un enlace en la sección VEA TAMBIÉN de la documentación principal.  
+Manuales, documentaciÃ³n de usuario final, documentos de investigaciÃ³n, P+F (I<FAQ>), etc, no son apropiadas en la documentaciÃ³n principal de un mÃ³dulo.  Si realmente quieres escribirlos, inclÃºyalos como sub-documentos, tales como C<My::Module::Tutorial> o C<My::Module::FAQ> y proporcione un enlace en la secciÃ³n VEA TAMBIÃ‰N de la documentaciÃ³n principal.  
 
-=head1 VEA TAMBIÉN
+=head1 VEA TAMBIÃ‰N
 
 =over 4
 
 =item L<perlstyle>
 
-Guía de estilo general programación Perl
+GuÃ­a de estilo general programaciÃ³n Perl
 
 =item L<perlnewmod>
 
-Cómo crear un nuevo módulo
+CÃ³mo crear un nuevo mÃ³dulo
 
 =item L<perlpod>
 
-Documentación POD
+DocumentaciÃ³n POD
 
 =item L<podchecker>
 
@@ -602,9 +602,9 @@ L<Test::Simple>, L<Test::Inline>, L<Carp::Assert>, L<Test::More>, L<Test::MockOb
 
 =item http://pause.perl.org/
 
-Servidor de subidas para los autores Perl (I<Perl Authors Upload Server>).  Contiene enlaces de información para los autores de módulos.
+Servidor de subidas para los autores Perl (I<Perl Authors Upload Server>).  Contiene enlaces de informaciÃ³n para los autores de mÃ³dulos.
 
-=item Cualquier buen libro de ingeniería del software
+=item Cualquier buen libro de ingenierÃ­a del software
 
 =back
 

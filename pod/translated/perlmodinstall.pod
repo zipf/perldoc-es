@@ -1,20 +1,20 @@
 =head1 NOMBRE
 
-perlmodinstall - Instalando mÛdulos CPAN
+perlmodinstall - Instalando m√≥dulos CPAN
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Puede pensar en un mÛdulo como la unidad fundamental de cÛdigo Perl reutilizable; vea L<perlmod> para m·s detalles.  Cada vez que alguien crea un trozo de cÛdigo Perl que considere de utilidad para el mundo, se registran como un desarrollador de Perl en http://www.cpan.org/modules/04pause.html para luego poder subir su cÛdigo a CPAN.  El CPAN es la red amplia de archivos Perl (I<Comprehensive Perl Archive Network>) y se puede acceder en http://www.cpan.org/ , y b˙squedas en http://search.cpan.org/ .
+Puede pensar en un m√≥dulo como la unidad fundamental de c√≥digo Perl reutilizable; vea L<perlmod> para m√°s detalles.  Cada vez que alguien crea un trozo de c√≥digo Perl que considere de utilidad para el mundo, se registran como un desarrollador de Perl en http://www.cpan.org/modules/04pause.html para luego poder subir su c√≥digo a CPAN.  El CPAN es la red amplia de archivos Perl (I<Comprehensive Perl Archive Network>) y se puede acceder en http://www.cpan.org/ , y b√∫squedas en http://search.cpan.org/ .
 
-Esta documentaciÛn es para las personas que quieren descargar mÛdulos de CPAN e instalarlos en su propia computadora.
+Esta documentaci√≥n es para las personas que quieren descargar m√≥dulos de CPAN e instalarlos en su propia computadora.
 
-=head2 PRE¡MBULO
+=head2 PRE√ÅMBULO
 
-En primer lugar, øest· seguro de que el mÛdulo no est· ya en su sistema?  Pruebe C<perl -MFoo -e 1>.  (Reemplace "Foo" con el nombre del mÛdulo; por ejemplo, C<perl -MCGI::Carp -e 1>.
+En primer lugar, ¬øest√° seguro de que el m√≥dulo no est√° ya en su sistema?  Pruebe C<perl -MFoo -e 1>.  (Reemplace "Foo" con el nombre del m√≥dulo; por ejemplo, C<perl -MCGI::Carp -e 1>.
 
-Si no ve un mensaje de error, tiene el mÛdulo instalado.  (Si ve un mensaje de error, a˙n es posible que tenga el mÛdulo, pero que no estÈ en su ruta, que puede ver con C<perl -e "print qq(@INC)">).  Para el resto de este documento, vamos a suponer que realmente no tiene el mÛdulo instalado, pero que lo ha encontrado en CPAN.
+Si no ve un mensaje de error, tiene el m√≥dulo instalado.  (Si ve un mensaje de error, a√∫n es posible que tenga el m√≥dulo, pero que no est√© en su ruta, que puede ver con C<perl -e "print qq(@INC)">).  Para el resto de este documento, vamos a suponer que realmente no tiene el m√≥dulo instalado, pero que lo ha encontrado en CPAN.
 
-AsÌ que ahora tiene un archivo con extensiÛn .tar.gz (o, menos frecuente, .zip).  Sabe que hay un sabroso mÛdulo en su interior.  Hay cuatro pasos que ahora debe tomar:
+As√≠ que ahora tiene un archivo con extensi√≥n .tar.gz (o, menos frecuente, .zip).  Sabe que hay un sabroso m√≥dulo en su interior.  Hay cuatro pasos que ahora debe tomar:
 
 =over 5
 
@@ -22,23 +22,23 @@ AsÌ que ahora tiene un archivo con extensiÛn .tar.gz (o, menos frecuente, .zip).
 
 =item B<DESEMPAQUETAR> el archivo en el directorio
 
-=item B<COMPILAR> el mÛdulo (a veces no es necesario)
+=item B<COMPILAR> el m√≥dulo (a veces no es necesario)
 
-=item B<INSTALAR> el mÛdulo.
+=item B<INSTALAR> el m√≥dulo.
 
 =back
 
-He aquÌ cÛmo realizar cada paso para cada sistema operativo.  °Esto <no> es un sustituto del hecho de tener que leer los archivos README e INSTALL que podrÌan haber venido con su mÛdulo!
+He aqu√≠ c√≥mo realizar cada paso para cada sistema operativo.  ¬°Esto <no> es un sustituto del hecho de tener que leer los archivos README e INSTALL que podr√≠an haber venido con su m√≥dulo!
 
-TambiÈn tenga en cuenta que estas instrucciones se adaptan para la instalaciÛn del mÛdulo en el repositorio del sistema de mÛdulos Perl, pero se pueden instalar los mÛdulos en cualquier directorio que desee.  Por ejemplo, cuando digo C<perl Makefile.PL>, puede sustituirlo por C<perl Makefile.PL PREFIX=/mi/directorio_perl> para instalar los mÛdulos en C</mi/directorio_perl>.  A continuaciÛn puede usar los mÛdulos desde sus programas Perl con C<use lib "/mi/directorio_perl/lib/site_perl";> o, a veces, con solo C<use "/mi/directorio_perl";>.  Si est· en un sistema que requiere de acceso superusuario/root para la instalaciÛn de mÛdulos en los directorios que ve cuando escribe C<perl -e "print qq(@INC)">, querr· instalarlos en un directorio local (tal como su directorio personal) y seguir con esta configuraciÛn.
+Tambi√©n tenga en cuenta que estas instrucciones se adaptan para la instalaci√≥n del m√≥dulo en el repositorio del sistema de m√≥dulos Perl, pero se pueden instalar los m√≥dulos en cualquier directorio que desee.  Por ejemplo, cuando digo C<perl Makefile.PL>, puede sustituirlo por C<perl Makefile.PL PREFIX=/mi/directorio_perl> para instalar los m√≥dulos en C</mi/directorio_perl>.  A continuaci√≥n puede usar los m√≥dulos desde sus programas Perl con C<use lib "/mi/directorio_perl/lib/site_perl";> o, a veces, con solo C<use "/mi/directorio_perl";>.  Si est√° en un sistema que requiere de acceso superusuario/root para la instalaci√≥n de m√≥dulos en los directorios que ve cuando escribe C<perl -e "print qq(@INC)">, querr√° instalarlos en un directorio local (tal como su directorio personal) y seguir con esta configuraci√≥n.
 
 =over 4
 
 =item *
 
-B<Si est· en un Unix o sistema parecido a Unix,>
+B<Si est√° en un Unix o sistema parecido a Unix,>
 
-Puede usar el mÛdulo CPAN de Andreas Koenig ( http://www.cpan.org/modules/by-module/CPAN ) para automatizar los siguientes pasos, desde DESCOMPRIMIR a INSTALAR.
+Puede usar el m√≥dulo CPAN de Andreas Koenig ( http://www.cpan.org/modules/by-module/CPAN ) para automatizar los siguientes pasos, desde DESCOMPRIMIR a INSTALAR.
 
 A. DESCOMPRIMIR
 
@@ -54,9 +54,9 @@ B. DESEMPAQUETAR
 
 Desempaquete el resultado con C<tar -xof sumodulo.tar>
 
-C. COMPILACI”N
+C. COMPILACI√ìN
 
-Entre en el directorio reciÈn creado y escriba:
+Entre en el directorio reci√©n creado y escriba:
 
       perl Makefile.PL
       make test
@@ -65,7 +65,7 @@ o bien
 
       perl Makefile.PL PREFIX=/mi/directorio_perl
 
-para instalarlo localmente.  (Recuerde que si hace esto, tendr· que poner C<use lib "/mi/directorio_perl";> cerca de la parte superior del programa que utilice ese mÛdulo.
+para instalarlo localmente.  (Recuerde que si hace esto, tendr√° que poner C<use lib "/mi/directorio_perl";> cerca de la parte superior del programa que utilice ese m√≥dulo.
 
 D. INSTALAR
 
@@ -73,34 +73,34 @@ Mientras sigue en ese directorio, escriba:
 
       make install
 
-Aseg˙rese de que tiene los permisos adecuados para instalar el mÛdulo en el directorio de la biblioteca Perl 5.  A menudo, tendr· que ser root.
+Aseg√∫rese de que tiene los permisos adecuados para instalar el m√≥dulo en el directorio de la biblioteca Perl 5.  A menudo, tendr√° que ser root.
 
-Esto es todo lo que tiene que hacer en los sistemas Unix con enlazado din·mico.
-La mayorÌa de sistemas Unix tienen enlazado din·mico. Si el suyo no lo tiene, o si por otra razÛn tiene un perl enlazado est·ticamente, B<y> el mÛdulo requiere compilaciÛn, tendr· que construir un nuevo binario Perl que incluye el mÛdulo.  Una vez m·s, probablemente tendr· que ser root.
+Esto es todo lo que tiene que hacer en los sistemas Unix con enlazado din√°mico.
+La mayor√≠a de sistemas Unix tienen enlazado din√°mico. Si el suyo no lo tiene, o si por otra raz√≥n tiene un perl enlazado est√°ticamente, B<y> el m√≥dulo requiere compilaci√≥n, tendr√° que construir un nuevo binario Perl que incluye el m√≥dulo.  Una vez m√°s, probablemente tendr√° que ser root.
 
 =item *
 
-B<Si est· ejecutando ActivePerl (Win95/98/2K/NT/XP, Linux, Solaris)>
+B<Si est√° ejecutando ActivePerl (Win95/98/2K/NT/XP, Linux, Solaris)>
 
-En primer lugar, escriba C<ppm> desde una consola y vea si en alg˙n repositorio PPM de ActiveState est· su mÛdulo.  Si es asÌ, puede instalarlo con C<ppm> y no tendr· que molestarse con ninguno de los siguientes pasos.  PodrÌa intentar usar las instrucciones CPAN de la secciÛn "Unix o Linux" anterior; dele una oportunidad.  De lo contrario, tendr· que seguir los siguientes pasos.
+En primer lugar, escriba C<ppm> desde una consola y vea si en alg√∫n repositorio PPM de ActiveState est√° su m√≥dulo.  Si es as√≠, puede instalarlo con C<ppm> y no tendr√° que molestarse con ninguno de los siguientes pasos.  Podr√≠a intentar usar las instrucciones CPAN de la secci√≥n "Unix o Linux" anterior; dele una oportunidad.  De lo contrario, tendr√° que seguir los siguientes pasos.
 
    A. DESCOMPRIMIR
 
-Puede usar el software shareware Winzip (http://www.winzip.com) para descomprimir y desempaquetar los mÛdulos.
+Puede usar el software shareware Winzip (http://www.winzip.com) para descomprimir y desempaquetar los m√≥dulos.
 
    B. DESEMPAQUETAR
 
-Si utilizÛ WinZip, ya estar· descomprimido.
+Si utiliz√≥ WinZip, ya estar√° descomprimido.
 
-   C. COMPILACI”N
+   C. COMPILACI√ìN
 
-Necesitar· la utilidad C<nmake>, disponible en http://download.microsoft.com/download/vc15/Patch/1.52/W95/EN-US/nmake15.exe o dmake, disponible en CPAN.
+Necesitar√° la utilidad C<nmake>, disponible en http://download.microsoft.com/download/vc15/Patch/1.52/W95/EN-US/nmake15.exe o dmake, disponible en CPAN.
 http://search.cpan.org/dist/dmake/
 
-øEl mÛdulo requiere de compilaciÛn (es decir, tiene archivos que terminan en .xs, .c, .h, .y, .cc, .cxx o .C)?  Si lo hace, la vida se le ha vuelto oficialmente difÌcil, porque tiene que compilar el mÛdulo por sÌ mismo (que no es tarea f·cil en Windows).  Necesitar· un compilador, como Visual C++.  Como alternativa, puede descargar un paquete PPM pre-construido desde ActiveState.
+¬øEl m√≥dulo requiere de compilaci√≥n (es decir, tiene archivos que terminan en .xs, .c, .h, .y, .cc, .cxx o .C)?  Si lo hace, la vida se le ha vuelto oficialmente dif√≠cil, porque tiene que compilar el m√≥dulo por s√≠ mismo (que no es tarea f√°cil en Windows).  Necesitar√° un compilador, como Visual C++.  Como alternativa, puede descargar un paquete PPM pre-construido desde ActiveState.
 http://aspn.activestate.com/ASPN/Downloads/ActivePerl/PPM/
 
-Entre en el directorio reciÈn creado y escriba:
+Entre en el directorio reci√©n creado y escriba:
 
       perl Makefile.PL
       nmake test
@@ -114,44 +114,44 @@ Mientras sigue en ese directorio, escriba:
 
 =item *
 
-B<Si est· usando un Macintosh con el MacOS "Classic" y MacPerl,>
+B<Si est√° usando un Macintosh con el MacOS "Classic" y MacPerl,>
 
 
 A. DESCOMPRIMIR
 
-En primer lugar, aseg˙rese de que tiene la ˙ltima distribuciÛn B<cpan-mac> ( http://www.cpan.org/authors/id/CNANDOR/ ), que tiene utilidades para hacer todos los pasos.  Lea las instrucciones de cpan-mac cuidadosamente e inst·lelo.  Si decide no utilizar cpan-mac por alguna razÛn, hay algunas alternativas listadas a continuaciÛn.
+En primer lugar, aseg√∫rese de que tiene la √∫ltima distribuci√≥n B<cpan-mac> ( http://www.cpan.org/authors/id/CNANDOR/ ), que tiene utilidades para hacer todos los pasos.  Lea las instrucciones de cpan-mac cuidadosamente e inst√°lelo.  Si decide no utilizar cpan-mac por alguna raz√≥n, hay algunas alternativas listadas a continuaci√≥n.
 
-DespuÈs de instalar cpan-mac, baje el archivo del mÛdulo en el I<droplet> B<untarzipme>, que lo descomprimir· y desempaquetar·.
+Despu√©s de instalar cpan-mac, baje el archivo del m√≥dulo en el I<droplet> B<untarzipme>, que lo descomprimir√° y desempaquetar√°.
 
-B<O>, puede utilizar la versiÛn shareware del programa B<StuffIt Expander> ( http://my.smithmicro.com/mac/stuffit/ ) o el programa gratuito B<MacGzip> ( http://persephone.cps.unizar.es/general/gente/spd/gzip/gzip.html ).
+B<O>, puede utilizar la versi√≥n shareware del programa B<StuffIt Expander> ( http://my.smithmicro.com/mac/stuffit/ ) o el programa gratuito B<MacGzip> ( http://persephone.cps.unizar.es/general/gente/spd/gzip/gzip.html ).
 
 B. DESEMPAQUETAR
 
-Si est· utilizando untarzipme o StuffIt, el archivo deber· estar ya extraÌdo.  B<O>, puede utilizar el software gratuito B<suntar> o I<Tar> ( http://hyperarchive.lcs.mit.edu/HyperArchive/Archive/cmp/ ).
+Si est√° utilizando untarzipme o StuffIt, el archivo deber√° estar ya extra√≠do.  B<O>, puede utilizar el software gratuito B<suntar> o I<Tar> ( http://hyperarchive.lcs.mit.edu/HyperArchive/Archive/cmp/ ).
 
-C. COMPILACI”N
+C. COMPILACI√ìN
 
-Compruebe el contenido de la distribuciÛn.
-Lea la documentaciÛn del mÛdulo, en busca de razones por las que pueda tener problemas para usarlo con MacPerl.  Busque por archivos F<.xs> y F<.c> que, normalmente, denotan que la distribuciÛn debe ser compilada, y no se pueden instalar "reciÈn salido de la caja". (Vea L<"PORTABILIDAD">).
+Compruebe el contenido de la distribuci√≥n.
+Lea la documentaci√≥n del m√≥dulo, en busca de razones por las que pueda tener problemas para usarlo con MacPerl.  Busque por archivos F<.xs> y F<.c> que, normalmente, denotan que la distribuci√≥n debe ser compilada, y no se pueden instalar "reci√©n salido de la caja". (Vea L<"PORTABILIDAD">).
 
 D. INSTALAR
 
-Si est· usando cpan-mac, simplemente coloque la carpeta en el I<droplet> B<installme>, y el uso el mÛdulo.
+Si est√° usando cpan-mac, simplemente coloque la carpeta en el I<droplet> B<installme>, y el uso el m√≥dulo.
 
-B<O>, si no est· usando cpan-mac, haga un poco de trabajo manual.
+B<O>, si no est√° usando cpan-mac, haga un poco de trabajo manual.
 
-Aseg˙rese de que los saltos de lÌnea para los mÛdulos est·n en formato Mac, no en el formato de Unix.
-Si no es asÌ entonces podrÌa haberlo descomprimido de forma incorrecta.  Verifique su configuraciÛn de herramientas de descompresiÛn y desembalaje para asegurarse de que se est·n traduciendo archivos de texto correctamente.
+Aseg√∫rese de que los saltos de l√≠nea para los m√≥dulos est√°n en formato Mac, no en el formato de Unix.
+Si no es as√≠ entonces podr√≠a haberlo descomprimido de forma incorrecta.  Verifique su configuraci√≥n de herramientas de descompresi√≥n y desembalaje para asegurarse de que se est√°n traduciendo archivos de texto correctamente.
 
-Como ˙ltimo recurso, puede utilizar el comando perl de una sola lÌnea:
+Como √∫ltimo recurso, puede utilizar el comando perl de una sola l√≠nea:
 
     perl -i.bak -pe 's/(?:\015)?\012/\015/g' <nombres de los archivos>
 
 en los archivos fuente.
 
-A continuaciÛn, mueva los archivos (probablemente sÛlo los archivos F<.pm>, aunque tambiÈn puede haber algunos m·s; revise la documentaciÛn del mÛdulo) hasta su destino final: lo m·s probable es que sea en C<$ENV{MACPERL}site_lib:> (es decir, C<HD:Carpeta MacPerl:site_lib:>).  Puede agregar nuevas rutas a los valores por defecto de C<@INC> en el elemento de men˙ Preferencias de la aplicaciÛn MacPerl (C<$ENV{MACPERL}site_lib:> se agrega autom·gicamente).  Cree aquellas estructuras de directorios necesarios (es decir, para C<Algun::Modulo>, cree C<$ENV{MACPERL}site_lib:Algun:> y ponga C<Modulo.pm> en ese directorio).
+A continuaci√≥n, mueva los archivos (probablemente s√≥lo los archivos F<.pm>, aunque tambi√©n puede haber algunos m√°s; revise la documentaci√≥n del m√≥dulo) hasta su destino final: lo m√°s probable es que sea en C<$ENV{MACPERL}site_lib:> (es decir, C<HD:Carpeta MacPerl:site_lib:>).  Puede agregar nuevas rutas a los valores por defecto de C<@INC> en el elemento de men√∫ Preferencias de la aplicaci√≥n MacPerl (C<$ENV{MACPERL}site_lib:> se agrega autom√°gicamente).  Cree aquellas estructuras de directorios necesarios (es decir, para C<Algun::Modulo>, cree C<$ENV{MACPERL}site_lib:Algun:> y ponga C<Modulo.pm> en ese directorio).
 
-A continuaciÛn, ejecute el siguiente I<script> (o algo parecido):
+A continuaci√≥n, ejecute el siguiente I<script> (o algo parecido):
 
      #!perl -w
      use AutoSplit;
@@ -160,24 +160,24 @@ A continuaciÛn, ejecute el siguiente I<script> (o algo parecido):
 
 =item *
 
-B<Si est· en una versiÛn DJGPP de DOS,>
+B<Si est√° en una versi√≥n DJGPP de DOS,>
 
    A. DESCOMPRIMIR
 
-djtarx ( ftp://ftp.delorie.com/pub/djgpp/current/v2/ ) descomprimir· y desempaquetar·.
+djtarx ( ftp://ftp.delorie.com/pub/djgpp/current/v2/ ) descomprimir√° y desempaquetar√°.
 
    B. DESEMPAQUETAR
 
-Vea m·s arriba.
+Vea m√°s arriba.
 
-   C. COMPILACI”N
+   C. COMPILACI√ìN
 
-Entre en el directorio reciÈn creado y escriba:
+Entre en el directorio reci√©n creado y escriba:
 
       perl Makefile.PL
       make test
 
-Necesitar· los paquetes mencionados en F<README.dos> en la distribuciÛn Perl.
+Necesitar√° los paquetes mencionados en F<README.dos> en la distribuci√≥n Perl.
 
    D. INSTALAR
 
@@ -185,19 +185,19 @@ Mientras sigue en ese directorio, escriba:
 
      make install	
 
-Necesitar· los paquetes mencionados en F<README.dos> en la distribuciÛn Perl.
+Necesitar√° los paquetes mencionados en F<README.dos> en la distribuci√≥n Perl.
 
 =item *
 
-B<Si est· en OS/2,>
+B<Si est√° en OS/2,>
 
 Obtenga el paquete de desarrollo EMX y el gzip/tar, ya sea desde Hobbes ( http://hobbes.nmsu.edu ) o Leo ( http://www.leo.org ), y luego siga las instrucciones para Unix.
 
 =item *
 
-B<Si est· en VMS,>
+B<Si est√° en VMS,>
 
-Al descargar desde CPAN, guarde su archivo con una extensiÛn C<.tgz> en lugar de C<.tar.gz>.  Todos los otros caracteres punto en el nombre del archivo deben ser reemplazado con guiones bajos.  Por ejemplo, C<Su-Modulo-1.33.tar.gz> deber· ser renombrado como C<Su-Modulo-1_33.tgz>.
+Al descargar desde CPAN, guarde su archivo con una extensi√≥n C<.tgz> en lugar de C<.tar.gz>.  Todos los otros caracteres punto en el nombre del archivo deben ser reemplazado con guiones bajos.  Por ejemplo, C<Su-Modulo-1.33.tar.gz> deber√° ser renombrado como C<Su-Modulo-1_33.tgz>.
 
 A. DESCOMPRIMIR
 
@@ -205,7 +205,7 @@ Tipo
 
     gzip -d Su-Modulo.tgz
 
-o, para mÛdulos zipeados, escriba
+o, para m√≥dulos zipeados, escriba
 
     unzip Su-Modulo.zip
 
@@ -213,15 +213,15 @@ Ejecutables para gzip, zip, y VMStar:
 
     http://www.hp.com/go/openvms/freeware/
 
-y su cÛdigo fuente:
+y su c√≥digo fuente:
 
     http://www.fsf.org/order/ftp.html
 
-Tenga en cuenta que el gzip/gunzip de GNU no es lo mismo que el zip/unzip de Info-ZIP.  El primero es una simple herramienta de compresiÛn; el ˙ltimo permite la creaciÛn de archivos multi-fichero.
+Tenga en cuenta que el gzip/gunzip de GNU no es lo mismo que el zip/unzip de Info-ZIP.  El primero es una simple herramienta de compresi√≥n; el √∫ltimo permite la creaci√≥n de archivos multi-fichero.
 
 B. DESEMPAQUETAR
 
-Si est· utilizando VMStar:
+Si est√° utilizando VMStar:
 
      VMStar xf Su-Modulo.tar
 
@@ -229,17 +229,17 @@ O, si es aficionado a la sintaxis de comandos VMS:
 
      tar/extract/verbose Su_Modulo.tar
 
-C. COMPILACI”N
+C. COMPILACI√ìN
 
-Aseg˙rese de que tiene MMS (de Digital) o el software gratuito MMK ( disponible en MadGoat en http://www.madgoat.com ).  A continuaciÛn, escriba esto para crear los DESCRIP.MMS del mÛdulo:
+Aseg√∫rese de que tiene MMS (de Digital) o el software gratuito MMK ( disponible en MadGoat en http://www.madgoat.com ).  A continuaci√≥n, escriba esto para crear los DESCRIP.MMS del m√≥dulo:
 
     perl Makefile.PL
 
-Ahora ya est· listo para compilar:
+Ahora ya est√° listo para compilar:
 
     mms test
 
-Sustituya C<mmk> por C<mms> en lo anterior si est· utilizando MMK.
+Sustituya C<mmk> por C<mms> en lo anterior si est√° utilizando MMK.
 
 D. INSTALAR
 
@@ -247,11 +247,11 @@ Tipo
 
     mms install
 
-Sustituya C<mmk> por C<mms> en lo anterior si est· utilizando MMK.
+Sustituya C<mmk> por C<mms> en lo anterior si est√° utilizando MMK.
 
 =item *
 
-B<Si est· en MVS,>
+B<Si est√° en MVS,>
 
 Introduzca el archivo F<.tar.gz> en un HFS como binario; no lo traduzca de ASCII a EBCDIC.
 
@@ -267,43 +267,43 @@ Desempaquete el resultado con
 
      pax -o to=IBM-1047,from=ISO8859-1 -r < sumodulo.tar
 
-Los pasos COMPILAR e INSTALAR son idÈnticos a los de Unix.  Algunos mÛdulos generan Makefiles que funcionan mejor con GNU make, que est· disponible en http://www.mks.com/s390/gnu/
+Los pasos COMPILAR e INSTALAR son id√©nticos a los de Unix.  Algunos m√≥dulos generan Makefiles que funcionan mejor con GNU make, que est√° disponible en http://www.mks.com/s390/gnu/
 
 =back
 
 =head1 PORTABILIDAD
 
-Tenga en cuenta que no todos los mÛdulos funcionar·n con todas las plataformas.
-Vea L<perlport> para m·s informaciÛn sobre problemas de portabilidad.
-Lea la documentaciÛn para ver si el mÛdulo funcionar· en su sistema.  Hay b·sicamente tres tipos de mÛdulos que no funcionan "reciÈn salidos de la caja" con todas las plataformas (con alguna posibilidad de que se superpongan):
+Tenga en cuenta que no todos los m√≥dulos funcionar√°n con todas las plataformas.
+Vea L<perlport> para m√°s informaci√≥n sobre problemas de portabilidad.
+Lea la documentaci√≥n para ver si el m√≥dulo funcionar√° en su sistema.  Hay b√°sicamente tres tipos de m√≥dulos que no funcionan "reci√©n salidos de la caja" con todas las plataformas (con alguna posibilidad de que se superpongan):
 
 =over 4
 
 =item *
 
-B<Los que deberÌan, pero no lo hacen>. Estos deben ser arreglados; considere ponerse en contacto con el autor y la posibilidad de escribir un parche.
+B<Los que deber√≠an, pero no lo hacen>. Estos deben ser arreglados; considere ponerse en contacto con el autor y la posibilidad de escribir un parche.
 
 =item *
 
-B<Los que necesitan ser compilados, donde la plataforma destino no tiene compiladores f·cilmente disponibles>. (Estos mÛdulos contienen, por lo general, archivos F<.xs> o F<.c>).  Quiz·s sea capaz de encontrar los binarios existentes en CPAN o en otro lugar, o es posible que desee intentar conseguir los compiladores e intentar la compilaciÛn por sÌ mismo, y luego publique el binario para que otras pobres almas lo usen.
+B<Los que necesitan ser compilados, donde la plataforma destino no tiene compiladores f√°cilmente disponibles>. (Estos m√≥dulos contienen, por lo general, archivos F<.xs> o F<.c>).  Quiz√°s sea capaz de encontrar los binarios existentes en CPAN o en otro lugar, o es posible que desee intentar conseguir los compiladores e intentar la compilaci√≥n por s√≠ mismo, y luego publique el binario para que otras pobres almas lo usen.
 
 =item *
 
-B<Los que est·n dirigidos a una plataforma especÌfica>. (Como los mÛdulos Win32::).  Si el mÛdulo est· dirigido especÌficamente a una plataforma diferente a la suya, lo m·s probable es que no tenga suerte.
+B<Los que est√°n dirigidos a una plataforma espec√≠fica>. (Como los m√≥dulos Win32::).  Si el m√≥dulo est√° dirigido espec√≠ficamente a una plataforma diferente a la suya, lo m√°s probable es que no tenga suerte.
 
 =back
 
 
 
-Compruebe los CPAN Testers por si un mÛdulo deberÌa trabajar en su plataforma, pero no se comporta como era de esperar, o si no est· seguro de si un mÛdulo trabajar· o no bajo su plataforma.  Si el mÛdulo que desea no est· en la lista, puede probarlo usted mismo y decÌrselo a los CPAN Testers, puede unirse a los CPAN Testers, o puede solicitar que sea probado.
+Compruebe los CPAN Testers por si un m√≥dulo deber√≠a trabajar en su plataforma, pero no se comporta como era de esperar, o si no est√° seguro de si un m√≥dulo trabajar√° o no bajo su plataforma.  Si el m√≥dulo que desea no est√° en la lista, puede probarlo usted mismo y dec√≠rselo a los CPAN Testers, puede unirse a los CPAN Testers, o puede solicitar que sea probado.
 
     http://testers.cpan.org/
 
 
-=head1 °Eh!
+=head1 ¬°Eh!
 
-Si tiene alguna sugerencia de cambios para esta p·gina, h·gamelo saber.  Por favor no me envÌe correo con una peticiÛn de ayuda sobre cÛmo instalar los mÛdulos.
-Hay demasiados mÛdulos y muy pocos Orwants, capaces de responder o incluso entender todas sus preguntas.  En su lugar pÛngase en contacto con el autor del mÛdulo, o por correo a comp.lang.perl.modules, o pregunte a alguien familiarizado con Perl en su sistema operativo.
+Si tiene alguna sugerencia de cambios para esta p√°gina, h√°gamelo saber.  Por favor no me env√≠e correo con una petici√≥n de ayuda sobre c√≥mo instalar los m√≥dulos.
+Hay demasiados m√≥dulos y muy pocos Orwants, capaces de responder o incluso entender todas sus preguntas.  En su lugar p√≥ngase en contacto con el autor del m√≥dulo, o por correo a comp.lang.perl.modules, o pregunte a alguien familiarizado con Perl en su sistema operativo.
 
 =head1 AUTOR
 
@@ -313,10 +313,10 @@ orwant@medita.mit.edu
 
 con la inestimable ayuda de Chris Nandor, y la valiosa ayuda de Brandon Allbery, Charles Bailey, Graham Barr, Dunlop Domingo, Hietaniemi Jarkko, Holzman Ben, Tom Horsley, Nick Ing-Simmons, J. Tuomas Lukka, Laszlo Molnar, Olsen Alan, Peter Prymmer , Gurusamy Sarathy, Spalinger Christoph, Sugalski Dan, Larry Virden, y Zakharevich Ilya.
 
-Primera versiÛn 22 de julio de 1998; ˙ltima revisiÛn 21 de noviembre de 2001.
+Primera versi√≥n 22 de julio de 1998; √∫ltima revisi√≥n 21 de noviembre de 2001.
 
 =head1 COPYRIGHT
 
 Copyright (C) 1998, 2002, 2003 Jon Orwant.  Reservados todos los derechos.
 
-Este documento puede ser distribuido bajo los mismos tÈrminos que los del propio Perl.
+Este documento puede ser distribuido bajo los mismos t√©rminos que los del propio Perl.

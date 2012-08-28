@@ -2,32 +2,32 @@
 
 =head1 NOMBRE
 
-perl5100delta - quÈ hay de nuevo para Perl 5.10.0
+perl5100delta - qu√© hay de nuevo para Perl 5.10.0
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Este documento describe las diferencias entre la versiÛn 5.8.8 y la versiÛn 5.10.0.
+Este documento describe las diferencias entre la versi√≥n 5.8.8 y la versi√≥n 5.10.0.
 
-Muchas de las correcciones de errores en 5.10.0 ya se observaban en las versiones de mantenimiento de 5.8.x; no se duplicar·n aquÌ y est·n documentadas en el conjunto de p·ginas de manual llamadas perl58[1-8]?delta.
+Muchas de las correcciones de errores en 5.10.0 ya se observaban en las versiones de mantenimiento de 5.8.x; no se duplicar√°n aqu√≠ y est√°n documentadas en el conjunto de p√°ginas de manual llamadas perl58[1-8]?delta.
 
 =head1 Mejoras en los componentes
 
 =head2 El pragma C<feature>
 
-El pragma C<feature> se utiliza para activar una nueva sintaxis que rompe la compatibilidad Perl con versiones anteriores del lenguaje. Se trata de una pragma lÈxico, al igual que C<strict> o C<warnings>.
+El pragma C<feature> se utiliza para activar una nueva sintaxis que rompe la compatibilidad Perl con versiones anteriores del lenguaje. Se trata de una pragma l√©xico, al igual que C<strict> o C<warnings>.
 
-En la actualidad las nuevas funciones disponibles son las siguientes: C<switch> (aÒade una sentencia switch), C<say> (aÒade una funciÛn incorporada C<say>), y C<state> (aÒade una palabra clave C<state> para declarar variables "est·ticas"). Esas caracterÌsticas se describen en sus propias secciones de este documento.
+En la actualidad las nuevas funciones disponibles son las siguientes: C<switch> (a√±ade una sentencia switch), C<say> (a√±ade una funci√≥n incorporada C<say>), y C<state> (a√±ade una palabra clave C<state> para declarar variables "est√°ticas"). Esas caracter√≠sticas se describen en sus propias secciones de este documento.
 
-El pragma C<feature> es tambiÈn implÌcitamente cargado cuando se requiere un mÌnimo de la versiÛn de Perl (con la construcciÛn C<use VERSION>) mayor que, o igual a 5.9.5. Vea L<feature> para m·s detalles.
+El pragma C<feature> es tambi√©n impl√≠citamente cargado cuando se requiere un m√≠nimo de la versi√≥n de Perl (con la construcci√≥n C<use VERSION>) mayor que, o igual a 5.9.5. Vea L<feature> para m√°s detalles.
 
-=head2 Nueva opciÛn en lÌnea de comandos B<-E>
+=head2 Nueva opci√≥n en l√≠nea de comandos B<-E>
 
-B<-E> es equivalente a B<-e>, pero implÌcitamente activa todas las caracterÌsticas opcionales (igual que C<use feature ":5.10">).
+B<-E> es equivalente a B<-e>, pero impl√≠citamente activa todas las caracter√≠sticas opcionales (igual que C<use feature ":5.10">).
 
 =head2 Operador definido-or
 
 Se ha implementado un nuevo operador: C<//> (definido-o).
-La expresiÛn siguiente:
+La expresi√≥n siguiente:
 
     $a // $b
 
@@ -35,7 +35,7 @@ es equivalente a
 
    defined $a ? $a : $b
 
-y la declaraciÛn
+y la declaraci√≥n
 
    $c //= $d;
 
@@ -44,11 +44,11 @@ se puede utilizar ahora en lugar de
    $c = $d unless defined $c;
 
 El operador C<//> tiene la misma precedencia y asociatividad que C<||>.
-Se ha tomado especial cuidado para garantizar que este operador Hace Lo Que Queremos Decir sin romper cÛdigo antiguo, pero en algunos casos extremos en los que est· implicada una expresiÛn regular vacÌa, pueden analizarse ahora de manera distinta.  Vea L<perlop> para m·s detalles.
+Se ha tomado especial cuidado para garantizar que este operador Hace Lo Que Queremos Decir sin romper c√≥digo antiguo, pero en algunos casos extremos en los que est√° implicada una expresi√≥n regular vac√≠a, pueden analizarse ahora de manera distinta.  Vea L<perlop> para m√°s detalles.
 
 =head2 El operador Switch y el emparejamiento inteligente
 
-Perl 5 ahora tiene una instrucciÛn switch. Est· disponible cuando C<use feature 'switch'> est· en vigor. Esta caracterÌstica introduce tres nuevas palabras clave, C<given>, C<when>, y C<default>:
+Perl 5 ahora tiene una instrucci√≥n switch. Est√° disponible cuando C<use feature 'switch'> est√° en vigor. Esta caracter√≠stica introduce tres nuevas palabras clave, C<given>, C<when>, y C<default>:
 
     given ($foo) {
 	when (/^abc/) { $abc = 1; }
@@ -57,11 +57,11 @@ Perl 5 ahora tiene una instrucciÛn switch. Est· disponible cuando C<use feature 
 	default { $nada = 1; }
     }
 
-Una descripciÛn m·s completa de cÛmo Perl hace coincidir la variable del switch con las condiciones C<when> se da en L<perlsyn/"Instrucciones switch">.
+Una descripci√≥n m√°s completa de c√≥mo Perl hace coincidir la variable del switch con las condiciones C<when> se da en L<perlsyn/"Instrucciones switch">.
 
-Este tipo de coincidencia se llama coincidencia inteligente (I<smart match>), y tambiÈn es posible utilizarlo fuera de las sentencias switch, a travÈs del nuevo operador C<~~>. Vea L<perlsyn/"Coincidencia inteligente, en detalle">.
+Este tipo de coincidencia se llama coincidencia inteligente (I<smart match>), y tambi√©n es posible utilizarlo fuera de las sentencias switch, a trav√©s del nuevo operador C<~~>. Vea L<perlsyn/"Coincidencia inteligente, en detalle">.
 
-Esta caracterÌstica fue aportada por Robin Houston.
+Esta caracter√≠stica fue aportada por Robin Houston.
 
 =head2 Expresiones regulares
 
@@ -69,68 +69,68 @@ Esta caracterÌstica fue aportada por Robin Houston.
 
 =item Patrones recursivos
 
-Ahora es posible escribir patrones recursivos sin usar la construcciÛn C<(??{})>. Esta nueva manera es m·s eficiente, y en muchos casos, m·s f·cil de leer.
+Ahora es posible escribir patrones recursivos sin usar la construcci√≥n C<(??{})>. Esta nueva manera es m√°s eficiente, y en muchos casos, m√°s f√°cil de leer.
 
-Cada parÈntesis de captura puede ahora ser tratado como un patrÛn independiente que puede ser escrito con la sintaxis C<(?PARNO)> (C<PARNO> quiere decir "n˙mero de parÈntesis"). Por ejemplo, el siguiente patrÛn coincidir· con pares de ·ngulos anidados y balanceados:
+Cada par√©ntesis de captura puede ahora ser tratado como un patr√≥n independiente que puede ser escrito con la sintaxis C<(?PARNO)> (C<PARNO> quiere decir "n√∫mero de par√©ntesis"). Por ejemplo, el siguiente patr√≥n coincidir√° con pares de √°ngulos anidados y balanceados:
 
     /
-     ^                      # comienzo de lÌnea
-     (                      # comienzo b˙fer de captura 1
-	<                   #   coincide con un ·ngulo inicial
+     ^                      # comienzo de l√≠nea
+     (                      # comienzo b√∫fer de captura 1
+	<                   #   coincide con un √°ngulo inicial
 	(?:                 #   coincide con uno de:
-	    (?>             #     no hacer marcha atr·s en el interior de este grupo
-	        [^<>]+      #       uno o m·s caracteres que no son ·ngulos
-	    )               #     fin del grupo del no-vuelta atr·s
+	    (?>             #     no hacer marcha atr√°s en el interior de este grupo
+	        [^<>]+      #       uno o m√°s caracteres que no son √°ngulos
+	    )               #     fin del grupo del no-vuelta atr√°s
 	|                   #     ... o ...
-	    (?1)            #     recursivo al grupo 1, e intÈntalo de nuevo
-	)*                  #   0 o m·s veces.
-	>                   #   coincide con un ·ngulo final
-     )                      # fin del b˙fer de captura 1
-     $                      # fin de lÌnea
+	    (?1)            #     recursivo al grupo 1, e int√©ntalo de nuevo
+	)*                  #   0 o m√°s veces.
+	>                   #   coincide con un √°ngulo final
+     )                      # fin del b√∫fer de captura 1
+     $                      # fin de l√≠nea
     /x
 
-Los usuarios PCRE deben tener en cuenta que la funciÛn recursiva de las expresiones regulares en Perl permite dar marcha atr·s en un patrÛn rellamado, mientras que en PCRE la recursividad es, por naturaleza, atÛmica o "posesiva".  Al igual que en el ejemplo anterior, puede agregar (?>) para controlar esto de forma selectiva.  (Yves Orton)
+Los usuarios PCRE deben tener en cuenta que la funci√≥n recursiva de las expresiones regulares en Perl permite dar marcha atr√°s en un patr√≥n rellamado, mientras que en PCRE la recursividad es, por naturaleza, at√≥mica o "posesiva".  Al igual que en el ejemplo anterior, puede agregar (?>) para controlar esto de forma selectiva.  (Yves Orton)
 
-=item B˙feres de captura nombrados
+=item B√∫feres de captura nombrados
 
-Ahora es posible poner nombres a los parÈntesis de captura en un patrÛn, y referirse a los contenidos capturados por ese nombre. La sintaxis del nombrado es C<< (?<NOMBRE>...) >>.
-Es posible referirse a un b˙fer nombrado con la sintaxis C<< \k<NOMBRE> >>. En cÛdigo, los nuevos hash m·gicos C<%+> y C<%-> puede ser usados para acceder a los contenidos de los b˙fer de captura.
+Ahora es posible poner nombres a los par√©ntesis de captura en un patr√≥n, y referirse a los contenidos capturados por ese nombre. La sintaxis del nombrado es C<< (?<NOMBRE>...) >>.
+Es posible referirse a un b√∫fer nombrado con la sintaxis C<< \k<NOMBRE> >>. En c√≥digo, los nuevos hash m√°gicos C<%+> y C<%-> puede ser usados para acceder a los contenidos de los b√∫fer de captura.
 
-Por lo tanto, para reemplazar todos los caracteres duplicados con una sola copia, se podrÌa escribir
+Por lo tanto, para reemplazar todos los caracteres duplicados con una sola copia, se podr√≠a escribir
 
     s/(?<letra>.)\k<letra>/$+{letra}/g
 
-Solo los b˙fer con contenido definido ser· "visible" en el hash C<%+>, por lo que es posible hacer algo como
+Solo los b√∫fer con contenido definido ser√° "visible" en el hash C<%+>, por lo que es posible hacer algo como
 
     foreach my $nombre (keys %+) {
-        print "contenido del b˙fer '$nombre' es $+{$nombre}\n";
+        print "contenido del b√∫fer '$nombre' es $+{$nombre}\n";
     }
 
-El hash C<%-> es un poco m·s completo, ya que Èl contendr· referencias a array que almacenan valores para todos los b˙fer de captura con el mismo nombre, si existiera m·s de uno de ellos.
+El hash C<%-> es un poco m√°s completo, ya que √©l contendr√° referencias a array que almacenan valores para todos los b√∫fer de captura con el mismo nombre, si existiera m√°s de uno de ellos.
 
-C<%+> y C<%-> son implementados como hash enlazados a travÈs del nuevo mÛdulo C<Tie::Hash::NamedCapture>.
+C<%+> y C<%-> son implementados como hash enlazados a trav√©s del nuevo m√≥dulo C<Tie::Hash::NamedCapture>.
 
-Los usuarios expuestos al motor de expresiones regulares de .NET encontrar·n que la implementaciÛn de perl difiere en que la ordenaciÛn numÈrica de los b˙fer es secuencial, y no "sin nombre, primero, con nombre, despuÈs". AsÌ, en el patrÛn
+Los usuarios expuestos al motor de expresiones regulares de .NET encontrar√°n que la implementaci√≥n de perl difiere en que la ordenaci√≥n num√©rica de los b√∫fer es secuencial, y no "sin nombre, primero, con nombre, despu√©s". As√≠, en el patr√≥n
 
    /(A)(?<B>B)(C)(?<D>D)/
 
-$1 ser· 'A', $2 ser· 'B', $3 ser· 'C' y $4 ser· 'D' y ni $1 es 'A', ni $2 es 'C' ni $3 es 'B' ni $4 es 'D', como un programador de .NET esperarÌa. Esto est· considerado como una caracterÌstica adicional. (Yves Orton)
+$1 ser√° 'A', $2 ser√° 'B', $3 ser√° 'C' y $4 ser√° 'D' y ni $1 es 'A', ni $2 es 'C' ni $3 es 'B' ni $4 es 'D', como un programador de .NET esperar√≠a. Esto est√° considerado como una caracter√≠stica adicional. (Yves Orton)
 
 =item Cuantificadores posesivos
 
-Perl ahora soporta la sintaxis "cuantificador posesivo" del patrÛn "coincidencia atÛmica". B·sicamente, un cuantificador posesivo coincide tanto como puede y no devuelve nada. Por lo tanto, se puede utilizar para controlar la marcha atr·s. La sintaxis es similar a coincidencias no ambiciosas, pero en lugar de utilizar un '?' se usa el modificador '+'. Por lo tanto C<?+>, C<*+>, C<++>, C<{min, max}+> ahora son cuantificadores legales. (Yves Orton)
+Perl ahora soporta la sintaxis "cuantificador posesivo" del patr√≥n "coincidencia at√≥mica". B√°sicamente, un cuantificador posesivo coincide tanto como puede y no devuelve nada. Por lo tanto, se puede utilizar para controlar la marcha atr√°s. La sintaxis es similar a coincidencias no ambiciosas, pero en lugar de utilizar un '?' se usa el modificador '+'. Por lo tanto C<?+>, C<*+>, C<++>, C<{min, max}+> ahora son cuantificadores legales. (Yves Orton)
 
-=item Verbos de control de vuelta atr·s
+=item Verbos de control de vuelta atr√°s
 
-El motor de expresiones regulares ahora es compatible con una serie de verbos de control de la vuelta atr·s, de propÛsitos especiales: (*THEN), (*PRUNE), (*MARK), (*SKIP), (*COMMIT), (*FAIL) y (*ACCEPT). Vea L<perlre> para consultar sus descripciones. (Yves Orton)
+El motor de expresiones regulares ahora es compatible con una serie de verbos de control de la vuelta atr√°s, de prop√≥sitos especiales: (*THEN), (*PRUNE), (*MARK), (*SKIP), (*COMMIT), (*FAIL) y (*ACCEPT). Vea L<perlre> para consultar sus descripciones. (Yves Orton)
 
 =item Contra referencias relativas
 
-Una nueva sintaxis C<\g{N}> o C<\gN> donde "N" es un entero decimal permite una forma m·s segura de la notaciÛn de contra referencia, asÌ como permitir contra referencias relativas hacia atr·s. Esto deberÌa hacer m·s f·cil el generar e integrar los patrones que contienen contra referencias. Vea L<perlre/"B˙feres de captura">. (Yves Orton)
+Una nueva sintaxis C<\g{N}> o C<\gN> donde "N" es un entero decimal permite una forma m√°s segura de la notaci√≥n de contra referencia, as√≠ como permitir contra referencias relativas hacia atr√°s. Esto deber√≠a hacer m√°s f√°cil el generar e integrar los patrones que contienen contra referencias. Vea L<perlre/"B√∫feres de captura">. (Yves Orton)
 
 =item Escapado C<\K>
 
-La funcionalidad del mÛdulo de Jeff Pinyan Regexp::Keep ha sido aÒadido al n˙cleo. Ahora puede utilizar en las expresiones regulares el escapado especial C<\K> como una manera de hacer algo como mirar atr·s de una longitud variable positiva. TambiÈn es ˙til en las sustituciones, como:
+La funcionalidad del m√≥dulo de Jeff Pinyan Regexp::Keep ha sido a√±adido al n√∫cleo. Ahora puede utilizar en las expresiones regulares el escapado especial C<\K> como una manera de hacer algo como mirar atr√°s de una longitud variable positiva. Tambi√©n es √∫til en las sustituciones, como:
 
   s/(foo)bar/$1/g;
 
@@ -138,79 +138,79 @@ que puede ser convertido a
 
   s/foo\Kbar//g
 
-que es mucho m·s eficiente. (Yves Orton)
+que es mucho m√°s eficiente. (Yves Orton)
 
-=item Espacio en blanco vertical y horizontal, y salto de lÌnea
+=item Espacio en blanco vertical y horizontal, y salto de l√≠nea
 
-Las expresiones regulares reconocen ahora los escapes C<\v> y C<\h>, que coinciden con los espacios en blanco vertical y horizontal, respectivamente. C<\V> y C<\H>, lÛgicamente, coinciden con sus complementarios.
+Las expresiones regulares reconocen ahora los escapes C<\v> y C<\h>, que coinciden con los espacios en blanco vertical y horizontal, respectivamente. C<\V> y C<\H>, l√≥gicamente, coinciden con sus complementarios.
 
-C<\R> coincide con un salto de lÌnea genÈrica, es decir, espacio en blanco vertical, adem·s de la secuencia de caracteres C<"\x0D\x0A">.
+C<\R> coincide con un salto de l√≠nea gen√©rica, es decir, espacio en blanco vertical, adem√°s de la secuencia de caracteres C<"\x0D\x0A">.
 
 =back
 
 =head2 C<say()>
 
-say() es una nueva funciÛn integrada; sÛlo est· disponible cuando C<use feature 'say'> est· en vigor, que es similar a print(), pero que, implÌcitamente, aÒade un car·cter de nueva lÌnea a la cadena a ser impresa. Vea L<perlfunc/say>. (Robin Houston)
+say() es una nueva funci√≥n integrada; s√≥lo est√° disponible cuando C<use feature 'say'> est√° en vigor, que es similar a print(), pero que, impl√≠citamente, a√±ade un car√°cter de nueva l√≠nea a la cadena a ser impresa. Vea L<perlfunc/say>. (Robin Houston)
 
-=head2 C<$_> lÈxico
+=head2 C<$_> l√©xico
 
-La variable por defecto C<$_> ahora puede ser lexicalizada, declar·ndola como cualquier otra variable lÈxica, con un simple
+La variable por defecto C<$_> ahora puede ser lexicalizada, declar√°ndola como cualquier otra variable l√©xica, con un simple
 
     my $_;
 
-Las operaciones que tienen por defecto a C<$_> utilizar·n la versiÛn de ·mbito lÈxica de C<$_> cuando exista, en lugar de la global C<$_>.
+Las operaciones que tienen por defecto a C<$_> utilizar√°n la versi√≥n de √°mbito l√©xica de C<$_> cuando exista, en lugar de la global C<$_>.
 
-En un C<map> o un bloque C<grep>, si C<$_> fue previamente declarado con my(), entonces la C<$_> en el interior del bloque tambiÈn es lÈxica, asÌ (y solo definida para el ·mbito de ese bloque).
+En un C<map> o un bloque C<grep>, si C<$_> fue previamente declarado con my(), entonces la C<$_> en el interior del bloque tambi√©n es l√©xica, as√≠ (y solo definida para el √°mbito de ese bloque).
 
-En un ·mbito donde C<$_> ha sido lexicalizada, a˙n puede tener acceso a la versiÛn global de C<$_> con C<$::_>, o, m·s sencillamente, obviando la declaraciÛn lÈxica con C<our $_>. (Rafael Garcia-Suarez)
+En un √°mbito donde C<$_> ha sido lexicalizada, a√∫n puede tener acceso a la versi√≥n global de C<$_> con C<$::_>, o, m√°s sencillamente, obviando la declaraci√≥n l√©xica con C<our $_>. (Rafael Garcia-Suarez)
 
 =head2 El prototipo C<_>
 
-Se ha aÒadido un nuevo car·cter de prototipado. C<_> es equivalente a C<$> pero es por defecto C<$_> si no se indica el correspondiente argumento (tanto C<$> como C<_> denotan un escalar). Debido a la naturaleza opcional del argumento, sÛlo puede usarlo al final de un prototipo, o antes de un punto y coma.
+Se ha a√±adido un nuevo car√°cter de prototipado. C<_> es equivalente a C<$> pero es por defecto C<$_> si no se indica el correspondiente argumento (tanto C<$> como C<_> denotan un escalar). Debido a la naturaleza opcional del argumento, s√≥lo puede usarlo al final de un prototipo, o antes de un punto y coma.
 
-Esto tiene una pequeÒa consecuencia de incompatibilidad: la funciÛn prototype() ha sido ajustada para devolver C<_> en algunos funciones incorporadas en los casos apropiados (por ejemplo, C<prototype('CORE::rmdir')>). (Rafael Garcia-Suarez)
+Esto tiene una peque√±a consecuencia de incompatibilidad: la funci√≥n prototype() ha sido ajustada para devolver C<_> en algunos funciones incorporadas en los casos apropiados (por ejemplo, C<prototype('CORE::rmdir')>). (Rafael Garcia-Suarez)
 
 =head2 Bloques UNITCHECK
 
-C<UNITCHECK>, un nuevo bloque de cÛdigo especial ha sido incorporado, adem·s de C<BEGIN>, C<CHECK>, C<INIT> y C<END>.
+C<UNITCHECK>, un nuevo bloque de c√≥digo especial ha sido incorporado, adem√°s de C<BEGIN>, C<CHECK>, C<INIT> y C<END>.
 
-Los bloques C<CHECK> e C<INIT>, si bien son ˙tiles para algunos propÛsitos especÌficos, siempre son ejecutados en la transiciÛn entre la compilaciÛn y la ejecuciÛn del programa principal, y por lo tanto no sirven para nada cada vez que el cÛdigo se carga en tiempo de ejecuciÛn. Por otro lado, los bloques C<UNITCHECK> se ejecutan justo despuÈs de que la unidad que los ha definido ha sido compilada. Vea L<perlmod> para m·s informaciÛn. (Alex Gough)
+Los bloques C<CHECK> e C<INIT>, si bien son √∫tiles para algunos prop√≥sitos espec√≠ficos, siempre son ejecutados en la transici√≥n entre la compilaci√≥n y la ejecuci√≥n del programa principal, y por lo tanto no sirven para nada cada vez que el c√≥digo se carga en tiempo de ejecuci√≥n. Por otro lado, los bloques C<UNITCHECK> se ejecutan justo despu√©s de que la unidad que los ha definido ha sido compilada. Vea L<perlmod> para m√°s informaci√≥n. (Alex Gough)
 
 =head2 Nuevo pragma, C<mro>
 
-Un nuevo pragma, C <mro> (Orden de mÈtodo de resoluciÛn) ha sido aÒadido. Permite cambiar, en funciÛn de cada clase, el algoritmo que utiliza perl para encontrar los mÈtodos heredados en caso de una jerarquÌa de herencia m˙ltiple. El valor MRO por defecto no ha cambiado (DFS (I<Depth First Search>), B˙squeda Primero en Profundidad). Otro MRO est· disponible: el algoritmo C3. Vea L<mro> para m·s informaciÛn.
+Un nuevo pragma, C <mro> (Orden de m√©todo de resoluci√≥n) ha sido a√±adido. Permite cambiar, en funci√≥n de cada clase, el algoritmo que utiliza perl para encontrar los m√©todos heredados en caso de una jerarqu√≠a de herencia m√∫ltiple. El valor MRO por defecto no ha cambiado (DFS (I<Depth First Search>), B√∫squeda Primero en Profundidad). Otro MRO est√° disponible: el algoritmo C3. Vea L<mro> para m√°s informaci√≥n.
 (Brandon Black)
 
-Tenga en cuenta que, debido a los cambios en la implementaciÛn de la b˙squeda de la jerarquÌa de clases, el cÛdigo que se utiliza para indefinir el comodÌn C<*ISA>, es muy probable que quede roto. De todos modos, indefinir C<*ISA> tuvo el efecto colateral de la eliminaciÛn de la magia en el array @ISA y no se deberÌa haber hecho desde el principio. Adem·s, el cachÈ C<*::ISA::CACHE::> ya no existe; para forzar la reinicializaciÛn del cachÈ @ISA, ahora necesita usar la API C<mro>, o de forma m·s sencilla, asignar un nuevo valor a @ISA (p.e. C<@ISA = @ISA>).
+Tenga en cuenta que, debido a los cambios en la implementaci√≥n de la b√∫squeda de la jerarqu√≠a de clases, el c√≥digo que se utiliza para indefinir el comod√≠n C<*ISA>, es muy probable que quede roto. De todos modos, indefinir C<*ISA> tuvo el efecto colateral de la eliminaci√≥n de la magia en el array @ISA y no se deber√≠a haber hecho desde el principio. Adem√°s, el cach√© C<*::ISA::CACHE::> ya no existe; para forzar la reinicializaci√≥n del cach√© @ISA, ahora necesita usar la API C<mro>, o de forma m√°s sencilla, asignar un nuevo valor a @ISA (p.e. C<@ISA = @ISA>).
 
 =head2 readdir() puede devolver un "nombre de archivo corto" en Windows
 
-La funciÛn readdir() puede devolver un "nombre de archivo corto" cuando el nombre de archivo largo contiene caracteres fuera de la p·gina de cÛdigos ANSI.  Del mismo modo Cwd::cwd() puede devolver un nombre de directorio corto, y glob() tambiÈn puede devolver nombres cortos.  En el sistema de archivos NTFS estos nombres cortos siempre se pueden representar en la p·gina de cÛdigos ANSI.  Esto no ser· cierto para todos los controladores del sistema de archivos; por ejemplo, el sistema de archivos FAT almacena los nombres de archivo cortos en la p·gina de cÛdigos OEM, por lo que algunos archivos en vol˙menes FAT permanecer·n inaccesibles usando la API ANSI.
+La funci√≥n readdir() puede devolver un "nombre de archivo corto" cuando el nombre de archivo largo contiene caracteres fuera de la p√°gina de c√≥digos ANSI.  Del mismo modo Cwd::cwd() puede devolver un nombre de directorio corto, y glob() tambi√©n puede devolver nombres cortos.  En el sistema de archivos NTFS estos nombres cortos siempre se pueden representar en la p√°gina de c√≥digos ANSI.  Esto no ser√° cierto para todos los controladores del sistema de archivos; por ejemplo, el sistema de archivos FAT almacena los nombres de archivo cortos en la p√°gina de c√≥digos OEM, por lo que algunos archivos en vol√∫menes FAT permanecer√°n inaccesibles usando la API ANSI.
 
-Del mismo modo, $^X, @INC, y $ENV{PATH} son preprocesadas en el arranque para asegurarse de que todas las rutas son v·lidos con la p·gina de cÛdigos ANSI (si es posible).
+Del mismo modo, $^X, @INC, y $ENV{PATH} son preprocesadas en el arranque para asegurarse de que todas las rutas son v√°lidos con la p√°gina de c√≥digos ANSI (si es posible).
 
-La funciÛn Win32::GetLongPathName() ahora devuelve en codificaciÛn UTF-8 el nombre correcto del archivo largo en lugar de utilizar caracteres de reemplazo para forzar a que el nombre estÈ en la p·gina de cÛdigos ANSI.  La nueva funciÛn Win32::GetANSIPathName() puede ser utilizada para convertir una ruta larga en una corta sÛlo si no puede ser representada con la p·gina de cÛdigos ANSI.
+La funci√≥n Win32::GetLongPathName() ahora devuelve en codificaci√≥n UTF-8 el nombre correcto del archivo largo en lugar de utilizar caracteres de reemplazo para forzar a que el nombre est√© en la p√°gina de c√≥digos ANSI.  La nueva funci√≥n Win32::GetANSIPathName() puede ser utilizada para convertir una ruta larga en una corta s√≥lo si no puede ser representada con la p√°gina de c√≥digos ANSI.
 
-Muchas otras funciones en el mÛdulo C<Win32> han sido mejorados para aceptar argumentos codificados en UTF-8.  Por favor, vea L<Win32> para m·s detalles.
+Muchas otras funciones en el m√≥dulo C<Win32> han sido mejorados para aceptar argumentos codificados en UTF-8.  Por favor, vea L<Win32> para m√°s detalles.
 
 =head2 readpipe() ahora es reemplazable
 
-La funciÛn incorporada readpipe() ahora es reemplazable. Sobrescribirla permite tambiÈn sobrescribir su operador homÛlogo, C<qx//> (es decir, C<``>).
-Por otra parte, se refiere por defecto a C<$_> si no se proporciona ning˙n argumento. (Rafael Garcia-Suarez)
+La funci√≥n incorporada readpipe() ahora es reemplazable. Sobrescribirla permite tambi√©n sobrescribir su operador hom√≥logo, C<qx//> (es decir, C<``>).
+Por otra parte, se refiere por defecto a C<$_> si no se proporciona ning√∫n argumento. (Rafael Garcia-Suarez)
 
 =head2 Argumento por defecto para readline()
 
-readline() ahora se refiere, por defecto, a C<*ARGV> si no se proporciona ning˙n argumento. (Rafael Garcia-Suarez)
+readline() ahora se refiere, por defecto, a C<*ARGV> si no se proporciona ning√∫n argumento. (Rafael Garcia-Suarez)
 
 =head2 Variables state()
 
-Una nueva clase de variables ha sido introducida. Las variables C<state> son similares a las variables C<my>, pero son declaradas con la palabra clave C<state> en lugar de C<my>. Son visibles sÛlo en su ·mbito lÈxico, pero su valor es persistente: a diferencia de las variables C<my>, que no est·n definidos a la entrada de su ·mbito, sino que conservan su valor anterior. (Rafael Garcia-Suarez, Nicholas Clark)
+Una nueva clase de variables ha sido introducida. Las variables C<state> son similares a las variables C<my>, pero son declaradas con la palabra clave C<state> en lugar de C<my>. Son visibles s√≥lo en su √°mbito l√©xico, pero su valor es persistente: a diferencia de las variables C<my>, que no est√°n definidos a la entrada de su √°mbito, sino que conservan su valor anterior. (Rafael Garcia-Suarez, Nicholas Clark)
 
 Para utilizar las variables C<state>, es necesario que las active mediante el uso de
 
     use feature "state";
 
-o mediante el uso de la opciÛn de la lÌnea de comandos C<-E> en los programas Perl de una-lÌnea.
+o mediante el uso de la opci√≥n de la l√≠nea de comandos C<-E> en los programas Perl de una-l√≠nea.
 Vea L<perlsub/"Variables privadas persistentes">.
 
 =head2 Operadores de test de ficheros apilados
@@ -219,31 +219,31 @@ Como una nueva forma de sintaxis edulcorada, ahora es posible apilar operadores 
 
 =head2 UNIVERSAL::DOES()
 
-La clase C<UNIVERSAL> tiene un nuevo mÈtodo, C<DOES()>. Se ha aÒadido para resolver los problemas de sem·ntica con el mÈtodo C<isa()>. C<isa()> controla la herencia, mientras que C<DOES()> ha sido diseÒado para ser sobre escrito cuando los autores de mÛdulos utilicen otros tipos de relaciones entre las clases (adem·s de la herencia). (chromatic)
+La clase C<UNIVERSAL> tiene un nuevo m√©todo, C<DOES()>. Se ha a√±adido para resolver los problemas de sem√°ntica con el m√©todo C<isa()>. C<isa()> controla la herencia, mientras que C<DOES()> ha sido dise√±ado para ser sobre escrito cuando los autores de m√≥dulos utilicen otros tipos de relaciones entre las clases (adem√°s de la herencia). (chromatic)
 
 Vea L<< UNIVERSAL/"$obj->DOES( ROL )" >>.
 
 =head2 Formatos
 
-Los formatos se han mejorado en varios aspectos. Un nuevo campo, C<^*>, puede ser utilizado como ancho variable, en el texto una-lÌnea-cada-vez. Caracteres nulos son ahora manejados correctamente en lÌneas de la imagen. Usando C<@#> y C<~~> juntos ahora producir·n un error en tiempo de compilaciÛn, ya que esos campos de formato son incompatibles.
+Los formatos se han mejorado en varios aspectos. Un nuevo campo, C<^*>, puede ser utilizado como ancho variable, en el texto una-l√≠nea-cada-vez. Caracteres nulos son ahora manejados correctamente en l√≠neas de la imagen. Usando C<@#> y C<~~> juntos ahora producir√°n un error en tiempo de compilaci√≥n, ya que esos campos de formato son incompatibles.
 L<perlform> ha sido mejorado, y diversos errores, corregidos.
 
 =head2 Modificadores de orden de bytes, para pack() y unpack()
 
-Hay dos nuevos modificadores de orden de bytes, C<E<gt>> (I<big-endian>) y C<E<lt>> (I<little-endian>), que se pueden aÒadir a la mayorÌa de plantillas de caracteres y grupos de pack() y unpack() para forzar a un cierto orden de bytes para ese tipo o grupo.
-Vea L<perlfunc/pack> y L<perlpacktut> para m·s detalles.
+Hay dos nuevos modificadores de orden de bytes, C<E<gt>> (I<big-endian>) y C<E<lt>> (I<little-endian>), que se pueden a√±adir a la mayor√≠a de plantillas de caracteres y grupos de pack() y unpack() para forzar a un cierto orden de bytes para ese tipo o grupo.
+Vea L<perlfunc/pack> y L<perlpacktut> para m√°s detalles.
 
 =head2 C<no VERSION>
 
-Ahora puede utilizar C<no> seguido por un n˙mero de versiÛn para especificar que desea utilizar una versiÛn de Perl m·s vieja que la especificada.
+Ahora puede utilizar C<no> seguido por un n√∫mero de versi√≥n para especificar que desea utilizar una versi√≥n de Perl m√°s vieja que la especificada.
 
 =head2 C<chdir>, C<chmod> y C<chown> en identificadores de archivos
 
 C<chdir>, C<chmod> y C<chown> ahora pueden trabajar tanto con nombres de ficheros como con identificadores de archivos, si el sistema soporta, respectivamente, C<fchdir>, C<fchmod> y C<fchown>, gracias a un parche proporcionado por Gisle Aas.
 
-=head2 AgrupaciÛn de SO
+=head2 Agrupaci√≥n de SO
 
-C<$(> y C<$)> ahora devuelven grupos en el orden en que el SO los devuelve, gracias a Gisle Aas. Esto no es lo que ocurrÌa anteriormente.
+C<$(> y C<$)> ahora devuelven grupos en el orden en que el SO los devuelve, gracias a Gisle Aas. Esto no es lo que ocurr√≠a anteriormente.
 
 =head2 Subrutinas recursivas sort
 
@@ -251,12 +251,12 @@ Ahora puede utilizar subrutinas recursivas con sort(), gracias a Robin Houston.
 
 =head2 Excepciones en el plegado de constantes
 
-La rutina de plegado de constantes est· ahora envuelta por un manejador de excepciones, y si el plegado produce una excepciÛn (por ejemplo, al intentar evaluar 0/0), perl ahora conserva el ·rbol de operaciones actual, en lugar de abortar todo el programa.
-Sin este cambio, los programas no se compilar·n si tenÌan expresiones que generaban excepciones, incluso si esas expresiones estuvieran en un cÛdigo que nunca fuera alcanzado en tiempo de ejecuciÛn. (Nicholas Clark, Dave Mitchell)
+La rutina de plegado de constantes est√° ahora envuelta por un manejador de excepciones, y si el plegado produce una excepci√≥n (por ejemplo, al intentar evaluar 0/0), perl ahora conserva el √°rbol de operaciones actual, en lugar de abortar todo el programa.
+Sin este cambio, los programas no se compilar√°n si ten√≠an expresiones que generaban excepciones, incluso si esas expresiones estuvieran en un c√≥digo que nunca fuera alcanzado en tiempo de ejecuci√≥n. (Nicholas Clark, Dave Mitchell)
 
-=head2 Filtros de cÛdigo fuente en @INC
+=head2 Filtros de c√≥digo fuente en @INC
 
-Es posible mejorar el mecanismo de enganche de subrutinas en @INC aÒadiendo un filtro de cÛdigo fuente por encima del identificador de archivo abierto y devuelto por el enganche. Esta caracterÌstica fue planeada hace mucho tiempo, pero no estuvo funcionando hasta ahora. Vea L<perlfunc/require> para m·s detalles. (Nicholas Clark)
+Es posible mejorar el mecanismo de enganche de subrutinas en @INC a√±adiendo un filtro de c√≥digo fuente por encima del identificador de archivo abierto y devuelto por el enganche. Esta caracter√≠stica fue planeada hace mucho tiempo, pero no estuvo funcionando hasta ahora. Vea L<perlfunc/require> para m√°s detalles. (Nicholas Clark)
 
 =head2 Nuevas variables internas
 
@@ -264,15 +264,15 @@ Es posible mejorar el mecanismo de enganche de subrutinas en @INC aÒadiendo un f
 
 =item C<${^RE_DEBUG_FLAGS}>
 
-Esta variable controla que banderas de depuraciÛn est·n en vigor para el motor de expresiones regulares cuando se ejecuta en C<use re "debug">. Vea L<re> para m·s detalles.
+Esta variable controla que banderas de depuraci√≥n est√°n en vigor para el motor de expresiones regulares cuando se ejecuta en C<use re "debug">. Vea L<re> para m√°s detalles.
 
 =item C<${^CHILD_ERROR_NATIVE}>
 
-Esta variable proporciona el estado nativo devuelto por la ˙ltima tuberÌa, acento grave, llamada exitosa a wait() o waitpid(), o por el operador system(). Vea L<perlvar> para m·s detalles. (Escrito por Gisle Aas).
+Esta variable proporciona el estado nativo devuelto por la √∫ltima tuber√≠a, acento grave, llamada exitosa a wait() o waitpid(), o por el operador system(). Vea L<perlvar> para m√°s detalles. (Escrito por Gisle Aas).
 
 =item C<${^RE_TRIE_MAXBUF}>
 
-Vea L</"OptimizaciÛn Trie de alternativas de cadenas literales">.
+Vea L</"Optimizaci√≥n Trie de alternativas de cadenas literales">.
 
 =item C<${^WIN32_SLOPPY_STAT}>
 
@@ -286,9 +286,9 @@ C<unpack()> ahora, por defecto, desempaqueta la variable C<$_>.
 
 C<mkdir()> sin argumentos ahora se refiere a C<$_>.
 
-La salida del comando interno dump se ha mejorado, de modo que los caracteres no imprimibles, como el nueva lÌnea y la tecla de retroceso se emiten en notaciÛn C<\x>, en lugar de octal.
+La salida del comando interno dump se ha mejorado, de modo que los caracteres no imprimibles, como el nueva l√≠nea y la tecla de retroceso se emiten en notaci√≥n C<\x>, en lugar de octal.
 
-La opciÛn B<-C> no puede ser utilizada en la lÌnea C<#!>. De todos modos no estaba funcionando de ninguna manera, ya que los flujos est·ndares ya estarÌan configurados en ese punto de la ejecuciÛn del intÈrprete de Perl. Puede utilizar binmode() en su lugar para obtener el comportamiento deseado.
+La opci√≥n B<-C> no puede ser utilizada en la l√≠nea C<#!>. De todos modos no estaba funcionando de ninguna manera, ya que los flujos est√°ndares ya estar√≠an configurados en ese punto de la ejecuci√≥n del int√©rprete de Perl. Puede utilizar binmode() en su lugar para obtener el comportamiento deseado.
 
 =head2 UCD 5.0.0
 
@@ -296,58 +296,58 @@ La copia de la base de datos de caracteres Unicode incluidos en Perl 5 ha sido a
 
 =head2 MAD
 
-MAD, que significa DecoraciÛn Variada de Atributos (I<Miscellaneous Attribute Decoration>), es un trabajo todavÌa en desarrollo que conduce a un conversor de Perl 5 a Perl 6. Para activarlo, es necesario pasar el argumento C<-Dmad> a Configure. El perl obtenido no es compatible a nivel binario con una versiÛn normal de perl 5.10, y tiene problemas de espacio y velocidad; adem·s, todavÌa no pasa todas las pruebas de regresiÛn. (Larry Wall, Nicholas Clark)
+MAD, que significa Decoraci√≥n Variada de Atributos (I<Miscellaneous Attribute Decoration>), es un trabajo todav√≠a en desarrollo que conduce a un conversor de Perl 5 a Perl 6. Para activarlo, es necesario pasar el argumento C<-Dmad> a Configure. El perl obtenido no es compatible a nivel binario con una versi√≥n normal de perl 5.10, y tiene problemas de espacio y velocidad; adem√°s, todav√≠a no pasa todas las pruebas de regresi√≥n. (Larry Wall, Nicholas Clark)
 
 =head2 kill() en Windows
 
-En plataformas Windows, C<kill(-9, $pid)> ahora mata a un ·rbol de procesos.
-(En Unix, esto envÌa una seÒal a todos los procesos en el mismo grupo de proceso).
+En plataformas Windows, C<kill(-9, $pid)> ahora mata a un √°rbol de procesos.
+(En Unix, esto env√≠a una se√±al a todos los procesos en el mismo grupo de proceso).
 
 =head1 Cambios incompatibles
 
 =head2 Cadenas UTF-8 y empaquetamiento
 
-La sem·ntica de pack() y unpack() en relaciÛn con datos codificados en UTF-8, ha cambiado. El procesamiento es ahora, por defecto, de car·cter en car·cter, en lugar de byte por byte siguiendo la codificaciÛn subyacente. En particular, el cÛdigo que utiliza cosas como C<pack("a*", $cadena)> para mirar a travÈs de la codificaciÛn de la $cadena, ahora, simplemente, devuelve la $cadena original. Las cadenas empaquetadas pueden tambiÈn ser actualizadas durante el procesado, cuando almacene caracteres actualizados. Puede obtener el comportamiento anterior mediante el uso de C<use bytes>.
+La sem√°ntica de pack() y unpack() en relaci√≥n con datos codificados en UTF-8, ha cambiado. El procesamiento es ahora, por defecto, de car√°cter en car√°cter, en lugar de byte por byte siguiendo la codificaci√≥n subyacente. En particular, el c√≥digo que utiliza cosas como C<pack("a*", $cadena)> para mirar a trav√©s de la codificaci√≥n de la $cadena, ahora, simplemente, devuelve la $cadena original. Las cadenas empaquetadas pueden tambi√©n ser actualizadas durante el procesado, cuando almacene caracteres actualizados. Puede obtener el comportamiento anterior mediante el uso de C<use bytes>.
 
-Para ser consistente con pack(), C<C0> en las plantillas de unpack(), indica que los datos se procesan en modo de caracteres, es decir, car·cter por car·cter; por el contrario, C<U0> en unpack() indica modo UTF-8, donde la cadena empaquetada se procesa en su formato codificado en Unicode UTF-8, de byte en byte. Esto es invertido con respecto a Perl 5.8.X, pero ahora es consistente entre pack() y unpack().
+Para ser consistente con pack(), C<C0> en las plantillas de unpack(), indica que los datos se procesan en modo de caracteres, es decir, car√°cter por car√°cter; por el contrario, C<U0> en unpack() indica modo UTF-8, donde la cadena empaquetada se procesa en su formato codificado en Unicode UTF-8, de byte en byte. Esto es invertido con respecto a Perl 5.8.X, pero ahora es consistente entre pack() y unpack().
 
-Adem·s, C<C0> y C<U0> tambiÈn se pueden utilizar en plantillas pack() para especificar, respectivamente, modo car·cter y modo bytes.
+Adem√°s, C<C0> y C<U0> tambi√©n se pueden utilizar en plantillas pack() para especificar, respectivamente, modo car√°cter y modo bytes.
 
-Ahora, C<C0> y C<U0> en medio de un formato de empaquetado o desempaquetado, cambia al modo de codificaciÛn especificada, respetando la agrupaciÛn hecha por los parÈntesis. Anteriormente, los parÈntesis eran ignorados.
+Ahora, C<C0> y C<U0> en medio de un formato de empaquetado o desempaquetado, cambia al modo de codificaci√≥n especificada, respetando la agrupaci√≥n hecha por los par√©ntesis. Anteriormente, los par√©ntesis eran ignorados.
 
-Adem·s, hay un nuevo formato pack() de caracteres, C<W>, que est· destinado a sustituir al antiguo C<C>. C<C> se mantiene para los caracteres sin signo codificados en forma de bytes en la representaciÛn interna de las cadenas. C<W> representa valores de caracteres sin signo (lÛgicos), que puede ser mayores de 255. Es por eso m·s robusto, cuando manejamos datos potencialmente codificados en UTF-8 (ya que C<C> ajusta los valores que estÈn fueran del rango 0..255, y no respecta la codificaciÛn de la cadena).
+Adem√°s, hay un nuevo formato pack() de caracteres, C<W>, que est√° destinado a sustituir al antiguo C<C>. C<C> se mantiene para los caracteres sin signo codificados en forma de bytes en la representaci√≥n interna de las cadenas. C<W> representa valores de caracteres sin signo (l√≥gicos), que puede ser mayores de 255. Es por eso m√°s robusto, cuando manejamos datos potencialmente codificados en UTF-8 (ya que C<C> ajusta los valores que est√©n fueran del rango 0..255, y no respecta la codificaci√≥n de la cadena).
 
-En la pr·ctica, eso significa que los formatos de pack son ahora neutrales con respecto a la codificaciÛn, a excepciÛn de C<C>.
+En la pr√°ctica, eso significa que los formatos de pack son ahora neutrales con respecto a la codificaci√≥n, a excepci√≥n de C<C>.
 
-Por razones de coherencia, ahora C<A> en un formato unpack() quita todos los espacios en blanco Unicode del final de la cadena. Antes de perl 5.9.2, se utilizaba para quitar sÛlo los cl·sicos caracteres espacio del ASCII.
+Por razones de coherencia, ahora C<A> en un formato unpack() quita todos los espacios en blanco Unicode del final de la cadena. Antes de perl 5.9.2, se utilizaba para quitar s√≥lo los cl√°sicos caracteres espacio del ASCII.
 
-=head2 CaracterÌstica de conteo de bytes/caracteres en unpack()
+=head2 Caracter√≠stica de conteo de bytes/caracteres en unpack()
 
-Un nuevo car·cter de plantilla para unpack(), C<".">, devuelve el n˙mero de bytes o caracteres (dependiendo del modo de codificaciÛn seleccionado, vea m·s arriba) leÌdos hasta ahora.
+Un nuevo car√°cter de plantilla para unpack(), C<".">, devuelve el n√∫mero de bytes o caracteres (dependiendo del modo de codificaci√≥n seleccionado, vea m√°s arriba) le√≠dos hasta ahora.
 
 =head2 Las variables C<$*> y C<$#> han sido eliminadas
 
 C<$*>, que estaba en desuso en favor de los modificadores de exp. reg. C</s> y C</m>, ha sido eliminada.
 
-La variable obsoleta C<$#> (formato de salida para los n˙meros) se ha eliminado.
+La variable obsoleta C<$#> (formato de salida para los n√∫meros) se ha eliminado.
 
-Dos nuevas advertencias severas, C<$#/$* is no longer supported> han sido aÒadidas.
+Dos nuevas advertencias severas, C<$#/$* is no longer supported> han sido a√±adidas.
 
 =head2 Los I<ivalores> de substr() ya no son de longitud fija
 
-Los I<ivalores> devueltos por la forma de tres argumento de substr() solÌa ser de una "ventana de longitud fija" de la cadena original. En algunos casos esto podrÌa causar m·s adelante una acciÛn sorprendente u otro comportamiento indefinido. Ahora, la longitud de la ventana se ajusta a la longitud de la cadena asignada a Èl.
+Los I<ivalores> devueltos por la forma de tres argumento de substr() sol√≠a ser de una "ventana de longitud fija" de la cadena original. En algunos casos esto podr√≠a causar m√°s adelante una acci√≥n sorprendente u otro comportamiento indefinido. Ahora, la longitud de la ventana se ajusta a la longitud de la cadena asignada a √©l.
 
-=head2 An·lisis de C<-f _>
+=head2 An√°lisis de C<-f _>
 
-Se fuerza a que el identificador C<_> sea considerada una palabra suelta despuÈs de un operador de test de fichero. Esto soluciona una serie de cuestiones de mala interpretaciÛn cuando estÈ definida una subrutina global C<_>.
+Se fuerza a que el identificador C<_> sea considerada una palabra suelta despu√©s de un operador de test de fichero. Esto soluciona una serie de cuestiones de mala interpretaci√≥n cuando est√© definida una subrutina global C<_>.
 
 =head2 C<:unique>
 
-El atributo C<:unique> se ha convertido en una no-operaciÛn, debido a que su implementaciÛn era, fundamentalmente, defectuosa y no multi-hilo.
+El atributo C<:unique> se ha convertido en una no-operaci√≥n, debido a que su implementaci√≥n era, fundamentalmente, defectuosa y no multi-hilo.
 
 =head2 Efecto de los pragma en eval
 
-El valor en tiempo de compilaciÛn de la variable especial C<%^H> ahora se puede propagar en un cÛdigo eval("")uado. Esto hace que sea m·s ˙til para implementar pragmas lÈxicos.
+El valor en tiempo de compilaci√≥n de la variable especial C<%^H> ahora se puede propagar en un c√≥digo eval("")uado. Esto hace que sea m√°s √∫til para implementar pragmas l√©xicos.
 
 Como un efecto secundario de esto, la sobrecarga de las constantes ahora se propaga en eval("").
 
@@ -357,15 +357,15 @@ Una palabra sencilla como argumento a chdir() ahora es reconocida como un identi
 Versiones anteriores interpretaban la palabra sencilla como un nombre de directorio.
 (Gisle Aas)
 
-=head2 GestiÛn de archivos .pmc
+=head2 Gesti√≥n de archivos .pmc
 
-Una vieja caracterÌstica de perl antes de que C<require> o C<use> busquen por un archivo con una extensiÛn F<.pm>, antes buscar· por un nombre de archivo similar con una extensiÛn F<.pmc>. Si se encuentra este archivo, se cargar· en lugar de cualquier archivo existente que termine en la extensiÛn F<. pm>.
+Una vieja caracter√≠stica de perl antes de que C<require> o C<use> busquen por un archivo con una extensi√≥n F<.pm>, antes buscar√° por un nombre de archivo similar con una extensi√≥n F<.pmc>. Si se encuentra este archivo, se cargar√° en lugar de cualquier archivo existente que termine en la extensi√≥n F<. pm>.
 
-Anteriormente, los archivos F<.pmc> sÛlo se cargaban si eran m·s recientes que el archivo F<.pm>. A partir de 5.9.4, siempre ser·n cargados, si existen.
+Anteriormente, los archivos F<.pmc> s√≥lo se cargaban si eran m√°s recientes que el archivo F<.pm>. A partir de 5.9.4, siempre ser√°n cargados, si existen.
 
 =head2 $^V es ahora un objeto C<version> en lugar de un v-string
 
-$^V puede seguir siendo usado con el formato C<%vd> en printf, pero cualquier operaciÛn a nivel de car·cter acceder· a la cadena que representa el objeto C<version> y no a los ordinales del v-string.
+$^V puede seguir siendo usado con el formato C<%vd> en printf, pero cualquier operaci√≥n a nivel de car√°cter acceder√° a la cadena que representa el objeto C<version> y no a los ordinales del v-string.
 Expresiones como C<< substr($^V, 0, 2) >> o C<< split //, $^V >> ya no funcionan y deben ser reescritas.
 
 =head2 @- y @+ en patrones
@@ -374,16 +374,16 @@ Los arrays especiales C<@-> y C<@+> ya no son interpolados en las expresiones re
 
 =head2 $AUTOLOAD ahora puede ser contaminada
 
-Si llama a una subrutina con un nombre contaminado, y ella remite a una funciÛn AUTOLOAD, entonces $AUTOLOAD quedar· (correctamente) contaminado.
+Si llama a una subrutina con un nombre contaminado, y ella remite a una funci√≥n AUTOLOAD, entonces $AUTOLOAD quedar√° (correctamente) contaminado.
 (Rick Delaney)
 
-=head2 ContaminaciÛn y printf
+=head2 Contaminaci√≥n y printf
 
-Cuando perl se ejecuta bajo el modo contaminado, C<printf()> y C<sprintf()> rechazar·n cualquier argumento de formato que estÈ contaminado. (Rafael Garcia-Suarez)
+Cuando perl se ejecuta bajo el modo contaminado, C<printf()> y C<sprintf()> rechazar√°n cualquier argumento de formato que est√© contaminado. (Rafael Garcia-Suarez)
 
-=head2 manejadores de seÒales y su indefiniciÛn
+=head2 manejadores de se√±ales y su indefinici√≥n
 
-Indefiniendo o borrando un gestor de seÒales con C<undef $SIG{FOO}> es ahora equivalente a ponerlo a C<'DEFAULT'>. (Rafael Garcia-Suarez)
+Indefiniendo o borrando un gestor de se√±ales con C<undef $SIG{FOO}> es ahora equivalente a ponerlo a C<'DEFAULT'>. (Rafael Garcia-Suarez)
 
 =head2 estado estricto y desreferenciando en defined()
 
@@ -393,94 +393,94 @@ C<use strict 'refs'> hace caso omiso de una referencia dura en un argumento para
     my $x = 'foo';
     if (defined $$x) {...}
 
-Esto ahora produce correctamente el error en tiempo de ejecuciÛn C<Can't use string as a SCALAR ref while "strict refs" in use>.
+Esto ahora produce correctamente el error en tiempo de ejecuci√≥n C<Can't use string as a SCALAR ref while "strict refs" in use>.
 
-C<defined @$foo> y C<defined %$bar> ahora siguen las normas impuestas por C<strict 'refs'> (es decir, C<$foo> y C<$bar> deber·n ser referencias correctas).
+C<defined @$foo> y C<defined %$bar> ahora siguen las normas impuestas por C<strict 'refs'> (es decir, C<$foo> y C<$bar> deber√°n ser referencias correctas).
 (De todos modos, C<defined(@foo)> y C<defined(%bar)> son siempre, de todos modos, construcciones no aconsejables).
 (Nicholas Clark)
 
 =head2 C<(?p{})> ha sido eliminado
 
-La construcciÛn basada en la expresiÛn regular C<(?p{})>, que fue depreciada en perl 5.8, ha sido eliminada. Use en su lugar C<(??{})>. (Rafael Garcia-Suarez)
+La construcci√≥n basada en la expresi√≥n regular C<(?p{})>, que fue depreciada en perl 5.8, ha sido eliminada. Use en su lugar C<(??{})>. (Rafael Garcia-Suarez)
 
 =head2 Los Pseudo-hashes han sido eliminados
 
-Soporte para pseudo-hashes ha sido eliminado a partir de Perl 5.9. (El pragma C<fields> se mantiene, pero utiliza una implementaciÛn alternativa).
+Soporte para pseudo-hashes ha sido eliminado a partir de Perl 5.9. (El pragma C<fields> se mantiene, pero utiliza una implementaci√≥n alternativa).
 
-=head2 EliminaciÛn del compilador de bytecode  y de perlcc
+=head2 Eliminaci√≥n del compilador de bytecode  y de perlcc
 
-C<perlcc>, el cargador de bytecode y sus mÛdulos asociados (B::C, B::CC, B::Bytecode, etc.) ya no se distribuyen con el cÛdigo fuente de perl. Estas herramientas experimentales nunca han funcionado apropiadamente, y debido a la falta de voluntarios para mantenerlos en lÌnea con los desarrollos en el intÈrprete perl, se ha decidido eliminarlos en lugar de incluir una versiÛn rota de ellos.
-La ˙ltima versiÛn de estos mÛdulos se puede encontrar en perl 5.9.4.
+C<perlcc>, el cargador de bytecode y sus m√≥dulos asociados (B::C, B::CC, B::Bytecode, etc.) ya no se distribuyen con el c√≥digo fuente de perl. Estas herramientas experimentales nunca han funcionado apropiadamente, y debido a la falta de voluntarios para mantenerlos en l√≠nea con los desarrollos en el int√©rprete perl, se ha decidido eliminarlos en lugar de incluir una versi√≥n rota de ellos.
+La √∫ltima versi√≥n de estos m√≥dulos se puede encontrar en perl 5.9.4.
 
-Sin embargo, el entorno de trabajo del compilador B sigue estando soportado en el n˙cleo de perl, asÌ como con los mÛdulos m·s ˙tiles dependientes de Èl (entre otro, B::Deparse y B::Concise).
+Sin embargo, el entorno de trabajo del compilador B sigue estando soportado en el n√∫cleo de perl, as√≠ como con los m√≥dulos m√°s √∫tiles dependientes de √©l (entre otro, B::Deparse y B::Concise).
 
-=head2 EliminaciÛn de JPL
+=head2 Eliminaci√≥n de JPL
 
-El JPL (Java-Perl Lingo) ha sido eliminado del paquete de cÛdigo fuente de perl.
+El JPL (Java-Perl Lingo) ha sido eliminado del paquete de c√≥digo fuente de perl.
 
-=head2 DetecciÛn precoz de herencia recursiva
+=head2 Detecci√≥n precoz de herencia recursiva
 
-Ahora Perl levantar· una excepciÛn inmediatamente si modifica cualquiera de los C<@ISA> de los package si con ello se traduce en una herencia recursiva.
+Ahora Perl levantar√° una excepci√≥n inmediatamente si modifica cualquiera de los C<@ISA> de los package si con ello se traduce en una herencia recursiva.
 
-Anteriormente, la excepciÛn no ocurrÌa hasta que Perl intentaba hacer uso de la herencia recursiva mientras resolvÌa un mÈtodo o hacÌa un C<$foo-E<gt>isa($bar)>.
+Anteriormente, la excepci√≥n no ocurr√≠a hasta que Perl intentaba hacer uso de la herencia recursiva mientras resolv√≠a un m√©todo o hac√≠a un C<$foo-E<gt>isa($bar)>.
 
-=head2 warnings::enabled y warnings::warnif cambiados para ayudar a los usuarios de mÛdulos
+=head2 warnings::enabled y warnings::warnif cambiados para ayudar a los usuarios de m√≥dulos
 
-El comportamiento en 5.10.x favorece a la persona que utiliza el mÛdulo; el comportamiento en 5.8.x favorece al escritor del mÛdulo;
+El comportamiento en 5.10.x favorece a la persona que utiliza el m√≥dulo; el comportamiento en 5.8.x favorece al escritor del m√≥dulo;
 
-Supongamos el siguiente cÛdigo:
+Supongamos el siguiente c√≥digo:
 
   el principal llama a Foo::Bar::baz()
   Foo::Bar hereda de Foo::Base
   Foo::Bar::baz() llama a Foo::Base::_bazbaz()
-  Foo::Base::_bazbaz() llama: warnings::warnif('substr', 'alg˙n mensaje de advertencia');
+  Foo::Base::_bazbaz() llama: warnings::warnif('substr', 'alg√∫n mensaje de advertencia');
 
-En 5.8.x, el cÛdigo advierte cuando Foo::Bar contiene C<use warnings;> No le importa si Foo::Base o principal tiene las advertencias activadas para desactivar la advertencia de que tiene que modificar Foo::Bar.
+En 5.8.x, el c√≥digo advierte cuando Foo::Bar contiene C<use warnings;> No le importa si Foo::Base o principal tiene las advertencias activadas para desactivar la advertencia de que tiene que modificar Foo::Bar.
 
-En 5.10.0 y posteriores, el cÛdigo advierte cuando principal contiene C<use warnings;> No importa si Foo::Base o Foo::Bar tienen las advertencias activadas para desactivar la advertencia de que tiene que modificar principal.
+En 5.10.0 y posteriores, el c√≥digo advierte cuando principal contiene C<use warnings;> No importa si Foo::Base o Foo::Bar tienen las advertencias activadas para desactivar la advertencia de que tiene que modificar principal.
 
-=head1 MÛdulos y pragmas
+=head1 M√≥dulos y pragmas
 
-=head2 Actualizando mÛdulos principales de forma individual
+=head2 Actualizando m√≥dulos principales de forma individual
 
-A˙n m·s mÛdulos b·sicos est·n ahora tambiÈn disponibles por separado a travÈs del CPAN.  Si desea actualizar uno de estos mÛdulos, no es necesario esperar a una nueva versiÛn de Perl.  Desde dentro de la shell de cpan, ejecutando el comando 'r' presentar· un informe de los mÛdulos con actualizaciones disponibles.  Vea C<perldoc CPAN> para m·s informaciÛn.
+A√∫n m√°s m√≥dulos b√°sicos est√°n ahora tambi√©n disponibles por separado a trav√©s del CPAN.  Si desea actualizar uno de estos m√≥dulos, no es necesario esperar a una nueva versi√≥n de Perl.  Desde dentro de la shell de cpan, ejecutando el comando 'r' presentar√° un informe de los m√≥dulos con actualizaciones disponibles.  Vea C<perldoc CPAN> para m√°s informaci√≥n.
 
-=head2 Cambios en la pr·gmata
+=head2 Cambios en la pr√°gmata
 
 =over 4
 
 =item C<feature>
 
-El nuevo pragma C<feature> es utilizado para habilitar las nuevas caracterÌsticas que puedan romper cÛdigo antiguo. Vea L</"El pragma C<feature>"> m·s arriba.
+El nuevo pragma C<feature> es utilizado para habilitar las nuevas caracter√≠sticas que puedan romper c√≥digo antiguo. Vea L</"El pragma C<feature>"> m√°s arriba.
 
 =item C<mro>
 
-Este nuevo pragma permite cambiar el algoritmo utilizado para resolver los mÈtodos heredados. Vea L</"Nuevo pragma, C<mro>"> m·s arriba.
+Este nuevo pragma permite cambiar el algoritmo utilizado para resolver los m√©todos heredados. Vea L</"Nuevo pragma, C<mro>"> m√°s arriba.
 
-=item ¡mbito del pragma C<sort>
+=item √Åmbito del pragma C<sort>
 
-El pragma C<sort> tiene ahora un alcance lÈxico. Su efecto solÌa ser global.
+El pragma C<sort> tiene ahora un alcance l√©xico. Su efecto sol√≠a ser global.
 
-=item ¡mbito de C<bignum>, C<bigint>, C<bigrat>
+=item √Åmbito de C<bignum>, C<bigint>, C<bigrat>
 
-Los tres pragmas numÈricos C<bignum>, C<bigint> y C<bigrat> ahora tienen ·mbito lÈxico. (Tels)
+Los tres pragmas num√©ricos C<bignum>, C<bigint> y C<bigrat> ahora tienen √°mbito l√©xico. (Tels)
 
 =item C<base>
 
-El pragma C<base> ahora avisa si una clase intenta heredar de sÌ misma.
+El pragma C<base> ahora avisa si una clase intenta heredar de s√≠ misma.
 (Curtis "Ovid" Poe)
 
 =item C<strict> y C<warnings>
 
-C<strict> y C<warnings> ahora se quejan en voz alta si son cargados usando un tamaÒo de caja incorrecto (como en C<use Strict;>). (Johan Vromans)
+C<strict> y C<warnings> ahora se quejan en voz alta si son cargados usando un tama√±o de caja incorrecto (como en C<use Strict;>). (Johan Vromans)
 
 =item C<version>
 
-El mÛdulo C<version> proporciona soporte para los objetos de versiÛn.
+El m√≥dulo C<version> proporciona soporte para los objetos de versi√≥n.
 
 =item C<warnings>
 
-El pragma C<warnings> ya no carga C<Carp>. Esto significa que el cÛdigo que utilizaba las rutinas C<Carp> sin haberlo cargado en tiempo de compilaciÛn puede ser necesario ajustarle; por lo general, el siguiente (y defectuoso) cÛdigo no funcionar· m·s, y requerir· que se aÒadan parÈntesis despuÈs del nombre de la funciÛn:
+El pragma C<warnings> ya no carga C<Carp>. Esto significa que el c√≥digo que utilizaba las rutinas C<Carp> sin haberlo cargado en tiempo de compilaci√≥n puede ser necesario ajustarle; por lo general, el siguiente (y defectuoso) c√≥digo no funcionar√° m√°s, y requerir√° que se a√±adan par√©ntesis despu√©s del nombre de la funci√≥n:
 
     use warnings;
     require Carp;
@@ -488,29 +488,29 @@ El pragma C<warnings> ya no carga C<Carp>. Esto significa que el cÛdigo que util
 
 =item C<less>
 
-C<less> ahora hace algo ˙til (o al menos lo intenta). De hecho, se ha convertido en un pragma lÈxico. Por lo tanto, en sus mÛdulos, ahora puede probar si los usuarios han solicitado utilizar menos CPU, o menos memoria, menos magia, o incluso menos grasa. Vea L<less> por m·s. (Joshua ben Jore)
+C<less> ahora hace algo √∫til (o al menos lo intenta). De hecho, se ha convertido en un pragma l√©xico. Por lo tanto, en sus m√≥dulos, ahora puede probar si los usuarios han solicitado utilizar menos CPU, o menos memoria, menos magia, o incluso menos grasa. Vea L<less> por m√°s. (Joshua ben Jore)
 
 =back
 
-=head2 Nuevos mÛdulos
+=head2 Nuevos m√≥dulos
 
 =over 4
 
 =item *
 
-C<encoding::warnings>, de Audrey Tang, es un mÛdulo para emitir avisos cada vez que una cadena de caracteres ASCII que, conteniendo bytes con los bits altos puestos, se convierte implÌcitamente en UTF-8. Se trata de un pragma lÈxico desde Perl 5.9.4; en los perl m·s antiguos, su efecto es global.
+C<encoding::warnings>, de Audrey Tang, es un m√≥dulo para emitir avisos cada vez que una cadena de caracteres ASCII que, conteniendo bytes con los bits altos puestos, se convierte impl√≠citamente en UTF-8. Se trata de un pragma l√©xico desde Perl 5.9.4; en los perl m√°s antiguos, su efecto es global.
 
 =item *
 
-C<Module::CoreList>, de Richard Clamp, es un pr·ctico y pequeÒo mÛdulo que te dice quÈ versiones de mÛdulos b·sicos se incluyen con cualquier versiÛn de Perl 5. Viene con una interfaz de lÌnea de comandos, C<corelist>.
+C<Module::CoreList>, de Richard Clamp, es un pr√°ctico y peque√±o m√≥dulo que te dice qu√© versiones de m√≥dulos b√°sicos se incluyen con cualquier versi√≥n de Perl 5. Viene con una interfaz de l√≠nea de comandos, C<corelist>.
 
 =item *
 
-C<Math::BigInt::FastCalc> es una versiÛn XS, y por lo tanto m·s r·pida, de C<Math::BigInt::Calc>.
+C<Math::BigInt::FastCalc> es una versi√≥n XS, y por lo tanto m√°s r√°pida, de C<Math::BigInt::Calc>.
 
 =item *
 
-C<Compress::Zlib> es un interfaz a la biblioteca de compresiÛn zlib. Viene con una versiÛn integrada de zlib, asÌ que tener un zlib funcional no es un requisito previo para instalarlo. Es utilizado por C<Archive::Tar> (ver m·s abajo).
+C<Compress::Zlib> es un interfaz a la biblioteca de compresi√≥n zlib. Viene con una versi√≥n integrada de zlib, as√≠ que tener un zlib funcional no es un requisito previo para instalarlo. Es utilizado por C<Archive::Tar> (ver m√°s abajo).
 
 =item *
 
@@ -518,49 +518,49 @@ C<IO::Zlib> es un interfaz con estilo C<IO::> a C<Compress::Zlib>.
 
 =item *
 
-C<Archive::Tar> es un mÛdulo para manipular archivos C<tar>.
+C<Archive::Tar> es un m√≥dulo para manipular archivos C<tar>.
 
 =item *
 
-C<Digest::SHA> es un mÛdulo usado para calcular cu·ntos tipos de res˙menes SHA, han sido incluidos para el soporte SHA en el mÛdulo de CPAN.
+C<Digest::SHA> es un m√≥dulo usado para calcular cu√°ntos tipos de res√∫menes SHA, han sido incluidos para el soporte SHA en el m√≥dulo de CPAN.
 
 =item *
 
-Han sido aÒadidos C<ExtUtils::CBuilder> y C<ExtUtils::ParseXS>.
+Han sido a√±adidos C<ExtUtils::CBuilder> y C<ExtUtils::ParseXS>.
 
 =item *
 
-C<Hash::Util::FieldHash>, de Anno Siegel, ha sido aÒadido. Este mÛdulo proporciona soporte para I<field hashes>: hash que mantienen una asociaciÛn de referencia con un valor, en un forma de recolector de basura compatible con el sistema de hilos.
-Tales hash son ˙tiles para implementar los objetos I<inside-out>.
+C<Hash::Util::FieldHash>, de Anno Siegel, ha sido a√±adido. Este m√≥dulo proporciona soporte para I<field hashes>: hash que mantienen una asociaci√≥n de referencia con un valor, en un forma de recolector de basura compatible con el sistema de hilos.
+Tales hash son √∫tiles para implementar los objetos I<inside-out>.
 
 =item *
 
-C<Module::Build>, de Ken Williams, ha sido aÒadido. Es una alternativa a C<ExtUtils::MakeMaker> para construir e instalar mÛdulos de perl.
+C<Module::Build>, de Ken Williams, ha sido a√±adido. Es una alternativa a C<ExtUtils::MakeMaker> para construir e instalar m√≥dulos de perl.
 
 =item *
 
-C<Module::Load>, de Jos Boumans, ha sido aÒadido. Proporciona una interfaz ˙nica para cargar los mÛdulos Perl y archivos C<.pl>.
+C<Module::Load>, de Jos Boumans, ha sido a√±adido. Proporciona una interfaz √∫nica para cargar los m√≥dulos Perl y archivos C<.pl>.
 
 =item *
 
-C<Module::Loaded>, de Jos Boumans, ha sido aÒadido. Se utiliza para marcar los mÛdulos como cargados o descargados.
+C<Module::Loaded>, de Jos Boumans, ha sido a√±adido. Se utiliza para marcar los m√≥dulos como cargados o descargados.
 
 =item *
 
-C<Package::Constants>, de Jos Boumans, ha sido aÒadido. Es una ayuda simple para listar todas las constantes declaradas en un determinado paquete.
+C<Package::Constants>, de Jos Boumans, ha sido a√±adido. Es una ayuda simple para listar todas las constantes declaradas en un determinado paquete.
 
 =item *
 
-C<Win32API::File>, de Tye McQueen, ha sido aÒadido (para los entornos Windows).
-Este mÛdulo proporciona acceso de bajo nivel para la API de llamadas del sistema Win32 para los archivos/directorios.
+C<Win32API::File>, de Tye McQueen, ha sido a√±adido (para los entornos Windows).
+Este m√≥dulo proporciona acceso de bajo nivel para la API de llamadas del sistema Win32 para los archivos/directorios.
 
 =item *
 
-C<Locale::Maketext::Simple>, necesarios para CPANPLUS, es un simple contenedor alrededor de C<Locale::Maketext::Lexicon>. Note que C<Locale::Maketext::Lexicon> no est· incluido en el n˙cleo de perl; el comportamiento de C<Locale::Maketext::Simple> gentilmente se degrada cuando ese ˙ltimo mÛdulo no est· presente.
+C<Locale::Maketext::Simple>, necesarios para CPANPLUS, es un simple contenedor alrededor de C<Locale::Maketext::Lexicon>. Note que C<Locale::Maketext::Lexicon> no est√° incluido en el n√∫cleo de perl; el comportamiento de C<Locale::Maketext::Simple> gentilmente se degrada cuando ese √∫ltimo m√≥dulo no est√° presente.
 
 =item *
 
-C<Params::Check> implementa un mecanismo de an·lisis/comprobaciÛn de entrada genÈrica. Es utilizado por CPANPLUS.
+C<Params::Check> implementa un mecanismo de an√°lisis/comprobaci√≥n de entrada gen√©rica. Es utilizado por CPANPLUS.
 
 =item *
 
@@ -572,11 +572,11 @@ C<Object::Accessor> proporciona una interfaz para crear accesos por cada objeto.
 
 =item *
 
-C<Module::Pluggable> es un simple marco de trabajo para crear mÛdulos conectables que aceptan submÛdulos enchufables.
+C<Module::Pluggable> es un simple marco de trabajo para crear m√≥dulos conectables que aceptan subm√≥dulos enchufables.
 
 =item *
 
-C<Module::Load::Conditional> ofrece formas sencillas de consulta y, posiblemente, carga mÛdulos instalados.
+C<Module::Load::Conditional> ofrece formas sencillas de consulta y, posiblemente, carga m√≥dulos instalados.
 
 =item *
 
@@ -588,37 +588,37 @@ C<IPC::Cmd> ayuda a encontrar y ejecutar comandos externos, posiblemente de form
 
 =item *
 
-C<File::Fetch> proporciona un simple mecanismo genÈrico para la b˙squeda de archivos.
+C<File::Fetch> proporciona un simple mecanismo gen√©rico para la b√∫squeda de archivos.
 
 =item *
 
-C<Log::Message> y C<Log::Message::Simple> son utilizados por la caracterÌstica de registro de C<CPANPLUS>.
+C<Log::Message> y C<Log::Message::Simple> son utilizados por la caracter√≠stica de registro de C<CPANPLUS>.
 
 =item *
 
-C<Archive::Extract> es un mecanismo de extracciÛn de archivo genÈrico para F<.tar> (normal, I<gzipeado> o I<bzipeado>) o archivos F<.zip>.
+C<Archive::Extract> es un mecanismo de extracci√≥n de archivo gen√©rico para F<.tar> (normal, I<gzipeado> o I<bzipeado>) o archivos F<.zip>.
 
 =item *
 
-C<CPANPLUS> proporciona una API y una herramienta de lÌnea de comandos para acceder a los espejos de CPAN.
+C<CPANPLUS> proporciona una API y una herramienta de l√≠nea de comandos para acceder a los espejos de CPAN.
 
 =item *
 
-C<Pod::Escapes> ofrece servicios que son ˙tiles en la descodificaciÛn de secuencias Pod EE<lt>...E<gt>.
+C<Pod::Escapes> ofrece servicios que son √∫tiles en la descodificaci√≥n de secuencias Pod EE<lt>...E<gt>.
 
 =item *
 
-C<Pod::Simple> ahora es la trastienda de varios mÛdulos relacionados con Pod incluidos con Perl.
+C<Pod::Simple> ahora es la trastienda de varios m√≥dulos relacionados con Pod incluidos con Perl.
 
 =back
 
-=head2 Cambios selectivos en mÛdulos principales
+=head2 Cambios selectivos en m√≥dulos principales
 
 =over 4
 
 =item C<Attribute::Handlers>
 
-C<Attribute::Handlers> ahora puede informar del archivo y n˙mero de lÌnea del llamador.
+C<Attribute::Handlers> ahora puede informar del archivo y n√∫mero de l√≠nea del llamador.
 (David Feldman)
 
 Todos los atributos interpretados ahora son pasados como referencias de array. (Damian Conway)
@@ -629,11 +629,11 @@ C<B::Lint> ahora se basa en C<Module::Pluggable>, por lo que se puede ampliar co
 
 =item C<B>
 
-Ahora es posible acceder al pragma lÈxico I<hints> (C<%^H>) utilizando el mÈtodo B::COP::hints_hash(). Devuelve un objeto C<B::RHE>, que a su vez puede ser utilizado para obtener una referencia a un hash mediante el mÈtodo B::RHE::HASH(). (Joshua ben Jore)
+Ahora es posible acceder al pragma l√©xico I<hints> (C<%^H>) utilizando el m√©todo B::COP::hints_hash(). Devuelve un objeto C<B::RHE>, que a su vez puede ser utilizado para obtener una referencia a un hash mediante el m√©todo B::RHE::HASH(). (Joshua ben Jore)
 
 =item C<Thread>
 
-A medida que el viejo modelo de hilado del 5005 ha sido eliminado en favor del sistema de C<ithreads>, el mÛdulo C<Thread> es ahora un envoltorio de compatibilidad, para ser utilizado solamente en el viejo cÛdigo. Se ha eliminado de la lista predeterminada de extensiones din·micas.
+A medida que el viejo modelo de hilado del 5005 ha sido eliminado en favor del sistema de C<ithreads>, el m√≥dulo C<Thread> es ahora un envoltorio de compatibilidad, para ser utilizado solamente en el viejo c√≥digo. Se ha eliminado de la lista predeterminada de extensiones din√°micas.
 
 =back
 
@@ -643,83 +643,83 @@ A medida que el viejo modelo de hilado del 5005 ha sido eliminado en favor del s
 
 =item perl -d
 
-El depurador Perl ahora puede salvar todos los comandos del depurador, para ser listados m·s tarde: notablemente, puede emular el ir hacia atr·s, reiniciando y reejecutando todo hasta el ˙ltimo comando en el histÛrico de comandos almacenado.
+El depurador Perl ahora puede salvar todos los comandos del depurador, para ser listados m√°s tarde: notablemente, puede emular el ir hacia atr√°s, reiniciando y reejecutando todo hasta el √∫ltimo comando en el hist√≥rico de comandos almacenado.
 
-TambiÈn puede mostrar el ·rbol de herencia de los padres de una determinada clase, con el comando C<i>.
+Tambi√©n puede mostrar el √°rbol de herencia de los padres de una determinada clase, con el comando C<i>.
 
 =item ptar
 
-C<ptar> es una implementaciÛn en puro perl de C<tar>, que viene incluido con C<Archive::Tar>.
+C<ptar> es una implementaci√≥n en puro perl de C<tar>, que viene incluido con C<Archive::Tar>.
 
 =item ptardiff
 
-C<ptardiff> es una pequeÒa utilidad que genera las diferencias entre los contenidos de un archivo tar y un ·rbol de directorio. Como C<ptar>, viene con C<Archive::Tar>.
+C<ptardiff> es una peque√±a utilidad que genera las diferencias entre los contenidos de un archivo tar y un √°rbol de directorio. Como C<ptar>, viene con C<Archive::Tar>.
 
 =item shasum
 
-C<shasum> es una utilidad de lÌnea de comandos, usada para imprimir o comprobar las sumas de control SHA. Viene con el nuevo mÛdulo C<Digest::SHA>.
+C<shasum> es una utilidad de l√≠nea de comandos, usada para imprimir o comprobar las sumas de control SHA. Viene con el nuevo m√≥dulo C<Digest::SHA>.
 
 =item corelist
 
-La utilidad C<corelist> es ahora instalada con perl (vea L</"Nuevos mÛdulos"> m·s arriba).
+La utilidad C<corelist> es ahora instalada con perl (vea L</"Nuevos m√≥dulos"> m√°s arriba).
 
 =item h2ph y h2xs
 
-C<h2ph> y C<h2xs> se han hecho m·s robustos con respecto al cÛdigo C "moderno".
+C<h2ph> y C<h2xs> se han hecho m√°s robustos con respecto al c√≥digo C "moderno".
 
-C<h2xs> implementa una nueva opciÛn: C<--use-xsloader>, para forzar el uso de C<XSLoader> incluso en mÛdulos retro-compatibles.
+C<h2xs> implementa una nueva opci√≥n: C<--use-xsloader>, para forzar el uso de C<XSLoader> incluso en m√≥dulos retro-compatibles.
 
-El manejo de los nombres de los autores que tenÌan apÛstrofes se ha solucionado.
+El manejo de los nombres de los autores que ten√≠an ap√≥strofes se ha solucionado.
 
 Cualquier enum con valores negativos es ahora omitido.
 
 =item perlivp
 
-C<perlivp>, por defecto, ya no comprueba los archivos F<*.ph>.  Use la nueva opciÛn C<-a> para correr I<todas> las pruebas.
+C<perlivp>, por defecto, ya no comprueba los archivos F<*.ph>.  Use la nueva opci√≥n C<-a> para correr I<todas> las pruebas.
 
 =item find2perl
 
-C<find2perl> ahora asume C<-print> como una acciÛn por defecto. Anteriormente, era necesario que se especificara de forma explÌcita.
+C<find2perl> ahora asume C<-print> como una acci√≥n por defecto. Anteriormente, era necesario que se especificara de forma expl√≠cita.
 
-Varios errores han sifo fijados en C<find2perl>, con respecto a C<-exec> y C<-eval>. TambiÈn han sido aÒadidas las opciones C<-path>, C<-ipath> e C<-iname>.
+Varios errores han sifo fijados en C<find2perl>, con respecto a C<-exec> y C<-eval>. Tambi√©n han sido a√±adidas las opciones C<-path>, C<-ipath> e C<-iname>.
 
 =item config_data
 
-C<config_data> es una nueva utilidad que viene con C<Module::Build>. Proporciona una interfaz de lÌnea de comandos para la configuraciÛn de los mÛdulos Perl que utilizan el marco de trabajo Module::Build para la configurabilidad (es decir, mÛdulos C<*::ConfigData> que contienen informaciÛn de configuraciÛn local para sus mÛdulos padre).
+C<config_data> es una nueva utilidad que viene con C<Module::Build>. Proporciona una interfaz de l√≠nea de comandos para la configuraci√≥n de los m√≥dulos Perl que utilizan el marco de trabajo Module::Build para la configurabilidad (es decir, m√≥dulos C<*::ConfigData> que contienen informaci√≥n de configuraci√≥n local para sus m√≥dulos padre).
 
 =item cpanp
 
-C<cpanp>, el shell CPANPLUS, ha sido aÒadido. (C<cpanp-run-perl>, un ayudante para la operaciÛn con CPANPLUS, se ha aÒadido tambiÈn, pero no est· destinado para un uso directo).
+C<cpanp>, el shell CPANPLUS, ha sido a√±adido. (C<cpanp-run-perl>, un ayudante para la operaci√≥n con CPANPLUS, se ha a√±adido tambi√©n, pero no est√° destinado para un uso directo).
 
 =item cpan2dist
 
-C<cpan2dist> es una nueva utilidad que viene con CPANPLUS. Es una herramienta para crear distribuciones (o paquetes) de los mÛdulos de CPAN.
+C<cpan2dist> es una nueva utilidad que viene con CPANPLUS. Es una herramienta para crear distribuciones (o paquetes) de los m√≥dulos de CPAN.
 
 =item pod2html
 
-La salida de C<pod2html> se ha mejorado para ser m·s personalizable a travÈs de CSS. Algunos problemas de formato tambiÈn se han corregido. (Jari Aalto)
+La salida de C<pod2html> se ha mejorado para ser m√°s personalizable a trav√©s de CSS. Algunos problemas de formato tambi√©n se han corregido. (Jari Aalto)
 
 =back
 
-=head1 Nueva documentaciÛn
+=head1 Nueva documentaci√≥n
 
-La p·gina de manual L<perlpragma> documenta cÛmo escribir su propio pragma lÈxico en puro Perl (algo que era posible desde 5.9.4).
+La p√°gina de manual L<perlpragma> documenta c√≥mo escribir su propio pragma l√©xico en puro Perl (algo que era posible desde 5.9.4).
 
-La nueva p·gina de manual L<perlglossary> es un glosario de tÈrminos utilizados en la documentaciÛn de Perl, tÈcnicos y otros, amablemente proporcionado por O'Reilly Media, Inc.
+La nueva p√°gina de manual L<perlglossary> es un glosario de t√©rminos utilizados en la documentaci√≥n de Perl, t√©cnicos y otros, amablemente proporcionado por O'Reilly Media, Inc.
 
-La p·gina de manual L<perlreguts>, cortesia de Yves Orton, describe las partes internas del motor de expresiones regulares de Perl.
+La p√°gina de manual L<perlreguts>, cortesia de Yves Orton, describe las partes internas del motor de expresiones regulares de Perl.
 
-La p·gina de manual L<perlreapi> describe el interfaz al intÈrprete perl usada para escribir motores de expresiones regulares enchufables (por ∆var Arnfjˆr Bjarmason).
+La p√°gina de manual L<perlreapi> describe el interfaz al int√©rprete perl usada para escribir motores de expresiones regulares enchufables (por √Üvar Arnfj√∂r√∞ Bjarmason).
 
-La p·gina de manual L<perlunitut> es una guÌa para la programaciÛn con Unicode y las codificaciones de cadenas en Perl, por cortesÌa de Juerd Waalboer.
+La p√°gina de manual L<perlunitut> es una gu√≠a para la programaci√≥n con Unicode y las codificaciones de cadenas en Perl, por cortes√≠a de Juerd Waalboer.
 
-Una nueva p·gina de manual, L<perlunifaq> (Perl Unicode FAQ), ha sido aÒadida (Juerd Waalboer).
+Una nueva p√°gina de manual, L<perlunifaq> (Perl Unicode FAQ), ha sido a√±adida (Juerd Waalboer).
 
-La p·gina de manual L<perlcommunity> da una descripciÛn de la comunidad Perl en Internet y en la vida real. (Edgar "Trizor" Bering)
+La p√°gina de manual L<perlcommunity> da una descripci√≥n de la comunidad Perl en Internet y en la vida real. (Edgar "Trizor" Bering)
 
-La p·gina de manual L<CORE> documenta el espacio de nombres C<CORE::>. (Tels)
+La p√°gina de manual L<CORE> documenta el espacio de nombres C<CORE::>. (Tels)
 
-La longeva caracterÌstica de expresiones regulares C</(?{...})/> que actualiza C<$_> y pos() est· ahora documentada.
+La longeva caracter√≠stica de expresiones regulares C</(?{...})/> que actualiza C<$_> y pos() est√° ahora documentada.
 
 =head1 Mejoras en el rendimiento
 
@@ -727,47 +727,47 @@ La longeva caracterÌstica de expresiones regulares C</(?{...})/> que actualiza C
 
 Ordenar arrays en el mismo sitio C<@a = sort @a> ha sido optimizado para evitar crear una copia temporal del array.
 
-Del mismo modo, C<reverse sort ...> est· ahora optimizado para ordenar en sentido inverso, evitando la generaciÛn de una lista intermedia temporal.
+Del mismo modo, C<reverse sort ...> est√° ahora optimizado para ordenar en sentido inverso, evitando la generaci√≥n de una lista intermedia temporal.
 
-=head2 Acceso a un array lÈxico
+=head2 Acceso a un array l√©xico
 
-Acceso a elementos de los arrays lÈxicos a travÈs de una constante numÈrica entre 0 y 255 es ahora m·s r·pido. (Esto sÛlo asÌ para el caso de las arrays globales).
+Acceso a elementos de los arrays l√©xicos a trav√©s de una constante num√©rica entre 0 y 255 es ahora m√°s r√°pido. (Esto s√≥lo as√≠ para el caso de las arrays globales).
 
 =head2 SWASHGET XS-asistida
 
-Algunos cÛdigos escritos en puro perl que se estaban usando para recuperar las propiedades Unicode y las asignaciones de transcripciÛn ha sido reimplementados en XS.
+Algunos c√≥digos escritos en puro perl que se estaban usando para recuperar las propiedades Unicode y las asignaciones de transcripci√≥n ha sido reimplementados en XS.
 
 =head2 Subrutinas constantes
 
-Las funciones incorporadas del intÈrprete ahora soportan un formato de memoria mucho m·s eficiente de las constantes que se pueden insertar en la traza del cÛdigo (I<inline>). Almacenar una referencia a un valor constante en una tabla de sÌmbolos es equivalente a un completo typeglob referenciando a una subrutina constante, pero usando unos 400 bytes menos de memoria. Este cacheo de la subrutina constante se actualiza autom·ticamente a un typeglob real con subrutina, si es necesario.
-El enfoque adoptado es an·logo a la optimizaciÛn del espacio existente para las declaraciones b·sicas de subrutinas, que son almacenadas como escalares normales en lugar del typeglob completo.
+Las funciones incorporadas del int√©rprete ahora soportan un formato de memoria mucho m√°s eficiente de las constantes que se pueden insertar en la traza del c√≥digo (I<inline>). Almacenar una referencia a un valor constante en una tabla de s√≠mbolos es equivalente a un completo typeglob referenciando a una subrutina constante, pero usando unos 400 bytes menos de memoria. Este cacheo de la subrutina constante se actualiza autom√°ticamente a un typeglob real con subrutina, si es necesario.
+El enfoque adoptado es an√°logo a la optimizaci√≥n del espacio existente para las declaraciones b√°sicas de subrutinas, que son almacenadas como escalares normales en lugar del typeglob completo.
 
-Varios de los mÛdulos b·sicos se han convertido para usar esta caracterÌstica para sus constantes dependientes del sistema - como resultado de esto, C<use POSIX;> ahora ocupa 200K menos de memoria.
+Varios de los m√≥dulos b√°sicos se han convertido para usar esta caracter√≠stica para sus constantes dependientes del sistema - como resultado de esto, C<use POSIX;> ahora ocupa 200K menos de memoria.
 
 =head2 C<PERL_DONT_CREATE_GVSV>
 
-La nueva opciÛn de compilaciÛn C<PERL_DONT_CREATE_GVSV>, presentado como una opciÛn en perl 5.8.8, est· activada de forma predeterminada en Perl 5.9.3. Evita que perl cree un escalar vacÌo con cada nuevo typeglob. Vea L<perl589delta> para m·s detalles.
+La nueva opci√≥n de compilaci√≥n C<PERL_DONT_CREATE_GVSV>, presentado como una opci√≥n en perl 5.8.8, est√° activada de forma predeterminada en Perl 5.9.3. Evita que perl cree un escalar vac√≠o con cada nuevo typeglob. Vea L<perl589delta> para m√°s detalles.
 
-=head2 Referencias dÈbiles son ahora m·s livianas
+=head2 Referencias d√©biles son ahora m√°s livianas
 
-La creaciÛn de referencias dÈbiles es ahora I<O(1)> en lugar de I<O(n)>, cortesÌa de Nicholas Clark. El borrado de referencias dÈbiles sigue siendo I<O(n)>, pero si el borrado solo sucede en la salida del programa, puede ser omitido por completo.
+La creaci√≥n de referencias d√©biles es ahora I<O(1)> en lugar de I<O(n)>, cortes√≠a de Nicholas Clark. El borrado de referencias d√©biles sigue siendo I<O(n)>, pero si el borrado solo sucede en la salida del programa, puede ser omitido por completo.
 
 =head2 Mejoras en sort()
 
-Salvador FandiÒo proporcionÛ mejoras para reducir la memoria usada por C<sort> y para mejorar la velocidad en algunos casos.
+Salvador Fandi√±o proporcion√≥ mejoras para reducir la memoria usada por C<sort> y para mejorar la velocidad en algunos casos.
 
 =head2 Optimizaciones de la memoria
 
 Varias estructuras de datos internas (typeglobs, GV, GS, formatos) se han reestructurado para utilizar menos memoria. (Nicholas Clark)
 
-=head2 OptimizaciÛn del cachÈ UTF-8
+=head2 Optimizaci√≥n del cach√© UTF-8
 
-El cÛdigo de cacheo de UTF-8 es ahora m·s eficiente, y se utiliza con m·s frecuencia.
+El c√≥digo de cacheo de UTF-8 es ahora m√°s eficiente, y se utiliza con m√°s frecuencia.
 (Nicholas Clark)
 
 =head2 stat desvirtuado en Windows
 
-En Windows, la funciÛn stat() de perl, abre, normalmente, el archivo para determinar el n˙mero de enlaces y los atributos de actualizaciÛn que pueden haber sido cambiados a travÈs de los enlaces duros. Poniendo ${^WIN32_SLOPPY_STAT} a un valor verdadero, aumento la velocidad de stat() al no realizar esa operaciÛn. (Jan Dubois)
+En Windows, la funci√≥n stat() de perl, abre, normalmente, el archivo para determinar el n√∫mero de enlaces y los atributos de actualizaci√≥n que pueden haber sido cambiados a trav√©s de los enlaces duros. Poniendo ${^WIN32_SLOPPY_STAT} a un valor verdadero, aumento la velocidad de stat() al no realizar esa operaci√≥n. (Jan Dubois)
 
 =head2 Optimizaciones de las expresiones regulares
 
@@ -775,87 +775,87 @@ En Windows, la funciÛn stat() de perl, abre, normalmente, el archivo para determ
 
 =item Motor de de-recursividad
 
-El motor de expresiones regulares ya no es recursivo, lo que significa que los patrones que utilizan el desbordamiento de la pila, o morir·n con explicaciones ˙tiles, o se ejecutar·n por completo, lo que, dado que ya eran capaces de desbordar la pila, es probable que tome un tiempo muy largo para que eso suceda. Si experimenta el desbordamiento de pila de forma ocasional (o violaciÛn de segmento) y ahora descubre que, aparentemente, lo que se cuelga es el propio perl, uso una expresiÛn regular m·s sencilla. (Dave Mitchell)
+El motor de expresiones regulares ya no es recursivo, lo que significa que los patrones que utilizan el desbordamiento de la pila, o morir√°n con explicaciones √∫tiles, o se ejecutar√°n por completo, lo que, dado que ya eran capaces de desbordar la pila, es probable que tome un tiempo muy largo para que eso suceda. Si experimenta el desbordamiento de pila de forma ocasional (o violaci√≥n de segmento) y ahora descubre que, aparentemente, lo que se cuelga es el propio perl, uso una expresi√≥n regular m√°s sencilla. (Dave Mitchell)
 
-=item Clases de caracteres de un solo car·cter tratados como literales
+=item Clases de caracteres de un solo car√°cter tratados como literales
 
-Clases con un ˙nico car·cter son ahora tratados como si el car·cter fuera utilizado como un literal, lo que significa que el cÛdigo que usa las clases car·cter como un mecanismo de escape ser·n aceleradas. (Yves Orton)
+Clases con un √∫nico car√°cter son ahora tratados como si el car√°cter fuera utilizado como un literal, lo que significa que el c√≥digo que usa las clases car√°cter como un mecanismo de escape ser√°n aceleradas. (Yves Orton)
 
-=item OptimizaciÛn Trie de alternativas de cadenas literales
+=item Optimizaci√≥n Trie de alternativas de cadenas literales
 
-Las alternancias, siempre que sea posible, son optimizadas en estructuras de coincidencia m·s eficientes. Las alternancias de cadenas literales son remezcladas en un ·rbol prefijado (Trie) y se les hace coincidir de forma simult·nea.  Esto significa que en lugar de un tiempo O(N) para hacer coincidir N alternancias en un punto dado, el nuevo cÛdigo lo realiza en un tiempo O(1).
-Una nueva variable, ${^RE_TRIE_MAXBUF}, ha sido aÒadida, para ajustar esta optimizaciÛn. (Yves Orton)
+Las alternancias, siempre que sea posible, son optimizadas en estructuras de coincidencia m√°s eficientes. Las alternancias de cadenas literales son remezcladas en un √°rbol prefijado (Trie) y se les hace coincidir de forma simult√°nea.  Esto significa que en lugar de un tiempo O(N) para hacer coincidir N alternancias en un punto dado, el nuevo c√≥digo lo realiza en un tiempo O(1).
+Una nueva variable, ${^RE_TRIE_MAXBUF}, ha sido a√±adida, para ajustar esta optimizaci√≥n. (Yves Orton)
 
-B<Nota:> Existe una gran cantidad de cÛdigo que intenta solventar los histÛricos malos resultados de perl en la cuestiÛn de las alternancias. A menudo, los trucos utilizados para esto, desactivar·n las nuevas optimizaciones. Esperemos que los mÛdulos de servicios utilizados para este propÛsito ser·n aleccionados con estas nuevas optimizaciones.
+B<Nota:> Existe una gran cantidad de c√≥digo que intenta solventar los hist√≥ricos malos resultados de perl en la cuesti√≥n de las alternancias. A menudo, los trucos utilizados para esto, desactivar√°n las nuevas optimizaciones. Esperemos que los m√≥dulos de servicios utilizados para este prop√≥sito ser√°n aleccionados con estas nuevas optimizaciones.
 
-=item OptimizaciÛn del punto de arranque con Aho-Corasick
+=item Optimizaci√≥n del punto de arranque con Aho-Corasick
 
-Cuando un patrÛn comienza con una alternancia capaz de ser optimizada en un ·rbol prefijado, y no hay mejores optimizaciones disponibles, el motor de expresiones regulares usar· la coincidencia Aho-Corasick para determinar el punto de inicio. (Yves Orton)
+Cuando un patr√≥n comienza con una alternancia capaz de ser optimizada en un √°rbol prefijado, y no hay mejores optimizaciones disponibles, el motor de expresiones regulares usar√° la coincidencia Aho-Corasick para determinar el punto de inicio. (Yves Orton)
 
 =back
 
-=head1 Mejoras en la instalaciÛn y configuraciÛn
+=head1 Mejoras en la instalaci√≥n y configuraci√≥n
 
-=head2 Mejoras en la configuraciÛn
+=head2 Mejoras en la configuraci√≥n
 
 =over 4
 
 =item C<-Dusesitecustomize>
 
-La personalizaciÛn en tiempo de ejecuciÛn de @INC ahora puede ser activada pasando la opciÛn C<-Dusesitecustomize> a Configure. Cuando est· activada, har· que perl ejecute F<$sitelibexp/sitecustomize.pl> antes que cualquier otra cosa.  Este script puede, entonces, ajustarse para que aÒada entradas adicionales a @INC.
+La personalizaci√≥n en tiempo de ejecuci√≥n de @INC ahora puede ser activada pasando la opci√≥n C<-Dusesitecustomize> a Configure. Cuando est√° activada, har√° que perl ejecute F<$sitelibexp/sitecustomize.pl> antes que cualquier otra cosa.  Este script puede, entonces, ajustarse para que a√±ada entradas adicionales a @INC.
 
 =item Instalaciones reubicables
 
-Ahora existe soporte para Configure para la creaciÛn de un ·rbol perl reubicable. Si ejecuta Configure con C<-Duserelocatableinc>, entonces las rutas en @INC (y todo lo dem·s en %Config) pueden ser, opcionalmente, localizadas a travÈs de la ruta del ejecutable perl.
+Ahora existe soporte para Configure para la creaci√≥n de un √°rbol perl reubicable. Si ejecuta Configure con C<-Duserelocatableinc>, entonces las rutas en @INC (y todo lo dem√°s en %Config) pueden ser, opcionalmente, localizadas a trav√©s de la ruta del ejecutable perl.
 
-Esto significa que, si la cadena C<".../"> se encuentra al principio de cualquier ruta, es sustituido por el directorio de $^X. Por lo tanto, el traslado se puede configurar en base a cada directorio, aunque el valor predeterminado con C<-Duserelocatableinc> es que todo sea reubicable. La instalaciÛn inicial se realiza con el prefijado original indicado en la configuraciÛn.
+Esto significa que, si la cadena C<".../"> se encuentra al principio de cualquier ruta, es sustituido por el directorio de $^X. Por lo tanto, el traslado se puede configurar en base a cada directorio, aunque el valor predeterminado con C<-Duserelocatableinc> es que todo sea reubicable. La instalaci√≥n inicial se realiza con el prefijado original indicado en la configuraci√≥n.
 
 =item strlcat() y strlcpy()
 
-El proceso de configuraciÛn ahora detecta si strlcat() y strlcpy() est·n disponibles.  Cuando no est·n disponibles, se utiliza la propia versiÛn de Perl (a partir de la implementaciÛn de dominio p˙blico de Russ Allbery).  Se cuentan con ellos en varios lugares del intÈrprete Perl. (Steve Peters)
+El proceso de configuraci√≥n ahora detecta si strlcat() y strlcpy() est√°n disponibles.  Cuando no est√°n disponibles, se utiliza la propia versi√≥n de Perl (a partir de la implementaci√≥n de dominio p√∫blico de Russ Allbery).  Se cuentan con ellos en varios lugares del int√©rprete Perl. (Steve Peters)
 
 =item C<d_pseudofork> y C<d_printf_format_null>
 
-Una nueva variable de configuraciÛn, disponible en C<$Config{d_pseudofork}> en el mÛdulo L<Config>, ha sido aÒadida, para distinguir de un soporte real de fork(), de un pseudofork falso utilizado en las plataformas Windows.
+Una nueva variable de configuraci√≥n, disponible en C<$Config{d_pseudofork}> en el m√≥dulo L<Config>, ha sido a√±adida, para distinguir de un soporte real de fork(), de un pseudofork falso utilizado en las plataformas Windows.
 
-Una nueva variable de configuraciÛn, C<d_printf_format_null>, ha sido aÒadida, para ver si los formatos para printf pueden ser NULL.
+Una nueva variable de configuraci√≥n, C<d_printf_format_null>, ha sido a√±adida, para ver si los formatos para printf pueden ser NULL.
 
 =item Ayuda en Configure
 
-C<Configure -h> ha sido extendido con las opciones m·s usadas.
+C<Configure -h> ha sido extendido con las opciones m√°s usadas.
 
 =back
 
-=head2 Mejoras en la compilaciÛn
+=head2 Mejoras en la compilaci√≥n
 
 =over 4
 
-=item CompilaciÛn paralela
+=item Compilaci√≥n paralela
 
-Hacer make en paralelo deberÌa funcionar ahora correctamente, aunque todavÌa puede haber problemas si se indica a C<make test> que se ejecute en paralelo.
+Hacer make en paralelo deber√≠a funcionar ahora correctamente, aunque todav√≠a puede haber problemas si se indica a C<make test> que se ejecute en paralelo.
 
 =item Soporte para los compiladores de Borland
 
-Compilando con compiladores Borland en Win32 deberÌa funcionar con m·s facilidad. En particular, Hay Steve trabajÛ para quitar muchas advertencias emitidas por estos compiladores y al menos un error interno del compilador de C.
+Compilando con compiladores Borland en Win32 deber√≠a funcionar con m√°s facilidad. En particular, Hay Steve trabaj√≥ para quitar muchas advertencias emitidas por estos compiladores y al menos un error interno del compilador de C.
 
-=item CompilaciÛn est·tica en Windows
+=item Compilaci√≥n est√°tica en Windows
 
-Extensiones Perl en Windows pueden ahora ser compiladas de forma est·tica en la DLL de Perl.
+Extensiones Perl en Windows pueden ahora ser compiladas de forma est√°tica en la DLL de Perl.
 
-Adem·s, ahora es posible compilar un C<perl-static.exe> que no dependa de la DLL Perl en Win32. Vea los makefiles de Win32 para m·s detalles.
+Adem√°s, ahora es posible compilar un C<perl-static.exe> que no dependa de la DLL Perl en Win32. Vea los makefiles de Win32 para m√°s detalles.
 (Vadim Konovalov)
 
 =item archivos ppport.h
 
-Todas los archivos F<ppport.h> en los mÛdulos XS incluidos con perl ahora son autogenerados en tiempo de compilaciÛn. (Marcus Holland-Moritz)
+Todas los archivos F<ppport.h> en los m√≥dulos XS incluidos con perl ahora son autogenerados en tiempo de compilaci√≥n. (Marcus Holland-Moritz)
 
 =item Compatibilidad C++
 
-Se han hecho esfuerzos para hacer perl y los mÛdulos principales XS compilables con varios compiladores C++ (aunque la situaciÛn no es perfecta con algunos compiladores en algunas de las plataformas de prueba).
+Se han hecho esfuerzos para hacer perl y los m√≥dulos principales XS compilables con varios compiladores C++ (aunque la situaci√≥n no es perfecta con algunos compiladores en algunas de las plataformas de prueba).
 
 =item Soporte para el compilador de Microsoft de 64 bits
 
-Se ha mejorado el soporte para la compilaciÛn de perl con el compilador de 64 bits de Microsoft. (ActiveState)
+Se ha mejorado el soporte para la compilaci√≥n de perl con el compilador de 64 bits de Microsoft. (ActiveState)
 
 =item Visual C++
 
@@ -867,19 +867,19 @@ Todas las compilaciones en Win32 (MS-Windows, WinCE) se han fusionado y limpiado
 
 =back
 
-=head2 Mejoras en la instalaciÛn
+=head2 Mejoras en la instalaci√≥n
 
 =over 4
 
-=item Archivos auxiliares de los mÛdulos
+=item Archivos auxiliares de los m√≥dulos
 
-Los archivos README y registros de cambios de los mÛdulos de CPAN incluidos con perl ya no son  instalados.
+Los archivos README y registros de cambios de los m√≥dulos de CPAN incluidos con perl ya no son  instalados.
 
 =back
 
 =head2 Nuevas o mejoras plataformas
 
-Se ha informado que Perl funciona en Symbian OS. Vea L<perlsymbian> para m·s informaciÛn.
+Se ha informado que Perl funciona en Symbian OS. Vea L<perlsymbian> para m√°s informaci√≥n.
 
 Muchas mejoras se han realizado para hacer que el Perl funcione correctamente en z/OS.
 
@@ -887,9 +887,9 @@ Se ha informado que Perl funciona en DragonFlyBSD y MidnightBSD.
 
 Se ha informado que Perl funciona en NexentaOS ( http://www.gnusolaris.org/ ).
 
-La adaptaciÛn a VMS ha sido mejorada. Vea L<perlvms>.
+La adaptaci√≥n a VMS ha sido mejorada. Vea L<perlvms>.
 
-Se ha aÒadido soporte para Cray XT4 Catamount/Qk. Vea F<hints/catamount.sh> en el cÛdigo fuente de la distribuciÛn para m·s informaciÛn.
+Se ha a√±adido soporte para Cray XT4 Catamount/Qk. Vea F<hints/catamount.sh> en el c√≥digo fuente de la distribuci√≥n para m√°s informaci√≥n.
 
 Los parches de fabricante han sido fusionados para RedHat y Gentoo.
 
@@ -907,35 +907,35 @@ C<strict> no estaba en vigor en bloques evaluados en las regexp (C</(?{...})/>).
 
 CORE::require() y CORE::do() eran siempre interpretadas como require() y do() cuando eran sobreescritas. Esto ha sido arreglado.
 
-=item SubÌndices de las porciones
+=item Sub√≠ndices de las porciones
 
-Ahora puede utilizar una forma de no-flecha para los subÌndices encadenados despuÈs de una porciÛn de una lista, como en:
+Ahora puede utilizar una forma de no-flecha para los sub√≠ndices encadenados despu√©s de una porci√≥n de una lista, como en:
 
     ({foo => "bar"})[0]{foo}
 
-Esto solÌa ser un error de sintaxis; se requerÌa un C<< -> >>.
+Esto sol√≠a ser un error de sintaxis; se requer√≠a un C<< -> >>.
 
 =item C<no warnings 'category'> funciona correctamente con -w
 
-Anteriormente, cuando se ejecutaba con las advertencias habilitadas a nivel global a travÈs de C<-w>, una desactivaciÛn selectiva de categorÌas de advertencias especÌficas podrÌa, realmente, desactivar todas las advertencias.
-Esto ha sido corregido; ahora C<no warnings 'io';> sÛlo desactivar· las advertencias en la clase C<io>. Anteriormente, desactivarÌa errÛneamente todas las advertencias.
+Anteriormente, cuando se ejecutaba con las advertencias habilitadas a nivel global a trav√©s de C<-w>, una desactivaci√≥n selectiva de categor√≠as de advertencias espec√≠ficas podr√≠a, realmente, desactivar todas las advertencias.
+Esto ha sido corregido; ahora C<no warnings 'io';> s√≥lo desactivar√° las advertencias en la clase C<io>. Anteriormente, desactivar√≠a err√≥neamente todas las advertencias.
 
 =item Mejoras en hebras
 
-Varias fugas de memoria en ithreads fueron cerradas. Adem·s, ithreads se ha hecho menos intenso con el consumo de memoria.
+Varias fugas de memoria en ithreads fueron cerradas. Adem√°s, ithreads se ha hecho menos intenso con el consumo de memoria.
 
-C<threads> es ahora un mÛdulo con doble vida, tambiÈn disponible en CPAN. Ha sido expandido de muchas maneras. Un mÈtodo kill() est· disponible para la seÒalizaciÛn en hilos.
-Se puede obtener el estado de un hilo, o la lista de hilos en ejecuciÛn o acoplables.
+C<threads> es ahora un m√≥dulo con doble vida, tambi√©n disponible en CPAN. Ha sido expandido de muchas maneras. Un m√©todo kill() est√° disponible para la se√±alizaci√≥n en hilos.
+Se puede obtener el estado de un hilo, o la lista de hilos en ejecuci√≥n o acoplables.
 
-Un nuevo mÈtodo C<< threads->exit() >> es utilizado para salir de la aplicaciÛn (esto es lo que est· puesto por defecto para el hilo principal) o sÛlo para el hilo actual (esto es lo que est· puesto por defecto para todos los otros hilos). Por otro lado, la funciÛn exit() incorporada ahora hace que toda la aplicaciÛn termine, totalmente. (Jerry D. Hedden)
+Un nuevo m√©todo C<< threads->exit() >> es utilizado para salir de la aplicaci√≥n (esto es lo que est√° puesto por defecto para el hilo principal) o s√≥lo para el hilo actual (esto es lo que est√° puesto por defecto para todos los otros hilos). Por otro lado, la funci√≥n exit() incorporada ahora hace que toda la aplicaci√≥n termine, totalmente. (Jerry D. Hedden)
 
 =item chr() y valores negativos
 
-chr() de un valor negativo ahora da C<\x{FFFD}>, el car·cter Unicode de reemplazo, salvo si est· activo el pragma C<bytes>, en cuyo caso se utilizan los ocho bits m·s bajos, del valor indicado.
+chr() de un valor negativo ahora da C<\x{FFFD}>, el car√°cter Unicode de reemplazo, salvo si est√° activo el pragma C<bytes>, en cuyo caso se utilizan los ocho bits m√°s bajos, del valor indicado.
 
-=item PERL5SHELL y la contaminaciÛn
+=item PERL5SHELL y la contaminaci√≥n
 
-En Windows, ahora se comprueba la contaminaciÛn de la variable de entorno PERL5SHELL. (Rafael Garcia-Suarez)
+En Windows, ahora se comprueba la contaminaci√≥n de la variable de entorno PERL5SHELL. (Rafael Garcia-Suarez)
 
 =item Usando *FILE{IO}
 
@@ -944,11 +944,11 @@ Los test de ficheros C<stat()> y C<-X> ahora trata a los identificadores de arch
 =item Sobrecargando y re-bendiciendo
 
 La sobrecarga ahora funciona cuando las referencias son re-bendecidas en otra clase.
-Internamente, esto se ha llevado a cabo moviendo la bandera de la "sobrecarga" de la referencia al referente, que, lÛgicamente, es donde siempre deberÌa haber estado. (Nicholas Clark)
+Internamente, esto se ha llevado a cabo moviendo la bandera de la "sobrecarga" de la referencia al referente, que, l√≥gicamente, es donde siempre deber√≠a haber estado. (Nicholas Clark)
 
 =item Sobrecargando y UTF-8
 
-Algunos errores relacionados con UTF-8 manipulando objetos que tienen sobrecargada la conversiÛn en cadenas de caracteres, han sido corregidos. (Nicholas Clark)
+Algunos errores relacionados con UTF-8 manipulando objetos que tienen sobrecargada la conversi√≥n en cadenas de caracteres, han sido corregidos. (Nicholas Clark)
 
 =item Arreglada las fugas de memoria con eval
 
@@ -956,56 +956,56 @@ Tradicionalmente, C<eval 'syntax error'> ha funcionado mal. Muchas (pero no toda
 
 =item Dispositivo Random en Windows
 
-En versiones anteriores, perl leerÌa el archivo F</dev/urandom>, en caso de existir, cuando est· sembrando su generador de n˙meros aleatorios.  Ese archivo es improbable que exista en Windows, y si existiese, probablemente no contendr· los datos adecuados, por lo que perl ya no tratar· de leerlo en Windows. (Alex Davies)
+En versiones anteriores, perl leer√≠a el archivo F</dev/urandom>, en caso de existir, cuando est√° sembrando su generador de n√∫meros aleatorios.  Ese archivo es improbable que exista en Windows, y si existiese, probablemente no contendr√° los datos adecuados, por lo que perl ya no tratar√° de leerlo en Windows. (Alex Davies)
 
 =item PERLIO_DEBUG
 
-La variable de entorno C<PERLIO_DEBUG> ya no tiene ning˙n efecto para los scripts setuid, ni para los scripts ejecutados con B<-T>.
+La variable de entorno C<PERLIO_DEBUG> ya no tiene ning√∫n efecto para los scripts setuid, ni para los scripts ejecutados con B<-T>.
 
-Adem·s, con un perl con soporte de hilos de ejecuciÛn, usar C<PERLIO_DEBUG> podrÌa provocar un desbordamiento de un b˙fer interno. Esto ha sido corregido.
+Adem√°s, con un perl con soporte de hilos de ejecuci√≥n, usar C<PERLIO_DEBUG> podr√≠a provocar un desbordamiento de un b√∫fer interno. Esto ha sido corregido.
 
 =item PerlIO::scalar y escalares de solo lectura
 
-PerlIO::scalar ahora evitar· la escritura a escalares de sÛlo lectura. Por otra parte, seek() es ahora compatible con gestores de archivo basados en PerlIO::scalar, poniÈndose la cadena subyacente rellenada con ceros, seg˙n sea necesario. (Rafael, Jarkko Hietaniemi)
+PerlIO::scalar ahora evitar√° la escritura a escalares de s√≥lo lectura. Por otra parte, seek() es ahora compatible con gestores de archivo basados en PerlIO::scalar, poni√©ndose la cadena subyacente rellenada con ceros, seg√∫n sea necesario. (Rafael, Jarkko Hietaniemi)
 
 =item study() y UTF-8
 
-study() nunca funcionÛ para las cadenas UTF-8, pero podrÌa conducir a resultados falsos.
-Ahora es una no-operaciÛn en datos UTF-8. (Yves Orton)
+study() nunca funcion√≥ para las cadenas UTF-8, pero podr√≠a conducir a resultados falsos.
+Ahora es una no-operaci√≥n en datos UTF-8. (Yves Orton)
 
-=item SeÒales crÌticas
+=item Se√±ales cr√≠ticas
 
-Las seÒales SIGILL, SIGBUS y SIGSEGV ahora siempre se entregan en una forma "insegura" (a diferencia de otras seÒales, que son diferidos hasta que el intÈrprete perl llega a un estado razonablemente estable; vea L<perlipc/"SeÒales Diferidas (SeÒales Seguras)">). (Rafael)
+Las se√±ales SIGILL, SIGBUS y SIGSEGV ahora siempre se entregan en una forma "insegura" (a diferencia de otras se√±ales, que son diferidos hasta que el int√©rprete perl llega a un estado razonablemente estable; vea L<perlipc/"Se√±ales Diferidas (Se√±ales Seguras)">). (Rafael)
 
 =item Arreglado el enganche con @INC
 
-Cuando un mÛdulo o un archivo se carga a travÈs de un gancho en @INC, y cuando este gancho ha fijado una entrada de nombre de archivo en %INC, __FILE__ est· ahora preparado para este mÛdulo de acuerdo con el contenido de esa entrada %INC. (Rafael)
+Cuando un m√≥dulo o un archivo se carga a trav√©s de un gancho en @INC, y cuando este gancho ha fijado una entrada de nombre de archivo en %INC, __FILE__ est√° ahora preparado para este m√≥dulo de acuerdo con el contenido de esa entrada %INC. (Rafael)
 
-=item Arreglada opciÛn C<-t>
+=item Arreglada opci√≥n C<-t>
 
-Las opciones C<-w> y C<-t> ahora pueden ser utilizadas juntas sin alterar quÈ categorÌas de alertas est·n activadas o no. (Rafael)
+Las opciones C<-w> y C<-t> ahora pueden ser utilizadas juntas sin alterar qu√© categor√≠as de alertas est√°n activadas o no. (Rafael)
 
 =item Duplicando gestores de archivo UTF-8
 
-Duplicando un gestor de archivo que tiene la capa PerlIO C<:utf8> activada, ahora activar· correctamente esa capa en el gestor de archivo duplicado. (Rafael)
+Duplicando un gestor de archivo que tiene la capa PerlIO C<:utf8> activada, ahora activar√° correctamente esa capa en el gestor de archivo duplicado. (Rafael)
 
-=item LocalizaciÛn de elementos hash
+=item Localizaci√≥n de elementos hash
 
-La localizaciÛn de un elemento hash cuya clave se dio como una variable no funciona correctamente si la variable se ha cambiado mientras que local() estaba en activo (como en C<local $h{$x}; ++$x>). (Bo Lindbergh)
+La localizaci√≥n de un elemento hash cuya clave se dio como una variable no funciona correctamente si la variable se ha cambiado mientras que local() estaba en activo (como en C<local $h{$x}; ++$x>). (Bo Lindbergh)
 
 =back
 
-=head1 DiagnÛsticos nuevos y cambiados
+=head1 Diagn√≥sticos nuevos y cambiados
 
 =over 4
 
 =item Uso de un valor no inicializado
 
-Perl, ahora, intentar· decirle el nombre de la variable (si existe) que estaba indefinida.
+Perl, ahora, intentar√° decirle el nombre de la variable (si existe) que estaba indefinida.
 
-=item Uso obsoleto de my() en condiciÛn falsa
+=item Uso obsoleto de my() en condici√≥n falsa
 
-Una nueva advertencia de obsolescencia, I<Deprecated use of my() in false conditional> (Uso obsoleto de my() en condiciÛn falsa), ha sido aÒadido, para advertir contra el uso de una construcciÛn dudosa y obsoleta
+Una nueva advertencia de obsolescencia, I<Deprecated use of my() in false conditional> (Uso obsoleto de my() en condici√≥n falsa), ha sido a√±adido, para advertir contra el uso de una construcci√≥n dudosa y obsoleta
 
     my $x if 0;
 
@@ -1015,17 +1015,17 @@ Vea L<perldiag>. Utilice variables C<state> en su lugar.
 
 Una nueva advertencia, C<!=~ should be !~>, es emitida para avisar de un fallo de escritura de un operador de no-coincidencia.
 
-=item Car·cter de nueva lÌnea en cadena justificada a la izquierda
+=item Car√°cter de nueva l√≠nea en cadena justificada a la izquierda
 
 La advertencia I<Newline in left-justified string> ha sido eliminada.
 
 =item Too late for "-T" option
 
-El error I<Too late for "-T" option> ha sido reformulado para ser m·s descriptivo.
+El error I<Too late for "-T" option> ha sido reformulado para ser m√°s descriptivo.
 
 =item "%s" variable %s masks earlier declaration
 
-Esta advertencia es ahora emitida en casos m·s consistentes; en resumen, cuando una de las declaraciones en cuestiÛn es una variable C<my>:
+Esta advertencia es ahora emitida en casos m√°s consistentes; en resumen, cuando una de las declaraciones en cuesti√≥n es una variable C<my>:
 
     my $x;   my $x;	# avisa
     my $x;  our $x;	# avisa
@@ -1039,68 +1039,68 @@ ahora da una advertencia C<"our" variable %s redeclared>.
 
 =item readdir()/closedir()/etc. attempted on invalid dirhandle
 
-Estas nuevas advertencias son ahora emitidas cuando un identificador de directorio que es usado ya est· cerrado o no es realmente un identificador de directorio.
+Estas nuevas advertencias son ahora emitidas cuando un identificador de directorio que es usado ya est√° cerrado o no es realmente un identificador de directorio.
 
 =item Opening dirhandle/filehandle %s also as a file/directory
 
-Dos advertencias de depreciaciones han sido aÒadidas: (Rafael)
+Dos advertencias de depreciaciones han sido a√±adidas: (Rafael)
 
     Opening dirhandle %s also as a file
     Opening filehandle %s also as a directory
 
 =item Use of -P is deprecated
 
-La opciÛn de lÌnea de comandos de Perl C<-P> es ahora obsoleta.
+La opci√≥n de l√≠nea de comandos de Perl C<-P> es ahora obsoleta.
 
 =item v-string in use/require is non-portable
 
-Perl le avisar· contra posibles problemas de compatibilidad con la sintaxis C<use VERSION>.
+Perl le avisar√° contra posibles problemas de compatibilidad con la sintaxis C<use VERSION>.
 
 =item perl -V
 
-C<perl -V> tiene varias mejoras, por lo que es m·s utilizable desde scripts de I<shell> para obtener el valor de las variables de configuraciÛn. Vea L<perlrun> para m·s detalles.
+C<perl -V> tiene varias mejoras, por lo que es m√°s utilizable desde scripts de I<shell> para obtener el valor de las variables de configuraci√≥n. Vea L<perlrun> para m√°s detalles.
 
 =back
 
 =head1 Cambios internos
 
-En general, el cÛdigo fuente de perl ha sido refactorizado, enlazado, y optimizado en muchos lugares. Adem·s, la gestiÛn de memoria y la asignaciÛn ha sido mejorados en varios puntos.
+En general, el c√≥digo fuente de perl ha sido refactorizado, enlazado, y optimizado en muchos lugares. Adem√°s, la gesti√≥n de memoria y la asignaci√≥n ha sido mejorados en varios puntos.
 
-Al compilar el n˙cleo de perl con gcc, se activan todas las banderas de advertencias de gcc como sea posible para esa plataforma.  (Esta b˙squeda de la limpieza no se extiende al cÛdigo XS, porque no podemos garantizar la pulcritud de cÛdigo que no escribimos).  Banderas similares que activan codificaciÛn estricta han sido aÒadidas o reforzadas para otros compiladores de C.
+Al compilar el n√∫cleo de perl con gcc, se activan todas las banderas de advertencias de gcc como sea posible para esa plataforma.  (Esta b√∫squeda de la limpieza no se extiende al c√≥digo XS, porque no podemos garantizar la pulcritud de c√≥digo que no escribimos).  Banderas similares que activan codificaci√≥n estricta han sido a√±adidas o reforzadas para otros compiladores de C.
 
 =head2 Reordenando constantes de SVt_*
 
-El orden relativo de las constantes que definen los diferentes tipos de C<SV> ha sido cambiados; en particular, C<SVt_PVGV> ha sido movido antes de C<SVt_PVLV>, C<SVt_PVAV>, C<SVt_PVHV> y C<SVt_PVCV>.  Es poco probable que no haya ninguna diferencia a menos que tenga alg˙n cÛdigo que, explÌcitamente, haga suposiciones con respecto a este ordenamiento. (La jerarquÌa de la herencia de los objetos C<B::*> ha sido cambiada para reflejar esto).
+El orden relativo de las constantes que definen los diferentes tipos de C<SV> ha sido cambiados; en particular, C<SVt_PVGV> ha sido movido antes de C<SVt_PVLV>, C<SVt_PVAV>, C<SVt_PVHV> y C<SVt_PVCV>.  Es poco probable que no haya ninguna diferencia a menos que tenga alg√∫n c√≥digo que, expl√≠citamente, haga suposiciones con respecto a este ordenamiento. (La jerarqu√≠a de la herencia de los objetos C<B::*> ha sido cambiada para reflejar esto).
 
-=head2 EliminaciÛn de SVt_PVBM
+=head2 Eliminaci√≥n de SVt_PVBM
 
-Relacionado con esto, el tipo interno C<SVt_PVBM> ha sido eliminado. Este tipo especÌfico de C<SV> fue utilizado por el operador C<index> y partes del motor de expresiones regulares para facilitar las coincidencias r·pidas Boyer-Moore. Su uso, internamente, ha sido sustituido por C<SV> del tipo C<SVt_PVGV>.
+Relacionado con esto, el tipo interno C<SVt_PVBM> ha sido eliminado. Este tipo espec√≠fico de C<SV> fue utilizado por el operador C<index> y partes del motor de expresiones regulares para facilitar las coincidencias r√°pidas Boyer-Moore. Su uso, internamente, ha sido sustituido por C<SV> del tipo C<SVt_PVGV>.
 
 =head2 Nuevo tipo SVt_BIND
 
-Un nuevo tipo C<SVt_BIND> ha sido aÒadido, en preparaciÛn para el proyecto de implementaciÛn de Perl 6 sobre Perl 5. Sin embargo, no hay ninguna implementaciÛn deliberada, y a˙n no puede ser creada ni destruida.
+Un nuevo tipo C<SVt_BIND> ha sido a√±adido, en preparaci√≥n para el proyecto de implementaci√≥n de Perl 6 sobre Perl 5. Sin embargo, no hay ninguna implementaci√≥n deliberada, y a√∫n no puede ser creada ni destruida.
 
-=head2 EliminaciÛn de los sÌmbolos CPP
+=head2 Eliminaci√≥n de los s√≠mbolos CPP
 
-Los sÌmbolos del preprocesador de C C<PERL_PM_APIVERSION> y C<PERL_XS_APIVERSION>, que se supone que deben almacenar el n˙mero de versiÛn de la versiÛn binaria m·s antigua de perl que es compatible a nivel binario (incluido compatible a nivel de cÛdigo fuente) con la actual, no se utilizaban, y a veces tenÌan valores errÛneos. Han sido eliminados.
+Los s√≠mbolos del preprocesador de C C<PERL_PM_APIVERSION> y C<PERL_XS_APIVERSION>, que se supone que deben almacenar el n√∫mero de versi√≥n de la versi√≥n binaria m√°s antigua de perl que es compatible a nivel binario (incluido compatible a nivel de c√≥digo fuente) con la actual, no se utilizaban, y a veces ten√≠an valores err√≥neos. Han sido eliminados.
 
 =head2 Menos espacio usado por las operaciones
 
-La estructura C<BASEOP> ahora ocupa menos espacio. El campo C<op_seq> ha sido eliminado y sustituido por un solo bit del campo de bits C<op_opt>. C<op_type> es ahora 9 bits de largo. (Por consiguiente, la clase C<B::OP> ya no proporciona un mÈtodo C<seq>).
+La estructura C<BASEOP> ahora ocupa menos espacio. El campo C<op_seq> ha sido eliminado y sustituido por un solo bit del campo de bits C<op_opt>. C<op_type> es ahora 9 bits de largo. (Por consiguiente, la clase C<B::OP> ya no proporciona un m√©todo C<seq>).
 
 =head2 Nuevo analizador
 
-El analizador de perl ahora es generado por bison (que antes solÌa ser generado por byacc). Como resultado de ello, parece ser un poco m·s robusto.
+El analizador de perl ahora es generado por bison (que antes sol√≠a ser generado por byacc). Como resultado de ello, parece ser un poco m√°s robusto.
 
-Adem·s, Dave Mitchell mejorÛ la salida de depuraciÛn del analizador lÈxico con C<-DT>.
+Adem√°s, Dave Mitchell mejor√≥ la salida de depuraci√≥n del analizador l√©xico con C<-DT>.
 
 =head2 Uso de C<const>
 
-Andy Lester suministrÛ muchas mejoras para determinar quÈ par·metros de las funciones y quÈ variables locales podrÌan realmente ser declaradas C<const> para el compilador de C. Steve Peters proporcionÛ nuevas macros C<*_set> y rediseÒÛ el n˙cleo para utilizar Èstas en lugar de asignar a macros en contexto de IVALOR.
+Andy Lester suministr√≥ muchas mejoras para determinar qu√© par√°metros de las funciones y qu√© variables locales podr√≠an realmente ser declaradas C<const> para el compilador de C. Steve Peters proporcion√≥ nuevas macros C<*_set> y redise√±√≥ el n√∫cleo para utilizar √©stas en lugar de asignar a macros en contexto de IVALOR.
 
 =head2 Mathoms
 
-Un nuevo archivo, F<mathoms.c>, ha sido aÒadido. Contiene las funciones que ya no se utilizan en el n˙cleo de perl, pero que siguen estando disponibles por motivos de compatibilidad binaria o de cÛdigo fuente. Sin embargo, esas funciones no ser·n compiladas si agrega C<-DNO_MATHOMS> en las opciones del compilador.
+Un nuevo archivo, F<mathoms.c>, ha sido a√±adido. Contiene las funciones que ya no se utilizan en el n√∫cleo de perl, pero que siguen estando disponibles por motivos de compatibilidad binaria o de c√≥digo fuente. Sin embargo, esas funciones no ser√°n compiladas si agrega C<-DNO_MATHOMS> en las opciones del compilador.
 
 =head2 C<AvFLAGS> ha sido eliminado
 
@@ -1108,48 +1108,48 @@ La macro C<AvFLAGS> se ha eliminado.
 
 =head2 Cambios en C<av_*>
 
-Las funciones C<av_*()>, usadas para manipular array, ya no aceptan par·metros C<AV*> nulos.
+Las funciones C<av_*()>, usadas para manipular array, ya no aceptan par√°metros C<AV*> nulos.
 
 =head2 $^H y %^H
 
-La implementaciÛn de las variables especiales $^H y %^H ha cambiado, para permitir la aplicaciÛn de pragmas lÈxicos en perl puro.
+La implementaci√≥n de las variables especiales $^H y %^H ha cambiado, para permitir la aplicaci√≥n de pragmas l√©xicos en perl puro.
 
-=head2 Cambiada la herencia en los mÛdulos B::
+=head2 Cambiada la herencia en los m√≥dulos B::
 
-La jerarquÌa de la herencia de los mÛdulos C<B::> ha sido cambiada; C<B::NV> ahora hereda desde C<B::SV> (se usaba para heredar desde C<B::IV>).
+La jerarqu√≠a de la herencia de los m√≥dulos C<B::> ha sido cambiada; C<B::NV> ahora hereda desde C<B::SV> (se usaba para heredar desde C<B::IV>).
 
-=head2 Constructores de hash y array anÛnimos
+=head2 Constructores de hash y array an√≥nimos
 
-Los constructores de hash y array anÛnimos ahora toman 1 operaciÛn en el ·rbol de operaciones en lugar de 3, ahora que pp_anonhash y pp_anonlist devuelven una referencia a un hash/array cuando la op. est· marcada con OPf_SPECIAL. (Nicholas Clark)
+Los constructores de hash y array an√≥nimos ahora toman 1 operaci√≥n en el √°rbol de operaciones en lugar de 3, ahora que pp_anonhash y pp_anonlist devuelven una referencia a un hash/array cuando la op. est√° marcada con OPf_SPECIAL. (Nicholas Clark)
 
 =head1 Problemas conocidos
 
-TodavÌa resta un problema en la implementaciÛn lÈxica de C<$_>: no funciona dentro de los bloques C</(?{...})/>. (Vea la prueba de TODO en F<t/op/mydef.t>).
+Todav√≠a resta un problema en la implementaci√≥n l√©xica de C<$_>: no funciona dentro de los bloques C</(?{...})/>. (Vea la prueba de TODO en F<t/op/mydef.t>).
 
-Operadores de test de archivos apilados no funcionar·n cuando el pragma C<filetest> estÈ en vigor, porque se basan en que estÈ poblado el b˙fer C<_> por efecto de stat(), y filetest no ejecuta stat().
+Operadores de test de archivos apilados no funcionar√°n cuando el pragma C<filetest> est√© en vigor, porque se basan en que est√© poblado el b√∫fer C<_> por efecto de stat(), y filetest no ejecuta stat().
 
 =head2 Problemas UTF-8
 
-El manejo de Unicode a˙n no est· claro en varios lugares, donde es dependiente de si una cadena est· internamente marcada como UTF-8. Esto se hizo m·s consistente en perl 5,12, pero que no fue posible sin una cierta cantidad de incompatibilidad con lo anterior.
+El manejo de Unicode a√∫n no est√° claro en varios lugares, donde es dependiente de si una cadena est√° internamente marcada como UTF-8. Esto se hizo m√°s consistente en perl 5,12, pero que no fue posible sin una cierta cantidad de incompatibilidad con lo anterior.
 
-=head1 Problemas en plataformas especÌficas
+=head1 Problemas en plataformas espec√≠ficas
 
 Cuando se compila con g++ y soporte para hebras en Linux, se ha informado que C<$!> deja de funcionar correctamente. Esto se relaciona con el hecho de que la glibc proporciona dos implementaciones strerror_r(3), y perl selecciona la incorrecta.
 
-=head1 NotificaciÛn de errores
+=head1 Notificaci√≥n de errores
 
-Si encuentra algo que piensa que es un error, podrÌa verificar los artÌculos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/rt3/ . Hay tambiÈn informaciÛn en la p·gina principal de Perl, http://www.perl.org/ .
+Si encuentra algo que piensa que es un error, podr√≠a verificar los art√≠culos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/rt3/ . Hay tambi√©n informaci√≥n en la p√°gina principal de Perl, http://www.perl.org/ .
 
-Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuciÛn.  Aseg˙rese de reducir la apariciÛn del error en un programa que sea pequeÒo, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser·n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaciÛn de Perl.
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuci√≥n.  Aseg√∫rese de reducir la aparici√≥n del error en un programa que sea peque√±o, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser√°n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaci√≥n de Perl.
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
-El archivo F<Changes> y las p·ginas de manual perl590delta a perl595delta para un exhaustivos detalles sobre lo que ha cambiado.
+El archivo F<Changes> y las p√°ginas de manual perl590delta a perl595delta para un exhaustivos detalles sobre lo que ha cambiado.
 
 El archivo F<INSTALL> contiene instrucciones para compilar Perl.
 
-El archivo F<README> contiene informaciÛn general.
+El archivo F<README> contiene informaci√≥n general.
 
-En los archivos F<Artistic> y F<Copying> encontrar· informaciÛn de copyright.
+En los archivos F<Artistic> y F<Copying> encontrar√° informaci√≥n de copyright.
 
 =cut

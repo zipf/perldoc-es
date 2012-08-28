@@ -1,77 +1,77 @@
 =head1 NOMBRE
 
-perlrun - cÛmo ejecutar el intÈrprete de Perl
+perlrun - c√≥mo ejecutar el int√©rprete de Perl
 
 =head1 SINOPSIS
 
 B<perl>	S<[ B<-sTtuUWX> ]>
 	S<[ B<-hv> ] [ B<-V>[:I<var_config>] ]>
-	S<[ B<-cw> ] [ B<-d>[B<t>][:I<depurador>] ] [ B<-D>[I<n˙mero/lista>] ]>
-	S<[ B<-pna> ] [ B<-F>I<patrÛn> ] [ B<-l>[I<octal>] ] [ B<-0>[I<octal/hexadecimal>] ]>
-	S<[ B<-I>I<dir> ] [ B<-m>[B<->]I<mÛdulo> ] [ B<-M>[B<->]I<'mÛdulo...'> ] [ B<-f> ]>
-	S<[ B<-C [I<n˙mero/lista>] >]>
+	S<[ B<-cw> ] [ B<-d>[B<t>][:I<depurador>] ] [ B<-D>[I<n√∫mero/lista>] ]>
+	S<[ B<-pna> ] [ B<-F>I<patr√≥n> ] [ B<-l>[I<octal>] ] [ B<-0>[I<octal/hexadecimal>] ]>
+	S<[ B<-I>I<dir> ] [ B<-m>[B<->]I<m√≥dulo> ] [ B<-M>[B<->]I<'m√≥dulo...'> ] [ B<-f> ]>
+	S<[ B<-C [I<n√∫mero/lista>] >]>
 	S<[ B<-S> ]>
 	S<[ B<-x>[I<dir>] ]>
-	S<[ B<-i>[I<extensiÛn>] ]>
+	S<[ B<-i>[I<extensi√≥n>] ]>
 	S<[ [B<-e>|B<-E>] I<'comando'> ] [ B<--> ] [ I<archivo_programa> ] [ I<argumento> ]...>
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-La forma normal de ejecutar un programa de Perl es haciÈndolo directamente ejecutable, o bien pasando el nombre del cÛdigo fuente como un argumento en la lÌnea de comandos.  (Un entorno Perl interactivo tambiÈn est· disponible -vea L<perldebug> para m·s detalles de cÛmo hacer esto-).
+La forma normal de ejecutar un programa de Perl es haci√©ndolo directamente ejecutable, o bien pasando el nombre del c√≥digo fuente como un argumento en la l√≠nea de comandos.  (Un entorno Perl interactivo tambi√©n est√° disponible -vea L<perldebug> para m√°s detalles de c√≥mo hacer esto-).
 En el arranque, Perl busca por su programa en uno de los siguientes lugares:
 
 =over 4
 
 =item 1.
 
-Especificado lÌnea a lÌnea por medio de las opciones B<-e> o B<-E> en la lÌnea de comandos.
+Especificado l√≠nea a l√≠nea por medio de las opciones B<-e> o B<-E> en la l√≠nea de comandos.
 
 =item 2.
 
-Contenido en el fichero especificado por el primer nombre de fichero en la lÌnea de comandos.
-(Tenga en cuenta que los sistemas que soporten la notaciÛn C<#!>, invocan a los intÈrpretes de esta manera. Vea L<Emplazamiento de Perl>).
+Contenido en el fichero especificado por el primer nombre de fichero en la l√≠nea de comandos.
+(Tenga en cuenta que los sistemas que soporten la notaci√≥n C<#!>, invocan a los int√©rpretes de esta manera. Vea L<Emplazamiento de Perl>).
 
 =item 3.
 
-Pasado implÌcitamente a travÈs de la entrada est·ndar.  Esto sÛlo funciona si no hay nombres de fichero como argumentos -para pasar argumentos a un programa que lee desde el STDIN debe, explÌcitamente, especificar un "-" para el nombre del programa-.
+Pasado impl√≠citamente a trav√©s de la entrada est√°ndar.  Esto s√≥lo funciona si no hay nombres de fichero como argumentos -para pasar argumentos a un programa que lee desde el STDIN debe, expl√≠citamente, especificar un "-" para el nombre del programa-.
 
 =back
 
-Con los mÈtodos 2 y 3, Perl inicia el an·lisis del fichero de entrada desde el comienzo, a menos que haya especificado una opciÛn B<-x>, en cuyo caso escanea por la primera lÌnea que comience por C<#!> y contenga la palabra "perl", y arrancar· desde allÌ.  Esto es ˙til para ejecutar un programa incorporado en un correo grande.  (En este caso se indicar· el final del programa, utilizando el I<token> C<__END__>).
+Con los m√©todos 2 y 3, Perl inicia el an√°lisis del fichero de entrada desde el comienzo, a menos que haya especificado una opci√≥n B<-x>, en cuyo caso escanea por la primera l√≠nea que comience por C<#!> y contenga la palabra "perl", y arrancar√° desde all√≠.  Esto es √∫til para ejecutar un programa incorporado en un correo grande.  (En este caso se indicar√° el final del programa, utilizando el I<token> C<__END__>).
 
-La lÌnea C<#!> es siempre examinada para buscar las opciones mientras la lÌnea est· siendo analizada.  Por lo tanto, si est· en una m·quina que sÛlo permite un argumento con la lÌnea C<#!>, o peor a˙n, ni siquiera reconoce la lÌnea C<#!>, todavÌa puede obtener un comportamiento consistente de las opciones independientemente de cÛmo Perl haya sido invocado, incluso si B<-x> fue utilizado para encontrar el inicio del programa.
+La l√≠nea C<#!> es siempre examinada para buscar las opciones mientras la l√≠nea est√° siendo analizada.  Por lo tanto, si est√° en una m√°quina que s√≥lo permite un argumento con la l√≠nea C<#!>, o peor a√∫n, ni siquiera reconoce la l√≠nea C<#!>, todav√≠a puede obtener un comportamiento consistente de las opciones independientemente de c√≥mo Perl haya sido invocado, incluso si B<-x> fue utilizado para encontrar el inicio del programa.
 
-Debido a que, histÛricamente, algunos sistemas operativos cortan, silenciosamente, la interpretaciÛn de la lÌnea C<#!> despuÈs de 32 caracteres, algunas opciones puede ser pasadas a la lÌnea de comandos, y algunas otras, no; incluso se podrÌa obtener un "-" sin su car·cter, si no tiene cuidado.
-Probablemente querr· asegurarse de que todos las opciones caigan antes del lÌmite de 32 caracteres.  La mayorÌa de las opciones, en realidad, no les importa si son procesadas ??de forma redundante, pero obtener un "-" en lugar de una opciÛn completa podrÌa hacer que Perl intente ejecutar la entrada est·ndar, en lugar de su programa.  Y una opciÛn B<-I> parcial tambiÈn podrÌa causar resultados extraÒos.
+Debido a que, hist√≥ricamente, algunos sistemas operativos cortan, silenciosamente, la interpretaci√≥n de la l√≠nea C<#!> despu√©s de 32 caracteres, algunas opciones puede ser pasadas a la l√≠nea de comandos, y algunas otras, no; incluso se podr√≠a obtener un "-" sin su car√°cter, si no tiene cuidado.
+Probablemente querr√° asegurarse de que todos las opciones caigan antes del l√≠mite de 32 caracteres.  La mayor√≠a de las opciones, en realidad, no les importa si son procesadas ‚Äã‚Äãde forma redundante, pero obtener un "-" en lugar de una opci√≥n completa podr√≠a hacer que Perl intente ejecutar la entrada est√°ndar, en lugar de su programa.  Y una opci√≥n B<-I> parcial tambi√©n podr√≠a causar resultados extra√±os.
 
-Algunas opciones son importantes por si son procesadas dos veces, como por ejemplo, combinaciones de B<-l> y B<-0>.  Puede poner todos las opciones despuÈs del lÌmite de 32 caracteres (si procede), o reemplazar el uso de B<-0>I<dÌgitos> por C<BEGIN{ $/ = "\0dÌgitos"; }>.
+Algunas opciones son importantes por si son procesadas dos veces, como por ejemplo, combinaciones de B<-l> y B<-0>.  Puede poner todos las opciones despu√©s del l√≠mite de 32 caracteres (si procede), o reemplazar el uso de B<-0>I<d√≠gitos> por C<BEGIN{ $/ = "\0d√≠gitos"; }>.
 
-El an·lisis de las opciones C<#!> empieza cuando se ha mencionado a "perl", en la lÌnea.
-Las secuencias "-*" y "- " son, especÌficamente, ignoradas, asÌ que podrÌa, si quisiera, escribir cosas como
+El an√°lisis de las opciones C<#!> empieza cuando se ha mencionado a "perl", en la l√≠nea.
+Las secuencias "-*" y "- " son, espec√≠ficamente, ignoradas, as√≠ que podr√≠a, si quisiera, escribir cosas como
 
     #!/bin/sh
     #! -*-perl-*-
     eval 'exec perl -x -wS $0 ${1+"$@"}'
         if 0;
 
-para permitir a Perl ver la opciÛn B<-p>.
+para permitir a Perl ver la opci√≥n B<-p>.
 
 Un truco similar hay con el programa I<env>, si lo tiene instalado.
 
     #!/usr/bin/env perl
 
-Los ejemplos anteriores usan una ruta relativa al intÈrprete perl, accediendo al primero que se encuentre en la ruta del usuario, sin fijarse en quÈ versiÛn sea.  Si necesita una versiÛn especÌfica de Perl, por ejemplo, la perl5.005_57, debe colocarla directamente en la ruta de la lÌnea  C<#!>.
+Los ejemplos anteriores usan una ruta relativa al int√©rprete perl, accediendo al primero que se encuentre en la ruta del usuario, sin fijarse en qu√© versi√≥n sea.  Si necesita una versi√≥n espec√≠fica de Perl, por ejemplo, la perl5.005_57, debe colocarla directamente en la ruta de la l√≠nea  C<#!>.
 
-Si la lÌnea C<#!> no contiene la palabra "perl" ni la palabra "indir", el programa nombrado despuÈs de C<#!> es ejecutado en lugar del intÈrprete de Perl.  Esto es algo extraÒo, pero ayuda a personas en m·quinas que no pueden trabajar con C<#!>, porque ellas pueden indicar a un programa que su SHELL es F</usr/bin/perl>, y Perl, entonces, despachar·, por ellos, el programa al intÈrprete correcto.
+Si la l√≠nea C<#!> no contiene la palabra "perl" ni la palabra "indir", el programa nombrado despu√©s de C<#!> es ejecutado en lugar del int√©rprete de Perl.  Esto es algo extra√±o, pero ayuda a personas en m√°quinas que no pueden trabajar con C<#!>, porque ellas pueden indicar a un programa que su SHELL es F</usr/bin/perl>, y Perl, entonces, despachar√°, por ellos, el programa al int√©rprete correcto.
 
-DespuÈs de localizar a su programa, Perl compila el programa entero a una forma interna.  Si existe alg˙n error de compilaciÛn, ni se intenta la ejecuciÛn del programa.  (Esto es muy distinto del tÌpico script shell, que se ejecutar· sin pensarlo hasta encontrar el primer error de sintaxis).
+Despu√©s de localizar a su programa, Perl compila el programa entero a una forma interna.  Si existe alg√∫n error de compilaci√≥n, ni se intenta la ejecuci√≥n del programa.  (Esto es muy distinto del t√≠pico script shell, que se ejecutar√° sin pensarlo hasta encontrar el primer error de sintaxis).
 
-Si el programa es sint·cticamente correcto, es ejecutado.  Si el programa se ejecuta hasta el final sin llegar a un operador exit() o die(), se ejecuta un implÌcito C<exit(0)> para indicar un completado exitoso.
+Si el programa es sint√°cticamente correcto, es ejecutado.  Si el programa se ejecuta hasta el final sin llegar a un operador exit() o die(), se ejecuta un impl√≠cito C<exit(0)> para indicar un completado exitoso.
 
 =head2 #! y entrecomillado en sistemas distintos del Unix
 X<hashbang> X<#!>
 
-La tÈcnica C<#!> del Unix puede ser simulada en otros sistemas:
+La t√©cnica C<#!> del Unix puede ser simulada en otros sistemas:
 
 =over 4
 
@@ -81,15 +81,15 @@ Ponga
 
     extproc perl -S -sus_modificadores
 
-como primera lÌnea en el archivo C<*.cmd> (B<-S> si sale un error en el manejo de `extproc' del cmd.exe).
+como primera l√≠nea en el archivo C<*.cmd> (B<-S> si sale un error en el manejo de `extproc' del cmd.exe).
 
 =item MS-DOS
 
-Cree un fichero batch para ejecutar su programa, y codifique en Èl un C<ALTERNATE_SHEBANG> (vea el archivo F<dosish.h> en el cÛdigo fuente de su distribuciÛn para obtener m·s informaciÛn).
+Cree un fichero batch para ejecutar su programa, y codifique en √©l un C<ALTERNATE_SHEBANG> (vea el archivo F<dosish.h> en el c√≥digo fuente de su distribuci√≥n para obtener m√°s informaci√≥n).
 
 =item Win95/NT
 
-La instalaciÛn Win95/NT, cuando se usa el instalador de ActiveState para Perl, modificar· el Registro para asociar la extensiÛn F<.pl> con el intÈrprete perl.  Si instala Perl por otros medios (incluyendo la compilaciÛn del cÛdigo fuente), puede modificar usted mismo el Registro de Windows.  Tenga en cuenta que esto significa que ya no podr· diferenciar a un programa Perl ejecutable de un archivo de biblioteca Perl.
+La instalaci√≥n Win95/NT, cuando se usa el instalador de ActiveState para Perl, modificar√° el Registro para asociar la extensi√≥n F<.pl> con el int√©rprete perl.  Si instala Perl por otros medios (incluyendo la compilaci√≥n del c√≥digo fuente), puede modificar usted mismo el Registro de Windows.  Tenga en cuenta que esto significa que ya no podr√° diferenciar a un programa Perl ejecutable de un archivo de biblioteca Perl.
 
 =item VMS
 
@@ -98,15 +98,15 @@ Ponga
  $ perl -mysw 'f$env("procedure")' 'p1' 'p2' 'p3' 'p4' 'p5' 'p6' 'p7' 'p8' !
  $ exit++ + ++$status != 0 and $exit = $status = undef;
 
-al comienzo del programa, donde B<-mysw> es cualquier conjunto de opciones que quiera pasar a Perl.  Ahora puede invocar el programa directamente, diciendo C<perl programa>, o como un procedimiento DCL, diciendo C<@programa> (o, implÌcitamente vÌa F<DCL$PATH> usando simplemente el nombre del programa).
+al comienzo del programa, donde B<-mysw> es cualquier conjunto de opciones que quiera pasar a Perl.  Ahora puede invocar el programa directamente, diciendo C<perl programa>, o como un procedimiento DCL, diciendo C<@programa> (o, impl√≠citamente v√≠a F<DCL$PATH> usando simplemente el nombre del programa).
 
-Esta llamada es m·s difÌcil de recordar, pero Perl se la mostrar· si dice C<perl "-V:startperl">.
+Esta llamada es m√°s dif√≠cil de recordar, pero Perl se la mostrar√° si dice C<perl "-V:startperl">.
 
 =back
 
-Los intÈrpretes de comando en sistemas Unix tienen diferentes ideas sobre el entrecomillado en los shells Unix.  Tendr· que aprender los caracteres especiales de su intÈrprete de comandos (C<*>, C<\> y C<"> son los m·s comunes) y la forma de proteger el espacio en blanco y estos caracteres para ejecutar programas de una sola lÌnea (vea L<-e|/-e lÌnea de comando> m·s abajo).
+Los int√©rpretes de comando en sistemas Unix tienen diferentes ideas sobre el entrecomillado en los shells Unix.  Tendr√° que aprender los caracteres especiales de su int√©rprete de comandos (C<*>, C<\> y C<"> son los m√°s comunes) y la forma de proteger el espacio en blanco y estos caracteres para ejecutar programas de una sola l√≠nea (vea L<-e|/-e l√≠nea de comando> m√°s abajo).
 
-En algunos sistemas, quiz·s tenga que cambiar las comillas simples por las dobles, algo que I<no> debe hacer en sistemas Unix o Plan 9.  Quiz·s tenga que cambiar un simple % a un %%.
+En algunos sistemas, quiz√°s tenga que cambiar las comillas simples por las dobles, algo que I<no> debe hacer en sistemas Unix o Plan 9.  Quiz√°s tenga que cambiar un simple % a un %%.
 
 Por ejemplo:
 
@@ -119,31 +119,31 @@ Por ejemplo:
     # VMS
     perl -e "print ""Hola a todos\n"""
 
-El problema es que nada de esto es fiable: depende del comando e es incluso posible que nada funcione.  Si I<4DOS> fuera el shell de comandos, esto servirÌa mejor:
+El problema es que nada de esto es fiable: depende del comando e es incluso posible que nada funcione.  Si I<4DOS> fuera el shell de comandos, esto servir√≠a mejor:
 
     perl -e "print <Ctrl-x>"Hola a todos\n<Ctrl-x>""
 
-B<CMD.EXE> en Windows NT tomÛ mucha de las funcionalidades est·ndar de Unix cuando nadie estaba mirando, pero intente encontrar documentaciÛn sobre sus reglas de entrecomillado.
+B<CMD.EXE> en Windows NT tom√≥ mucha de las funcionalidades est√°ndar de Unix cuando nadie estaba mirando, pero intente encontrar documentaci√≥n sobre sus reglas de entrecomillado.
 
-No existe una soluciÛn general para todo esto.  Es un completo enredo.
+No existe una soluci√≥n general para todo esto.  Es un completo enredo.
 
 =head2 Emplazamiento de Perl
-X<perl, emplazamiento del intÈrprete>
+X<perl, emplazamiento del int√©rprete>
 
-Parce obvio decirlo, pero Perl solo es ˙til cuando los usuarios pueden encontrarlo f·cilmente.  Cuando sea posible, serÌa bueno que tanto F</usr/bin/perl> como F</usr/local/bin/perl> sean enlaces simbÛlicos al binario efectivo.  Si eso no se puede hacer, se solicita a los administradores del sistema que pongan (enlaces simbÛlicos) a perl y sus utilerÌas asociadas en un directorio que estÈ normalmente en el PATH del usuario, o en alg˙n otro obvio y conveniente lugar.
+Parce obvio decirlo, pero Perl solo es √∫til cuando los usuarios pueden encontrarlo f√°cilmente.  Cuando sea posible, ser√≠a bueno que tanto F</usr/bin/perl> como F</usr/local/bin/perl> sean enlaces simb√≥licos al binario efectivo.  Si eso no se puede hacer, se solicita a los administradores del sistema que pongan (enlaces simb√≥licos) a perl y sus utiler√≠as asociadas en un directorio que est√© normalmente en el PATH del usuario, o en alg√∫n otro obvio y conveniente lugar.
 
-En esta documentaciÛn, C<#!/usr/bin/perl> en la primera lÌnea del programa aparecer· sin importar quÈ mÈtodo funcione es su sistema.  Se le aconseja que use una ruta especÌfica si le interesa usar una versiÛn especÌfica.
+En esta documentaci√≥n, C<#!/usr/bin/perl> en la primera l√≠nea del programa aparecer√° sin importar qu√© m√©todo funcione es su sistema.  Se le aconseja que use una ruta espec√≠fica si le interesa usar una versi√≥n espec√≠fica.
 
     #!/usr/local/bin/perl5.00554
 
-o si solo quiere ejecutar una cierta versiÛn, coloca una instrucciÛn como esta al principio de su programa:
+o si solo quiere ejecutar una cierta versi√≥n, coloca una instrucci√≥n como esta al principio de su programa:
 
     use 5.005_54;
 
 =head2 Opciones de comando
 X<perl, opciones comando> X<opciones comando>
 
-Como con todos los comandos est·ndares, una opciÛn de un sÛlo car·cter puede ser agrupado con la siguiente opciÛn, si la hubiera.
+Como con todos los comandos est√°ndares, una opci√≥n de un s√≥lo car√°cter puede ser agrupado con la siguiente opci√≥n, si la hubiera.
 
     #!/usr/bin/perl -spi.orig	# lo mismo que -s -p -i.orig
 
@@ -154,19 +154,19 @@ Las opciones son:
 =item B<-0>[I<octal/hexadecimal>]
 X<-0> X<$/>
 
-especifica el delimitador de registros de entrada (C<$/>) como un n˙mero en octal o hexadecimal.  Si no hay dÌgitos, el separador ser· el car·cter nulo.  Otras opciones pueden preceder o seguir a los dÌgitos.  Por ejemplo, si tiene una versiÛn de I<find> que puede imprimir nombres de archivos terminados con un car·cter nulo, puede decir algo esto:
+especifica el delimitador de registros de entrada (C<$/>) como un n√∫mero en octal o hexadecimal.  Si no hay d√≠gitos, el separador ser√° el car√°cter nulo.  Otras opciones pueden preceder o seguir a los d√≠gitos.  Por ejemplo, si tiene una versi√≥n de I<find> que puede imprimir nombres de archivos terminados con un car√°cter nulo, puede decir algo esto:
 
     find . -name '*.orig' -print0 | perl -n0e unlink
 
-El valor especial 00 har· que Perl succione archivos en modo p·rrafo.
-Cualquier valor igual o superior a 0400 har· que Perl succione todo el fichero, pero, por convenciÛn, para este propÛsito se usa de forma normal el valor 0777.
+El valor especial 00 har√° que Perl succione archivos en modo p√°rrafo.
+Cualquier valor igual o superior a 0400 har√° que Perl succione todo el fichero, pero, por convenci√≥n, para este prop√≥sito se usa de forma normal el valor 0777.
 
-TambiÈn puede especificar el car·cter separador usando notaciÛn hexadecimal: B<-0xI<HHH...>>, donde C<I<H>> son dÌgitos hexadecimales v·lidos.  A diferencia de con la forma octal, Èsta puede ser usada para especificar cualquier car·cter Unicode, incluso lo que est·n m·s all· de 0xFF.  AsÌ que si I<verdaderamente> quiere usar un separador de registro 0777, especifÌquelo como B<-0x1FF>.  (Esto significa que no puede usar la opciÛn B<-x> con un nombre de directorio que consista en dÌgitos hexadecimales, o sino, Perl pensar· que ha especificado un n˙mero hex relativo a B<-0>).
+Tambi√©n puede especificar el car√°cter separador usando notaci√≥n hexadecimal: B<-0xI<HHH...>>, donde C<I<H>> son d√≠gitos hexadecimales v√°lidos.  A diferencia de con la forma octal, √©sta puede ser usada para especificar cualquier car√°cter Unicode, incluso lo que est√°n m√°s all√° de 0xFF.  As√≠ que si I<verdaderamente> quiere usar un separador de registro 0777, especif√≠quelo como B<-0x1FF>.  (Esto significa que no puede usar la opci√≥n B<-x> con un nombre de directorio que consista en d√≠gitos hexadecimales, o sino, Perl pensar√° que ha especificado un n√∫mero hex relativo a B<-0>).
 
 =item B<-a>
 X<-a> X<autosplit>
 
-activa el modo de auto divisiÛn, cuando se usa junto con B<-n> o B<-p>.  Se realiza un implÌcito comando split al array @F como primera tarea que se realiza dentro del implÌcito bucle while creado por B<-n> o B<-p>.
+activa el modo de auto divisi√≥n, cuando se usa junto con B<-n> o B<-p>.  Se realiza un impl√≠cito comando split al array @F como primera tarea que se realiza dentro del impl√≠cito bucle while creado por B<-n> o B<-p>.
 
     perl -ane 'print pop(@F), "\n";'
 
@@ -179,16 +179,16 @@ es equivalente a
 
 Se puede especificar un delimitar alternativo usando B<-F>.
 
-=item B<-C [I<n˙mero/lista>]>
+=item B<-C [I<n√∫mero/lista>]>
 X<-C>
 
-La opciÛn B<-C> controla alguna de las caracterÌsticas Unicode en Perl.
+La opci√≥n B<-C> controla alguna de las caracter√≠sticas Unicode en Perl.
 
-A partir de 5.8.1, el B<-C> puede ser seguido tanto por un n˙mero como una lista de letras de opciones.  Estas letras, sus valores numÈricos, y efectos, son como sigue; listar las letras es lo mismo que sumar los n˙meros.
+A partir de 5.8.1, el B<-C> puede ser seguido tanto por un n√∫mero como una lista de letras de opciones.  Estas letras, sus valores num√©ricos, y efectos, son como sigue; listar las letras es lo mismo que sumar los n√∫meros.
 
-    I     1   STDIN es asumido que est· en UTF-8
-    O     2   STDOUT estar· en UTF-8
-    E     4   STDERR estar· en UTF-8
+    I     1   STDIN es asumido que est√° en UTF-8
+    O     2   STDOUT estar√° en UTF-8
+    E     4   STDERR estar√° en UTF-8
     S     7   I + O + E
     i     8   UTF-8 es la capa PerlIO por defecto para los flujos de entrada
     o    16   UTF-8 es la capa PerlIO por defecto para los flujos de salida
@@ -196,40 +196,40 @@ A partir de 5.8.1, el B<-C> puede ser seguido tanto por un n˙mero como una lista
     A    32   los elementos @ARGV se espera que sean cadenas codificados
               en UTF-8
     L    64   normalmente, el "IOEioA" es incondicional, la L las hace
-              condicionales seg˙n las variables de entorno de
-              configuraciÛn local (LC_ALL, LC_TYPE, y LANG, en
+              condicionales seg√∫n las variables de entorno de
+              configuraci√≥n local (LC_ALL, LC_TYPE, y LANG, en
               orden de precedencia decreciente) Si las variables
               indican UTF-8, entonces toman efecto las opciones "IOEioA"
-    a   256   Pone ${^UTF8CACHE} a -1, para ejecutar el cÛdigo de cachÈ
-              UTF-8 en modo depuraciÛn.
+    a   256   Pone ${^UTF8CACHE} a -1, para ejecutar el c√≥digo de cach√©
+              UTF-8 en modo depuraci√≥n.
 
 =for documentando_lo_indocumentado
 perl.h ofrece W/128 como PERL_UNICODE_WIDESYSCALLS "/* por Sarathy */"
 
 =for todo
-perltodo menciona Unicode en %ENV y en los nombres de archivo. Supongo que ser·n las opciones e y f (o F).
+perltodo menciona Unicode en %ENV y en los nombres de archivo. Supongo que ser√°n las opciones e y f (o F).
 
-Por ejemplo, B<-COE> y B<-C6> activar·n el tratamiento UTF-8 tanto en STDOUT como en STDERR.  Repetir letras solo es redundante, ni acumulativo ni intercambia el sentido.
+Por ejemplo, B<-COE> y B<-C6> activar√°n el tratamiento UTF-8 tanto en STDOUT como en STDERR.  Repetir letras solo es redundante, ni acumulativo ni intercambia el sentido.
 
-Las opciones C<io> quieren decir que cualquier subsecuente open() (o similares operaciones de E/S) en el actual ·mbito del archivo tendr· aplicado una implÌcita capa PerlIO C<:utf8>, en otras palabras, se espera UTF-8 en cualquier flujo de entrada, y UTF-8 es producido en cualquier flujo de salida.  Esto queda marcado como por defecto, mientras que las capas explÌcitas en open() y con binmode() se pueden manipular los flujos de la forma usual.
+Las opciones C<io> quieren decir que cualquier subsecuente open() (o similares operaciones de E/S) en el actual √°mbito del archivo tendr√° aplicado una impl√≠cita capa PerlIO C<:utf8>, en otras palabras, se espera UTF-8 en cualquier flujo de entrada, y UTF-8 es producido en cualquier flujo de salida.  Esto queda marcado como por defecto, mientras que las capas expl√≠citas en open() y con binmode() se pueden manipular los flujos de la forma usual.
 
-Un solitario B<-C> (no seguido por ning˙n n˙mero ni lista de opciones), o la cadena vacÌa C<""> para la variable de entorno C<PERL_UNICODE>, tiene el mismo efecto que B<-CSDL>.  En otras palabras, los gestores de archivo est·ndares de E/S y la capa por defecto para C<open()> est·n en modo UTF I<pero> solo si las variables de entorno de configuraciÛn local indican que se est· en un entorno local UTF-8.  Este comportamiento sigue el I<implÌcito> (y problem·tico) comportamiento de UTF-8 de Perl 5.8.0.
-(Vea L<perl581delta/UTF-8 ya no est· predeterminado bajo configuraciones regionales UTF-8>).
+Un solitario B<-C> (no seguido por ning√∫n n√∫mero ni lista de opciones), o la cadena vac√≠a C<""> para la variable de entorno C<PERL_UNICODE>, tiene el mismo efecto que B<-CSDL>.  En otras palabras, los gestores de archivo est√°ndares de E/S y la capa por defecto para C<open()> est√°n en modo UTF I<pero> solo si las variables de entorno de configuraci√≥n local indican que se est√° en un entorno local UTF-8.  Este comportamiento sigue el I<impl√≠cito> (y problem√°tico) comportamiento de UTF-8 de Perl 5.8.0.
+(Vea L<perl581delta/UTF-8 ya no est√° predeterminado bajo configuraciones regionales UTF-8>).
 
-Puede usar B<-C0> (o C<"0"> para C<PERL_UNICODE>) para desactivar explÌcitamente todas las caracterÌsticas Unicode anteriores.
+Puede usar B<-C0> (o C<"0"> para C<PERL_UNICODE>) para desactivar expl√≠citamente todas las caracter√≠sticas Unicode anteriores.
 
-La variable m·gica de solo lectura C<${^UNICODE}> refleja el valor numÈrico de este par·metro.  Esta variable se activa durante el arranque de Perl y, por lo tanto, es de solo lectura.  Si quiere efectos en tiempo de ejecuciÛn, use el open() de tres argumentos (vea L<perlfunc/open>), el binmode() de dos argumentos (vea L<perlfunc/binmode>), y el pragma C<open> (vea L<open>).
+La variable m√°gica de solo lectura C<${^UNICODE}> refleja el valor num√©rico de este par√°metro.  Esta variable se activa durante el arranque de Perl y, por lo tanto, es de solo lectura.  Si quiere efectos en tiempo de ejecuci√≥n, use el open() de tres argumentos (vea L<perlfunc/open>), el binmode() de dos argumentos (vea L<perlfunc/binmode>), y el pragma C<open> (vea L<open>).
 
-(En Perl anteriores a 5.8.1, la opciÛn B<-C> solo era una opciÛn solo Win32 que activaba el uso de las "wide system call" de la API de Win32 relativo a la codificaciÛn Unicode.
-Esta caracterÌstica, sin embargo, y en la pr·ctica, no era usada, por lo que esta opciÛn ha sido "reciclada").
+(En Perl anteriores a 5.8.1, la opci√≥n B<-C> solo era una opci√≥n solo Win32 que activaba el uso de las "wide system call" de la API de Win32 relativo a la codificaci√≥n Unicode.
+Esta caracter√≠stica, sin embargo, y en la pr√°ctica, no era usada, por lo que esta opci√≥n ha sido "reciclada").
 
-B<Nota:> Desde perl 5.10.1, si la opciÛn B<-C> es usada en la lÌnea C<#!>, tambiÈn debe ser especificada en la lÌnea de comando, debido a que los flujos est·ndar son inicializados en ese punto, en la ejecuciÛn del intÈrprete perl.
-TambiÈn puede usar binmode() para establecer la codificaciÛn de un flujo de E/S.
+B<Nota:> Desde perl 5.10.1, si la opci√≥n B<-C> es usada en la l√≠nea C<#!>, tambi√©n debe ser especificada en la l√≠nea de comando, debido a que los flujos est√°ndar son inicializados en ese punto, en la ejecuci√≥n del int√©rprete perl.
+Tambi√©n puede usar binmode() para establecer la codificaci√≥n de un flujo de E/S.
 
 =item B<-c>
 X<-c>
 
-hace que Perl comprueba la sintaxis del programa y salga sin ejecutarlo.  Realmente, I<ejecutar·> los bloques C<BEGIN>, C<UNITCHECK>, o C<CHECK> y cualquier instrucciÛn C<use>: se les considera que ocurren fuera de la ejecuciÛn de su programa.  Bloques C<INIT> y C<END>, sin embargo, ser·n obviados.
+hace que Perl comprueba la sintaxis del programa y salga sin ejecutarlo.  Realmente, I<ejecutar√°> los bloques C<BEGIN>, C<UNITCHECK>, o C<CHECK> y cualquier instrucci√≥n C<use>: se les considera que ocurren fuera de la ejecuci√≥n de su programa.  Bloques C<INIT> y C<END>, sin embargo, ser√°n obviados.
 
 =item B<-d>
 X<-d> X<-dt>
@@ -237,57 +237,57 @@ X<-d> X<-dt>
 =item B<-dt>
 
 ejecuta el programa bajo el depurador Perl.  Vea L<perldebug>.
-Si se ha especificado B<t>, indica al depurador que se depurar·n los hilos de ejecuciÛn usados en el cÛdigo.
+Si se ha especificado B<t>, indica al depurador que se depurar√°n los hilos de ejecuci√≥n usados en el c√≥digo.
 
 =item B<-d:>I<MOD[=bar,baz]>
 X<-d> X<-dt>
 
 =item B<-dt:>I<MOD[=bar,baz]>
 
-ejecuta el programa bajo el control de una depuraciÛn, perfilado, o trazado de un mÛdulo instalado como C<Devel::I<MOD>>. Ej., B<-d:DProf> ejecuta el programa usando el perfilador C<Devel::DProf>.  Igual que con la bandera B<-M>, las opciones son pasadas al paquete C<Devel::I<MOD>> donde ser·n recibidas e interpretadas por la rutina C<Devel::I<MOD>::import>.  De nuevo, como en B<-M>, use -B<-d:-I<MOD>> para llamar a C<Devel::I<MOD>::unimport> en lugar de import.  La lista de opciones separada por comas debe seguir al car·cter C<=>.  Si se ha especificado B<t>, indica al depurador que se depurar·n los hilos de ejecuciÛn usados en el cÛdigo.  Vea L<perldebug>.
+ejecuta el programa bajo el control de una depuraci√≥n, perfilado, o trazado de un m√≥dulo instalado como C<Devel::I<MOD>>. Ej., B<-d:DProf> ejecuta el programa usando el perfilador C<Devel::DProf>.  Igual que con la bandera B<-M>, las opciones son pasadas al paquete C<Devel::I<MOD>> donde ser√°n recibidas e interpretadas por la rutina C<Devel::I<MOD>::import>.  De nuevo, como en B<-M>, use -B<-d:-I<MOD>> para llamar a C<Devel::I<MOD>::unimport> en lugar de import.  La lista de opciones separada por comas debe seguir al car√°cter C<=>.  Si se ha especificado B<t>, indica al depurador que se depurar√°n los hilos de ejecuci√≥n usados en el c√≥digo.  Vea L<perldebug>.
 
 =item B<-D>I<letras>
 X<-D> X<DEBUGGING> X<-DDEBUGGING>
 
-=item B<-D>I<n˙mero>
+=item B<-D>I<n√∫mero>
 
-activa banderas de depuraciÛn.  Para mirar cÛmo se ejecuta su programa, use B<-Dtls>.  (Esto funciona solo si el soporte para depuraciÛn fue compilado en su Perl).  Otro valor interesante es B<-Dx>, que lista el ·rbol de sintaxis compilado.  Y B<-Dr> muestra las expresiones regulares compiladas; el formato de salida es explicado en L<perldebguts>.
+activa banderas de depuraci√≥n.  Para mirar c√≥mo se ejecuta su programa, use B<-Dtls>.  (Esto funciona solo si el soporte para depuraci√≥n fue compilado en su Perl).  Otro valor interesante es B<-Dx>, que lista el √°rbol de sintaxis compilado.  Y B<-Dr> muestra las expresiones regulares compiladas; el formato de salida es explicado en L<perldebguts>.
 
-Como alternativa, especifique un n˙mero en lugar de una lista de letras (ej., B<-D14> es equivalente a B<-Dtls>):
+Como alternativa, especifique un n√∫mero en lugar de una lista de letras (ej., B<-D14> es equivalente a B<-Dtls>):
 
-        1  p  SimbolizaciÛn y an·lisis (con v, muestra la pila de an·lisis)
+        1  p  Simbolizaci√≥n y an√°lisis (con v, muestra la pila de an√°lisis)
         2  s  Volcados de la Pila (con v, muestra todas las pilas)
         4  l  Procesado de las pilas de contexto (bucles)
-        8  t  Trazado de la ejecuciÛn
-       16  o  ResoluciÛn de mÈtodos y sobrecarga
-       32  c  Conversiones cadena/n˙mero
-       64  P  Imprime informaciÛn de perfilado y el estado de la entrada del archivo fuente
+        8  t  Trazado de la ejecuci√≥n
+       16  o  Resoluci√≥n de m√©todos y sobrecarga
+       32  c  Conversiones cadena/n√∫mero
+       64  P  Imprime informaci√≥n de perfilado y el estado de la entrada del archivo fuente
       128  m  Reserva de memoria y de SV
       256  f  Procesado de formatos
-      512  r  An·lisis y ejecuciÛn de expresiones regulares
-     1024  x  Volcado del ·rbol sint·ctico
-     2048  u  Comprobaciones de contaminaciÛn
+      512  r  An√°lisis y ejecuci√≥n de expresiones regulares
+     1024  x  Volcado del √°rbol sint√°ctico
+     2048  u  Comprobaciones de contaminaci√≥n
      4096  U  No oficial, para hackeo de usuarios (reservado para uso privado, y no distribuible)
      8192  H  Volcado de Hash -- usurpa values()
     16384  X  Reserva del Scratchpad
     32768  D  Limpieza
-   131072  T  SimbolizaciÛn
+   131072  T  Simbolizaci√≥n
    262144  R  Incluye el contador de referencias de las variables
               volcadas (ej. cuando se usa -Ds)
-   524288  J  muestra s,t,P-debug (no salta afuera) en cÛdigos de
-              operaciÛn dentro del paquete DB
+   524288  J  muestra s,t,P-debug (no salta afuera) en c√≥digos de
+              operaci√≥n dentro del paquete DB
   1048576  v  Verboso: usar junto con otras banderas
   2097152  C  Copiar En Escritura
   4194304  A  Comprueba la consistencia en las estructuras internas
   8388608  q  silencio - actualmente solo suprime el mensaje "EXECUTING"
- 16777216  M  traza la resoluciÛn de la coincidencia inteligente
+ 16777216  M  traza la resoluci√≥n de la coincidencia inteligente
  33554432  B  vuelca las definiciones de suBrutinas, incluyendo los
               Bloques especiales como BEGIN
 
 Todas estas banderas requieren B<-DDEBUGGING> cuando compile el ejecutable Perl (pero vea C<:opd> en L<Devel::Peek> o L<re/modo 'debug'> que puede cambiar esto).
-Vea el archivo F<INSTALL> en la distribuciÛn del cÛdigo fuente para saber cÛmo hacerlo.  Esta bandera es autom·ticamente puesta si incluye la opciÛn B<-g> cuando C<Configure> pregunte sobre banderas para el optimizador/depurador.
+Vea el archivo F<INSTALL> en la distribuci√≥n del c√≥digo fuente para saber c√≥mo hacerlo.  Esta bandera es autom√°ticamente puesta si incluye la opci√≥n B<-g> cuando C<Configure> pregunte sobre banderas para el optimizador/depurador.
 
-Si solo est· intentando imprimir cada lÌnea del cÛdigo Perl que est· ejecutando, de la misma forma que C<sh -x> se ofrece para los script del shell, no puede usar la opciÛn B<-D> con Perl.  En lugar de eso
+Si solo est√° intentando imprimir cada l√≠nea del c√≥digo Perl que est√° ejecutando, de la misma forma que C<sh -x> se ofrece para los script del shell, no puede usar la opci√≥n B<-D> con Perl.  En lugar de eso
 
   # Si tiene una utilidad "env"
   env PERLDB_OPTS="NonStop=1 AutoTrace=1 frame=2" perl -dS programa
@@ -298,65 +298,65 @@ Si solo est· intentando imprimir cada lÌnea del cÛdigo Perl que est· ejecutando,
   # Sintaxis csh
   % (setenv PERLDB_OPTS "NonStop=1 AutoTrace=1 frame=2"; perl -dS programa)
 
-Vea L<perldebug> para m·s detalles y variaciones.
+Vea L<perldebug> para m√°s detalles y variaciones.
 
-=item B<-e> I<lÌnea de comando>
+=item B<-e> I<l√≠nea de comando>
 X<-e>
 
-puede ser usado para entrar un programa de una lÌnea.  Si se indica B<-e>, Perl no mirar· por un nombre de archivo en la lista de argumentos.  Se pueden indicar m˙ltiples comandos B<-e> para construir un script multi-lÌnea.  Aseg˙rese de usar caracteres de punto y coma tal y como harÌa con un programa normal.
+puede ser usado para entrar un programa de una l√≠nea.  Si se indica B<-e>, Perl no mirar√° por un nombre de archivo en la lista de argumentos.  Se pueden indicar m√∫ltiples comandos B<-e> para construir un script multi-l√≠nea.  Aseg√∫rese de usar caracteres de punto y coma tal y como har√≠a con un programa normal.
 
-=item B<-E> I<lÌnea de comandos>
+=item B<-E> I<l√≠nea de comandos>
 X<-E>
 
-se comporta igual que B<-e>, excepto que, implicitamente, activa todas las caracterÌsticas opcionales (en la unidad de compilaciÛn principal). Ver L<feature>.
+se comporta igual que B<-e>, excepto que, implicitamente, activa todas las caracter√≠sticas opcionales (en la unidad de compilaci√≥n principal). Ver L<feature>.
 
 =item B<-f>
 X<-f> X<sitecustomize> X<sitecustomize.pl>
 
-Desactiva la ejecuciÛn de F<$Config{sitelib}/sitecustomize.pl> en el arranque.
+Desactiva la ejecuci√≥n de F<$Config{sitelib}/sitecustomize.pl> en el arranque.
 
-Se puede compilar Perl para que, por defecto, intentar· ejecutar F<$Config{sitelib}/sitecustomize.pl> en el arranque (en el bloque BEGIN).
+Se puede compilar Perl para que, por defecto, intentar√° ejecutar F<$Config{sitelib}/sitecustomize.pl> en el arranque (en el bloque BEGIN).
 Esto es un gancho que permite al administrador del sistema personalizar el comportamiento de Perl.
-Puede, por ejemplo, ser usado para aÒadir entradas al array @INC para hacer que Perl busque mÛdulos en lugares no est·ndares.
+Puede, por ejemplo, ser usado para a√±adir entradas al array @INC para hacer que Perl busque m√≥dulos en lugares no est√°ndares.
 
-Perl realmente inserta el siguiente cÛdigo:
+Perl realmente inserta el siguiente c√≥digo:
 
     BEGIN {
         do { local $!; -f "$Config{sitelib}/sitecustomize.pl"; }
             && do "$Config{sitelib}/sitecustomize.pl";
     }
 
-Debido a que es un C<do> (no un C<require>), F<sitecustomize.pl> no retorna un valor verdadero. El cÛdigo se ejecuta en el paquete C<main>, en su propio ·mbito lÈxico. Sin embargo, el el script muere, C<$@> no ser· actualizado.
+Debido a que es un C<do> (no un C<require>), F<sitecustomize.pl> no retorna un valor verdadero. El c√≥digo se ejecuta en el paquete C<main>, en su propio √°mbito l√©xico. Sin embargo, el el script muere, C<$@> no ser√° actualizado.
 
-El valor de C<$Config{sitelib}> tambiÈn est· determinado en el cÛdigo C, no leÌdo desde C<Config.pm>, que no es cargado.
+El valor de C<$Config{sitelib}> tambi√©n est√° determinado en el c√≥digo C, no le√≠do desde C<Config.pm>, que no es cargado.
 
-El cÛdigo es ejecutado I<muy> prontamente. Por ejemplo, cualquier cambio hecho a C<@INC> se mostrar· en la salida de `perl -V`. Naturalmente, los bloques C<END> ser·n igualmente ejecutados muy tardÌamente.
+El c√≥digo es ejecutado I<muy> prontamente. Por ejemplo, cualquier cambio hecho a C<@INC> se mostrar√° en la salida de `perl -V`. Naturalmente, los bloques C<END> ser√°n igualmente ejecutados muy tard√≠amente.
 
-Para determinar en tiempo de ejecuciÛn si esta capacidad ha sido compilada en su perl, puede comprobar el valor de C<$Config{usesitecustomize}>.
+Para determinar en tiempo de ejecuci√≥n si esta capacidad ha sido compilada en su perl, puede comprobar el valor de C<$Config{usesitecustomize}>.
 
-=item B<-F>I<patrÛn>
+=item B<-F>I<patr√≥n>
 X<-F>
 
-especifica el patrÛn a split si B<-a> tambiÈn est· en activo.  El patrÛn puede estar rodeado de C<//>, C<""> o C<''>, o de lo contrario se pondr· entre comillas simples. Puede usar espacio en blanco literal dentro del patrÛn.
+especifica el patr√≥n a split si B<-a> tambi√©n est√° en activo.  El patr√≥n puede estar rodeado de C<//>, C<""> o C<''>, o de lo contrario se pondr√° entre comillas simples. Puede usar espacio en blanco literal dentro del patr√≥n.
 
 =item B<-h>
 X<-h>
 
 imprime un resumen de las opciones.
 
-=item B<-i>[I<extensiÛn>]
+=item B<-i>[I<extensi√≥n>]
 X<-i> X<in situ>
 
-especifica que los archivos procesados por la construcciÛn C<E<lt>E<gt>> han de ser editados in situ.  Lo hace renombrando el archivo de entrada, abriendo el archivo de salida con el nombre original, y seleccionando este archivo de salida como el de por defecto para las instrucciones print().  La extensiÛn, si es suministrada, es usada para modificar el nombre del viejo archivo para hacer una copia de seguridad, siguiendo estas reglas:
+especifica que los archivos procesados por la construcci√≥n C<E<lt>E<gt>> han de ser editados in situ.  Lo hace renombrando el archivo de entrada, abriendo el archivo de salida con el nombre original, y seleccionando este archivo de salida como el de por defecto para las instrucciones print().  La extensi√≥n, si es suministrada, es usada para modificar el nombre del viejo archivo para hacer una copia de seguridad, siguiendo estas reglas:
 
-Si no se indica ninguna extensiÛn, no se realiza ninguna copia de seguridad y el archivo actual es
+Si no se indica ninguna extensi√≥n, no se realiza ninguna copia de seguridad y el archivo actual es
 sobreescrito.
 
-Si la extensiÛn no contiene un C<*>, entonces es aÒadida al final del nombre de archivo actual como sufijo.  Si la extensiÛn contiene uno o m·s caracteres C<*>, entonces cada C<*> es reemplazado por el nombre del archivo actual.  En tÈrminos Perl, se podrÌa pensar que se est· haciendo esto:
+Si la extensi√≥n no contiene un C<*>, entonces es a√±adida al final del nombre de archivo actual como sufijo.  Si la extensi√≥n contiene uno o m√°s caracteres C<*>, entonces cada C<*> es reemplazado por el nombre del archivo actual.  En t√©rminos Perl, se podr√≠a pensar que se est√° haciendo esto:
 
     ($backup = $extension) =~ s/\*/$nombre_archivo/g;
 
-Esto le permite aÒadir un prefijo al archivo de copia de seguridad, en vez de (o adem·s de)
+Esto le permite a√±adir un prefijo al archivo de copia de seguridad, en vez de (o adem√°s de)
 un sufijo:
 
  $ perl -pi'orig_*' -e 's/bar/baz/' fileA  # copia de seguridad
@@ -367,7 +367,7 @@ O incluso para colocar copias de seguridad de los archivos originales en otro di
  $ perl -pi'old/*.orig' -e 's/bar/baz/' fileA  # copia de seguridad
                                                # a 'old/fileA.orig'
 
-Este conjunto de una-lÌneas son equivalentes:
+Este conjunto de una-l√≠neas son equivalentes:
 
  $ perl -pi -e 's/bar/baz/' fileA          # sobrescribe el archivo actual
  $ perl -pi'*' -e 's/bar/baz/' fileA       # sobrescribe el archivo actual
@@ -408,67 +408,67 @@ que es equivalente a
     }
     select(STDOUT);
 
-excepto que la opciÛn B<-i> no necesita comparar $ARGV a $oldargv para saber cu·ndo el nombre de archivo ha cambiado.  Aun asÌ, usa ARGVOUT para el gestor de archivo seleccionado.  Tenga en cuenta que STDOUT es restaurado como el gestor de archivo por defecto, despuÈs del bucle.
+excepto que la opci√≥n B<-i> no necesita comparar $ARGV a $oldargv para saber cu√°ndo el nombre de archivo ha cambiado.  Aun as√≠, usa ARGVOUT para el gestor de archivo seleccionado.  Tenga en cuenta que STDOUT es restaurado como el gestor de archivo por defecto, despu√©s del bucle.
 
-Como se muestra arriba, Perl crea el archivo de copia de seguridad tanto si ha ocurrido un cambio en la salida, como si no.  AsÌ que esto es justo una manera elegante de copiar archivos:
+Como se muestra arriba, Perl crea el archivo de copia de seguridad tanto si ha ocurrido un cambio en la salida, como si no.  As√≠ que esto es justo una manera elegante de copiar archivos:
 
     $ perl -p -i'/alguna/ruta/archivos/*' -e 1 archivo1 archivo2 archivo3...
 o
     $ perl -p -i'.orig' -e 1 archivo1 archivo2 archivo3...
 
-Puede utilizar C<eof> sin parÈntesis para localizar el fin de cada archivo de entrada, en caso de que quiera aÒadir a cada archivo, o reiniciar la numeraciÛn de lÌneas (vea ejemplo en L<perlfunc/eof>).
+Puede utilizar C<eof> sin par√©ntesis para localizar el fin de cada archivo de entrada, en caso de que quiera a√±adir a cada archivo, o reiniciar la numeraci√≥n de l√≠neas (vea ejemplo en L<perlfunc/eof>).
 
-Si, para un archivo dado, Perl es incapaz de crear el archivo de copia de seguridad cuando se ha especificado en la extensiÛn, entonces saltar· ese archivo y continuar· con el siguiente (si existe).
+Si, para un archivo dado, Perl es incapaz de crear el archivo de copia de seguridad cuando se ha especificado en la extensi√≥n, entonces saltar√° ese archivo y continuar√° con el siguiente (si existe).
 
-Para una discusiÛn de las cuestiones que rodean a los permisos de archivo y B<-i>, vea L<perlfaq5/øPor quÈ Perl me deja eliminar archivos de solo lectura?  øPor quÈ -i sobrescribe archivos protegidos?  øEsto no es un error de Perl?>.
+Para una discusi√≥n de las cuestiones que rodean a los permisos de archivo y B<-i>, vea L<perlfaq5/¬øPor qu√© Perl me deja eliminar archivos de solo lectura?  ¬øPor qu√© -i sobrescribe archivos protegidos?  ¬øEsto no es un error de Perl?>.
 
 No puede usar B<-i> para crear directorios o quita extensiones a los archivos.
 
-Perl no expande C<~> en los nombres de archivo, lo cual est· bien, desde que algunos amigos lo usan para sus archivos de copia de seguridad:
+Perl no expande C<~> en los nombres de archivo, lo cual est√° bien, desde que algunos amigos lo usan para sus archivos de copia de seguridad:
 
     $ perl -pi~ -e 's/foo/bar/' archivo1 archivo2 archivo3...
 
-Tenga en cuenta que debido a que B<-i> renombra o elimina el archivo original antes de crear un archivo nuevo con el mismo nombre, los enlaces tipo Unix, blandos y duros, no ser·n preservados.
+Tenga en cuenta que debido a que B<-i> renombra o elimina el archivo original antes de crear un archivo nuevo con el mismo nombre, los enlaces tipo Unix, blandos y duros, no ser√°n preservados.
 
-Finalmente, la opciÛn B<-i> no impide la ejecuciÛn cu·ndo no se indica ning˙n archivo en la lÌnea de comandos.  En este caso, no se realiza ninguna copia de seguridad (el archivo original no puede, naturalmente, ser determinado) y el procesamiento procede de STDIN a STDOUT, que es lo esperado.
+Finalmente, la opci√≥n B<-i> no impide la ejecuci√≥n cu√°ndo no se indica ning√∫n archivo en la l√≠nea de comandos.  En este caso, no se realiza ninguna copia de seguridad (el archivo original no puede, naturalmente, ser determinado) y el procesamiento procede de STDIN a STDOUT, que es lo esperado.
 
 =item B<-I>I<directorio>
 X<-I> X<@INC>
 
-Los directorios especificados por B<-I> son antepuestos a las rutas de b˙squeda de mÛdulos (C<@INC>).
+Los directorios especificados por B<-I> son antepuestos a las rutas de b√∫squeda de m√≥dulos (C<@INC>).
 
-=item B<-l>[I<n˙m_octal>]
+=item B<-l>[I<n√∫m_octal>]
 X<-l> X<$/> X<$\>
 
-habilita el procesamiento autom·tico de fin de lÌnea.  Tiene dos efectos separados.  Primero, autom·ticamente chomps C<$/> (el separador de registros de entrada) cu·ndo es utilizado con B<-n> o B<-p>.  Segundo, asigna C<$\> (el separador de registros de salida) al valor I<n˙m_oct>, de modo que cualesquiera instrucciones de impresiÛn tendr·n este separador aÒadido.
-Si se omite I<n˙m_oct>, C<$\> toma el valor actual de C<$/>.  Por ejemplo, para recortar lÌneas a 80 columnas:
+habilita el procesamiento autom√°tico de fin de l√≠nea.  Tiene dos efectos separados.  Primero, autom√°ticamente chomps C<$/> (el separador de registros de entrada) cu√°ndo es utilizado con B<-n> o B<-p>.  Segundo, asigna C<$\> (el separador de registros de salida) al valor I<n√∫m_oct>, de modo que cualesquiera instrucciones de impresi√≥n tendr√°n este separador a√±adido.
+Si se omite I<n√∫m_oct>, C<$\> toma el valor actual de C<$/>.  Por ejemplo, para recortar l√≠neas a 80 columnas:
 
     perl -lpe 'substr($_, 80) = ""'
 
-Tenga en cuenta que la asignaciÛn C<$\ = $/> se realiza cuando la opciÛn es procesada, asÌ que el separador de registro de entrada puede ser diferente del separador de registros de salida si la opciÛn B<-l> es seguida por una opciÛn B<-0>:
+Tenga en cuenta que la asignaci√≥n C<$\ = $/> se realiza cuando la opci√≥n es procesada, as√≠ que el separador de registro de entrada puede ser diferente del separador de registros de salida si la opci√≥n B<-l> es seguida por una opci√≥n B<-0>:
 
     gnufind / -print0 | perl -ln0e 'print "encontrado $_" if -p'
 
-Esto pone C<$\> a un car·cter de nueva lÌnea y luego pone C<$/> al car·cter nulo.
+Esto pone C<$\> a un car√°cter de nueva l√≠nea y luego pone C<$/> al car√°cter nulo.
 
-=item B<-m>[B<->]I<mÛdulo>
+=item B<-m>[B<->]I<m√≥dulo>
 X<-m> X<-M>
 
-=item B<-M>[B<->]I<mÛdulo>
+=item B<-M>[B<->]I<m√≥dulo>
 
-=item B<-M>[B<->]I<'mÛdulo ...'>
+=item B<-M>[B<->]I<'m√≥dulo ...'>
 
-=item B<-[mM]>[B<->]I<mÛdulo=arg[,arg]...>
+=item B<-[mM]>[B<->]I<m√≥dulo=arg[,arg]...>
 
-B<-m>I<mÛdulo> ejecuta C<use> I<mÛdulo> C<();> antes de ejecutar su programa.
+B<-m>I<m√≥dulo> ejecuta C<use> I<m√≥dulo> C<();> antes de ejecutar su programa.
 
-B<-M>I<mÛdulo> ejecuta C<use> I<mÛdulo> C<;> antes de ejecutar su programa.  Puede utilizar comillas para aÒadir cÛdigo extra despuÈs del nombre del mÛdulo, p. ej., C<'-MI<M”DULO> qw(foo bar)'>.
+B<-M>I<m√≥dulo> ejecuta C<use> I<m√≥dulo> C<;> antes de ejecutar su programa.  Puede utilizar comillas para a√±adir c√≥digo extra despu√©s del nombre del m√≥dulo, p. ej., C<'-MI<M√ìDULO> qw(foo bar)'>.
 
-Si el primer car·cter despuÈs de B<-M> o B<-m> es un guion (B<->) entonces el 'use' es reemplazado por un 'no'.
+Si el primer car√°cter despu√©s de B<-M> o B<-m> es un guion (B<->) entonces el 'use' es reemplazado por un 'no'.
 
-Un poco de endulzamiento sint·ctico interno puede ayudarle para decir B<-mI<M”DULO>=foo,bar> o B<-MI<M”DULO>=foo,bar> como una forma abreviada de B<'-MI<M”DULO> qw(foo bar)'>.  Esto evita la necesidad de usar comillas cuando se importan sÌmbolos.  El cÛdigo real generado por B<-MI<M”DULO>=foo,bar> es C<use mÛdulo split(/,/,q{foo,bar})>.  Tenga en cuenta que la forma C<=> quita la distinciÛn entre B<-m> y B<-M>.
+Un poco de endulzamiento sint√°ctico interno puede ayudarle para decir B<-mI<M√ìDULO>=foo,bar> o B<-MI<M√ìDULO>=foo,bar> como una forma abreviada de B<'-MI<M√ìDULO> qw(foo bar)'>.  Esto evita la necesidad de usar comillas cuando se importan s√≠mbolos.  El c√≥digo real generado por B<-MI<M√ìDULO>=foo,bar> es C<use m√≥dulo split(/,/,q{foo,bar})>.  Tenga en cuenta que la forma C<=> quita la distinci√≥n entre B<-m> y B<-M>.
 
-Una consecuencia de esto es que B<-MI<M”DULO>=n˙mero> nunca hace un control de versiÛn, a no ser que C<I<M”DULO>::import()> tenga instalado un control de versiÛn, lo cual podrÌa pasar, por ejemplo, si I<M”DULO> hereda de L<Exporter>.
+Una consecuencia de esto es que B<-MI<M√ìDULO>=n√∫mero> nunca hace un control de versi√≥n, a no ser que C<I<M√ìDULO>::import()> tenga instalado un control de versi√≥n, lo cual podr√≠a pasar, por ejemplo, si I<M√ìDULO> hereda de L<Exporter>.
 
 =item B<-n>
 X<-n>
@@ -477,22 +477,22 @@ hace que Perl asuma el bucle siguiente alrededor de su programa, el cual hace it
 
   LINEA:
     while (<>) {
-	...		# su programa va aquÌ
+	...		# su programa va aqu√≠
     }
 
-Note que las lÌneas, por defecto, no son impresas.  Vea L</-p> para tener las lÌneas impresas.  Si un archivo nombrado por un argumento no puede ser abierto por alguna razÛn, Perl se lo advierte y pasa al archivo siguiente.
+Note que las l√≠neas, por defecto, no son impresas.  Vea L</-p> para tener las l√≠neas impresas.  Si un archivo nombrado por un argumento no puede ser abierto por alguna raz√≥n, Perl se lo advierte y pasa al archivo siguiente.
 
-TambiÈn tenga en cuenta que C<< <> >> pasa los argumentos de la lÌnea de comandos a L<perlfunc/open>, el cual, no necesariamente, les interpreta como nombres de archivo.
+Tambi√©n tenga en cuenta que C<< <> >> pasa los argumentos de la l√≠nea de comandos a L<perlfunc/open>, el cual, no necesariamente, les interpreta como nombres de archivo.
 Vea L<perlop> para las posibles implicaciones de seguridad.
 
-AquÌ hay una manera eficaz de eliminar todos los archivos que no hayan sido modificados durante la ˙ltima semana:
+Aqu√≠ hay una manera eficaz de eliminar todos los archivos que no hayan sido modificados durante la √∫ltima semana:
 
     find . -mtime +7 -print | perl -nle unlink
 
-Esto es m·s r·pido que utilizar la opciÛn B<-exec> de I<find> porque no tiene que arrancar un proceso en cada nombre de archivo encontrado.  Adolece del error de perder los caracteres de nueva lÌnea en los nombres de las rutas de archivos, que puede arreglar si sigue el ejemplo que hay en B<-0>.
+Esto es m√°s r√°pido que utilizar la opci√≥n B<-exec> de I<find> porque no tiene que arrancar un proceso en cada nombre de archivo encontrado.  Adolece del error de perder los caracteres de nueva l√≠nea en los nombres de las rutas de archivos, que puede arreglar si sigue el ejemplo que hay en B<-0>.
 
-Los bloques C<BEGIN> y C<END> pueden ser usados para capturar el control antes de o despuÈs del
-bucle de programa implÌcito, como se hace en I<awk>.
+Los bloques C<BEGIN> y C<END> pueden ser usados para capturar el control antes de o despu√©s del
+bucle de programa impl√≠cito, como se hace en I<awk>.
 
 =item B<-p>
 X<-p>
@@ -502,33 +502,33 @@ hace que Perl asuma el bucle siguiente alrededor de su programa, el cual hace it
 
   LINEA:
     while (<>) {
-	...		# su programa va aquÌ
+	...		# su programa va aqu√≠
     } continue {
 	print or die "-p destino: $!\n";
     }
 
-Si un archivo nombrado por un argumento no puede ser abierto por alguna razÛn, Perl se lo advierte y pasa al archivo siguiente.  Note que las lÌneas son impresas autom·ticamente.  Un error que ocurra durante la impresiÛn es tratado como fatal.  Para suprimir la impresiÛn use la opciÛn B<-n>.  Una opciÛn B<-p> sobrescribe una B<-n>.
+Si un archivo nombrado por un argumento no puede ser abierto por alguna raz√≥n, Perl se lo advierte y pasa al archivo siguiente.  Note que las l√≠neas son impresas autom√°ticamente.  Un error que ocurra durante la impresi√≥n es tratado como fatal.  Para suprimir la impresi√≥n use la opci√≥n B<-n>.  Una opci√≥n B<-p> sobrescribe una B<-n>.
 
-Los bloques C<BEGIN> y C<END> pueden ser usados para capturar el control antes de o despuÈs del bucle implÌcito, como se hace en I<awk>.
+Los bloques C<BEGIN> y C<END> pueden ser usados para capturar el control antes de o despu√©s del bucle impl√≠cito, como se hace en I<awk>.
 
 =item B<-s>
 X<-s>
 
-habilita un rudimentario an·lisis de opciones en la lÌnea de comando despuÈs del nombre de programa pero antes de cualquier argumento de nombre de archivo (o antes de un argumento B<-->).  Cualquier opciÛn encontrada allÌ es eliminada de @ARGV y se pone en la correspondiente variable del programa Perl.  El programa siguiente imprime "1" si el programa es invocado con una opciÛn B<-xyz>, y "abc" si es invocado con B<-xyz=abc>.
+habilita un rudimentario an√°lisis de opciones en la l√≠nea de comando despu√©s del nombre de programa pero antes de cualquier argumento de nombre de archivo (o antes de un argumento B<-->).  Cualquier opci√≥n encontrada all√≠ es eliminada de @ARGV y se pone en la correspondiente variable del programa Perl.  El programa siguiente imprime "1" si el programa es invocado con una opci√≥n B<-xyz>, y "abc" si es invocado con B<-xyz=abc>.
 
     #!/usr/bin/perl -s
     if ($xyz) { print "$xyz\n" }
 
-Tenga en cuenta que una opciÛn como B<--help> crea la variable C<${-help}>, el cual no es acorde con C<use strict "refs">.  TambiÈn, cu·ndo utilice esta opciÛn en un guiÛn con avisos habilitados, puede obtener avisos espurios de la forma "utilizado sÛlo una vez (I<used only once>)".
+Tenga en cuenta que una opci√≥n como B<--help> crea la variable C<${-help}>, el cual no es acorde con C<use strict "refs">.  Tambi√©n, cu√°ndo utilice esta opci√≥n en un gui√≥n con avisos habilitados, puede obtener avisos espurios de la forma "utilizado s√≥lo una vez (I<used only once>)".
 
 =item B<-S>
 X<-S>
 
 hace que Perl use la variable de entorno PATH para buscar el programa, a no ser que el nombre del programa contenga separadores de ruta.
 
-En algunas plataformas, esto tambiÈn hace que Perl aÒada sufijos al nombre del archivo mientras lo busca.  Por ejemplo, en plataformas Win32, los sufijos ".bat" y ".cmd" son aÒadidos si falla la localizaciÛn del nombre original, y si el nombre no termina realmente en uno de estos sufijos.  Si su Perl fue compilado con C<DEBUGGING> activado, usando la opciÛn B<-Dp> hace que Perl muestre el progreso de b˙squeda.
+En algunas plataformas, esto tambi√©n hace que Perl a√±ada sufijos al nombre del archivo mientras lo busca.  Por ejemplo, en plataformas Win32, los sufijos ".bat" y ".cmd" son a√±adidos si falla la localizaci√≥n del nombre original, y si el nombre no termina realmente en uno de estos sufijos.  Si su Perl fue compilado con C<DEBUGGING> activado, usando la opci√≥n B<-Dp> hace que Perl muestre el progreso de b√∫squeda.
 
-TÌpicamente esto es lo que se usa para emular el arranque C<#!> en plataformas que no soportan C<#!>.  Es tambiÈn conveniente que cuando se depura un guiÛn que usa C<#!>, y es normalmente encontrado por los mecanismos de b˙squeda del shell en $PATH.
+T√≠picamente esto es lo que se usa para emular el arranque C<#!> en plataformas que no soportan C<#!>.  Es tambi√©n conveniente que cuando se depura un gui√≥n que usa C<#!>, y es normalmente encontrado por los mecanismos de b√∫squeda del shell en $PATH.
 
 Este ejemplo funciona en muchas plataformas que tienen un shell compatible con Bourne shell:
 
@@ -536,54 +536,54 @@ Este ejemplo funciona en muchas plataformas que tienen un shell compatible con B
     eval 'exec /usr/bin/perl -wS $0 ${1+"$@"}'
 	    if $ejecutando_bajo_algun_shell;
 
-El sistema ignora la primera lÌnea y alimenta el programa a F</bin/sh>, el cual procede a probar a ejecutar el programa Perl como un guiÛn de shell.
-El shell ejecuta la segunda lÌnea como un comando shell normal, y asÌ arranca el intÈrprete Perl.  En algunos sistemas, $0 no siempre contiene la ruta completa, por lo que B<-S> le dice a Perl que busque el programa, si es necesario.  DespuÈs de localizar el programa, Perl analiza las lÌneas y las ignora porque la variable $ejecutando_bajo_algun_shell no es verdadera.  Si el programa ser· interpretado por csh, tendr· que reemplazar C<${1+"$@"}> por C<$*>, incluso aunque esto no interprete los espacios incrustados (y cosas asÌ) en la lista de argumentos.  Para poner en marcha I<sh> en lugar de I<csh>, algunos sistemas pueden tener que reemplazar la lÌnea C<#!> con una lÌnea que contenga sÛlo un car·cter de dos puntos, que ser· amablemente ignorado por Perl.  Otros sistemas no controlan nada de esto, y necesitan de una enrevesada construcciÛn que funcione tanto en I<csh>, como I<sh> o Perl, tales como la siguiente:
+El sistema ignora la primera l√≠nea y alimenta el programa a F</bin/sh>, el cual procede a probar a ejecutar el programa Perl como un gui√≥n de shell.
+El shell ejecuta la segunda l√≠nea como un comando shell normal, y as√≠ arranca el int√©rprete Perl.  En algunos sistemas, $0 no siempre contiene la ruta completa, por lo que B<-S> le dice a Perl que busque el programa, si es necesario.  Despu√©s de localizar el programa, Perl analiza las l√≠neas y las ignora porque la variable $ejecutando_bajo_algun_shell no es verdadera.  Si el programa ser√° interpretado por csh, tendr√° que reemplazar C<${1+"$@"}> por C<$*>, incluso aunque esto no interprete los espacios incrustados (y cosas as√≠) en la lista de argumentos.  Para poner en marcha I<sh> en lugar de I<csh>, algunos sistemas pueden tener que reemplazar la l√≠nea C<#!> con una l√≠nea que contenga s√≥lo un car√°cter de dos puntos, que ser√° amablemente ignorado por Perl.  Otros sistemas no controlan nada de esto, y necesitan de una enrevesada construcci√≥n que funcione tanto en I<csh>, como I<sh> o Perl, tales como la siguiente:
 
 	eval '(exit $?0)' && eval 'exec perl -wS $0 ${1+"$@"}'
 	& eval 'exec /usr/bin/perl -wS $0 $argv:q'
 		if $ejecutando_bajo_algun_shell;
 
-Si el nombre del archivo suministrado contiene separadores de directorios (y por lo tanto es una ruta absoluta o relativa), y si ese archivo no es encontrado, las plataformas que aÒaden extensiones de archivo lo har·n, y tratar·n de buscar el archivo con estas extensiones aÒadidas, una a una.
+Si el nombre del archivo suministrado contiene separadores de directorios (y por lo tanto es una ruta absoluta o relativa), y si ese archivo no es encontrado, las plataformas que a√±aden extensiones de archivo lo har√°n, y tratar√°n de buscar el archivo con estas extensiones a√±adidas, una a una.
 
-En plataformas DOS, si el programa no contiene separadores de directorios, en primer lugar se buscar· en el directorio actual antes de ser buscado en el PATH.  En plataformas Unix, el programa se buscar· estrictamente en PATH.
+En plataformas DOS, si el programa no contiene separadores de directorios, en primer lugar se buscar√° en el directorio actual antes de ser buscado en el PATH.  En plataformas Unix, el programa se buscar√° estrictamente en PATH.
 
 =item B<-t>
 X<-t>
 
-Al igual que B<-T>, pero las comprobaciones de contaminaciÛn emitir·n advertencias en lugar de errores fatales.  Estas advertencias se pueden controlar de forma normal con C<no warnings qw(taint)>.
+Al igual que B<-T>, pero las comprobaciones de contaminaci√≥n emitir√°n advertencias en lugar de errores fatales.  Estas advertencias se pueden controlar de forma normal con C<no warnings qw(taint)>.
 
-B<Nota: °Esto no es un sustituto de C<-T>!> Su destino es ser utilizada I<sÛlo> como una ayuda temporal para el desarrollo, mientras asegura cÛdigo heredado: para el cÛdigo en producciÛn real y para nuevo cÛdigo seguro escrito desde cero, utilice siempre el verdadero B<-T>.
+B<Nota: ¬°Esto no es un sustituto de C<-T>!> Su destino es ser utilizada I<s√≥lo> como una ayuda temporal para el desarrollo, mientras asegura c√≥digo heredado: para el c√≥digo en producci√≥n real y para nuevo c√≥digo seguro escrito desde cero, utilice siempre el verdadero B<-T>.
 
 =item B<-T>
 X<-T>
 
-activa el modo "contaminaciÛn" para que pueda probarlo.  Por lo general, estos controles se realizan sÛlo cuando se ejecuta setuid o setgid.  Es una buena idea activarlo de forma explÌcita en los programas que se ejecutan en nombre de otra persona que no sea, necesariamente, de su confianza, tales como programas CGI o cualquier servidor de Internet que se puede escribir en Perl.  Vea L<perlsec> para m·s detalles.  Por razones de seguridad, esta opciÛn debe ser vista por Perl lo m·s pronto posible, por lo general esto significa que debe aparecer lo primero en la lÌnea de comandos o en la lÌnea C<#!> en los sistemas que soportan esta construcciÛn.
+activa el modo "contaminaci√≥n" para que pueda probarlo.  Por lo general, estos controles se realizan s√≥lo cuando se ejecuta setuid o setgid.  Es una buena idea activarlo de forma expl√≠cita en los programas que se ejecutan en nombre de otra persona que no sea, necesariamente, de su confianza, tales como programas CGI o cualquier servidor de Internet que se puede escribir en Perl.  Vea L<perlsec> para m√°s detalles.  Por razones de seguridad, esta opci√≥n debe ser vista por Perl lo m√°s pronto posible, por lo general esto significa que debe aparecer lo primero en la l√≠nea de comandos o en la l√≠nea C<#!> en los sistemas que soportan esta construcci√≥n.
 
 =item B<-u>
 X<-u>
 
-Esta opciÛn hace que Perl vuelque su memoria despuÈs de compilar el programa.  A continuaciÛn, puede, en teorÌa, tomar ese volcado de memoria y convertirlo en un archivo ejecutable mediante el uso del programa I<undump> (no suministrado).
-Esto acelera el inicio a costa de espacio en disco (que puede minimizar mediante la eliminaciÛn de sÌmbolos en el ejecutable).  (Sin embargo, un ejecutable "hola mundo" ocupa unos 200Kb en mi m·quina).  Si desea ejecutar una parte de su programa antes del volcado de memoria, use en su lugar el operador dump().  Nota: La disponibilidad de I<undump> es especÌfico de la plataforma y puede no estar disponible para una determinada adaptaciÛn de Perl.
+Esta opci√≥n hace que Perl vuelque su memoria despu√©s de compilar el programa.  A continuaci√≥n, puede, en teor√≠a, tomar ese volcado de memoria y convertirlo en un archivo ejecutable mediante el uso del programa I<undump> (no suministrado).
+Esto acelera el inicio a costa de espacio en disco (que puede minimizar mediante la eliminaci√≥n de s√≠mbolos en el ejecutable).  (Sin embargo, un ejecutable "hola mundo" ocupa unos 200Kb en mi m√°quina).  Si desea ejecutar una parte de su programa antes del volcado de memoria, use en su lugar el operador dump().  Nota: La disponibilidad de I<undump> es espec√≠fico de la plataforma y puede no estar disponible para una determinada adaptaci√≥n de Perl.
 
 =item B<-U>
 X<-U>
 
-permite a Perl hacer operaciones inseguras.  En la actualidad las ˙nicas operaciones "no seguras" son las tratan de eliminar directorios mientras se ejecuta como superusuario y ejecutar programas setuid con comprobaciones fatales de contaminaciÛn convertidas en advertencias.
-Tenga en cuenta que las advertencias deben estar habilitadas con esta opciÛn para I<generar> las advertencias de contaminaciÛn.
+permite a Perl hacer operaciones inseguras.  En la actualidad las √∫nicas operaciones "no seguras" son las tratan de eliminar directorios mientras se ejecuta como superusuario y ejecutar programas setuid con comprobaciones fatales de contaminaci√≥n convertidas en advertencias.
+Tenga en cuenta que las advertencias deben estar habilitadas con esta opci√≥n para I<generar> las advertencias de contaminaci√≥n.
 
 =item B<-v>
 X<-v>
 
-imprime la versiÛn y nivel de parcheado del ejecutable perl.
+imprime la versi√≥n y nivel de parcheado del ejecutable perl.
 
 =item B<-V>
 X<-V>
 
-imprime un resumen de los valores de configuraciÛn m·s importantes de perl y los valores actuales de @INC
+imprime un resumen de los valores de configuraci√≥n m√°s importantes de perl y los valores actuales de @INC
 
 =item B<-V:>I<configvar>
 
-Imprime a STDOUT el valor de la(s) variable(s) de configuraciÛn indicadas, o m˙ltiples valores cuando el argumento C<I<configvar>> se parece a una expresiÛn regular (no contiene letras).  Por ejemplo:
+Imprime a STDOUT el valor de la(s) variable(s) de configuraci√≥n indicadas, o m√∫ltiples valores cuando el argumento C<I<configvar>> se parece a una expresi√≥n regular (no contiene letras).  Por ejemplo:
 
     $ perl -V:libc
 	libc='/lib/libc-2.2.4.so';
@@ -598,17 +598,17 @@ Imprime a STDOUT el valor de la(s) variable(s) de configuraciÛn indicadas, o m˙l
 	libperl='libperl.a';
 	....
 
-Adem·s, los caracteres de dos puntos adicionales se pueden utilizar para controlar el formato.  Un car·cter dos puntos final suprime el salto de lÌnea y el terminador ";", permitiendo integrar consultas en comandos shell.  (nemotÈcnico: separador ":" en PATH).
+Adem√°s, los caracteres de dos puntos adicionales se pueden utilizar para controlar el formato.  Un car√°cter dos puntos final suprime el salto de l√≠nea y el terminador ";", permitiendo integrar consultas en comandos shell.  (nemot√©cnico: separador ":" en PATH).
 
-    $ echo "° var. compresiÛn: " `perl -V:z.*: ` " aquÌ est·n!"
-    ° var. compresiÛn:  zcat='' zip='zip'  aquÌ est·n!
+    $ echo "¬° var. compresi√≥n: " `perl -V:z.*: ` " aqu√≠ est√°n!"
+    ¬° var. compresi√≥n:  zcat='' zip='zip'  aqu√≠ est√°n!
 
-Un car·cter dos puntos precedente elimina la parte "name =" de la respuesta, permitiendo asignar el nombre que necesite.  (nemotÈcnico: etiqueta vacÌa)
+Un car√°cter dos puntos precedente elimina la parte "name =" de la respuesta, permitiendo asignar el nombre que necesite.  (nemot√©cnico: etiqueta vac√≠a)
 
     $ echo "goodvfork="`./perl -Ilib -V::usevfork`
     goodvfork=false;
 
-Caracteres dos puntos precedentes y finales puedes ser usados conjuntamente si necesita valores de par·metros posicionales sin los nombres.  Note que, en el caso siguiente, los par·metros C<PERL_API> se devuelven en orden alfabÈtico.
+Caracteres dos puntos precedentes y finales puedes ser usados conjuntamente si necesita valores de par√°metros posicionales sin los nombres.  Note que, en el caso siguiente, los par√°metros C<PERL_API> se devuelven en orden alfab√©tico.
 
     $ echo compilado_en `perl -V::osname: -V::PERL_API_.*:`
     compilado_en 'linux' '5' '1' '9'
@@ -616,10 +616,10 @@ Caracteres dos puntos precedentes y finales puedes ser usados conjuntamente si n
 =item B<-w>
 X<-w>
 
-imprime advertencias sobre construcciones dudosas, como nombres de variables mencionadas sÛlo una vez y variables escalares utilizadas antes de ser declaradas; subrutinas redefinidas; referencias a gestores de archivo indefinidos; gestores de archivo abiertos en sÛlo lectura mientras que est· intentando escribir en ellos; valores utilizados como un n˙mero que no I<parecen> n˙meros; utilizando un array como si se tratara de un escalar; si sus subrutinas tienen m·s de 100 niveles de profundidad de recursiÛn; y un sinn˙mero de otras cosas.
+imprime advertencias sobre construcciones dudosas, como nombres de variables mencionadas s√≥lo una vez y variables escalares utilizadas antes de ser declaradas; subrutinas redefinidas; referencias a gestores de archivo indefinidos; gestores de archivo abiertos en s√≥lo lectura mientras que est√° intentando escribir en ellos; valores utilizados como un n√∫mero que no I<parecen> n√∫meros; utilizando un array como si se tratara de un escalar; si sus subrutinas tienen m√°s de 100 niveles de profundidad de recursi√≥n; y un sinn√∫mero de otras cosas.
 
-Esta opciÛn, en realidad, sÛlo activa la variable global C<$^W>; normalmente, es preferible usar el pragma de ·mbito lÈxico C<use warnings>. Puede desactivar o promover en errores fatales, advertencias especÌficas utilizando ganchos C<__WARN__>, como se describe en L<perlvar> y L<perlfunc/warn>.
-Vea tambiÈn L<perldiag> y L<perltrap>.  Una muy detallada facilidad de alertas tambiÈn est· disponible si quiere manipular clases enteras de advertencias; vea L<warnings> o L<perllexwarn>.
+Esta opci√≥n, en realidad, s√≥lo activa la variable global C<$^W>; normalmente, es preferible usar el pragma de √°mbito l√©xico C<use warnings>. Puede desactivar o promover en errores fatales, advertencias espec√≠ficas utilizando ganchos C<__WARN__>, como se describe en L<perlvar> y L<perlfunc/warn>.
+Vea tambi√©n L<perldiag> y L<perltrap>.  Una muy detallada facilidad de alertas tambi√©n est√° disponible si quiere manipular clases enteras de advertencias; vea L<warnings> o L<perllexwarn>.
 
 =item B<-W>
 X<-W>
@@ -638,16 +638,16 @@ X<-x>
 
 =item B<-x>I<directorio>
 
-le dice a Perl que el programa est· incrustado en un pedazo m·s grande de texto, sin ninguna relaciÛn con Èl, como por ejemplo, en un mensaje de correo electrÛnico.  La basura inicial ser· descartada hasta la primera lÌnea que comience con C<#!> y contenga la cadena "perl".  Se aplicar· cualquier opciÛn significativa de esa lÌnea.
+le dice a Perl que el programa est√° incrustado en un pedazo m√°s grande de texto, sin ninguna relaci√≥n con √©l, como por ejemplo, en un mensaje de correo electr√≥nico.  La basura inicial ser√° descartada hasta la primera l√≠nea que comience con C<#!> y contenga la cadena "perl".  Se aplicar√° cualquier opci√≥n significativa de esa l√≠nea.
 
-Todas las referencias a n˙meros de lÌnea en el programa (avisos, errores, ...) ser·n tratados como si la lÌnea C<#!> fuera la primera lÌnea.
-Entonces, una advertencia en la lÌnea 2 del programa, que est· en la lÌnea 100 en el archivo ser· reportada como la lÌnea 2, no como la lÌnea 100.
+Todas las referencias a n√∫meros de l√≠nea en el programa (avisos, errores, ...) ser√°n tratados como si la l√≠nea C<#!> fuera la primera l√≠nea.
+Entonces, una advertencia en la l√≠nea 2 del programa, que est√° en la l√≠nea 100 en el archivo ser√° reportada como la l√≠nea 2, no como la l√≠nea 100.
 Esto se puede anular mediante el uso de la directiva C<#line>.
-(Vea L<perlsyn/"Viejos y simples comentarios (°No!)">)
+(Vea L<perlsyn/"Viejos y simples comentarios (¬°No!)">)
 
-Si un nombre de directorio es especificado, Perl cambiar· a ese directorio antes de ejecutar el programa.  La opciÛn B<-x> controla sÛlo la eliminaciÛn de la basura inicial.  El programa debe terminar con C<__END__> si hay detr·s la basura que debe ser ignorada; el programa puede procesar cualquier o toda la basura posterior a travÈs del gestor de archivo C<DATA>, si asÌ lo desea.
+Si un nombre de directorio es especificado, Perl cambiar√° a ese directorio antes de ejecutar el programa.  La opci√≥n B<-x> controla s√≥lo la eliminaci√≥n de la basura inicial.  El programa debe terminar con C<__END__> si hay detr√°s la basura que debe ser ignorada; el programa puede procesar cualquier o toda la basura posterior a trav√©s del gestor de archivo C<DATA>, si as√≠ lo desea.
 
-El directorio, si se especifica, debe aparecer inmediatamente despuÈs de B<-x>, sin espacios en blanco entremedias.
+El directorio, si se especifica, debe aparecer inmediatamente despu√©s de B<-x>, sin espacios en blanco entremedias.
 
 =back
 
@@ -664,65 +664,65 @@ Usada si C<chdir> no tiene argumentos.
 =item LOGDIR
 X<LOGDIR>
 
-Usada si C<chdir> no tiene argumentos y HOME no est· establecida.
+Usada si C<chdir> no tiene argumentos y HOME no est√° establecida.
 
 =item PATH
 X<PATH>
 
-Usada en la ejecuciÛn de subprocesos, y en la b˙squeda del programa, si se usa B<-S>.
+Usada en la ejecuci√≥n de subprocesos, y en la b√∫squeda del programa, si se usa B<-S>.
 
 =item PERL5LIB
 X<PERL5LIB>
 
-Una lista de directorios en los que buscar archivos de bibliotecas Perl antes de buscar en la biblioteca est·ndar y en el directorio actual.  Cualesquiera directorios especÌficos de la arquitectura, bajo las ubicaciones indicadas, son autom·ticamente incluidos, si existen, realizando la b˙squeda en el arranque del intÈrprete.
+Una lista de directorios en los que buscar archivos de bibliotecas Perl antes de buscar en la biblioteca est√°ndar y en el directorio actual.  Cualesquiera directorios espec√≠ficos de la arquitectura, bajo las ubicaciones indicadas, son autom√°ticamente incluidos, si existen, realizando la b√∫squeda en el arranque del int√©rprete.
 
-Si PERL5LIB no est· definido, se usa PERLLIB.  Los directorios est·n separados (como en PATH) por un car·cter dos puntos en las plataformas Unix y por un punto y coma en Windows (el separador de ruta adecuado viene dado por el comando C<perl -V:I<path_sep>>).
+Si PERL5LIB no est√° definido, se usa PERLLIB.  Los directorios est√°n separados (como en PATH) por un car√°cter dos puntos en las plataformas Unix y por un punto y coma en Windows (el separador de ruta adecuado viene dado por el comando C<perl -V:I<path_sep>>).
 
-Cuando ejecuta test de contaminaciÛn, ya sea porque el programa se estaba ejecutando con setuid o setgid, o estaban especificadas las opciones B<-T> o B<-t>, no son consultadas ni PERL5LIB ni PERLLIB. El programa, en su lugar, deberÌa decir:
+Cuando ejecuta test de contaminaci√≥n, ya sea porque el programa se estaba ejecutando con setuid o setgid, o estaban especificadas las opciones B<-T> o B<-t>, no son consultadas ni PERL5LIB ni PERLLIB. El programa, en su lugar, deber√≠a decir:
 
     use lib "/mi/directorio";
 
 =item PERL5OPT
 X<PERL5OPT>
 
-Opciones en lÌnea de comandos.  Las opciones en esta variable son tratadas como si estuvieran en cada lÌnea de comandos Perl.  Solo se permiten las opciones B<-[CDIMUdmtwW]>.  Cuando se ejecutan test de contaminaciÛn (ya sea porque el programa se estaba ejecutando setuid o setgid, o especificadas las opciones B<-T> o B<-t>), esta variable es ignorada.  Si PERL5OPT comienza con B<-T>, la contaminaciÛn es activada, y las siguientes opciones ignoradas.  Si PERL5OPT comienza con B<-t>, la contaminaciÛn ser· activada, un modificable punto eliminado de @INC, y las posteriores opciones tenidas en cuenta.
+Opciones en l√≠nea de comandos.  Las opciones en esta variable son tratadas como si estuvieran en cada l√≠nea de comandos Perl.  Solo se permiten las opciones B<-[CDIMUdmtwW]>.  Cuando se ejecutan test de contaminaci√≥n (ya sea porque el programa se estaba ejecutando setuid o setgid, o especificadas las opciones B<-T> o B<-t>), esta variable es ignorada.  Si PERL5OPT comienza con B<-T>, la contaminaci√≥n es activada, y las siguientes opciones ignoradas.  Si PERL5OPT comienza con B<-t>, la contaminaci√≥n ser√° activada, un modificable punto eliminado de @INC, y las posteriores opciones tenidas en cuenta.
 
 =item PERLIO
 X<PERLIO>
 
-Una lista separada por espacios (o caracteres de dos puntos) de capas PerlIO. Si perl est· compilado para utilizar el sistema de PerlIO de E/S (por defecto) estas capas afectan a la E/S de Perl.
+Una lista separada por espacios (o caracteres de dos puntos) de capas PerlIO. Si perl est√° compilado para utilizar el sistema de PerlIO de E/S (por defecto) estas capas afectan a la E/S de Perl.
 
-Lo normal es empezar los nombres de capa con un car·cter dos puntos (por ejemplo, C<:perlio>) para enfatizar su similitud con la variable "attributes". Sin embargo, el cÛdigo que analiza cadenas de capas de especificaciÛn, que tambiÈn se utiliza para decodificar la variable de entorno PERLIO, trata al car·cter dos puntos como un separador.
+Lo normal es empezar los nombres de capa con un car√°cter dos puntos (por ejemplo, C<:perlio>) para enfatizar su similitud con la variable "attributes". Sin embargo, el c√≥digo que analiza cadenas de capas de especificaci√≥n, que tambi√©n se utiliza para decodificar la variable de entorno PERLIO, trata al car√°cter dos puntos como un separador.
 
-Un inexistente PerlIO, o vacÌo, es equivalente al conjunto predeterminado de capas para su plataforma; por ejemplo, C<:unix:perlio> en sistemas tipo Unix y C<:unix:crlf> en Windows y otros sistemas DOS.
+Un inexistente PerlIO, o vac√≠o, es equivalente al conjunto predeterminado de capas para su plataforma; por ejemplo, C<:unix:perlio> en sistemas tipo Unix y C<:unix:crlf> en Windows y otros sistemas DOS.
 
-La lista se convierte en el valor predeterminado para I<toda> E/S de Perl. En consecuencia, sÛlo capas incluidas en el cÛdigo pueden aparecer en esta lista, ya que las capas externas (tales como C<encoding()>) necesitan E/S para poder ser leÌdas! Vea L<"open pragma"|open> para saber cÛmo aÒadir codificaciones externas por defecto.
+La lista se convierte en el valor predeterminado para I<toda> E/S de Perl. En consecuencia, s√≥lo capas incluidas en el c√≥digo pueden aparecer en esta lista, ya que las capas externas (tales como C<encoding()>) necesitan E/S para poder ser le√≠das! Vea L<"open pragma"|open> para saber c√≥mo a√±adir codificaciones externas por defecto.
 
-Capas que tiene sentido incluir en la variable de entorno PERLIO se resumen a continuaciÛn. Para m·s detalles, vea L<PerlIO>.
+Capas que tiene sentido incluir en la variable de entorno PERLIO se resumen a continuaci√≥n. Para m√°s detalles, vea L<PerlIO>.
 
 =over 8
 
 =item :bytes
 X<:bytes>
 
-Una pseudocapa que pone la bandera C<:utf8> a I<off> para la capa inferior; poco probable que sea ˙til por sÌ sola en la variable de entorno global PERLIO.
-Quiz·s estaba pensando en C<:crlf:bytes> o C<:perlio:bytes>.
+Una pseudocapa que pone la bandera C<:utf8> a I<off> para la capa inferior; poco probable que sea √∫til por s√≠ sola en la variable de entorno global PERLIO.
+Quiz√°s estaba pensando en C<:crlf:bytes> o C<:perlio:bytes>.
 
 =item :crlf
 X<:crlf>
 
-Una capa que pone CRLF a C<"\n"> trasladando la distinciÛn de los archivos de "texto" y "binarios", a la manera de MS-DOS y sistemas operativos similares.
+Una capa que pone CRLF a C<"\n"> trasladando la distinci√≥n de los archivos de "texto" y "binarios", a la manera de MS-DOS y sistemas operativos similares.
 (En la actualidad, I<no> imita a MS-DOS en cuanto al tratamiento de Control-Z como un marcador de fin de archivo).
 
 =item :mmap
 X<:mmap>
 
-Una capa que implementa la "lectura" de archivos mediante el uso de I<mmap>(2) para hacer que todo un archivo aparezca en el espacio de direcciones del proceso, y luego utilizarlo como un b˙fer de PerlIO.
+Una capa que implementa la "lectura" de archivos mediante el uso de I<mmap>(2) para hacer que todo un archivo aparezca en el espacio de direcciones del proceso, y luego utilizarlo como un b√∫fer de PerlIO.
 
 =item :perlio
 X<:perlio>
 
-Esta es una reimplementaciÛn del almacenamiento en b˙fer al estilo stdio escrito como una capa PerlIO.  Como tal ser· llamada cualesquiera capa estÈ por debajo de ella, para sus operaciones, por lo general, C<:unix>.
+Esta es una reimplementaci√≥n del almacenamiento en b√∫fer al estilo stdio escrito como una capa PerlIO.  Como tal ser√° llamada cualesquiera capa est√© por debajo de ella, para sus operaciones, por lo general, C<:unix>.
 
 =item :pop
 X<:pop>
@@ -733,15 +733,15 @@ Se usa con el mismo cuidado que se reserva para la nitroglicerina.
 =item :raw
 X<:raw>
 
-Una pseudocapa que manipula las otras capas.  Aplicando la capa C<:raw> es equivalente a llamar a C<binmode($fh)>.  Hace pasar el flujo de cada byte tal cual, sin traducciÛn.  En particular, tanto la traducciÛn de CRLF y la intuiciÛn de C<:utf8> desde la configuraciÛn regional, son desactivados.
+Una pseudocapa que manipula las otras capas.  Aplicando la capa C<:raw> es equivalente a llamar a C<binmode($fh)>.  Hace pasar el flujo de cada byte tal cual, sin traducci√≥n.  En particular, tanto la traducci√≥n de CRLF y la intuici√≥n de C<:utf8> desde la configuraci√≥n regional, son desactivados.
 
-A diferencia de versiones anteriores de Perl, C<:raw> I<no> es justo la inversa de C<:crlf>: otras capas que podrÌan afectar a la naturaleza binaria del flujo tambiÈn son eliminadas o desactivadas.
+A diferencia de versiones anteriores de Perl, C<:raw> I<no> es justo la inversa de C<:crlf>: otras capas que podr√≠an afectar a la naturaleza binaria del flujo tambi√©n son eliminadas o desactivadas.
 
 =item :stdio
 X<:stdio>
 
-Esta capa proporciona una interfaz PerlIO envolviendo a llamadas a la biblioteca del sistema ANSI C "stdio". La capa proporciona un sistema de b˙fer y E/S.
-Tenga en cuenta que la capa C<:stdio> I<no> hace traducciÛn CRLF incluso si ese es el comportamiento normal de la plataforma. Necesitar· una capa C<:crlf> por encima de ella, para hacer eso.
+Esta capa proporciona una interfaz PerlIO envolviendo a llamadas a la biblioteca del sistema ANSI C "stdio". La capa proporciona un sistema de b√∫fer y E/S.
+Tenga en cuenta que la capa C<:stdio> I<no> hace traducci√≥n CRLF incluso si ese es el comportamiento normal de la plataforma. Necesitar√° una capa C<:crlf> por encima de ella, para hacer eso.
 
 =item :unix
 X<:unix>
@@ -751,30 +751,30 @@ Capa de bajo nivel que llama a C<read>, C<write>, C<lseek>, etc.
 =item :utf8
 X<:utf8>
 
-Una pseudocapa que activa una bandera en la capa de abajo para avisar a Perl que la salida debe ser en utf8 y que la entrada debe ser considerada como que ya est· en una forma v·lida de utf8. B<AVISO: no comprueba la validez y debe ser manejada con extrema cautela para la entrada, debido a que pueden ocurrir violaciones de seguridad, con codificaciones UTF-8 no acortadas, etc.> Por lo general, C<:encoding(utf8)> es la mejor opciÛn al leer datos codificados en UTF-8.
+Una pseudocapa que activa una bandera en la capa de abajo para avisar a Perl que la salida debe ser en utf8 y que la entrada debe ser considerada como que ya est√° en una forma v√°lida de utf8. B<AVISO: no comprueba la validez y debe ser manejada con extrema cautela para la entrada, debido a que pueden ocurrir violaciones de seguridad, con codificaciones UTF-8 no acortadas, etc.> Por lo general, C<:encoding(utf8)> es la mejor opci√≥n al leer datos codificados en UTF-8.
 
 =item :win32
 X<:win32>
 
-En plataformas Win32 esta capa I<experimental> usa "gestores" de E/S nativos en lugar de una capa de descriptor de fichero numÈrico tipo Unix. Se sabe que tiene errores en esta versiÛn (5.14).
+En plataformas Win32 esta capa I<experimental> usa "gestores" de E/S nativos en lugar de una capa de descriptor de fichero num√©rico tipo Unix. Se sabe que tiene errores en esta versi√≥n (5.14).
 
 =back
 
-El conjunto predeterminado de capas deberÌa dar resultados aceptables en todas las plataformas
+El conjunto predeterminado de capas deber√≠a dar resultados aceptables en todas las plataformas
 
-Para plataformas Unix esto ser· equivalente a "unix perlio" o "stdio".
-Configure est· configurado para preferir el "stdio" si la biblioteca del sistema proporciona un acceso m·s r·pido al b˙fer; de lo contrario, se utiliza el "unix perlio" de la implementaciÛn.
+Para plataformas Unix esto ser√° equivalente a "unix perlio" o "stdio".
+Configure est√° configurado para preferir el "stdio" si la biblioteca del sistema proporciona un acceso m√°s r√°pido al b√∫fer; de lo contrario, se utiliza el "unix perlio" de la implementaci√≥n.
 
-En Win32 el valor por defecto en esta versiÛn (5.14) es "unix crlf". El "stdio" de Win32 tiene una serie de errores/fallas en PerlIO que son un poco dependientes de la versiÛn y del proveedor del compilador de C. Usando nuestra propia capa C<crlf> como b˙fer, evita estos problemas y hace las cosas m·s uniformes.  La capa C<crlf> proporciona la conversiÛn CRLF, asÌ como almacenamiento en b˙fer.
+En Win32 el valor por defecto en esta versi√≥n (5.14) es "unix crlf". El "stdio" de Win32 tiene una serie de errores/fallas en PerlIO que son un poco dependientes de la versi√≥n y del proveedor del compilador de C. Usando nuestra propia capa C<crlf> como b√∫fer, evita estos problemas y hace las cosas m√°s uniformes.  La capa C<crlf> proporciona la conversi√≥n CRLF, as√≠ como almacenamiento en b√∫fer.
 
-Esta versiÛn (5.14) utiliza C<unix> como la capa inferior de Win32, por lo que todavÌa utiliza las rutinas de descriptor numÈrico de archivo del compilador de C. Existe una capa experimental nativa C<win32>, que se espera que sea mejor y, finalmente, deba ser el valor por defecto en Win32.
+Esta versi√≥n (5.14) utiliza C<unix> como la capa inferior de Win32, por lo que todav√≠a utiliza las rutinas de descriptor num√©rico de archivo del compilador de C. Existe una capa experimental nativa C<win32>, que se espera que sea mejor y, finalmente, deba ser el valor por defecto en Win32.
 
-La variable de entorno PERLIO es completamente ignorada cuando Perl se ejecuta en el modo de contaminaciÛn.
+La variable de entorno PERLIO es completamente ignorada cuando Perl se ejecuta en el modo de contaminaci√≥n.
 
 =item PERLIO_DEBUG
 X<PERLIO_DEBUG>
 
-Si se establece al nombre de un archivo o dispositivo, ciertas operaciones del subsistema PerlIO ser·n registradas en ese archivo, que se abre en el modo aÒadir tÌpico de Unix:
+Si se establece al nombre de un archivo o dispositivo, ciertas operaciones del subsistema PerlIO ser√°n registradas en ese archivo, que se abre en el modo a√±adir t√≠pico de Unix:
 
    % env PERLIO_DEBUG=/dev/tty perl script ...
 
@@ -783,131 +783,131 @@ y bajo Win32, el equivalente aproximado es:
    > set PERLIO_DEBUG=CON
    perl script ...
 
-Esta funcionalidad est· deshabilitada para scripts setuid y para scripts que se ejecuten con B<-T>.
+Esta funcionalidad est√° deshabilitada para scripts setuid y para scripts que se ejecuten con B<-T>.
 
 =item PERLLIB
 X<PERLLIB>
 
-Una lista de directorios en los que buscar archivos de bibliotecas Perl antes de buscar en la biblioteca est·ndar y en el directorio actual.
-Si PERL5LIB est· definida, PERLLIB no se utiliza.
+Una lista de directorios en los que buscar archivos de bibliotecas Perl antes de buscar en la biblioteca est√°ndar y en el directorio actual.
+Si PERL5LIB est√° definida, PERLLIB no se utiliza.
 
-La variable de entorno PERLLIB es completamente ignorada cuando Perl se ejecuta en el modo de contaminaciÛn.
+La variable de entorno PERLLIB es completamente ignorada cuando Perl se ejecuta en el modo de contaminaci√≥n.
 
 =item PERL5DB
 X<PERL5DB>
 
-El comando usado para cargar el cÛdigo del depurador.  El valor por defecto es:
+El comando usado para cargar el c√≥digo del depurador.  El valor por defecto es:
 
 	BEGIN { require "perl5db.pl" }
 
-La variable de entorno PERL5DB sÛlo se usa cuando Perl es iniciado con una simple opciÛn B<-d>.
+La variable de entorno PERL5DB s√≥lo se usa cuando Perl es iniciado con una simple opci√≥n B<-d>.
 
 =item PERL5DB_THREADED
 X<PERL5DB_THREADED>
 
-Si se establece a un valor verdadero, indica al depurador que el cÛdigo que se est· depurando usa hilos de ejecuciÛn.
+Si se establece a un valor verdadero, indica al depurador que el c√≥digo que se est√° depurando usa hilos de ejecuci√≥n.
 
-=item PERL5SHELL (especÌfico a la adaptaciÛn Win32)
+=item PERL5SHELL (espec√≠fico a la adaptaci√≥n Win32)
 X<PERL5SHELL>
 
-En las adaptaciones Win32, se puede establecer un shell alternativo que Perl debe utilizar internamente para la ejecuciÛn de comandos en "comillas invertidas" o system().  Por defecto es C<cmd.exe /x/d/c> en Windows NT y C<command.com /c> en Windows 95.  El valor es considerado que est· separado por espacios.  Preceda cualquier car·cter que necesite ser protegido, como un espacio o una barra diagonal inversa, con otra barra diagonal inversa.
+En las adaptaciones Win32, se puede establecer un shell alternativo que Perl debe utilizar internamente para la ejecuci√≥n de comandos en "comillas invertidas" o system().  Por defecto es C<cmd.exe /x/d/c> en Windows NT y C<command.com /c> en Windows 95.  El valor es considerado que est√° separado por espacios.  Preceda cualquier car√°cter que necesite ser protegido, como un espacio o una barra diagonal inversa, con otra barra diagonal inversa.
 
-Tenga en cuenta que Perl no utiliza COMSPEC para este propÛsito porque COMSPEC tiene un alto grado de variabilidad entre los usuarios, lo que se traduce en problemas de portabilidad.  Adem·s, Perl puede utilizar un shell que no pueda ser apto para el uso interactivo, y el establecimiento de COMSPEC a un shell puede interferir con el buen funcionamiento de otros programas (que sÌ suelen mirar en COMSPEC para encontrar un shell para el uso interactivo).
+Tenga en cuenta que Perl no utiliza COMSPEC para este prop√≥sito porque COMSPEC tiene un alto grado de variabilidad entre los usuarios, lo que se traduce en problemas de portabilidad.  Adem√°s, Perl puede utilizar un shell que no pueda ser apto para el uso interactivo, y el establecimiento de COMSPEC a un shell puede interferir con el buen funcionamiento de otros programas (que s√≠ suelen mirar en COMSPEC para encontrar un shell para el uso interactivo).
 
-Antes de Perl 5.10.0 y 5.8.8, PERL5SHELL no era comprobada su contaminaciÛn cuando se ejecutaban comandos externos.  Se recomienda que se establezca explÌcitamente (o elimine) C<$ENV{PERL5SHELL}> cuando se ejecute en modo contaminaciÛn en Windows.
+Antes de Perl 5.10.0 y 5.8.8, PERL5SHELL no era comprobada su contaminaci√≥n cuando se ejecutaban comandos externos.  Se recomienda que se establezca expl√≠citamente (o elimine) C<$ENV{PERL5SHELL}> cuando se ejecute en modo contaminaci√≥n en Windows.
 
-=item PERL_ALLOW_NON_IFS_LSP (especÌfico a la adaptaciÛn Win32)
+=item PERL_ALLOW_NON_IFS_LSP (espec√≠fico a la adaptaci√≥n Win32)
 X<PERL_ALLOW_NON_IFS_LSP>
 
 Se establece en 1 para permitir el uso de LSP (proveedores de servicio en niveles) no compatibles con IFS.
-Perl normalmente busca un LSP compatible IFS, porque es necesario para la emulaciÛn de los I<sockets> de Windows como gestores de archivo real.  Sin embargo, esto puede causar problemas si usted tiene un cortafuegos como I<McAfee Guardian>, que requiere que todas las aplicaciones utilicen su LSP, pero que no es compatible con IFS, porque es evidente que Perl normalmente evita el uso de ese LSP.
+Perl normalmente busca un LSP compatible IFS, porque es necesario para la emulaci√≥n de los I<sockets> de Windows como gestores de archivo real.  Sin embargo, esto puede causar problemas si usted tiene un cortafuegos como I<McAfee Guardian>, que requiere que todas las aplicaciones utilicen su LSP, pero que no es compatible con IFS, porque es evidente que Perl normalmente evita el uso de ese LSP.
 
-Al establecer esta variable de entorno a 1 significa que Perl simplemente utilizar· el primer LSP adecuado, enumerado en el cat·logo, que mantenga I<McAfee Guardian> feliz -y en ese caso en particular, Perl tambiÈn funciona porque el LSP de I<McAfee Guardian> realmente juega a otros juegos que permiten trabajar a las aplicaciones que requieran compatibilidad IFS-.
+Al establecer esta variable de entorno a 1 significa que Perl simplemente utilizar√° el primer LSP adecuado, enumerado en el cat√°logo, que mantenga I<McAfee Guardian> feliz -y en ese caso en particular, Perl tambi√©n funciona porque el LSP de I<McAfee Guardian> realmente juega a otros juegos que permiten trabajar a las aplicaciones que requieran compatibilidad IFS-.
 
 =item PERL_DEBUG_MSTATS
 X<PERL_DEBUG_MSTATS>
 
-SÛlo es relevante si Perl es compilado con el C<malloc> incluido con la distribuciÛn de Perl; es decir, si C<perl -V:d_mymalloc> est· "I<define>" (definido).
+S√≥lo es relevante si Perl es compilado con el C<malloc> incluido con la distribuci√≥n de Perl; es decir, si C<perl -V:d_mymalloc> est√° "I<define>" (definido).
 
-Si est· establecido, vuelca estadÌsticas de memoria despuÈs de la ejecuciÛn.  Si se define a un entero mayor que uno, tambiÈn vuelca las estadÌsticas de la memoria despuÈs de la compilaciÛn.
+Si est√° establecido, vuelca estad√≠sticas de memoria despu√©s de la ejecuci√≥n.  Si se define a un entero mayor que uno, tambi√©n vuelca las estad√≠sticas de la memoria despu√©s de la compilaci√≥n.
 
 =item PERL_DESTRUCT_LEVEL
 X<PERL_DESTRUCT_LEVEL>
 
-SÛlo es relevante si el ejecutable Perl fue compilado con B<-DDEBUGGING>, Èste controla el comportamiento de la destrucciÛn global de objetos y otras referencias.  Vea L<perlhacktips/PERL_DESTRUCT_LEVEL> para m·s informaciÛn.
+S√≥lo es relevante si el ejecutable Perl fue compilado con B<-DDEBUGGING>, √©ste controla el comportamiento de la destrucci√≥n global de objetos y otras referencias.  Vea L<perlhacktips/PERL_DESTRUCT_LEVEL> para m√°s informaci√≥n.
 
 =item PERL_DL_NONLAZY
 X<PERL_DL_NONLAZY>
 
-Se establece en C<"1"> para hacer que Perl resuelva I<todos> los sÌmbolos indefinidos cuando se cargue una biblioteca din·mica.  El comportamiento por defecto es resolver los sÌmbolos cuando son utilizados.  Establecer esta variable es ˙til durante las pruebas de las extensiones, ya que asegura que obtendr· un error con nombres de funciÛn mal escritos, incluso si el conjunto de pruebas no los llama.
+Se establece en C<"1"> para hacer que Perl resuelva I<todos> los s√≠mbolos indefinidos cuando se cargue una biblioteca din√°mica.  El comportamiento por defecto es resolver los s√≠mbolos cuando son utilizados.  Establecer esta variable es √∫til durante las pruebas de las extensiones, ya que asegura que obtendr√° un error con nombres de funci√≥n mal escritos, incluso si el conjunto de pruebas no los llama.
 
 =item PERL_ENCODING
 X<PERL_ENCODING>
 
-Si se utiliza el pragma C<use encoding> sin un nombre de codificaciÛn explÌcito, la variable de entorno PERL_ENCODING es consultada por un nombre de codificaciÛn.
+Si se utiliza el pragma C<use encoding> sin un nombre de codificaci√≥n expl√≠cito, la variable de entorno PERL_ENCODING es consultada por un nombre de codificaci√≥n.
 
 =item PERL_HASH_SEED
 X<PERL_HASH_SEED>
 
-(Desde Perl 5.8.1.)  Se utiliza para aleatorizar la funciÛn hash interna de Perl.
-Para emular el comportamiento pre-5.8.1, establezca a un n˙mero entero; C<"0"> significa exactamente el mismo orden que en 5.8.0.  "Pre-5.8.1" significa, entre otras cosas, que las claves de hash siempre tendr· el mismo orden entre las diferentes ejecuciones de Perl.
+(Desde Perl 5.8.1.)  Se utiliza para aleatorizar la funci√≥n hash interna de Perl.
+Para emular el comportamiento pre-5.8.1, establezca a un n√∫mero entero; C<"0"> significa exactamente el mismo orden que en 5.8.0.  "Pre-5.8.1" significa, entre otras cosas, que las claves de hash siempre tendr√° el mismo orden entre las diferentes ejecuciones de Perl.
 
-La mayorÌa de los hashes, por defecto, devuelven elementos en el mismo orden que en Perl 5.8.0.
-En un trabajo normal con un hash, si se detectan datos patolÛgicos durante una inserciÛn de clave hash, entonces ese hash pasar· a una alternativa de semillas de hash aleatorias.
+La mayor√≠a de los hashes, por defecto, devuelven elementos en el mismo orden que en Perl 5.8.0.
+En un trabajo normal con un hash, si se detectan datos patol√≥gicos durante una inserci√≥n de clave hash, entonces ese hash pasar√° a una alternativa de semillas de hash aleatorias.
 
 El comportamiento por defecto es el azar a menos que se establezca PERL_HASH_SEED.
 Si Perl se ha compilado con B<-DUSE_HASH_SEED_EXPLICIT>, el comportamiento por defecto es I<no> seleccionar al azar a menos que se establezca PERL_HASH_SEED.
 
-Si PERL_HASH_SEED no est· definida o est· establecida a una cadena no numÈrica, Perl utiliza la semilla pseudoaleatoria suministrada por el sistema operativo y las bibliotecas.
+Si PERL_HASH_SEED no est√° definida o est√° establecida a una cadena no num√©rica, Perl utiliza la semilla pseudoaleatoria suministrada por el sistema operativo y las bibliotecas.
 
-B<POR FAVOR, TENGA EN CUENTA: La semilla hash es informaciÛn sensible>. Los hash son asignados al azar para protegerse contra los ataques locales y remotos contra el cÛdigo Perl. Poniendo manualmente una semilla, esta protecciÛn puede quedar parcial o completamente perdida.
+B<POR FAVOR, TENGA EN CUENTA: La semilla hash es informaci√≥n sensible>. Los hash son asignados al azar para protegerse contra los ataques locales y remotos contra el c√≥digo Perl. Poniendo manualmente una semilla, esta protecci√≥n puede quedar parcial o completamente perdida.
 
-Vea L<perlsec/"Ataques de Complejidad AlgorÌtmica"> y L</PERL_HASH_SEED_DEBUG> para m·s informaciÛn.
+Vea L<perlsec/"Ataques de Complejidad Algor√≠tmica"> y L</PERL_HASH_SEED_DEBUG> para m√°s informaci√≥n.
 
 =item PERL_HASH_SEED_DEBUG
 X<PERL_HASH_SEED_DEBUG>
 
-(Desde Perl 5.8.1.)  Establecido a C<"1"> para mostrar (en STDERR) el valor de la semilla de hash al comienzo de la ejecuciÛn.  Esto, combinado con L</PERL_HASH_SEED> est· destinado a ayudar a depurar el comportamiento no determinista causado por la aleatorizaciÛn de los hash.
+(Desde Perl 5.8.1.)  Establecido a C<"1"> para mostrar (en STDERR) el valor de la semilla de hash al comienzo de la ejecuci√≥n.  Esto, combinado con L</PERL_HASH_SEED> est√° destinado a ayudar a depurar el comportamiento no determinista causado por la aleatorizaci√≥n de los hash.
 
-B <Note que la semilla hash es informaciÛn sensible>: conociÈndolo, se puede elaborar un ataque de denegaciÛn de servicio contra el cÛdigo Perl, incluso remotamente; vea L<perlsec/"Ataques de Complejidad AlgorÌtmica"> para m·s informaciÛn.
+B <Note que la semilla hash es informaci√≥n sensible>: conoci√©ndolo, se puede elaborar un ataque de denegaci√≥n de servicio contra el c√≥digo Perl, incluso remotamente; vea L<perlsec/"Ataques de Complejidad Algor√≠tmica"> para m√°s informaci√≥n.
 B<No muestre la semilla hash> a personas que no necesiten conocerla.
-Vea tambiÈn hash_seed() en L<Hash::Util>.
+Vea tambi√©n hash_seed() en L<Hash::Util>.
 
 =item PERL_MEM_LOG
 X<PERL_MEM_LOG>
 
-Si su Perl se ha compilado con B<-Accflags=-DPERL_MEM_LOG>, poniendo la variable de entorno C<PERL_MEM_LOG> permite el registro de mensajes de depuraciÛn. El valor tiene la forma C<< <I<n˙mero>>[m][s][t] >>, donde C<I<n˙mero>> es el n˙mero de descriptor de archivo en donde desea escribir (2, por defecto), y la combinaciÛn de letras especifica que desea informaciÛn acerca de (m)moria y/o (s)v, opcionalmente con (t)iempos. Por ejemplo, C<PERL_MEM_LOG=1mst> registra toda la informaciÛn a la salida est·ndar. Puede escribir a otros descriptores de fichero abiertos en una variedad de formas:
+Si su Perl se ha compilado con B<-Accflags=-DPERL_MEM_LOG>, poniendo la variable de entorno C<PERL_MEM_LOG> permite el registro de mensajes de depuraci√≥n. El valor tiene la forma C<< <I<n√∫mero>>[m][s][t] >>, donde C<I<n√∫mero>> es el n√∫mero de descriptor de archivo en donde desea escribir (2, por defecto), y la combinaci√≥n de letras especifica que desea informaci√≥n acerca de (m)moria y/o (s)v, opcionalmente con (t)iempos. Por ejemplo, C<PERL_MEM_LOG=1mst> registra toda la informaci√≥n a la salida est√°ndar. Puede escribir a otros descriptores de fichero abiertos en una variedad de formas:
 
   $ 3>foo3 PERL_MEM_LOG=3m perl ...
 
-=item PERL_ROOT (especÌfico a la adaptaciÛn VMS)
+=item PERL_ROOT (espec√≠fico a la adaptaci√≥n VMS)
 X<PERL_ROOT>
 
-Solo para VMS, un nombre lÛgico que hace referencia a la raÌz y dispositivo lÛgico para la ruta @INC.  Otros nombres lÛgicos que afectan a Perl en VMS incluyen a PERLSHR, PERL_ENV_TABLES y SYS$TIMEZONE_DIFFERENTIAL, pero son opcionales y se explican m·s adelante en L<perlvms> y en F<README.vms> en la distribuciÛn del cÛdigo fuente de Perl.
+Solo para VMS, un nombre l√≥gico que hace referencia a la ra√≠z y dispositivo l√≥gico para la ruta @INC.  Otros nombres l√≥gicos que afectan a Perl en VMS incluyen a PERLSHR, PERL_ENV_TABLES y SYS$TIMEZONE_DIFFERENTIAL, pero son opcionales y se explican m√°s adelante en L<perlvms> y en F<README.vms> en la distribuci√≥n del c√≥digo fuente de Perl.
 
 =item PERL_SIGNALS
 X<PERL_SIGNALS>
 
-Disponible en Perls 5.8.1 y versiones posteriores.  Si se establece a C<"unsafe">, se restaura el comportamiento de seÒales como en pre-Perl-5.8.0 (que es r·pido, pero inseguro).  Si se establece a C<safe>, entonces se usan seÒales seguras (pero diferidas).  Vea L<perlipc/"SeÒales Diferidas (SeÒales Seguras)">.
+Disponible en Perls 5.8.1 y versiones posteriores.  Si se establece a C<"unsafe">, se restaura el comportamiento de se√±ales como en pre-Perl-5.8.0 (que es r√°pido, pero inseguro).  Si se establece a C<safe>, entonces se usan se√±ales seguras (pero diferidas).  Vea L<perlipc/"Se√±ales Diferidas (Se√±ales Seguras)">.
 
 =item PERL_UNICODE
 X<PERL_UNICODE>
 
-Equivalente a la opciÛn de lÌnea de comandos B<-C>.  Tenga en cuenta que esto no es una variable booleana. Definiendo este valor a C<"1">, no es la manera correcta de "activar Unicode" (sea lo que signifique).  Al contrario, puede utilizar C<"0"> para "desactivar Unicode" (o, alternativamente, limpiar PERL_UNICODE en su shell antes de iniciar Perl).  Vea la descripciÛn de la opciÛn B<-C> para m·s informaciÛn sobre esto.
+Equivalente a la opci√≥n de l√≠nea de comandos B<-C>.  Tenga en cuenta que esto no es una variable booleana. Definiendo este valor a C<"1">, no es la manera correcta de "activar Unicode" (sea lo que signifique).  Al contrario, puede utilizar C<"0"> para "desactivar Unicode" (o, alternativamente, limpiar PERL_UNICODE en su shell antes de iniciar Perl).  Vea la descripci√≥n de la opci√≥n B<-C> para m√°s informaci√≥n sobre esto.
 
-=item SYS$LOGIN (especÌfico de la adaptaciÛn a VMS)
+=item SYS$LOGIN (espec√≠fico de la adaptaci√≥n a VMS)
 X<SYS$LOGIN>
 
-Usada si chdir no tiene argumento y HOME y LOGDIR no tienen ning˙n valor.
+Usada si chdir no tiene argumento y HOME y LOGDIR no tienen ning√∫n valor.
 
 =back
 
-Perl tambiÈn tiene variables de entorno que controlan cÛmo Perl trata los datos especÌficos de los lenguajes naturales; vea L<perllocale>.
+Perl tambi√©n tiene variables de entorno que controlan c√≥mo Perl trata los datos espec√≠ficos de los lenguajes naturales; vea L<perllocale>.
 
-Perl y sus diferentes mÛdulos y componentes, incluidos los marcos de prueba, a veces pueden hacer uso de ciertas variables de entorno.  Algunos de estos son especÌficos para una determinada plataforma.  Por favor, consulte la documentaciÛn del mÛdulo correspondiente y toda la documentaciÛn para su plataforma (como L<perlsolaris>, L<perllinux>, L<perlmacosx>, L<perlwin32>, etc) para las variables propias de esas situaciones especÌficas.
+Perl y sus diferentes m√≥dulos y componentes, incluidos los marcos de prueba, a veces pueden hacer uso de ciertas variables de entorno.  Algunos de estos son espec√≠ficos para una determinada plataforma.  Por favor, consulte la documentaci√≥n del m√≥dulo correspondiente y toda la documentaci√≥n para su plataforma (como L<perlsolaris>, L<perllinux>, L<perlmacosx>, L<perlwin32>, etc) para las variables propias de esas situaciones espec√≠ficas.
 
-Perl hace disponibles todas las variables de entorno para el programa en ejecuciÛn, y las pasa a todos los procesos hijo que inicie.
-Sin embargo, en la ejecuciÛn de programas setuid harÌan bien en ejecutar las siguientes lÌneas antes de hacer nada, solo para que la gente siga siendo honesta:
+Perl hace disponibles todas las variables de entorno para el programa en ejecuci√≥n, y las pasa a todos los procesos hijo que inicie.
+Sin embargo, en la ejecuci√≥n de programas setuid har√≠an bien en ejecutar las siguientes l√≠neas antes de hacer nada, solo para que la gente siga siendo honesta:
 
     $ENV{PATH}  = "/bin:/usr/bin";    # o lo que sea necesario
     $ENV{SHELL} = "/bin/sh" if exists $ENV{SHELL};

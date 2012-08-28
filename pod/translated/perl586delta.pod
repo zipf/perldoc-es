@@ -1,10 +1,10 @@
 =head1 NOMBRE
 
-perl586delta - quÈ hay de nuevo para perl v5.8.6
+perl586delta - qu√© hay de nuevo para perl v5.8.6
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Este documento describe las diferencias entre la versiÛn 5.8.5 y la versiÛn 5.8.6.
+Este documento describe las diferencias entre la versi√≥n 5.8.5 y la versi√≥n 5.8.6.
 
 =head1 Cambios incompatibles
 
@@ -12,11 +12,11 @@ No hay cambios incompatibles con 5.8.5.
 
 =head1 Mejoras en los componentes
 
-El intÈrprete perl es ahora m·s tolerante con los script codificados en UTF-16.
+El int√©rprete perl es ahora m√°s tolerante con los script codificados en UTF-16.
 
-En Win32, Perl ahora puede usar no-IFS compatibles con LSP, que permite a Perl trabajar en conjunto con cortafuegos como McAfee Guardian. Para m·s detalles vea el archivo F<README.win32>, sobre todo si est· ejecutando Win95.
+En Win32, Perl ahora puede usar no-IFS compatibles con LSP, que permite a Perl trabajar en conjunto con cortafuegos como McAfee Guardian. Para m√°s detalles vea el archivo F<README.win32>, sobre todo si est√° ejecutando Win95.
 
-=head1 MÛdulos y pragmas
+=head1 M√≥dulos y pragmas
 
 =over 4
 
@@ -26,112 +26,112 @@ Con el pragma C<base>, una clase intermedia sin campos es utilizada para mezclar
 
 =item *
 
-Cwd actualizado a la versiÛn 3.01 (como parte de la nueva distribuciÛn PathTools)
+Cwd actualizado a la versi√≥n 3.01 (como parte de la nueva distribuci√≥n PathTools)
 
 =item *
 
-Devel::PPPort actualizado a la versiÛn 3.03
+Devel::PPPort actualizado a la versi√≥n 3.03
 
 =item *
 
-File::Spec actualizado a la versiÛn 3.01 (como parte de la nueva distribuciÛn PathTools)
+File::Spec actualizado a la versi√≥n 3.01 (como parte de la nueva distribuci√≥n PathTools)
 
 =item *
 
-Encode actualizado a la versiÛn 2.08
+Encode actualizado a la versi√≥n 2.08
 
 =item *
 
-ExtUtils::MakeMaker se mantiene en la versiÛn 6.17, debido a que las ˙ltimas versiones estables actualmente disponibles en CPAN tienen algunos problemas con los mÛdulos b·sicos en algunas plataformas principales.
+ExtUtils::MakeMaker se mantiene en la versi√≥n 6.17, debido a que las √∫ltimas versiones estables actualmente disponibles en CPAN tienen algunos problemas con los m√≥dulos b√°sicos en algunas plataformas principales.
 
 =item *
 
-I18N::LangTags actualizado a la versiÛn 0.35
+I18N::LangTags actualizado a la versi√≥n 0.35
 
 =item *
 
-Math::BigInt actualizado a la versiÛn 1.73
+Math::BigInt actualizado a la versi√≥n 1.73
 
 =item *
 
-Math::BigRat actualizado a la versiÛn 0.13
+Math::BigRat actualizado a la versi√≥n 0.13
 
 =item *
 
-MIME::Base64 actualizado a la versiÛn 3.05
+MIME::Base64 actualizado a la versi√≥n 3.05
 
 =item *
 
-La funciÛn POSIX::sigprocmask ahora puede recuperar la m·scara de seÒales actual sin tener que establecerla.
+La funci√≥n POSIX::sigprocmask ahora puede recuperar la m√°scara de se√±ales actual sin tener que establecerla.
 
 =item *
 
-Time::HiRes actualizado a la versiÛn 1.65
+Time::HiRes actualizado a la versi√≥n 1.65
 
 =back
 
 =head1 Cambios en utilidades
 
-Perl tiene una nueva bandera de lÌnea de comandos llamada -dt, que activa el soporte de hebras en el depurador.
+Perl tiene una nueva bandera de l√≠nea de comandos llamada -dt, que activa el soporte de hebras en el depurador.
 
 =head1 Mejoras en el rendimiento
 
-C<reverse sort ...> se ha optimizado para ordenar a la inversa, evitando la generaciÛn de una lista temporal intermedia.
+C<reverse sort ...> se ha optimizado para ordenar a la inversa, evitando la generaci√≥n de una lista temporal intermedia.
 
-C<for (reverse @foo)> ahora se repite a la inversa, evitando la generaciÛn de una lista invertida temporal.
+C<for (reverse @foo)> ahora se repite a la inversa, evitando la generaci√≥n de una lista invertida temporal.
 
 =head1 Arreglo de determinados errores
 
-El motor regex es ahora m·s sÛlido cuando se le administra una entrada utf8 inv·lida, como a veces se genera por parte de mÛdulos XS con errores.
+El motor regex es ahora m√°s s√≥lido cuando se le administra una entrada utf8 inv√°lida, como a veces se genera por parte de m√≥dulos XS con errores.
 
 C<foreach> sobre un array threads::shared era capaz de colgar Perl. Este error ya se ha solucionado.
 
-Una expresiÛn regular en el destructor de C<STDOUT> se usa en el volcado del n˙cleo, ya que la plataforma de expresiones regulares ya fue liberada. Esto ha sido corregido.
+Una expresi√≥n regular en el destructor de C<STDOUT> se usa en el volcado del n√∫cleo, ya que la plataforma de expresiones regulares ya fue liberada. Esto ha sido corregido.
 
-C<goto &> es ahora m·s robusto - errores en la recursividad profunda y C<goto &> encadenados han sido corregidos.
+C<goto &> es ahora m√°s robusto - errores en la recursividad profunda y C<goto &> encadenados han sido corregidos.
 
 El uso de C<delete> en un array ya no provoca fugas de memoria. A C<pop> de un elemento de una referencia compartida a un array ya no provoca fugas de memoria.
 
-C<eval_sv()> fallando una prueba de pringado podrÌa corromper la pila - ha sido arreglado.
+C<eval_sv()> fallando una prueba de pringado podr√≠a corromper la pila - ha sido arreglado.
 
-En las plataformas con punteros de 64 bits los operadores de comparaciÛn numÈricos eran errÛneamente usados para comparar las direcciones de las referencias que estaban sobrecargadas, en lugar de utilizar los valores sobrecargados. Esto ha sido corregido.
+En las plataformas con punteros de 64 bits los operadores de comparaci√≥n num√©ricos eran err√≥neamente usados para comparar las direcciones de las referencias que estaban sobrecargadas, en lugar de utilizar los valores sobrecargados. Esto ha sido corregido.
 
-C<read> en un b˙fer codificado en UTF8 con un desplazamiento m·s all· del final del b˙fer ya no calcula mal la longitud del b˙fer.
+C<read> en un b√∫fer codificado en UTF8 con un desplazamiento m√°s all√° del final del b√∫fer ya no calcula mal la longitud del b√∫fer.
 
-Aunque Perl prometiÛ, desde la versiÛn 5.8, que C<sort()> serÌa estable, los dos casos C<sort {$b cmp $a}> y C<< sort {$b <=> $a} >> puede producir ordenaciones no estables.   Esto se ha corregido en perl5.8.6.
+Aunque Perl prometi√≥, desde la versi√≥n 5.8, que C<sort()> ser√≠a estable, los dos casos C<sort {$b cmp $a}> y C<< sort {$b <=> $a} >> puede producir ordenaciones no estables.   Esto se ha corregido en perl5.8.6.
 
-LocalizaciÛn de C<$^D> ya no genera un mensaje de diagnÛstico sobre banderas v·lidas -D.
+Localizaci√≥n de C<$^D> ya no genera un mensaje de diagn√≥stico sobre banderas v√°lidas -D.
 
-=head1 DiagnÛsticos nuevos y cambiados
+=head1 Diagn√≥sticos nuevos y cambiados
 
 Por -t y -T,
-   Demasiado tarde para la opciÛn "-T" se ha cambiado para que sea m·s informativa
-   "-T" est· en la #! lÌnea, tambiÈn debe estar en la lÌnea de comandos
+   Demasiado tarde para la opci√≥n "-T" se ha cambiado para que sea m√°s informativa
+   "-T" est√° en la #! l√≠nea, tambi√©n debe estar en la l√≠nea de comandos
 
 =head1 Cambios internos
 
-A partir de ahora todas las aplicaciones que incrusten perl se comportar·n como si se estuviera compilado con -DPERL_USE_SAFE_PUTENV.  Vea "Acceso al entorno" en el fichero F<INSTALL> para m·s detalles.
+A partir de ahora todas las aplicaciones que incrusten perl se comportar√°n como si se estuviera compilado con -DPERL_USE_SAFE_PUTENV.  Vea "Acceso al entorno" en el fichero F<INSTALL> para m√°s detalles.
 
-La mayorÌa de los archivos de cÛdigo fuente C<C> ya tienen comentarios en la parte superior explicando su propÛsito, que debe ayudar a cualquier persona que desee obtener una visiÛn general de la aplicaciÛn.
+La mayor√≠a de los archivos de c√≥digo fuente C<C> ya tienen comentarios en la parte superior explicando su prop√≥sito, que debe ayudar a cualquier persona que desee obtener una visi√≥n general de la aplicaci√≥n.
 
 =head1 Nuevas pruebas
 
-Hay significativamente m·s pruebas para el conjunto de mÛdulos C<B>.
+Hay significativamente m√°s pruebas para el conjunto de m√≥dulos C<B>.
 
-=head1 NotificaciÛn de errores
+=head1 Notificaci√≥n de errores
 
-Si usted encuentra algo que piensa que es un error, podrÌa verificar los artÌculos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  TambiÈn puede haber informaciÛn en http://www.perl.org/, la p·gina oficial de Perl.
+Si usted encuentra algo que piensa que es un error, podr√≠a verificar los art√≠culos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/.  Tambi√©n puede haber informaci√≥n en http://www.perl.org/, la p√°gina oficial de Perl.
 
-Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuciÛn.  Aseg˙rese de reducir la apariciÛn del error en un programa que sea pequeÒo, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser·n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaciÛn de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
+Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribuci√≥n.  Aseg√∫rese de reducir la aparici√≥n del error en un programa que sea peque√±o, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, ser√°n enviados a perlbug@perl.org para ser analizado por el equipo de adaptaci√≥n de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
-El archivo de F<Changes> (Cambios) para obtener m·s informaciÛn exhaustiva sobre lo que ha cambiado.
+El archivo de F<Changes> (Cambios) para obtener m√°s informaci√≥n exhaustiva sobre lo que ha cambiado.
 
 El archivo F<INSTALL> contiene instrucciones para compilar Perl.
 
-El archivo F<README> contiene informaciÛn general.
+El archivo F<README> contiene informaci√≥n general.
 
-En los archivos F<Artistic> y F<Copying> encontrar· informaciÛn de copyright.
+En los archivos F<Artistic> y F<Copying> encontrar√° informaci√≥n de copyright.
 
 =cut
