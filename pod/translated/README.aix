@@ -1,50 +1,50 @@
-Puede leer este archivo en cualquier editor de texto (ver· algunos caracteres extraÒos, pero puede ignorarlos).
-Est· escrito en formato POD (vea pod/perlpod.pod), un formato diseÒado especÌficamente para ser legible tal cual.
+Puede leer este archivo en cualquier editor de texto (ver√° algunos caracteres extra√±os, pero puede ignorarlos).
+Est√° escrito en formato POD (vea pod/perlpod.pod), un formato dise√±ado espec√≠ficamente para ser legible tal cual.
 
 =head1 NOMBRE
 
-perlaix - Perl versiÛn 5 en sistemass IBM AIX (UNIX)
+perlaix - Perl versi√≥n 5 en sistemass IBM AIX (UNIX)
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Este documento describe varias caracterÌsticas del sistema operativo UNIX AIX de IBM que afectar· a cÛmo Perl versiÛn 5 (de ahora en adelante sÛlo Perl) es compilado y/o ejecutado.
+Este documento describe varias caracter√≠sticas del sistema operativo UNIX AIX de IBM que afectar√° a c√≥mo Perl versi√≥n 5 (de ahora en adelante s√≥lo Perl) es compilado y/o ejecutado.
 
 =head2 Compilando Perl 5 en AIX
 
-Para obtener informaciÛn sobre los compiladores en las versiones anteriores de AIX, vea L<Compilando Perl 5 en versiones anteriores de AIX hasta la 4.3.3>.
+Para obtener informaci√≥n sobre los compiladores en las versiones anteriores de AIX, vea L<Compilando Perl 5 en versiones anteriores de AIX hasta la 4.3.3>.
 
-Al compilar Perl, debe utilizar un compilador ANSI C. AIX no incluye por defecto un compilador de ANSI C compatible con AIX, pero las versiones binarias de gcc para AIX est·n ampliamente disponibles. Una versiÛn de gcc tambiÈn se incluye en la caja de herramientas AIX (AIX Toolbox) que se incluye con AIX.
+Al compilar Perl, debe utilizar un compilador ANSI C. AIX no incluye por defecto un compilador de ANSI C compatible con AIX, pero las versiones binarias de gcc para AIX est√°n ampliamente disponibles. Una versi√≥n de gcc tambi√©n se incluye en la caja de herramientas AIX (AIX Toolbox) que se incluye con AIX.
 
 =head2 Compiladores soportados
 
-En la actualidad todas las versiones de IBM de los compiladores ANSI/C "xlc", "xlc_r", "cc", "cc_r" o "vac" servir·n para la compilaciÛn de Perl, si el compilador funciona en su sistema.
+En la actualidad todas las versiones de IBM de los compiladores ANSI/C "xlc", "xlc_r", "cc", "cc_r" o "vac" servir√°n para la compilaci√≥n de Perl, si el compilador funciona en su sistema.
 
-Si planea enlazar Perl con cualquier mÛdulo que requiera soporte de hilos, como DBD::Oracle, es mejor utilizar la versiÛn _r del compilador.
-Esto no crear· un Perl multihebra, si no un Perl con hilos habilitados. Vea tambiÈn L<Perl multihebra> m·s adelante.
+Si planea enlazar Perl con cualquier m√≥dulo que requiera soporte de hilos, como DBD::Oracle, es mejor utilizar la versi√≥n _r del compilador.
+Esto no crear√° un Perl multihebra, si no un Perl con hilos habilitados. Vea tambi√©n L<Perl multihebra> m√°s adelante.
 
-En el momento de escribir esto (2010-09), sÛlo los compiladores I<IBM XL C for AIX> o I<IBM XL C/C++ for AIX> son compatibles con IBM en AIX 5L/6.1/7.1.
+En el momento de escribir esto (2010-09), s√≥lo los compiladores I<IBM XL C for AIX> o I<IBM XL C/C++ for AIX> son compatibles con IBM en AIX 5L/6.1/7.1.
 
-Las siguientes versiones del compilador est·n soportados por IBM:
+Las siguientes versiones del compilador est√°n soportados por IBM:
 
     IBM XL C e IBM XL C/C++ V8, V9, V10, V11
 
-El I<XL C for AIX> est· integrado en el compilador I<XL C/C++ for AIX> y por lo tanto, tambiÈn soportado.
+El I<XL C for AIX> est√° integrado en el compilador I<XL C/C++ for AIX> y por lo tanto, tambi√©n soportado.
 
-Si elige I<XL C/C++ V9> necesitar· que estÈ instalado APAR IZ35785, o de lo contrario el SDBM_File integrado no se compilar· correctamente debido a un error de optimizaciÛn. Puede evitar este problema mediante la adiciÛn de -qipa a los par·metros de optimizaciÛn (-Doptimize='-O -qipa').
-El PTF para APAR IZ35785 que soluciona este problema est· disponible desde IBM (I<April 2009 PTF for XL C/C++ Enterprise Edition for AIX, V9.0>).
+Si elige I<XL C/C++ V9> necesitar√° que est√© instalado APAR IZ35785, o de lo contrario el SDBM_File integrado no se compilar√° correctamente debido a un error de optimizaci√≥n. Puede evitar este problema mediante la adici√≥n de -qipa a los par√°metros de optimizaci√≥n (-Doptimize='-O -qipa').
+El PTF para APAR IZ35785 que soluciona este problema est√° disponible desde IBM (I<April 2009 PTF for XL C/C++ Enterprise Edition for AIX, V9.0>).
 
-Si elige I<XL C/C++ V11> necesitar· que estÈ instalado el I<April 2010 PTF> (o m·s reciente), o de lo contrario no obtendr· una versiÛn funcional de Perl.
+Si elige I<XL C/C++ V11> necesitar√° que est√© instalado el I<April 2010 PTF> (o m√°s reciente), o de lo contrario no obtendr√° una versi√≥n funcional de Perl.
 
 Perl puede ser compilado tanto con el compilador de ANSI C de IBM C o con gcc.
-El primero es lo recomendado, ya que no sÛlo puede compilar Perl sin ninguna dificultad, sino que tambiÈn puede tomar ventaja de las caracterÌsticas que se enumeran m·s adelante que requieren el uso de opciones en lÌnea de comandos especÌficos del compilador de IBM.
+El primero es lo recomendado, ya que no s√≥lo puede compilar Perl sin ninguna dificultad, sino que tambi√©n puede tomar ventaja de las caracter√≠sticas que se enumeran m√°s adelante que requieren el uso de opciones en l√≠nea de comandos espec√≠ficos del compilador de IBM.
 
-Si decide usar gcc, aseg˙rese de que su instalaciÛn es reciente y completa, y aseg˙rese de leer el archivo INSTALL de Perl para m·s detalles especÌficos de gcc. Por favor, reporte cualquier rodeo que tuvo que solventar, al equipo de desarrollo.
+Si decide usar gcc, aseg√∫rese de que su instalaci√≥n es reciente y completa, y aseg√∫rese de leer el archivo INSTALL de Perl para m√°s detalles espec√≠ficos de gcc. Por favor, reporte cualquier rodeo que tuvo que solventar, al equipo de desarrollo.
 
 =head2 Incompatibilidad con la biblioteca gdbm de AIX Toolbox
 
-Si la versiÛn de la biblioteca gdbm de AIX Toolbox instalada en su sistema es menor que 1.8.3-5, entonces Perl no funcionar·. Esta biblioteca contiene los archivos cabecera /opt/freeware/include/gdbm/dbm.h|ndbm.h que entran en conflicto con las versiones del sistema AIX. La biblioteca gdbm ser· autom·ticamente eliminada de las bibliotecas buscadas si se detecta la presencia de uno de estos dos archivos cabecera. Si quiere compilar Perl con soporte para GDBM, por favor instale al menos gdbm-devel-1.8.3-5 (o superior).
+Si la versi√≥n de la biblioteca gdbm de AIX Toolbox instalada en su sistema es menor que 1.8.3-5, entonces Perl no funcionar√°. Esta biblioteca contiene los archivos cabecera /opt/freeware/include/gdbm/dbm.h|ndbm.h que entran en conflicto con las versiones del sistema AIX. La biblioteca gdbm ser√° autom√°ticamente eliminada de las bibliotecas buscadas si se detecta la presencia de uno de estos dos archivos cabecera. Si quiere compilar Perl con soporte para GDBM, por favor instale al menos gdbm-devel-1.8.3-5 (o superior).
 
-=head2 Perl 5 fue compilador y comprobado con Èxito:
+=head2 Perl 5 fue compilador y comprobado con √©xito:
 
     Perl   | Nivel AIX           | Nivel Compilador        | c hi | s hi
     -------+---------------------+-------------------------+------+-------
@@ -67,47 +67,47 @@ Si la versiÛn de la biblioteca gdbm de AIX Toolbox instalada en su sistema es me
     s hi   = sin soporte para hilos
     OK     = comprobado
 
-Probado con Èxito significa que todo el "make test" funciona terminando con un resultado del 100% correcto (I<OK>). Todas las pruebas se realizaron con -Duseshrplib activado.
+Probado con √©xito significa que todo el "make test" funciona terminando con un resultado del 100% correcto (I<OK>). Todas las pruebas se realizaron con -Duseshrplib activado.
 
-Todas las pruebas se llevaron a cabo con el nivel de soporte tecnolÛgico de AIX m·s antiguo, con el ˙ltimo paquete de parcheo aplicado. Si la versiÛn de AIX que ha sido probada ya no tiene soporte (AIX 4.3.3, 5.1, 5.2), entonces se usa el ˙ltimo nivel de soporte disponible.
+Todas las pruebas se llevaron a cabo con el nivel de soporte tecnol√≥gico de AIX m√°s antiguo, con el √∫ltimo paquete de parcheo aplicado. Si la versi√≥n de AIX que ha sido probada ya no tiene soporte (AIX 4.3.3, 5.1, 5.2), entonces se usa el √∫ltimo nivel de soporte disponible.
 
-=head2 Compilando Extensiones Din·micas en AIX
+=head2 Compilando Extensiones Din√°micas en AIX
 
-A partir de Perl 5.7.2 (y en consecuencia 5.8.x / 5.10.x / 5.12.x) y AIX 4.3 o en versiones m·s modernas, se utiliza la interfaz nativa de AIX de carga din·mica en el llamado modo de enlazado en tiempo de ejecuciÛn, en lugar del interfaz emulado que se utilizaba en Perl 5.6.1 y anteriores, para las versiones de AIX 4.2 y anteriores. Este cambio no rompe la compatibilidad hacia atr·s con los mÛdulos compilados de versiones anteriores de Perl. El cambio se hizo para hacer m·s compatible Perl con otras aplicaciones como Apache/mod_perl que est·n utilizando la interfaz nativa de AIX. Este cambio tambiÈn permite el uso de cÛdigo C++ con constructores est·ticos y destructores en las extensiones de Perl, que no era posible con la interfaz de emulaciÛn.
+A partir de Perl 5.7.2 (y en consecuencia 5.8.x / 5.10.x / 5.12.x) y AIX 4.3 o en versiones m√°s modernas, se utiliza la interfaz nativa de AIX de carga din√°mica en el llamado modo de enlazado en tiempo de ejecuci√≥n, en lugar del interfaz emulado que se utilizaba en Perl 5.6.1 y anteriores, para las versiones de AIX 4.2 y anteriores. Este cambio no rompe la compatibilidad hacia atr√°s con los m√≥dulos compilados de versiones anteriores de Perl. El cambio se hizo para hacer m√°s compatible Perl con otras aplicaciones como Apache/mod_perl que est√°n utilizando la interfaz nativa de AIX. Este cambio tambi√©n permite el uso de c√≥digo C++ con constructores est√°ticos y destructores en las extensiones de Perl, que no era posible con la interfaz de emulaci√≥n.
 
 Se recomienda utilizar la nueva interfaz.
 
 =head2 Usando archivos grandes con Perl
 
-No deberÌa observar ning˙n problema.
+No deber√≠a observar ning√∫n problema.
 
 =head2 Perl multihebra
 
-No deberÌan producirse problemas con AIX 5.1 / 5.2 / 5.3 / 6.1 / 7.1.
+No deber√≠an producirse problemas con AIX 5.1 / 5.2 / 5.3 / 6.1 / 7.1.
 
-IBM usa el Perl del sistema AIX (V5.6.0 en AIX 5.1 y V5.8.2 en AIX 5.2 / 5.3 y 6.1; V5.8.8 en AIX 5.3 TL11 y AIX 6.1 TL4; V5.10.1 en AIX 7.1) para algunos I<scripts> del sistema AIX. Si cambia los enlaces en /usr/bin del Perl del sistema AIX (/usr/opt/perl5) al nuevo Perl compilado entonces obtiene las mismas caracterÌsticas que el Perl del sistema IBM AIX si se usan las opciones de multihebra.
+IBM usa el Perl del sistema AIX (V5.6.0 en AIX 5.1 y V5.8.2 en AIX 5.2 / 5.3 y 6.1; V5.8.8 en AIX 5.3 TL11 y AIX 6.1 TL4; V5.10.1 en AIX 7.1) para algunos I<scripts> del sistema AIX. Si cambia los enlaces en /usr/bin del Perl del sistema AIX (/usr/opt/perl5) al nuevo Perl compilado entonces obtiene las mismas caracter√≠sticas que el Perl del sistema IBM AIX si se usan las opciones de multihebra.
 
-El Perl multihebra compilado funciona tambiÈn en AIX 5.1, pero la compilaciÛn del Perl de IBM (Perl v5.6.0) no es multihebra en AIX 5.1.
+El Perl multihebra compilado funciona tambi√©n en AIX 5.1, pero la compilaci√≥n del Perl de IBM (Perl v5.6.0) no es multihebra en AIX 5.1.
 
 Perl 5.12 y superiores no son compatibles con el conjunto de archivos perl.libext de IBM.
 
 =head2 Perl de 64-bit
 
-Si su sistema AIX est· instalado con soporte de 64 bits, puede esperarse que las configuraciones de 64 bits funcionen. Si desea utilizar Perl de 64-bit en AIX 6.1 necesita un APAR para un bug en libc.a que afecta a las funciones (n)dbm_XXX.
-El n˙mero de APAR para este problema es el IZ39077.
+Si su sistema AIX est√° instalado con soporte de 64 bits, puede esperarse que las configuraciones de 64 bits funcionen. Si desea utilizar Perl de 64-bit en AIX 6.1 necesita un APAR para un bug en libc.a que afecta a las funciones (n)dbm_XXX.
+El n√∫mero de APAR para este problema es el IZ39077.
 
-Si necesita m·s memoria (segmentos de datos m·s grandes) para sus programas Perl, puede establecer:
+Si necesita m√°s memoria (segmentos de datos m√°s grandes) para sus programas Perl, puede establecer:
 
     /etc/security/limits
     default:                    (o su usuario)
         data = -1                   (por defecto es 262144 * 512 bytes)
 
-Con la configuraciÛn por defecto el tamaÒo est· limitado a 128 MB.
-El -1 elimina este lÌmite. Si el "make test" falla, por favor cambie el archivo /etc/security/limits como se ha indicado antes.
+Con la configuraci√≥n por defecto el tama√±o est√° limitado a 128 MB.
+El -1 elimina este l√≠mite. Si el "make test" falla, por favor cambie el archivo /etc/security/limits como se ha indicado antes.
 
 =head2 Opciones recomendadas para AIX 5.1/5.2/5.3/6.1 y 7.1 (multihebra/32-bit)
 
-Con las siguientes opciones obtendr· una versiÛn de Perl multihebra que pasar· todas las pruebas en el modo 32 bits multihebra, que es la configuraciÛn por defecto para el Perl compilado que AIX trae.
+Con las siguientes opciones obtendr√° una versi√≥n de Perl multihebra que pasar√° todas las pruebas en el modo 32 bits multihebra, que es la configuraci√≥n por defecto para el Perl compilado que AIX trae.
 
     rm config.sh
     ./Configure \
@@ -117,11 +117,11 @@ Con las siguientes opciones obtendr· una versiÛn de Perl multihebra que pasar· t
     -Dusethreads \
     -Dprefix=/usr/opt/perl5_32
 
-La opciÛn -Dprefix instalar· Perl en un directorio paralelo a la instalaciÛn del Perl del sistema IBM AIX.
+La opci√≥n -Dprefix instalar√° Perl en un directorio paralelo a la instalaci√≥n del Perl del sistema IBM AIX.
 
 =head2 Opciones recomendadas para AIX 5.1/5.2/5.3/6.1 y 7.1 (32-bit)
 
-Con las siguientes opciones obtendr· una versiÛn de Perl que pasa todas las pruebas en modo de 32 bits.
+Con las siguientes opciones obtendr√° una versi√≥n de Perl que pasa todas las pruebas en modo de 32 bits.
 
     rm config.sh
     ./Configure \
@@ -130,11 +130,11 @@ Con las siguientes opciones obtendr· una versiÛn de Perl que pasa todas las prue
     -Duseshrplib \
     -Dprefix=/usr/opt/perl5_32
 
-La opciÛn -Dprefix instalar· Perl en un directorio paralelo a la instalaciÛn del Perl del sistema IBM AIX.
+La opci√≥n -Dprefix instalar√° Perl en un directorio paralelo a la instalaci√≥n del Perl del sistema IBM AIX.
 
 =head2 Opciones recomendadas para AIX 5.1/5.2/5.3/6.1 y 7.1 (multihebra/64-bit)
 
-Con las siguientes opciones obtendr· una versiÛn de Perl que pasa todas las pruebas en modo de 64 bits.
+Con las siguientes opciones obtendr√° una versi√≥n de Perl que pasa todas las pruebas en modo de 64 bits.
 
     export OBJECT_MODE=64 / setenv OBJECT_MODE 64 (dependiendo de su shell)
 
@@ -149,7 +149,7 @@ Con las siguientes opciones obtendr· una versiÛn de Perl que pasa todas las prue
 
 =head2 Opciones recomendadas para AIX 5.1/5.2/5.3/6.1 y 7.1 (64-bit)
 
-Con las siguientes opciones obtendr· una versiÛn de Perl que pasa todas las pruebas en modo de 64 bits. 
+Con las siguientes opciones obtendr√° una versi√≥n de Perl que pasa todas las pruebas en modo de 64 bits. 
 
     export OBJECT_MODE=64 / setenv OBJECT_MODE 64 (dependiendo de su shell)
 
@@ -161,41 +161,41 @@ Con las siguientes opciones obtendr· una versiÛn de Perl que pasa todas las prue
     -Duse64bitall \
     -Dprefix=/usr/opt/perl5_64
 
-La opciÛn -Dprefix instalar· Perl en un directorio paralelo a la instalaciÛn del Perl del sistema IBM AIX.
+La opci√≥n -Dprefix instalar√° Perl en un directorio paralelo a la instalaci√≥n del Perl del sistema IBM AIX.
 
-Si elige a gcc para compilar un Perl de 64-bit, entonces necesita agregar la siguiente opciÛn:
+Si elige a gcc para compilar un Perl de 64-bit, entonces necesita agregar la siguiente opci√≥n:
 
     -Dcc='gcc -maix64'
 
 
 =head2 Compilando Perl 5 en versiones AIX anteriores a 4.3.3
 
-Debido al hecho de que AIX 4.3.3 llegÛ al final de su servicio efectivo el 31 de diciembre de 2003, esta informaciÛn se proporciona tal cual. Las versiones anteriores de Perl a Perl 5.8.9 pueden ser compiladas en AIX 4.3.3 con las siguientes opciones activadas (su experiencia puede variar):
+Debido al hecho de que AIX 4.3.3 lleg√≥ al final de su servicio efectivo el 31 de diciembre de 2003, esta informaci√≥n se proporciona tal cual. Las versiones anteriores de Perl a Perl 5.8.9 pueden ser compiladas en AIX 4.3.3 con las siguientes opciones activadas (su experiencia puede variar):
 
-Al compilar Perl, debe utilizar un compilador ANSI C. AIX no incluye por defecto un compilador de ANSI C compatible con AIX, pero las versiones binarias de gcc para AIX est·n ampliamente disponibles.
+Al compilar Perl, debe utilizar un compilador ANSI C. AIX no incluye por defecto un compilador de ANSI C compatible con AIX, pero las versiones binarias de gcc para AIX est√°n ampliamente disponibles.
 
-En el momento de escribir esto, AIX soporta dos compiladores nativos diferentes de C, por los que tendr· que pagar: B<xlC> y B<vac>. Si decide utilizar cualquiera de estos (que es mucho m·s f·cil que usar gcc), aseg˙rese de actualizar al ˙ltimo parche disponible. Actualmente:
+En el momento de escribir esto, AIX soporta dos compiladores nativos diferentes de C, por los que tendr√° que pagar: B<xlC> y B<vac>. Si decide utilizar cualquiera de estos (que es mucho m√°s f√°cil que usar gcc), aseg√∫rese de actualizar al √∫ltimo parche disponible. Actualmente:
 
     xlC.C     3.1.4.10 o 3.6.6.0 o 4.0.2.2 o 5.0.2.9 o 6.0.0.3
     vac.C     4.4.0.3  o 5.0.2.6 o 6.0.0.1
 
-tenga en cuenta que xlC tiene la versiÛn del sistema operativo en el nombre de la versiÛn 4.0.2.0, por lo que encontrar· xlC.C para AIX-5.0 como paquete
+tenga en cuenta que xlC tiene la versi√≥n del sistema operativo en el nombre de la versi√≥n 4.0.2.0, por lo que encontrar√° xlC.C para AIX-5.0 como paquete
 
     xlC.aix50.rte   5.0.2.0 o 6.0.0.3
 
-subversiones no son lo mismo que "las ˙ltimas" en todas las versiones del S.O. Por ejemplo, la ˙ltima xlC-5 en aix41 es 5.0.2.9, mientras que en aix43, es 5.0.2.7.
+subversiones no son lo mismo que "las √∫ltimas" en todas las versiones del S.O. Por ejemplo, la √∫ltima xlC-5 en aix41 es 5.0.2.9, mientras que en aix43, es 5.0.2.7.
 
 Perl puede ser compilado tanto con el compilador de ANSI C de IBM C o con gcc.
-El primero es lo recomendado, ya que no sÛlo puede compilar Perl sin ninguna dificultad, sino que tambiÈn puede tomar ventaja de las caracterÌsticas que se enumeran m·s adelante que requieren el uso de opciones en lÌnea de comandos especÌficos del compilador de IBM.
+El primero es lo recomendado, ya que no s√≥lo puede compilar Perl sin ninguna dificultad, sino que tambi√©n puede tomar ventaja de las caracter√≠sticas que se enumeran m√°s adelante que requieren el uso de opciones en l√≠nea de comandos espec√≠ficos del compilador de IBM.
 
-El parche del compilador de IBM niveles 5.0.0.0 y 5.0.1.0 tienen errores de optimizaciÛn en el compilador, que afectan a la compilaciÛn de perl.c y regcomp.c, respectivamente.  Si la configuraciÛn de Perl detecta estos parches del compilador, la optimizaciÛn quedar· desactivada para esos archivos del cÛdigo fuente.
-Se recomienda la actualizaciÛn a por lo menos 5.0.2.0.
+El parche del compilador de IBM niveles 5.0.0.0 y 5.0.1.0 tienen errores de optimizaci√≥n en el compilador, que afectan a la compilaci√≥n de perl.c y regcomp.c, respectivamente.  Si la configuraci√≥n de Perl detecta estos parches del compilador, la optimizaci√≥n quedar√° desactivada para esos archivos del c√≥digo fuente.
+Se recomienda la actualizaci√≥n a por lo menos 5.0.2.0.
 
-Si decide usar gcc, aseg˙rese de que su instalaciÛn es reciente y completa, y aseg˙rese de leer el archivo INSTALL de Perl para m·s detalles especÌficos de gcc. Por favor, reporte cualquier rodeo que tuvo que solventar, al equipo de desarrollo.
+Si decide usar gcc, aseg√∫rese de que su instalaci√≥n es reciente y completa, y aseg√∫rese de leer el archivo INSTALL de Perl para m√°s detalles espec√≠ficos de gcc. Por favor, reporte cualquier rodeo que tuvo que solventar, al equipo de desarrollo.
 
 =head2 Nivel de S.O.
 
-Antes de instalar los parches para el compilador C de IBM lo que necesita saber es el nivel de parches para el Sistema Operativo. El comando de IBM 'oslevel' mostrar· la base, pero no siempre es completa (en este ejemplo oslevel muestra 4.3.NULL, mientras que el sistema podrÌa estar ejecutando hasta 4.3.THREE):
+Antes de instalar los parches para el compilador C de IBM lo que necesita saber es el nivel de parches para el Sistema Operativo. El comando de IBM 'oslevel' mostrar√° la base, pero no siempre es completa (en este ejemplo oslevel muestra 4.3.NULL, mientras que el sistema podr√≠a estar ejecutando hasta 4.3.THREE):
 
     # oslevel
     4.3.0.0
@@ -204,31 +204,31 @@ Antes de instalar los parches para el compilador C de IBM lo que necesita saber 
     bos.rte            4.3.2.0  COMMITTED  Base Operating System Runtime
     #
 
-Lo mismo podrÌa suceder a AIX 5.1 u otros niveles del S.O. Como nota al margen, Perl no se puede compilar sin que estÈn instalados bos.adt.syscalls y bos.adt.libm
+Lo mismo podr√≠a suceder a AIX 5.1 u otros niveles del S.O. Como nota al margen, Perl no se puede compilar sin que est√©n instalados bos.adt.syscalls y bos.adt.libm
 
     # lslpp -l | egrep "syscalls|libm"
     bos.adt.libm      5.1.0.25  COMMITTED  Base Application Development
     bos.adt.syscalls  5.1.0.36  COMMITTED  System Calls Application
     #
 
-=head2 Compilando Extensiones Din·micas en AIX E<lt> 5L
+=head2 Compilando Extensiones Din√°micas en AIX E<lt> 5L
 
-AIX soporta la carga din·mica de objetos asÌ como las bibliotecas compartidas.
-Las bibliotecas compartidas est·n, por convenciÛn, acabadas con el sufijo .a, que es un poco engaÒoso, ya que un archivo puede contener tanto miembros est·ticos como din·micos. 
-Para objetos Perl cargados din·micamente se utiliza el sufijo .so, tambiÈn utilizado en muchas otras plataformas.
+AIX soporta la carga din√°mica de objetos as√≠ como las bibliotecas compartidas.
+Las bibliotecas compartidas est√°n, por convenci√≥n, acabadas con el sufijo .a, que es un poco enga√±oso, ya que un archivo puede contener tanto miembros est√°ticos como din√°micos. 
+Para objetos Perl cargados din√°micamente se utiliza el sufijo .so, tambi√©n utilizado en muchas otras plataformas.
 
-Tenga en cuenta que a partir de Perl 5.7.2 (y en consecuencia 5.8.0) y AIX 4.3 o en versiones m·s modernas, se utiliza la interfaz nativa de AIX de carga din·mica en el llamado modo de enlazado en tiempo de ejecuciÛn, en lugar del interfaz emulado que se utilizaba en Perl 5.6.1 y anteriores, para las versiones de AIX 4.2 y anteriores.  Este cambio no rompe la compatibilidad hacia atr·s con los mÛdulos compilados de versiones anteriores de Perl.  El cambio se hizo para hacer m·s compatible Perl con otras aplicaciones como Apache/mod_perl que est·n utilizando la interfaz nativa de AIX. Este cambio tambiÈn permite el uso de cÛdigo C++ con constructores est·ticos y destructores en las extensiones de Perl, que no era posible con la interfaz de emulaciÛn.
+Tenga en cuenta que a partir de Perl 5.7.2 (y en consecuencia 5.8.0) y AIX 4.3 o en versiones m√°s modernas, se utiliza la interfaz nativa de AIX de carga din√°mica en el llamado modo de enlazado en tiempo de ejecuci√≥n, en lugar del interfaz emulado que se utilizaba en Perl 5.6.1 y anteriores, para las versiones de AIX 4.2 y anteriores.  Este cambio no rompe la compatibilidad hacia atr√°s con los m√≥dulos compilados de versiones anteriores de Perl.  El cambio se hizo para hacer m√°s compatible Perl con otras aplicaciones como Apache/mod_perl que est√°n utilizando la interfaz nativa de AIX. Este cambio tambi√©n permite el uso de c√≥digo C++ con constructores est√°ticos y destructores en las extensiones de Perl, que no era posible con la interfaz de emulaci√≥n.
 
 =head2 El compilador ANSI C de IBM
 
 Puede usarse todos los valores predeterminados de Configure.
 
-Si ha optado por utilizar vac 4, aseg˙rese de ejecutar 4.4.0.3. Las versiones anteriores se vuelven m·s desagradables. Para vac 5 aseg˙rese que ejecuta al menos 5.0.1.0, pero vac 5.0.2.6 o superior es altamente recomendado. Tenga en cuenta que desde que IBM ha eliminado vac 5.0.2.1 a 5.0.2.5 del almacÈn de software, estas versiones deben ser consideradas obsoletas.
+Si ha optado por utilizar vac 4, aseg√∫rese de ejecutar 4.4.0.3. Las versiones anteriores se vuelven m√°s desagradables. Para vac 5 aseg√∫rese que ejecuta al menos 5.0.1.0, pero vac 5.0.2.6 o superior es altamente recomendado. Tenga en cuenta que desde que IBM ha eliminado vac 5.0.2.1 a 5.0.2.5 del almac√©n de software, estas versiones deben ser consideradas obsoletas.
 
-Esto es una pequeÒa guÌa de cÛmo actualizar el compilador a su ˙ltima versiÛn.  Por supuesto, esto est· sujeto a cambios.  SÛlo puede actualizar las versiones con las actualizaciones disponibles con el ftp si los tres primeros grupos de dÌgitos son iguales (en donde puede saltarse numeraciÛn intermedia a diferencia de los parches en las instant·neas de desarrollo de Perl), o a una versiÛn donde la "base" se encuentre disponible.  En otras palabras, los parches del compilador AIX son acumulativos.
+Esto es una peque√±a gu√≠a de c√≥mo actualizar el compilador a su √∫ltima versi√≥n.  Por supuesto, esto est√° sujeto a cambios.  S√≥lo puede actualizar las versiones con las actualizaciones disponibles con el ftp si los tres primeros grupos de d√≠gitos son iguales (en donde puede saltarse numeraci√≥n intermedia a diferencia de los parches en las instant√°neas de desarrollo de Perl), o a una versi√≥n donde la "base" se encuentre disponible.  En otras palabras, los parches del compilador AIX son acumulativos.
 
  vac.C.4.4.0.1 => vac.C.4.4.0.3  es OK     (vac.C.4.4.0.2 no es necesario)
- xlC.C.3.1.3.3 => xlC.C.3.1.4.10 NO es OK  (xlC.C.3.1.4.0 no est· disponible)
+ xlC.C.3.1.3.3 => xlC.C.3.1.4.10 NO es OK  (xlC.C.3.1.4.0 no est√° disponible)
 
  # ftp ftp.software.ibm.com
  Connected to service.boulder.ibm.com.
@@ -236,7 +236,7 @@ Esto es una pequeÒa guÌa de cÛmo actualizar el compilador a su ˙ltima versiÛn.  
  Name (ftp.software.ibm.com:merijn): anonymous
  331 Guest login ok, send your complete e-mail address as password.
  Password:
- ... el mensaje tÌpico de registro de entrada aceptado
+ ... el mensaje t√≠pico de registro de entrada aceptado
  ftp> cd /aix/fixes/v4/
  ftp> dir other other.ll
  output to local-file: other.ll? y
@@ -294,13 +294,13 @@ Lo mismo para todos los niveles del S.O. Entonces ejecute el siguiente comando, 
   [ OK ]
   [ OK ]
 
-Siga los mensajes... y se habr· terminado.
+Siga los mensajes... y se habr√° terminado.
 
-Si quiere un aproximaciÛn m·s parecida a un web, un buen punto de partida puede ser http://www14.software.ibm.com/webapp/download/downloadaz.jsp y pulsar en "C for AIX", y seguir las instrucciones.
+Si quiere un aproximaci√≥n m√°s parecida a un web, un buen punto de partida puede ser http://www14.software.ibm.com/webapp/download/downloadaz.jsp y pulsar en "C for AIX", y seguir las instrucciones.
 
-=head2 La opciÛn usenm
+=head2 La opci√≥n usenm
 
-Si est· enlazando miniperl
+Si est√° enlazando miniperl
 
  cc -o miniperl ... miniperlmain.o opmini.o perl.o ... -lm -lc ...
 
@@ -321,43 +321,43 @@ puede reintentarlo con
  rm config.sh
  ./Configure -Dusenm ...
 
-que hace que Configure use la herramienta C<nm> cuando hace la exploraciÛn de las bibliotecas de sÌmbolos, que por lo general no se hace en AIX.
+que hace que Configure use la herramienta C<nm> cuando hace la exploraci√≥n de las bibliotecas de s√≠mbolos, que por lo general no se hace en AIX.
 
-En relaciÛn con esto, es probable que no deba utilizar la opciÛn C<-r> de Configure en AIX, ya que afecta a la forma en que se utiliza la herramienta C<nm>.
+En relaci√≥n con esto, es probable que no deba utilizar la opci√≥n C<-r> de Configure en AIX, ya que afecta a la forma en que se utiliza la herramienta C<nm>.
 
-=head2 Usando GNU's gcc para la compilaciÛn de Perl
+=head2 Usando GNU's gcc para la compilaci√≥n de Perl
 
-Usando gcc-3.x (probado con 3.0.4, 3.1 y 3.2) funciona muy bien, al igual que el reciente gcc-2.9 disponible directamente desde IBM como parte de sus paquetes de compatibilidad con Linux, disponible aquÌ:
+Usando gcc-3.x (probado con 3.0.4, 3.1 y 3.2) funciona muy bien, al igual que el reciente gcc-2.9 disponible directamente desde IBM como parte de sus paquetes de compatibilidad con Linux, disponible aqu√≠:
 
   http://www.ibm.com/servers/aix/products/aixos/linux/
 
 =head2 Usando archivos grandes con Perl E<lt> 5L
 
-No deberÌa observar ning˙n problema.
+No deber√≠a observar ning√∫n problema.
 
 =head2 Perl multihebra E<lt> 5L
 
-Los hilos parece que funcionann bien, aunque por el momento no pasan todas las pruebas cuando los hilos se utilizan en combinaciÛn con configuraciones de 64-bit.
+Los hilos parece que funcionann bien, aunque por el momento no pasan todas las pruebas cuando los hilos se utilizan en combinaci√≥n con configuraciones de 64-bit.
 
-Puede recibir un aviso cuando se hace una compilaciÛn multihebra:
+Puede recibir un aviso cuando se hace una compilaci√≥n multihebra:
 
   "pp_sys.c", line 4640.39: 1506-280 (W) Function argument assignment 
   between types "unsigned char*" and "const void*" is not allowed.
 
-El n˙mero de lÌnea exacto puede variar, pero si la advertencia (W) viene de una lÌnea asÌ
+El n√∫mero de l√≠nea exacto puede variar, pero si la advertencia (W) viene de una l√≠nea as√≠
 
   hent = PerlSock_gethostbyaddr(addr, (Netdb_hlen_t) addrlen, addrtype);
 
-en la funciÛn "pp_ghostent", puede ignorarla sin peligro.  La advertencia es causada por la variante reentrante de gethostbyaddr() que tiene un prototipo ligeramente diferente de su variante no reentrante, pero la diferencia no es realmente importante.
+en la funci√≥n "pp_ghostent", puede ignorarla sin peligro.  La advertencia es causada por la variante reentrante de gethostbyaddr() que tiene un prototipo ligeramente diferente de su variante no reentrante, pero la diferencia no es realmente importante.
 
 =head2 Perl 64-bit E<lt> 5L
 
-Si su sistema AIX est· instalado con soporte de 64 bits, puede esperarse que las configuraciones de 64 bits funcionen. En combinaciÛn con los hilos, algunas pruebas podrÌa seguir fracasando.
+Si su sistema AIX est√° instalado con soporte de 64 bits, puede esperarse que las configuraciones de 64 bits funcionen. En combinaci√≥n con los hilos, algunas pruebas podr√≠a seguir fracasando.
 
-=head2 AIX 4.2 y extensiones usando C++ con est·ticos
+=head2 AIX 4.2 y extensiones usando C++ con est√°ticos
 
-En AIX 4.2 las extensiones Perl que usan funciones C++ que usan est·ticos pueden tener problemas, ya que los est·ticos no son inicializados.
-En versiones m·s reciente de AIX esto ha sido resuelto mediante la vinculaciÛn de Perl con la biblioteca libc_r, pero por desgracia en AIX 4.2 la mencionada biblioteca tiene un oscuro problema, donde las diversas funciones relacionadas con el tiempo (como time() y gettimeofday()) devuelven valores defectuosos, y por lo tanto en AIX 4.2, Perl no est· vinculado contra libc_r.
+En AIX 4.2 las extensiones Perl que usan funciones C++ que usan est√°ticos pueden tener problemas, ya que los est√°ticos no son inicializados.
+En versiones m√°s reciente de AIX esto ha sido resuelto mediante la vinculaci√≥n de Perl con la biblioteca libc_r, pero por desgracia en AIX 4.2 la mencionada biblioteca tiene un oscuro problema, donde las diversas funciones relacionadas con el tiempo (como time() y gettimeofday()) devuelven valores defectuosos, y por lo tanto en AIX 4.2, Perl no est√° vinculado contra libc_r.
 
 =head1 AUTORES
 

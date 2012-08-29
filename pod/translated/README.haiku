@@ -1,32 +1,32 @@
-Puede leer este archivo en cualquier editor de texto (verá algunos caracteres extraños, pero puede ignorarlos).
-Está escrito en formato POD (vea pod/perlpod.pod), un formato diseñado específicamente para ser legible tal cual.
+Puede leer este archivo en cualquier editor de texto (verÃ¡ algunos caracteres extraÃ±os, pero puede ignorarlos).
+EstÃ¡ escrito en formato POD (vea pod/perlpod.pod), un formato diseÃ±ado especÃ­ficamente para ser legible tal cual.
 
 =head1 NOMBRE
 
 perlhaiku - Perl version 5.10+ en Haiku
 
-=head1 DESCRIPCIÓN
+=head1 DESCRIPCIÃ“N
 
-Este archivo contiene instrucciones de cómo construir Perl para Haiku y listas de problemas conocidos.
+Este archivo contiene instrucciones de cÃ³mo construir Perl para Haiku y listas de problemas conocidos.
 
-=head1 CONSTRUCCIÓN E INSTALACIÓN
+=head1 CONSTRUCCIÃ“N E INSTALACIÃ“N
 
-El procedimiento de construcción es completamente estándar:
+El procedimiento de construcciÃ³n es completamente estÃ¡ndar:
 
   ./Configure -de
   make
   make install
 
-Hace a perl ejecutable y crea un enlace simbólico para libperl:
+Hace a perl ejecutable y crea un enlace simbÃ³lico para libperl:
 
   chmod a+x /boot/common/bin/perl
   cd /boot/common/lib; ln -s perl5/5.16.1/BePC-haiku/CORE/libperl.so .
 
-Reemplace C<5.16.1> con su respectiva versión de Perl.
+Reemplace C<5.16.1> con su respectiva versiÃ³n de Perl.
 
 =head1 PROBLEMAS CONOCIDOS
 
-Los siguientes problemas se encuentran en la versión Haiku 28311:
+Los siguientes problemas se encuentran en la versiÃ³n Haiku 28311:
 
 =over 4
 
@@ -36,22 +36,22 @@ Perl no puede ser compilado con soporte multihilo ATM.
 
 =item *
 
-El test F<ext/Socket/t/socketpair.t> falla. Precisando más: las subpruebas usando sockets de datagramas fallan. Los datagramas sockect Unix aún no están implementados en Haiku.
+El test F<ext/Socket/t/socketpair.t> falla. Precisando mÃ¡s: las subpruebas usando sockets de datagramas fallan. Los datagramas sockect Unix aÃºn no estÃ¡n implementados en Haiku.
 
 =item *
 
-Una subprueba del test F<ext/Sys/Syslog/t/syslog.t> falla. Esto se debe a que Haiku aún no implementa soporte para C</dev/log>.
+Una subprueba del test F<ext/Sys/Syslog/t/syslog.t> falla. Esto se debe a que Haiku aÃºn no implementa soporte para C</dev/log>.
 
 =item *
 
-Los test F<lib/Net/Ping/t/450_service.t> y F<lib/Net/Ping/t/510_ping_udp.t> fallan. Esto se debe a errores en la implementación de la pila del sistema de red de Haiku.
+Los test F<lib/Net/Ping/t/450_service.t> y F<lib/Net/Ping/t/510_ping_udp.t> fallan. Esto se debe a errores en la implementaciÃ³n de la pila del sistema de red de Haiku.
 
 =back
 
 =head1 CONTACTO
 
-Para problemas específicos de Haiku, póngase en contacto con los desarrolladores HaikuPorts: L<http://ports.haiku-files.org/>
+Para problemas especÃ­ficos de Haiku, pÃ³ngase en contacto con los desarrolladores HaikuPorts: L<http://ports.haiku-files.org/>
 
-La primera adaptación de Haiku fue realizada por Ingo Weinhold <ingo_weinhold@gmx.de>.
+La primera adaptaciÃ³n de Haiku fue realizada por Ingo Weinhold <ingo_weinhold@gmx.de>.
 
-Última actualización: 2008-10-29
+Ãšltima actualizaciÃ³n: 2008-10-29

@@ -1,22 +1,22 @@
-Puede leer este archivo en cualquier editor de texto (verá algunos caracteres extraños, pero puede ignorarlos).
-Está escrito en formato POD (vea pod/perlpod.pod), un formato diseñado específicamente para ser legible tal cual.
+Puede leer este archivo en cualquier editor de texto (verÃ¡ algunos caracteres extraÃ±os, pero puede ignorarlos).
+EstÃ¡ escrito en formato POD (vea pod/perlpod.pod), un formato diseÃ±ado especÃ­ficamente para ser legible tal cual.
 
 =head1 NOMBRE
 
-perlbeos - Perl versión 5.8+ en BeOS
+perlbeos - Perl versiÃ³n 5.8+ en BeOS
 
-=head1 DESCRIPCIÓN
+=head1 DESCRIPCIÃ“N
 
-Este archivo contiene instrucciones de cómo construir Perl para BeOS y listas de problemas conocidos.
+Este archivo contiene instrucciones de cÃ³mo construir Perl para BeOS y listas de problemas conocidos.
 
-=head1 CONSTRUCCIÓN E INSTALACIÓN
+=head1 CONSTRUCCIÃ“N E INSTALACIÃ“N
 
 =head2 Requisitos
 
 He construido y probado Perl 5.8.6 y 5.9.1 bajo BeOS R5 x86 net server.
-No puedo decir nada con respecto a PPC. Desde que Perl 5.8.0 ha sido lanzado para BeOS BONE, sospecho, que es una buena oportunidad, para que todavía se pueda compilar en un sistema BONE. El único cambio que he hecho, que afecta a los sistemas BONE, es el reconocimiento de si se trata de un sistema BONE o no, en F<hints/beos.sh>. Ahora, el soporte para red debe permanecer habilitado en los sistemas BONE. Esto, sin embargo, también podría romper la compilación.
+No puedo decir nada con respecto a PPC. Desde que Perl 5.8.0 ha sido lanzado para BeOS BONE, sospecho, que es una buena oportunidad, para que todavÃ­a se pueda compilar en un sistema BONE. El Ãºnico cambio que he hecho, que afecta a los sistemas BONE, es el reconocimiento de si se trata de un sistema BONE o no, en F<hints/beos.sh>. Ahora, el soporte para red debe permanecer habilitado en los sistemas BONE. Esto, sin embargo, tambiÃ©n podrÃ­a romper la compilaciÃ³n.
 
-Como las versiones más recientes de autoconf requieren soporte de flock(), he escrito una emulación de flock() (flock_server) y la publiqué en BeBits:
+Como las versiones mÃ¡s recientes de autoconf requieren soporte de flock(), he escrito una emulaciÃ³n de flock() (flock_server) y la publiquÃ© en BeBits:
 
 	http://www.bebits.com/app/4030
 
@@ -35,7 +35,7 @@ Sin soporte de flock():
 
 	./configure.gnu --prefix=/boot/home/config
 
-=head2 Compilación
+=head2 CompilaciÃ³n
 
 Con soporte de flock():
 
@@ -45,19 +45,19 @@ Sin soporte de flock():
 
 	make LDLOADLIBS="-lnet"
 
-C<-lnet> es necesario en los sistemas net server solo si el compilador no lo agrega de forma automática (El gcc de Be R5 así lo hace; el gcc de Oliver Tappe 2.95.3, no).
+C<-lnet> es necesario en los sistemas net server solo si el compilador no lo agrega de forma automÃ¡tica (El gcc de Be R5 asÃ­ lo hace; el gcc de Oliver Tappe 2.95.3, no).
 
-=head2 Instalación
+=head2 InstalaciÃ³n
 
 Instalar todos los archivos de perl:
 
 	make install
 
-Crear un enlace simbólico para libperl:
+Crear un enlace simbÃ³lico para libperl:
 
 	cd ~/config/lib; ln -s perl5/5.8.6/BePC-beos/CORE/libperl.so .
 
-Reemplace C<5.8.6> con su respectiva versión de Perl.
+Reemplace C<5.8.6> con su respectiva versiÃ³n de Perl.
 
 =head1 PROBLEMAS CONOCIDOS
 
@@ -65,24 +65,24 @@ Reemplace C<5.8.6> con su respectiva versión de Perl.
 
 =item *
 
-Soporte para socket está desactivado para BeOS R5 net server. No me atrevía aún a activarlo y ver qué problemas pueden ocurrir.
+Soporte para socket estÃ¡ desactivado para BeOS R5 net server. No me atrevÃ­a aÃºn a activarlo y ver quÃ© problemas pueden ocurrir.
 
 =item *
 
-Las pruebas para LFS (I<large file support>, soporte para archivos grandes) (F<t/op/lfs> y F<xt/Fcntl/t/syslfs>) están deshabilitadas, debido a que el posicionamiento a más de 2 GB falla, según jhi@iki.fi, que fue el último que controló la adaptación de BeOS y la actualización de este archivo antes de mí. No lo he comprobado por mí mismo.
+Las pruebas para LFS (I<large file support>, soporte para archivos grandes) (F<t/op/lfs> y F<xt/Fcntl/t/syslfs>) estÃ¡n deshabilitadas, debido a que el posicionamiento a mÃ¡s de 2 GB falla, segÃºn jhi@iki.fi, que fue el Ãºltimo que controlÃ³ la adaptaciÃ³n de BeOS y la actualizaciÃ³n de este archivo antes de mÃ­. No lo he comprobado por mÃ­ mismo.
 
 =item *
 
-El test F<t/io/fflush> falla en el número 6. Por lo que puedo decir, es causado por un error en la implementación de las tuberías en BeOS que se produce cuando se inicia otro proceso hijo. En el caso particular del test C<system("perl -e 0")> vacía la tubería de salida estándar de otro proceso hijo.
+El test F<t/io/fflush> falla en el nÃºmero 6. Por lo que puedo decir, es causado por un error en la implementaciÃ³n de las tuberÃ­as en BeOS que se produce cuando se inicia otro proceso hijo. En el caso particular del test C<system("perl -e 0")> vacÃ­a la tuberÃ­a de salida estÃ¡ndar de otro proceso hijo.
 
 =item *
 
-El test F<ext/POSIX/t/waitpid> falla en el número #1. Después de que todos los procesos hijo hayan terminado, el waitpid(-1, ...) de BeOS devuelve 0 en lugar de -1 (como debería). No tengo idea de cómo solucionar este problema.
+El test F<ext/POSIX/t/waitpid> falla en el nÃºmero #1. DespuÃ©s de que todos los procesos hijo hayan terminado, el waitpid(-1, ...) de BeOS devuelve 0 en lugar de -1 (como deberÃ­a). No tengo idea de cÃ³mo solucionar este problema.
 
 =back
 
 =head1 CONTACTO
 
-Para información específica de problemas BeOS no dude en enviar un correo a: Ingo Weinhold <bonefish@cs.tu-berlin.de>
+Para informaciÃ³n especÃ­fica de problemas BeOS no dude en enviar un correo a: Ingo Weinhold <bonefish@cs.tu-berlin.de>
 
-Última actualización: 2004-12-16
+Ãšltima actualizaciÃ³n: 2004-12-16

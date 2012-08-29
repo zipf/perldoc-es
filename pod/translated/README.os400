@@ -1,38 +1,38 @@
-Puede leer este archivo en cualquier editor de texto (ver· algunos caracteres extraÒos, pero puede ignorarlos).
-Est· escrito en formato POD (vea pod/perlpod.pod), un formato diseÒado especÌficamente para ser legible tal cual.
+Puede leer este archivo en cualquier editor de texto (ver√° algunos caracteres extra√±os, pero puede ignorarlos).
+Est√° escrito en formato POD (vea pod/perlpod.pod), un formato dise√±ado espec√≠ficamente para ser legible tal cual.
 
 =head1 NOMBRE
 
-perlos400 - Perl versiÛn 5 en OS/400
+perlos400 - Perl versi√≥n 5 en OS/400
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Este documentos describe varias caracterÌsticas del sistema operativo OS/400 de IBM que afectar·n a cÛmo Perl versiÛn 5 (de ahora en adelante sÛlo Perl) es compilado y/o ejecutado.
+Este documentos describe varias caracter√≠sticas del sistema operativo OS/400 de IBM que afectar√°n a c√≥mo Perl versi√≥n 5 (de ahora en adelante s√≥lo Perl) es compilado y/o ejecutado.
 
-Con mucho, la forma m·s f·cil de compilar Perl para OS/400 es utilizar el PASE (I<Portable Application Solutions Environment>), para obtener m·s informaciÛn, vea L<http://www.iseries.ibm.com/developer/factory/pase/index.html> Este entorno permite la utilizaciÛn de las API de AIX en la programaciÛn, y proporciona un tiempo de ejecuciÛn que permite a los binarios AIX ejecutarse directamente en los PowerPC iSeries.
+Con mucho, la forma m√°s f√°cil de compilar Perl para OS/400 es utilizar el PASE (I<Portable Application Solutions Environment>), para obtener m√°s informaci√≥n, vea L<http://www.iseries.ibm.com/developer/factory/pase/index.html> Este entorno permite la utilizaci√≥n de las API de AIX en la programaci√≥n, y proporciona un tiempo de ejecuci√≥n que permite a los binarios AIX ejecutarse directamente en los PowerPC iSeries.
 
 =head2 Compilando Perl para OS/400 PASE
 
-La forma recomendada de compilar Perl para PASE OS/400 es compilar el cÛdigo fuente de Perl 5 (versiÛn 5.8.1 o posterior) en AIX.
+La forma recomendada de compilar Perl para PASE OS/400 es compilar el c√≥digo fuente de Perl 5 (versi√≥n 5.8.1 o posterior) en AIX.
 
-El truco es dar un par·metro especial al script shell Configure cuando se ejecuta en AIX:
+El truco es dar un par√°metro especial al script shell Configure cuando se ejecuta en AIX:
 
   sh Configure -DPASE ...
 
-El directorio de instalaciÛn por defecto de Perl bajo PASE es /QOpenSys/perl.
-Esto se puede modificar, si es necesario, con el par·metro de Configure -Dprefix=/some/dir.
+El directorio de instalaci√≥n por defecto de Perl bajo PASE es /QOpenSys/perl.
+Esto se puede modificar, si es necesario, con el par√°metro de Configure -Dprefix=/some/dir.
 
-A partir de OS/400 V5R2, el compilador de IBM Visual Age est· soportado en OS/400 PASE, por lo que es posible la compilaciÛn de Perl de forma nativa en OS/400.  
-La manera m·s f·cil, sin embargo, es la compilaciÛn en AIX, tal como acabamos de describir.
+A partir de OS/400 V5R2, el compilador de IBM Visual Age est√° soportado en OS/400 PASE, por lo que es posible la compilaci√≥n de Perl de forma nativa en OS/400.  
+La manera m√°s f√°cil, sin embargo, es la compilaci√≥n en AIX, tal como acabamos de describir.
 
-Si no desea instalar el Perl compilado en AIX en /QOpenSys (para ser empaquetado antes de copiarlo a PASE), puede utilizar un par·metro de Configure: -Dinstallprefix=/tmp/QOpenSys/perl.  Esto har· que el "make install" instale todo en ese directorio, mientras que los archivos instalados seguir·n pensando que est·n (estar·n) en /QOpenSys/perl.
+Si no desea instalar el Perl compilado en AIX en /QOpenSys (para ser empaquetado antes de copiarlo a PASE), puede utilizar un par√°metro de Configure: -Dinstallprefix=/tmp/QOpenSys/perl.  Esto har√° que el "make install" instale todo en ese directorio, mientras que los archivos instalados seguir√°n pensando que est√°n (estar√°n) en /QOpenSys/perl.
 
-Si compila de forma nativa en PASE, por favor, h·galo en el directorio /QOpenSys, ya que Perl es m·s feliz cuando se compila en un sistema de archivos que es sensible a las may˙sculas y min˙sculas.
+Si compila de forma nativa en PASE, por favor, h√°galo en el directorio /QOpenSys, ya que Perl es m√°s feliz cuando se compila en un sistema de archivos que es sensible a las may√∫sculas y min√∫sculas.
 
 =head2 Instalando Perl en OS/400 PASE
 
-Si est· compilando en AIX, simplemente haga un "make install" en la caja AIX.
-Una vez que finalice la instalaciÛn, pase el directorio /QOpenSys/perl por un tar.  Transfiera el empaquetado tar al OS/400 usando FTP con los siguientes comandos:
+Si est√° compilando en AIX, simplemente haga un "make install" en la caja AIX.
+Una vez que finalice la instalaci√≥n, pase el directorio /QOpenSys/perl por un tar.  Transfiera el empaquetado tar al OS/400 usando FTP con los siguientes comandos:
 
   > binary
   > site namefmt 1
@@ -40,22 +40,22 @@ Una vez que finalice la instalaciÛn, pase el directorio /QOpenSys/perl por un ta
 
 Una vez que lo tenga, simplemente lance un shell PASE y extraiga el empaquetado tar.
 
-Si est· compilando en PASE, entonces "make install" es lo ˙nico que necesitar· hacer.
+Si est√° compilando en PASE, entonces "make install" es lo √∫nico que necesitar√° hacer.
 
-La ruta por defecto para el binario perl es /QOpenSys/perl/bin/perl.  Querr· hacer un enlace simbÛlico de /QOpenSys/usr/bin/perl a este fichero, por lo que no tiene que modificar su ruta.
+La ruta por defecto para el binario perl es /QOpenSys/perl/bin/perl.  Querr√° hacer un enlace simb√≥lico de /QOpenSys/usr/bin/perl a este fichero, por lo que no tiene que modificar su ruta.
 
 =head2 Usando Perl en OS/400 PASE
 
-Perl en PASE puede ser usado de la misma manera en que usarÌa Perl en AIX.
+Perl en PASE puede ser usado de la misma manera en que usar√≠a Perl en AIX.
 
-Scripts comenzando con #!/usr/bin/perl deberÌan funcionar si tiene /QOpenSys/usr/bin/perl enlazado simbÛlicamente a su binario perl.  Esto no funcionar· si ha hecho un setuid/setgid o tiene una variable de entorno PASE_EXEC_QOPENSYS="N".  Si tiene un V5R1, necesitar· conseguir el ˙ltimo PTFs para obtener esta caracterÌstica.  Scripts comenzando con #!/QOpenSys/perl/bin/perl deberÌan funcionar siempre.
+Scripts comenzando con #!/usr/bin/perl deber√≠an funcionar si tiene /QOpenSys/usr/bin/perl enlazado simb√≥licamente a su binario perl.  Esto no funcionar√° si ha hecho un setuid/setgid o tiene una variable de entorno PASE_EXEC_QOPENSYS="N".  Si tiene un V5R1, necesitar√° conseguir el √∫ltimo PTFs para obtener esta caracter√≠stica.  Scripts comenzando con #!/QOpenSys/perl/bin/perl deber√≠an funcionar siempre.
 
 =head2 Problemas conocidos
 
-Cuando compile en PASE, no hay un comando "oslevel".  Por eso, puede querer crear un script llamado "oslevel" que saque el nivel de AIX que su versiÛn del ejecutable PASE soporta.  Si no est· seguro, consulte la documentaciÛn o use "4.3.3.0".
+Cuando compile en PASE, no hay un comando "oslevel".  Por eso, puede querer crear un script llamado "oslevel" que saque el nivel de AIX que su versi√≥n del ejecutable PASE soporta.  Si no est√° seguro, consulte la documentaci√≥n o use "4.3.3.0".
 
 Si tiene test de casos que fallan, compruebe la existencia de ficheros de I<spool>.
-El test de caso puede estar intentando usar una syscall que no est· implementada en PASE.  Para evitar el SIGILL, intente ajustar la variable de entorno PASE_SYSCALL_NOSIGILL o tener un controlador para SIGILL.  Si puede compilar programas para PASE, ejecute el script config y edite config.sh cuando le dÈ esa posibilidad.  Si desea eliminar fchdir(), que no est· implementado en V5R1, simplemente cambie la lÌnea que dice:
+El test de caso puede estar intentando usar una syscall que no est√° implementada en PASE.  Para evitar el SIGILL, intente ajustar la variable de entorno PASE_SYSCALL_NOSIGILL o tener un controlador para SIGILL.  Si puede compilar programas para PASE, ejecute el script config y edite config.sh cuando le d√© esa posibilidad.  Si desea eliminar fchdir(), que no est√° implementado en V5R1, simplemente cambie la l√≠nea que dice:
 
 d_fchdir='define'
 
@@ -63,14 +63,14 @@ a
 
 d_fchdir='undef'
 
-y entonces compile Perl.  Los lugares donde fchdir() es usado tienen alternativas para sistemas en los que no estÈ disponible fchdir().
+y entonces compile Perl.  Los lugares donde fchdir() es usado tienen alternativas para sistemas en los que no est√© disponible fchdir().
 
 =head2 Perl en ILE
 
-Existe un adaptaciÛn de Perl al entorno ILE.  Esta adaptaciÛn, sin embargo, se basa completamente en una publicaciÛn antigua de Perl, Perl 5.00502 (agosto de 1998).
-(La ˙ltima publicaciÛn de Perl 5.8.0 fue en julio del 2002, e incluso 5.6.1 saliÛ en abril del 2001).  Si, a pesar de todo, necesita ejecutar Perl en ILE, puede necesitar esta vieja adaptaciÛn: L<http://www.cpan.org/ports/#os400> Tenga en cuenta que cualquier Perl siguiente a 5.00502 no ha sido adaptada a ILE.
+Existe un adaptaci√≥n de Perl al entorno ILE.  Esta adaptaci√≥n, sin embargo, se basa completamente en una publicaci√≥n antigua de Perl, Perl 5.00502 (agosto de 1998).
+(La √∫ltima publicaci√≥n de Perl 5.8.0 fue en julio del 2002, e incluso 5.6.1 sali√≥ en abril del 2001).  Si, a pesar de todo, necesita ejecutar Perl en ILE, puede necesitar esta vieja adaptaci√≥n: L<http://www.cpan.org/ports/#os400> Tenga en cuenta que cualquier Perl siguiente a 5.00502 no ha sido adaptada a ILE.
 
-Si necesita utilizar Perl en el entorno ILE, es posible que desee considerar el uso de Qp2RunPase() para llamar a la versiÛn de PASE de Perl.
+Si necesita utilizar Perl en el entorno ILE, es posible que desee considerar el uso de Qp2RunPase() para llamar a la versi√≥n de PASE de Perl.
 
 =head1 AUTORES
 
