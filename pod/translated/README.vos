@@ -1,4 +1,4 @@
-Puede leer este archivo en cualquier editor de texto (ver· algunos caracteres extraÒos, pero puede ignorarlos). Est· escrito en formato POD (vea pod/perlpod.pod), un formato diseÒado especÌficamente para ser legible tal cual.
+Puede leer este archivo en cualquier editor de texto (ver√° algunos caracteres extra√±os, pero puede ignorarlos). Est√° escrito en formato POD (vea pod/perlpod.pod), un formato dise√±ado espec√≠ficamente para ser legible tal cual.
 
 =head1 NOMBRE
 
@@ -6,17 +6,17 @@ perlvos - Notas para Stratus VOS
 
 =head1 SINOPSIS
 
-Este archivo contiene instrucciones de cÛmo construir Perl en el sistema operativo Stratus VOS.  Perl es un lenguaje de I<scripts> o lenguaje de macros que es popular en muchos sistemas.  Consulte L<perlbook> para ver una lista de buenos libros sobre Perl.
+Este archivo contiene instrucciones de c√≥mo construir Perl en el sistema operativo Stratus VOS.  Perl es un lenguaje de I<scripts> o lenguaje de macros que es popular en muchos sistemas.  Consulte L<perlbook> para ver una lista de buenos libros sobre Perl.
 
-Estas son las instrucciones para la compilaciÛn de Perl desde el cÛdigo fuente.  Esta versiÛn de Perl no est· soportado en VOS versiÛn 14.2 o anteriores.  Si tiene una plataforma Continuum corriendo VOS versiones 14.3 a 14.7, descargue Perl desde el sitio FTP anÛnimo de Stratus Anonymous ftp://ftp.stratus.com/pub/vos/posix/ga/continuum/continuum.html.  Si tiene una plataforma de la Serie V corriendo VOS versiÛn 15.0 o posterior, o si tiene una plataforma de la Serie V corriendo OpenVOS versiÛn 17.0 o posterior, descargue Perl en ftp://ftp.stratus.com/pub/vos/posix/ga/ v-series/v-series.html.  Los archivos de la distribuciÛn de perl en el sitio FTP anÛnimo de Stratus se almacenan en un formato llamado "archivo empaquetado".  Instrucciones para el desempaquetado del archivo de la distribuciÛn Perl se encuentran en ftp://ftp.stratus.com/pub/vos/utility/utility.html.
+Estas son las instrucciones para la compilaci√≥n de Perl desde el c√≥digo fuente.  Esta versi√≥n de Perl no est√° soportado en VOS versi√≥n 14.2 o anteriores.  Si tiene una plataforma Continuum corriendo VOS versiones 14.3 a 14.7, descargue Perl desde el sitio FTP an√≥nimo de Stratus Anonymous ftp://ftp.stratus.com/pub/vos/posix/ga/continuum/continuum.html.  Si tiene una plataforma de la Serie V corriendo VOS versi√≥n 15.0 o posterior, o si tiene una plataforma de la Serie V corriendo OpenVOS versi√≥n 17.0 o posterior, descargue Perl en ftp://ftp.stratus.com/pub/vos/posix/ga/ v-series/v-series.html.  Los archivos de la distribuci√≥n de perl en el sitio FTP an√≥nimo de Stratus se almacenan en un formato llamado "archivo empaquetado".  Instrucciones para el desempaquetado del archivo de la distribuci√≥n Perl se encuentran en ftp://ftp.stratus.com/pub/vos/utility/utility.html.
 
-Si est· ejecutando VOS versiÛn 14.4.1 o posterior, puede obtener una distribuciÛn de perl pre-compilada, mediante la compra de la versiÛn 2.0.1 (o posterior) de VOS GNU C/C++ y GNU Tools, de Stratus Technologies.
+Si est√° ejecutando VOS versi√≥n 14.4.1 o posterior, puede obtener una distribuci√≥n de perl pre-compilada, mediante la compra de la versi√≥n 2.0.1 (o posterior) de VOS GNU C/C++ y GNU Tools, de Stratus Technologies.
 
 =head1 COMPILANDO PERL PARA VOS
 
-Para compilar perl a partir de su cÛdigo fuente en la plataforma Stratus Continuum, debe tener VOS versiÛn 14.5.0 o posterior, el producto STCP, y el GNU C/C++ y las GNU Tools, versiÛn 2.0.1 o posterior.  En la plataforma Serie V debe tener VOS versiÛn 15.0.0 o posterior, y cualquier versiÛn del GNU C/C++ y el producto GNU Tools.
+Para compilar perl a partir de su c√≥digo fuente en la plataforma Stratus Continuum, debe tener VOS versi√≥n 14.5.0 o posterior, el producto STCP, y el GNU C/C++ y las GNU Tools, versi√≥n 2.0.1 o posterior.  En la plataforma Serie V debe tener VOS versi√≥n 15.0.0 o posterior, y cualquier versi√≥n del GNU C/C++ y el producto GNU Tools.
 
-Para construir perl usando el I<script> Configure suministrada y makefiles, cambie al subdirectorio "vos" y escriba el comando "compile_full_perl" o "start_process compile_full_perl".  Esto configurar·, compilar· y comprobar· perl.
+Para construir perl usando el I<script> Configure suministrada y makefiles, cambie al subdirectorio "vos" y escriba el comando "compile_full_perl" o "start_process compile_full_perl".  Esto configurar√°, compilar√° y comprobar√° perl.
 
 =head1 INSTALANDO PERL EN VOS
 
@@ -24,13 +24,13 @@ Para construir perl usando el I<script> Configure suministrada y makefiles, camb
 
 =item 1
 
-Si ha compilado perl usando el I<script> Configure, aseg˙rese de que ha modificado y puesto por defecto los permisos de escritura a C<< >system>ported >> y todos los subdirectorios.  A continuaciÛn, escriba
+Si ha compilado perl usando el I<script> Configure, aseg√∫rese de que ha modificado y puesto por defecto los permisos de escritura a C<< >system>ported >> y todos los subdirectorios.  A continuaci√≥n, escriba
 
      gmake install
 
 =item 2
 
-Si bien actualmente no hay extensiones especÌficas de la arquitectura o mÛdulos distribuidos con perl, los siguientes directorios pueden ser usados para guardar este tipo de archivos (reemplace la cadena VERSION por el n˙mero de versiÛn que corresponda):
+Si bien actualmente no hay extensiones espec√≠ficas de la arquitectura o m√≥dulos distribuidos con perl, los siguientes directorios pueden ser usados para guardar este tipo de archivos (reemplace la cadena VERSION por el n√∫mero de versi√≥n que corresponda):
 
      >system>ported>lib>perl5>VERSION>7100
      >system>ported>lib>perl5>VERSION>8000
@@ -38,11 +38,11 @@ Si bien actualmente no hay extensiones especÌficas de la arquitectura o mÛdulos 
 
 =item 3
 
-Extensiones y mÛdulos de perl especÌficas del sitio pueden instalarse en uno de dos lugares.  Ponga los archivos independientes de la arquitectura en:
+Extensiones y m√≥dulos de perl espec√≠ficas del sitio pueden instalarse en uno de dos lugares.  Ponga los archivos independientes de la arquitectura en:
 
      >system>ported>lib>perl5>site_perl>VERSION
 
-Ponga los archivos dependientes de la arquitectura especÌfica especÌdicos del sitio en uno de los siguientes directorios:
+Ponga los archivos dependientes de la arquitectura espec√≠fica espec√≠dicos del sitio en uno de los siguientes directorios:
 
      >system>ported>lib>perl5>site_perl>VERSION>7100
      >system>ported>lib>perl5>site_perl>VERSION>8000
@@ -58,22 +58,22 @@ Puede examinar la variable @INC desde dentro de un programa perl para ver el ord
 
 =head2 Restricciones de Perl en VOS
 
-Esta adaptaciÛn de Perl versiÛn 5 a VOS prefiere el estilo Unix, con rutas separadas con barras diagonales, en lugar del estilo VOS con las rutas separadas por 'mayores-que'.  Las rutas al estilo VOS deberÌan funcionar en la mayorÌa de contextos, pero si tiene problemas, reemplace todos los caracteres 'mayor-que' por los caracteres barra diagonal.  Debido a que el car·cter de barra diagonal se utiliza como un delimitador de ruta, Perl no puede procesar nombres de rutas VOS que contengan un car·cter de barra diagonal en el nombre de un directorio o archivo; deber· renombrarlo.
+Esta adaptaci√≥n de Perl versi√≥n 5 a VOS prefiere el estilo Unix, con rutas separadas con barras diagonales, en lugar del estilo VOS con las rutas separadas por 'mayores-que'.  Las rutas al estilo VOS deber√≠an funcionar en la mayor√≠a de contextos, pero si tiene problemas, reemplace todos los caracteres 'mayor-que' por los caracteres barra diagonal.  Debido a que el car√°cter de barra diagonal se utiliza como un delimitador de ruta, Perl no puede procesar nombres de rutas VOS que contengan un car√°cter de barra diagonal en el nombre de un directorio o archivo; deber√° renombrarlo.
 
-Esta adaptaciÛn de Perl tambiÈn utiliza internamente valores de fecha basados en Unix.
-Siempre y cuando trate con representaciones de fechas en cadenas de caracteres ASCII, no deberÌa ser un problema.  El periodo de tiempo soportado es 1 de enero de 1980, a 17 de enero de 2038.
+Esta adaptaci√≥n de Perl tambi√©n utiliza internamente valores de fecha basados en Unix.
+Siempre y cuando trate con representaciones de fechas en cadenas de caracteres ASCII, no deber√≠a ser un problema.  El periodo de tiempo soportado es 1 de enero de 1980, a 17 de enero de 2038.
 
-Vea el archivo pod/perlport.pod para obtener m·s informaciÛn sobre la versiÛn Perl de VOS.
+Vea el archivo pod/perlport.pod para obtener m√°s informaci√≥n sobre la versi√≥n Perl de VOS.
 
-=head2 GestiÛn del desbordamiento y agotamiento
+=head2 Gesti√≥n del desbordamiento y agotamiento
 
-Antes de la versiÛn 14.7.0 de VOS, VOS no soporta la asignaciÛn autom·tica del desbordamiento de valores de punto flotante hacia +infinito, ni la asignaciÛn autom·tica del agotamiento de valores de punto flotante a cero, a diferencia de muchas otras plataformas.  La funciÛn pack de Perl ha sido modificada para realizar esa asignaciÛn en el software de VOS.  Realizar otras operaciones en coma flotante que produzcan desbordamiento o agotamiento probablemente dar·n lugar a una SIGFPE.  No se la juegue.
+Antes de la versi√≥n 14.7.0 de VOS, VOS no soporta la asignaci√≥n autom√°tica del desbordamiento de valores de punto flotante hacia +infinito, ni la asignaci√≥n autom√°tica del agotamiento de valores de punto flotante a cero, a diferencia de muchas otras plataformas.  La funci√≥n pack de Perl ha sido modificada para realizar esa asignaci√≥n en el software de VOS.  Realizar otras operaciones en coma flotante que produzcan desbordamiento o agotamiento probablemente dar√°n lugar a una SIGFPE.  No se la juegue.
 
-A partir de la VOS versiÛn 14.7.0 o posterior, el conjunto POSIX de tiempo de ejecuciÛn en VOS establece el registro de estado de punto flotante del hardware PA-RISC e IA-32 de modo que las excepciones de desbordamiento y agotamiento no provoquen cuelgues, sino que convierta autom·ticamente el resultado a infinito o cero, seg˙n sea lo apropiado.  En el momento de escribir estas lÌneas, todavÌa hay operaciones de punto flotante que pueden provocar excepciones, como por ejemplo, la resta de dos valores infinitos.  Esto est· registrado como sugerencia posix-1022, que ha sido corregido en VOS versiÛn 15.2 y superior.
+A partir de la VOS versi√≥n 14.7.0 o posterior, el conjunto POSIX de tiempo de ejecuci√≥n en VOS establece el registro de estado de punto flotante del hardware PA-RISC e IA-32 de modo que las excepciones de desbordamiento y agotamiento no provoquen cuelgues, sino que convierta autom√°ticamente el resultado a infinito o cero, seg√∫n sea lo apropiado.  En el momento de escribir estas l√≠neas, todav√≠a hay operaciones de punto flotante que pueden provocar excepciones, como por ejemplo, la resta de dos valores infinitos.  Esto est√° registrado como sugerencia posix-1022, que ha sido corregido en VOS versi√≥n 15.2 y superior.
 
-=head1 COMPROBACI”N DE ESTADO
+=head1 COMPROBACI√ìN DE ESTADO
 
-Cuando Perl 5.9.0 es compilado usando los procesos nativos de compilaciÛn en VOS versiÛn 14.7.0 y GNU C++/GNU Tools 2.0.2a, todas las pruebas excepto nueve de las pruebas intentadas, o pasan o dan lugar a unos fallos I<TODO> ("pendientes por hacer", ignorado).  Las pruebas que fallan son:
+Cuando Perl 5.9.0 es compilado usando los procesos nativos de compilaci√≥n en VOS versi√≥n 14.7.0 y GNU C++/GNU Tools 2.0.2a, todas las pruebas excepto nueve de las pruebas intentadas, o pasan o dan lugar a unos fallos I<TODO> ("pendientes por hacer", ignorado).  Las pruebas que fallan son:
 
 t/io/dup, test 2
 t/io/tell, test 28
@@ -87,15 +87,15 @@ lib/Net/ing/t/450_service, test 8
 
 =head1 ESTADO DEL SOPORTE
 
-Ofrezco esta adaptaciÛn "tal cual" est·.  Puede preguntarme, pero no puedo garantizar que serÈ capaz de responderlas.  Hay disponibles algunos libros excelentes sobre el lenguaje Perl; consulte a su librero.
+Ofrezco esta adaptaci√≥n "tal cual" est√°.  Puede preguntarme, pero no puedo garantizar que ser√© capaz de responderlas.  Hay disponibles algunos libros excelentes sobre el lenguaje Perl; consulte a su librero.
 
-Si desea una versiÛn compatible de perl para VOS, compre el VOS GNU C/C++ y las GNU Tools versiÛn 2.0.1 (o posterior) a Stratus Technologies, junto con un contrato de soporte (o de cualquier otra persona que le venda su soporte).
+Si desea una versi√≥n compatible de perl para VOS, compre el VOS GNU C/C++ y las GNU Tools versi√≥n 2.0.1 (o posterior) a Stratus Technologies, junto con un contrato de soporte (o de cualquier otra persona que le venda su soporte).
 
 =head1 AUTOR
 
 Paul Green (Paul.Green@stratus.com)
 
-=head1 ⁄LTIMA ACTUALIZACI”N
+=head1 √öLTIMA ACTUALIZACI√ìN
 
 6 de octubre de 2010
 

@@ -1,19 +1,19 @@
 microperl is supposed to be a really minimal perl, even more
-minimal than miniperl.  No se necesita Configure para construir microperl, por otra parte esto significa que las interfaces entre Perl y su sistema operativo se quedan en muy, muy, muy mÌnimas.
+minimal than miniperl.  No se necesita Configure para construir microperl, por otra parte esto significa que las interfaces entre Perl y su sistema operativo se quedan en muy, muy, muy m√≠nimas.
 
-Todo esto es experimental.  Si no sabe quÈ hacer con microperl probablemente no deberÌa construirlo.  Por favor, no informe de errores en microperl; corrija los errores.  (Informes de errores acerca de microperl sin correcciones/parches son equivalentes a las peticiones - no van a ser desechados, pero probablemente no se trabajar· en ellos, a menos que coincida oportunamente con una comezÛn personal de alg˙n voluntario)
+Todo esto es experimental.  Si no sabe qu√© hacer con microperl probablemente no deber√≠a construirlo.  Por favor, no informe de errores en microperl; corrija los errores.  (Informes de errores acerca de microperl sin correcciones/parches son equivalentes a las peticiones - no van a ser desechados, pero probablemente no se trabajar√° en ellos, a menos que coincida oportunamente con una comez√≥n personal de alg√∫n voluntario)
 
-Asumimos ANSI C89 m·s lo siguiente:
+Asumimos ANSI C89 m√°s lo siguiente:
 - <stddef.h>, <stdlib.h>
 - rename()
-- opendir(), readdir(), closedir() (vÌa dirent.h)
-- memchr(), memcmp(), memcpy(), memset() (vÌa string.h)
-- (un seguro) putenv() (vÌa stdlib.h)
-- strtoul() (vÌa stdlib.h)
+- opendir(), readdir(), closedir() (v√≠a dirent.h)
+- memchr(), memcmp(), memcpy(), memset() (v√≠a string.h)
+- (un seguro) putenv() (v√≠a stdlib.h)
+- strtoul() (v√≠a stdlib.h)
 (grep para 'define' en uconfig.sh).
-TambiÈn, Perl times() est· definida para siempre devolver ceros.
+Tambi√©n, Perl times() est√° definida para siempre devolver ceros.
 
-Si a˙n sigue leyendo esto y est· ansioso por probar microperl:
+Si a√∫n sigue leyendo esto y est√° ansioso por probar microperl:
 
 	make -f Makefile.micro
 
@@ -28,11 +28,11 @@ Si realiza cambios en uconfig.sh, ejecute
 
 	make -f Makefile.micro regen_uconfig
 
-para regenerar uconfig.h.  (o regen_uconfig64 si est· editando uconfig64.sh)
+para regenerar uconfig.h.  (o regen_uconfig64 si est√° editando uconfig64.sh)
 
 
 Si ninguna de las configuraciones por defecto funcionan en su plataforma, es posible que desee probar
 
 	make -f Makefile.micro patch_uconfig
 
-*antes* del "make -f Makefile.micro".  Esto intenta parchear mÌnimamente el uconfig.sh utilizando su *actual* Perl para que su microperl tenga los tipos y tamaÒos b·sicos y orden de los bytes correcto.
+*antes* del "make -f Makefile.micro".  Esto intenta parchear m√≠nimamente el uconfig.sh utilizando su *actual* Perl para que su microperl tenga los tipos y tama√±os b√°sicos y orden de los bytes correcto.

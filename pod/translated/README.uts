@@ -1,4 +1,4 @@
-Puede leer este archivo en cualquier editor de texto (verá algunos caracteres extraños, pero puede ignorarlos). Está escrito en formato POD (ver la página de manual perlpod) que está específicamente diseñado para ser legible de forma sencilla.
+Puede leer este archivo en cualquier editor de texto (verÃ¡ algunos caracteres extraÃ±os, pero puede ignorarlos). EstÃ¡ escrito en formato POD (ver la pÃ¡gina de manual perlpod) que estÃ¡ especÃ­ficamente diseÃ±ado para ser legible de forma sencilla.
 
 =head1 NOMBRE
 
@@ -6,17 +6,17 @@ perluts - Perl bajo UTS
 
 =head1 SINOPSIS
 
-Este documento se puede leer I<tal cual>: como F<README.uts>, o puede leerlo después de construir el paquete usando "man perluts".
+Este documento se puede leer I<tal cual>: como F<README.uts>, o puede leerlo despuÃ©s de construir el paquete usando "man perluts".
 
-El propósito es ayudar a construir Perl para UTS, que, si se siguen estas instrucciones, debería ser fácil, y el resultado ser una instalación sólida.
+El propÃ³sito es ayudar a construir Perl para UTS, que, si se siguen estas instrucciones, deberÃ­a ser fÃ¡cil, y el resultado ser una instalaciÃ³n sÃ³lida.
 
-=head1 DESCRIPCIÓN
+=head1 DESCRIPCIÃ“N
 
-Perl 5.7.2 (en desarrollo) o Perl 5.8.x (en preparación) para UTS
+Perl 5.7.2 (en desarrollo) o Perl 5.8.x (en preparaciÃ³n) para UTS
 
 =head1 CONSTRUYENDO PERL EN UTS
 
-NOTE: Algunos sitios han redefinido la forma en que uname funciona, y si en el suyo lo hace así, se debe tener en cuenta una serie de pasos especiales, para que el Configure puede reconocer su sistema como un sistema UTS.  Para ver si está en esta categoría, ejecute el comando "uname -a".  Debe ser algo como:
+NOTE: Algunos sitios han redefinido la forma en que uname funciona, y si en el suyo lo hace asÃ­, se debe tener en cuenta una serie de pasos especiales, para que el Configure puede reconocer su sistema como un sistema UTS.  Para ver si estÃ¡ en esta categorÃ­a, ejecute el comando "uname -a".  Debe ser algo como:
 
   uts juno 4 4.4 9672 370
 
@@ -24,28 +24,28 @@ En cualquier caso, el primer campo debe ser "uts".  Si este no es el caso, supon
    # uname
    /usr/bin/uname "$@" | sed -e 's/^telcoUTS/uts/'
 
-y cuando ejecute Configure, hágalo de la siguiente manera, con la adición de PATH=uts:$PATH como prefijo.  Es decir, haga:
+y cuando ejecute Configure, hÃ¡galo de la siguiente manera, con la adiciÃ³n de PATH=uts:$PATH como prefijo.  Es decir, haga:
 
    PATH=uts:$PATH ./Configure ...
 
-No hay necesidad de hacer un sistema interactivo para hacer la configuración, sólo tiene que escribir
+No hay necesidad de hacer un sistema interactivo para hacer la configuraciÃ³n, sÃ³lo tiene que escribir
 
   ./Configure -de [-Dusedevel] [-Doptimize=-g ] 2>&1 | tee Conf.out
 
 "-Dusedevel" puede ser necesario para configurar Perl 5.7.2 de forma no interactiva.
-Use -Doptimize=-g si quiere ejecutar Perl bajo sdb o gdb, O si quiere ser capaz de usar la bandera -D en la línea de comandos con perl, que ocasionalmente es útil en la depuración de scripts perl.
+Use -Doptimize=-g si quiere ejecutar Perl bajo sdb o gdb, O si quiere ser capaz de usar la bandera -D en la lÃ­nea de comandos con perl, que ocasionalmente es Ãºtil en la depuraciÃ³n de scripts perl.
 
-En este y los siguientes pasos, el "2>&1 | tee XXX.out" registra toda la salida del proceso, que será útil si algo inesperado va mal.
+En este y los siguientes pasos, el "2>&1 | tee XXX.out" registra toda la salida del proceso, que serÃ¡ Ãºtil si algo inesperado va mal.
 
-Entonces, realice la compilación con
+Entonces, realice la compilaciÃ³n con
 
   make 2>&1 | tee make.out
 
-Por último, pruebe con
+Por Ãºltimo, pruebe con
 
   make test 2>&1 | tee make-test.out
 
-En la salida, los únicos errores que debe ver deben ser similares a:
+En la salida, los Ãºnicos errores que debe ver deben ser similares a:
 
    lib/Math/BigInt/t/bigfltpm.........Use of uninitialized value ...
    FAILED at test 57
@@ -63,7 +63,7 @@ En la salida, los únicos errores que debe ver deben ser similares a:
    lib/Net/protoent...................ok
    lib/Net/servent....................FAILED at test 0
 
-Esto significa que todo pasa a excepción de algunos problemas en los paquetes "Math::BigInt", "Math::Complex", y "Math::Trig".
+Esto significa que todo pasa a excepciÃ³n de algunos problemas en los paquetes "Math::BigInt", "Math::Complex", y "Math::Trig".
 El error en lib/Net/servent parece que es un error en el programa de pruebas.  Para confirmar esto, desde el directorio principal fuente de Perl, hacer:
 
    LD_LIBRARY_PATH=`pwd` ./perl -Ilib lib/Net/servent.t
@@ -75,7 +75,7 @@ y debe de salir
    ok 2
    ok 3
 
-=head1 Instalando la compilación de perl en UTS
+=head1 Instalando la compilaciÃ³n de perl en UTS
 
 Ejecute el comando "make install"
 

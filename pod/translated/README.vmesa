@@ -1,6 +1,6 @@
 
 This document is written in pod format hence there are punctuation
-characters in odd places.  No se preocupe, parece que le funcionó correctamente la traducción EBCDIC->ASCII.  Puede leer más acerca pod/perlpod.pod o el resumen en el fichero INSTALL.
+characters in odd places.  No se preocupe, parece que le funcionÃ³ correctamente la traducciÃ³n EBCDIC->ASCII.  Puede leer mÃ¡s acerca pod/perlpod.pod o el resumen en el fichero INSTALL.
 
 =head1 NOMBRE
 
@@ -8,13 +8,13 @@ perlvmesa - compilando e instalando Perl en VM/ESA.
 
 =head1 SINOPSIS
 
-Este documento le ayudará a configurar, compilar, probar e instalar Perl en VM/ESA.
+Este documento le ayudarÃ¡ a configurar, compilar, probar e instalar Perl en VM/ESA.
 
-=head1 DESCRIPCIÓN
+=head1 DESCRIPCIÃ“N
 
-Esta es una versión de perl completamente portado para VM/ESA 2.3.0.  Es posible que funcione en otras versiones, pero esta es la única en la que lo hemos probado.
+Esta es una versiÃ³n de perl completamente portado para VM/ESA 2.3.0.  Es posible que funcione en otras versiones, pero esta es la Ãºnica en la que lo hemos probado.
 
-Si ha descargado la distribución binaria, necesita ser instalada en /usr/local.  Las distribuciones de código fuente tiene un sistema automatizado de "make install" que significa que no es necesario extraer el código fuente en /usr/local (que es, sin embargo, donde se instala por defecto).  Es posible que tenga que preocuparse de los archivos de configuración de red, discutido en el último punto de más abajo.
+Si ha descargado la distribuciÃ³n binaria, necesita ser instalada en /usr/local.  Las distribuciones de cÃ³digo fuente tiene un sistema automatizado de "make install" que significa que no es necesario extraer el cÃ³digo fuente en /usr/local (que es, sin embargo, donde se instala por defecto).  Es posible que tenga que preocuparse de los archivos de configuraciÃ³n de red, discutido en el Ãºltimo punto de mÃ¡s abajo.
 
 =head2 Desempaquetando distribuciones Perl en VM/ESA
 
@@ -22,41 +22,41 @@ Para extraer un archivo tar ASCII en VM/ESA, haga lo siguiente:
 
    pax -o to=IBM-1047,from=ISO8859-1 -r < latest.tar
 
-=head2 Instalación de Perl y de las utilerías en VM/ESA
+=head2 InstalaciÃ³n de Perl y de las utilerÃ­as en VM/ESA
 
-GNU make para VM/ESA, que puede ser requerido para la compilación de perl, está disponible desde:
+GNU make para VM/ESA, que puede ser requerido para la compilaciÃ³n de perl, estÃ¡ disponible desde:
 
 L<http://vm.marist.edu/~neale/vmoe.html>
 
 =head2 Configurar Perl en VM/ESA
 
-Una vez que haya descomprimido la distribución, ejecute B<Configure> (consulte INSTALL para una descripción completa de las opciones de configuración), y luego ejecutar B<make>, y luego "make test" y luego "make install" (este último paso puede requerir privilegios UID=0).
+Una vez que haya descomprimido la distribuciÃ³n, ejecute B<Configure> (consulte INSTALL para una descripciÃ³n completa de las opciones de configuraciÃ³n), y luego ejecutar B<make>, y luego "make test" y luego "make install" (este Ãºltimo paso puede requerir privilegios UID=0).
 
-Hay un archivo "hints" (sugerencias) para vmesa que especifica los valores correctos para la mayoría de las cosas.  Algunas cosas a tener en cuenta son:
+Hay un archivo "hints" (sugerencias) para vmesa que especifica los valores correctos para la mayorÃ­a de las cosas.  Algunas cosas a tener en cuenta son:
 
 =over 4
 
 =item *
 
-esta adaptación tiene soporte para carga dinámica, pero no ha sido muy testado
+esta adaptaciÃ³n tiene soporte para carga dinÃ¡mica, pero no ha sido muy testado
 
 =item *
 
-No active el indicador "-O" de optimización del compilador.  Hay un error en el compilador (APAR PQ18812) que genera mal código cuando el optimizador está activo.
+No active el indicador "-O" de optimizaciÃ³n del compilador.  Hay un error en el compilador (APAR PQ18812) que genera mal cÃ³digo cuando el optimizador estÃ¡ activo.
 
 =item *
 
-Como VM/ESA no es totalmente compatible con la API fork(), los programas que confían en esta llamada no funcionarán. He reemplazado fork()/exec() y el solitario exec() con spawn(). Esto tiene un efecto secundario al abrir las tuberías anónimas en un script de shell: no se ha generado ningún proceso hijo.
+Como VM/ESA no es totalmente compatible con la API fork(), los programas que confÃ­an en esta llamada no funcionarÃ¡n. He reemplazado fork()/exec() y el solitario exec() con spawn(). Esto tiene un efecto secundario al abrir las tuberÃ­as anÃ³nimas en un script de shell: no se ha generado ningÃºn proceso hijo.
 
 =item *
 
-En este momento el archivo de sugerencias para VM/ESA, básicamente, pasa por alto todo el proceso de configuración automática.  Esto se debe a que Configure se basa en: 1. Los archivos cabecera residen en el I<Byte File System > (puede ponerla ahí si quiere); 2. El preprocesador de C, incluyendo las instrucciones #include en el archivo de salida del preprocesador (.i).
+En este momento el archivo de sugerencias para VM/ESA, bÃ¡sicamente, pasa por alto todo el proceso de configuraciÃ³n automÃ¡tica.  Esto se debe a que Configure se basa en: 1. Los archivos cabecera residen en el I<Byte File System > (puede ponerla ahÃ­ si quiere); 2. El preprocesador de C, incluyendo las instrucciones #include en el archivo de salida del preprocesador (.i).
 
 =back
 
-=head2 Probando anomalías de Perl en VM/ESA
+=head2 Probando anomalÃ­as de Perl en VM/ESA
 
-El paso "make test" ejecuta un I<Perl Verification Procedure>, normalmente antes de la instalación.  A medida que el kit 5.6.1 se estaba ensamblando, aparecieron los siguientes "fallos" en algunas máquinas durante el "make test" (en su mayoría debido a los conflictos ASCII vs EBCDIC), los resultados pueden ser diferentes:
+El paso "make test" ejecuta un I<Perl Verification Procedure>, normalmente antes de la instalaciÃ³n.  A medida que el kit 5.6.1 se estaba ensamblando, aparecieron los siguientes "fallos" en algunas mÃ¡quinas durante el "make test" (en su mayorÃ­a debido a los conflictos ASCII vs EBCDIC), los resultados pueden ser diferentes:
 
 [La lista de fracasos que han sido recopilados]
 
@@ -64,27 +64,27 @@ El paso "make test" ejecuta un I<Perl Verification Procedure>, normalmente antes
 
 Cuando se utiliza perl en VM/ESA por favor, tenga en cuenta que los juegos de caracteres EBCDIC y ASCII son diferentes.  Las funciones Perl integradas que pueden comportarse de manera diferente en EBCDIC se mencionan en el documento perlport.pod.
 
-OpenEdition (UNIX System Services) (aún) no soporta el #! para la invocación de I<script>.
+OpenEdition (UNIX System Services) (aÃºn) no soporta el #! para la invocaciÃ³n de I<script>.
 Vea:
 
     head `whence perldoc`
 
-para ver un ejemplo de cómo utilizar el truco del "eval exec" para hacer que el shell ejecute por usted los scripts perl.
+para ver un ejemplo de cÃ³mo utilizar el truco del "eval exec" para hacer que el shell ejecute por usted los scripts perl.
 
 =head1 AUTORES
 
 Neale Ferguson.
 
-=head1 VEA TAMBIÉN
+=head1 VEA TAMBIÃ‰N
 
 L<INSTALL>, L<perlport>, L<perlebcdic>.
 
 =head2 Lista de correo de Perl en VM/ESA
 
-Si está interesado en las versiones VM/ESA, z/OS (anteriormente conocido como OS/390) y POSIX-BC (BS2000) de Perl, entonces vea la lista de correo perl-mvs.
-Para suscribirse, envíe un mensaje vacío a perl-mvs-subscribe@perl.org.
+Si estÃ¡ interesado en las versiones VM/ESA, z/OS (anteriormente conocido como OS/390) y POSIX-BC (BS2000) de Perl, entonces vea la lista de correo perl-mvs.
+Para suscribirse, envÃ­e un mensaje vacÃ­o a perl-mvs-subscribe@perl.org.
 
-Vea también:
+Vea tambiÃ©n:
 
 L<http://lists.perl.org/list/perl-mvs.html>
 
