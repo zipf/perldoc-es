@@ -1,26 +1,27 @@
 #!/usr/bin/perl
+#
+# Checl POD2::ES instalation
+#
 use strict;
 use warnings;
 use open OUT => ':locale';
+use feature 'say';
 
 use POD2::ES;
 
 my $pod_es = POD2::ES->new();
 
-print "Directorios de instalación:\n";
-print "\t", join("\n\t", $pod_es->pod_dirs());
-print "\n\n";
+say 'Instalation directories';
+say "\t", join("\n\t", $pod_es->pod_dirs()), "\n";
 
-print "Titular de la lista alfabética de funciones Perl:\n";
-my $texto = $pod_es->search_perlfunc_re();
-print "\t", $texto;
-print "\n\n";
+say 'Title of Alphabetic list of Perl functions:';
+my $text = $pod_es->search_perlfunc_re();
+say "\t$text\n";
 
-print "Lista de pods traducidos:\n";
+say "List of translated pods:";
 $pod_es->print_pods();
-print "\n";
+say '';
 
-print "Estado de perlintro:\n";
+say 'Status of perlintro:';
 $pod_es->print_pod('perlintro');
-print "\n\n";
-
+say '';
