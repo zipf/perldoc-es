@@ -94,7 +94,7 @@ Los usuarios PCRE deben tener en cuenta que la función recursiva de las expresi
 =item Búferes de captura nombrados
 
 Ahora es posible poner nombres a los paréntesis de captura en un patrón, y referirse a los contenidos capturados por ese nombre. La sintaxis del nombrado es C<< (?<NOMBRE>...) >>.
-Es posible referirse a un búfer nombrado con la sintaxis C<< \k<NOMBRE> >>. En código, los nuevos hash mágicos C<%+> y C<%-> puede ser usados para acceder a los contenidos de los búfer de captura.
+Es posible retrorreferirse a un búfer nombrado con la sintaxis C<< \k<NOMBRE> >>. En código, los nuevos hash mágicos C<%+> y C<%-> puede ser usados para acceder a los contenidos de los búfer de captura.
 
 Por lo tanto, para reemplazar todos los caracteres duplicados con una sola copia, se podría escribir
 
@@ -124,9 +124,9 @@ Perl ahora soporta la sintaxis "cuantificador posesivo" del patrón "coincidenci
 
 El motor de expresiones regulares ahora es compatible con una serie de verbos de control de la vuelta atrás, de propósitos especiales: (*THEN), (*PRUNE), (*MARK), (*SKIP), (*COMMIT), (*FAIL) y (*ACCEPT). Vea L<perlre> para consultar sus descripciones. (Yves Orton)
 
-=item Contra referencias relativas
+=item Retrorreferencias relativas
 
-Una nueva sintaxis C<\g{N}> o C<\gN> donde "N" es un entero decimal permite una forma más segura de la notación de contra referencia, así como permitir contra referencias relativas hacia atrás. Esto debería hacer más fácil el generar e integrar los patrones que contienen contra referencias. Vea L<perlre/"Búferes de captura">. (Yves Orton)
+Una nueva sintaxis C<\g{N}> o C<\gN> donde "N" es un entero decimal permite una forma más segura de la notación de retrorreferencia, así como permitir las retrorreferencias relativas. Esto debería hacer más fácil el generar e integrar los patrones que contienen retrorreferencias. Vea L<perlre/"Búferes de captura">. (Yves Orton)
 
 =item Escapado C<\K>
 
