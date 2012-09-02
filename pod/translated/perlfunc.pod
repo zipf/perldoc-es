@@ -4756,7 +4756,7 @@ Se produce un campo vacío posterior, por el contrario, cuando existe una coinci
 
 produce la salida S<' :a:b:c:'>.
 
-Si el PATRÓN contiene L<grupos de captura|perlretut/Agrupando cosas y coincidencia jerárquica>, entonces, por cada separador, se produce un campo adicional para cada subcadena capturada por un grupo (en el orden en que los grupos son especificados, como lo hacen las L<contrareferencias|perlretut/Contrareferencias>); si algún grupo no coincide, entonces captura el valor C<undef> en lugar de una subcadena.  Además, note que se produce un campo adicional cada vez que exista un separador (es decir, cuando se produce una división), y tales campos adicionales B<no> cuentan para el LÍMITE.  Considere las siguientes expresiones evaluadas en contexto de lista (se indica cada lista devuelta en el comentario correspondiente):
+Si el PATRÓN contiene L<grupos de captura|perlretut/Agrupando cosas y coincidencia jerárquica>, entonces, por cada separador, se produce un campo adicional para cada subcadena capturada por un grupo (en el orden en que los grupos son especificados, como lo hacen las L<retrorreferencias|perlretut/Retrorreferencias>); si algún grupo no coincide, entonces captura el valor C<undef> en lugar de una subcadena.  Además, note que se produce un campo adicional cada vez que exista un separador (es decir, cuando se produce una división), y tales campos adicionales B<no> cuentan para el LÍMITE.  Considere las siguientes expresiones evaluadas en contexto de lista (se indica cada lista devuelta en el comentario correspondiente):
 
     split(/-|,/, "1-10,20", 3)
     # ('1', '10', '20')
@@ -5862,7 +5862,7 @@ X<use> X<module> X<import> X<módulo> X<importar>
 
 =item use Módulo LISTA
 
-=item use Módule
+=item use Módulo
 
 =item use VERSIÓN
 

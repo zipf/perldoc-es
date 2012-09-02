@@ -336,7 +336,7 @@ Los detalles están en L<perlop/Comillas y Operadores de comillas>.
 =head3 Clase carácter y otros escapados especiales
 
 Ademas, Perl define lo siguiente:
-X<\g> X<\k> X<\K> X<backreference>
+X<\g> X<\k> X<\K> X<backreference> X<retrorreferencia>
 
  Secuencia  Nota    Descripción
   [...]     [1]  Busca un carácter de acuerdo a las reglas de la clase
@@ -362,14 +362,14 @@ X<\g> X<\k> X<\K> X<backreference>
                    los caracteres UTF-8 en sus respectivos bytes, por lo
                    que puede terminar con partes incorrectas de UTF-8.  No soportado en
                    búsquedas de coincidencias previas.
-  \1        [5]  Contrareferencia a un específico grupo de captura o búfer.
+  \1        [5]  Retrorreferencia a un grupo específico de captura o búfer.
                    '1' puede ser cualquier entero positivo.
-  \g1       [5]  Contrareferencia a un grupo específico o anterior,
+  \g1       [5]  Retrorreferencia a un grupo específico o anterior,
   \g{-1}    [5]  El número puede ser negativo, indicando la posición relativa de
                    un grupo anterior y puede, opcionalmente, estar rodeado por
                    llaves, para un mejor análisis de la exp. reg.
-  \g{name}  [5]  Contrareferencia nominal
-  \k<name>  [5]  Contrareferencia nominal
+  \g{name}  [5]  Retrorreferencia con nombre
+  \k<name>  [5]  Retrorreferencia con nombre
   \K        [6]  Olvidar lo que está a la izquierda de \K, no incluir en $&
   \N        [7]  Cualquier carácter excepto \n (experimental)  No se ve afectado por el
                    modificador /s
@@ -451,17 +451,17 @@ Cabe señalar que C<\G> mal utilizado puede resultar en un bucle infinito. Tenga
 =head3 Grupos de captura
 
 La construcción de paréntesis C<( ... )> crea grupos de captura (también referidos como búferes de captura). Para hacer referencia más tarde a los contenidos actuales de un grupo de captura, dentro del mismo patrón, use C<\g1> (o C<\g{1}>) para el primero, C<\g2> (o C<\g{2}>) para el segundo, y así sucesivamente.
-A esto se le llama una I<contrareferencia>.
+A esto se le llama una I<retrorreferencia>.
 X<regex, búfer captura> X<regexp, búfer captura>
 X<regex, grupo captura> X<regexp, grupo captura>
-X<expresión regular, búfer captura> X<contrareferencia>
+X<expresión regular, búfer captura> X<retrorreferencia>
 X<expresión regular, grupo captura>
-X<\g{1}> X<\g{-1}> X<\g{nombre}> X<contrareferencia relativa> X<contrareferencia nombre>
+X<\g{1}> X<\g{-1}> X<\g{nombre}> X<retrorreferencia relativa> X<retrorreferencia nombre>
 X<búfer captura nombre> X<expresión regular, búfer captura nombre>
 X<grupo captura nombre> X<expresión regular, grupo captura nombre>
 X<%+> X<$+{nombre}> X<< \k<nombre> >>
 No hay límite al número de subcadenas capturadas que puede usar.
-Los grupos son numerados siendo el paréntesis abierto más a la izquierda el número 1, etc. Si un grupo no se ha encontrado, la contrareferencia asociada no será inicializada. (Esto puede ocurrir si el grupo es opcional, o en una rama diferente de la alternancia).
+Los grupos son numerados siendo el paréntesis abierto más a la izquierda el número 1, etc. Si un grupo no se ha encontrado, la retrorreferencia asociada no será inicializada. (Esto puede ocurrir si el grupo es opcional, o en una rama diferente de la alternancia).
 Puede omitir la C<"g">, y escribir C<"\1">, etc., pero hay algunos problemas con este formato, como se describe más abajo.
 
 También puede referirse a los grupos de captura, de forma relativa, usando un número negativo, por lo que C<\g-1> y C<\g{-1}> se refieren al grupo de captura inmediatamente anterior, y C<\g-2> y C<\g{-2}> se refieren al grupo anterior a éste.  Por ejemplo:
@@ -488,8 +488,8 @@ Puede referirse a ellos con un número absoluto (usando C<"$1"> en lugar de C<"\
 
 Las llaves son necesarias al referirse a los grupos de captura de llamada, pero son opcionales para los números absolutos o relativos.  Las llaves son más seguras al crear una expresión regular mediante la concatenación de cadenas más pequeñas.  Por ejemplo, si tiene C<qr/$a$b/>, y C<$a> conteniendo C<"\g1"> y C<$b> conteniendo C<"37">, obtendrá C<\g137/>, que, probablemente, no será lo que pretendía.
 
-Las notaciones C<\g> y C<\k> fueron introducidas en Perl 5.10.0.  Antes de esto, no existían los grupos de captura numerados de forma relativa, o mediante un nombre de grupo.  Los grupos numerados de forma absoluta eran de la forma C<\1>, C<\2>, etc., y esta notación todavía está aceptada (y probablemente siempre lo será).  Pero conduce a algunas ambigüedades si hay más de 9 grupos de captura, como C<\10> podría referirse al décimo grupo de captura, o al carácter cuyo ordinal en octal es 010 (un retroceso, en ASCII).  Perl resuelve esta ambigüedad mediante la interpretación de C<\10> como una contrareferencia cuando, al menos, se han abierto, antes, 10 paréntesis de apertura.  Asimismo, \11 es una contrareferencia sólo si, antes, y por lo menos, se han abierto 11 paréntesis.
-Y así sucesivamente.  De C<\1> a C<\9>, son siempre interpretadas como contrareferencias.
+Las notaciones C<\g> y C<\k> fueron introducidas en Perl 5.10.0.  Antes de esto, no existían los grupos de captura numerados de forma relativa, o mediante un nombre de grupo.  Los grupos numerados de forma absoluta eran de la forma C<\1>, C<\2>, etc., y esta notación todavía está aceptada (y probablemente siempre lo será).  Pero conduce a algunas ambigüedades si hay más de 9 grupos de captura, como C<\10> podría referirse al décimo grupo de captura, o al carácter cuyo ordinal en octal es 010 (un retroceso, en ASCII).  Perl resuelve esta ambigüedad mediante la interpretación de C<\10> como una retrorreferencia cuando, al menos, se han abierto, antes, 10 paréntesis de apertura.  Asimismo, \11 es una retroreferencia sólo si, antes, y por lo menos, se han abierto 11 paréntesis.
+Y así sucesivamente.  De C<\1> a C<\9>, son siempre interpretadas como retrorreferencias.
 Hay varios ejemplos a continuación que ilustran estos peligros.  Puede evitar la ambigüedad usando siempre C<\g{}> o C<\g> si se refiere a los grupos de captura; y para las constantes octales siempre con C<\o{}>, o para C<\077> e inferiores, usando 3 dígitos rellenados con ceros a la izquierda, ya que un cero a la izquierda implica una constante octal.
 
 La notación C<\I<dígito>> también funciona, en ciertas circunstancias, fuera del patrón.  Vea L</Advertencia de \1 en lugar de $1> abajo para los detalles.
@@ -513,9 +513,9 @@ Ejemplos:
         $segundos = $3;
     }
 
-    /(.)(.)(.)(.)(.)(.)(.)(.)(.)\g10/   # \g10 es una contrareferencia
+    /(.)(.)(.)(.)(.)(.)(.)(.)(.)\g10/   # \g10 es una retrorreferencia
     /(.)(.)(.)(.)(.)(.)(.)(.)(.)\10/    # \10 es octal
-    /((.)(.)(.)(.)(.)(.)(.)(.)(.))\10/  # \10 es una contrareferencia
+    /((.)(.)(.)(.)(.)(.)(.)(.)(.))\10/  # \10 es una retrorreferencia
     /((.)(.)(.)(.)(.)(.)(.)(.)(.))\010/ # \010 es octal
 
     $a = '(.)\1';        # Crea problemas cuando es concatenado.
@@ -618,7 +618,7 @@ X<(?:)>
 =item C<(?^aluimsx:patrón)>
 X<(?^:)>
 
-Este es para agrupación, no captura; agrupa subexpresiones como lo hace "()", pero no crea contrareferencias como sí lo hace "()".  Así que
+Este es para agrupación, no captura; agrupa subexpresiones como lo hace "()", pero no crea retrorreferencias como sí lo hace "()".  Así que
 
     @campos = split(/\b(?:a|b|c)\b/)
 
@@ -757,7 +757,7 @@ B<NOTA:> Con el fin de facilitar las cosas a los programadores con experiencia e
 
 =item C<< \k'NOMBRE' >>
 
-Referencia inversa nominada. Similar a las referencias inversas numéricas, excepto que el grupo es designado por nombre y no por número. Si varios grupos tienen el mismo nombre entonces se refiere al grupo más a la izquierda de la coincidencia actual.
+Retroreferencia con nombre. Similar a las retrorreferencias numéricas, excepto que el grupo es designado por nombre y no por número. Si varios grupos tienen el mismo nombre entonces se refiere al grupo más a la izquierda de la coincidencia actual.
 
 Es un error referirse a un nombre no definido anteriormente en el patrón por un C<< (?<NOMBRE>) >>.
 
@@ -860,7 +860,7 @@ X<(?PARNO)> X<(?1)> X<(?R)> X<(?0)> X<(?-1)> X<(?+1)> X<(?-PARNO)> X<(?+PARNO)> 
 Similar a C<(??{ código })> excepto que no incluye la compilación de ningún código; en vez de eso trata a los contenidos de un grupo de captura como un patrón independiente que debe coincidir en la posición actual.  Los grupos de captura que contengan el patrón tendrán el valor determinado por la recursividad más externa.
 
 PARNO es una secuencia de dígitos (no empezando en 0) cuyo valor refleja el número del par de paréntesis del grupo de captura que hay que re-ejecutar. C<(?R)> re-ejecuta hasta el comienzo de todo el patrón. C<(?0)> es una sintaxis alternativa para C<(?R)>. Si PARNO es precedido por un signo más o menos, entonces se asume que es relativo, con números negativos indicando grupos de captura anteriores, y con positivos a los posteriores. Así C<(?-1)> se refiere al grupo declarado más recientemente, y C<(?+1)> se refiere al siguiente grupo a ser declarado.
-Tenga en cuenta que el recuento de la recursión relativa difiere de la de contra-referencias relativas, en que con recursión, los grupos no cerrados B<están> incluidos.
+Tenga en cuenta que el recuento de la recursión relativa difiere de la de retrorreferencias relativas, en que con recursión, los grupos no cerrados B<están> incluidos.
 
 El siguiente patrón coincide con una función foo() que puede contener paréntesis balanceados como argumento.
 
@@ -1013,7 +1013,7 @@ Por ejemplo: C<< ^(?>a*)ab >> nunca coincidirá, ya que C<< (?>a*) >> (anclada a
 C<< (?>patrón) >> no desactiva la vuelta atrás una vez que ha coincidido. Todavía es posible dar marcha atrás más allá de la construcción, pero no dentro de ella. Por tanto C<< ((?>a*)|(?>b*))ar >> aún lo haría con "bar".
 
 Un efecto similar a C<< (?>patrón) >> se puede conseguir escribiendo C<(?=(patrón))\g{-1}>.  Esto busca la misma subcadena como en C<a+>, y el siguiente C<\g{-1}> se come la cadena coincidente; por lo tanto, hace una aserción de longitud cero, como un análogo de C<< (?>...) >>.
-(La diferencia entre estas dos construcciones es que el segundo utiliza un grupo de captura, aumentando el número de contrareferencias en el resto de la expresión regular).
+(La diferencia entre estas dos construcciones es que el segundo utiliza un grupo de captura, aumentando el número de retrorreferencias en el resto de la expresión regular).
 
 Considere este patrón:
 
@@ -1391,7 +1391,7 @@ Las alternativas son procesadas de izquierda a derecha, de modo que la primera a
 
 También recuerde que "|" es interpretado como un literal cuando está entre corchetes, por lo que si usted escribe C<[fee|fie|foe]> realmente está solo buscando C<[feio|]>.
 
-Dentro de un patrón, puede designar subpatrones para su posterior consulta encerrándolos entre paréntesis, y puede referirse al subpatrón I<n>-ésimo más adelante, en el patrón utilizando el metacarácter \I<n> o \gI<n>.  Los subpatrones son numerados basados en el orden, de izquierda a derecha, de su paréntesis de apertura.  Una contrareferencia coincide con lo que en realidad coincidía con el subpatrón en la cadena examinada, no con las reglas de ese subpatrón.  Por lo tanto, C<(0|0x)\d*\s\g1\d*> coincidirá con "0x1234 0x4321", pero no con "0x1234 01234", debido a que el subpatrón primero coincidió con "0x", incluso aunque la regla C<0|0x> podría coincidir con el 0 a la izquierda en el segundo número.
+Dentro de un patrón, puede designar subpatrones para su posterior consulta encerrándolos entre paréntesis, y puede referirse al subpatrón I<n>-ésimo más adelante, en el patrón utilizando el metacarácter \I<n> o \gI<n>.  Los subpatrones son numerados basados en el orden, de izquierda a derecha, de su paréntesis de apertura.  Una retrorreferencia coincide con lo que en realidad coincidía con el subpatrón en la cadena examinada, no con las reglas de ese subpatrón.  Por lo tanto, C<(0|0x)\d*\s\g1\d*> coincidirá con "0x1234 0x4321", pero no con "0x1234 01234", debido a que el subpatrón primero coincidió con "0x", incluso aunque la regla C<0|0x> podría coincidir con el 0 a la izquierda en el segundo número.
 
 =head2 Advertencia de \1 en lugar de $1
 
@@ -1407,7 +1407,7 @@ O si trata de hacer
 
     s/(\d+)/\1000/;
 
-No puede eliminar la ambigüedad diciendo C<\{1}000>, mientras que lo puede arreglar con C<${1}000>.  La operación de interpolación no se debe confundir con la operación de coincidencia con una contrareferencia.  Significan dos cosas diferentes en el lado I<izquierdo> del C<s///>.
+No puede eliminar la ambigüedad diciendo C<\{1}000>, mientras que lo puede arreglar con C<${1}000>.  La operación de interpolación no se debe confundir con la operación de coincidencia con una retrorreferencia.  Significan dos cosas diferentes en el lado I<izquierdo> del C<s///>.
 
 =head2 Patrones repetidos coincidiendo con subcadenas de longitud cero
 
@@ -1535,7 +1535,7 @@ Coincide con la mejor coincidencia de C<S> y sólo esa.
 
 =item C<(?=S)>, C<(?<=S)>
 
-Sólo es considerada la mejor coincidencia para C<S>.  (Esto es importante sólo si C<S> tiene paréntesis de captura, y las contrareferencias son utilizadas en otra parte de la expresión regular).
+Sólo es considerada la mejor coincidencia para C<S>.  (Esto es importante sólo si C<S> tiene paréntesis de captura, y las retrorreferencias son utilizadas en otra parte de la expresión regular).
 
 =item C<(?!S)>, C<(?<!S)>
 
@@ -1607,7 +1607,7 @@ Define un grupo de captura con nombre. Equivalente a C<< (?<NOMBRE>patrón) >>.
 
 =item C<< (?P=NOMBRE) >>
 
-Contrareferencia a un grupo de captura con nombre. Equivalente a C<< \g{NOMBRE} >>.
+Retrorreferencia a un grupo de captura con nombre. Equivalente a C<< \g{NOMBRE} >>.
 
 =item C<< (?P>NOMBRE) >>
 

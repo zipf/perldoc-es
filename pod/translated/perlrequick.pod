@@ -241,7 +241,7 @@ Si las agrupaciones en una I<regex> están anidadas, C<$1> devuelve el grupo con
     /(ab(cd|ef)((gi)|j))/;
      1  2      34
 
-Asociado con las variables de emparejamiento C<$1> C<$2>, ... son las B<contrareferencias> C<\g1> C<\g2>, ... Las contrareferencias son variables de emparejamiento que pueden ser utilizadas I<dentro> una I<regex>:
+Asociado con las variables de emparejamiento C<$1> C<$2>, ... son las B<retrorreferencias> C<\g1> C<\g2>, ... Las retrorreferencias son variables de emparejamiento que pueden ser utilizadas I<dentro> una I<regex>:
 
     /(\w\w\w)\s\g1/; # encuentra secuencias como 'por por' en la cadena
 
