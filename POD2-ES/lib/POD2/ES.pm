@@ -1,7 +1,6 @@
 package POD2::ES;
 use strict;
 use warnings;
-use 5.010;
 use open ':locale';
 use base 'POD2::Base';
 use base 'Exporter';
