@@ -72,10 +72,10 @@ sub print_pod {
     while (@args) {
         (my $pod = lc(shift @args)) =~ s/\.pod$//;
         if ( exists $pods->{$pod} ) {
-            say "\t'$pod' traducido correspondiente a Perl $pods->{$pod}";
+            print "\t'$pod' traducido correspondiente a Perl $pods->{$pod}\n";
         }
         else {
-            say "\t'$pod' todavía no existe";
+            print "\t'$pod' todavía no existe\n";
         }
     }
 }
