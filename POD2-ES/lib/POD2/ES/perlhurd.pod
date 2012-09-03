@@ -1,32 +1,34 @@
-Puede leer este archivo en cualquier editor de texto (ver· algunos caracteres
-extraÒos, pero puede ignorarlos). Est· escrito en formato POD (vea
-pod/perlpod.pod), un formato diseÒado especÌficamente para ser legible tal
+=encoding utf8
+
+Puede leer este archivo en cualquier editor de texto (ver√° algunos caracteres
+extra√±os, pero puede ignorarlos). Est√° escrito en formato POD (vea
+pod/perlpod.pod), un formato dise√±ado espec√≠ficamente para ser legible tal
 cual.
 
 =head1 NOMBRE
 
-perlhurd - Perl versiÛn 5 en Hurd
+perlhurd - Perl versi√≥n 5 en Hurd
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Si desea usar Perl en Hurd, la distribuciÛn recomendada es Debian GNU/Hurd
-(visite http://www.debian.org/ ), aunque a˙n no existe una versiÛn oficial
-estable. Con toda seguridad habr· m·s problemas en la distribuciÛn binaria
+Si desea usar Perl en Hurd, la distribuci√≥n recomendada es Debian GNU/Hurd
+(visite http://www.debian.org/ ), aunque a√∫n no existe una versi√≥n oficial
+estable. Con toda seguridad habr√° m√°s problemas en la distribuci√≥n binaria
 anterior, "gnu-0.2".
 
 =head2 Problemas conocidos de Perl en Hurd 
 
-El conjunto de pruebas de Perl podrÌa detectar errores en Hurd. Es muy probable
-que no se superen las pruebas "lib/anydbm" y "pragma/warnings". En realidad,
-estos errores no son especÌficos de Hurd (como parece indicar el resultado del
-conjunto de pruebas).
+El conjunto de pruebas de Perl podr√≠a detectar errores en Hurd. Es muy
+probable que no se superen las pruebas "lib/anydbm" y "pragma/warnings". En
+realidad, estos errores no son espec√≠ficos de Hurd (como parece indicar el
+resultado del conjunto de pruebas).
 
-Si la red no est· configurada, las pruebas de sockets pueden generar errores.
+Si la red no est√° configurada, las pruebas de sockets pueden generar errores.
 Debe establecer "/hurd/pfinet" como traductor de "/servers/socket/2",
-suministr·ndole los argumentos correctos. Pruebe "/hurd/pfinet --help" para
-obtener m·s informaciÛn.
+suministr√°ndole los argumentos correctos. Pruebe "/hurd/pfinet --help" para
+obtener m√°s informaci√≥n.
 
-Estas son las estadÌsticas correspondientes a Perl 5.005_62 en mi sistema:
+Estas son las estad√≠sticas correspondientes a Perl 5.005_62 en mi sistema:
 
  Failed Test  Status Wstat Total Fail  Failed  List of failed
  -------------------------------------------------------------------------
@@ -38,28 +40,28 @@ Estas son las estadÌsticas correspondientes a Perl 5.005_62 en mi sistema:
 
 En muchos sistemas los resultados obtenidos son peores...
 
-Sin embargo, como estoy ejecutando una instant·nea muy reciente de Hurd, en la
+Sin embargo, como estoy ejecutando una instant√°nea muy reciente de Hurd, en la
 que se han corregido muchos de los errores expuestos por el conjunto de pruebas
-de Perl, es posible que otros usuarios encuentren m·s errores. Los candidatos
+de Perl, es posible que otros usuarios encuentren m√°s errores. Los candidatos
 probables son: "op/stat", "lib/io_pipe", "lib/io_sock", "lib/io_udp" y
 "lib/time".
 
-En cualquier caso, si ve m·s errores que los mencionados en este documento,
-deberÌa actualizar a la versiÛn m·s reciente de Hurd antes de notificar los
+En cualquier caso, si ve m√°s errores que los mencionados en este documento,
+deber√≠a actualizar a la versi√≥n m√°s reciente de Hurd antes de notificar los
 errores.
 
 =head1 AUTOR
 
 Mark Kettenis <kettenis@gnu.org>
 
-⁄ltima actualizaciÛn: viernes, 29 de octubre de 1999 22:50:30 +0200
+√öltima actualizaci√≥n: viernes, 29 de octubre de 1999 22:50:30 +0200
 
 
 =head1 TRADUCTORES
 
 =over
 
-=item * JoaquÌn Ferrero (Tech Lead)
+=item * Joaqu√≠n Ferrero (Tech Lead)
 
 =item * Enrique Nell (Language Lead)
 

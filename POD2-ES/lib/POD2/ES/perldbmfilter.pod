@@ -1,3 +1,5 @@
+=encoding utf8
+
 =head1 NOMBRE
 
 perldbmfilter - Filtros DBM de Perl
@@ -11,14 +13,14 @@ perldbmfilter - Filtros DBM de Perl
     $filtro_anterior = $db->filter_fetch_key  ( sub { ... } );
     $filtro_anterior = $db->filter_fetch_value( sub { ... } );
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Los cuatro mÈtodos C<filter_*> mostrados arriba est·n disponibles en todos los
-mÛdulos DBM incluidos en Perl: DB_File, GDBM_File, NDBM_File, ODBM_File y
+Los cuatro m√©todos C<filter_*> mostrados arriba est√°n disponibles en todos
+los m√≥dulos DBM incluidos en Perl: DB_File, GDBM_File, NDBM_File, ODBM_File y
 SDBM_File.
 
-Todos los mÈtodos funcionan de la misma manera y se usan para instalar (o
-desinstalar) un filtro DBM individual. La ˙nica diferencia entre ellos es el
+Todos los m√©todos funcionan de la misma manera y se usan para instalar (o
+desinstalar) un filtro DBM individual. La √∫nica diferencia entre ellos es el
 lugar en el que se instala el filtro.
 
 Su funcionamiento se puede resumir de la siguiente manera:
@@ -27,65 +29,65 @@ Su funcionamiento se puede resumir de la siguiente manera:
 
 =item B<filter_store_key>
 
-Si se ha instalado un filtro con este mÈtodo, se invocar· cada vez que se
+Si se ha instalado un filtro con este m√©todo, se invocar√° cada vez que se
 escriba una clave en una base de datos DBM.
 
 =item B<filter_store_value>
 
-Si se ha instalado un filtro con este mÈtodo, se invocar· cada vez que se
+Si se ha instalado un filtro con este m√©todo, se invocar√° cada vez que se
 escriba un valor en una base de datos DBM.
 
 =item B<filter_fetch_key>
 
-Si se ha instalado un filtro con este mÈtodo, se invocar· cada vez que se lea
+Si se ha instalado un filtro con este m√©todo, se invocar√° cada vez que se lea
 una clave de una base de datos DBM.
 
 =item B<filter_fetch_value>
 
-Si se ha instalado un filtro con este mÈtodo, se invocar· cada vez que se lea
+Si se ha instalado un filtro con este m√©todo, se invocar√° cada vez que se lea
 un valor de una base de datos DBM.
 
 =back
 
-Puede usar cualquier combinaciÛn de estos mÈtodos (desde ninguno hasta los
+Puede usar cualquier combinaci√≥n de estos m√©todos (desde ninguno hasta los
 cuatro).
 
-Todos los mÈtodos de filtro devuelven el filtro, si existe; de lo contrario,
+Todos los m√©todos de filtro devuelven el filtro, si existe; de lo contrario,
 devuelven C<undef>.
 
 Para eliminar un filtro debe pasarle C<undef>.
 
 =head2 El filtro
 
-Cuando Perl llama a uno de estos filtros, una copia local de C<$_> contendr· la
-clave o el valor que se va a filtrar. El filtrado se realiza modificando el
-contenido de C<$_>. Se omite el cÛdigo de retorno del filtro.
+Cuando Perl llama a uno de estos filtros, una copia local de C<$_> contendr√°
+la clave o el valor que se va a filtrar. El filtrado se realiza modificando el
+contenido de C<$_>. Se omite el c√≥digo de retorno del filtro.
 
-=head2 Ejemplo: el problema de la terminaciÛn de cadenas con un car·cter NULL
+=head2 Ejemplo: el problema de la terminaci√≥n de cadenas con un car√°cter NULL
 
-Los filtros DBM son ˙tiles para un tipo de problema en el que se desea aplicar
-I<siempre> la misma transformaciÛn a todas las claves, a todos los valores, o a
-todas las claves y todos los valores.
+Los filtros DBM son √∫tiles para un tipo de problema en el que se desea aplicar
+I<siempre> la misma transformaci√≥n a todas las claves, a todos los valores, o
+a todas las claves y todos los valores.
 
 Por ejemplo, considere el siguiente escenario. Tiene una base de datos DBM que
-desea compartir con una aplicaciÛn en C de terceros. La aplicaciÛn en C supone
-que I<todas> las claves y sus valores correspondientes terminan con un car·cter
-NULL. Sin embargo, Perl no usa el car·cter de terminaciÛn NULL al escribir en
-bases de datos DBM, por lo que la aplicaciÛn Perl deber· encargarse de agregar
-la terminaciÛn NULL. Para escribir en la base de datos debe usar una
-instrucciÛn similar a la siguiente:
+desea compartir con una aplicaci√≥n en C de terceros. La aplicaci√≥n en C
+supone que I<todas> las claves y sus valores correspondientes terminan con un
+car√°cter NULL. Sin embargo, Perl no usa el car√°cter de terminaci√≥n NULL al
+escribir en bases de datos DBM, por lo que la aplicaci√≥n Perl deber√°
+encargarse de agregar la terminaci√≥n NULL. Para escribir en la base de datos
+debe usar una instrucci√≥n similar a la siguiente:
 
     $hash{"$clave\0"} = "$valor\0";
 
-TambiÈn hay que tener en cuenta el car·cter NULL al determinar la longitud de
+Tambi√©n hay que tener en cuenta el car√°cter NULL al determinar la longitud de
 claves y valores existentes.
 
-SerÌa mucho mejor poder ignorar el problema de los caracteres NULL de
-terminaciÛn de cadena en el cÛdigo principal de la aplicaciÛn y disponer de un
-mecanismo que agregue autom·ticamente un car·cter NULL de terminaciÛn a todas
-las claves y todos los valores que se escriban en la base de datos, y lo
-elimine al leer de la base de datos. Como ya se habr· imaginado, Èste es un
-problema que se puede solucionar f·cilmente con filtros DBM.
+Ser√≠a mucho mejor poder ignorar el problema de los caracteres NULL de
+terminaci√≥n de cadena en el c√≥digo principal de la aplicaci√≥n y disponer de
+un mecanismo que agregue autom√°ticamente un car√°cter NULL de terminaci√≥n a
+todas las claves y todos los valores que se escriban en la base de datos, y lo
+elimine al leer de la base de datos. Como ya se habr√° imaginado, √©ste es un
+problema que se puede solucionar f√°cilmente con filtros DBM.
 
     use strict;
     use warnings;
@@ -112,23 +114,23 @@ problema que se puede solucionar f·cilmente con filtros DBM.
     undef $db;
     untie %hash;
 
-El cÛdigo anterior usa SDBM_File, pero funcionar· igual con todos los mÛdulos
-DBM.
+El c√≥digo anterior usa SDBM_File, pero funcionar√° igual con todos los
+m√≥dulos DBM.
 
 El contenido de cada filtro debe ser autodescriptivo. Los dos filtros "fetch"
-quitan el car·cter NULL de terminaciÛn y los dos filtros "store" agregan un
-car·cter NULL de terminaciÛn.
+quitan el car√°cter NULL de terminaci√≥n y los dos filtros "store" agregan un
+car√°cter NULL de terminaci√≥n.
 
 
 =head2 Otro ejemplo: las claves son enteros de C
 
 Otro ejemplo del mundo real: de manera predeterminada, cuando Perl escribe en
-una base de datos DBM, siempre escribe la clave y el valor como cadenas. AsÌ,
-cuando se ejecuta la siguiente instrucciÛn:
+una base de datos DBM, siempre escribe la clave y el valor como cadenas. As√≠,
+cuando se ejecuta la siguiente instrucci√≥n:
 
     $hash{12345} = "algo";
 
-la clave 12345 se almacenar· en la base de datos DBM como una cadena de 5
+la clave 12345 se almacenar√° en la base de datos DBM como una cadena de 5
 bytes, "12345". Si desea almacenarla como un entero de C, debe usar C<pack> al
 escribir y C<unpack> al leer.
 
@@ -152,14 +154,14 @@ El siguiente filtro DBM hace esto:
     undef $db;
     untie %hash;
 
-El cÛdigo anterior usa DB_File, pero funcionar· con cualquiera de los mÛdulos
-DBM.
+El c√≥digo anterior usa DB_File, pero funcionar√° con cualquiera de los
+m√≥dulos DBM.
 
-En este caso no se han utilizado m·s que dos filtros; solo hay que manipular el
-contenido de la clave, por lo que no es necesario instalar ning˙n filtro de
+En este caso no se han utilizado m√°s que dos filtros; solo hay que manipular
+el contenido de la clave, por lo que no es necesario instalar ning√∫n filtro de
 valores.
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
 L<DB_File>, L<GDBM_File>, L<NDBM_File>, L<ODBM_File> y L<SDBM_File>.
 
@@ -172,9 +174,9 @@ Paul Marquess
 
 =over
 
-=item * JoaquÌ≠n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaqu√≠n Ferrero (Tech Lead)
 
-=item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
+=item * Enrique Nell (Language Lead)
 
 =back
 

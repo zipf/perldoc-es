@@ -1,6 +1,7 @@
 package POD2::ES;
 use strict;
 use warnings;
+use 5.010;
 use open ':locale';
 use base 'POD2::Base';
 use base 'Exporter';
@@ -11,36 +12,36 @@ our @EXPORT = qw(print_pod print_pods);
 
 # Versions list
 sub pod_info {{
-    perl              => '5.16.0',
-    perlbook          => '5.16.0',
-    perlboot          => '5.16.0',
-    perlbot           => '5.16.0',
-    perlcommunity     => '5.16.0',
-    perldata          => '5.16.0',
-    perldbmfilter     => '5.16.0',
-    perldoc           => '5.16.0',
-    perlexperiment    => '5.16.0',
-    perlfaq1          => '5.16.0',
-    perlfaq2          => '5.16.0',
-    perlfreebsd       => '5.16.0',
-    perlhist          => '5.16.0',
-    perlhurd          => '5.16.0',
-    perlintro         => '5.16.0',
-    perlmroapi        => '5.16.0',
-    perlnewmod        => '5.16.0',
-    perlnumber        => '5.16.0',
-    perlobj           => '5.16.0',
-    perlootut         => '5.16.0',
-    perlopenbsd       => '5.16.0',
-    perlpragma        => '5.16.0',
-    perlsource        => '5.16.0',
-    perlstyle         => '5.16.0',
-    perltodo          => '5.16.0',
-    perltooc          => '5.16.0',
-    perltoot          => '5.16.0',
-    perlunifaq        => '5.16.0',
-    perlunitut        => '5.16.0',
-    perlutil          => '5.16.0',
+    perl              => '5.16.1',
+    perlbook          => '5.16.1',
+    perlboot          => '5.16.1',
+    perlbot           => '5.16.1',
+    perlcommunity     => '5.16.1',
+    perldata          => '5.16.1',
+    perldbmfilter     => '5.16.1',
+    perldoc           => '5.16.1',
+    perlexperiment    => '5.16.1',
+    perlfaq1          => '5.16.1',
+    perlfaq2          => '5.16.1',
+    perlfreebsd       => '5.16.1',
+    perlhist          => '5.16.1',
+    perlhurd          => '5.16.1',
+    perlintro         => '5.16.1',
+    perlmroapi        => '5.16.1',
+    perlnewmod        => '5.16.1',
+    perlnumber        => '5.16.1',
+    perlobj           => '5.16.1',
+    perlootut         => '5.16.1',
+    perlopenbsd       => '5.16.1',
+    perlpragma        => '5.16.1',
+    perlsource        => '5.16.1',
+    perlstyle         => '5.16.1',
+    perltodo          => '5.16.1',
+    perltooc          => '5.16.1',
+    perltoot          => '5.16.1',
+    perlunifaq        => '5.16.1',
+    perlunitut        => '5.16.1',
+    perlutil          => '5.16.1',
 }};
 
 # String for perldoc with -L switch
@@ -48,7 +49,7 @@ sub search_perlfunc_re {
     return 'Lista de funciones de Perl en orden';
 }
 
-# Print information about one pod
+# Print information about a pod file
 sub print_pod {
     my $self = shift;
 
@@ -79,7 +80,7 @@ sub print_pod {
     }
 }
 
-# Print list pods translated
+# Print list of translated pods
 sub print_pods {
     my $self = shift // __PACKAGE__;
 
@@ -97,10 +98,10 @@ POD2::ES - Documentación de Perl en español
 
 =head1 SINOPSIS
 
-  $ perldoc POD2::ES::<nombre_de_pod>
+  $ perldoc POD2::ES::<nombre_pod>
 
   $ perl -MPOD2::ES -e print_pods
-  $ perl -MPOD2::ES -e print_pod <nombre_de_pod1> [<nombre_de_pod2> ...]
+  $ perl -MPOD2::ES -e print_pod <nombre_pod1> [<nombre_pod2> ...]
 
   use POD2::ES;
   print_pods();
@@ -121,7 +122,7 @@ L<http://github.com/zipf/perldoc-es>.
 Cuando haya instalado el paquete, puede utilizar el siguiente comando para
 consultar la documentación:
 
-  $ perldoc POD2::ES::<nombre_de_pod>
+  $ perldoc POD2::ES::<nombre_pod>
 
 A partir de la versión 3.14 de Pod::Perldoc se permite utilizar la siguiente sintaxis:
 
@@ -186,10 +187,10 @@ pods pasados como argumentos.
 
 =item * C<search_perlfunc_re>
 
-F<Pod/Perldoc.pm> llama a este método para saber qué cadena debe buscar
-dentro de perlfunc.pod para omitir la introducción y localizar la
+F<Pod/Perldoc.pm> llama a este método para determinar qué cadena debe 
+buscar en perlfunc.pod, a fin omitir la introducción y localizar la
 posición donde comienza la definición de la función que el usuario
-solicita a C<perldoc> con la opción C<-f>.
+solicita a C<perldoc> mediante la opción C<-f>.
 
 =back
 
