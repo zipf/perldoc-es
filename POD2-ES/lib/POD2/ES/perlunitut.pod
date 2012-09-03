@@ -1,74 +1,76 @@
+=encoding utf8
+
 =head1 NOMBRE
 
 perlunitut - Tutorial de Unicode en Perl
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
 Actualmente ya no es posible trabajar con cadenas de texto de manera
 irreflexiva. Los programas modernos deben poder comunicar caracteres acentuados
-o sÌmbolos como el del euro. Esto significa que los programadores deben
-adquirir nuevas costumbres. Es f·cil programar software compatible con Unicode,
-pero hacerlo bien requiere disciplina.
+o s√≠mbolos como el del euro. Esto significa que los programadores deben
+adquirir nuevas costumbres. Es f√°cil programar software compatible con
+Unicode, pero hacerlo bien requiere disciplina.
 
 Hay mucho que aprender sobre juegos de caracteres y codificaciones de texto.
-Probablemente lo mejor sea dedicar un dÌa entero a esta tarea, pero para
-aprender los conceptos b·sicos bastan unos pocos minutos.
+Probablemente lo mejor sea dedicar un d√≠a entero a esta tarea, pero para
+aprender los conceptos b√°sicos bastan unos pocos minutos.
 
-Aunque estos conceptos no son tan b·sicos... Se supone que ya conoce la
+Aunque estos conceptos no son tan b√°sicos... Se supone que ya conoce la
 diferencia entre bytes y caracteres, y comprende (y acepta) que hay muchos
 juegos de caracteres y codificaciones distintos, que debe utilizar
-explÌcitamente en su programa. Para adquirir estos conocimientos b·sicos, es
-recomendable leer el artÌculo "The Absolute Minimum Every Software Developer
+expl√≠citamente en su programa. Para adquirir estos conocimientos b√°sicos, es
+recomendable leer el art√≠culo "The Absolute Minimum Every Software Developer
 Absolutely, Positively Must Know About Unicode and Character Sets (No
 Excuses!)" de Joel Spolsky, en
 L<http://joelonsoftware.com/articles/Unicode.html>.
 
-En este tutorial hablamos en tÈrminos absolutos, y solo proporcionamos una
-visiÛn limitada de las muchas caracterÌsticas relacionadas con el procesamiento
-de cadenas de caracteres que Perl ofrece. Sin embargo, es probable que para la
-mayorÌa de los proyectos baste con esta informaciÛn.
+En este tutorial hablamos en t√©rminos absolutos, y solo proporcionamos una
+visi√≥n limitada de las muchas caracter√≠sticas relacionadas con el
+procesamiento de cadenas de caracteres que Perl ofrece. Sin embargo, es
+probable que para la mayor√≠a de los proyectos baste con esta informaci√≥n.
 
 =head2 Definiciones
 
-Para empezar es importante aclarar algunas ideas. …sta es la parte m·s
+Para empezar es importante aclarar algunas ideas. √âsta es la parte m√°s
 importante del tutorial. Nuestro enfoque puede chocar con otros que haya
-encontrado en Internet, pero esto se debe a que la informaciÛn proporcionada
+encontrado en Internet, pero esto se debe a que la informaci√≥n proporcionada
 por muchas fuentes no es correcta.
 
-Es posible que tenga que leer esta secciÛn varias veces...
+Es posible que tenga que leer esta secci√≥n varias veces...
 
 =head3 Unicode
 
 B<Unicode> es un juego de caracteres en el que caben muchos caracteres. El
-valor ordinal de un car·cter se denomina B<cÛdigo de car·cter> (I<code point>).
-En la pr·ctica, la distinciÛn entre los conceptos de cÛdigo de car·cter y
-car·cter es difusa, por lo que se suelen utilizar ambos tÈrminos
+valor ordinal de un car√°cter se denomina B<c√≥digo de car√°cter> (I<code
+point>). En la pr√°ctica, la distinci√≥n entre los conceptos de c√≥digo de
+car√°cter y car√°cter es difusa, por lo que se suelen utilizar ambos t√©rminos
 indistintamente.
 
-Hay muchÌsimos cÛdigos de car·cter, pero el hardware trabaja con bytes, y un
-byte sÛlo puede representar 256 valores. En Unicode hay muchos m·s caracteres,
-por lo que necesitamos una forma de hacerlos accesibles.
+Hay much√≠simos c√≥digos de car√°cter, pero el hardware trabaja con bytes, y un
+byte s√≥lo puede representar 256 valores. En Unicode hay muchos m√°s
+caracteres, por lo que necesitamos una forma de hacerlos accesibles.
 
-Existen varias codificaciones de Unicode en competencia, de las cuales la m·s
-utilizada es UTF-8. En una codificaciÛn de Unicode se pueden utilizar varios
-bytes seguidos para almacenar un solo cÛdigo de car·cter (o car·cter).
+Existen varias codificaciones de Unicode en competencia, de las cuales la m√°s
+utilizada es UTF-8. En una codificaci√≥n de Unicode se pueden utilizar varios
+bytes seguidos para almacenar un solo c√≥digo de car√°cter (o car√°cter).
 
 =head3 UTF-8
 
-B<UTF-8> es una codificaciÛn de Unicode. Muchas personas creen que Unicode es
+B<UTF-8> es una codificaci√≥n de Unicode. Muchas personas creen que Unicode es
 lo mismo que UTF-8, pero se equivocan. Hay otras codificaciones de Unicode,
-pero UTF-8 se est· convirtiendo en la codificaciÛn est·ndar.
+pero UTF-8 se est√° convirtiendo en la codificaci√≥n est√°ndar.
 
-En UTF-8 los primeros 128 cÛdigos de car·cter (0 a 127) son equivalentes a
-ASCII. Ocupan un solo byte por car·cter. Todos los dem·s caracteres se
-codifican como dos o m·s bytes (hasta seis) mediante un esquema complejo.
+En UTF-8 los primeros 128 c√≥digos de car√°cter (0 a 127) son equivalentes a
+ASCII. Ocupan un solo byte por car√°cter. Todos los dem√°s caracteres se
+codifican como dos o m√°s bytes (hasta seis) mediante un esquema complejo.
 Afortunadamente, Perl se encarga de esto.
 
 =head3 Cadenas de texto (cadenas de caracteres)
 
-Las B<cadenas de texto>, o B<cadenas de caracteres>, est·n constituidas por
+Las B<cadenas de texto>, o B<cadenas de caracteres>, est√°n constituidas por
 caracteres. En este contexto, los bytes y las codificaciones son irrelevantes.
-Cada car·cter no es m·s que eso: un car·cter.
+Cada car√°cter no es m√°s que eso: un car√°cter.
 
 Con una cadena de texto puede realizar operaciones como estas:
 
@@ -77,14 +79,14 @@ Con una cadena de texto puede realizar operaciones como estas:
     $texto = ucfirst $texto;
     my $numero_caracteres = length $texto;
 
-El valor de un car·cter (C<ord>, C<chr>) es el cÛdigo de car·cter Unicode
+El valor de un car√°cter (C<ord>, C<chr>) es el c√≥digo de car√°cter Unicode
 correspondiente.
 
 =head3 Cadenas binarias (cadenas de bytes)
 
-Las B<cadenas binarias> (o B<cadenas de bytes>) est·n constituidas por bytes.
-Contienen bytes, no caracteres. La comunicaciÛn con el mundo exterior (todo lo
-que estÈ fuera del proceso Perl actual) se realiza en binario.
+Las B<cadenas binarias> (o B<cadenas de bytes>) est√°n constituidas por bytes.
+Contienen bytes, no caracteres. La comunicaci√≥n con el mundo exterior (todo lo
+que est√© fuera del proceso Perl actual) se realiza en binario.
 
 Con una cadena binaria puede realizar operaciones como estas:
 
@@ -93,101 +95,101 @@ Con una cadena binaria puede realizar operaciones como estas:
     print {$fh} $binario;
     my $numero_bytes = length $binario;
 
-=head3 CodificaciÛn
+=head3 Codificaci√≥n
 
 B<Codificar> consiste en convertir I<texto> a I<binario>. Al codificar debe
-especificar la codificaciÛn de destino (por ejemplo, C<iso-8859-1> o C<UTF-8>).
-Algunas codificaciones, como las de la familia C<iso-8859> ("alfabeto latino"),
-no cubren el est·ndar Unicode completo; los caracteres que no se pueden
-representar se perder·n durante la conversiÛn.
+especificar la codificaci√≥n de destino (por ejemplo, C<iso-8859-1> o
+C<UTF-8>). Algunas codificaciones, como las de la familia C<iso-8859>
+("alfabeto latino"), no cubren el est√°ndar Unicode completo; los caracteres
+que no se pueden representar se perder√°n durante la conversi√≥n.
 
-=head3 DescodificaciÛn
+=head3 Descodificaci√≥n
 
 B<Descodificar> consiste en convertir I<binario> a I<texto>. Para descodificar
-necesita saber la codificaciÛn que se utilizÛ al codificar. TambiÈn es
+necesita saber la codificaci√≥n que se utiliz√≥ al codificar. Tambi√©n es
 fundamental que lo que se va a descodificar sea descodificable (por ejemplo, no
 tiene sentido descodificar una imagen PNG en una cadena de texto).
 
 =head3 Formato interno
 
-Perl utiliza un B<formato interno>, que es una codificaciÛn con la que se
+Perl utiliza un B<formato interno>, que es una codificaci√≥n con la que se
 codifican las cadenas de texto para almacenarlas en memoria. Todas las cadenas
-de texto tienen este formato interno (de hecho, es el ˙nico formato de las
+de texto tienen este formato interno (de hecho, es el √∫nico formato de las
 cadenas de texto).
 
-No tiene que preocuparse por los detalles, ya que la conversiÛn se realiza
-autom·ticamente al descodificar y codificar.
+No tiene que preocuparse por los detalles, ya que la conversi√≥n se realiza
+autom√°ticamente al descodificar y codificar.
 
 =head2 Su nuevo kit de herramientas
 
-Agregue al encabezado est·ndar del programa la lÌnea siguiente:
+Agregue al encabezado est√°ndar del programa la l√≠nea siguiente:
 
     use Encode qw(encode decode);
 
-Si no le sobra energÌa, puede limitarse a escribir esto:
+Si no le sobra energ√≠a, puede limitarse a escribir esto:
 
     use Encode;
 
-=head2 Flujo de E/S (el autÈntico tutorial, en 5 minutos)
+=head2 Flujo de E/S (el aut√©ntico tutorial, en 5 minutos)
 
-El flujo de entrada/salida tÌpico de un programa es:
+El flujo de entrada/salida t√≠pico de un programa es:
 
     1. Recibir y descodificar
     2. Procesar
     3. Codificar y emitir los resultados
 
-Por supuesto, si la entrada es binaria y debe permanecer asÌ, no debe
-descodificarla en una cadena de texto. Pero en todos los dem·s casos debe
+Por supuesto, si la entrada es binaria y debe permanecer as√≠, no debe
+descodificarla en una cadena de texto. Pero en todos los dem√°s casos debe
 hacerlo.
 
-No es posible descodificar de manera fiable si no se sabe cÛmo se codificaron
-los datos. Si puede elegir, es recomendable utilizar UTF-8 de manera est·ndar.
+No es posible descodificar de manera fiable si no se sabe c√≥mo se codificaron
+los datos. Si puede elegir, es recomendable utilizar UTF-8 de manera est√°ndar.
 
     my $foo   = decode('UTF-8', get 'http://ejemplo.com/');
     my $bar   = decode('ISO-8859-1', readline STDIN);
     my $xyzzy = decode('Windows-1251', $cgi->param('foo'));
 
-El procesamiento se realiza igual que antes. La ˙nica diferencia es que ahora
-trabajamos con caracteres en lugar de bytes. Esto resulta muy ˙til al utilizar
+El procesamiento se realiza igual que antes. La √∫nica diferencia es que ahora
+trabajamos con caracteres en lugar de bytes. Esto resulta muy √∫til al utilizar
 funciones como C<substr> o C<length>.
 
 Es importante comprender que en una cadena de texto no hay bytes. Por supuesto,
-Perl utiliza su propia codificaciÛn para almacenar la cadena en memoria, pero
-el usuario no tiene que conocer los detalles. Si necesita el n˙mero de bytes
-para algo, debe calcularlo en el paso 3, despuÈs de codificar la cadena. AsÌ
-podr· saber exactamente cu·ntos bytes hay en la cadena generada.
+Perl utiliza su propia codificaci√≥n para almacenar la cadena en memoria, pero
+el usuario no tiene que conocer los detalles. Si necesita el n√∫mero de bytes
+para algo, debe calcularlo en el paso 3, despu√©s de codificar la cadena. As√≠
+podr√° saber exactamente cu√°ntos bytes hay en la cadena generada.
 
 La sintaxis para codificar cadenas de texto en cadenas binarias es tan sencilla
-como la sintaxis de descodificaciÛn:
+como la sintaxis de descodificaci√≥n:
 
     $cuerpo_texto = encode('UTF-8', $cuerpo_texto);
 
 Si necesita averiguar la longitud de la cadena en bytes, ahora es el momento de
-hacerlo. Como C<$cuerpo_texto> es una cadena de bytes, C<length> devolver· el
-n˙mero de bytes, en lugar del n˙mero de caracteres. Ya no se podr· saber cu·l
-es el n˙mero de caracteres, puesto que los caracteres solo existen en las
-cadenas de texto.
+hacerlo. Como C<$cuerpo_texto> es una cadena de bytes, C<length> devolver√° el
+n√∫mero de bytes, en lugar del n√∫mero de caracteres. Ya no se podr√° saber
+cu√°l es el n√∫mero de caracteres, puesto que los caracteres solo existen en
+las cadenas de texto.
 
     my $numero_bytes = length $cuerpo_texto;
 
 Y si el protocolo utilizado ofrece alguna manera de indicar al destinatario la
-codificaciÛn de caracteres utilizada, es muy recomendable hacerlo. Por ejemplo,
-el correo electrÛnico y HTTP son compatibles con los encabezados MIME, por lo
-que puede usar el encabezado C<Content-Type>. TambiÈn se puede utilizar
-C<Content-Length> para indicar el n˙mero de I<bytes>, un dato que siempre viene
-bien conocer.
+codificaci√≥n de caracteres utilizada, es muy recomendable hacerlo. Por
+ejemplo, el correo electr√≥nico y HTTP son compatibles con los encabezados
+MIME, por lo que puede usar el encabezado C<Content-Type>. Tambi√©n se puede
+utilizar C<Content-Length> para indicar el n√∫mero de I<bytes>, un dato que
+siempre viene bien conocer.
 
     "Content-Type: text/plain; charset=UTF-8",
     "Content-Length: $numero_bytes"
 
 =head1 RESUMEN
 
-Descodifique todo lo que reciba y codifique todo lo que envÌe (si son datos de
+Descodifique todo lo que reciba y codifique todo lo que env√≠e (si son datos de
 tipo texto).
 
 =head1 Preguntas y respuestas (o P+F)
 
-DespuÈs de leer este documento, debe leer L<perlunifaq>.
+Despu√©s de leer este documento, debe leer L<perlunifaq>.
 
 =head1 AGRADECIMIENTOS
 
@@ -197,22 +199,22 @@ Amsterdam Perl Mongers hicieron que me interesara por el tema y me propusiera
 aprender a utilizar de una manera segura las codificaciones de caracteres en
 Perl.
 
-Gerard Goossen de TTY. Su presentaciÛn "UTF-8 in the wild" (Dutch Perl Workshop
-2006) me sirviÛ de inspiraciÛn para publicar mis ideas y escribir este
-tutorial.
+Gerard Goossen de TTY. Su presentaci√≥n "UTF-8 in the wild" (Dutch Perl
+Workshop 2006) me sirvi√≥ de inspiraci√≥n para publicar mis ideas y escribir
+este tutorial.
 
 Todas las personas que han hecho preguntas sobre este tema en diversos canales
 IRC sobre Perl y que me han recordado constantemente lo necesaria que era una
-explicaciÛn m·s sencilla.
+explicaci√≥n m√°s sencilla.
 
-Las personas que han revisado este documento antes de su publicaciÛn: Benjamin
+Las personas que han revisado este documento antes de su publicaci√≥n: Benjamin
 Smith, Jan-Pieter Cornet, Johan Vromans, Lukas Mai, Nathan Gray.
 
 =head1 AUTOR
 
 Juerd Waalboer <#####@juerd.nl>
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
 L<perlunifaq>, L<perlunicode>, L<perluniintro>, L<Encode>
 
@@ -221,7 +223,7 @@ L<perlunifaq>, L<perlunicode>, L<perluniintro>, L<Encode>
 
 =over
 
-=item * JoaquÌn Ferrero (Tech Lead)
+=item * Joaqu√≠n Ferrero (Tech Lead)
 
 =item * Enrique Nell (Language Lead)
 

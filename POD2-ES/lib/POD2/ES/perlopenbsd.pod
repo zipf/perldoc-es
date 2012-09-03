@@ -1,35 +1,37 @@
-Puede leer este archivo en cualquier editor de texto (ver· algunos caracteres
-extraÒos, pero puede ignorarlos). Est· escrito en formato POD (vea
-pod/perlpod.pod), un formato diseÒado especÌficamente para ser legible tal
+=encoding utf8
+
+Puede leer este archivo en cualquier editor de texto (ver√° algunos caracteres
+extra√±os, pero puede ignorarlos). Est√° escrito en formato POD (vea
+pod/perlpod.pod), un formato dise√±ado espec√≠ficamente para ser legible tal
 cual.
 
 =head1 NOMBRE
 
-perlopenbsd - Perl versiÛn 5 en sistemas OpenBSD
+perlopenbsd - Perl versi√≥n 5 en sistemas OpenBSD
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-En este documento se describen varias caracterÌsticas de OpenBSD que afectan a
-la compilaciÛn y ejecuciÛn de Perl versiÛn 5 (en lo sucesivo, Perl).
+En este documento se describen varias caracter√≠sticas de OpenBSD que afectan a
+la compilaci√≥n y ejecuci√≥n de Perl versi√≥n 5 (en lo sucesivo, Perl).
 
 =head2 OpenBSD vuelca la memoria de trabajo desde getprotobyname_r y getservbyname_r con ithreads
 
-Si Perl est· configurado para usar ithreads, las llamadas a biblioteca
-reentrantes tendr·n preferencia sobre las versiones no reentrantes. En las
+Si Perl est√° configurado para usar ithreads, las llamadas a biblioteca
+reentrantes tendr√°n preferencia sobre las versiones no reentrantes. En las
 versiones 3.7 y posteriores de OpenBSD existe una incompatibilidad en las
-funciones C<getprotobyname_r> y C<getservbyname_r> que provocar· un SEGV si se
-llama a estas funciones sin haber aplicado antes la funciÛn C<bzero> a sus
-estructuras de retorno. Este problema est· solucionado en la versiÛn actual de
-Perl, pero afecta a las versiones antiguas (5.8.6 o anteriores) que se hayan
-compilado con compatibilidad con hilos de ejecuciÛn. Si desea ejecutar una
-versiÛn de Perl compatible con hilos de ejecuciÛn en OpenBSD 3.7 o posterior,
-tendr· que actualizar a Perl 5.8.7 como mÌnimo.
+funciones C<getprotobyname_r> y C<getservbyname_r> que provocar√° un SEGV si se
+llama a estas funciones sin haber aplicado antes la funci√≥n C<bzero> a sus
+estructuras de retorno. Este problema est√° solucionado en la versi√≥n actual
+de Perl, pero afecta a las versiones antiguas (5.8.6 o anteriores) que se
+hayan compilado con compatibilidad con hilos de ejecuci√≥n. Si desea ejecutar
+una versi√≥n de Perl compatible con hilos de ejecuci√≥n en OpenBSD 3.7 o
+posterior, tendr√° que actualizar a Perl 5.8.7 como m√≠nimo.
 
 =head1 AUTOR
 
 Steve Peters <steve@fisharerojo.org>
 
-Para notificar errores, actualizaciones o sugerencias, utilice la direcciÛn
+Para notificar errores, actualizaciones o sugerencias, utilice la direcci√≥n
 F<perlbug@perl.org>.
 
 
@@ -37,7 +39,7 @@ F<perlbug@perl.org>.
 
 =over
 
-=item * JoaquÌn Ferrero (Tech Lead)
+=item * Joaqu√≠n Ferrero (Tech Lead)
 
 =item * Enrique Nell (Language Lead)
 

@@ -1,112 +1,115 @@
+=encoding utf8
+
 =head1 NOMBRE
 
-perlintro -- Breve introducciÛn y descripciÛn general de Perl
+perlintro -- Breve introducci√≥n y descripci√≥n general de Perl
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Este documento proporciona una introducciÛn r·pida al lenguaje de programaciÛn
-Perl e incluye referencias a documentaciÛn adicional. Es una guÌa de iniciaciÛn
-para los nuevos usuarios del lenguaje que proporciona la informaciÛn necesaria
-para poder leer el cÛdigo Perl de otras personas y comprender a grandes rasgos
-su funcionamiento, o para escribir scripts sencillos.
+Este documento proporciona una introducci√≥n r√°pida al lenguaje de
+programaci√≥n Perl e incluye referencias a documentaci√≥n adicional. Es una
+gu√≠a de iniciaci√≥n para los nuevos usuarios del lenguaje que proporciona la
+informaci√≥n necesaria para poder leer el c√≥digo Perl de otras personas y
+comprender a grandes rasgos su funcionamiento, o para escribir scripts
+sencillos.
 
-Es un documento introductorio, no una guÌa completa. Tampoco explica el
-lenguaje en detalle. En algunos casos se ha sacrificado la precisiÛn para
+Es un documento introductorio, no una gu√≠a completa. Tampoco explica el
+lenguaje en detalle. En algunos casos se ha sacrificado la precisi√≥n para
 transmitir la idea general. Es I<muy> recomendable complementar esta
-introducciÛn con informaciÛn del manual de Perl completo, cuya tabla de
+introducci√≥n con informaci√≥n del manual de Perl completo, cuya tabla de
 contenido se encuentra en L<perltoc>.
 
-En este documento se incluyen referencias a otras partes de la documentaciÛn de
-Perl. Puede consultar la documentaciÛn mediante el comando C<perldoc> o
-cualquier otro mÈtodo que use para leer este documento.
+En este documento se incluyen referencias a otras partes de la documentaci√≥n
+de Perl. Puede consultar la documentaci√≥n mediante el comando C<perldoc> o
+cualquier otro m√©todo que use para leer este documento.
 
-En la documentaciÛn de Perl se incluyen muchos ejemplos que ilustran las
-caracterÌsticas descritas. Tenga en cuenta que muchos de estos ejemplos son
-fragmentos de cÛdigo, no programas completos.
+En la documentaci√≥n de Perl se incluyen muchos ejemplos que ilustran las
+caracter√≠sticas descritas. Tenga en cuenta que muchos de estos ejemplos son
+fragmentos de c√≥digo, no programas completos.
 
-Los ejemplos de las distintas partes de la documentaciÛn reflejan el estilo y
-las preferencias de sus autores, y pueden ser m·s escuetos que una lÌnea de
-cÛdigo equivalente en un programa real. Salvo si se indica lo contrario, debe
+Los ejemplos de las distintas partes de la documentaci√≥n reflejan el estilo y
+las preferencias de sus autores, y pueden ser m√°s escuetos que una l√≠nea de
+c√≥digo equivalente en un programa real. Salvo si se indica lo contrario, debe
 suponer que al principio del "programa" se incluyen las instrucciones C<use
 strict> y C<use warnings>, y que todas las variables han sido declaradas,
 aunque se omitan las declaraciones para facilitar la lectura del ejemplo.
 
 Tenga en cuenta que los ejemplos han sido escritos por muchos autores distintos
-a lo largo de varias dÈcadas. Por esta razÛn, habr· diversos estilos y
-tÈcnicas, pero se ha procurado que en una misma secciÛn los estilos no varÌen
-demasiado. Ning˙n estilo es mejor que otro. No olvide que uno de los lemas de
-Perl es "Se puede hacer de varias maneras". Al fin y al cabo, en su vida
-profesional como programador se va a encontrar distintos estilos.
+a lo largo de varias d√©cadas. Por esta raz√≥n, habr√° diversos estilos y
+t√©cnicas, pero se ha procurado que en una misma secci√≥n los estilos no
+var√≠en demasiado. Ning√∫n estilo es mejor que otro. No olvide que uno de los
+lemas de Perl es "Se puede hacer de varias maneras". Al fin y al cabo, en su
+vida profesional como programador se va a encontrar distintos estilos.
 
-=head2 øQuÈ es Perl?
+=head2 ¬øQu√© es Perl?
 
-Perl es un lenguaje de programaciÛn de propÛsito general desarrollado
-originalmente para la manipulaciÛn de texto y que, en la actualidad, se usa
-para una amplia gama de tareas, como administraciÛn de sistemas, desarrollo
-web, programaciÛn de red, desarrollo de interfaces gr·ficas de usuario, etc.
+Perl es un lenguaje de programaci√≥n de prop√≥sito general desarrollado
+originalmente para la manipulaci√≥n de texto y que, en la actualidad, se usa
+para una amplia gama de tareas, como administraci√≥n de sistemas, desarrollo
+web, programaci√≥n de red, desarrollo de interfaces gr√°ficas de usuario, etc.
 
-El lenguaje se diseÒÛ para ser pr·ctico (f·cil de usar, eficaz, completo), m·s
-que estÈtico (reducido, elegante, minimalista). Se caracteriza principalmente
-por su facilidad de uso (permite programar tanto de manera procedural como
-orientada a objetos (OO)), su magnÌfica capacidad para procesamiento de texto y
-por tener una de las colecciones de mÛdulos de terceros m·s impresionantes del
-mundo.
+El lenguaje se dise√±√≥ para ser pr√°ctico (f√°cil de usar, eficaz, completo),
+m√°s que est√©tico (reducido, elegante, minimalista). Se caracteriza
+principalmente por su facilidad de uso (permite programar tanto de manera
+procedural como orientada a objetos (OO)), su magn√≠fica capacidad para
+procesamiento de texto y por tener una de las colecciones de m√≥dulos de
+terceros m√°s impresionantes del mundo.
 
 En L<perl>, L<perlfaq1> y en muchos otros sitios se incluyen definiciones de
-Perl. Esto refleja el hecho de que, aunque Perl tiene muchos p˙blicos
+Perl. Esto refleja el hecho de que, aunque Perl tiene muchos p√∫blicos
 distintos, muchas personas piensan que merece la pena escribir sobre este
 lenguaje.
 
-=head2 EjecuciÛn de programas Perl
+=head2 Ejecuci√≥n de programas Perl
 
-Para ejecutar un programa Perl desde la lÌnea de comandos de Unix, use el
+Para ejecutar un programa Perl desde la l√≠nea de comandos de Unix, use el
 siguiente comando:
 
     perl nombre_programa.pl
 
-Como alternativa, puede colocar al principio del script la siguiente lÌnea:
+Como alternativa, puede colocar al principio del script la siguiente l√≠nea:
 
     #!/usr/bin/env perl
 
-... y ejecutar el script como C</ruta/script.pl>. Por supuesto, antes deber·
+... y ejecutar el script como C</ruta/script.pl>. Por supuesto, antes deber√°
 marcarlo como ejecutable con el comando C<chmod 755 script.pl> (en Unix).
 
-(En esta lÌnea se supone que dispone del programa B<env>. TambiÈn puede
+(En esta l√≠nea se supone que dispone del programa B<env>. Tambi√©n puede
 especificar directamente la ruta de acceso a su ejecutable perl:
 C<#!/usr/bin/perl>).
 
-Para obtener m·s informaciÛn e instrucciones para otras plataformas, como
+Para obtener m√°s informaci√≥n e instrucciones para otras plataformas, como
 Windows y Mac OS, lea L<perlrun>.
 
 =head2 Red de seguridad
 
-Por su diseÒo, Perl es un lenguaje muy indulgente. Sin embargo, para trabajar
-de manera m·s segura se recomienda iniciar cada programa con las lÌneas
+Por su dise√±o, Perl es un lenguaje muy indulgente. Sin embargo, para trabajar
+de manera m√°s segura se recomienda iniciar cada programa con las l√≠neas
 siguientes:
 
     #!/usr/bin/perl
     use strict;
     use warnings;
 
-Estas dos lÌneas adicionales ordenan a perl que detecte diversos problemas
-comunes en el cÛdigo. Comprueban cosas distintas, por lo que ambas deben ser
-incluidas. Un posible problema detectado por C<use strict;> har· que el cÛdigo
-se detenga inmediatamente, mientras que C<use warnings;> (al igual que el
-modificador de lÌnea de comandos B<-w>) sÛlo mostrar· una advertencia y dejar·
-que el cÛdigo se ejecute. Para obtener m·s informaciÛn, consulte las p·ginas de
-manual correspondientes a L<strict> y L<warnings>.
+Estas dos l√≠neas adicionales ordenan a perl que detecte diversos problemas
+comunes en el c√≥digo. Comprueban cosas distintas, por lo que ambas deben ser
+incluidas. Un posible problema detectado por C<use strict;> har√° que el
+c√≥digo se detenga inmediatamente, mientras que C<use warnings;> (al igual que
+el modificador de l√≠nea de comandos B<-w>) s√≥lo mostrar√° una advertencia y
+dejar√° que el c√≥digo se ejecute. Para obtener m√°s informaci√≥n, consulte las
+p√°ginas de manual correspondientes a L<strict> y L<warnings>.
 
-=head2 DescripciÛn general de la sintaxis b·sica
+=head2 Descripci√≥n general de la sintaxis b√°sica
 
 Un script o programa Perl consta de una o varias instrucciones. Estas
 instrucciones se escriben directamente en el script. Es decir, no es necesario
-utilizar una funciÛn C<main()> ni nada similar.
+utilizar una funci√≥n C<main()> ni nada similar.
 
 Las instrucciones de Perl deben terminar con un signo de punto y coma:
 
     print "Hola a todos";
 
-Los comentarios comienzan con un sÌmbolo # y van hasta el final de la lÌnea:
+Los comentarios comienzan con un s√≠mbolo # y van hasta el final de la l√≠nea:
 
     # Esto es un comentario
 
@@ -116,9 +119,9 @@ El espacio en blanco no es significativo:
         "Hola a todos"
         ;
 
-... salvo cuando est· entre comillas:
+... salvo cuando est√° entre comillas:
 
-    # esto imprimir· un salto de lÌnea en la mitad de la frase
+    # esto imprimir√° un salto de l√≠nea en la mitad de la frase
     print "Hola
     a todos";
 
@@ -128,23 +131,24 @@ Las cadenas literales se pueden escribir entre comillas dobles o simples:
     print 'Hola a todos';
 
 Sin embargo las variables y los caracteres especiales, como los caracteres de
-nueva lÌnea (C<\n>), solo se "interpolan" con comillas dobles:
+nueva l√≠nea (C<\n>), solo se "interpolan" con comillas dobles:
 
     print "Hola, $nombre\n";  # funciona correctamente
     print 'Hola, $nombre\n';  # imprime $nombre\n literalmente
 
-No es necesario escribir los n˙meros entre comillas:
+No es necesario escribir los n√∫meros entre comillas:
 
     print 42;
 
-Puede escribir los argumentos de las funciones entre parÈntesis u omitir los
-parÈntesis, si lo prefiere. Solo son necesarios en algunos casos para aclarar
+Puede escribir los argumentos de las funciones entre par√©ntesis u omitir los
+par√©ntesis, si lo prefiere. Solo son necesarios en algunos casos para aclarar
 la precedencia.
 
     print("Hola a todos\n");
     print "Hola a todos\n";
 
-Encontrar· informaciÛn m·s detallada sobre la sintaxis de Perl en L<perlsyn>.
+Encontrar√° informaci√≥n m√°s detallada sobre la sintaxis de Perl en
+L<perlsyn>.
 
 =head2 Tipos de variables de Perl
 
@@ -159,11 +163,11 @@ Un escalar representa un solo valor:
     my $animal = "camello";
     my $respuesta = 42;
 
-Los valores escalares pueden ser cadenas, enteros o n˙meros de punto flotante,
-y Perl los convertir· de un tipo a otro cuando sea necesario. No es necesario
-predeclarar los tipos de las variables, pero Èstas deben declararse con la
-palabra clave C<my> la primera vez que se usan.  (…ste es uno de los requisitos
-de C<use strict;>).
+Los valores escalares pueden ser cadenas, enteros o n√∫meros de punto flotante,
+y Perl los convertir√° de un tipo a otro cuando sea necesario. No es necesario
+predeclarar los tipos de las variables, pero √©stas deben declararse con la
+palabra clave C<my> la primera vez que se usan. (√âste es uno de los
+requisitos de C<use strict;>).
 
 Los valores escalares se pueden usar de varias maneras:
 
@@ -171,12 +175,12 @@ Los valores escalares se pueden usar de varias maneras:
     print "El animal es $animal\n";
     print "El cuadrado de $respuesta es ", $respuesta * $respuesta, "\n";
 
-Hay varios escalares "m·gicos" con nombres que recuerdan conjuntos de signos de
-puntuaciÛn (o "ruido de seÒal"). Estas variables especiales se usan para
-diversos fines y se describen en L<perlvar>. La ˙nica que tiene que conocer por
-ahora es C<$_>, la "variable predeterminada". Se usa como argumento
+Hay varios escalares "m√°gicos" con nombres que recuerdan conjuntos de signos
+de puntuaci√≥n (o "ruido de se√±al"). Estas variables especiales se usan para
+diversos fines y se describen en L<perlvar>. La √∫nica que tiene que conocer
+por ahora es C<$_>, la "variable predeterminada". Se usa como argumento
 predeterminado de varias funciones de Perl y su valor se establece
-implÌcitamente en determinadas estructuras de bucle.
+impl√≠citamente en determinadas estructuras de bucle.
 
     print;          # imprime el contenido de $_ de manera predeterminada
 
@@ -184,23 +188,23 @@ implÌcitamente en determinadas estructuras de bucle.
 
 Un array representa una lista de valores:
 
-    my @animales = ("camello", "llama", "b˙ho");
+    my @animales = ("camello", "llama", "b√∫ho");
     my @numeros  = (23, 42, 69);
     my @mezcla   = ("camello", 42, 1.23);
 
-El Ìndice de un array empieza en cero. Para obtener los elementos de un array:
+El √≠ndice de un array empieza en cero. Para obtener los elementos de un array:
 
     print $animales[0];  # imprime "camello"
     print $animales[1];  # imprime "llama"
 
-La variable especial C<$#array> indica el Ìndice del ˙ltimo elemento de un
+La variable especial C<$#array> indica el √≠ndice del √∫ltimo elemento de un
 array:
 
-    print $mezcla[$#mezcla];  # ˙ltimo elemento, imprime 1.23
+    print $mezcla[$#mezcla];  # √∫ltimo elemento, imprime 1.23
 
-PodrÌa sentirse tentado de usar C<$#array + 1> para determinar el n˙mero de
+Podr√≠a sentirse tentado de usar C<$#array + 1> para determinar el n√∫mero de
 elementos de un array. No es necesario. Si utiliza C<@array> donde Perl espera
-encontrar un valor escalar ("en contexto de escalar"), obtendr· el n˙mero de
+encontrar un valor escalar ("en contexto de escalar"), obtendr√° el n√∫mero de
 elementos del array:
 
     if (@animales < 5) { ... }
@@ -212,17 +216,17 @@ escalar.
 Para obtener varios elementos de un array:
 
     @animales[0,1];            # devuelve ("camello", "llama");
-    @animales[0..2];           # devuelve ("camello", "llama", "b˙ho");
+    @animales[0..2];           # devuelve ("camello", "llama", "b√∫ho");
     @animales[1..$#animales];  # devuelve todos excepto el primero
 
-Esto se denomina una "porciÛn de array".
+Esto se denomina una "porci√≥n de array".
 
-Puede hacer varias cosas ˙tiles con las listas:
+Puede hacer varias cosas √∫tiles con las listas:
 
     my @ordenados     = sort @animales;
     my @orden_inverso = reverse @numeros;
 
-TambiÈn hay dos arrays especiales: C<@ARGV> (los argumentos de lÌnea de
+Tambi√©n hay dos arrays especiales: C<@ARGV> (los argumentos de l√≠nea de
 comandos pasados al script) y C<@_> (los argumentos pasados a una subrutina).
 Se describen en L<perlvar>.
 
@@ -230,14 +234,14 @@ Se describen en L<perlvar>.
 
 Un hash representa un conjunto de pares clave-valor:
 
-    my %color_fruta = ("manzana", "rojo", "pl·tano", "amarillo");
+    my %color_fruta = ("manzana", "rojo", "pl√°tano", "amarillo");
 
 Puede usar espacio en blanco y el operador C<< => >> para expresarlos de manera
-m·s clara:
+m√°s clara:
 
     my %color_fruta = (
         manzana => "rojo",
-        pl·tano => "amarillo",
+        pl√°tano => "amarillo",
     );
 
 Para obtener los elementos de un hash:
@@ -250,27 +254,27 @@ C<values()> respectivamente.
     my @frutas  = keys %color_fruta;
     my @colores = values %color_fruta;
 
-En los hashes no hay un orden interno especÌfico, aunque puede ordenar las
+En los hashes no hay un orden interno espec√≠fico, aunque puede ordenar las
 claves antes de recorrerlas en un bucle.
 
-De la misma manera que hay escalares y arrays especiales, tambiÈn hay hashes
-especiales. El m·s conocido es C<%ENV>, que contiene variables de entorno.
-Encontrar· informaciÛn sobre este hash (y sobre otras variables especiales) en 
-L<perlvar>.
+De la misma manera que hay escalares y arrays especiales, tambi√©n hay hashes
+especiales. El m√°s conocido es C<%ENV>, que contiene variables de entorno.
+Encontrar√° informaci√≥n sobre este hash (y sobre otras variables especiales)
+en L<perlvar>.
 
 =back
 
-Encontrar· informaciÛn detallada sobre los escalares, arrays y hashes en
+Encontrar√° informaci√≥n detallada sobre los escalares, arrays y hashes en
 L<perldata>.
 
-Se pueden crear tipos de datos m·s complejos mediante referencias, que permiten
-generar listas y hashes dentro de listas y hashes.
+Se pueden crear tipos de datos m√°s complejos mediante referencias, que
+permiten generar listas y hashes dentro de listas y hashes.
 
 Una referencia es un valor escalar que puede apuntar a cualquier tipo de datos
-de Perl. AsÌ, almacenando una referencia como el valor de un elemento de array
-o hash, puede crear f·cilmente listas y hashes dentro de listas y hashes. En el
-ejemplo siguiente se muestra una estructura de hash de hashes de 2 niveles en
-la que se usan referencias de hash anÛnimas.
+de Perl. As√≠, almacenando una referencia como el valor de un elemento de array
+o hash, puede crear f√°cilmente listas y hashes dentro de listas y hashes. En
+el ejemplo siguiente se muestra una estructura de hash de hashes de 2 niveles
+en la que se usan referencias de hash an√≥nimas.
 
     my $variables = {
         escalar =>  {
@@ -289,12 +293,12 @@ la que se usan referencias de hash anÛnimas.
 
     print "Los escalares empiezan por $variables->{'escalar'}->{'sigilo'}\n";
 
-Encontrar· informaciÛn detallada sobre las referencias en L<perlreftut>,
+Encontrar√° informaci√≥n detallada sobre las referencias en L<perlreftut>,
 L<perllol>, L<perlref> y L<perldsc>.
 
-=head2 ¡mbito de las variables
+=head2 √Åmbito de las variables
 
-En todos los ejemplos de la secciÛn anterior se utilizÛ esta sintaxis:
+En todos los ejemplos de la secci√≥n anterior se utiliz√≥ esta sintaxis:
 
     my $var = "valor";
 
@@ -302,10 +306,10 @@ En realidad no es obligatorio usar C<my>; se puede usar simplemente:
 
     $var = "valor";
 
-Sin embargo, el uso anterior crear· variables globales en todo el programa,
-algo que no se recomienda en programaciÛn. En cambio, C<my> crea variables
-dentro de un ·mbito lÈxico. El ·mbito de las variables es el bloque (conjunto
-de instrucciones entre llaves) en el que se definen.
+Sin embargo, el uso anterior crear√° variables globales en todo el programa,
+algo que no se recomienda en programaci√≥n. En cambio, C<my> crea variables
+dentro de un √°mbito l√©xico. El √°mbito de las variables es el bloque
+(conjunto de instrucciones entre llaves) en el que se definen.
 
     my $x = "foo";
     my $una_condicion = 1;
@@ -315,71 +319,72 @@ de instrucciones entre llaves) en el que se definen.
         print $y;           # imprime "bar"
     }
     print $x;               # imprime "foo"
-    print $y;               # no imprime nada; $y est· fuera del ·mbito
+    print $y;               # no imprime nada; $y est√° fuera del √°mbito
 
 Si escribe C<use strict;> al principio de los scripts de Perl y usa C<my>, el
-intÈrprete detectar· determinados errores frecuentes de programaciÛn. AsÌ, en
-el ejemplo anterior, la ˙ltima instrucciÛn C<print $y> provocar· un error en
-tiempo de compilaciÛn que impedir· la ejecuciÛn del programa. Es muy
+int√©rprete detectar√° determinados errores frecuentes de programaci√≥n. As√≠,
+en el ejemplo anterior, la √∫ltima instrucci√≥n C<print $y> provocar√° un error
+en tiempo de compilaci√≥n que impedir√° la ejecuci√≥n del programa. Es muy
 recomendable usar C<strict>.
 
 =head2 Estructuras condicionales y de bucle
 
 Perl ofrece las estructuras condiciones y de bucle habituales. En Perl 5.10,
-incluso ofrece una instrucciÛn case/switch (llamada C<given>/C<when>). Consulte
-"Instrucciones switch" en L<perlsyn> para obtener informaciÛn detallada.
+incluso ofrece una instrucci√≥n case/switch (llamada C<given>/C<when>).
+Consulte "Instrucciones switch" en L<perlsyn> para obtener informaci√≥n
+detallada.
 
-Una condiciÛn puede ser cualquier expresiÛn Perl. Consulte la lista de
-operadores de la siguiente secciÛn para obtener informaciÛn sobre los
-operadores lÛgicos booleanos y de comparaciÛn que se suelen usar en
+Una condici√≥n puede ser cualquier expresi√≥n Perl. Consulte la lista de
+operadores de la siguiente secci√≥n para obtener informaci√≥n sobre los
+operadores l√≥gicos booleanos y de comparaci√≥n que se suelen usar en
 instrucciones condicionales.
 
 =over 4
 
 =item if
 
-    if ( condiciÛn ) {
+    if ( condici√≥n ) {
         ...
-    } elsif ( otra condiciÛn ) {
+    } elsif ( otra condici√≥n ) {
         ...
     } else {
         ...
     }
 
-TambiÈn existe la versiÛn negada:
+Tambi√©n existe la versi√≥n negada:
 
-    unless ( condiciÛn ) {
+    unless ( condici√≥n ) {
         ...
     }
 
-Esto se proporciona como una versiÛn m·s legible de C<if (!I<condiciÛn>)>.
+Esto se proporciona como una versi√≥n m√°s legible de C<if (!I<condici√≥n>)>.
 
-Tenga en cuenta que en Perl es obligatorio usar las llaves, aunque sÛlo haya
-una lÌnea en el bloque. Sin embargo, puede escribir los bloques condicionales
-de una sola lÌnea de manera que recuerden a una frase en inglÈs:
+Tenga en cuenta que en Perl es obligatorio usar las llaves, aunque s√≥lo haya
+una l√≠nea en el bloque. Sin embargo, puede escribir los bloques condicionales
+de una sola l√≠nea de manera que recuerden a una frase en ingl√©s:
 
     # la manera tradicional
     if ($zippy) {
-        print "°Caramba!";
+        print "¬°Caramba!";
     }
 
-    # ahora con una condiciÛn posterior, al estilo Perl
-    print "°Caramba!" if $zippy;
-    print "No quedan pl·tanos" unless $platanos;
+    # ahora con una condici√≥n posterior, al estilo Perl
+    print "¬°Caramba!" if $zippy;
+    print "No quedan pl√°tanos" unless $platanos;
 
 =item while
 
-    while ( condiciÛn ) {
+    while ( condici√≥n ) {
         ...
     }
 
-Existe tambiÈn una versiÛn negada, por la misma razÛn que existe C<unless>:
+Existe tambi√©n una versi√≥n negada, por la misma raz√≥n que existe C<unless>:
 
-    until ( condiciÛn ) {
+    until ( condici√≥n ) {
         ...
     }
 
-TambiÈn puede usar C<while> en una condiciÛn posterior:
+Tambi√©n puede usar C<while> en una condici√≥n posterior:
 
     print "LA LA LA\n" while 1;          # bucle sin fin
 
@@ -391,8 +396,8 @@ Exactamente igual que en C:
         ...
     }
 
-El bucle for de C no se suele usar, ya que Perl proporciona una alternativa m·s
-sencilla para recorrer listas, el bucle C<foreach>.
+El bucle for de C no se suele usar, ya que Perl proporciona una alternativa
+m√°s sencilla para recorrer listas, el bucle C<foreach>.
 
 =item foreach
 
@@ -407,36 +412,36 @@ sencilla para recorrer listas, el bucle C<foreach>.
         print "El valor de $clave es $hash{$clave}\n";
     }
 
-En realidad, la palabra clave C<foreach> es un sinÛnimo de la palabra clave
-C<for>. Vea la secciÛn sobre bucles C<foreach> en C<L<perlsyn>>.
+En realidad, la palabra clave C<foreach> es un sin√≥nimo de la palabra clave
+C<for>. Vea la secci√≥n sobre bucles C<foreach> en C<L<perlsyn>>.
 
 =back
 
-Para obtener m·s informaciÛn sobre las estructuras de bucle (y otras
-estructuras que no se han mencionado en esta introducciÛn ), consulte
+Para obtener m√°s informaci√≥n sobre las estructuras de bucle (y otras
+estructuras que no se han mencionado en esta introducci√≥n ), consulte
 L<perlsyn>.
 
 =head2 Funciones y operadores predefinidos
 
-Perl incluye una amplia selecciÛn de funciones y operadores predefinidos. Ya
+Perl incluye una amplia selecci√≥n de funciones y operadores predefinidos. Ya
 hemos visto algunas funciones, como C<print>, C<sort> y C<reverse>. Al
-principio de L<perlfunc> se incluye una lista completa de funciones. TambiÈn
-puede obtener f·cilmente informaciÛn sobre cualquier funciÛn mediante el
-comando C<perldoc -f I<nombre_funciÛn>>.
+principio de L<perlfunc> se incluye una lista completa de funciones. Tambi√©n
+puede obtener f√°cilmente informaci√≥n sobre cualquier funci√≥n mediante el
+comando C<perldoc -f I<nombre_funci√≥n>>.
 
-Encontrar· informaciÛn detallada sobre los operadores de Perl en L<perlop>;
-algunos de los m·s comunes son:
+Encontrar√° informaci√≥n detallada sobre los operadores de Perl en L<perlop>;
+algunos de los m√°s comunes son:
 
 =over 4
 
-=item AritmÈtica
+=item Aritm√©tica
 
     +   suma
     -   resta
-    *   multiplicaciÛn
-    /   divisiÛn
+    *   multiplicaci√≥n
+    /   divisi√≥n
 
-=item ComparaciÛn numÈrica
+=item Comparaci√≥n num√©rica
 
     ==  igual que
     !=  distinto que
@@ -445,7 +450,7 @@ algunos de los m·s comunes son:
     <=  menor o igual que
     >=  mayor o igual que
 
-=item ComparaciÛn de cadenas
+=item Comparaci√≥n de cadenas
 
     eq  igual que
     ne  distinto que
@@ -454,28 +459,28 @@ algunos de los m·s comunes son:
     le  menor o igual que
     ge  mayor o igual que
 
-øPor quÈ se usa un operador de comparaciÛn para n˙meros y otro para cadenas? 
-Porque Perl no distingue el tipo del contenido de las variables y tiene que
-determinar si debe ordenar numÈricamente (99 menor que 100) o alfabÈticamente
-(100 es anterior a 99).
+¬øPor qu√© se usa un operador de comparaci√≥n para n√∫meros y otro para
+cadenas? Porque Perl no distingue el tipo del contenido de las variables y
+tiene que determinar si debe ordenar num√©ricamente (99 menor que 100) o
+alfab√©ticamente (100 es anterior a 99).
 
-=item LÛgica Booleana
+=item L√≥gica Booleana
 
     &&  and
     ||  or
     !   not
 
 (En la tabla anterior C<and>, C<or> y C<not> no son solo descripciones de los
-operadores. Son tambiÈn operadores. Ofrecen m·s legibilidad que los operadores
-tipo C correspondientes, como C<&&>, pero su precedencia es distinta. Consulte
-L<perlop> para obtener m·s informaciÛn).
+operadores. Son tambi√©n operadores. Ofrecen m√°s legibilidad que los
+operadores tipo C correspondientes, como C<&&>, pero su precedencia es
+distinta. Consulte L<perlop> para obtener m√°s informaci√≥n).
 
 =item Otros operadores
 
-    =   asignaciÛn
-    .   concatenaciÛn de cadenas
-    x   multiplicaciÛn de cadenas
-    ..  operador de intervalo (crea una lista de n˙meros)
+    =   asignaci√≥n
+    .   concatenaci√≥n de cadenas
+    x   multiplicaci√≥n de cadenas
+    ..  operador de intervalo (crea una lista de n√∫meros)
 
 =back
 
@@ -487,43 +492,44 @@ Muchos operadores se pueden combinar con un signo C<=> de la manera siguiente:
 
 =head2 Archivos y E/S
 
-La funciÛn C<open()> abre un archivo para entrada o salida. Esta funciÛn se
-describe de forma muy detallada en L<perlfunc> y L<perlopentut>. A continuaciÛn
-se muestra un resumen de cÛmo se usa:
+La funci√≥n C<open()> abre un archivo para entrada o salida. Esta funci√≥n se
+describe de forma muy detallada en L<perlfunc> y L<perlopentut>. A
+continuaci√≥n se muestra un resumen de c√≥mo se usa:
 
     open(my $entrada,  "<",  "entrada.txt") or die "No se puede abrir entrada.txt: $!";
     open(my $salida,   ">",  "salida.txt" ) or die "No se puede abrir salida.txt: $!";
     open(my $registro, ">>", "mi.registro") or die "No se puede abrir mi.registro: $!";
 
 Puede utilizar el operador C<< <> >> para leer de un identificador de archivo
-abierto. En contexto de escalar, este operador lee una sola lÌnea del
+abierto. En contexto de escalar, este operador lee una sola l√≠nea del
 identificador de archivo, mientras que en contexto de lista lee todo el archivo
-y asigna cada lÌnea a un elemento de la lista:
+y asigna cada l√≠nea a un elemento de la lista:
 
     my $linea  = <$entrada>;
     my @lineas = <$entrada>;
 
-La lectura de un archivo completo se suele llamar "slurping" (succiÛn). Puede
-resultar ˙til, pero esta operaciÛn consume mucha memoria. Gran parte de las
-tareas de procesamiento de archivos de texto se puede hacer de lÌnea en lÌnea
+La lectura de un archivo completo se suele llamar "slurping" (succi√≥n). Puede
+resultar √∫til, pero esta operaci√≥n consume mucha memoria. Gran parte de las
+tareas de procesamiento de archivos de texto se puede hacer de l√≠nea en l√≠nea
 con las estructuras de bucle de Perl.
 
 El operador C<< <> >> se suele utilizar en un bucle C<while>:
 
-    while (<$entrada>) {     # asigna una lÌnea cada vez a $_
-        print "Acabo de leer esta lÌnea: $_";
+    while (<$entrada>) {     # asigna una l√≠nea cada vez a $_
+        print "Acabo de leer esta l√≠nea: $_";
     }
 
-Ya hemos visto la manera de imprimir en la salida est·ndar mediante C<print()>.
-Sin embargo, C<print()> tambiÈn puede consumir un primer argumento opcional que
-especifique el identificador de archivo en el que se debe imprimir:
+Ya hemos visto la manera de imprimir en la salida est√°ndar mediante
+C<print()>. Sin embargo, C<print()> tambi√©n puede consumir un primer argumento
+opcional que especifique el identificador de archivo en el que se debe
+imprimir:
 
-    print STDERR "…sta es la ˙ltima advertencia.\n";
+    print STDERR "√âsta es la √∫ltima advertencia.\n";
     print $salida $registro;
     print $registro $mensaje_registro;
 
 Cuando termine de trabajar con los identificadores de archivo, debe cerrarlos
-con C<close()> (de todos modos, Perl se encargar· de ello si se le olvida):
+con C<close()> (de todos modos, Perl se encargar√° de ello si se le olvida):
 
     close $entrada or die "$entrada: $!";
 
@@ -531,98 +537,98 @@ con C<close()> (de todos modos, Perl se encargar· de ello si se le olvida):
 
 El soporte de Perl para las expresiones regulares es amplio y profundo, y se
 describe en gran detalle en los documentos L<perlrequick> y L<perlretut>, entre
-otros. Se incluye a continuaciÛn un resumen:
+otros. Se incluye a continuaci√≥n un resumen:
 
 =over 4
 
-=item DetecciÛn de coincidencias sencilla
+=item Detecci√≥n de coincidencias sencilla
 
     if (/foo/)       { ... }  # verdadero si $_ contiene "foo"
     if ($a =~ /foo/) { ... }  # verdadero si $a contiene "foo"
 
-El operador de detecciÛn de coincidencias C<//> se describe en L<perlop>. Opera
-en C<$_> de manera predeterminada, o se puede enlazar a otra variable con el
-operador de enlace C<=~> (que tambiÈn se describe en L<perlop>).
+El operador de detecci√≥n de coincidencias C<//> se describe en L<perlop>.
+Opera en C<$_> de manera predeterminada, o se puede enlazar a otra variable con
+el operador de enlace C<=~> (que tambi√©n se describe en L<perlop>).
 
-=item SustituciÛn simple
+=item Sustituci√≥n simple
 
     s/foo/bar/;        # reemplaza foo por bar en $_
     $a =~ s/foo/bar/;  # reemplaza foo por bar en $a
     $a =~ s/foo/bar/g; # reemplaza todas las coincidencias de foo por bar en $a
 
-El operador de sustituciÛn, C<s///>, se describe en L<perlop>.
+El operador de sustituci√≥n, C<s///>, se describe en L<perlop>.
 
-=item Expresiones regulares m·s complejas
+=item Expresiones regulares m√°s complejas
 
 No tiene que limitarse a detectar coincidencias en cadenas fijas. De hecho,
-puede detectar coincidencias donde quiera con expresiones regulares m·s
-complejas. Estas se describen de forma detallada en L<perlre>. A continuaciÛn
-se incluye una guÌa r·pida:
+puede detectar coincidencias donde quiera con expresiones regulares m√°s
+complejas. Estas se describen de forma detallada en L<perlre>. A continuaci√≥n
+se incluye una gu√≠a r√°pida:
 
-    .                   un solo car·cter
-    \s                  un espacio en blanco (espacio, tabulaciÛn, nueva lÌnea, ...)
-    \S                  un car·cter que no sea un espacio en blanco
-    \d                  un dÌgito (0-9)
-    \D                  un car·cter que no sea un dÌgito
-    \w                  un car·cter de palabra (a-z, A-Z, 0-9, _)
-    \W                  un car·cter que no sea de palabra
-    [aeiou]             un solo car·cter del conjunto especificado
-    [^aeiou]            un solo car·cter no perteneciente al conjunto especificado
+    .                   un solo car√°cter
+    \s                  un espacio en blanco (espacio, tabulaci√≥n, nueva l√≠nea, ...)
+    \S                  un car√°cter que no sea un espacio en blanco
+    \d                  un d√≠gito (0-9)
+    \D                  un car√°cter que no sea un d√≠gito
+    \w                  un car√°cter de palabra (a-z, A-Z, 0-9, _)
+    \W                  un car√°cter que no sea de palabra
+    [aeiou]             un solo car√°cter del conjunto especificado
+    [^aeiou]            un solo car√°cter no perteneciente al conjunto especificado
     (foo|bar|baz)       cualquiera de las alternativas especificadas
 
     ^                   principio de una cadena
     $                   final de una cadena
 
-Los cuantificadores se utilizan para especificar cu·ntas coincidencias de lo
-anterior (un car·cter literal, uno de los metacaracteres antes especificados o
-un grupo de caracteres o metacaracteres entre parÈntesis) se desea detectar.
+Los cuantificadores se utilizan para especificar cu√°ntas coincidencias de lo
+anterior (un car√°cter literal, uno de los metacaracteres antes especificados o
+un grupo de caracteres o metacaracteres entre par√©ntesis) se desea detectar.
 
-    *                   cero o m·s coincidencias de lo anterior
-    +                   una o m·s coincidencias de lo anterior
+    *                   cero o m√°s coincidencias de lo anterior
+    +                   una o m√°s coincidencias de lo anterior
     ?                   cero o una coincidencias de lo anterior
     {3}                 detecta exactamente 3 coincidencias de lo anterior
     {3,6}               detecta entre 3 y 6 coincidencias de lo anterior
-    {3,}                detecta 3 o m·s coincidencias de lo anterior
+    {3,}                detecta 3 o m√°s coincidencias de lo anterior
 
 Algunos ejemplos breves:
 
-    /^\d+/              cadena que empieza por uno o varios dÌgitos
-    /^$/                cadena vacÌa (principio y final contiguos)
-    /(\d\s){3}/         tres dÌgitos, cada uno seguido de un espacio
+    /^\d+/              cadena que empieza por uno o varios d√≠gitos
+    /^$/                cadena vac√≠a (principio y final contiguos)
+    /(\d\s){3}/         tres d√≠gitos, cada uno seguido de un espacio
                         (p. ej. "3 4 5 ")
     /(a.)+/             cadena en la que cada letra impar
                         es "a" (p. ej., "abacadaf")
 
-    # Este bucle lee de STDIN e imprime las lÌneas que no estÈn vacÌas:
+    # Este bucle lee de STDIN e imprime las l√≠neas que no est√©n vac√≠as:
     while (<>) {
         next if /^$/;
         print;
     }
 
-=item ParÈntesis de captura
+=item Par√©ntesis de captura
 
-Adem·s de para agrupar, los parÈntesis tambiÈn se pueden usar para capturar
-los resultados de partes de una expresiÛn regular a fin de usarlos
+Adem√°s de para agrupar, los par√©ntesis tambi√©n se pueden usar para capturar
+los resultados de partes de una expresi√≥n regular a fin de usarlos
 posteriormente. Los resultados se almacenan en C<$1>, C<$2>, etc.
 
-    # manera r·pida de descomponer una direcciÛn de correo electrÛnico
+    # manera r√°pida de descomponer una direcci√≥n de correo electr√≥nico
 
     if ($email =~ /([^@]+)@(.+)/) {
         print "El nombre de usuario es $1\n";
         print "El nombre de host es $2\n";
     }
 
-=item Otras caracterÌsticas de las expresiones regulares
+=item Otras caracter√≠sticas de las expresiones regulares
 
-Las expresiones regulares de Perl tambiÈn ofrecen referencias a capturas
-previas, inspecciÛn hacia adelante, y muchas otras funcionalidades complejas.
-Encontrar· m·s informaciÛn en L<perlrequick>, L<perlretut> y L<perlre>.
+Las expresiones regulares de Perl tambi√©n ofrecen referencias a capturas
+previas, inspecci√≥n hacia adelante, y muchas otras funcionalidades complejas.
+Encontrar√° m√°s informaci√≥n en L<perlrequick>, L<perlretut> y L<perlre>.
 
 =back
 
-=head2 ProgramaciÛn de subrutinas
+=head2 Programaci√≥n de subrutinas
 
-Es f·cil escribir subrutinas:
+Es f√°cil escribir subrutinas:
 
     sub registrador {
         my $mensaje_registro = shift;
@@ -630,22 +636,22 @@ Es f·cil escribir subrutinas:
         print $registro $mensaje_registro;
     }
 
-Ahora podemos usar la subrutina como cualquier funciÛn integrada:
+Ahora podemos usar la subrutina como cualquier funci√≥n integrada:
 
     registrador("Tenemos una subrutina para registrar.");
 
-øQuÈ hace C<shift>?  Los argumentos pasados a una subrutina est·n disponibles
-en un array especial denominado C<@_> (consulte L<perlvar> para obtener m·s
-informaciÛn). El argumento predeterminado de la funciÛn C<shift> es C<@_>. AsÌ,
-C<my $mensaje_registro = shift;> quita el primer elemento de la lista de
-argumentos y se lo asigna a C<$mensaje_registro>.
+¬øQu√© hace C<shift>? Los argumentos pasados a una subrutina est√°n
+disponibles en un array especial denominado C<@_> (consulte L<perlvar> para
+obtener m√°s informaci√≥n). El argumento predeterminado de la funci√≥n C<shift>
+es C<@_>. As√≠, C<my $mensaje_registro = shift;> quita el primer elemento de la
+lista de argumentos y se lo asigna a C<$mensaje_registro>.
 
-TambiÈn podemos manipular C<@_> de otras maneras:
+Tambi√©n podemos manipular C<@_> de otras maneras:
 
-    my ($mensaje_registro, $prioridad) = @_; # com˙n
-    my $mensaje_registro = $_[0];            # poco com˙n (y poco estÈtico)
+    my ($mensaje_registro, $prioridad) = @_; # com√∫n
+    my $mensaje_registro = $_[0];            # poco com√∫n (y poco est√©tico)
 
-Las subrutinas tambiÈn pueden devolver valores:
+Las subrutinas tambi√©n pueden devolver valores:
 
     sub cuadrado {
         my $num = shift;
@@ -653,50 +659,50 @@ Las subrutinas tambiÈn pueden devolver valores:
         return $resultado;
     }
 
-Puede asignar el valor devuelto asÌ:
+Puede asignar el valor devuelto as√≠:
 
     $sq = cuadrado(8);
 
-Para obtener m·s informaciÛn sobre cÛmo escribir subrutinas, consulte
+Para obtener m√°s informaci√≥n sobre c√≥mo escribir subrutinas, consulte
 L<perlsub>.
 
 =head2 Perl orientado a objetos
 
-La programaciÛn orientada a objetos en Perl es relativamente sencilla y se
-implementa con referencias que "conocen" quÈ tipo de objeto son, bas·ndose en
-el concepto de paquetes de Perl. Sin embargo, este tema queda fuera del ·mbito
+La programaci√≥n orientada a objetos en Perl es relativamente sencilla y se
+implementa con referencias que "conocen" qu√© tipo de objeto son, bas√°ndose en
+el concepto de paquetes de Perl. Sin embargo, este tema queda fuera del √°mbito
 de este documento. Vea L<perlootut> y L<perlobj>.
 
-La aplicaciÛn que suelen hacer los programadores principiantes de la
-programaciÛn orientada a objetos en Perl es la utilizaciÛn de mÛdulos de
-terceros, que se describe a continuaciÛn.
+La aplicaci√≥n que suelen hacer los programadores principiantes de la
+programaci√≥n orientada a objetos en Perl es la utilizaci√≥n de m√≥dulos de
+terceros, que se describe a continuaci√≥n.
 
-=head2 UtilizaciÛn de mÛdulos de Perl
+=head2 Utilizaci√≥n de m√≥dulos de Perl
 
-No pierda tiempo reinventando la rueda. Los mÛdulos de Perl disponibles en CPAN
-( http://www.cpan.org/) proporcionan funcionalidad que puede utilizar en sus
-programas. La distribuciÛn de Perl incluye muchos mÛdulos populares.
+No pierda tiempo reinventando la rueda. Los m√≥dulos de Perl disponibles en
+CPAN ( http://www.cpan.org/) proporcionan funcionalidad que puede utilizar en
+sus programas. La distribuci√≥n de Perl incluye muchos m√≥dulos populares.
 
-Las categorÌas de mÛdulos abarcan desde la manipulaciÛn de texto hasta
-protocolos de red, integraciÛn de bases de datos o gr·ficos. En CPAN tambiÈn
-est· disponible una lista de mÛdulos clasificados por categorÌas.
+Las categor√≠as de m√≥dulos abarcan desde la manipulaci√≥n de texto hasta
+protocolos de red, integraci√≥n de bases de datos o gr√°ficos. En CPAN tambi√©n
+est√° disponible una lista de m√≥dulos clasificados por categor√≠as.
 
-Para aprender a instalar los mÛdulos que descargue de CPAN, lea
+Para aprender a instalar los m√≥dulos que descargue de CPAN, lea
 L<perlmodinstall>.
 
-Para aprender a usar un mÛdulo especÌfico, ejecute C<perldoc
-I<Nombre::MÛdulo>>. Normalmente agregar· a su programa la lÌnea C<use
-I<Nombre::MÛdulo>>, que le proporcionar· acceso a las funciones exportadas o a
-una interfaz orientada a objetos del mÛdulo.
+Para aprender a usar un m√≥dulo espec√≠fico, ejecute C<perldoc
+I<Nombre::M√≥dulo>>. Normalmente agregar√° a su programa la l√≠nea C<use
+I<Nombre::M√≥dulo>>, que le proporcionar√° acceso a las funciones exportadas o
+a una interfaz orientada a objetos del m√≥dulo.
 
 L<perlfaq> contiene preguntas y respuestas relacionadas con muchas tareas
-comunes, y en muchos casos sugiere los mÛdulos de CPAN adecuados para cada
+comunes, y en muchos casos sugiere los m√≥dulos de CPAN adecuados para cada
 tarea.
 
-En L<perlmod> se describen los mÛdulos de Perl en general. L<perlmodlib>
-enumera los mÛdulos incluidos en la instalaciÛn de Perl.
+En L<perlmod> se describen los m√≥dulos de Perl en general. L<perlmodlib>
+enumera los m√≥dulos incluidos en la instalaci√≥n de Perl.
 
-Si desea escribir mÛdulos de Perl, L<perlnewmod> le ayudar· a empezar.
+Si desea escribir m√≥dulos de Perl, L<perlnewmod> le ayudar√° a empezar.
 
 =head1 AUTOR
 
@@ -707,7 +713,7 @@ Kirrily "Skud" Robert <skud@cpan.org>
 
 =over
 
-=item * JoaquÌn Ferrero (Tech Lead)
+=item * Joaqu√≠n Ferrero (Tech Lead)
 
 =item * Enrique Nell (Language Lead)
 

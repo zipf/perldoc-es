@@ -1,7 +1,9 @@
+=encoding utf8
+
 
 =head1 NOMBRE
 
-perldoc - Consultar la documentaciÛn de Perl en formato Pod.
+perldoc - Consultar la documentaci√≥n de Perl en formato Pod.
 
 =head1 SINOPSIS
 
@@ -10,17 +12,17 @@ perldoc - Consultar la documentaciÛn de Perl en formato Pod.
         [B<-dI<archivo_destino>>]
         [B<-oI<nombre_formato>>]
         [B<-MI<NombreClaseFormateador>>]
-        [B<-wI<opciÛn_formateador:valor>>]
+        [B<-wI<opci√≥n_formateador:valor>>]
         [B<-n>I<sustituto_nroff>]
         [B<-X>]
-        [B<-L> I<cÛdigo_idioma>]
-        NombreP·gina|NombreMÛdulo|NombrePrograma|DirecciÛnURL
+        [B<-L> I<c√≥digo_idioma>]
+        NombreP√°gina|NombreM√≥dulo|NombrePrograma|Direcci√≥nURL
 
 Ejemplos:
 
-    B<perldoc> B<-f> I<funciÛn predefinida>
+    B<perldoc> B<-f> I<funci√≥n predefinida>
 
-    B<perldoc> B<-L> it B<-f> I<funciÛn predefinida>
+    B<perldoc> B<-L> it B<-f> I<funci√≥n predefinida>
 
     B<perldoc> B<-q> I<palabra clave de perlfaq>
 
@@ -28,22 +30,23 @@ Ejemplos:
 
     B<perldoc> B<-v> I<variable de Perl>
 
-A continuaciÛn se muestra una descripciÛn m·s detallada de los modificadores.
+A continuaci√≥n se muestra una descripci√≥n m√°s detallada de los
+modificadores.
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-B<perldoc> busca un elemento de documentaciÛn con formato .pod incluido en el
-·rbol de instalaciÛn de perl o en un script perl, y ejecuta C<groff -man |
-$PAGER> para mostrarlo (en HP-UX se usa adem·s C<col -x>). Este programa se usa
-principalmente para consultar la documentaciÛn de los mÛdulos de biblioteca de
-perl.
+B<perldoc> busca un elemento de documentaci√≥n con formato .pod incluido en el
+√°rbol de instalaci√≥n de perl o en un script perl, y ejecuta C<groff -man |
+$PAGER> para mostrarlo (en HP-UX se usa adem√°s C<col -x>). Este programa se
+usa principalmente para consultar la documentaci√≥n de los m√≥dulos de
+biblioteca de perl.
 
-Es posible que tambiÈn estÈn instaladas en el sistema p·ginas de manual para
-esos mÛdulos, en cuyo caso es probable que desee usar simplemente el comando
+Es posible que tambi√©n est√©n instaladas en el sistema p√°ginas de manual para
+esos m√≥dulos, en cuyo caso es probable que desee usar simplemente el comando
 man(1).
 
-En la p·gina L<perltoc> encontrar· una tabla de contenido de la documentaciÛn
-de los mÛdulos de biblioteca de Perl.
+En la p√°gina L<perltoc> encontrar√° una tabla de contenido de la
+documentaci√≥n de los m√≥dulos de biblioteca de Perl.
 
 =head1 OPCIONES
 
@@ -56,50 +59,50 @@ B<h>elp).
 
 =item B<-D>
 
-B<D>escribe de manera B<d>etallada la b˙squeda de un elemento.
+B<D>escribe de manera B<d>etallada la b√∫squeda de un elemento.
 
 =item B<-t>
 
 Muestra los documentos con un conversor de B<t>exto simple, en lugar de nroff.
-Puede que sea m·s r·pido, pero es probable que el aspecto del resultado sea
+Puede que sea m√°s r√°pido, pero es probable que el aspecto del resultado sea
 peor.
 
 =item B<-u>
 
-Omite el formato pod real y solo muestra el cÛdigo pod sin formato ("u" viene
+Omite el formato pod real y solo muestra el c√≥digo pod sin formato ("u" viene
 de la palabra inglesa B<U>nformatted)
 
-=item B<-m> I<mÛdulo>
+=item B<-m> I<m√≥dulo>
 
-Muestra el mÛdulo completo: tanto el cÛdigo como la documentaciÛn pod sin
-formato. Esto puede resultar ˙til si en la documentaciÛn no se explica una
-funciÛn con el nivel de detalle necesario y desea inspeccionar el cÛdigo
-directamente; perldoc buscar· el archivo y se lo mostrar·.
+Muestra el m√≥dulo completo: tanto el c√≥digo como la documentaci√≥n pod sin
+formato. Esto puede resultar √∫til si en la documentaci√≥n no se explica una
+funci√≥n con el nivel de detalle necesario y desea inspeccionar el c√≥digo
+directamente; perldoc buscar√° el archivo y se lo mostrar√°.
 
 =item B<-l>
 
-Muestra sÛB<l>o el nombre de archivo del mÛdulo encontrado.
+Muestra s√≥B<l>o el nombre de archivo del m√≥dulo encontrado.
 
 =item B<-F>
 
-Especifica que los argumentos son nombres de archivos; no se realizan b˙squedas
-en directorios.
+Especifica que los argumentos son nombres de archivos; no se realizan
+b√∫squedas en directorios.
 
 =item B<-f> I<perlfunc>
 
-La opciÛn B<-f> seguida del nombre de una funciÛn predefinida de perl extrae de
-L<perlfunc> la documentaciÛn de la funciÛn.
+La opci√≥n B<-f> seguida del nombre de una funci√≥n predefinida de perl extrae
+de L<perlfunc> la documentaci√≥n de la funci√≥n.
 
 Ejemplo:
 
       perldoc -f sprintf
 
 
-=item B<-q> I<regexp-b˙squeda-perlfaq>
+=item B<-q> I<regexp-b√∫squeda-perlfaq>
 
-La opciÛn B<-q> consume una expresiÛn regular como argumento. Busca en los
+La opci√≥n B<-q> consume una expresi√≥n regular como argumento. Busca en los
 encabezados de las preguntas ("q" viene de la palabra inglesa B<q>uestion) de
-perlfaq[1-9] e imprime en pantalla las entradas compatibles con la expresiÛn
+perlfaq[1-9] e imprime en pantalla las entradas compatibles con la expresi√≥n
 regular.
 
 Ejemplo:
@@ -109,8 +112,8 @@ Ejemplo:
 
 =item B<-v> I<perlvar>
 
-La opciÛn B<-v> seguida del nombre de una variable predefinida de Perl extrae
-de L<perlvar> la documentaciÛn de la variable.
+La opci√≥n B<-v> seguida del nombre de una variable predefinida de Perl extrae
+de L<perlvar> la documentaci√≥n de la variable.
 
 Ejemplos:
 
@@ -121,13 +124,13 @@ Ejemplos:
 
 =item B<-T>
 
-Especifica que la salida no se enviar· a un paginador; se enviar· directamente
-a STDOUT.
+Especifica que la salida no se enviar√° a un paginador; se enviar√°
+directamente a STDOUT.
 
 =item B<-d> I<archivo-destino>
 
-Especifica que la salida no se enviar· a un paginador ni a STDOUT; se guardar·
-en un archivo con el nombre especificado. Ejemplo: C<perldoc -oLaTeX
+Especifica que la salida no se enviar√° a un paginador ni a STDOUT; se
+guardar√° en un archivo con el nombre especificado. Ejemplo: C<perldoc -oLaTeX
 -dtextwrapdocs.tex Text::Wrap>
 
 =item B<-o> I<formato-salida>
@@ -136,7 +139,7 @@ Especifica que perldoc debe intentar usar una clase de formato pod para el
 formato de salida indicado. Por ejemplo: C<-oman>. En realidad es un
 encapsulador del modificador C<-M>; si se usa C<-oI<nombre_formato>>, solo
 busca una clase que se pueda cargar agregando ese nombre de formato (con
-distintas combinaciones de may˙sculas y min˙sculas) al final de distintos
+distintas combinaciones de may√∫sculas y min√∫sculas) al final de distintos
 prefijos de nombre de clase.
 
 Por ejemplo, C<-oLaTeX> prueba todas las clases siguientes:
@@ -144,122 +147,122 @@ Pod::Perldoc::ToLaTeX Pod::Perldoc::Tolatex Pod::Perldoc::ToLatex
 Pod::Perldoc::ToLATEX Pod::Simple::LaTeX Pod::Simple::latex Pod::Simple::Latex
 Pod::Simple::LATEX Pod::LaTeX Pod::latex Pod::Latex Pod::LATEX.
 
-=item B<-M> I<nombre_mÛdulo>
+=item B<-M> I<nombre_m√≥dulo>
 
-Permite especificar el mÛdulo que se desea usar para aplicar formato al cÛdigo
-pod. La clase debe proporcionar al menos un mÈtodo C<parse_from_file>. Por
-ejemplo: C<perldoc -MPod::Perldoc::ToChecker>.
+Permite especificar el m√≥dulo que se desea usar para aplicar formato al
+c√≥digo pod. La clase debe proporcionar al menos un m√©todo C<parse_from_file>.
+Por ejemplo: C<perldoc -MPod::Perldoc::ToChecker>.
 
-Puede especificar varias clases separ·ndolas con comas o signos de punto y coma
-(por ejemplo, C<-MTk::SuperPod;Tk::Pod>).
+Puede especificar varias clases separ√°ndolas con comas o signos de punto y
+coma (por ejemplo, C<-MTk::SuperPod;Tk::Pod>).
 
-=item B<-w> I<opciÛn:valor> o B<-w> I<opciÛn>
+=item B<-w> I<opci√≥n:valor> o B<-w> I<opci√≥n>
 
-Permite especificar una opciÛn con ("w" viene de la palabra inglesa B<w>ith) la
-que desea llamar al formateador. Por ejemplo, C<-w textsize:15> llamar· a C<<
-$formatter->textsize(15) >> en el objeto formateador antes de que se use para
-aplicar formato al objeto. Para que esto funcione, la clase de formateador debe
-proporcionar este mÈtodo y el valor pasado debe ser v·lido (si C<textsize>
-espera un entero y se especifica C<-w textsize:big>, lo m·s seguro es que se
-produzca un error).
+Permite especificar una opci√≥n con ("w" viene de la palabra inglesa B<w>ith)
+la que desea llamar al formateador. Por ejemplo, C<-w textsize:15> llamar√° a
+C<< $formatter->textsize(15) >> en el objeto formateador antes de que se use
+para aplicar formato al objeto. Para que esto funcione, la clase de formateador
+debe proporcionar este m√©todo y el valor pasado debe ser v√°lido (si
+C<textsize> espera un entero y se especifica C<-w textsize:big>, lo m√°s seguro
+es que se produzca un error).
 
-Puede usar C<-w nombre_opciÛn> (sin un valor) como una forma abreviada de C<-w
-nombre_opciÛn:I<TRUE>>. Esto puede ser ˙til para caracterÌsticas que se activan
-o desactivan, como por ejemplo C<-w page_numbering>.
+Puede usar C<-w nombre_opci√≥n> (sin un valor) como una forma abreviada de C<-w
+nombre_opci√≥n:I<TRUE>>. Esto puede ser √∫til para caracter√≠sticas que se
+activan o desactivan, como por ejemplo C<-w page_numbering>.
 
 Puede usar un signo "=" en lugar del signo ":"; por ejemplo, C<-w textsize=15>.
-Esto puede resultar m·s (o menos) cÛmodo seg˙n la shell que se use.
+Esto puede resultar m√°s (o menos) c√≥modo seg√∫n la shell que se use.
 
 =item B<-X>
 
-Usa un Ìndice si existe. La opciÛn B<-X> busca en el archivo
+Usa un √≠ndice si existe. La opci√≥n B<-X> busca en el archivo
 C<$Config{archlib}/pod.idx> una entrada cuyo nombre base coincida con el nombre
-especificado en la lÌnea de comandos. El archivo F<pod.idx> debe contener
-nombres de archivo completos (uno por lÌnea).
+especificado en la l√≠nea de comandos. El archivo F<pod.idx> debe contener
+nombres de archivo completos (uno por l√≠nea).
 
-=item B<-L> I<cÛdigo_idioma>
+=item B<-L> I<c√≥digo_idioma>
 
-Este modificador permite especificar el I<cÛdigo de idioma> para obtener la
-traducciÛn del documento en el idioma deseado. Si el paquete
-C<POD2::E<lt>cÛdigo_idiomaE<gt>> no est· instalado en el sistema, se ignorar·
-el modificador. Todos los paquetes de traducciÛn de la documentaciÛn se
-encuentran en el espacio de nombres C<POD2::>. Si desea saber cÛmo puede crear
-nuevos paquetes de documentaciÛn localizados (C<POD2::*>) e integrarlos en
-L<Pod::Perldoc>, vea L<POD2::ES> (o L<POD2::IT>, L<POD2::FR>).
+Este modificador permite especificar el I<c√≥digo de idioma> para obtener la
+traducci√≥n del documento en el idioma deseado. Si el paquete
+C<POD2::E<lt>c√≥digo_idiomaE<gt>> no est√° instalado en el sistema, se
+ignorar√° el modificador. Todos los paquetes de traducci√≥n de la
+documentaci√≥n se encuentran en el espacio de nombres C<POD2::>. Si desea saber
+c√≥mo puede crear nuevos paquetes de documentaci√≥n localizados (C<POD2::*>) e
+integrarlos en L<Pod::Perldoc>, vea L<POD2::ES> (o L<POD2::IT>, L<POD2::FR>).
 
-=item B<NombreP·gina|NombreMÛdulo|NombrePrograma|DirecciÛnURL>
+=item B<NombreP√°gina|NombreM√≥dulo|NombrePrograma|Direcci√≥nURL>
 
-El elemento que desea buscar. Los mÛdulos anidados, como C<File::Basename>, se
-pueden especificar mediante C<File::Basename> o C<< File/Basename >>. TambiÈn
-puede especificar un nombre descriptivo de una p·gina, como C<perlfunc>. Para
+El elemento que desea buscar. Los m√≥dulos anidados, como C<File::Basename>, se
+pueden especificar mediante C<File::Basename> o C<< File/Basename >>. Tambi√©n
+puede especificar un nombre descriptivo de una p√°gina, como C<perlfunc>. Para
 direcciones URL, actualmente solo se admite HTTP y HTTPS.
 
-En el caso de nombres sencillos, como 'foo', si la b˙squeda normal no encuentra
-una p·gina coincidente, se realiza tambiÈn una b˙squeda con el prefijo "perl".
-Por ejemplo, "perldoc intro" es suficiente para encontrar y mostrar
-"perlintro.pod".
+En el caso de nombres sencillos, como 'foo', si la b√∫squeda normal no
+encuentra una p√°gina coincidente, se realiza tambi√©n una b√∫squeda con el
+prefijo "perl". Por ejemplo, "perldoc intro" es suficiente para encontrar y
+mostrar "perlintro.pod".
 
-=item B<-n> I<alg˙n_formateador>
+=item B<-n> I<alg√∫n_formateador>
 
 Especifique el sustituto de groff
 
 =item B<-r>
 
-B˙squeda recursiva.
+B√∫squeda recursiva.
 
 =item B<-i>
 
-No se distinguen may˙sculas de min˙sculas.
+No se distinguen may√∫sculas de min√∫sculas.
 
 =item B<-V>
 
-Muestra la versiÛn de perldoc que se ejecuta actualmente.
+Muestra la versi√≥n de perldoc que se ejecuta actualmente.
 
 =back
 
 =head1 SEGURIDAD
 
 Como B<perldoc> no usa comprobaciones de seguridad y se sabe que tiene
-vulnerabilidades, cuando se ejecuta como superusuario intentar· ceder
+vulnerabilidades, cuando se ejecuta como superusuario intentar√° ceder
 privilegios estableciendo los identificadores efectivo y real en la cuenta
-nobody o nouser, o en -2 si dichas cuentas no est·n disponibles. Si no puede
-renunciar a los privilegios, no se ejecutar·.
+nobody o nouser, o en -2 si dichas cuentas no est√°n disponibles. Si no puede
+renunciar a los privilegios, no se ejecutar√°.
 
 
 =head1 ENTORNO
 
 Se consumen todos los modificadores de la variable de entorno C<PERLDOC> antes
-que los argumentos de lÌnea de comandos.
+que los argumentos de l√≠nea de comandos.
 
-Algunos valores ˙tiles para C<PERLDOC> son C<-oman>, C<-otext>, C<-otk>,
-C<-ortf>, C<-oxml>, etc., en funciÛn de los mÛdulos disponibles; o bien, se
+Algunos valores √∫tiles para C<PERLDOC> son C<-oman>, C<-otext>, C<-otk>,
+C<-ortf>, C<-oxml>, etc., en funci√≥n de los m√≥dulos disponibles; o bien, se
 puede especificar exactamente la clase de formateador con
 C<-MPod::Perldoc::ToMan> o similar.
 
-C<perldoc> tambiÈn busca en los directorios especificados por las variables de
-entorno C<PERL5LIB> (o C<PERLLIB> si C<PERL5LIB> no est· definida) y C<PATH>
-(esta ˙ltima hace que estÈ disponible la documentaciÛn pod incluida en
+C<perldoc> tambi√©n busca en los directorios especificados por las variables de
+entorno C<PERL5LIB> (o C<PERLLIB> si C<PERL5LIB> no est√° definida) y C<PATH>
+(esta √∫ltima hace que est√© disponible la documentaci√≥n pod incluida en
 ejecutables, como C<perldoc>).
 
-C<perldoc> usar· (por orden de preferencia) el paginador definido en
+C<perldoc> usar√° (por orden de preferencia) el paginador definido en
 C<PERLDOC_PAGER>, C<MANPAGER> o C<PAGER> antes de intentar localizar un
-paginador (no se usar· C<MANPAGER> si se configurÛ C<perldoc> para mostrar
+paginador (no se usar√° C<MANPAGER> si se configur√≥ C<perldoc> para mostrar
 texto simple o texto sin formato).
 
-Un valor ˙til para C<PERLDOC_PAGER> es C<less -+C -E>.
+Un valor √∫til para C<PERLDOC_PAGER> es C<less -+C -E>.
 
-Si se establece como valor de PERLDOCDEBUG un entero positivo, perldoc emitir·
-una salida a˙n m·s descriptiva que la que proporciona el modificador C<-v>;
-cuanto mayor sea el n˙mero, m·s informaciÛn emitir·.
+Si se establece como valor de PERLDOCDEBUG un entero positivo, perldoc emitir√°
+una salida a√∫n m√°s descriptiva que la que proporciona el modificador C<-v>;
+cuanto mayor sea el n√∫mero, m√°s informaci√≥n emitir√°.
 
 
 =head1 CAMBIOS
 
-Hasta la versiÛn 3.14_05 se usaba el modificador B<-v> para producir mensajes
-detallados del funcionamiento de B<perldoc>; ahora esta opciÛn se habilita
+Hasta la versi√≥n 3.14_05 se usaba el modificador B<-v> para producir mensajes
+detallados del funcionamiento de B<perldoc>; ahora esta opci√≥n se habilita
 mediante B<-D>.
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
 L<perlpod>, L<Pod::Perldoc>
 
@@ -267,10 +270,10 @@ L<perlpod>, L<Pod::Perldoc>
 
 Mantenedor actual: Mark Allen C<< <mallen@cpan.org> >>
 
-Anteriormente contribuyeron a este documento: brian d foy C<< <bdfoy@cpan.org>
->>  Adriano R. Ferreira C<< <ferreira@cpan.org> >>, Sean M. Burke C<<
-<sburke@cpan.org> >>, Kenneth Albanowski C<< <kjahds@kjahds.com> >>, Andy
-Dougherty  C<< <doughera@lafcol.lafayette.edu> >> y muchos otros.
+Anteriormente contribuyeron a este documento: brian d foy C<< <bdfoy@cpan.org> >>,
+Adriano R. Ferreira C<< <ferreira@cpan.org> >>, Sean M. Burke C<< <sburke@cpan.org> >>,
+Kenneth Albanowski C<< <kjahds@kjahds.com> >>,
+Andy Dougherty C<< <doughera@lafcol.lafayette.edu> >> y muchos otros.
 
 =cut
 
@@ -278,9 +281,9 @@ Dougherty  C<< <doughera@lafcol.lafayette.edu> >> y muchos otros.
 
 =over
 
-=item * JoaquÌ≠n Ferrero (Tech Lead), C< explorer + POD2ES at joaquinferrero.com >
+=item * Joaqu√≠n Ferrero (Tech Lead)
 
-=item * Enrique Nell (Language Lead), C< blas.gordon + POD2ES at gmail.com >
+=item * Enrique Nell (Language Lead)
 
 =back
 
