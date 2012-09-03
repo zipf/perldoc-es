@@ -1,4 +1,5 @@
 package POD2::ES;
+use utf8;
 use strict;
 use warnings;
 use open ':locale';
@@ -278,7 +279,7 @@ alta la moral. Todo será bienvenido.
 =head1 ERRORES
 
 Puede notificar errores (bugs) o solicitar funcionalidad a través de la
-dirección de correo electrónico C<bug-pod2-esd at rt.cpan.org> o de la interfaz
+dirección de correo electrónico C<bug-pod2-es at rt.cpan.org> o de la interfaz
 web en L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POD2-ES>. Se le
 comunicarán automáticamente los cambios relacionados con los errores
 notificados o la funcionalidad solicitada.
