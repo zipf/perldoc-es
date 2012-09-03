@@ -100,9 +100,9 @@ foreach my $pod_name (@names) {
 
     # Get path components
     my ($name, $path, $suffix) = fileparse($target, qr{\.pod|\.pm|\..*});    
-    say $name;
-    say $path;
-    say $suffix;
+    #say $name;
+    #say $path;
+    #say $suffix;
 
     my ( $ext ) = $suffix =~ /\.(.+)$/;
 
@@ -237,6 +237,8 @@ foreach my $pod_name (@names) {
     # Generate word-oriented diff file
     if ( $diff ) {
 
+        say "Generating diff file...";
+
         diff_file(
                     trans     => $trans_pod,
                     rev       => $rev_pod,
@@ -251,6 +253,8 @@ foreach my $pod_name (@names) {
 
     # Generate HTML file for proofreading;
     unless ( $nohtml ) {
+
+        say "Generating HTML version of POD file...";
 
         my $html = "$REVPOD_PATH/$name$suffix.html";
         system("perl -MPod::Simple::HTML -e Pod::Simple::HTML::go $distr > $html");
