@@ -49,12 +49,17 @@ Readonly my $DIFF_HEADER   => <<"END_HEADER";
 <html>
 <head>
 <META HTTP-EQUIV='Content-Type' CONTENT='text/html; charset=UTF-8'>
-<link rel='stylesheet' href='word_diff.css' type='text/css'>
+<style>
+.file .fileheader { color: #888; }
+.file .hunk ins   { color: #060; font-weight: bold; }
+.file .hunk del   { color: #b22; font-weight: bold; }
+</style>
 </head>
 <title>Word-oriented POD comparison</title>
 <body>
 END_HEADER
 
+#<link rel='stylesheet' href='word_diff.css' type='text/css'>
 
 # read team from __DATA__ section
 my (%team, %files);
