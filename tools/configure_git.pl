@@ -1,18 +1,18 @@
 #!/usr/bin/perl
 #
 #
-#  Configure basic settings for git
+#  Configure basic git settings
 #
 
 use feature 'say';
 
-say 'Configuration of global work of git';
+say 'Configuration for global work using git';
 
-print 'Write your username in Github: ';
+print 'Please write your Github user name: ';
 my $user = readline;
 chomp $user;
 
-print 'Write email address in Github: ';
+print 'Please write your Github email address: ';
 my $email = readline;
 chomp $email;
 
