@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 #
-# Copy files from Perl distribution to source/ OmegaT directory.
+# Copy files from Perl distribution to source/ directory in OmegaT project.
 #
 use v5.12;
 use autodie;
@@ -8,7 +8,7 @@ use File::Copy;
 
 ### Configuration ###
 my $SOURCE_DIR = '/home/explorer/perl5/perlbrew/build/perl-5.16.1';	# Distribution directory
-my $TARGET_DIR = '/home/explorer/perlspanish/source';			# source/ OmegaT directory
+my $TARGET_DIR = '/home/explorer/perlspanish/source';			    # source/ OmegaT directory
 my @EXCEPTIONS = qw(
     README.cn
     README.ko
@@ -22,23 +22,23 @@ my $number_files = 0;
 #####################
 
 ### Check ###
-if (not -d $TARGET_DIR) {		# To create destination dir.
+if (not -d $TARGET_DIR) {		# Create destination dir.
     mkdir $TARGET_DIR;
 }
 if (<$TARGET_DIR/*>) {			# Check dirs.
-    die "ERROR: $TARGET_DIR have files!. I need a clean bedroom.\n";
+    die "ERROR: $TARGET_DIR contains files! I need a clean bedroom.\n";
 }
 
 if (not -d $SOURCE_DIR) {
-    die "ERROR: the source distribution directory not exists.\n";
+    die "ERROR: The source distribution directory does not exist.\n";
 }
 
 if (not -e "$SOURCE_DIR/README") {
-    die "ERROR: I don't found the README file into $SOURCE_DIR directory.\n";
+    die "ERROR: Couldn't find the README file in $SOURCE_DIR directory.\n";
 }
 
 if (not -d "$SOURCE_DIR/pod") {
-    die "ERROR: I don't found the pod/ directory into $SOURCE_DIR directory.\n";
+    die "ERROR: Couldn't find the pod/ directory in $SOURCE_DIR directory.\n";
 }
 
 ### Copy READMEs
@@ -64,7 +64,7 @@ if (not -d "$SOURCE_DIR/pod") {
     closedir $DIR;
 }
 
-### Copy faqs & extra pods
+### Copy faqs & additional pods
 {
     my $source_dir = "$SOURCE_DIR/lib";
     opendir my $DIR, $source_dir;
@@ -77,7 +77,7 @@ if (not -d "$SOURCE_DIR/pod") {
 }
 
 ### End
-say "Number of files copied: $number_files";
+say "Files copied: $number_files";
 
 ### Subroutines
 sub copy_file {
