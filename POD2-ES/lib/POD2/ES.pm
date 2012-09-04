@@ -3,8 +3,8 @@ use utf8;
 use strict;
 use warnings;
 use open ':locale';
-use base 'POD2::Base';
 use base 'Exporter';
+use base 'POD2::Base';
 
 our $VERSION = '5.16.1.01';
 

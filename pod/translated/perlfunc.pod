@@ -352,7 +352,7 @@ Como en Perl 5.9.1, una dulce forma, puramente sintáctica, puede apilar operado
 
 Cuestiones de portabilidad: L<perlport/-X>.
 
-Para no confundir a los posibles usuarios de su código con errores de sintaxis misteriosos, ponga algo como esto en la parte superior de su I<script>:
+Para no confundir a los posibles usuarios de su código con errores de sintaxis misteriosos, ponga algo como esto en la parte superior de su script:
 
     use 5.010;  # así, los test de archivo pueden apilarse
 
@@ -2049,7 +2049,7 @@ Implementa la función ioctl(2).  Probablemente primero querrá escribir
     require "sys/ioctl.ph";  # probablemente en $Config{archlib}/sys/ioctl.ph
 
 para obtener las correctas definiciones de la función.  Si F<sys/ioctl.ph> no existe o no tiene las definiciones correctas, tendrá que incorporar las suyas propias, basadas en sus archivos de cabecera C como las de F<< <sys/ioctl.h> >>.
-(Existe un I<script> Perl llamado B<h2ph> que viene con el kit Perl que puede ayudarle en esto, pero no es nada trivial).  ESCALAR será leído o escrito dependiendo de la FUNCIÓN; un puntero C al valor de la cadena ESCALAR será pasado como tercer argumento de la actual llamada C<ioctl>.  (Si ESCALAR no tiene un valor de cadena sino que tiene un valor numérico, ese valor será el que se pase, en lugar de un puntero al valor de la cadena.  Para garantizar que esto sea cierto, sume un C<0> al escalar antes de usarlo).  Las funciones C<pack> y C<unpack> pueden ser necesarias para manipular los valores de las estructuras utilizadas por C<ioctl>.
+(Existe un script Perl llamado B<h2ph> que viene con el kit Perl que puede ayudarle en esto, pero no es nada trivial).  ESCALAR será leído o escrito dependiendo de la FUNCIÓN; un puntero C al valor de la cadena ESCALAR será pasado como tercer argumento de la actual llamada C<ioctl>.  (Si ESCALAR no tiene un valor de cadena sino que tiene un valor numérico, ese valor será el que se pase, en lugar de un puntero al valor de la cadena.  Para garantizar que esto sea cierto, sume un C<0> al escalar antes de usarlo).  Las funciones C<pack> y C<unpack> pueden ser necesarias para manipular los valores de las estructuras utilizadas por C<ioctl>.
 
 El valor devuelto de C<ioctl> (y C<fcntl>) es como sigue:
 

@@ -6,7 +6,7 @@ perlvos - Notas para Stratus VOS
 
 =head1 SINOPSIS
 
-Este archivo contiene instrucciones de cómo construir Perl en el sistema operativo Stratus VOS.  Perl es un lenguaje de I<scripts> o lenguaje de macros que es popular en muchos sistemas.  Consulte L<perlbook> para ver una lista de buenos libros sobre Perl.
+Este archivo contiene instrucciones de cómo construir Perl en el sistema operativo Stratus VOS.  Perl es un lenguaje de scripts o lenguaje de macros que es popular en muchos sistemas.  Consulte L<perlbook> para ver una lista de buenos libros sobre Perl.
 
 Estas son las instrucciones para la compilación de Perl desde el código fuente.  Esta versión de Perl no está soportado en VOS versión 14.2 o anteriores.  Si tiene una plataforma Continuum corriendo VOS versiones 14.3 a 14.7, descargue Perl desde el sitio FTP anónimo de Stratus Anonymous ftp://ftp.stratus.com/pub/vos/posix/ga/continuum/continuum.html.  Si tiene una plataforma de la Serie V corriendo VOS versión 15.0 o posterior, o si tiene una plataforma de la Serie V corriendo OpenVOS versión 17.0 o posterior, descargue Perl en ftp://ftp.stratus.com/pub/vos/posix/ga/ v-series/v-series.html.  Los archivos de la distribución de perl en el sitio FTP anónimo de Stratus se almacenan en un formato llamado "archivo empaquetado".  Instrucciones para el desempaquetado del archivo de la distribución Perl se encuentran en ftp://ftp.stratus.com/pub/vos/utility/utility.html.
 
@@ -16,7 +16,7 @@ Si está ejecutando VOS versión 14.4.1 o posterior, puede obtener una distribuc
 
 Para compilar perl a partir de su código fuente en la plataforma Stratus Continuum, debe tener VOS versión 14.5.0 o posterior, el producto STCP, y el GNU C/C++ y las GNU Tools, versión 2.0.1 o posterior.  En la plataforma Serie V debe tener VOS versión 15.0.0 o posterior, y cualquier versión del GNU C/C++ y el producto GNU Tools.
 
-Para construir perl usando el I<script> Configure suministrada y makefiles, cambie al subdirectorio "vos" y escriba el comando "compile_full_perl" o "start_process compile_full_perl".  Esto configurará, compilará y comprobará perl.
+Para construir perl usando el script Configure suministrada y makefiles, cambie al subdirectorio "vos" y escriba el comando "compile_full_perl" o "start_process compile_full_perl".  Esto configurará, compilará y comprobará perl.
 
 =head1 INSTALANDO PERL EN VOS
 
@@ -24,7 +24,7 @@ Para construir perl usando el I<script> Configure suministrada y makefiles, camb
 
 =item 1
 
-Si ha compilado perl usando el I<script> Configure, asegúrese de que ha modificado y puesto por defecto los permisos de escritura a C<< >system>ported >> y todos los subdirectorios.  A continuación, escriba
+Si ha compilado perl usando el script Configure, asegúrese de que ha modificado y puesto por defecto los permisos de escritura a C<< >system>ported >> y todos los subdirectorios.  A continuación, escriba
 
      gmake install
 
