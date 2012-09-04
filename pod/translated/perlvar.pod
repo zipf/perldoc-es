@@ -133,7 +133,7 @@ Mnemónico: funciona en contexto doblemente entrecomillado.
 =item $$
 X<$$> X<$PID> X<$PROCESS_ID>
 
-El número de proceso de Perl ejecutando este I<script>.  A pesar de que I<puede> darle un valor a esta variable, por lo general se desaconseja hacerlo, aunque puede resultar muy útil para algunas comprobaciones de pruebas.  Será restablecerá automáticamente a través de las llamadas C<fork()>.
+El número de proceso de Perl ejecutando este script.  A pesar de que I<puede> darle un valor a esta variable, por lo general se desaconseja hacerlo, aunque puede resultar muy útil para algunas comprobaciones de pruebas.  Será restablecerá automáticamente a través de las llamadas C<fork()>.
 
 Nota para los usuarios de Linux Debian GNU/kFreeBSD: Antes de Perl v5.16.0, perl podría emular la semántica POSIX en sistemas Linux usando LinuxThreads, una implementación parcial de POSIX Threads que desde entonces ha sido reemplazada por la I<Native POSIX Thread Library> (NPTL).
 
@@ -161,7 +161,7 @@ En algunas plataformas el relleno puede extenderse por todo el largo de la longi
 
 Nota para los usuarios de BSD: modificar C<$0> no elimina por completo "perl" de la salida de ps(1).  Por ejemplo, la modificación de C<$0> en C<"foobar"> puede resultar C<"perl: foobar (perl)"> (el que salga el prefijo C<"perl:"> y el sufijo "(perl)" depende de la variante y de versión exacta de BSD).  Esta es una característica del sistema operativo, Perl no puede evitarlo.
 
-En los I<scripts> multihebra Perl coordina los hilos de manera que cualquier hilo puede modificar su copia de C<$0> y el cambio se hace visible para ps(1) (suponiendo que el sistema operativo juegue limpio).  Tenga en cuenta que la visión de C<$0> desde los otros hilos no va a cambiar, ya que tienen sus propias copias de ella misma.
+En los scripts multihebra Perl coordina los hilos de manera que cualquier hilo puede modificar su copia de C<$0> y el cambio se hace visible para ps(1) (suponiendo que el sistema operativo juegue limpio).  Tenga en cuenta que la visión de C<$0> desde los otros hilos no va a cambiar, ya que tienen sus propias copias de ella misma.
 
 Si el programa se ha entregado a perl a través de las opciones C<-e> o C<-E>, C<$0> contendrá la cadena C<"-e">.
 
@@ -851,7 +851,7 @@ Contiene el nombre del archivo actual, cuando se lee con C<< <> >>.
 =item @ARGV
 X<@ARGV>
 
-El array C<@ARGV> contiene los argumentos de la línea de comandos que se pasaron al I<script>.  C<$#ARGV> es, generalmente, el número de argumentos menos uno, debido a que C<$ARGV[0]> es el primer argumento, I<no> es el nombre del propio programa.  Vea L</$0> para obtener el nombre del comando.
+El array C<@ARGV> contiene los argumentos de la línea de comandos que se pasaron al script.  C<$#ARGV> es, generalmente, el número de argumentos menos uno, debido a que C<$ARGV[0]> es el primer argumento, I<no> es el nombre del propio programa.  Vea L</$0> para obtener el nombre del comando.
 
 =item ARGV
 X<ARGV>
@@ -1243,7 +1243,7 @@ Mnemónico: valor de la opción B<-D>.
 =item ${^ENCODING}
 X<${^ENCODING}>
 
-La I<referencia de objecto> al objeto C<Encode> que se ha utilizado para convertir el código fuente a Unicode.  Gracias a este variable su I<script> Perl no tiene por qué estar escrito en UTF-8.  El valor predeterminado es I<undef>.  La manipulación directa de esta variable está sumamente desaconsejada.
+La I<referencia de objecto> al objeto C<Encode> que se ha utilizado para convertir el código fuente a Unicode.  Gracias a este variable su script Perl no tiene por qué estar escrito en UTF-8.  El valor predeterminado es I<undef>.  La manipulación directa de esta variable está sumamente desaconsejada.
 
 Esta variable se incorporó en Perl 5.8.2.
 
@@ -1555,7 +1555,7 @@ X<$]> X<$OLD_PERL_VERSION>
 
 Vea L</$^V> para una representación más moderna de la versión Perl que permite comparaciones de cadena más cuidadosas.
 
-La versión + nivel de parcheo / 1000 del intérprete Perl.  Esta variable puede ser usada para determinar si el intérprete de Perl que ejecuta un I<script> está en el rango correcto de versiones:
+La versión + nivel de parcheo / 1000 del intérprete Perl.  Esta variable puede ser usada para determinar si el intérprete de Perl que ejecuta un script está en el rango correcto de versiones:
 
     warn "¡No hay suma de control!\n" if $] < 3.019;
 
