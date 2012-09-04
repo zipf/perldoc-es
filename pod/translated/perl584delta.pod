@@ -26,7 +26,7 @@ La copia de la base de datos de caracteres Unicode incluidos en Perl 5.8 ha sido
 
 =head2 suidperl menos inseguro
 
-Paul Szabo ha analizado y parcheado C<suidperl> para eliminar los inseguridades conocidas en este momento. Actualmente no hay ningún agujero conocido en C<suidperl>, pero la experiencia anterior muestra que no podemos estar seguros de que estos fueron los últimos. Es posible que ya no invoque a perl con el uid activado, directamente, así que para mantener la compatibilidad anterior con I<scripts> que llaman a #!/usr/bin/suidperl el único binario con uid activado es ahora C<sperl5.8.>I<n> (C<sperl5.8.4> para esta versión). C<suidperl> es instalado como un enlace duro a C<perl>; tanto C<suidperl> como C<perl> invocarán al binario C<sperl5.8.4> automáticamente, por lo que este cambio debería ser completamente transparente.
+Paul Szabo ha analizado y parcheado C<suidperl> para eliminar los inseguridades conocidas en este momento. Actualmente no hay ningún agujero conocido en C<suidperl>, pero la experiencia anterior muestra que no podemos estar seguros de que estos fueron los últimos. Es posible que ya no invoque a perl con el uid activado, directamente, así que para mantener la compatibilidad anterior con scripts que llaman a #!/usr/bin/suidperl el único binario con uid activado es ahora C<sperl5.8.>I<n> (C<sperl5.8.4> para esta versión). C<suidperl> es instalado como un enlace duro a C<perl>; tanto C<suidperl> como C<perl> invocarán al binario C<sperl5.8.4> automáticamente, por lo que este cambio debería ser completamente transparente.
 
 Para nuevos proyectos el equipo básico de desarrollo perl recomienda, encarecidamente, que utilice herramientas específicas para el propósito de seguridad, tales como C<sudo>, en lugar de C<suidperl>.
 
