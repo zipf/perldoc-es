@@ -41,6 +41,7 @@ Readonly my $CLEANM_PATH   => "../../omegat_clean_prj/omegat/project_save.tmx";
 # git repository
 Readonly my $TRANSPOD_PATH => "../pod/translated";
 Readonly my $REVPOD_PATH   => "../pod/reviewed";
+Readonly my $DIFF_PATH     => "../pod/diff";
 Readonly my $DISTR_PATH    => "../POD2-ES/lib/POD2/ES";
 Readonly my $WORK_PATH     => "../memory/work/perlspanish-omegat.zipf.tmx";
 
@@ -249,7 +250,7 @@ foreach my $pod_name (@names) {
         diff_file(
                     trans     => $trans_pod,
                     rev       => $rev_pod,
-                    path      => $REVPOD_PATH,
+                    path      => $DIFF_PATH,
                     name      => $name,
                     extension => $ext,
                     header    => $DIFF_HEADER,
@@ -323,6 +324,6 @@ sub diff_file {
 
 __DATA__
 j3nnn1,Jennifer Maldonado,C< jcmm986 + POD2ES at gmail.com >
-mgomez,Manuel Gómez Olmedo,C< mgomez + POD2ES at decsai.ugr.es >,perlootut,perlobj
+mgomez,Manuel Gómez Olmedo,C< mgomez + POD2ES at decsai.ugr.es >,perlootut,perlobj,perlmod
 explorer,Joaquín Ferrero (Tech Lead),C< explorer + POD2ES at joaquinferrero.com >
 zipf,Enrique Nell (Language Lead),C< blas.gordon + POD2ES at gmail.com >   
