@@ -59,7 +59,6 @@ Readonly my $DIFF_HEADER   => <<"END_HEADER";
 <body>
 END_HEADER
 
-#<link rel='stylesheet' href='word_diff.css' type='text/css'>
 
 # read team from __DATA__ section
 my (%team, %files);
@@ -111,9 +110,6 @@ foreach my $pod_name (@names) {
 
     # Get path components
     my ($name, $path, $suffix) = fileparse($target, qr{\.pod|\.pm|\..*});    
-    #say $name;
-    #say $path;
-    #say $suffix;
 
     my ( $ext ) = $suffix =~ /\.(.+)$/;
 
@@ -298,6 +294,12 @@ sub diff_file {
     say $out "<h1>Comparison results for $params{name}.$params{extension}</h1>\n</br>";
 
     for (my $i=0; $i < $#trans; $i++) {
+       
+        $trans[$i] =~ s/</\(/g;
+        $trans[$i] =~ s/>/\)/g;
+
+        $rev[$i]   =~ s/</\(/g;
+        $rev[$i]   =~ s/>/\)/g;
         
         if ( $rev[$i] ne $trans[$i] ) {
     
