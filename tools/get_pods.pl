@@ -8,7 +8,7 @@ use File::Copy;
 
 ### Configuration ###
 my $SOURCE_DIR = '/home/explorer/perl5/perlbrew/build/perl-5.16.1';	# Distribution directory
-my $TARGET_DIR = '/home/explorer/perlspanish/source';			    # source/ OmegaT directory
+my $TARGET_DIR = '/home/explorer/perlspanish/source';			# source/ OmegaT directory
 my @EXCEPTIONS = qw(
     README.cn
     README.ko
