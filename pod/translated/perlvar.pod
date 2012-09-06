@@ -9,7 +9,7 @@ perlvar - Variables predefinidas de Perl
 En Perl, los nombres de variable pueden tener varios formatos.  Generalmente empiezan por una letra o un guión bajo, en cuyo caso pueden tener una longitud arbitraria (hasta un límite interno de 251), y muchos contienen letras, dígitos, guiones bajos o la secuencia especial C<::> o C<'>.  En este caso, se usa la parte que hay antes del último C<::> o
 C<'> como I<calificador del paquete>; vea L<perlmod>.
 
-Los nombres de variables Perl también pueden estar formados por una secuencia de dígitos o un solo singno de puntuación o carácter de control.  Todos estos nombres están reservados para usos especiales en Perl; por ejemplo, los nombres formados exclusivamente por dígitos se usan para almacenar datos capturados por retrorreferencias detectadas por una expresión regular.  Perl tiene una sintaxis especial para los nombres de un solo carácter de control: entiende que C<^X> (acento circunflejo-C<X>) representa al carácter de control-C<X>.  Por ejemplo, la notación C<$^W> (signo de dólar, acento circunflejo, C<W>) es la variable escalar cuyo nombre es el carácter único de control-C<W>.  Esto es mejor que escribir un control-C<W> literal en su programa.
+Los nombres de variables Perl también pueden estar formados por una secuencia de dígitos o un solo singno de puntuación o carácter de control.  Todos estos nombres están reservados para usos especiales en Perl; por ejemplo, los nombres formados exclusivamente por dígitos se usan para almacenar datos capturados por ///backreferences detectadas por una expresión regular.  Perl tiene una sintaxis especial para los nombres de un solo carácter de control: entiende que C<^X> (acento circunflejo-C<X>) representa al carácter de control-C<X>.  Por ejemplo, la notación C<$^W> (signo de dólar, acento circunflejo, C<W>) es la variable escalar cuyo nombre es el carácter único de control-C<W>.  Esto es mejor que escribir un control-C<W> literal en su programa.
 
 Desde la versión Perl 5.6, los nombres de variables Perl pueden ser cadenas alfanuméricas que empiezan por caracteres de control (o mejor, por un signo de intercalación).
 Estas variables deben escribirse con la sintaxis C<${^Foo}>; las llaves no son opcionales.  C<${^Foo}> denotas la variable escalar cuyo nombre es un control-C<F> seguido por dos C<o>.  Estas variables están reservadas para futuros usos especiales de Perl, a excepción de los que comienzan con C<^_> (control-guión bajo o acento circunflejo-guión bajo).  Ningún nombre de carácter de control que comience con C<^_> adquirirá un significado especial en cualquier futura versión de Perl; por lo tanto, estos nombres pueden ser usados con seguridad en los programas actuales.  C<$^_>, sin embargo, I<está> reservada.
@@ -1110,7 +1110,7 @@ X<$^S> X<$EXCEPTIONS_BEING_CAUGHT>
 
 Estado actual del intérprete.
 
-	$^S              Estado
+	$^S         Estado
 	---------        -------------------
 	undef            Interpretando un módulo o un eval()
 	verdadero (1)    Ejecutando un eval()
@@ -1427,7 +1427,7 @@ Mantiene información sobre las líneas del fuente en las que una subrutina est�
 
 =item 0x20
 
-Iniciar con un paso simple.
+Start with single-step on.
 
 =item 0x40
 
