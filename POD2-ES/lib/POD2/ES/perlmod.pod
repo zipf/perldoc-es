@@ -7,7 +7,8 @@ perlmod - Módulos Perl (paquetes y tablas de símbolos)
 =head1 DESCRIPCIÓN
 
 =head2 Paquetes
-X<package> X<paquete> X<namespace> X<espacio de nombres> X<variable, global> X<global, variable> X<global variable> X<variable global> X<global>
+X<package> X<paquete> X<namespace> X<espacio de nombres> X<variable, global> 
+X<global, variable> X<global variable> X<variable global> X<global>
 
 Perl proporciona un mecanismo de espacios de nombres alternativos que evita
 colisiones entre variables de distintos paquetes. De hecho, en Perl no hay
@@ -70,9 +71,9 @@ bajo (C<_>), como $_ y C<sub_>. Vea también la sección "La sintaxis de los
 nombres de variables" de L<perlvar>.
 
 Las cadenas evaluadas con C<eval> se compilan en el paquete en que se compiló
-la función eval()  (sin embargo, las asignaciones a C<$SIG{}> suponen que el
-controlador de señal especificado está en el paquete C<main>. Califique el
-nombre del controlador de señal si desea que esté en un paquete.)  En el
+la función eval() (sin embargo, las asignaciones a C<$SIG{}> suponen que el
+controlador de señal especificado está en el paquete C<main>; califique el
+nombre del controlador de señal si desea que esté en un paquete). En el
 archivo F<perldb.pl> de la biblioteca de Perl encontrará un ejemplo.
 Inicialmente cambia al paquete C<DB>, de forma que el depurador no interfiera
 con las variables del programa que intenta depurar. Sin embargo, en varios
@@ -88,7 +89,8 @@ Vea L<perlsub> para obtener información sobre otras cuestiones relativas al
 información sobre los cierres.
 
 =head2 Tabla de símbolos
-X<symbol table> X<tabla de símbolos> X<stash> X<%::> X<%main::> X<typeglob> X<glob> X<alias>
+X<symbol table> X<tabla de símbolos> X<stash> X<%::> X<%main::> X<typeglob> 
+X<glob> X<alias>
 
 La tabla de símbolos de un paquete se almacena en el hash cuyo nombre es el
 nombre del paquete con un doble signo de dos puntos anexado. Así, el nombre de
@@ -353,30 +355,30 @@ El programa B<begincheck> expone esto de forma clara (o eso esperamos):
 
   print         "10. El código normal se ejecuta en tiempo de ejecución.\n";
 
-  END { print   "16.   Y este cuento se ha acabado.\n" }
+  END { print   "16. Y este cuento se ha acabado.\n" }
   INIT { print  " 7. Los bloques INIT se ejecutan en orden FIFO antes del tiempo de ejecución.\n" }
   UNITCHECK {
-    print       " 4.   Y, por tanto, antes que los bloques CHECK.\n"
+    print       " 4. Y, por tanto, antes que los bloques CHECK.\n"
   }
-  CHECK { print " 6.   Esta es la sexta línea.\n" }
+  CHECK { print " 6. Esta es la sexta línea.\n" }
 
-  print         "11.   Por supuesto, se ejecuta por orden.\n";
+  print         "11. Por supuesto, se ejecuta por orden.\n";
 
   BEGIN { print " 1. Los bloques BEGIN se ejecutan en orden FIFO durante la compilación.\n" }
-  END { print   "15.   Lea perlmod para obtener más información.\n" }
+  END { print   "15. Lea perlmod para obtener más información.\n" }
   CHECK { print " 5. Los bloques CHECK se ejecutan en orden LIFO tras la compilación.\n" }
-  INIT { print  " 8.   Volvemos a ejecutar esto, ahora con el modificador -c de perl.\n" }
+  INIT { print  " 8. Volvemos a ejecutar esto, ahora con el modificador -c de perl.\n" }
 
-  print         "12.   Esto es lo contrario de código ofuscado.\n";
+  print         "12. Esto es lo contrario de código ofuscado.\n";
 
   END { print   "14. Los bloques END se ejecutan en orden LIFO al finalizar.\n" }
-  BEGIN { print " 2.   Así que esta línea será la segunda.\n" }
+  BEGIN { print " 2. Así que esta línea será la segunda.\n" }
   UNITCHECK {
-   print " 3. Los bloques UNITCHECK se ejecutan en orden LIFO tras compilar cada archivo.\n"
+          print " 3. Los bloques UNITCHECK se ejecutan en orden LIFO tras compilar cada archivo.\n"
   }
-  INIT { print  " 9.   Verá la diferencia inmediatamente.\n" }
+  INIT { print  " 9. Verá la diferencia inmediatamente.\n" }
 
-  print         "13.   Parece lioso, pero no lo es en realidad.\n";
+  print         "13. Parece lioso, pero no lo es en realidad.\n";
 
   __END__
 
@@ -384,7 +386,7 @@ El programa B<begincheck> expone esto de forma clara (o eso esperamos):
 X<class> X<clase> X<@ISA>
 
 No hay una sintaxis especial para clases en Perl, pero un paquete puede actuar
-como una clase si proporciona subrutinas que se comportan como métodos.   Un
+como una clase si proporciona subrutinas que se comportan como métodos. Un
 paquete así también pueden derivar alguno de sus métodos de otra clase
 (paquete) especificando el nombre de este paquete en su array global @ISA, que
 debe ser una variable global (no léxica) del paquete.
@@ -504,7 +506,7 @@ Las dos instrucciones
 
 difieren en dos aspectos. En el primer caso, si el nombre del módulo contiene
 el símbolo "::" (por ejemplo, C<Mi::Modulo>), dicho símbolo se traducirá
-como el separador de directorios habitual (generalmente "/").   En el segundo
+como el separador de directorios habitual (generalmente "/"). En el segundo
 caso no es así, y debe especificarse de forma literal. La otra diferencia
 consiste en que C<require> indica al compilador que se usa la sintaxis
 indirecta de objetos en relación a "MiModulo", de forma que las expresiones
@@ -519,13 +521,13 @@ subrutinas que están visibles incluso como operadores de lista o unarios para
 el resto del archivo actual. Pero no funcionará si usa C<require> en lugar de
 C<use>. Con C<require> puede producirse el siguiente problema:
 
-    require Cwd;		# hace Cwd:: accesible
+    require Cwd;		        # hace Cwd:: accesible
     $directorio = Cwd::getcwd();
 
-    use Cwd;			# importa nombres de Cwd::
+    use Cwd;			        # importa nombres de Cwd::
     $directorio = getcwd();
 
-    require Cwd;		# hace Cwd:: accesible
+    require Cwd;	         	# hace Cwd:: accesible
     $directorio= getcwd(); 		# vaya... no existe main::getcwd()
 
 En general se recomienda usar C<use Module ()> en lugar de C<require Module>,
@@ -554,7 +556,8 @@ todo.
 =head2 Crear módulos seguros para hilos de ejecución
 X<threadsafe> X<thread safe> X<seguro para hilos de ejecución>
 X<module, threadsafe> X<module, thread safe> X<seguro para hilos de ejecución>
-X<CLONE> X<CLONE_SKIP> X<thread> X<hilo de ejecución> X<threads> X<hilos de ejecución> X<ithread> X<hilo de ejecución de intérprete>
+X<CLONE> X<CLONE_SKIP> X<thread> X<hilo de ejecución> X<threads> 
+X<hilos de ejecución> X<ithread> X<hilo de ejecución de intérprete>
 
 En la versión 5.6.0 de Perl se agregó compatibilidad con un nuevo tipo de
 hilos de ejecución, denominado hilos de ejecución de intérprete
