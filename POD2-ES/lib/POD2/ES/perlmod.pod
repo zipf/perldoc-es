@@ -7,7 +7,7 @@ perlmod - Módulos Perl (paquetes y tablas de símbolos)
 =head1 DESCRIPCIÓN
 
 =head2 Paquetes
-X<package> X<paquete> X<namespace> X<espacio de nombres> X<variable, global> 
+X<package> X<paquete> X<namespace> X<espacio de nombres> X<variable, global>
 X<global, variable> X<global variable> X<variable global> X<global>
 
 Perl proporciona un mecanismo de espacios de nombres alternativos que evita
@@ -89,7 +89,7 @@ Vea L<perlsub> para obtener información sobre otras cuestiones relativas al
 información sobre los cierres.
 
 =head2 Tabla de símbolos
-X<symbol table> X<tabla de símbolos> X<stash> X<%::> X<%main::> X<typeglob> 
+X<symbol table> X<tabla de símbolos> X<stash> X<%::> X<%main::> X<typeglob>
 X<glob> X<alias>
 
 La tabla de símbolos de un paquete se almacena en el hash cuyo nombre es el
@@ -521,14 +521,14 @@ subrutinas que están visibles incluso como operadores de lista o unarios para
 el resto del archivo actual. Pero no funcionará si usa C<require> en lugar de
 C<use>. Con C<require> puede producirse el siguiente problema:
 
-    require Cwd;		        # hace Cwd:: accesible
+    require Cwd;                  # hace Cwd:: accesible
     $directorio = Cwd::getcwd();
 
-    use Cwd;			        # importa nombres de Cwd::
+    use Cwd;                      # importa nombres de Cwd::
     $directorio = getcwd();
 
-    require Cwd;	         	# hace Cwd:: accesible
-    $directorio= getcwd(); 		# vaya... no existe main::getcwd()
+    require Cwd;                  # hace Cwd:: accesible
+    $directorio= getcwd();        # vaya... no existe main::getcwd()
 
 En general se recomienda usar C<use Module ()> en lugar de C<require Module>,
 ya que determina la disponibilidad del módulo en tiempo de compilación, y no
