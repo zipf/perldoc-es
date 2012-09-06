@@ -14,6 +14,7 @@ my @EXCEPTIONS = qw(
     README.ko
     README.jp
     README.tw
+    perltoc.pod
 );
 #####################
 
