@@ -1,6 +1,6 @@
 =head1 NOMBRE
 
-perlclib - reemplazos internos para las funciones de la biblioteca estándar C
+perlclib - Sustitutos internos de funciones de la biblioteca estándar de C
 
 =head1 DESCRIPCIÓN
 
@@ -36,7 +36,7 @@ C<sv>, C<av>, C<hv>, etc. representan variables de sus tipos respectivos.
 
 =head2 Operaciones con archivos
 
-En lugar de las funciones de F<stdio.h> debe usar la capa de abstracción de Perl. En vez de los tipos C<FILE*>, tiene que manejar los tipos C<PerlIO*>.  No hay que olvidar que con la nueva capa de abstracción PerlIO, los tipos C<FILE*> pueden incluso estar no disponibles. Vea también la documentación C<perlapio> para obtener más información acerca de las siguientes funciones:
+En lugar de las funciones de F<stdio.h> debe usar la capa de abstracción de Perl. En lugar de tipos C<FILE*> debe manipular tipos C<PerlIO*>.  No hay que olvidar que con la nueva capa de abstracción PerlIO, los tipos C<FILE*> pueden incluso estar no disponibles. Vea también la documentación de C<perlapio> para obtener más información acerca de las siguientes funciones:
 
     En lugar de:                 Use:
 
@@ -44,47 +44,47 @@ En lugar de las funciones de F<stdio.h> debe usar la capa de abstracción de Per
     stdout                      PerlIO_stdout()
     stderr                      PerlIO_stderr()
 
-    fopen(fn, modo)             PerlIO_open(fn, modo)
-    freopen(fn, modo, flujo)    PerlIO_reopen(fn, modo, perlio) (obsoleta)
-    fflush(flujo)               PerlIO_flush(perlio)
-    fclose(flujo)               PerlIO_close(perlio)
+    fopen(fn, mode)             PerlIO_open(fn, mode)
+    freopen(fn, mode, stream)   PerlIO_reopen(fn, mode, perlio) (obsoleta)
+    fflush(stream)              PerlIO_flush(perlio)
+    fclose(stream)              PerlIO_close(perlio)
 
-=head2 Entrada y salida de archivos
+=head2 Entrada y salida de archivo
 
     En lugar de:                 Use:
 
-    fprintf(flujo, fmt, ...)    PerlIO_printf(perlio, fmt, ...)
+    fprintf(stream, fmt, ...)   PerlIO_printf(perlio, fmt, ...)
 
-    [f]getc(flujo)              PerlIO_getc(perlio)
-    [f]putc(flujo, n)           PerlIO_putc(perlio, n)
-    ungetc(n, flujo)            PerlIO_ungetc(perlio, n)
+    [f]getc(stream)             PerlIO_getc(perlio)
+    [f]putc(stream, n)          PerlIO_putc(perlio, n)
+    ungetc(n, stream)           PerlIO_ungetc(perlio, n)
 
 Nótese que los equivalentes de PerlIO C<fread> y C<fwrite> son ligeramente diferentes de sus homólogos de la biblioteca de C:
 
-    fread(p, tamaño, n, flujo)  PerlIO_read(perlio, búfer, númerobytes)
-    fwrite(p, tamaño, n, flujo) PerlIO_write(perlio, búfer, númerobytes)
+    fread(p, size, n, stream)   PerlIO_read(perlio, buf, numbytes)
+    fwrite(p, size, n, stream)  PerlIO_write(perlio, buf, numbytes)
 
-    fputs(s, flujo)             PerlIO_puts(perlio, s)
+    fputs(s, stream)            PerlIO_puts(perlio, s)
 
-No hay un equivalente a C<fgets>; uno debe usar en su lugar C<sv_gets>:
+No existe nada equivalente a C<fgets>; en su lugar, debe usar C<sv_gets>:
 
-    fgets(s, n, flujo)          sv_gets(sv, perlio, añadido)
+    fgets(s, n, stream)         sv_gets(sv, perlio, append)
 
-=head2 Posicionamiento en archivos
+=head2 Posición en archivo
 
     En lugar de:                 Use:
 
-    feof(flujo)                 PerlIO_eof(perlio)
-    fseek(flujo, n, desde)      PerlIO_seek(perlio, n, desde)
-    rewind(flujo)               PerlIO_rewind(perlio)
+    feof(stream)                PerlIO_eof(perlio)
+    fseek(stream, n, whence)    PerlIO_seek(perlio, n, whence)
+    rewind(stream)              PerlIO_rewind(perlio)
 
-    fgetpos(flujo, p)           PerlIO_getpos(perlio, sv)
-    fsetpos(flujo, p)           PerlIO_setpos(perlio, sv)
+    fgetpos(stream, p)          PerlIO_getpos(perlio, sv)
+    fsetpos(stream, p)          PerlIO_setpos(perlio, sv)
 
-    ferror(flujo)               PerlIO_error(perlio)
-    clearerr(flujo)             PerlIO_clearerr(perlio)
+    ferror(stream)              PerlIO_error(perlio)
+    clearerr(stream)            PerlIO_clearerr(perlio)
 
-=head2 Gestión de memoria y manejo de cadenas de caracteres
+=head2 Administración de memoria y manipulación de cadenas
 
     En lugar de:                 	Use:
 
@@ -93,15 +93,15 @@ No hay un equivalente a C<fgets>; uno debe usar en su lugar C<sv_gets>:
     p = realloc(p, n)           	Renew(p, n, t)
     memcpy(dst, src, n)         	Copy(src, dst, n, t)
     memmove(dst, src, n)        	Move(src, dst, n, t)
-    memcpy(dst, src, sizeof(t))         StructCopy(src, dst, t)
-    memset(dst, 0, n * sizeof(t))       Zero(dst, n, t)
+    memcpy(dst, src, sizeof(t))		StructCopy(src, dst, t)
+    memset(dst, 0, n * sizeof(t))	Zero(dst, n, t)
     memzero(dst, 0)			Zero(dst, n, char)
     free(p)             	        Safefree(p)
 
     strdup(p)                   savepv(p)
     strndup(p, n)               savepvn(p, n) (¡Eh, strndup no existe!)
 
-    strstr(grande, pequeño)     instr(grande, pequeño)
+    strstr(big, little)         instr(big, little)
     strcmp(s1, s2)              strLE(s1, s2) / strEQ(s1, s2) / strGT(s1,s2)
     strncmp(s1, s2, n)          strnNE(s1, s2, n) / strnEQ(s1, s2, n)
 
@@ -125,11 +125,11 @@ A veces, en lugar de poner a cero el montón asignado mediante el uso de Newxz()
     PoisonFree(dst, n, t)       igual a PoisonWith(dst, n, t, 0xEF)
     Poison(dst, n, t)           igual a PoisonFree(dst, n, t)
 
-=head2 Pruebas en clases de caracteres
+=head2 Pruebas de clases de caracteres
 
-Hay dos tipos de pruebas de clases de caracteres que Perl implementa: un tipo maneja C<char> y por tanto B<no> son compatibles con Unicode (y por lo tanto, obsoletas a menos que B<sepa> que debe usarlas) y el otro tipo maneja los C<UV> y conoce las propiedades Unicode. En la siguiente tabla, C<c> es un C<char> y C<u> es un punto de código Unicode.
+Hay dos tipos de pruebas de clases de caracteres que Perl implementa: un tipo maneja C<char> y por tanto B<no> son compatibles con Unicode (y por lo tanto, obsoletas a menos que B<sepa> que debe usarlas) y el otro tipo maneja los C<UV> y conoce las propiedades Unicode. En la tabla siguiente, C<c> es un C<char> y C<u> es un código de carácter Unicode.
 
-    En lugar de:                Use:            Pero mejor use:
+    En lugar de:                 Use:            O mejor:
 
     isalnum(c)                  isALNUM(c)      isALNUM_uni(u)
     isalpha(c)                  isALPHA(c)      isALPHA_uni(u)
@@ -165,7 +165,7 @@ En teoría C<Strtol> y C<Strtoul> pueden no estar definidas si la máquina que c
                                   PL_srand_called = TRUE; }
 
     exit(n)                     my_exit(n)
-    system(s)                   No. Mire en pp_system o use my_popen
+    system(s)                   No. Mire pp_system o use my_popen
 
     getenv(s)                   PerlEnv_getenv(s)
     setenv(s, val)              my_putenv(s, val)

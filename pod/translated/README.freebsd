@@ -10,7 +10,7 @@ En este documento se describen varias características de FreeBSD que afectan a 
 
 =head2 FreeBSD vuelca la memoria de trabajo desde readdir_r con ithreads
 
-Si Perl está configurado para usar ithreads, las llamadas a biblioteca reentrantes tendrán preferencia sobre las versiones no reentrantes.  En las versiones 4.5 y anteriores de FreeBSD existe un error en la función  C<readdir_r> que provocará un SEGV si se leen directorios grandes. Está disponible una revisión de FreeBSD libc (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=misc/30631)
+Si Perl está configurado para usar ithreads, las llamadas a biblioteca reentrantes tendrán preferencia sobre las versiones no reentrantes.  En las versiones 4.5 y anteriores de FreeBSD existe un error en la función  C<readdir_r> que provocará un SEGV si se leen directorios grandes. Está disponible un parche de FreeBSD libc (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=misc/30631)
 que se ha integrado en FreeBSD 4.6.
 
 =head2 En FreeBSD, $^X no siempre contiene una ruta de acceso completa
