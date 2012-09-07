@@ -338,7 +338,7 @@ Dentro de un bloque C<INIT> el valor de C<${^GLOBAL_PHASE}> será C<"INIT">.
 Los bloques C<CHECK> e C<INIT> en código compilado por C<require> y en
 funciones C<do> o C<eval> de cadena no se ejecutarán si están después del
 final de la fase principal de compilación; esto puede suponer un problema en
-el entorno mod_perl y otros entornos permanentes que usan esas funcionas para
+el entorno mod_perl y otros entornos permanentes que usan esas funciones para
 cargar código en tiempo de ejecución.
 
 Cuando se usan los modificadores B<-n> y B<-p> en Perl, C<BEGIN> y C<END>
@@ -521,14 +521,14 @@ subrutinas que están visibles incluso como operadores de lista o unarios para
 el resto del archivo actual. Pero no funcionará si usa C<require> en lugar de
 C<use>. Con C<require> puede producirse el siguiente problema:
 
-    require Cwd;                  # hace Cwd:: accesible
+    require Cwd;                   # hace Cwd:: accesible
     $directorio = Cwd::getcwd();
 
-    use Cwd;                      # importa nombres de Cwd::
+    use Cwd;                       # importa nombres de Cwd::
     $directorio = getcwd();
 
-    require Cwd;                  # hace Cwd:: accesible
-    $directorio= getcwd();        # vaya... no existe main::getcwd()
+    require Cwd;                   # hace Cwd:: accesible
+    $directorio= getcwd();         # vaya... no existe main::getcwd()
 
 En general se recomienda usar C<use Module ()> en lugar de C<require Module>,
 ya que determina la disponibilidad del módulo en tiempo de compilación, y no
@@ -556,7 +556,7 @@ todo.
 =head2 Crear módulos seguros para hilos de ejecución
 X<threadsafe> X<thread safe> X<seguro para hilos de ejecución>
 X<module, threadsafe> X<module, thread safe> X<seguro para hilos de ejecución>
-X<CLONE> X<CLONE_SKIP> X<thread> X<hilo de ejecución> X<threads> 
+X<CLONE> X<CLONE_SKIP> X<thread> X<hilo de ejecución> X<threads>
 X<hilos de ejecución> X<ithread> X<hilo de ejecución de intérprete>
 
 En la versión 5.6.0 de Perl se agregó compatibilidad con un nuevo tipo de
