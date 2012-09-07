@@ -21,7 +21,7 @@ X<variable, punctuation> X<variable, puntuación>
 Las variables cuyo nombre comienza con un guión bajo se solían asignar al paquete C<main>, pero en su día decidimos que para los desarrolladores de paquetes era más útil poder usar guiones bajos iniciales para indicar nombres de variables y métodos privados.
 Sin embargo, aún se fuerza la asignación al paquete C<main> de los nombres de variables y funciones con un único guión bajo (C<_>), como $_ y C<sub_>.  Vea también la sección "La sintaxis de los nombres de variables" de L<perlvar>.
 
-Las cadenas evaluadas con C<eval> se compilan en el paquete en que se compiló la función eval()  (sin embargo, las asignaciones a C<$SIG{}> suponen que el controlador de señal especificado está en el paquete C<main>.  Califique el nombre del controlador de señal si desea que esté en un paquete.)  En el archivo F<perldb.pl> de la biblioteca de Perl encontrará un ejemplo.  Inicialmente cambia al paquete C<DB>, de forma que el depurador no interfiera con las variables del programa que intenta depurar.  Sin embargo, en varios puntos cambia temporalmente al paquete C<main> para evaluar diversas expresiones en este contexto (o en el contexto en el que esté trabajando).  Vea L<perldebug>.
+Las cadenas evaluadas con C<eval> se compilan en el paquete en que se compiló la función eval()  (sin embargo, las asignaciones a C<$SIG{}> suponen que el controlador de señal especificado está en el paquete C<main>;  califique el nombre del controlador de señal si desea que esté en un paquete).  En el archivo F<perldb.pl> de la biblioteca de Perl encontrará un ejemplo.  Inicialmente cambia al paquete C<DB>, de forma que el depurador no interfiera con las variables del programa que intenta depurar.  Sin embargo, en varios puntos cambia temporalmente al paquete C<main> para evaluar diversas expresiones en este contexto (o en el contexto en el que esté trabajando).  Vea L<perldebug>.
 
 El símbolo especial C<__PACKAGE__> contiene el paquete actual, pero no puede usarse (fácilmente) para crear nombres de variables.
 
@@ -185,7 +185,7 @@ Los bloques C<INIT> se ejecutan justo antes de iniciar el tiempo de ejecución d
 
 Dentro de un bloque C<INIT> el valor de C<${^GLOBAL_PHASE}> será C<"INIT">.
 
-Los bloques C<CHECK> e C<INIT> en código compilado por C<require> y en funciones C<do> o C<eval> de cadena no se ejecutarán si están después del final de la fase principal de compilación; esto puede suponer un problema en el entorno mod_perl y otros entornos permanentes que usan esas funcionas para cargar código en tiempo de ejecución.
+Los bloques C<CHECK> e C<INIT> en código compilado por C<require> y en funciones C<do> o C<eval> de cadena no se ejecutarán si están después del final de la fase principal de compilación; esto puede suponer un problema en el entorno mod_perl y otros entornos permanentes que usan esas funciones para cargar código en tiempo de ejecución.
 
 Cuando se usan los modificadores B<-n> y B<-p> en Perl, C<BEGIN> y C<END> funcionan como lo harían en B<awk>, es decir, como un caso degenerado.
 Los bloques C<BEGIN> y C<CHECK> se ejecutan cuando se usa el modificador B<-c> para llevar a cabo únicamente una compilación de comprobación de la sintaxis, aunque no se ejecute el código principal.

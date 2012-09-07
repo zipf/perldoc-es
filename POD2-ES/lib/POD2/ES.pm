@@ -6,7 +6,7 @@ use open ':locale';
 use base 'Exporter';
 use base 'POD2::Base';
 
-our $VERSION = '5.16.1.01';
+our $VERSION = '5.16.1.02';
 
 our @EXPORT = qw(print_pod print_pods);
 
@@ -16,6 +16,7 @@ sub pod_info {{
     perlbook          => '5.16.1',
     perlboot          => '5.16.1',
     perlbot           => '5.16.1',
+    perlclib          => '5.16.1',
     perlcommunity     => '5.16.1',
     perldata          => '5.16.1',
     perldbmfilter     => '5.16.1',
@@ -24,9 +25,12 @@ sub pod_info {{
     perlfaq1          => '5.16.1',
     perlfaq2          => '5.16.1',
     perlfreebsd       => '5.16.1',
+    perlhacktut       => '5.16.1',
     perlhist          => '5.16.1',
     perlhurd          => '5.16.1',
     perlintro         => '5.16.1',
+    perlmod           => '5.16.1',
+    perlmodinstall    => '5.16.1',
     perlmroapi        => '5.16.1',
     perlnewmod        => '5.16.1',
     perlnumber        => '5.16.1',
