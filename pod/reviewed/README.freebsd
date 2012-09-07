@@ -1,21 +1,21 @@
-Puede leer este archivo en cualquier editor de texto (ver· algunos caracteres extraÒos, pero puede ignorarlos).  Est· escrito en formato POD (vea pod/perlpod.pod), un formato diseÒado especÌficamente para ser legible tal cual.
+Puede leer este archivo en cualquier editor de texto (ver√° algunos caracteres extra√±os, pero puede ignorarlos).  Est√° escrito en formato POD (vea pod/perlpod.pod), un formato dise√±ado espec√≠ficamente para ser legible tal cual.
 
 =head1 NOMBRE
 
-perlfreebsd - Perl versiÛn 5 en sistemas FreeBSD
+perlfreebsd - Perl versi√≥n 5 en sistemas FreeBSD
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-En este documento se describen varias caracterÌsticas de FreeBSD que afectan a la compilaciÛn y ejecuciÛn de Perl versiÛn 5 (en lo sucesivo, Perl).
+En este documento se describen varias caracter√≠sticas de FreeBSD que afectan a la compilaci√≥n y ejecuci√≥n de Perl versi√≥n 5 (en lo sucesivo, Perl).
 
 =head2 FreeBSD vuelca la memoria de trabajo desde readdir_r con ithreads
 
-Si Perl est· configurado para usar ithreads, las llamadas a biblioteca reentrantes tendr·n preferencia sobre las versiones no reentrantes.  En las versiones 4.5 y anteriores de FreeBSD existe un error en la funciÛn  C<readdir_r> que provocar· un SEGV si se leen directorios grandes. Est· disponible una revisiÛn de FreeBSD libc (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=misc/30631)
+Si Perl est√° configurado para usar ithreads, las llamadas a biblioteca reentrantes tendr√°n preferencia sobre las versiones no reentrantes.  En las versiones 4.5 y anteriores de FreeBSD existe un error en la funci√≥n  C<readdir_r> que provocar√° un SEGV si se leen directorios grandes. Est√° disponible un parche de FreeBSD libc (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=misc/30631)
 que se ha integrado en FreeBSD 4.6.
 
 =head2 En FreeBSD, $^X no siempre contiene una ruta de acceso completa
 
-Siempre que es posible, perl establece como valor de C<$^X> una ruta completa; para ello, consulta al sistema operativo. En FreeBSD, la ruta completa del intÈrprete perl se obtiene mediante C<sysctl> con C<KERN_PROC_PATHNAME>, si se admite; de lo contrario, se puede leer el vÌnculo simbÛlico F</proc/curproc/file>. En FreeBSD 7 y versiones anteriores habÌa un error que hacÌa que, a veces, cualquiera de las dos formas mencionadas de obtener la ruta devolviera un valor incorrecto (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=35703 ).
+Siempre que es posible, perl establece como valor de C<$^X> una ruta completa; para ello, consulta al sistema operativo. En FreeBSD, la ruta completa del int√©rprete perl se obtiene mediante C<sysctl> con C<KERN_PROC_PATHNAME>, si se admite; de lo contrario, se puede leer el v√≠nculo simb√≥lico F</proc/curproc/file>. En FreeBSD 7 y versiones anteriores hab√≠a un error que hac√≠a que, a veces, cualquiera de las dos formas mencionadas de obtener la ruta devolviera un valor incorrecto (vea http://www.freebsd.org/cgi/query-pr.cgi?pr=35703 ).
 En estos casos, perl vuelve al comportamiento anterior (utilizar el valor argv[0] de C como valor de C<$^X>).
 
 =head1 AUTOR
@@ -23,5 +23,5 @@ En estos casos, perl vuelve al comportamiento anterior (utilizar el valor argv[0
 Nicholas Clark <nick@ccl4.org>, con aportaciones de Slaven Rezic
 y Tim Bunce.
 
-Para notificar errores, actualizaciones o sugerencias, utilice la direcciÛn F<perlbug@perl.org>.
+Para notificar errores, actualizaciones o sugerencias, utilice la direcci√≥n F<perlbug@perl.org>.
 

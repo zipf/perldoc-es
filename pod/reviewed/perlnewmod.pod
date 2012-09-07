@@ -1,159 +1,159 @@
 =head1 NOMBRE
 
-perlnewmod - Preparar la distribuciÛn de un mÛdulo nuevo
+perlnewmod - Preparar la distribuci√≥n de un m√≥dulo nuevo
 
-=head1 DESCRIPCI”N
+=head1 DESCRIPCI√ìN
 
-Este documento ofrece algunas sugerencias para escribir mÛdulos Perl, preparar su distribuciÛn y publicarlos en CPAN.
+Este documento ofrece algunas sugerencias para escribir m√≥dulos Perl, preparar su distribuci√≥n y publicarlos en CPAN.
 
-Uno de los factores que hacen que Perl sea una herramienta realmente eficaz es el hecho de que los hackers que usan este lenguaje suelen compartir el cÛdigo que desarrollan al solucionar problemas para que sus camaradas no tengan que enfrentarse a esos mismos problemas.
+Uno de los factores que hacen que Perl sea una herramienta realmente eficaz es el hecho de que los hackers que usan este lenguaje suelen compartir el c√≥digo que desarrollan al solucionar problemas para que sus camaradas no tengan que enfrentarse a esos mismos problemas.
 
-La forma principal de compartir cÛdigo es abstraer la soluciÛn en un mÛdulo Perl. Si no sabe lo que es un mÛdulo Perl, este documento no le va a ser de gran ayuda. Adem·s, eso significa que a˙n no se est· beneficiando de una enorme cantidad de cÛdigo que puede resultarle muy ˙til; antes de leer este documento deberÌa leer L<perlmod>, L<perlmodlib> y L<perlmodinstall>.
+La forma principal de compartir c√≥digo es abstraer la soluci√≥n en un m√≥dulo Perl. Si no sabe lo que es un m√≥dulo Perl, este documento no le va a ser de gran ayuda. Adem√°s, eso significa que a√∫n no se est√° beneficiando de una enorme cantidad de c√≥digo que puede resultarle muy √∫til; antes de leer este documento deber√≠a leer L<perlmod>, L<perlmodlib> y L<perlmodinstall>.
 
-Si no existe ning˙n mÛdulo para lo que usted necesita, y ya se ha encargado de escribir el cÛdigo, serÌa un detalle que empaquetara la soluciÛn en un mÛdulo y lo subiera a CPAN para que otros programadores puedan usarlo.
+Si no existe ning√∫n m√≥dulo para lo que usted necesita, y ya se ha encargado de escribir el c√≥digo, ser√≠a un detalle que empaquetara la soluci√≥n en un m√≥dulo y lo subiera a CPAN para que otros programadores puedan usarlo.
 
 =head2 Aviso
 
-Vamos a centrarnos principalmente en mÛdulos de Perl puro, no en mÛdulos XS. Los mÛdulos XS se usan para otros fines y hay que tener en cuenta varias cosas antes de distribuirlos, como la popularidad de la biblioteca para la que se est· creando un enlace, la portabilidad a otros sistemas operativos, etc. Sin embargo, las notas sobre cÛmo preparar la parte Perl del mÛdulo y la forma de empaquetarlo para su distribuciÛn se aplican tanto a un mÛdulo XS como a un mÛdulo Perl puro.
+Vamos a centrarnos principalmente en m√≥dulos de Perl puro, no en m√≥dulos XS. Los m√≥dulos XS se usan para otros fines y hay que tener en cuenta varias cosas antes de distribuirlos, como la popularidad de la biblioteca para la que se est√° creando un enlace, la portabilidad a otros sistemas operativos, etc. Sin embargo, las notas sobre c√≥mo preparar la parte Perl del m√≥dulo y la forma de empaquetarlo para su distribuci√≥n se aplican tanto a un m√≥dulo XS como a un m√≥dulo Perl puro.
 
-=head2 øQuÈ se debe incluir en un mÛdulo?
+=head2 ¬øQu√© se debe incluir en un m√≥dulo?
 
-En un mÛdulo debe incluir cÛdigo que crea que puede ser de utilidad para otros programadores. Todo aquello que llene un vacÌo en la biblioteca com˙n y que alguien pueda usar directamente en sus programas. TambiÈn son buenos candidatos los fragmentos de cÛdigo que pueda aislar y extraer para conectarlos a otro componente.
+En un m√≥dulo debe incluir c√≥digo que crea que puede ser de utilidad para otros programadores. Todo aquello que llene un vac√≠o en la biblioteca com√∫n y que alguien pueda usar directamente en sus programas. Tambi√©n son buenos candidatos los fragmentos de c√≥digo que pueda aislar y extraer para conectarlos a otro componente.
 
-Veamos un ejemplo. Supongamos que ha escrito un programa que lee datos en un formato local y los almacena en un hash de hashes de Perl. DespuÈs los convierte en un ·rbol, recorre el ·rbol y canaliza cada nodo hacia un servidor Acme Transmogrifier.
+Veamos un ejemplo. Supongamos que ha escrito un programa que lee datos en un formato local y los almacena en un hash de hashes de Perl. Despu√©s los convierte en un √°rbol, recorre el √°rbol y canaliza cada nodo hacia un servidor Acme Transmogrifier.
 
-Hay muchos usuarios de Acme Transmogrifier y ha tenido que partir de cero para escribir el cÛdigo de comunicaciÛn del protocolo. Con toda seguridad, este cÛdigo podrÌa ser un buen candidato a mÛdulo. El nivel al que desee afrontar la tarea es cosa suya: puede que desee crear mÛdulos de nivel de protocolo an·logos a L<Net::SMTP|Net::SMTP> para comunicarse con mÛdulos de nivel superior an·logos a L<Mail::Send|Mail::Send>. La elecciÛn es suya, pero lo que est· claro es que debe publicar un mÛdulo para ese protocolo de servidor.
+Hay muchos usuarios de Acme Transmogrifier y ha tenido que partir de cero para escribir el c√≥digo de comunicaci√≥n del protocolo. Con toda seguridad, este c√≥digo podr√≠a ser un buen candidato a m√≥dulo. El nivel al que desee afrontar la tarea es cosa suya: puede que desee crear m√≥dulos de nivel de protocolo an√°logos a L<Net::SMTP|Net::SMTP> para comunicarse con m√≥dulos de nivel superior an√°logos a L<Mail::Send|Mail::Send>. La elecci√≥n es suya, pero lo que est√° claro es que debe publicar un m√≥dulo para ese protocolo de servidor.
 
-Nadie m·s en el planeta va a comunicarse con su formato de datos local, por lo que podemos ignorar esta parte. Pero, øquÈ pasa con el resto? Crear estructuras de ·rbol a partir de variables Perl y despuÈs recorrerlas es un problema de aplicaciÛn general interesante, y si nadie ha creado un mÛdulo que haga eso, es posible que desee convertir tambiÈn este cÛdigo en un mÛdulo.
+Nadie m√°s en el planeta va a comunicarse con su formato de datos local, por lo que podemos ignorar esta parte. Pero, ¬øqu√© pasa con el resto? Crear estructuras de √°rbol a partir de variables Perl y despu√©s recorrerlas es un problema de aplicaci√≥n general interesante, y si nadie ha creado un m√≥dulo que haga eso, es posible que desee convertir tambi√©n este c√≥digo en un m√≥dulo.
 
-Ya sabe quÈ partes podrÌa convertir en mÛdulos.
+Ya sabe qu√© partes podr√≠a convertir en m√≥dulos.
 Veamos la manera de hacerlo.
 
 =head2 Paso a paso: hacer los preparativos
 
-Antes de empezar a preparar el cÛdigo debe hacer algunas cosas.
+Antes de empezar a preparar el c√≥digo debe hacer algunas cosas.
 
 =over 3
 
-=item Examine cÛdigo de otros programadores
+=item Examine c√≥digo de otros programadores
 
-Analice minuciosamente unos cuantos mÛdulos para ver cÛmo los han programado. Es recomendable empezar con L<Text::Tabs|Text::Tabs> (un mÛdulo interesante y sencillo disponible en la biblioteca est·ndar) y despuÈs pasar a algo un poco m·s complejo, como L<File::Copy|File::Copy>.  C<WWW::Mechanize> y los mÛdulos C<Email::*> son buenos ejemplos de cÛdigo orientado a objetos.
+Analice minuciosamente unos cuantos m√≥dulos para ver c√≥mo los han programado. Es recomendable empezar con L<Text::Tabs|Text::Tabs> (un m√≥dulo interesante y sencillo disponible en la biblioteca est√°ndar) y despu√©s pasar a algo un poco m√°s complejo, como L<File::Copy|File::Copy>.  C<WWW::Mechanize> y los m√≥dulos C<Email::*> son buenos ejemplos de c√≥digo orientado a objetos.
 
-Estos mÛdulos le proporcionar·n una idea general de cÛmo se estructura y desarrolla un mÛdulo.
+Estos m√≥dulos le proporcionar√°n una idea general de c√≥mo se estructura y desarrolla un m√≥dulo.
 
-=item Aseg˙rese de que su contribuciÛn es novedosa
+=item Aseg√∫rese de que su contribuci√≥n es novedosa
 
-En CPAN hay muchos mÛdulos, por lo que es f·cil pasar por alto alguno similar al que pretende publicar. Investigue a fondo en L<http://search.cpan.org> y aseg˙rese de que no va a reinventar la rueda.
+En CPAN hay muchos m√≥dulos, por lo que es f√°cil pasar por alto alguno similar al que pretende publicar. Investigue a fondo en L<http://search.cpan.org> y aseg√∫rese de que no va a reinventar la rueda.
 
-=item Eval˙e la necesidad
+=item Eval√∫e la necesidad
 
-Es posible que su mÛdulo le encante y que crea que a todo el mundo le vendrÌa bien, pero puede ocurrir que a nadie le interese. Si no est· seguro de la demanda que puede tener su mÛdulo, puede sondear opiniones en el grupo de noticias C<comp.lang.perl.modules> o, como ˙ltimo recurso, preguntar en la lista sobre mÛdulos, escribiendo a la direcciÛn C<modules@perl.org>. Recuerde que se trata de una lista cerrada con un tiempo de respuesta largo; seguramente tardar·n en contestar.
+Es posible que su m√≥dulo le encante y que crea que a todo el mundo le vendr√≠a bien, pero puede ocurrir que a nadie le interese. Si no est√° seguro de la demanda que puede tener su m√≥dulo, puede sondear opiniones en el grupo de noticias C<comp.lang.perl.modules> o, como √∫ltimo recurso, preguntar en la lista sobre m√≥dulos, escribiendo a la direcci√≥n C<modules@perl.org>. Recuerde que se trata de una lista cerrada con un tiempo de respuesta largo; seguramente tardar√°n en contestar.
 
 =item Elija un nombre
 
-Los mÛdulos Perl incluidos en CPAN tienen una jerarquÌa de nomenclatura; procure respetarla. Encontrar· los detalles sobre esta nomenclatura en L<perlmodlib>. Puede examinar CPAN y la lista de mÛdulos para familiarizarse con ella. Como mÌnimo, debe recordar que las palabras que componen el nombre de un mÛdulo deben escribirse con la letra inicial may˙scula (Este::Programa) y que cada mÛdulo debe pertenecer a una categorÌa e incluir una descripciÛn de su propÛsito.
+Los m√≥dulos Perl incluidos en CPAN tienen una jerarqu√≠a de nomenclatura; procure respetarla. Encontrar√° los detalles sobre esta nomenclatura en L<perlmodlib>. Puede examinar CPAN y la lista de m√≥dulos para familiarizarse con ella. Como m√≠nimo, debe recordar que las palabras que componen el nombre de un m√≥dulo deben escribirse con la letra inicial may√∫scula (Este::Programa) y que cada m√≥dulo debe pertenecer a una categor√≠a e incluir una descripci√≥n de su prop√≥sito.
 
-=item CompruÈbelo otra vez
+=item Compru√©belo otra vez
 
-Y al hacerlo aseg˙rese de que no ha pasado por alto ning˙n mÛdulo similar al que va a escribir.
+Y al hacerlo aseg√∫rese de que no ha pasado por alto ning√∫n m√≥dulo similar al que va a escribir.
 
-Cuando se haya decidido por un nombre y estÈ seguro de que su mÛdulo es necesario y que actualmente no hay nada parecido disponible, puede empezar a programar.
+Cuando se haya decidido por un nombre y est√© seguro de que su m√≥dulo es necesario y que actualmente no hay nada parecido disponible, puede empezar a programar.
 
 =back
 
-=head2 Paso a paso: crear el mÛdulo
+=head2 Paso a paso: crear el m√≥dulo
 
 =over 3
 
 =item Para empezar, use F<module-starter> o F<h2xs>
 
-La utilidad F<module-starter> se distribuye como parte del paquete de CPAN L<Module::Starter|Module::Starter>.  Crea un directorio con el esqueleto de todos los archivos necesarios para iniciar un nuevo mÛdulo, seg˙n las "pr·cticas recomendadas" actuales para el desarrollo de mÛdulos, y se invoca desde la lÌnea de comandos de la siguiente manera:
+La utilidad F<module-starter> se distribuye como parte del paquete de CPAN L<Module::Starter|Module::Starter>.  Crea un directorio con el esqueleto de todos los archivos necesarios para iniciar un nuevo m√≥dulo, seg√∫n las "pr√°cticas recomendadas" actuales para el desarrollo de m√≥dulos, y se invoca desde la l√≠nea de comandos de la siguiente manera:
 
     module-starter --module=Foo::Bar \
        --author="Su nombre" --email=sunombre@cpan.org
 
-Si no desea instalar el paquete L<Module::Starter|Module::Starter> de CPAN, puede usar F<h2xs>, una herramienta m·s antigua que se creÛ originalmente para desarrollar mÛdulos XS, y que se incluye en la distribuciÛn de Perl. 
+Si no desea instalar el paquete L<Module::Starter|Module::Starter> de CPAN, puede usar F<h2xs>, una herramienta m√°s antigua que se cre√≥ originalmente para desarrollar m√≥dulos XS, y que se incluye en la distribuci√≥n de Perl. 
 
-Una invocaciÛn tÌpica de L<h2xs|h2xs> para crear un mÛdulo Perl puro es:
+Una invocaci√≥n t√≠pica de L<h2xs|h2xs> para crear un m√≥dulo Perl puro es:
 
     h2xs -AX --skip-exporter --use-new-tests -n Foo::Bar 
 
-El modificador C<-A> omite el cÛdigo de Autoloader, C<-X> omite los elementos XS,
-C<--skip-exporter> omite el cÛdigo de Exporter, C<--use-new-tests> configura un entorno de pruebas moderno y C<-n> especifica el nombre del mÛdulo.
+El modificador C<-A> omite el c√≥digo de Autoloader, C<-X> omite los elementos XS,
+C<--skip-exporter> omite el c√≥digo de Exporter, C<--use-new-tests> configura un entorno de pruebas moderno y C<-n> especifica el nombre del m√≥dulo.
 
 =item Use L<strict|strict> y L<warnings|warnings>
 
-Debe usar los pragmas warnings y strict en el cÛdigo de su mÛdulo, ya que no sabe en quÈ condiciones se va a usar. Adem·s, no querr· distribuir cÛdigo que no respete los pragmas warnings y strict, øno?
+Debe usar los pragmas warnings y strict en el c√≥digo de su m√≥dulo, ya que no sabe en qu√© condiciones se va a usar. Adem√°s, no querr√° distribuir c√≥digo que no respete los pragmas warnings y strict, ¬øno?
 
 =item Use L<Carp|Carp>
 
-El mÛdulo L<Carp|Carp> permite presentar los mensajes de error desde la perspectiva del cÛdigo que llama; esto permite indicar que el problema est· en el cÛdigo que hace la llamada y no en su mÛdulo. Por ejemplo, si escribe:
+El m√≥dulo L<Carp|Carp> permite presentar los mensajes de error desde la perspectiva del c√≥digo que llama; esto permite indicar que el problema est√° en el c√≥digo que hace la llamada y no en su m√≥dulo. Por ejemplo, si escribe:
 
     warn "No se ha especificado un nombre de host";
 
-el usuario ver· algo similar a:
+el usuario ver√° algo similar a:
 
     No se ha especificado un nombre de host en /usr/local/lib/perl5/site_perl/5.6.0/Net/Acme.pm
-    lÌnea 123.
+    l√≠nea 123.
 
-que parece indicar que su mÛdulo ha producido un error. En lugar de ello, tiene que atribuir la culpa al usuario y decir esto:
+que parece indicar que su m√≥dulo ha producido un error. En lugar de ello, tiene que atribuir la culpa al usuario y decir esto:
 
-    No se ha especificado ning˙n nombre de host en programa_deficiente, lÌnea 10.
+    No se ha especificado ning√∫n nombre de host en programa_deficiente, l√≠nea 10.
 
-Para ello debe usar L<Carp|Carp> y reemplazar C<warn> por C<carp>. Asimismo, si el cÛdigo incluye C<die>, debe usar C<croak> en su lugar. Sin embargo, mantenga las instrucciones C<warn> y C<die> necesarias para realizar comprobaciones (para los casos en que la culpa la tenga realmente su mÛdulo).
+Para ello debe usar L<Carp|Carp> y reemplazar C<warn> por C<carp>. Asimismo, si el c√≥digo incluye C<die>, debe usar C<croak> en su lugar. Sin embargo, mantenga las instrucciones C<warn> y C<die> necesarias para realizar comprobaciones (para los casos en que la culpa la tenga realmente su m√≥dulo).
 
 =item Use L<Exporter|Exporter> con sensatez
 
-L<Exporter|Exporter> ofrece una manera est·ndar de exportar sÌmbolos y subrutinas de su mÛdulo al espacio de nombres del autor de la llamada. Por ejemplo, C<use Net::Acme qw(&frob)> importar· la subrutina C<frob>.
+L<Exporter|Exporter> ofrece una manera est√°ndar de exportar s√≠mbolos y subrutinas de su m√≥dulo al espacio de nombres del autor de la llamada. Por ejemplo, C<use Net::Acme qw(&frob)> importar√° la subrutina C<frob>.
 
-La variable de paquete C<@EXPORT> determina quÈ sÌmbolos se exportan cuando en el cÛdigo que llama solo se usa C<use Net::Acme>. Es muy probable que nunca tenga que colocar nada aquÌ. Por otra parte, C<@EXPORT_OK> le permite especificar los sÌmbolos que desea exportar. Si desea exportar un conjunto de sÌmbolos, use C<%EXPORT_TAGS> y defina un conjunto de exportaciÛn definido. Encontrar· m·s detalles en L<Exporter>.
+La variable de paquete C<@EXPORT> determina qu√© s√≠mbolos se exportan cuando en el c√≥digo que llama solo se usa C<use Net::Acme>. Es muy probable que nunca tenga que colocar nada aqu√≠. Por otra parte, C<@EXPORT_OK> le permite especificar los s√≠mbolos que desea exportar. Si desea exportar un conjunto de s√≠mbolos, use C<%EXPORT_TAGS> y defina un conjunto de exportaci√≥n definido. Encontrar√° m√°s detalles en L<Exporter>.
 
-=item Use L<DocumentaciÛn en texto simple (Plain Old Documentation)|perlpod>
+=item Use L<Documentaci√≥n en texto simple (Plain Old Documentation)|perlpod>
 
-No habr· acabado el trabajo hasta que tenga listo el papeleo. Tiene que dedicar algo de tiempo a escribir la documentaciÛn del mÛdulo.
-C<module-starter> y C<h2xs> proporcionan un esqueleto que puede rellenar; si no conoce el formato POD y desea ver una introducciÛn, consulte L<perlpod>. Debe incluir una sinopsis adecuada que explique cÛmo se usa el mÛdulo, una descripciÛn, notas sobre la sintaxis y el propÛsito de las subrutinas o los mÈtodos individuales. Use los comentarios del cÛdigo Perl como notas de desarrollo y la documentaciÛn POD como notas para los usuarios finales.
+No habr√° acabado el trabajo hasta que tenga listo el papeleo. Tiene que dedicar algo de tiempo a escribir la documentaci√≥n del m√≥dulo.
+C<module-starter> y C<h2xs> proporcionan un esqueleto que puede rellenar; si no conoce el formato POD y desea ver una introducci√≥n, consulte L<perlpod>. Debe incluir una sinopsis adecuada que explique c√≥mo se usa el m√≥dulo, una descripci√≥n, notas sobre la sintaxis y el prop√≥sito de las subrutinas o los m√©todos individuales. Use los comentarios del c√≥digo Perl como notas de desarrollo y la documentaci√≥n POD como notas para los usuarios finales.
 
 =item Escriba pruebas
 
-Le animamos a crear pruebas autom·ticas del mÛdulo para asegurarse de que funciona de la manera prevista en las distintas plataformas compatibles con Perl; si sube el mÛdulo a CPAN, una legiÛn de comprobadores dedicar· tiempo a compilar su mÛdulo y enviarle los resultados de las pruebas. C<module-starter> y C<h2xs> proporcionan un entorno de pruebas que puede ampliar; no debe limitarse a comprobar que el mÛdulo se compila.
-L<Test::Simple|Test::Simple> y L<Test::More|Test::More> son buenos puntos de partida para escribir una baterÌa de pruebas.
+Le animamos a crear pruebas autom√°ticas del m√≥dulo para asegurarse de que funciona de la manera prevista en las distintas plataformas compatibles con Perl; si sube el m√≥dulo a CPAN, una legi√≥n de comprobadores dedicar√° tiempo a compilar su m√≥dulo y enviarle los resultados de las pruebas. C<module-starter> y C<h2xs> proporcionan un entorno de pruebas que puede ampliar; no debe limitarse a comprobar que el m√≥dulo se compila.
+L<Test::Simple|Test::Simple> y L<Test::More|Test::More> son buenos puntos de partida para escribir una bater√≠a de pruebas.
 
-=item Escriba el archivo README (L…AME)
+=item Escriba el archivo README (L√âAME)
 
-Si va a subir el mÛdulo a CPAN, los enanitos automatizados extraer·n el archivo README y lo colocar·n en su directorio de CPAN. TambiÈn aparecer· en los directorios principales F<by-module> (por mÛdulo) y F<by-category> (por categorÌa) si registra el mÛdulo en la lista de mÛdulos. Es recomendable incluir en el README una descripciÛn detallada de lo que hace el mÛdulo, asÌ como los cambios visibles para el usuario con respecto a la versiÛn anterior.
+Si va a subir el m√≥dulo a CPAN, los enanitos automatizados extraer√°n el archivo README y lo colocar√°n en su directorio de CPAN. Tambi√©n aparecer√° en los directorios principales F<by-module> (por m√≥dulo) y F<by-category> (por categor√≠a) si registra el m√≥dulo en la lista de m√≥dulos. Es recomendable incluir en el README una descripci√≥n detallada de lo que hace el m√≥dulo, as√≠ como los cambios visibles para el usuario con respecto a la versi√≥n anterior.
 
 =back
 
-=head2 Paso a paso: distribuir el mÛdulo
+=head2 Paso a paso: distribuir el m√≥dulo
 
 =over 3
 
 =item Obtenga un identificador de usuario de CPAN
 
-Para poder publicar mÛdulos en CPAN, un programador necesita un identificador de CPAN.  Visite C<http://pause.perl.org/>, seleccione "Request PAUSE Account" (Solicitar cuenta de PAUSE) y espere a que los administradores de PAUSE aprueben su solicitud.
+Para poder publicar m√≥dulos en CPAN, un programador necesita un identificador de CPAN.  Visite C<http://pause.perl.org/>, seleccione "Request PAUSE Account" (Solicitar cuenta de PAUSE) y espere a que los administradores de PAUSE aprueben su solicitud.
 
 =item C<perl Makefile.PL; make test; make dist>
 
-Una vez m·s, C<module-starter> (o C<h2xs>) se encarga de todo.
-Crea el archivo C<Makefile.PL> est·ndar que se usa para instalar los mÛdulos descargados, y que produce un archivo Makefile con un destino C<dist>.
+Una vez m√°s, C<module-starter> (o C<h2xs>) se encarga de todo.
+Crea el archivo C<Makefile.PL> est√°ndar que se usa para instalar los m√≥dulos descargados, y que produce un archivo Makefile con un destino C<dist>.
 
-Cuando se haya asegurado de que el mÛdulo supera todas las pruebas (algo que siempre es recomendable), puede ejecutar C<make dist> para que Makefile produzca un paquete tar del mÛdulo, listo para enviarlo a CPAN.
+Cuando se haya asegurado de que el m√≥dulo supera todas las pruebas (algo que siempre es recomendable), puede ejecutar C<make dist> para que Makefile produzca un paquete tar del m√≥dulo, listo para enviarlo a CPAN.
 
 =item Suba el paquete tar
 
-En el mensaje de correo electrÛnico que recibiÛ con el identificador de CPAN se incluyen instrucciones sobre cÛmo iniciar sesiÛn en PAUSE (Perl Authors Upload Server, el servidor de carga para autores de mÛdulos Perl). Puede usar los men˙s de PAUSE para subir el mÛdulo a CPAN.
+En el mensaje de correo electr√≥nico que recibi√≥ con el identificador de CPAN se incluyen instrucciones sobre c√≥mo iniciar sesi√≥n en PAUSE (Perl Authors Upload Server, el servidor de carga para autores de m√≥dulos Perl). Puede usar los men√∫s de PAUSE para subir el m√≥dulo a CPAN.
 
-=item Anuncie el mÛdulo en la lista de mÛdulos
+=item Anuncie el m√≥dulo en la lista de m√≥dulos
 
-Una vez subido, el mÛdulo se alojar· en su directorio de autor sin hacer ruido. Si desea conectarlo con el resto de CPAN, tendr· que registrar el espacio de nombres a travÈs de "Register Namespace" en PAUSE.  Una vez registrado, el mÛdulo figurar· en las listas I<by-module> y I<by-category> de CPAN.
+Una vez subido, el m√≥dulo se alojar√° en su directorio de autor sin hacer ruido. Si desea conectarlo con el resto de CPAN, tendr√° que registrar el espacio de nombres a trav√©s de "Register Namespace" en PAUSE.  Una vez registrado, el m√≥dulo figurar√° en las listas I<by-module> y I<by-category> de CPAN.
 
-=item Anuncie el mÛdulo en clpa
+=item Anuncie el m√≥dulo en clpa
 
-Si est· impaciente por dar a conocer su mÛdulo, publique un anuncio en el grupo de noticias moderado C<comp.lang.perl.announce>.
+Si est√° impaciente por dar a conocer su m√≥dulo, publique un anuncio en el grupo de noticias moderado C<comp.lang.perl.announce>.
 
 =item Corrija los errores
 
-Cuando empiece a acumular usuarios, tambiÈn empezar· a recibir informes de error. Con suerte, hasta le enviar·n archivos de revisiÛn. AsÌ probar· las mieles del mantenimiento de un proyecto de software...
+Cuando empiece a acumular usuarios, tambi√©n empezar√° a recibir informes de error. Con suerte, hasta le enviar√°n parches. As√≠ probar√° las mieles del mantenimiento de un proyecto de software...
 
 =back
 
@@ -163,9 +163,9 @@ Simon Cozens, C<simon@cpan.org>
 
 Actualizado por Kirrily "Skud" Robert, C<skud@cpan.org>
 
-=head1 VEA TAMBI…N
+=head1 VEA TAMBI√âN
 
 L<perlmod>, L<perlmodlib>, L<perlmodinstall>, L<h2xs>, L<strict>,
 L<Carp>, L<Exporter>, L<perlpod>, L<Test::Simple>, L<Test::More>
 L<ExtUtils::MakeMaker>, L<Module::Build>, L<Module::Starter>,
-http://www.cpan.org/ , y el tutorial de Ken Williams sobre cÛmo crear su propio mÛdulo en http://mathforum.org/~ken/perl_modules.html
+http://www.cpan.org/ , y el tutorial de Ken Williams sobre c√≥mo crear su propio m√≥dulo en http://mathforum.org/~ken/perl_modules.html
