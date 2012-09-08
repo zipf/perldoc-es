@@ -306,11 +306,11 @@ sub diff_file {
     
              my $diff = word_diff \$trans[$i], \$rev[$i], { STYLE => 'HTML' };
 
-            say $out "<span style='color:blue'><b>TRANSLATOR:</b></span></br>$trans[$i]</br>";
+            say $out "<span style='color:blue'><b>TRANSLATOR:</b></span><br />$trans[$i]<br />";
 
-            say $out "<span style='color:red'><b>REVIEWER:</b></span></br>$rev[$i]</br>";
+            say $out "<span style='color:red'><b>REVIEWER:</b></span><br />$rev[$i]<br />";
 
-            say $out "<span style='color:blueviolet'><b>CHANGES:</b></span></br>$diff</br>";        
+            say $out "<span style='color:blueviolet'><b>CHANGES:</b></span><br />$diff<br />";        
 
         }
 
