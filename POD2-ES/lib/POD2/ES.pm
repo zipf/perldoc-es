@@ -6,7 +6,7 @@ use open ':locale';
 use base 'Exporter';
 use base 'POD2::Base';
 
-our $VERSION = '5.16.1.02';
+our $VERSION = '5.16.1.03';
 
 our @EXPORT = qw(print_pod print_pods);
 
@@ -86,7 +86,7 @@ sub print_pod {
 
 # Print list of translated pods
 sub print_pods {
-    my $self = shift // __PACKAGE__;
+    my $self = @_ ?  shift : __PACKAGE__;
 
     $self->SUPER::print_pods;
 }
