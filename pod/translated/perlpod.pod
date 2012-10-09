@@ -1,0 +1,542 @@
+
+=for comment
+This document is in Pod format.  Para leerlo, use un formateador de Pod,
+como "perldoc perlpod".
+
+=head1 NOMBRE
+X<POD> X<plain old documentation>
+
+perlpod - el formato de documentación POD (sencilla, vieja, documentación)
+
+=head1 DESCRIPCIÓN
+
+Pod es un lenguaje de marcas fácil de usar, utilizado para escribir documentación de Perl, programas Perl y módulos Perl.
+
+Hay traductores disponibles para convertir Pod a varios formatos como texto simple, HTML, páginas de manual, y otros.
+
+El sistema de marcas Pod consiste en tres clases de párrafos: L<ordinario|/"Párrafo ordinario">, L<literal|/"Párrafo literal">, y L<comando|/"Párrafo comando">.
+
+
+=head2 Párrafo ordinario
+X<POD, ordinary paragraph> X<POD, párrafo ordinario>
+
+La mayoría de párrafos en su documentación serán bloques normales de texto, como este mismo.  Puede, sencillamente, escribir su texto sin usar ningún tipo de marcado, y usando solo una línea en blanco, antes y después del párrafo.  Cuándo vaya a ser formateado, lo será con un formateo mínimo, como por ejemplo, un ajuste mínimo del ancho del texto, quizás usando una fuente de caracteres proporcional, o incluso quedar justificado.
+
+Puede usar códigos de formateo en los párrafos ordinarios, como B<negrita>, I<itálica>, C<estilo código>, L<hiperenlaces|perlfaq>, y más.  Tales códigos están explicados en la sección "L<Códigos de formateo|/"Códigos de formateo">", más abajo.
+
+
+=head2 Párrafos literales
+X<POD, verbatim paragraph> X<verbatim> X<POD, párrafo literal> X<literal>
+
+Los párrafos literales se utilizan normalmente para presentar un bloque de código u otro texto que no requiere ningún análisis especial o formateo, y que no deben ser ajustados en anchura.
+
+Un párrafo literal se distingue por que su primer carácter es un espacio o un tabulador.  (Y generalmente, todas sus líneas empiezan con espacios y/o tabuladores).  Debe ser reproducido exactamente, asumiendo que los tabuladores definen posiciones de columnas en múltiplos de 8.  No hay códigos de formateo especiales, por lo que no puede usar la cursiva o cosas así.  Una \ significa una \, y nada más.
+
+
+=head2 Párrafo comando
+X<POD, command> X<POD, comando>
+
+Un párrafo de comando se utiliza para el tratamiento especial de bloques de texto, normalmente como cabeceras o elementos de listas.
+
+Todos los párrafos comando (que típicamente consisten en una única y larga línea) comienzan por "=", seguido por un identificador, seguido por un texto arbitrario que el comando puede utilizar si lo cree conveniente.  Actualmente se reconocen los siguientes comandos
+
+    =pod
+    =head1 Texto de encabezado
+    =head2 Texto de encabezado
+    =head3 Texto de encabezado
+    =head4 Texto de encabezado
+    =over nivel de sangrado
+    =item ítem
+    =back
+    =begin formato
+    =end formato
+    =for formato texto...
+    =encoding codificación
+    =cut
+
+Explicación detallada de cada uno de ellos:
+
+=over
+
+=item C<=head1 I<Texto de encabezado>>
+X<=head1> X<=head2> X<=head3> X<=head4>
+X<head1> X<head2> X<head3> X<head4>
+
+=item C<=head2 I<Texto de encabezado>>
+
+=item C<=head3 I<Texto de encabezado>>
+
+=item C<=head4 I<Texto de encabezado>>
+
+De "head1" a "head4" produce encabezados, siendo "head1" el de mayor nivel.  El texto que hay en el resto de este párrafo es el contenido del encabezado.  Por ejemplo:
+
+  =head2 Atributos de objeto
+
+El texto "Atributos de objeto" forma el encabezado.  (Note que "head3" y "head4" son adiciones recientes, no soportadas en traductores de Pod antiguos).  El texto en estos comandos de encabezamiento puede usar códigos de formateo, como se muestra aquí:
+
+  =head2 Valores posibles de C<$/>
+
+Tales comandos están explicados en la sección "L<Códigos de formateo|/"Códigos de formateo">", más abajo.
+
+=item C<=over I<nivel de sangrado>>
+X<=over> X<=item> X<=back> X<over> X<item> X<back>
+
+=item C<=item I<ítem...>>
+
+=item C<=back>
+
+"item", "over" y "back" requieren un poco más explicación: "=over" inicia una región específica para la generación de una lista que utiliza comandos "=item", o para sangrar (grupos de) párrafos normales.  Al final de su lista, use "=back" para terminarlo.  La opción I<nivel de sangrado> de "=over" indica el tamaño del sangrado, generalmente en B<em> (dónde
+un B<em> es el ancho de una "M" en la fuente de letras del documento) o en unidades aproximadamente comparables; si hay ninguna opción I<nivel de sangrado>, el valor predeterminado es cuatro.  (Y algunos formateadores puede incluso ignorar cualquier I<nivel de sangrado> indicado).  En el I<ítem> en C<=item I<ítem...>>, puede usar códigos de formateo, como se muestra aquí:
+
+  =item Usando C<$|> para controlar el Almacenamiento temporal
+
+Tales comandos están explicados en la sección "L<Códigos de formateo|/"Códigos de formateo">", más abajo.
+
+Note también que hay algunas reglas básicas para utilizar secciones "=over" ... "=back":
+
+=over
+
+=item *
+
+No use "=item" fuera de una sección "=over" ... "=back".
+
+=item *
+
+Lo primero que debe haber después de un comando "=over" debe ser un "=item", a menos que no deba existir ningún ítem en esa región "=over" ... "=back".
+
+=item *
+
+No ponga comandos "=headI<n>" dentro de una región "=over" ... "=back".
+
+=item *
+
+Y quizás lo más importante, mantener los elementos de forma coherente: poner todos los elementos como "=item *" para producir viñetas; o usar "=item 1.", "=item 2.", etc., para producir listas numeradas; o usar "=item foo", "=item bar", etc., para cosas que no parecen viñetas o números.
+
+Si empieza con viñetas o números, siga usándolos, ya que los formateadores se fijan en el tipo del primer "=item" para decidir cómo formatear la lista.
+
+=back
+
+=item C<=cut>
+X<=cut> X<cut>
+
+Para acabar un bloque Pod, use una línea en blanco, seguida por una línea que comience por "=cut", y una línea en blanco a continuación.  Este le permite a Perl (y a los formateadores Pod) saber dónde sigue el código Perl.  (La línea en blanco antes de "=cut" no es técnicamente necesario, sino que muchos procesadores Pod antiguos lo requieren).
+
+=item C<=pod>
+X<=pod> X<pod>
+
+El comando "=pod", por sí mismo, no hace mucho, pero le dice a Perl (y los formateadores Pod) que un bloque Pod empieza ahí.  Un bloque Pod comienza con I<cualquier> comando de párrafo, así que normalmente se usa un comando "=pod" cuando se quiere iniciar un bloque Pod con un párrafo ordinario o párrafo literal.  Por ejemplo:
+
+  =item stuff()
+
+  Esta función hace algo.
+
+  =cut
+
+  sub stuff {
+    ...
+  }
+
+  =pod
+
+  Recuerde comprobar su valor de retorno, como por ejemplo:
+
+    stuff() || die "¡No puedo hacer stuff!";
+
+  =cut
+
+=item C<=begin I<nombre de formato>>
+X<=begin> X<=end> X<=for> X<begin> X<end> X<for>
+
+=item C<=end I<nombre de formato>>
+
+=item C<=for I<nombre de formato> I<texto...>>
+
+C<for>, C<begin>, y C<end> le permitirá tener regiones de texto/código/datos que no son, generalmente, interpretados como texto Pod normal, si no que son pasados directamente a los formateadores particulares, o de alguna manera, indican que son especiales.  Un formateador que pueda usar ese formato usará esa región; sino, será completamente ignorada.
+
+Un comando "=begin I<nombre de formato>", algunos párrafos, y un comando "=end I<nombre de formato>", significa que texto/datos entre los dos es para los formateadores que entienden el formato especial llamado I<nombre de formato>.  Por ejemplo,
+
+  =begin html
+
+  <hr> <img src="thang.png">
+  <p> Este es un párrafo escrito en puro HTML </p>
+
+  =end html
+
+El comando "=for I<nombre de formato> I<texto...>" especifica que lo que sigue justo a continuación de este párrafo (comenzando a la derecha de I<nombre formato>) está en ese formato especial.  
+
+  =for html <hr> <img src="thang.png">
+  <p> Este es un párrafo escrito en puro HTML </p>
+
+Esto muestra lo mismo que la región anterior "=begin html" ... "=end html".
+
+Es decir, con "=for" solo puede tener un párrafo de texto (p. ej., el texto en "=foo objetivo texto..."), pero con "=begin objetivo" ... "=end objetivo", puede tener cualquier cantidad de contenido entre los dos.  (Note que debe seguir estando una línea en blanco después del comando "=begin" y una línea en blanco antes del comando "=end".
+
+A continuación algunos ejemplos de cómo usarlos:
+
+  =begin html
+
+  <br>Figura 1.<br><IMG SRC="figura1.png"><br>
+
+  =end html
+
+  =begin text
+
+    ---------------
+    |  foo        |
+    |        bar  |
+    ---------------
+
+  ^^^^ Figura 1. ^^^^
+
+  =end text
+
+Algunos de los nombres de formatos que los formateadores aceptan actualmente son "roff", "man", "latex", "tex", "text" y "html".  (Algunos formateadores tratarán a algunos de estos como sinónimos).
+
+Un nombre de formato "comment" se suele usar para tomar notas (presumiblemente usted mismo) que no aparecerá en ninguna versión formateada del documento Pod:
+
+  =for comment
+  ¡Asegúrese de que todas las opciones están documentadas!
+
+Algunos I<nombres de formato> requerirán un carácter de dos puntos por delante (como en C<"=for :nombre de formato">, o C<"=begin :nombre de formato" ... "=end :nombre de formato">), para señalar que el texto no son datos en crudo, sino que I<es> texto Pod (p. ej., posiblemente conteniendo códigos de formato) que no debe ser formateado de forma normal (p. ej., no puede ser un párrafo normal, sino que podría ser necesario ser formateado como pie de página).
+
+=item C<=encoding I<nombre de codificación>>
+X<=encoding> X<encoding> X<codificación>
+
+Este comando se utiliza para declarar la codificación de un documento.  La mayoría de usuarios no necesitarán esto; pero si su codificación no es US-ASCII o Latin-1, entonces ponga un comando C<=encoding I<nombre de codificación>> lo más cerca de la parte superior del documento, para que los formateadores sepan cómo decodificar el documento.  Para el I<nombre de codificación>, use un nombre reconocido por el módulo L<Encode::Supported>.  Ejemplos:
+
+  =encoding utf8
+
+  =encoding koi8-r
+  
+  =encoding ShiftJIS
+  
+  =encoding big5
+
+=back
+
+C<=encoding> afecta a todo el documento, y solo debe aparecer una vez.
+
+Y no lo olvide: cuándo use cualquier otro comando, éste tiene efecto hasta el fin del I<párrafo>, no de su línea.  Así, en los ejemplos anteriores, puede ver que cada comando necesita una línea en blanco después de él, para acabar su párrafo.
+
+Algunos ejemplos de listas:
+
+  =over
+
+  =item *
+
+  Primer elemento
+
+  =item *
+
+  Segundo elemento
+
+  =back
+
+  =over
+
+  =item Foo()
+
+  Descripción de la función Foo
+
+  =item Bar()
+
+  Descripción de la función Bar
+
+  =back
+
+
+=head2 Códigos de formateo
+X<POD, formatting code> X<formatting code> X<código de formateo>
+X<POD, interior sequence> X<interior sequence> X<secuencia interior>
+
+En párrafos normales y en algunos comandos de párrafo, se pueden usar distintos códigos de formateo (es decir,  "secuencias interiores"):
+
+=for comment
+ "secuencias interiores" es un término algo opaco.
+ En su lugar es preferible usar "códigos de formateo".
+
+=over
+
+=item C<IE<lt>textoE<gt>> -- texto en itálica
+X<I> X<< IZ<><> >> X<POD, formatting code, italic> X<italic> X<itálica>
+
+Usado para enfatizar ("C<ten IE<lt>cuidadoE<gt>>") y parámetros ("C<redo IE<lt>ETIQUETAE<gt>>")
+
+=item C<BE<lt>textoE<gt>> -- texto en negrita
+X<B> X<< BZ<><> >> X<POD, formatting code, bold> X<bold> X<negrita>
+
+Usado para opciones ("C<la opción BE<lt>-nE<gt>de perl>"), programas ("C<algunos sistemas ofrecen BE<lt>chfnE<gt> para eso>"), enfásis ("C<ten BE<lt>cuidadoE<gt>>"), y sobre todo, para destacar ("C<y esta característica es conocida como BE<lt>autovivificaciónE<gt>>").
+
+=item C<CE<lt>códigoE<gt>> -- texto de código
+X<C> X<< CZ<><> >> X<POD, formatting code, code> X<code> X<código>
+
+Renderiza código en una fuente monoespaciada, o da algunas indicaciones de que esto representa texto de programa ("C<CE<lt>gmtime($^T)E<gt>>") o cualquier cosa típica de la informática ("C<CE<lt>drwxr-xr-xE<gt>>").
+
+=item C<LE<lt>nombreE<gt>> -- un hiperenlace
+X<L> X<< LZ<><> >> X<POD, formatting code, hyperlink> X<hyperlink> X<hiperenlace>
+
+Hay varias sintaxis posibles, que se indican a continuación.  En las sintaxis indicadas, C<texto>, C<nombre>, y C<sección> no pueden contener los caracteres '/' y '|'; y cualquier '<' o '>' deben estar emparejados.
+
+=over
+
+=item *
+
+C<LE<lt>nombreE<gt>>
+
+Enlaza a una página de manual de Perl (p. ej., C<LE<lt>Net::PingE<gt>>).  Note que C<nombre> no tendría que contener espacios.  Esta sintaxis es también, ocasionalmente, utilizada para referencias a páginas de manual del Unix, como por ejemplo C<LE<lt>crontab(5)E<gt>>.
+
+=item *
+
+C<LE<lt>nombre/"sección"E<gt>> o C<LE<lt>nombre/secciónE<gt>>
+
+Enlaza a una sección en otra página del manual.  Por ej., C<LE<lt>perlsyn/"Bucles For"E<gt>>
+
+=item *
+
+C<LE<lt>/"sección"E<gt>> o C<LE<lt>/secciónE<gt>>
+
+Enlaza a una sección en esta página del manual.  Por ej., C<LE<lt>/"Métodos de objetos"E<gt>>
+
+=back
+
+Una sección comienza por el encabezado o el elemento indicado.  Por ejemplo, C<LE<lt>perlvar/$.E<gt>> o C<LE<lt>perlvar/"$."E<gt>> son enlaces a la sección que comienza por "C<=item $.>" en perlvar.  Y C<LE<lt>perlsyn/Bucles ForE<gt>> o C<LE<lt>perlsyn/"Bucles For"E<gt>> son enlaces a la sección que comienza por "C<=head2 Bucles For>" en perlsyn.
+
+Para controlar qué texto se utilizará para mostrar en el enlace, utilice "C<LE<lt>texto|...E<gt>>", como en:
+
+=over
+
+=item *
+
+C<LE<lt>texto|nombreE<gt>>
+
+Enlaza este texto a la página de manual.  P. ej., C<LE<lt>Mensajes de error de Perl|perldiagE<gt>>
+
+=item *
+
+C<LE<lt>texto|nombre/"sección"E<gt>> o C<LE<lt>texto|nombre/secciónE<gt>>
+
+Enlaza este texto a esa sección en esa página de manual.  Por ej., C<LE<lt>"if" postfijo|perlsyn/"Modificadores de instrucciones"E<gt>>
+
+=item *
+
+C<LE<lt>texto|/"sección"E<gt>> o C<LE<lt>texto|/secciónE<gt>> o C<LE<lt>texto|"sección"E<gt>>
+
+Enlaza este texto a esa sección en esta página de manual.  Por ej., C<LE<lt>Atributos diversos|/"Datos miembro"E<gt>>
+
+=back
+
+O puede enlazar a una página web:
+
+=over
+
+=item *
+
+C<LE<lt>esquema:...E<gt>>
+
+C<LE<lt>texto|esquema:...E<gt>>
+
+Enlaces a un URL absoluto.  Por ejemplo, C<LE<lt>http://www.perl.org/E<gt>> o C<LE<lt>La página principal de Perl|http://www.perl.org/E<gt>>.
+
+=back
+
+=item C<EE<lt>escapeE<gt>> -- un carácter de escape
+X<E> X<< EZ<><> >> X<POD, formatting code, escape> X<escape>
+
+Muy similar a las entidades HTML/XML C<&I<foo>;>:
+
+=over
+
+=item *
+
+C<EE<lt>ltE<gt>> -- un literal E<lt> (menor que)
+
+=item *
+
+C<EE<lt>gtE<gt>> -- un literal E<gt> (mayor que)
+
+=item *
+
+C<EE<lt>verbarE<gt>> -- un literal | (I<bar>ra I<ver>tical)
+
+=item *
+
+C<EE<lt>solE<gt>> -- un literal / (barra diagonal)
+
+Los cuatro anteriores son opcionales excepto dentro de otros códigos de formateo, notablemente con C<LE<lt>...E<gt>>, y cuándo es precedido por una letra mayúscula.
+
+=item *
+
+C<EE<lt>nombrehtmlE<gt>>
+
+Algunas nombres de entidades HTML no numéricas, como C<EE<lt>eacuteE<gt>>, significan lo mismo que C<&eacute;> en HTML, es decir, un letra e minúscula con un acento agudo.
+
+=item *
+
+C<EE<lt>númeroE<gt>>
+
+El carácter ASCII/Latin-1/Unicode con ese número.  Si lo precede un "0x" significa que I<número> está en hexadecimal, como en C<EE<lt>0x201EE<gt>>.  Si lo precede un "0x" significa que I<número> está en hexadecimal, como en C<EE<lt>0x201EE<gt>>.  Cualquier otro I<número> es interpretado que está en decimal, como en C<EE<lt>181E<gt>>.
+
+Tenga en cuenta que los formateadores Pod más antiguos quizás no reconozcan las secuencias de escapado numérico octal o hexadecimal, y que muchos formateadores no pueden mostrar caracteres por encima del 255 de forma correcta.  (Algunos formateadores pueden incluso tener que usar soluciones de compromiso para mostrar caracteres Latin-1, como en el caso de mostrar C<EE<lt>eacuteE<gt>> con una sencilla "e").
+
+=back
+
+=item C<FE<lt>nombrearchivoE<gt>> -- utilizado por nombres de archivo
+X<F> X<< FZ<><> >> X<POD, formatting code, filename> X<filename> X<nombre de archivo>
+
+Típicamente mostrado en itálica.  Ejemplo: "C<FE<lt>.cshrcE<gt>>"
+
+=item C<SE<lt>textoE<gt>> -- texto conteniendo espacio no divisible
+X<S> X<< SZ<><> >> X<POD, formatting code, non-breaking space> X<non-breaking space>
+X<espacio no divisible>
+
+Quiere decir que las palabras en I<texto> no deben quedar separadas en varias líneas.  Ejemplo: S<C<SE<lt>$x ? $y : $zE<gt>>>.
+
+=item C<XE<lt>nombre de un tópicoE<gt>> -- una entrada de índice
+X<X> X<< XZ<><> >> X<POD, formatting code, index entry> X<index entry>
+X<entrada de índice>
+
+Esto es ignorado por la mayor parte de los formateadores, pero algunos pueden utilizarlo para construir
+índices.  Siempre se muestra como una cadena de caracteres vacía.
+Ejemplo: C<XE<lt>URL absolutamente relativosE<gt>>
+
+=item C<ZE<lt>E<gt>> -- un código de formateo nulo (cero efectos)
+X<Z> X<< ZZ<><> >> X<POD, formatting code, null> X<null>
+
+Esto su usa muy raramente.  Es una manera, algunas veces, de escapar código EE<lt>...E<gt>.  Por ejemplo, en lugar de "C<NEE<lt>ltE<gt>3>" (para "NE<lt>3") puede escribirlo así "C<NZE<lt>E<gt>E<lt>3>" (el "ZE<lt>E<gt>" separa la "N" y el "E<lt>" por lo que no pueden ser considerados como parte de un código (ficticio) "NE<lt>...E<gt>").
+
+=for comment
+ Anteriormente a esto se le llamaba un "carácter de ancho cero".  Pero en 
+ la mayor parte de los modelos de analizadores, no se convierte en nada, siendo lo opuesto a interpretarlo
+ como si fuera un E<zwnj> o E<zwj>, que REALMENTE sí son caracteres de ancho cero.
+ Así que "ancho" y "carácter" son, exactamente, palabras inadecuadas.
+
+=back
+
+La mayor parte del tiempo, necesitará sólo un conjunto de ángulos para delimitar el comienzo y final de los códigos de formateo.  Aun así, a veces querrá poner un ángulo derecho real (un signo mayor-que, '>') dentro de un código de formateo.  Esto es algo particularmente común cuándo se usa un código de formateo para proporcionar un tipo de fuente de letras diferente para un trozo de código.  Cuando con todas las cosas en Perl, hay más de una manera de hacerlo.  Una manera es sencillamente escapar el ángulo de cierre utilizando un código C<E>:
+
+    C<$a E<lt>=E<gt> $b>
+
+Esto producirá: "C<$a E<lt>=E<gt> $b>"
+
+Un forma más legible, y quizás más "sencilla" es utilizar un conjunto alternativo de delimitadores que no requieran que sea escapado un simple ">".
+Se pueden usar dobles ángulos ("<<" y ">>") I<¡si y solo si hay espacio en blanco a continuación del delimitador de apertura y espacio en blanco antes del delimitar de cierre!> Por ejemplo, lo siguiente hará el truco: X<POD, formatting code, escaping with multiple brackets> X<escapando con múltiples ángulos>
+
+    C<< $a <=> $b >>
+
+De hecho, puede utilizar tantos ángulos repetidos como quiera, siempre y cuando tenga el mismo número de ellos en el delimitador de apertura y cierre, y asegurándose que hay espacio en blanco a continuación del último '<' del delimitador de apertura, e inmediatamente antes del primer '>' del delimitador de cierre.  (El espacio en blanco es ignorado).  Así que lo siguiente también funcionará: X<POD, formatting code, escaping with multiple brackets>
+
+    C<<< $a <=> $b >>>
+    C<<<<  $a <=> $b     >>>>
+
+Y todos ellos significan exactamente lo mismo que esto:
+
+    C<$a E<lt>=E<gt> $b>
+
+La forma de ángulos múltiples no afecta la interpretación de los contenidos del código de formateo, sólo a cómo tiene que acabar.  Eso quiere decir que los ejemplos anteriores son también exactamente iguales a esto:
+
+    C<< $a E<lt>=E<gt> $b >>
+
+Como un ejemplo más, esto significa que si quiere poner estos trozos de código en el estilo de (código) C<C>:
+
+    open(X, ">>cosa.dat") || die $!
+    $foo->bar();
+
+podría hacerlo así:
+
+    C<<< open(X, ">>cosa.dat") || die $! >>>
+    C<< $foo->bar(); >>
+
+que es, presumiblemente, más fácil de leer que de la forma anterior:
+
+    C<open(X, "E<gt>E<gt>cosa.dat") || die $!>
+    C<$foo-E<gt>bar();>
+
+Esto está actualmente soportado por pod2text (Pod::Text), pod2man (Pod::Man), y cualquier otro traductor pod2xxx o Pod::Xxxx que usen Pod::Parser 1.093 o superior, o Pod:Tree 1.02 o superior.
+
+=head2 La intención
+X<POD, intent of> X<intención de POD>
+
+La intención es la simplicidad de uso, no la fuerza de expresión.  Párrafos que se parecen a párrafos (formato bloque), de modo que destacan visualmente, y por lo tanto se podría ejecutar C<fmt> en ellos fácilmente para reformatearles (F7 en mi versión de B<vi>, o Esc Q en mi versión de B<emacs>).  Quería que el traductor siempre dejara sin tocar el C<'>, C<`> y C<">, en modo literal, por lo que podría llevarlo a un programa, desplazarlo cuatro espacios, e imprimirlo, hum, de forma literal.  Y, presumiblemente, en fuente monoespaciada.
+
+El formato Pod no es necesariamente suficiente para escribir un libro.  Pod es solo un medio para ofrecer un código común a prueba de idiotas para nroff, HTML, TeX y otros lenguajes de marcado, utilizados para la documentación en línea.  Existen traductores para B<pod2text>, B<pod2html>, B<pod2man> (este es para nroff(1) y troff(1)), B<pod2latex> y B<pod2fm>.  Hay muchos otros disponibles en CPAN.
+
+
+=head2 Incrustando Pod en módulos Perl
+X<POD, embedding> X<POD, incrustando>
+
+Puede incrustar documentación Pod en sus módulos y guiones Perl.
+Inicie su documentación con una línea vacía, una comando "=head1" al principio, y termine con un comando "=cut" y una línea vacía.  Perl ignorará el texto Pod.  Vea como ejemplo cualquiera de los módulos de biblioteca suministrados.  Si va a poner su Pod al final del archivo, y está utilizando una marca de corte __END__ o __DATA__, asegúrese que pone una línea vacía antes del primer comando Pod.
+
+  __END__
+
+  =head1 NOMBRE
+
+  Time::Local - calcula eficientemente la hora a partir de la hora local y GMT
+
+Sin esa línea vacía antes del "=head1", muchos traductores no habrían reconocido el "=head1" como marca de inicio de un bloque Pod.
+
+=head2 Pistas para escribir Pod
+
+=over
+
+=item *
+X<podchecker> X<POD, validating> X<POD, validando>
+
+El comando B<podchecker> sirve para comprobar la sintaxis Pod para descubrir errores y advertencias.  Por ejemplo, comprueba por la existencia de líneas completamente en blanco en los bloques Pod y por órdenes y códigos de formateo desconocidos.  Debería también pasar su documento a través de uno o más traductores y verificar el resultado, o imprimir el resultado y verificarlo.  Algunos de los problemas encontrados pueden ser errores en los traductores, que puede o no desear evitar.
+
+=item *
+
+Si está más familiarizado con la escritura en HTML que con la escritura en Pod, puede probar su destreza escribiendo documentación en simple HTML, y convertirla a Pod con el módulo experimental L<Pod::HTML2Pod|Pod::HTML2Pod> (disponible en CPAN), y mirar el código resultante.  El módulo experimental L<Pod::PXML|Pod::PXML> en CPAN también podría ser útil.
+
+=item *
+
+Muchos de los antiguos traductores Pod exigen que las líneas antes de cada comando Pod y después de cada comando Pod (¡incluido "=cut"!) sean líneas en blanco.  Teniendo algo como esto:
+
+ # - - - - - - - - - - - -
+ =item $petardo->boom()
+
+ Esto detona ruidosamente el objeto petardo.
+ =cut
+ sub boom {
+ ...
+
+... hará que los traductores Pod fallen completamente a la hora de ver el bloque Pod.
+
+En su lugar, teniéndolo de la siguiente manera:
+
+ # - - - - - - - - - - - -
+
+ =item $petardo->boom()
+
+ Esto detona ruidosamente el objeto petardo.
+
+ =cut
+
+ sub boom {
+ ...
+
+=item *
+
+Algunos traductores Pod antiguos requieren que los párrafos (incluidos los párrafos de comandos como "=head2 Funciones") estén separados I<completamente> por líneas vacías.  Si tiene una línea aparentemente vacía con algunos espacios en ella, podría no contar como un separador para los traductores, y eso podría causar un formateo extraño.
+
+=item *
+
+Traductores antiguos pueden agregar texto alrededor de un enlace LE<lt>E<gt>, por lo que C<LE<lt>Foo::BarE<gt>> puede convertirse en "la página de manual de Foo::Bar", por ejemplo.
+Así que no debería escribir cosas como C<la documentación LE<lt>fooE<gt>>, si desea que el documento traducido sea leído de forma sensata.
+En su lugar, escriba C<la documentación LE<lt>Foo::Bar|Foo::BarE<gt>> o C<LE<lt>la documentación Foo::Bar|Foo::Bar<gt>>, para controlar el modo en que aparece el enlace.
+
+=item *
+
+Sobrepasar la columna 70ª en un bloque literal podría provocar un ajuste sin miramientos por parte de algunos formateadores.
+
+=back
+
+=head1 VEA TAMBIÉN
+
+L<perlpodspec>, L<perlsyn/"POD: Documentación incrustada">, L<perlnewmod>, L<perldoc>, L<pod2html>, L<pod2man>, L<podchecker>.
+
+=head1 AUTOR
+
+Larry Wall, Sean M. Burke
+
+=cut
