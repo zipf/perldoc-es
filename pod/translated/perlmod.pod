@@ -21,8 +21,7 @@ X<variable, puntuación>
 Las variables que comienzan con un subrayado se suelen almacenar en el paquete main, pero hemos decidido que era más útil para los desarrolladores de paquetes ser capaces de usar subrayados al inicio para indicar nombres de variables y métodos privados.
 Sin embargo, los nombres de variables y funciones cuyo nombre contiene un único símbolo C<_> como $_ y C<sub _> se almacenan a la fuerza en el paquete C<main>.  Consulte también L<perlvar/"The Syntax of Variable Names">.
 
-Las cadenas C<eval>uadas se compilan en el paquete en que se compiló la función eval().  (Las asignaciones a C<$SIG{}>, sin embargo, asumen que el gestor de señal especificado está en el paquete C<main>.  Cualifique el nombre del gestor de señal si desea que esté en un paquete.)  Consulte el documento F<perldb.pl> para disponer de un ejemplo en la librería de Perl.  It initially switches
-to the C<DB> package so that the debugger doesn't interfere with variables
+Las cadenas C<eval>uadas se compilan en el paquete en que se compiló la función eval().  (Las asignaciones a C<$SIG{}>, sin embargo, asumen que el gestor de señal especificado está en el paquete C<main>.  Cualifique el nombre del gestor de señal si desea que esté en un paquete.)  Consulte el documento F<perldb.pl> para disponer de un ejemplo en la librería de Perl.  It initially switches to the C<DB> package so	 that the debugger doesn't interfere with variables
 in the program you are trying to debug.  En varios puntos, sin embargo, cambia temporalmente al paquete C<main> para evaluar varias expresiones en este contexto (o en el contexto en el que esté trabajando).  Vea L<perldebug>.
 
 El símbolo especial C<__PACKAGE__> contiene el paquete actual, pero no puede usarse (fácilmente) para construir nombres de variables.
@@ -67,8 +66,7 @@ C<*foo = *bar> hace que los mismos tipos globales sean sinónimos, mientras que 
         print $foo;      # imprime '1'!
     }
 
-No imprimiría '1' porque C<$foo> mantiene una referencia a la variable I<original>
-C<$bar> original. La que fue reemplazada por C<local()> y que será restaurada cuando finalice el bloque. Ya que las variables se acceden mediante typeglob, puede usar C<*foo = *bar> para crear un alias que pueda ser localizado. (Pero tenga en cuenta que esto significa que no puede disponer de C<@foo> y C<@bar> separadas, etc.)
+No imprimiría '1' porque C<$foo> mantiene una referencia a la variable I<original> C<$bar> original. La que fue reemplazada por C<local()> y que será restaurada cuando finalice el bloque. Ya que las variables se acceden mediante typeglob, puede usar C<*foo = *bar> para crear un alias que pueda ser localizado. (Pero tenga en cuenta que esto significa que no puede disponer de C<@foo> y C<@bar> separadas, etc.)
 
 Lo que hace que todo esto sea importante es que el módulo Exporter usa alias de expansión como el mecanismo de importación/exportación. El hecho de poder localizar adecuadamente una variable exportada de un módulo depende de cómo se exportó:
 
@@ -176,8 +174,7 @@ Dentro de un bloque C<END> el valor de C<${^GLOBAL_PHASE}> es C<"END">.
 
 Los bloques C<UNITCHECK>, C<CHECK> y C<INIT> son útiles para capturar la transición entre la fase de compilación y de ejecución del programa principal.
 
-C<UNITCHECK> blocks are run just after the unit which defined them has
-been compiled.  El archivo del programa principal y cada módulo que carga son unidades de compilación, como lo son las cadenas C<eval>, código compilado usando la construcción C<(?{ })> en una expresión regular, llamadas a C<do FILE>, C<require FILE> y código tras la opción C<-e> en la línea de comando.
+C<UNITCHECK> blocks are run just after the unit which defined them has been compiled.  El archivo del programa principal y cada módulo que carga son unidades de compilación, como lo son las cadenas C<eval>, código compilado usando la construcción C<(?{ })> en una expresión regular, llamadas a C<do FILE>, C<require FILE> y código tras la opción C<-e> en la línea de comando.
 
 Los bloques de código C<BEGIN> y C<UNITCHECK> no están directamente relacionados con la fase del intérprete.  Puede crearse y ejecutarse durante cualquier fase.
 
@@ -371,5 +368,4 @@ Al igual que C<CLONE>, C<CLONE_SKIP> se llama actualmente sin parámetros más q
 
 =head1 VEA TAMBIÉN
 
-Consulte L<perlmodlib> para cuestiones de estilo general relacionadas con la construcción de módulos y clases en Perl, así como descripciones de librería estándar y CPAN; L<Exporter> para conocer cómo funciona el mecanismo estándar de exportación/importación; L<perlootut> y L<perlobj> para obtener información detallada sobre creación de clases; L<perlobj> como documento básico sobre objetos; L<perlsub> para cuestiones relacionadas con funciones y ámbito y
-L<perlxstut> y L<perlguts> para disponer de más detalles sobre la escritura de módulos de extensión.
+Consulte L<perlmodlib> para cuestiones de estilo general relacionadas con la construcción de módulos y clases en Perl, así como descripciones de librería estándar y CPAN; L<Exporter> para conocer cómo funciona el mecanismo estándar de exportación/importación; L<perlootut> y L<perlobj> para obtener información detallada sobre creación de clases; L<perlobj> como documento básico sobre objetos; L<perlsub> para cuestiones relacionadas con funciones y ámbito y L<perlxstut> y L<perlguts> para disponer de más detalles sobre la escritura de módulos de extensión.
