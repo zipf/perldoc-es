@@ -9,19 +9,19 @@ Esta página describe la sintaxis de las expresiones regulares en Perl.
 
 Si no ha utilizado expresiones regulares antes, una introducción rápida está disponible en L<perlrequick>, y un cursillo de introducción mayor está disponible en L<perlretut>.
 
-Para tener una referencia sobre cómo las expresiones regulares se utilizan en operaciones de búsqueda, además de varios ejemplos de lo mismo, vea las discusiones sobre C<m//> C<s///>, C<qr//> y C<??> en L<perlop/"Operadores Regexp Entrecomillados">.
+Para tener una referencia sobre cómo las expresiones regulares se utilizan en operaciones de coincidencia, además de varios ejemplos de lo mismo, vea las discusiones sobre C<m//> C<s///>, C<qr//> y C<??> en L<perlop/"Operadores Regexp Entrecomillados">.
 
 
 =head2 Modificadores
 
-Las operaciones de coincidencia pueden tener varios modificadores.  Los modificadores que se relacionan con la interpretación de la expresión regular del interior se enumeran a continuación.  Modificadores que alteran la forma en que una expresión regular es utilizada por Perl se detallan en L<perlop/"Operadores Regexp Entrecomillados"> y L<perlop/"Detalles sangrientos del análisis de las construcciones entrecomilladas">.
+Las operaciones de coincidencia pueden tener varios modificadores.  Los modificadores que se relacionan con la interpretación del interior de la expresión regular se enumeran a continuación.  Modificadores que alteran la forma en que una expresión regular es utilizada por Perl se detallan en L<perlop/"Operadores Regexp Entrecomillados"> y L<perlop/"Detalles sangrientos del análisis de las construcciones entrecomilladas">.
 
 =over 4
 
 =item m
 X</m> X<regex, multiline> X<regexp, multiline> X<regular expression, multiline> X<regex, multilínea> X<expresión regular, multilínea>
 
-Trata a la cadena como un conjunto de varias líneas.  Es decir, cambia "^" y "$" de coincidir con el inicio y el final de la cadena a coincidir con el inicio y el final de cualquier línea en cualquier lugar dentro de la cadena.
+Trata a la cadena como un conjunto de múltiples líneas.  Es decir, cambia el significado de "^" y "$" de coincidir con el inicio y el final de la cadena a coincidir con el inicio y el final de cualquier línea en cualquier lugar dentro de la cadena.
 
 =item s
 X</s> X<regex, single-line> X<regexp, single-line> X<regular expression, single-line> X<regex, una línea> X<expresión regular, una línea>
@@ -35,7 +35,7 @@ X</i> X<regex, case-insensitive> X<regexp, case-insensitive> X<regular expressio
 
 Hace coincidencia de patrones sin importar si son mayúsculas o minúsculas.
 
-Si están activas las reglas de coincidencia local, el mapeo de caja se toma de la configuración local actual para los puntos de código menores que 255, y de las reglas Unicode para los puntos de código superiores.  Sin embargo, las coincidencia que podrían cruzar los márgenes de las reglas Unicode/no-Unicode (ordinales 255/256) no tendrán éxito.  Vea L<perllocale>.
+Si están activas las reglas de coincidencia local, el mapeo de caja se toma de la configuración local actual para los puntos de código menores que 255, y de las reglas Unicode para los puntos de código superiores.  Sin embargo, las coincidencias que podrían cruzar los márgenes de las reglas Unicode/no-Unicode (ordinales 255/256) no tendrán éxito.  Vea L<perllocale>.
 
 Hay una serie de caracteres Unicode que coinciden con múltiples caracteres con C</i> activado.  Por ejemplo, C<LATIN SMALL LIGATURE FI> debe coincidir con la secuencia C<fi>.  Perl no es capaz, actualmente, de hacer esto cuando los grupos de caracteres están en el patrón y se dividen en agrupaciones, o cuando uno o más de ellos se han cuantificado.  Por lo tanto
 
@@ -43,7 +43,7 @@ Hay una serie de caracteres Unicode que coinciden con múltiples caracteres con 
  "\N{LATIN SMALL LIGATURE FI}" =~ /[fi][fi]/i;    # ¡No coincide!
  "\N{LATIN SMALL LIGATURE FI}" =~ /fi*/i;         # ¡No coincide!
 
- # Lo siguiente no coincide, y no está claro que contendrá $1 y $2
+ # Lo siguiente no coincide, y no está claro qué contendrá $1 y $2
  # ¡Incluso si ya lo ha intentado!
  "\N{LATIN SMALL LIGATURE FI}" =~ /(f)(i)/i;      # ¡No coincide!
 
@@ -77,7 +77,7 @@ A diferencia de i, m, s y x, estos dos indicadores afectan a la forma en que se 
 =item a, d, l y u
 X</a> X</d> X</l> X</u>
 
-Estos modificadores, todos nuevos en 5,14, afectan a la semántica del conjunto de caracteres (Unicode, etc.) que se utiliza, como se describe más abajo en L</Modificadores del conjunto de caracteres>.
+Estos modificadores, todos nuevos en 5,14, afectan a la semántica del conjunto de caracteres (Unicode, etc.) son descritos más abajo en L</Modificadores del conjunto de caracteres>.
 
 =back
 
@@ -90,7 +90,7 @@ X</x>
 
 =head3 Modificadores del conjunto de caracteres
 
-C</d>, C</u>, C</a>, y C</l>, disponibles a partir de 5.14, son llamados modificadores del conjunto de caracteres; afectan a la semántica del conjunto de caracteres utilizado por la expresión regular.
+C</d>, C</u>, C</a> y C</l>, disponibles a partir de 5.14, son llamados modificadores del conjunto de caracteres; afectan a la semántica del conjunto de caracteres utilizado por la expresión regular.
 
 Los modificadores C</d>, C</u> y C</l> no serán, probablemente, de gran utilidad para usted, y por lo tanto no necesita preocuparse mucho acerca de ellos.  Existen para uso interno de Perl, de modo que las estructuras complejas de datos de expresiones regulares pueden ser serializadas automáticamente y más tarde reconstituidas exactamente, incluyendo todos sus matices.  Pero, ya que Perl no puede guardar un secreto, y puede haber casos excepcionales en los que sean útiles, se describen aquí.
 
@@ -110,19 +110,19 @@ Los modificadores C</l> y C</u> se seleccionan automáticamente para las expresi
 
  s/foo/\Ubar/il
 
-coincidirá con "foo" usando las reglas de la configuración regional para la coincidencia entre las mayúsculas y minúsculas, pero el C</l> no afecta a cómo funciona C<\U>.  Lo más probable es que desee que los dos usen las reglas de la configuración regional.  Para ello, compile la expresión regular dentro del ámbito de C<use locale>.  De manera implícita, esto añade C</l> y aplica las reglas de configuración regional para C<\U>.   La lección es usar C<use locale> y no poner explícitamente C</l>.
+coincidirá con "foo" usando las reglas de la configuración regional para una coincidencia independiente de las mayúsculas y minúsculas, pero el C</l> no afecta a cómo funciona C<\U>.  Lo más probable es que desee que los dos usen las reglas de la configuración regional.  Para ello, compile la expresión regular dentro del ámbito de C<use locale>.  De manera implícita, esto añade C</l> y aplica las reglas de configuración regional para C<\U>.   La lección es usar C<use locale> y no poner explícitamente C</l>.
 
 De manera similar, sería mejor utilizar C<use feature 'unicode_strings'> en lugar de,
 
  s/foo/\Lbar/iu
 
-para que se apliquen las reglas Unicode, como hacía C<\L> en el primer caso (pero no necesariamente en el último caso) también usaría las reglas Unicode.
+para que se apliquen reglas Unicode, igual a como C<\L> también usaría reglas Unicode en un primer caso (pero no necesariamente en el último).
 
 Siguen más detalles sobre cada uno de los modificadores.  Lo más probable es que no necesite saber estos detalles para C</l>, C</u> y C</d>, y puede saltar directamente a L<E<sol>a|/E<sol>a (y E<sol>aa)>.
 
 =head4 /l
 
-significa que hay que usar las reglas regionales actuales (vea L<perllocale>) en la coincidencia de patrones.  Por ejemplo, C<\w> coincidirá con los caracteres "palabra" de esa localidad, y la insensibilidad al tamaño de caja C<"/i"> coincidirá de acuerdo a las normas regionales de plegado de caja.  La regla regional utilizada será la vigente en el momento de la ejecución de la coincidencia de patrón.  Ésta puede no ser la misma que la configuración regional en tiempo de compilación, y pueden diferir de una coincidencia a otra, si hay una llamada a la L<función setlocale()|perllocale/La función setlocale>.
+significa que hay que usar las reglas regionales en vigor (vea L<perllocale>) en la coincidencia de patrones.  Por ejemplo, C<\w> coincidirá con los caracteres "palabra" de esa configuración regional, y la insensibilidad al tamaño de caja C<"/i"> coincidirá de acuerdo a las normas regionales de plegado de caja.  La regla regional utilizada será la vigente en el momento de la ejecución de la coincidencia de patrón.  Ésta puede no ser la misma que la configuración regional en tiempo de compilación, y pueden diferir de una coincidencia a otra, si hay una llamada a la L<función setlocale()|perllocale/La función setlocale>.
 
 Perl sólo soporta reglas regionales de bytes simples.  Esto significa que los puntos de código por encima de 255 se consideran como Unicode sin importar qué configuración regional esté en vigor.
 Según las normas Unicode, hay unos pocos casos que cruzan el límite 255/256 de las coincidencias de mayúsculas y minúsculas.  Éstos no se permiten bajo C</l>.  Por ejemplo, 0xFF (en plataformas ASCII) no coincide con el carácter 0x178, C<LATIN CAPITAL LETTER Y WITH DIAERESIS> -sin tener en cuenta el tamaño de caja-, porque 0xFF quizás no sea C<LATIN SMALL LETTER Y WITH DIAERESIS> en la configuración regional actual, y Perl no tiene manera de saber si ese carácter incluso existe en la configuración regional, y mucho menos qué código de carácter es.
@@ -135,18 +135,18 @@ X</l>
 significa que use las reglas Unicode en la coincidencia de patrones.  En las plataformas ASCII, esto significa que los códigos de carácter entre 128 y 255 se toman como si fueran Latin-1 (ISO-8859-1) (que son los mismos que en Unicode).
 (De otra forma Perl considera sus significados como indefinidos).  Así, con este modificador, la plataforma ASCII se convierte de forma efectiva en una plataforma Unicode; y por lo tanto, por ejemplo, C<\w> coincidirá con cualquiera de los más de 100 000 caracteres en Unicode que pueden formar parte de una "palabra".
 
-A diferencia de la mayoría de las configuraciones regionales, que son específicas de una pareja idioma/país, Unicode clasifica todos los caracteres que son letras, I<en cualquier parte> del mundo, como C<\w>.  Por ejemplo, tu configuración regional no pensaría que C<LATIN SMALL LETTER ETH> es una letra (a menos que usted hable de Islandés), pero Unicode sí.  Del mismo modo, todos los caracteres que son dígitos decimales en algún lugar del mundo coincidirán con C<\d>,lo que significa que son cientos, no 10, de posibles coincidencias.  Y algunas de esas cifras se parecen a algunos de los 10 dígitos ASCII, pero significan un número diferente, por lo que un ser humano podría pensar en un número con una cantidad diferente de lo que realmente es.  Por ejemplo, C<BENGALI DIGIT FOUR> (U+09EA) se parece mucho a una C<ASCII DIGIT EIGHT> (U+0038).  Y, C<\d+>, puede coincidir con cadenas de dígitos que son una mezcla de diferentes sistemas de escritura, creando un problema de seguridad.  Se puede utilizar L<Unicode::UCD/num()> para resolver este problema.  O el modificador C</a> puede ser usado para forzar C<\d> para que coincida con sólo los ASCII 0 al 9.
+A diferencia de la mayoría de las configuraciones regionales, que son específicas de una pareja idioma/país, Unicode clasifica todos los caracteres que son letras, I<en cualquier parte> del mundo, como C<\w>.  Por ejemplo, tu configuración regional no pensaría que C<LATIN SMALL LETTER ETH> es una letra (a menos que usted hable Islandés), pero Unicode sí.  Del mismo modo, todos los caracteres que son dígitos decimales en algún lugar del mundo coincidirán con C<\d>, lo que significa que son cientos, no diez, de posibles coincidencias.  Y algunas de esas cifras se parecen a algunos de los 10 dígitos ASCII, pero significan un número diferente, por lo que un ser humano podría pensar en un número con una cantidad diferente de lo que realmente es.  Por ejemplo, C<BENGALI DIGIT FOUR> (U+09EA) se parece mucho a una C<ASCII DIGIT EIGHT> (U+0038).  Y, C<\d+>, puede coincidir con cadenas de dígitos que son una mezcla de diferentes sistemas de escritura, creando un problema de seguridad.  Se puede utilizar L<Unicode::UCD/num()> para resolver este problema.  O el modificador C</a> puede ser usado para forzar C<\d> para que coincida con sólo los ASCII 0 al 9.
 
 Además, con este modificador, la coincidencia insensible al tamaño de caja funciona en todo el conjunto de caracteres Unicode.  El C<KELVIN SIGN>, por ejemplo, coincide con las letras "k" y "K", y C<LATIN SMALL LIGATURE FF> coincide con la secuencia "ff", que, si no está preparado, puede hacer que se vea como una constante hexadecimal, presentando otro problema potencial de seguridad.  Vea L<http://unicode.org/reports/tr36> para una discusión detallada de los problemas de seguridad en Unicode.
 
-En las plataformas EBCDIC que maneja Perl, el conjunto de caracteres nativo, es equivalente a Latin-1.  Así, este modificador sólo cambia el comportamiento cuando el modificador C<"/i"> también es especificado, y resulte que sólo afecte a dos caracteres, dándoles una semántica completa de Unicode: el C<MICRO SIGN> coincidirá con las letras griegas mayúscula y minúscula de C<MU>, de lo contrario, no; y la C<LATIN CAPITAL LETTER SHARP S> coincidirá con cualquiera de C<SS>, C<Ss>, C<sS>, y C<ss>; de lo contrario, no.
+En las plataformas EBCDIC que maneja Perl, el conjunto de caracteres nativo, es equivalente a Latin-1.  Así, este modificador sólo cambia el comportamiento cuando el modificador C<"/i"> también es especificado, y resulta que sólo afecta a dos caracteres, dándoles una semántica completa de Unicode: el C<MICRO SIGN> coincidirá con las letras griegas mayúscula y minúscula de C<MU>, de lo contrario, no; y la C<LATIN CAPITAL LETTER SHARP S> coincidirá con cualquiera de C<SS>, C<Ss>, C<sS>, y C<ss>; de lo contrario, no.
 
 Se puede especificar este modificador para que sea el predeterminado por medio de C<use feature 'unicode_strings'>, C<use locale ':not_characters'> o C<L<use 5.012|perlfunc/use VERSION>> (o superior), pero vea L</¿Qué modificador de conjunto de caracteres está en vigor?>.
 X</u>
 
 =head4 /d
 
-Este modificador significa usar las reglas nativas "Predeterminadas" (I<Default>) de la plataforma, excepto cuando hay razones para utilizar las reglas Unicode, de la siguiente manera:
+Este modificador significa usar las reglas nativas "Predeterminadas" (por I<d>efecto) de la plataforma, excepto cuando hay razones para utilizar las reglas Unicode, de la siguiente manera:
 
 =over 4
 
@@ -185,21 +185,21 @@ Aquí hay algunos ejemplos de cómo funciona esto en una plataforma ASCII:
  chop $str;
  $str =~ /^\w/;       # ¡Todavía coincide! $str sigue estando en formato UTF-8.
 
-Este modificador se selecciona de forma automática, de forma predeterminada, cuando ninguno de los otros lo son, por lo que también es conocido como "Default" (predeterminado).
+Este modificador se selecciona de forma automática, de forma predeterminada, cuando ninguno de los otros lo están, por lo que también es conocido como "por Defecto" (predeterminado).
 
-A causa de los comportamientos inesperados asociados con este modificador, es probable que sólo deba utilizarlo para mantener la compatibilidad hacia atrás de extraños comportamientos.
+A causa de los comportamientos inesperados asociados con este modificador, es probable que sólo deba utilizarlo para mantener la compatibilidad hacia atrás de comportamientos extraños.
 
 =head4 /a (y /aa)
 
-A este modificador se le conoce como el ASCII-estricto ASCII (o ASCII-seguro).  Este modificador, a diferencia de los otros, puede ser doblado para aumentar su efecto.
+A este modificador se le conoce como el ASCII-restrictivo (o ASCII-seguro).  Este modificador, a diferencia de los otros, puede ser duplicado para aumentar su efecto.
 
 Cuando aparece solo una vez, hace que las secuencias de C<\d>, C<\s>, C<\w> y las clases de caracteres Posix coincidan sólo en el rango del ASCII.  De este modo, vuelven a sus significados pre-5.6, pre-Unicode.  Bajo C</a>, C<\d> siempre representa exactamente a los dígitos C<"0"> a C<"9">; C<\s> representa a los cinco caracteres C<[ \f\n\r\t]>; C<\w> representa a los 63 caracteres C<[A-Za-z0-9_]>; y, del mismo modo, todas las clases Posix, como C<[[:print:]]> solo coinciden con el rango apropiado de caracteres ASCII.
 
-Este modificador es útil para personas que usan Unicode solo de forma accidental, y para quienes no deseen cargar con sus complejidades y problemas de seguridad.
+Este modificador es útil para personas que usan Unicode a propósito, y para quienes no deseen cargar con sus complejidades y problemas de seguridad.
 
 Con C</a>, se puede escribir C<\d> con la confianza de que sólo coincidirá con caracteres ASCII, y si fuera necesario que coincida más allá del ASCII, puede usar C<\p{Digit}>, o C<\p{Word}> en lugar de C<\w>.  Hay construcciones similares a C<\p{...}> que pueden coincidir, más allá del ASCII, tanto con espacio en blanco (vea L<perlrecharclass/Espacio en blanco>), y clases Posix (vea L<perlrecharclass/Clases de caracteres POSIX>).  Por lo tanto, este modificador no significa que no pueda utilizar Unicode, sino que para obtener coincidencia con Unicode debe utilizar, explícitamente, una construcción (C<\p{}>, C<\P{}>) que indica usar Unicode.
 
-Como era de esperar, esto hace que el modificador, por ejemplo, C<\D> quiera decir lo mismo que C<[^ 0-9]>; de hecho, todos los caracteres no ASCII coinciden con C<\D>, C<\S> y C<\W>.  C<\b> sigue coincidiendo en el límite entre C<\w> y C<\W>, usando las definiciones C</a> de ellos (lo mismo para C<\B>).
+Como era de esperar, este modificador hace que, por ejemplo, C<\D> quiera decir lo mismo que C<[^0-9]>; de hecho, todos los caracteres no ASCII coinciden con C<\D>, C<\S> y C<\W>.  C<\b> sigue coincidiendo en el límite entre C<\w> y C<\W>, usando las definiciones C</a> de ellos (lo mismo para C<\B>).
 
 De lo contrario, C</a> se comporta como el modificador C</u>, en que la comparación que no distingue entre mayúsculas y minúsculas utiliza semántica Unicode; por ejemplo, "k" coincidirá con el Unicode C<\N{KELVIN SIGN}> bajo C</i>, y los puntos de código en el rango de Latin1, por encima de ASCII tendrá reglas Unicode cuando se trata de coincidencias que no distingan entre mayúsculas y minúsculas.
 
@@ -220,7 +220,7 @@ La parte más interior siempre tiene prioridad sobre cualquier otra externa, y l
 El pragma C<L<use re 'E<sol>foo'|re/"modo '/Banderas'">> se puede utilizar para establecer los modificadores por defecto (incluyendo éstos) para las expresiones regulares compiladas dentro de su ámbito.  Este pragma tiene precedencia sobre otros pragmas, listados a continuación, que cambian los valores predeterminados.
 
 De lo contrario, C<L<use locale|perllocale>> establece el modificador por defecto a C</l>; y C<L<use feature 'unicode_strings|feature>> o C<L<use 5.012|perlfunc/use VERSION>> (o superior) establece el valor por defecto a C</u> cuando no estén en el mismo ámbito, tanto si está en efecto C<L<use locale|perllocale>> o C<L<use bytes|bytes>>.
-(C<L<use locale ':not_characters'|perllocale/Unicode and UTF-8>> también establecen como predeterminado a C</u>, anulando cualquier otro C<use locale>).
+(C<L<use locale ':not_characters'|perllocale/Unicode and UTF-8>> también establece como predeterminado a C</u>, anulando cualquier otro C<use locale>).
 A diferencia de los mecanismos mencionados anteriormente, estos afectan a las operaciones de coincidencia de las expresiones regulares, y así obtener resultados más consistentes con otros operadores, incluyendo el uso de C<\U>, C<\l>, etc, en la parte de la sustitución en los reemplazos.
 
 Si no se puede aplicar ninguna de las situaciones anteriores, por razones de compatibilidad, el modificador C</d> es el que está activo de manera predeterminada.  Ya que esto puede conducir a resultados inesperados, lo mejor es especificar qué conjunto de reglas se deben usar.
@@ -242,16 +242,16 @@ X<\> X<^> X<.> X<$> X<|> X<(> X<()> X<[> X<[]>
 
     \	Escapa al siguiente metacarácter
     ^	Coincide con el principio de la línea
-    .	Coincide con cualquier carácter (excepto el nueva línea)
-    $	Coincide con el final de línea (o antes del nuevo línea del final)
+    .	Coincide con cualquier carácter (excepto el nueva-línea)
+    $	Coincide con el final de línea (o antes del nueva-línea del final)
     |	Alternativas
     ()	Agrupación
     []	Clase carácter encorchetada
 
-Por defecto, el carácter "^" garantiza que coincidirá solo con el principio de la cadena, el carácter "$" solo con el final (o antes del nueva línea del final) y Perl hará ciertas optimizaciones asumiendo que la cadena solo contiene una línea.  Los caracteres de nueva línea incrustados dentro de la cadena no coincidirán con "^" o "$".  Puede, sin embargo, desear tratar a la cadena como un búfer de varias líneas, de modo que "^" coincidirá después de cualquier carácter nueva línea dentro de la cadena (excepto si el nueva línea es el último carácter en la cadena), y "$" coincidirá delante de cualquier carácter nueva línea.  A costa de una ligera sobrecarga, puede hacer esto usando el modificador /m en el patrón del operador de coincidencia.  (Los programas anteriores lo hacían por medio de la configuración C<$*>, pero esta opción se eliminó en perl 5.9).
+Por defecto, el carácter "^" garantiza que coincidirá solo con el principio de la cadena, el carácter "$" solo con el final (o antes del nueva-línea del final) y Perl hará ciertas optimizaciones asumiendo que la cadena solo contiene una línea.  Los caracteres nueva línea incrustados dentro de la cadena no coincidirán con "^" o "$".  Puede, sin embargo, desear tratar a la cadena como un búfer de varias líneas, de modo que "^" coincidirá después de cualquier carácter nueva-línea dentro de la cadena (excepto si el nueva-línea es el último carácter en la cadena), y "$" coincidirá delante de cualquier carácter nueva-línea.  A costa de una ligera sobrecarga, puede hacer esto usando el modificador /m en el patrón del operador de coincidencia.  (Los programas anteriores lo hacían por medio de la configuración C<$*>, pero esta opción se eliminó en perl 5.9).
 X<^> X<$> X</m>
 
-Para simplificar la sustitución de varias líneas, el carácter "."  no coincide con una nueva línea a menos que utilice el modificador C</s>, que en efecto dice a Perl que asuma que la cadena es una sola línea -incluso si no lo es-.
+Para simplificar la sustitución de varias líneas, el carácter "."  no coincide con un nueva-línea a menos que utilice el modificador C</s>, que en efecto dice a Perl que asuma que la cadena es una sola línea -incluso si no lo es-.
 X<.> X</s>
 
 =head3 Cuantificadores
