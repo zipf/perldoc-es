@@ -1,0 +1,89 @@
+Puede leer este archivo en cualquier editor de texto (verá algunos caracteres extraños, pero puede ignorarlos). Está escrito en formato POD (ver la página de manual perlpod) que está específicamente diseñado para ser legible de forma sencilla.
+
+=head1 NOMBRE
+
+perluts - Perl bajo UTS
+
+=head1 SINOPSIS
+
+Este documento se puede leer I<tal cual>: como F<README.uts>, o puede leerlo después de construir el paquete usando "man perluts".
+
+El propósito es ayudar a construir Perl para UTS, que, si se siguen estas instrucciones, debería ser fácil, y el resultado ser una instalación sólida.
+
+=head1 DESCRIPCIÓN
+
+Perl 5.7.2 (en desarrollo) o Perl 5.8.x (en preparación) para UTS
+
+=head1 CONSTRUYENDO PERL EN UTS
+
+NOTE: Algunos sitios han redefinido la forma en que uname funciona, y si en el suyo lo hace así, se debe tener en cuenta una serie de pasos especiales, para que el Configure puede reconocer su sistema como un sistema UTS.  Para ver si está en esta categoría, ejecute el comando "uname -a".  Debe ser algo como:
+
+  uts juno 4 4.4 9672 370
+
+En cualquier caso, el primer campo debe ser "uts".  Si este no es el caso, suponiendo que fuera, digamos telcoUTS, cree un script, uts/uname (es decir, uname en el subdirectorio "uts" del directorio principal de Perl):
+   # uname
+   /usr/bin/uname "$@" | sed -e 's/^telcoUTS/uts/'
+
+y cuando ejecute Configure, hágalo de la siguiente manera, con la adición de PATH=uts:$PATH como prefijo.  Es decir, haga:
+
+   PATH=uts:$PATH ./Configure ...
+
+No hay necesidad de hacer un sistema interactivo para hacer la configuración, sólo tiene que escribir
+
+  ./Configure -de [-Dusedevel] [-Doptimize=-g ] 2>&1 | tee Conf.out
+
+"-Dusedevel" puede ser necesario para configurar Perl 5.7.2 de forma no interactiva.
+Use -Doptimize=-g si quiere ejecutar Perl bajo sdb o gdb, O si quiere ser capaz de usar la bandera -D en la línea de comandos con perl, que ocasionalmente es útil en la depuración de scripts perl.
+
+En este y los siguientes pasos, el "2>&1 | tee XXX.out" registra toda la salida del proceso, que será útil si algo inesperado va mal.
+
+Entonces, realice la compilación con
+
+  make 2>&1 | tee make.out
+
+Por último, pruebe con
+
+  make test 2>&1 | tee make-test.out
+
+En la salida, los únicos errores que debe ver deben ser similares a:
+
+   lib/Math/BigInt/t/bigfltpm.........Use of uninitialized value ...
+   FAILED at test 57
+   lib/Math/BigInt/t/bigintc..........ok
+   lib/Math/BigInt/t/bigintpm.........FAILED at test 204
+   lib/Math/BigInt/t/mbimbf...........Use of uninitialized value ...
+   Illegal division by zero at ../lib/Math/BigInt/Calc.pm line 314.
+   FAILED at test 71
+   lib/Math/Complex...................exp: OVERFLOW
+   FAILED at test 250
+   lib/Math/Trig......................exp: OVERFLOW
+   ok
+   lib/Memoize/t/array................ok
+   	...
+   lib/Net/protoent...................ok
+   lib/Net/servent....................FAILED at test 0
+
+Esto significa que todo pasa a excepción de algunos problemas en los paquetes "Math::BigInt", "Math::Complex", y "Math::Trig".
+El error en lib/Net/servent parece que es un error en el programa de pruebas.  Para confirmar esto, desde el directorio principal fuente de Perl, hacer:
+
+   LD_LIBRARY_PATH=`pwd` ./perl -Ilib lib/Net/servent.t
+
+y debe de salir
+
+   1..3
+   ok 1
+   ok 2
+   ok 3
+
+=head1 Instalando la compilación de perl en UTS
+
+Ejecute el comando "make install"
+
+=head1 AUTOR
+
+   Hal Morris
+   UTS Global LLC
+   email: hom00@utsglobal.com
+
+=cut
+
