@@ -1,26 +1,96 @@
 Brief description of the available tools
 ========================================
 
-NOTE: Most of these tools contain hardcoded paths that should be replaced
+
+NOTE: Most of these scripts contain hardcoded paths that 
+should be replaced as necessary
 
 
 
-configure_git.pl
+** compare_pods.sh
+
+Audience:    Tech Lead/PM
+
+Description: Compares different versions of pod documents.
+
+Usage:       ./compare_pods.sh
 
 
 
-get_pods.pl
-Gets all the pod files from the Perl distribution and adds them to the OmegaT project source folder.
+** configure_git.pl
+
+Audience:    Every member of the project       
+
+Description: Configures basic git settings.
+
+Usage:       perl configure_git.pl
 
 
-postprocess.pl
+
+** get_pods.pl
+
+Audience:    Tech Lead/PM
+
+Description: Gets all the pod files from the Perl distribution and 
+             copies them to the source folder in the Omegat project.
+
+Usage:       perl get_pods.pl 
 
 
-compare_pods.sh
+
+** postprocess.pl
+
+Audience:    Language Lead/Reviewer
+
+Description: Copies one or more reviewed files and the translation 
+             memory to different project locations. It formats and
+             copies the final file to the CPAN distribution.
+             It also checks its POD syntax, generates a WYSIWYG html 
+             file for final checks, and creates a diff file in html 
+             format to give feedback to the translators.
+
+Usage:       perl postprocess.pl --pod doc1.pod [doc2.pod]... [--nohtml] [--diff]
 
 
 
-test_pod2es_setup.pl
-Checks the POD2::ES setup.
+** sort_perlglossary.pl
 
-tmx_merge.pl
+Audience:     Language Lead/Reviewer
+
+Description:  Sorts alphabetically the translated perlglossary.pod.
+
+Usage:        perl sort_perlglossary.pl
+
+
+
+** test_pod2es_setup.pl
+
+Audience:    Reviewer/PM
+
+Description: Checks the POD2::ES setup.
+
+Usage:       perl test_pod2es_setup.pl
+
+
+
+** tmx_merge.pl
+
+Audience:     Translator
+
+Description:  Merges a clean memory (i.e., reviewed segments) into the 
+              work memory, overwriting matching work segments
+
+Usage:        perl tmx_merge.pl
+
+
+
+** update_stastics.pl
+
+Audience:    PM
+
+Description: Updates the project statistics spreadsheet in Google Docs
+             using the statistics provided by OmegaT
+
+Usage:       perl update_statistics.pl
+
+
