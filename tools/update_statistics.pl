@@ -85,7 +85,11 @@ for (read_file("$dir_project/omegat/project_stats.txt")) {
     $stats{$campos[0]} = [ @campos[1..8] ];
 }
 
+<<<<<<< HEAD
 keys %stats or die "ERROR: Project stats unread.\n";
+=======
+%stats or die "ERROR: Project stats unread.\n";
+>>>>>>> 19922f3cf50c1e719333154f94e9ba4a2f5f0e33
 
 
 ## Conexión con Google Docs ---------------------------------------------------
