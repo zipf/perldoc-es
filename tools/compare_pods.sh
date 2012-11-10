@@ -30,21 +30,13 @@ test -f source/$POD && test -f target/$POD	|| exit 3
 
 ### Format pod with MANWIDTH width
 MEDIO=$[$COLS/2-5]
-<<<<<<< HEAD
-MANWIDTH=$MEDIO perldoc -d $POD.en source/$POD
-=======
 MANWIDTH=$MEDIO PERLDOC_POD2="" perldoc -d $POD.en source/$POD
->>>>>>> cf4fd457826e62901bcfd53799c3eb67d4c4c117
 
 ### This encoding line is required because target/ pods
 # don't go through the postprocess program, yet
 echo -e "=encoding utf-8\n\n" > $POD.es.org
 cat target/$POD >> $POD.es.org
-<<<<<<< HEAD
-MANWIDTH=$MEDIO perldoc -d $POD.es $POD.es.org
-=======
 MANWIDTH=$MEDIO PERLDOC_POD2="" perldoc -d $POD.es $POD.es.org
->>>>>>> cf4fd457826e62901bcfd53799c3eb67d4c4c117
 
 ### Show side-by-side
 diff -y -W $COLS $POD.{en,es} |less
