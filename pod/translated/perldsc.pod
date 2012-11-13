@@ -650,7 +650,7 @@ Aquí hay un ejemplo que muestra cómo crear y usar un registro cuyos campos pue
 =head2 Generación de un HASH DE REGISTROS COMPLEJOS
 
      # leyendo desde un archivo
-     # es más fácil hacerlo teniendo en el fichero
+     # es más fácil hacerlo teniendo en el archivo
      # los datos en el formato en crudo mostrado antes.  perl es feliz
      # de analizar complejas estructuras de datos si son declaradas como datos, así que
      # algunas veces es más fácil hacer esto que
@@ -661,7 +661,7 @@ Aquí hay un ejemplo que muestra cómo crear y usar un registro cuyos campos pue
      $reg->{noches} = [ buscar_dias() ];
 
      @miembros = ();
-     # asume que este fichero tiene una sintaxis campo=valor
+     # asume que este archivo tiene una sintaxis campo=valor
      while (<>) {
          %campos = split /[\s=]+/;
          push @miembros, { %campos };
@@ -717,9 +717,9 @@ Aquí hay un ejemplo que muestra cómo crear y usar un registro cuyos campos pue
          print "\n";
      }
 
-=head1 Enlace con las bases de datos
+=head1 Bases de datos con ataduras
 
-No es fácil enlazar una estructura de datos de múltiples niveles (por ejemplo, un hash de hashes) a un archivo dbm.  El primer problem es que todas, excepto las BD GDBM y Berkeley tienen limitaciones de tamaño; pero aparte de eso, también tiene problemas con cómo las referencias son representadas en disco.  Un módulo experimental que intenta, parcialmente, resolver esto es el módulo MLDBM.  Revise su sitio CPAN más cercano, como se describe en L<perlmodlib>, para obtener el código fuente de MLDBM.
+No es fácil atar una estructura de datos de múltiples niveles (por ejemplo, un hash de hashes) a un archivo dbm.  El primer problem es que todas, excepto las BD GDBM y Berkeley tienen limitaciones de tamaño; pero aparte de eso, también tiene problemas con cómo las referencias son representadas en disco.  Un módulo experimental que intenta, parcialmente, resolver esto es el módulo MLDBM.  Revise su sitio CPAN más cercano, como se describe en L<perlmodlib>, para obtener el código fuente de MLDBM.
 
 =head1 VEA TAMBIÉN
 

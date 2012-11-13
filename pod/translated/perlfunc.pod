@@ -1,7 +1,7 @@
 =head1 NAME
 X<function>
 
-perlfunc - Funciones integradas en Perl
+perlfunc - Funciones predefinidas en Perl
 
 =head1 DESCRIPCIÓN
 
@@ -391,7 +391,7 @@ Para lapsos de tiempo inferiores a un segundo, el módulo Time::HiRes (en CPAN, 
 
 Normalmente es un error entremezclar llamadas a C<alarm> y C<sleep>, porque C<sleep> puede ser, internamente, implementado en su sistema con C<alarm>.
 
-Si quiere usar C<alarm> controlar la duración de una llamada del sistema necesita una pareja C<eval>/C<die>.  No puede confiar que la alarma que llama a la llamada del sistema falle y ponga C<$!> a C<EINTR> porque Perl activa gestores de señal para reiniciar llamadas al sistema en algunos sistemas.  Usando C<eval>/C<die> siempre funciona, teniendo en cuenta las advertencias dadas en L<perlipc/"Señales">.
+Si quiere usar C<alarm> controlar la duración de una llamada del sistema necesita una pareja C<eval>/C<die>.  No puede confiar que la alarma que llama a la llamada del sistema falle y ponga C<$!> a C<EINTR> porque Perl activa controladores de señal para reiniciar llamadas al sistema en algunos sistemas.  Usando C<eval>/C<die> siempre funciona, teniendo en cuenta las advertencias dadas en L<perlipc/"Señales">.
 
     eval {
         local $SIG{ALRM} = sub { die "alarma\n" }; # NB: \n necesario
@@ -463,7 +463,7 @@ C<:utf8> solo marca los datos como UTF-8 sin más comprobaciones ulteriores, mie
 En general, binmode() debe ser llamada después de open() pero antes de que cualquier I/O se realice sobre el identificador de archivo.  Llamando a binmode(), normalmente vaciará cualquier dato pendiente que esté almacenado en la salida (y quizás datos pendientes a la entrada) del identificador de archivo.  Una excepción a esto es la capa C<:encoding> que cambia la codificación por defecto del identificador de archivo; ver L</open>.
 La capa C<:encoding> algunas veces necesita ser llamada en mitad del flujo de datos y no lo vacía.  C<:encoding> también se coloca, implícitamente, por encima de la capa C<:utf8> porque Perl, internamente, opera con caracteres Unicode codificados en UTF-8.
 
-El sistema operativo, gestores de dispositivos, bibliotecas C y Perl en tiempo de ejecución conspiran al unísono para permitirle al programador tratar un simple carácter (C<\n>) como el final de línea, independientemente de su representación externa.  En muchos sistemas operativos, la representación nativa de un archivo texto coincide con su representación interna, pero en algunas plataformas la representación externa de C<\n> se realiza con más de un carácter.
+El sistema operativo, controladores de dispositivos, bibliotecas C y Perl en tiempo de ejecución conspiran al unísono para permitirle al programador tratar un simple carácter (C<\n>) como el final de línea, independientemente de su representación externa.  En muchos sistemas operativos, la representación nativa de un archivo texto coincide con su representación interna, pero en algunas plataformas la representación externa de C<\n> se realiza con más de un carácter.
 
 Todas las variantes de Unix, Mac OS (viejo y nuevo) y los archivos Stream_LF sobre VMS usan un único carácter al final de cada línea en la representación externa del texto (incluso si el carácter único es un RETORNO DE CARRO en el antiguo, pre-Darwin sabor de Mac OS, y un AVANCE DE LÍNEA en los Unix y la mayor parte de los archivos VMS).  En otros sistemas como OS/2, DOS y los distintos sabores de MS-Windows, tu programa ve un C<\n> como un simple C<\cJ>, pero es almacenado en los archivos de texto como los dos caracteres C<\cM\cJ>.  Esto significa que, si no usa binmode() en estos sistemas, las secuencias C<\cM\cJ> en disco serán convertidas a C<\n> en la entrada y cualquier C<\n> en tu programa será convertido de nuevo en C<\cM\cJ> en la salida.  Esto es lo que usted quiere para los archivos de texto, pero puede ser desastroso para archivos binarios.
 
@@ -485,7 +485,7 @@ Esta función dice que la cosa referenciada por REF es ahora un objeto del paque
 Vea L<perlobj> para más información sobre la bendición (y las bendiciones) de los objetos.
 
 Considerar siempre bautizar objetos de NOMBRECLASE que mezcle mayúsculas y minúsculas.
-El espacio de nombres en minúsculas está considerado reservado para los pragmas de Perl.  Los tipos incluidos tienen todos sus nombres en mayúscula.  Para evitar confusiones, evite nombres de paquete también de esta manera.  Asegúrese de que NOMBRECLASE es un valor verdadero.
+El espacio de nombres en minúsculas está considerado reservado para los pragmas de Perl.  Los tipos predefinidos tienen todos sus nombres en mayúscula.  Para evitar confusiones, evite nombres de paquete también de esta manera.  Asegúrese de que NOMBRECLASE es un valor verdadero.
 
 Ver L<perlmod/"Módulos Perl">.
 
@@ -594,7 +594,7 @@ Si VARIABLE se omite, usa C<$_>.  Ejemplo:
 
 Si VARIABLE es un hash, recorta los valores del hash, pero no sus claves.
 
-Puede recortar cualquier cosa que sea un lvalue (valor a la izquierda), incluyendo una asignación:
+Puede recortar cualquier cosa que sea un valor-izquierda, incluyendo una asignación:
 
     chomp($cwd = `pwd`);
     chomp($respuesta = <STDIN>);
@@ -615,7 +615,7 @@ X<chop>
 Recorta el último carácter de un string y devuelve el carácter recortado.  Es más eficiente que C<s/.$//s> porque ni escanea ni copia el string.  Si VARIABLE se omite, recorta C<$_>.
 Si VARIABLE es un hash, recorta los valores del hash, pero no sus claves.
 
-Puede recortar cualquier cosa que sea un lvalue (valor a la izquierda), incluyendo una asignación.
+Puede recortar cualquier cosa que sea un valor-izquierda, incluyendo una asignación.
 
 Si recorta una lista, cada elemento es recortado.  Sólo se devuelve el valor del último recorte.
 
@@ -906,7 +906,7 @@ delete() puede usarse también en lo arrays y porciones de array, pero su compor
 
 B<AVISO:> Usar delete en elementos de un array es una funcionalidad obsoleta y es probable que sea eliminada en una futura versión de Perl.
 
-Borrando de C<%ENV> modifica el entorno.  Borrando de un hash enlazado a un archivo DBM, borra esa entrada del archivo DBM.  Borrando de un hash o array C<enlazado> no necesariamente devolverá algo; depende de la implementación del método DELETE en el paquete C<enlazado>, que puede hacer lo que quiera.
+Borrando de C<%ENV> modifica el entorno.  Borrando de un hash atado a un archivo DBM, borra esa entrada del archivo DBM.  Borrando de un hash o array C<atado> no necesariamente devolverá algo; depende de la implementación del método DELETE en el paquete C<atado>, que puede hacer lo que quiera.
 
 La construcción C<delete local EXPR> localiza la eliminación al actual bloque en tiempo de ejecución.  Hasta que un bloque termine, los elementos locales suprimidos, temporalmente, ya no existen.  Ver L<perlsub/"Eliminación local de elementos de tipos compuestos">.
 
@@ -1011,7 +1011,7 @@ Puede disponer que una retrollamada se ejecute antes de que C<die> haga sus func
 
     die @_ if $^S;
 
-como primera línea del gestor (ver L<perlvar/$^S>).  Debido a que provoca una acción extraña a gran distancia, este comportamiento no intuitivo puede ser arreglado en una distribución futura.
+como primera línea del controlador (ver L<perlvar/$^S>).  Debido a que provoca una acción extraña a gran distancia, este comportamiento no intuitivo puede ser arreglado en una distribución futura.
 
 Ver también exit(), warn() y el módulo Carp.
 
@@ -1319,7 +1319,7 @@ Dada una expresión que especifica un elemento de un hash, devuelve verdadero si
     print "Definido\n"  if defined $hash{$clave};
     print "Verdadero\n"   if $hash{$clave};
 
-exists también pueden ser llamado sobre elementos de array, pero su comportamiento es mucho menos evidente, y está fuertemente ligado a la utilización de L</delete> en arrays.  B<Queda avisado> que borrar elementos de un array mediante delete() es una funcionalidad obsoleta y es probable que sea eliminada en una futura versión de Perl.
+exists también pueden ser llamado sobre elementos de array, pero su comportamiento es mucho menos evidente, y está fuertemente atado a la utilización de L</delete> en arrays.  B<Queda avisado> que borrar elementos de un array mediante delete() es una funcionalidad obsoleta y es probable que sea eliminada en una futura versión de Perl.
 
     print "Existe\n"    if exists  $array[$indice];
     print "Definido\n"  if defined $array[$indice];
@@ -1350,7 +1350,7 @@ Esto sucede en cualquier parte en que se use el operador flecha, incluso aquí:
     if (exists $ref->{"Alguna clave"})    { }
     print $ref;  # imprime HASH(0x80d3d5c)
 
-Esta sorprendente autovivificación en que al primer vistazo -o incluso al segundo- parece que es un contexto lvalor quizás será arreglado en una futura distribución.
+Esta sorprendente autovivificación en que al primer vistazo -o incluso al segundo- parece que es un contexto valor-izquierda quizás será arreglado en una futura distribución.
 
 Usar una llamada de subrutina en lugar del nombre de una subrutina como argumento a exists() es un error.
 
@@ -1855,7 +1855,7 @@ La función C<getprotobynumber>, a pesar de que sólo toma un argumento, tiene l
     getprotobynumber($numero eq 'icmp')  # esto es lo que significa
     getprotobynumber($numero) eq 'icmp'  # mejor de esta manera
 
-Si está cansado de recordar qué elemento de la lista devuelta contiene qué valor, existen interfaces por nombre, en módulos estándar: C<File::stat>, C<Net::hostent>, C<Net::netent>, C<Net::protoent>, C<Net::servent>, C<Time::gmtime>, C<Time::localtime> y C<User::grent>.  Estas sobreescriben a las integradas, con versiones que devuelven objetos con los nombres apropiados para cada campo.  Por ejemplo:
+Si está cansado de recordar qué elemento de la lista devuelta contiene qué valor, existen interfaces por nombre, en módulos estándar: C<File::stat>, C<Net::hostent>, C<Net::netent>, C<Net::protoent>, C<Net::servent>, C<Time::gmtime>, C<Time::localtime> y C<User::grent>.  Estas sobreescriben a las predefinidas, con versiones que devuelven objetos con los nombres apropiados para cada campo.  Por ejemplo:
 
    use File::stat;
    use User::pwent;
@@ -2116,12 +2116,12 @@ Esto es una ordenación numérica descendente de un hash por sus valores:
         printf "%4d %s\n", $hash{$clave}, $clave;
     }
 
-Usado como valor a la izquierda (lvalue), C<keys> le permite incrementar el número de alojamientos de memoria hash para el hash indicado.  Puede hacerle ganar más eficiencia si sabe que el hash va a tener un gran tamaño.  (Esto es similar a pre-extender un array asignándole un gran número a $#array).  Si dice
+Usado como valor-izquierda, C<keys> le permite incrementar el número de casillas de memoria hash para el hash indicado.  Puede hacerle ganar más eficiencia si sabe que el hash va a tener un gran tamaño.  (Esto es similar a pre-extender un array asignándole un gran número a $#array).  Si dice
 
     keys %hash = 200;
 
-entonces C<%hash> tendrá al menos 200 alojamientos de memoria reservados para él -- 256 de ellos, de hecho, ya que se redondea a la siguiente potencia de dos.  Estos alojamientos serán mantenidos incluso si hace C<%hash = ()>. Use C<undef %hash> si quiere liberar el almacenamiento mientras mantiene a C<%hash> en el ámbito.
-No puede reducir el número de alojamientos reservados para el hash usando C<keys> de esta manera (pero no necesita preocuparse si hace esto por accidente; intentarlo no tiene ningún efecto).  C<keys @array> en un contexto a la izquierda es un error de sintaxis.
+entonces C<%hash> tendrá al menos 200 casillas de memoria reservados para él -- 256 de ellos, de hecho, ya que se redondea a la siguiente potencia de dos.  Estas casillas serán mantenidos incluso si hace C<%hash = ()>. Use C<undef %hash> si quiere liberar el almacenamiento mientras mantiene a C<%hash> en el ámbito.
+No puede reducir el número de casillas reservados para el hash usando C<keys> de esta manera (pero no necesita preocuparse si hace esto por accidente; intentarlo no tiene ningún efecto).  C<keys @array> en un contexto valor-izquierda es un error de sintaxis.
 
 A partir de Perl 5.14, C<keys> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento es desreferenciado automáticamente.  Este aspecto de C<keys> es considerado altamente experimental.  El comportamiento exacto puede cambiar en una futura versión de Perl.
 
@@ -2301,7 +2301,7 @@ X<local>
 
 Lo que realmente querrá usar es C<my>, debido a que C<local> no es lo que la mayoría de la gente piensa en algo "local".  Ver L<perlsub/"Variables privadas con my()"> para más detalles.
 
-Un local() modifica las variables listadas para que sean locales en el bloque que les rodea, un archivo o un eval().  Si se lista más de un valor, esa lista debe ser puesta entre paréntesis.  Ver L<perlsub/"Valores temporales con local()"> para más detalles, incluidas las cuestiones relativas a arrays y hash enlazadas.
+Un local() modifica las variables listadas para que sean locales en el bloque que les rodea, un archivo o un eval().  Si se lista más de un valor, esa lista debe ser puesta entre paréntesis.  Ver L<perlsub/"Valores temporales con local()"> para más detalles, incluidas las cuestiones relativas a arrays y hash atados.
 
 La construcción C<delete local EXPR> también se puede utilizar para localizar la supresión de elementos de un array o hash en el bloque actual.
 Ver L<perlsub/"Eliminación local de elementos de tipos compuestos">.
@@ -2346,7 +2346,7 @@ En contexto escalar, C<localtime()> devuelve el valor de ctime(3):
 
     $ahora = gmtime;  # ej., "Thu Oct 13 04:54:34 1994"
 
-El formato de este valor escalar B<no> es dependiente de la configuración regional, sino que viene integrado en Perl.  Para GMT, en lugar de la hora local, use la primitiva L</gmtime>.  Vea también el módulo C<Time::Local> (para convertir los segundos, minutos, horas, etc, de nuevo al valor entero devuelto por time()), y las funciones strftime(3) y mktime(3) del módulo L<POSIX>.
+El formato de este valor escalar B<no> es dependiente de la configuración regional, sino que viene predefinido en Perl.  Para GMT, en lugar de la hora local, use la función predefinida L</gmtime>.  Vea también el módulo C<Time::Local> (para convertir los segundos, minutos, horas, etc, de nuevo al valor entero devuelto por time()), y las funciones strftime(3) y mktime(3) del módulo L<POSIX>.
 
 Para obtener algo similar, pero con cadenas de fecha dependiente de la configuración región, ajuste apropiadamente sus variables de entorno a la región (por favor, vea L<perllocale>) e intente, por ejemplo:
 
@@ -2632,7 +2632,7 @@ y para escritura:
 
 (Lo siguiente es una referencia general a open(): para una introducción más suave puede considerar L<perlopentut>).
 
-Si IDENTIFICADOR_FICHERO es una variable escalar indefinida (o array o elemento hash), un nuevo identificador de archivo es autovivificado, significando que a la variable es asignada una referencia a un nuevo, anónimo y reservado identificador de archivo.  De lo contrario, si IDENTIFICADOR_ARCHIVO es una expresión, su valor es el identificador de archivo real.  (Esto se considera una referencia simbólica, por lo que C<use strict "refs"> I<no> debe estar activado).
+Si IDENTIFICADOR_ARCHIVO es una variable escalar indefinida (o array o elemento hash), un nuevo identificador de archivo es autovivificado, significando que a la variable es asignada una referencia a un nuevo, anónimo y reservado identificador de archivo.  De lo contrario, si IDENTIFICADOR_ARCHIVO es una expresión, su valor es el identificador de archivo real.  (Esto se considera una referencia simbólica, por lo que C<use strict "refs"> I<no> debe estar activado).
 
 Si EXPR se omite, la variable escalar global (a nivel de paquete) del mismo nombre que el IDENTIFICADOR_ARCHIVO contiene el nombre del archivo.  (Tenga en cuenta que las variables léxicas -las declaradas con C<my> o C<state>- no servirán para este propósito; así que si está usando C<my> o C<state>, especifique EXPR en su llamada a open).
 
@@ -3555,7 +3555,7 @@ X<prototype> X<prototipo>
 
 Devuelve el prototipo de una función como una cadena (o C<undef> si la función no tiene ningún prototipo).  FUNCIÓN es una referencia a, o el nombre de, la función cuyo prototipo se desea recuperar.
 
-Si FUNCIÓN es una cadena que comienza con C<CORE::>, el resto es tomado como un nombre para una orden interna de Perl.  Si la orden interna no es yo <sobreescribible> (como lo es C<qw//>) o si sus argumentos no pueden ser adecuadamente expresados por un prototipo (como C<system>), prototype() devuelve C<undef>, porque la orden interna en realidad no se comporta como una función de Perl.  De lo contrario, se devuelve la cadena que describe el prototipo equivalente.
+Si FUNCIÓN es una cadena que comienza con C<CORE::>, el resto es tomado como un nombre para una función predefinida de Perl.  Si la función predefinida no es I<sobreescribible> (como lo es C<qw//>) o si sus argumentos no pueden ser adecuadamente expresados por un prototipo (como C<system>), prototype() devuelve C<undef>, porque la orden interna en realidad no se comporta como una función de Perl.  De lo contrario, se devuelve la cadena que describe el prototipo equivalente.
 
 =item push ARRAY,LISTA
 X<push> X<stack> X<pila>
@@ -3832,7 +3832,7 @@ X<ref> X<reference> X<referencia>
 =for Pod::Functions find out the type of thing being referenced
 
 Devuelve una cadena no vacía si EXPR es una referencia; de otra manera, devuelve una cadena vacía.  Si EXPR no se especifica, se comprobará C<$_>.  El valor devuelto depende del tipo de cosa que la referencia indique como referencia.
-Tipos integrados incluyen:
+Tipos predefinidos incluyen:
 
     SCALAR
     ARRAY
@@ -3855,7 +3855,7 @@ Si el objeto referenciado ha sido bendecido en un paquete, entonces es el nombre
         print "r no es una referencia.\n";
     }
 
-El valor de retorno C<LVALUE> indica una referencia a un I<ivalor> (valor que se pone a la izquierda) que no es una variable.  Obtiene esto de la referencia a las llamadas a funciones como C<pos()> o C<substr()>.  C<VSTRING> se devuelve si la referencia apunta a una L<version string|perldata/"Cadenas de versión">.
+El valor de retorno C<LVALUE> indica una referencia a un valor-izquierda que no es una variable.  Obtiene esto de la referencia a las llamadas a funciones como C<pos()> o C<substr()>.  C<VSTRING> se devuelve si la referencia apunta a una L<version string|perldata/"Cadenas de versión">.
 
 El resultado C<Regexp> indica que el argumento es una expresión regular como resultado de C<qr//>.
 
@@ -3972,7 +3972,7 @@ Estado opcional para la subrutina.  El estado es pasado en C<$_[1]>.  Una refere
 =back
 
 Si se devuelve una lista vacía, C<undef>, o nada que coincida con los tres primeros valores anteriores, entonces C<require> mira en los elementos restantes de @INC.
-Tenga en cuenta que este identificador de archivo debe ser un identificador de archivo real (en sentido estricto un C<typeglob> o una referencia a un C<typeglob>, bendecido o no); identificadores de archivo enlazados serán ignorados y el procesado terminará ahí.
+Tenga en cuenta que este identificador de archivo debe ser un identificador de archivo real (en sentido estricto un C<typeglob> o una referencia a un C<typeglob>, bendecido o no); identificadores de archivo atados serán ignorados y el procesado terminará ahí.
 
 Si el enganche es una referencia de array, su primer elemento debe ser una referencia a una subrutina.  Esta subrutina se llama como antes, pero el primer parámetro es la referencia al array.  Esto le permite pasar argumentos indirectamente a la subrutina.
 
@@ -4056,7 +4056,7 @@ Si se utiliza sin argumentos en contexto escalar, reverse() invierte C<$_>.
     print reverse;                              # No hay salida, contexto lista
     print scalar reverse;                       # Hola, mundo
 
-Tenga en cuenta que invertir un array en sí mismo (como en C<@a = reverse @a>) preservará elementos inexistentes cuando le sea posible, es decir, para arrays no mágicos o arrays enlazados con métodos C<EXISTS> y C<DELETE>.
+Tenga en cuenta que invertir un array en sí mismo (como en C<@a = reverse @a>) preservará elementos inexistentes cuando le sea posible, es decir, para arrays no mágicos o arrays atados con métodos C<EXISTS> y C<DELETE>.
 
 Este operador también es útil para invertir un hash, aunque existen algunas salvedades.  Si un valor está duplicado en el hash original, sólo uno de ellos puede ser representado como clave en el hash invertido.  Además, esto tiene el efecto de desmontar un hash y construir uno nuevo, algo que puede tardar algún tiempo en un hash grande, como en un archivo DBM.
 
@@ -5318,9 +5318,9 @@ Extrae una subcadena de EXPR y la devuelve.  El primer carácter está en el des
     my $tail   = substr $s, -5;        # verde
     my $z      = substr $s, -5, 2;     # ve
 
-Puede utilizar la función substr() como un I<ivalor>, en cuyo caso la EXPR debe ser en si mismo un I<ivalor>.  Si asigna algo más corto que LONGITUD, la cadena se reducirá, y si asigna algo más largo que LONGITUD, la cadena crecerá para acogerlo.  Para mantener la cadena de la misma longitud, puede ser necesario rellenar o recortar su valor con C<sprintf>.
+Puede utilizar la función substr() como un valor-izquierda, en cuyo caso la EXPR debe ser en si mismo un valor-izquierda.  Si asigna algo más corto que LONGITUD, la cadena se reducirá, y si asigna algo más largo que LONGITUD, la cadena crecerá para acogerlo.  Para mantener la cadena de la misma longitud, puede ser necesario rellenar o recortar su valor con C<sprintf>.
 
-Si DESPLAZAMIENTO y LONGITUD especifican una subcadena que está parcialmente fuera de la cadena, sólo la parte de dentro de la cadena se devuelve.  Si la subcadena está más allá de cada extremo de la cadena, substr() devuelve el valor indefinido y produce una advertencia.  Cuando se utiliza como un I<ivalor>, especificando una subcadena que está totalmente fuera de la cadena lanza una excepción.
+Si DESPLAZAMIENTO y LONGITUD especifican una subcadena que está parcialmente fuera de la cadena, sólo la parte de dentro de la cadena se devuelve.  Si la subcadena está más allá de cada extremo de la cadena, substr() devuelve el valor indefinido y produce una advertencia.  Cuando se utiliza como un valor-izquierda, especificando una subcadena que está totalmente fuera de la cadena lanza una excepción.
 Aquí un ejemplo que muestra el comportamiento para los casos límite:
 
     my $nombre = 'pedro';
@@ -5329,13 +5329,13 @@ Aquí un ejemplo que muestra el comportamiento para los casos límite:
     my $oops = substr $nombre, 7;     # devuelve undef, con advertencia
     substr($nombre, 7) = 'gap';       # lanza una excepción
 
-Una alternativa al uso substr() como un I<ivalor> es especificar la cadena de reemplazo como el cuarto argumento.  Esto le permite reemplazar partes de la EXPR y devolver lo que había antes, en una operación, tal como se puede hacer con splice().
+Una alternativa al uso substr() como un valor-izquierda es especificar la cadena de reemplazo como el cuarto argumento.  Esto le permite reemplazar partes de la EXPR y devolver lo que había antes, en una operación, tal como se puede hacer con splice().
 
     my $s = "El gato negro subió el árbol verde";
     my $z = substr $s, 14, 5, "saltó desde";    # subió
     # $s es ahora "El gato negro saltó desde el árbol verde"
 
-Tenga en cuenta que el I<ivalor>> devuelto por la versión de tres argumentos de substr() actúa como una 'bala mágica'; cada vez que se le asigna, recuerda qué parte de la cadena original se ha modificado; por ejemplo:
+Tenga en cuenta que el valor-izquierda devuelto por la versión de tres argumentos de substr() actúa como una 'bala mágica'; cada vez que se le asigna, recuerda qué parte de la cadena original se ha modificado; por ejemplo:
 
     $x = '1234';
     for (substr($x,1,2)) {
@@ -5354,7 +5354,7 @@ Con desplazamientos negativos, recuerda su posición desde el final de la cadena
         print $_,"\n";                # imprime f
     }
 
-Antes de la versión Perl 5.10, no estaba especificado el resultado de usar varias veces un I<ivalor> (valor indicado en la parte izquierda).  Antes de 5,16, el resultado con desplazamientos negativos no estaba especificado.
+Antes de la versión Perl 5.10, no estaba especificado el resultado de usar varias veces un valor-izquierda.  Antes de 5,16, el resultado con desplazamientos negativos no estaba especificado.
 
 =item symlink VIEJO,NUEVO
 X<symlink> X<link> X<symbolic link> X<link, symbolic> X<enlace simbólico> X<enlace>
@@ -5521,7 +5521,7 @@ Si ESCALAR es de longitud cero, sólo se puede utilizar un DESPLAZAMIENTO de 0.
 
 B<ADVERTENCIA>: Si el identificador de archivo está marcado como C<:utf8>, caracteres Unicode codificados en UTF-8 son escritos en lugar de bytes, y la LONGITUD, DESPLAZAMIENTO y el valor de retorno de syswrite() estarán basados en caracteres (Unicode codificados en UTF-8).
 La capa C<:encoding(...)> implícitamente introduce la capa C<:utf8>.
-Alternativamente, si el gestor no está marcado con una codificación pero intenta escribir caracteres con puntos de código superiores a 255, se genera una excepción.
+De forma alternativa, si el identificador no está marcado con una codificación pero intenta escribir caracteres con puntos de código superiores a 255, se genera una excepción.
 Ver L</binmode>, L</open>, y el pragma C<open>, L<open>.
 
 =item tell IDENTIFICADOR_ARCHIVO
@@ -5628,7 +5628,7 @@ Una clase que implementa un escalar debe tener los siguientes métodos:
 
 No todos los métodos indicados es necesario implementarlos.  Ver L<perltie>, L<Tie::Hash>, L<Tie::Array>, L<Tie::Scalar>, y L<Tie::Handle>.
 
-A diferencia de C<dbmopen>, la función C<tie> no usará C<use> o C<require> de un módulo por usted; necesitará hacerlo de forma explícita.  Ver L<DB_File> o el módulo F<Config> para interesantes implementaciones de C<tie>.
+A diferencia de C<dbmopen>, la función C<tie> no usará C<use> o C<require> de un módulo por usted; necesitará hacerlo de forma explícita.  Ver L<DB_File> o el módulo F<Config> para implementaciones interesantes de C<tie>.
 
 Para más detalles, vea L<perltie>, L<"tied VARIABLE">.
 
@@ -5637,7 +5637,7 @@ X<tied>
 
 =for Pod::Functions get a reference to the object underlying a tied variable
 
-Devuelve una referencia al objeto subyacente en VARIABLE (el mismo valor que fue devuelto originalmente por la llamada C<tie> que unía a la variable a un paquete).  Devuelve el valor indefinido si la VARIABLE no está vinculada a un paquete.
+Devuelve una referencia al objeto subyacente en VARIABLE (el mismo valor que fue devuelto originalmente por la llamada C<tie> que unía a la variable a un paquete).  Devuelve el valor indefinido si la VARIABLE no está atada a un paquete.
 
 =item time
 X<time> X<epoch>
@@ -5742,7 +5742,7 @@ X<undef> X<undefine> X<indefine>
 
 =for Pod::Functions remove a variable or function definition
 
-Indefine el valor de EXPR, que debe ser un I<ivalor>.  Use solamente sobre un valor escalar, un array (usando C<@>), un hash (con C<%>), una subrutina (con C<&>), o un typeglob (usando C<*>).  Decir C<undef $hash{$key}> probablemente no vaya a hacer lo que usted espera en la mayoría de las variables predefinidas o lista de valores DBM, así que no lo haga; vea L</delete>.  Siempre devuelve el valor indefinido.  Puede omitir la EXPR, en tal caso, nada queda indefinido, pero aún obtiene un valor indefinido que podría, por ejemplo, devolver de una subrutina, asignar a una variable, o pasar como un parámetro.  Ejemplos:
+Indefine el valor de EXPR, que debe ser un valor-izquierda.  Use solamente sobre un valor escalar, un array (usando C<@>), un hash (con C<%>), una subrutina (con C<&>), o un typeglob (usando C<*>).  Decir C<undef $hash{$key}> probablemente no vaya a hacer lo que usted espera en la mayoría de las variables predefinidas o lista de valores DBM, así que no lo haga; vea L</delete>.  Siempre devuelve el valor indefinido.  Puede omitir la EXPR, en tal caso, nada queda indefinido, pero aún obtiene un valor indefinido que podría, por ejemplo, devolver de una subrutina, asignar a una variable, o pasar como un parámetro.  Ejemplos:
 
     undef $foo;
     undef $bar{'blurfl'};      # Comparar a: delete $bar{'blurfl'};
@@ -5853,7 +5853,7 @@ X<untie>
 
 Rompe el enlace entre una variable y un paquete.
 (Vea L<tie|/tie VARIABLE,CLASE,LISTA>).
-No tiene efecto si la variable no está enlazada.
+No tiene efecto si la variable no está atada.
 
 =item use Módulo VERSIÓN LISTA
 X<use> X<module> X<import> X<módulo> X<importar>
@@ -5890,7 +5890,7 @@ Suele ser útil si necesita comprobar la versión actual de Perl antes de que C<
 C<use VERSIÓN> también activará todas las características disponibles en la versión solicitada tal como son definidas por el pragma C<feature>, desactivando cualquier característica no incluida en la versión solicitada.  Ver L<feature>.
 Del mismo modo, si la versión especificada de Perl es mayor o igual a 5.11.0, el modo de trabajo estricto quedará activado léxicamente, igual a como lo hace C<use strict>.  Cualquier uso explícito de C<use strict> o C<no strict> anula C<use VERSIÓN>, incluso si se coloca antes de él.  En ambos casos, los archivos F<feature.pm> y F<strict.pm> no son cargados.
 
-El C<BEGIN> fuerza a ejecutar a C<require> e C<import> en tiempo de compilación.  El C<require> se asegura que el módulo esté cargado en memoria, si todavía no lo está.  El C<import> no es una orden interna; es sólo una llamada al método estático ordinario en el paquete C<Módulo> para indicar al módulo que importe la lista de características en el paquete actual.  El módulo puede implementar su propio método C<import> de la forma que desee, aunque la mayoría de los módulos sólo eligen derivar su método C<import> vía herencia desde la clase C<Exporter> que se define en el módulo C<Exporter>.  Ver L<Exporter>.  Si no se puede encontrar ningún método C<import> entonces la llamada se pasa por alto, incluso si hay un método AUTOLOAD.
+El C<BEGIN> fuerza a ejecutar a C<require> e C<import> en tiempo de compilación.  El C<require> se asegura que el módulo esté cargado en memoria, si todavía no lo está.  El C<import> no es una función predefinida; es sólo una llamada al método estático ordinario en el paquete C<Módulo> para indicar al módulo que importe la lista de características en el paquete actual.  El módulo puede implementar su propio método C<import> de la forma que desee, aunque la mayoría de los módulos sólo eligen derivar su método C<import> vía herencia desde la clase C<Exporter> que se define en el módulo C<Exporter>.  Ver L<Exporter>.  Si no se puede encontrar ningún método C<import> entonces la llamada se pasa por alto, incluso si hay un método AUTOLOAD.
 
 Si no desea llamar al método C<import> del paquete (por ejemplo, para impedir que su espacio de nombres sea alterado), indique, de manera explícita, una lista vacía:
 

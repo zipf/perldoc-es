@@ -341,7 +341,7 @@ Esta variable se incorporó en Perl 5.003.
 =item %SIG
 X<%SIG>
 
-El hash C<%SIG> contiene los gestores de señal para el procesamiento de señales.  Por ejemplo:
+El hash C<%SIG> contiene los identificadores de señal para el procesamiento de señales.  Por ejemplo:
 
     sub manejador {   # el primer argumento es el nombre de la señal
 	my($sig) = @_;
@@ -660,7 +660,7 @@ Las claves del hash C<%+> lista sólo los nombres de los búferes que han captur
 
 El comportamiento subyacente de C<%+> es proporcionado por el módulo L<Tie::Hash::NamedCapture>.
 
-B<Nota:> C<%-> y C<%+> están vinculadas en un hash interno común asociado con la última expresión regular exitosa.  Por lo tanto mezclar un acceso iterativo en ellas a través de C<each> puede tener resultados impredecibles.
+B<Nota:> C<%-> y C<%+> están atadas en un hash interno común asociado con la última expresión regular exitosa.  Por lo tanto mezclar un acceso iterativo en ellas a través de C<each> puede tener resultados impredecibles.
 Del mismo modo, si la última coincidencia exitosa cambia, entonces los resultados pueden ser sorprendentes.
 
 Esta variable se incorporó en Perl 5.10.
@@ -734,7 +734,7 @@ Las claves del hash C<%-> corresponde a todos los nombres de búferes encontrado
 
 El comportamiento de C<%-> es proporcionado por el módulo L<Tie::Hash::NamedCapture>.
 
-B<Nota:> C<%-> y C<%+> están vinculadas en un hash interno común asociado con la última expresión regular exitosa.  Por lo tanto mezclar un acceso iterativo en ellas a través de C<each> puede tener resultados impredecibles.
+B<Nota:> C<%-> y C<%+> están atadas en un hash interno común asociado con la última expresión regular exitosa.  Por lo tanto mezclar un acceso iterativo en ellas a través de C<each> puede tener resultados impredecibles.
 Del mismo modo, si la última coincidencia exitosa cambia, entonces los resultados pueden ser sorprendentes.
 
 Esta variable se incorporó en Perl 5.10
@@ -767,24 +767,24 @@ Esta variable se incorporó en Perl 5.10.
 
 =back
 
-=head2 Variables relacionadas con gestores de archivo
+=head2 Variables relacionadas con identificadores de archivo
 
-Las variables que dependen del actualmente gestor de archivo seleccionado puede ser asignadas llamando a un método de objeto correspondiente al objeto C<IO::Handle>, aunque esto es menos eficaz que usando las variables integradas.  (Para resumir, en las líneas siguientes se usará la palabra GESTOR).
+Las variables que dependen del actualmente identificador de archivo seleccionado puede ser asignadas llamando a un método de objeto correspondiente al objeto C<IO::Handle>, aunque esto es menos eficaz que usando las variables predefinidas.  (Para resumir, en las líneas siguientes se usará la palabra IDENTIFICADOR.)
 En primer lugar, hay que decir
 
     use IO::Handle;
 
 después de lo cual puede usar cualquiera de estas formas:
 
-    método GESTOR EXPR
+    método IDENTIFICADOR EXPR
 
 o de forma más segura,
 
-    GESTOR->método(EXPR)
+    IDENTIFICADOR->método(EXPR)
 
 Cada método devuelve el valor anterior del atributo C<IO::Handle>.  Cada uno de los métodos toman una EXPR opcional, que, si es suministrada, especifica el nuevo valor del atributo C<IO::Handle> en cuestión.  Si no se proporciona, la mayor parte de los métodos no hacen nada al valor actual, a excepción de C<autoflush()>, que asumirá que ha escrito un 1, sólo por llevar la contraria.
 
-Debido a que la carga de la clase C<IO::Handle> es una operación costosa, debe aprender a utilizar las habituales variables integradas.
+Debido a que la carga de la clase C<IO::Handle> es una operación costosa, debe aprender a utilizar las habituales variables predefinidas.
 
 Algunas de estas variables se consideran de "sólo lectura".  Esto significa que si se intenta asignar a esta variable, ya sea directa o indirectamente a través de una referencia, se producirá una excepción en tiempo de ejecución.
 
@@ -856,14 +856,14 @@ El array C<@ARGV> contiene los argumentos de la línea de comandos que se pasaro
 =item ARGV
 X<ARGV>
 
-Es el gestor de archivo especial que itera sobre los nombres de archivos de la línea de comandos en C<@ARGV>.  Por lo general, escrito como el gestor de archivo nulo con el operador de ángulo C<< <> >>.  Tenga en cuenta que en la actualidad C<ARGV> sólo tiene su efecto mágico con el operador C<< <> >>; en otras situaciones es sólo un gestor de archivo simple correspondiente al último archivo abierto por C<< <> >>.  Dicho sea de paso, pasar C<\*ARGV> como un parámetro a una función que espera un gestor de archivo, no hace que pueda conseguir que su función pueda leer de forma automática el contenido de todos los archivos que están en C<@ARGV>.
+Es el identificador de archivo especial que itera sobre los nombres de archivos de la línea de comandos en C<@ARGV>.  Por lo general, escrito como el identificador de archivo nulo con el operador de ángulo C<< <> >>.  Tenga en cuenta que en la actualidad C<ARGV> sólo tiene su efecto mágico con el operador C<< <> >>; en otras situaciones es sólo un identificador de archivo simple correspondiente al último archivo abierto por C<< <> >>.  Dicho sea de paso, pasar C<\*ARGV> como un parámetro a una función que espera un identificador de archivo, no hace que pueda conseguir que su función pueda leer de forma automática el contenido de todos los archivos que están en C<@ARGV>.
 
 =item ARGVOUT
 X<ARGVOUT>
 
-Es el gestor de archivo especial que apunta al actual archivo de salida abierto al hacer edición in-situ al procesarlo con B<-i>.  Es útil cuando tiene que hacer un montón de inserciones y no quiere seguir modificando C<$_>.  Consulte L<perlrun> para ver la opción B<-i>.
+Es el identificador de archivo especial que apunta al actual archivo de salida abierto al hacer edición in-situ al procesarlo con B<-i>.  Es útil cuando tiene que hacer un montón de inserciones y no quiere seguir modificando C<$_>.  Consulte L<perlrun> para ver la opción B<-i>.
 
-=item Gestor->output_field_separator( EXPR )
+=item Identificador->output_field_separator( EXPR )
 
 =item $OUTPUT_FIELD_SEPARATOR
 
@@ -876,7 +876,7 @@ El separador de campos a la salida para el operador print.  Si se define, este v
 
 Mnemónico: lo que se imprime cuando hay un "," en su instrucción print.
 
-=item GESTOR->input_line_number( EXPR )
+=item IDENTIFICADOR->input_line_number( EXPR )
 
 =item $INPUT_LINE_NUMBER
 
@@ -885,19 +885,19 @@ Mnemónico: lo que se imprime cuando hay un "," en su instrucción print.
 =item $.
 X<$.> X<$NR> X<$INPUT_LINE_NUMBER> X<line number> X<número de línea>
 
-Número de línea actual para el gestor de archivo accedido por última vez.
+Número de línea actual para el identificador de archivo accedido por última vez.
 
-Cada gestor de archivo en Perl cuenta el número de líneas que se han leído de él.  (Dependiendo del valor de C<$/>, la idea de Perl de lo que constituye una línea puede que no coincida con la suya).  Cuando una línea se lee desde un gestor de archivo (a través de C<readline()> o C<< <> >>), o cuando se llama a C<tell()> o C<seek()>, C<$.> se convierte en un alias para el contador de líneas para el gestor de archivo.
+Cada identificador de archivo en Perl cuenta el número de líneas que se han leído de él.  (Dependiendo del valor de C<$/>, la idea de Perl de lo que constituye una línea puede que no coincida con la suya).  Cuando una línea se lee desde un identificador de archivo (a través de C<readline()> o C<< <> >>), o cuando se llama a C<tell()> o C<seek()>, C<$.> se convierte en un alias para el contador de líneas para el identificador de archivo.
 
-Se puede ajustar el contador mediante la asignación a C<$.>, pero esto realmente no moverá el puntero de búsqueda.  I<Localizar C<$.> no localizará el contador de líneas del gestor de archivo>.  En su lugar, se localizará la noción de perl del gestor de archivo al que C<$.> está referenciando.
+Se puede ajustar el contador mediante la asignación a C<$.>, pero esto realmente no moverá el puntero de búsqueda.  I<Localizar C<$.> no localizará el contador de líneas del identificador de archivo>.  En su lugar, se localizará la noción de perl del identificador de archivo al que C<$.> está referenciando.
 
-C<$.> es reiniciado cuando el gestor de archivo es cerrado, pero B<no> cuando un gestor de archivo abierto es reabierto sin intervención de C<close()>.  Para más detalles, vea L<perlop/"Operadores EE<sol>S">.  Debido a que C<< <> >> nunca hace un cierre explícito, los números de línea aumentan a lo largo de los archivos C<ARGV> (pero vea los ejemplos en L<perlfunc/eof>).
+C<$.> es reiniciado cuando el identificador de archivo es cerrado, pero B<no> cuando un identificador de archivo abierto es reabierto sin intervención de C<close()>.  Para más detalles, vea L<perlop/"Operadores EE<sol>S">.  Debido a que C<< <> >> nunca hace un cierre explícito, los números de línea aumentan a lo largo de los archivos C<ARGV> (pero vea los ejemplos en L<perlfunc/eof>).
 
-También puede utilizar C<< GESTOR->input_line_number(EXPR) >> para acceder al contador de líneas de un gestor de archivo determinado sin tener que preocuparse de qué gestor fue accedido por última vez.
+También puede utilizar C<< IDENTIFICADOR->input_line_number(EXPR) >> para acceder al contador de líneas de un identificador de archivo determinado sin tener que preocuparse de qué identificador fue accedido por última vez.
 
 Mnemónico: muchos programas usan "." como el actual número de línea.
 
-=item GESTOR->input_record_separator( EXPR )
+=item IDENTIFICADOR->input_record_separator( EXPR )
 
 =item $INPUT_RECORD_SEPARATOR
 
@@ -922,7 +922,7 @@ Estableciendo C<$/> a una referencia a un número entero, o un escalar contenien
 
 leerá un registro de no más de 32768 bytes desde $fh.  Si no está leyendo un archivo orientado a registros (o su sistema operativo no tiene archivos orientados a registros), entonces lo más probable es que obtenga una porción completa de los datos con cada lectura.  Si un registro es mayor que el tamaño del registro que ha establecido, obtendrá ese registro en pedazos.  Tratar de establecer el tamaño del registro a cero o menor hará que se lea en (el resto de) todo el archivo.
 
-Solo en VMS, el registro pasa por alto las capas PerlIO y cualquier búfer asociado, por lo que no debe mezclar las lecturas de registros y no registros en el mismo gestor de archivos.  El modo de acceso por registro se puede mezclar con el modo línea sólo cuando la capa de almacenamiento en búfer está en uso para ambos modos.
+Solo en VMS, el registro pasa por alto las capas PerlIO y cualquier búfer asociado, por lo que no debe mezclar las lecturas de registros y no registros en el mismo identificador de archivos.  El modo de acceso por registro se puede mezclar con el modo línea sólo cuando la capa de almacenamiento en búfer está en uso para ambos modos.
 
 Si realiza una lectura de un registro en un ARCHIVO con una capa de codificación, tal como C<:encoding(latin1)>o C<:utf8>, puede conseguir como resultado una cadena inválida, puede dejar el ARCHIVO situado entre caracteres en el flujo y quizás no pueda leer el número de bytes del archivo que ha especificado.  Este comportamiento puede cambiar sin previo aviso, en una futura versión de Perl.
 
@@ -930,7 +930,7 @@ Vea también L<perlport/"Caracteres de nueva línea">. Consulte también L</$.>.
 
 Mnemónico: / delimita límites de línea cuando se cita poesía.
 
-=item GESTOR->output_record_separator( EXPR )
+=item IDENTIFICADOR->output_record_separator( EXPR )
 
 =item $OUTPUT_RECORD_SEPARATOR
 
@@ -944,7 +944,7 @@ El separador de registros a la salida para el operador print.  Si se define, est
 Mnemónico: establece C<$\> en lugar de añadir "\n" al final del print.
 Además, es igual que C<$/>, pero es lo que obtiene "de vuelta" desde Perl.
 
-=item GESTOR->autoflush( EXPR )
+=item IDENTIFICADOR->autoflush( EXPR )
 
 =item $OUTPUT_AUTOFLUSH
 
@@ -960,7 +960,7 @@ Mnemónico: cuando quiere que las tuberías se calienten.
 
 =head3 Variables relacionadas con formatos
 
-Las variables especiales para formatos son un subconjunto de los gestores de archivo.  Vea L<perlform> para obtener más información acerca de los formatos de Perl.
+Las variables especiales para formatos son un subconjunto de los identificadores de archivo.  Vea L<perlform> para obtener más información acerca de los formatos de Perl.
 
 =over 8
 
@@ -972,7 +972,7 @@ X<$^A> X<$ACCUMULATOR>
 El valor actual del acumulador C<write()> para las líneas C<format()>.
 Un formato contiene llamadas C<formline()> que ponen su resultado en C<$^A>.  Después de llamar a su formato, C<write()> imprime el contenido de C<$^A> y se vacía.  Así que nunca, realmente, va a ver el contenido de C<$^A> a menos que llame a C<formline()> usted mismo y mire dentro de él.  Vea L<perlform> y L<perlfunc/"formline FORMA,LISTA">.
 
-=item GESTOR->format_formfeed(EXPR)
+=item IDENTIFICADOR->format_formfeed(EXPR)
 
 =item $FORMAT_FORMFEED
 
@@ -981,7 +981,7 @@ X<$^L> X<$FORMAT_FORMFEED>
 
 Qué es lo que sacan los formatos como avance de página.  El valor por defecto es C<\f>.
 
-=item GESTOR->format_page_number(EXPR)
+=item IDENTIFICADOR->format_page_number(EXPR)
 
 =item $FORMAT_PAGE_NUMBER
 
@@ -992,7 +992,7 @@ El número de la página actual del actual canal de salida seleccionado.
 
 Mnemónico: C<%> es el número de página en B<nroff>.
 
-=item GESTOR->format_lines_left(EXPR)
+=item IDENTIFICADOR->format_lines_left(EXPR)
 
 =item $FORMAT_LINES_LEFT
 
@@ -1003,7 +1003,7 @@ El número de líneas que quedan en la página del actual canal de salida selecc
 
 Mnemónico: líneas_en_la_página - líneas_impresas.
 
-=item GESTOR->format_line_break_characters EXPR
+=item IDENTIFICADOR->format_line_break_characters EXPR
 
 =item $FORMAT_LINE_BREAK_CHARACTERS
 
@@ -1014,7 +1014,7 @@ El actual conjunto de caracteres después del cual puede una cadena ser partida 
 
 Mnemónico: un "dos puntos" en poesía es una parte de una línea.
 
-=item GESTOR->format_lines_per_page(EXPR)
+=item IDENTIFICADOR->format_lines_per_page(EXPR)
 
 =item $FORMAT_LINES_PER_PAGE
 
@@ -1025,27 +1025,27 @@ La longitud de la página actual (líneas imprimibles) del actual canal de salid
 
 Mnemónico: = tiene líneas horizontales.
 
-=item GESTOR->format_top_name(EXPR)
+=item IDENTIFICADOR->format_top_name(EXPR)
 
 =item $FORMAT_TOP_NAME
 
 =item $^
 X<$^> X<$FORMAT_TOP_NAME>
 
-El nombre del actual formato de la cabecera de página para el actual canal de salida seleccionado.  El valor predeterminado es el nombre del gestor de archivo con C<_TOP> agregado.  Por ejemplo, el nombre del formato predeterminado de la cabecera para el gestor de archivos C<STDOUT> es C<STDOUT_TOP>.
+El nombre del actual formato de la cabecera de página para el actual canal de salida seleccionado.  El valor predeterminado es el nombre del identificador de archivo con C<_TOP> agregado.  Por ejemplo, el nombre del formato predeterminado de la cabecera para el identificador de archivos C<STDOUT> es C<STDOUT_TOP>.
 
 Mnemónico: apunta a la cabecera de la página.
 
-=item GESTOR->format_name(EXPR)
+=item IDENTIFICADOR->format_name(EXPR)
 
 =item $FORMAT_NAME
 
 =item $~
 X<$~> X<$FORMAT_NAME>
 
-El nombre del actual formato de informe para el actual canal de salida seleccionado.  El nombre predeterminado del formato es el mismo que el del gestor de archivo.  Por ejemplo, el nombre del formato predeterminado para el gestor de archivos C<STDOUT> es C<STDOUT>.
+El nombre del actual formato de informe para el actual canal de salida seleccionado.  El nombre predeterminado del formato es el mismo que el del identificador de archivo.  Por ejemplo, el nombre del formato predeterminado para el identificador de archivos C<STDOUT> es C<STDOUT>.
 
-Mnemonic: hermano de C<$^>.
+Mnemónico: hermano de C<$^>.
 
 =back
 
@@ -1116,7 +1116,7 @@ Estado actual del intérprete.
 	verdadero (1)    Ejecutando un eval()
 	falso (0)        Cualquier otra cosa
 
-El primer estado puede aparecer en los gestores C<$SIG{__DIE__}> y C<$SIG{__WARN__}>.
+El primer estado puede aparecer en los controladores C<$SIG{__DIE__}> y C<$SIG{__WARN__}>.
 
 Esta variable se incorporó en Perl 5.004.
 
@@ -1190,7 +1190,7 @@ El estado devuelto por la última tubería cerrada, comando acento grave (C<``>)
 
 Además, si la variable C<h_errno> está soportada en C, su valor es devuelto a través de C<$?> si falla alguna función C<gethost*()>.
 
-Si ha instalado algún gestor de señales para C<SIGCHLD>, el valor de C<$?> será, generalmente, incorrecto, fuera de ese gestor.
+Si ha instalado algún controlador de señales para C<SIGCHLD>, el valor de C<$?> será, generalmente, incorrecto, fuera de ese controlador.
 
 Dentro de una subrutina C<END> C<$?> contiene el valor que se le va a dar a C<exit()>.  Puede modificar C<$?> en una subrutina C<END> para cambiar el estado de salida de su programa.  Por ejemplo:
 

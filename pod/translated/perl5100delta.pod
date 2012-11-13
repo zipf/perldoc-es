@@ -16,7 +16,7 @@ Muchas de las correcciones de errores en 5.10.0 ya se observaban en las versione
 
 El pragma C<feature> se utiliza para activar una nueva sintaxis que rompe la compatibilidad Perl con versiones anteriores del lenguaje. Se trata de una pragma léxico, al igual que C<strict> o C<warnings>.
 
-En la actualidad las nuevas funciones disponibles son las siguientes: C<switch> (añade una sentencia switch), C<say> (añade una función incorporada C<say>), y C<state> (añade una palabra clave C<state> para declarar variables "estáticas"). Esas características se describen en sus propias secciones de este documento.
+En la actualidad las nuevas funciones disponibles son las siguientes: C<switch> (añade una sentencia switch), C<say> (añade una función predefinida C<say>), y C<state> (añade una palabra clave C<state> para declarar variables "estáticas"). Esas características se describen en sus propias secciones de este documento.
 
 El pragma C<feature> es también implícitamente cargado cuando se requiere un mínimo de la versión de Perl (con la construcción C<use VERSION>) mayor que, o igual a 5.9.5. Vea L<feature> para más detalles.
 
@@ -108,7 +108,7 @@ Solo los búfer con contenido definido será "visible" en el hash C<%+>, por lo 
 
 El hash C<%-> es un poco más completo, ya que él contendrá referencias a array que almacenan valores para todos los búfer de captura con el mismo nombre, si existiera más de uno de ellos.
 
-C<%+> y C<%-> son implementados como hash enlazados a través del nuevo módulo C<Tie::Hash::NamedCapture>.
+C<%+> y C<%-> son implementados como hash atados a través del nuevo módulo C<Tie::Hash::NamedCapture>.
 
 Los usuarios expuestos al motor de expresiones regulares de .NET encontrarán que la implementación de perl difiere en que la ordenación numérica de los búfer es secuencial, y no "sin nombre, primero, con nombre, después". Así, en el patrón
 
@@ -130,7 +130,7 @@ Una nueva sintaxis C<\g{N}> o C<\gN> donde "N" es un entero decimal permite una 
 
 =item Escapado C<\K>
 
-La funcionalidad del módulo de Jeff Pinyan Regexp::Keep ha sido añadido al núcleo. Ahora puede utilizar en las expresiones regulares el escapado especial C<\K> como una manera de hacer algo como mirar atrás de una longitud variable positiva. También es útil en las sustituciones, como:
+La funcionalidad del módulo de Jeff Pinyan Regexp::Keep ha sido añadido al núcleo. Ahora puede utilizar en las expresiones regulares el escapado especial C<\K> como una manera de hacer algo como inspeccionar hacia atrás de una longitud variable positiva. También es útil en las sustituciones, como:
 
   s/(foo)bar/$1/g;
 
@@ -150,7 +150,7 @@ C<\R> coincide con un salto de línea genérica, es decir, espacio en blanco ver
 
 =head2 C<say()>
 
-say() es una nueva función integrada; sólo está disponible cuando C<use feature 'say'> está en vigor, que es similar a print(), pero que, implícitamente, añade un carácter de nueva línea a la cadena a ser impresa. Vea L<perlfunc/say>. (Robin Houston)
+say() es una nueva función predefinida; sólo está disponible cuando C<use feature 'say'> está en vigor, que es similar a print(), pero que, implícitamente, añade un carácter de nueva línea a la cadena a ser impresa. Vea L<perlfunc/say>. (Robin Houston)
 
 =head2 C<$_> léxico
 
@@ -168,7 +168,7 @@ En un ámbito donde C<$_> ha sido lexicalizada, aún puede tener acceso a la ver
 
 Se ha añadido un nuevo carácter de prototipado. C<_> es equivalente a C<$> pero es por defecto C<$_> si no se indica el correspondiente argumento (tanto C<$> como C<_> denotan un escalar). Debido a la naturaleza opcional del argumento, sólo puede usarlo al final de un prototipo, o antes de un punto y coma.
 
-Esto tiene una pequeña consecuencia de incompatibilidad: la función prototype() ha sido ajustada para devolver C<_> en algunos funciones incorporadas en los casos apropiados (por ejemplo, C<prototype('CORE::rmdir')>). (Rafael Garcia-Suarez)
+Esto tiene una pequeña consecuencia de incompatibilidad: la función prototype() ha sido ajustada para devolver C<_> en algunos funciones predefinidas en los casos apropiados (por ejemplo, C<prototype('CORE::rmdir')>). (Rafael Garcia-Suarez)
 
 =head2 Bloques UNITCHECK
 
@@ -195,7 +195,7 @@ Muchas otras funciones en el módulo C<Win32> han sido mejorados para aceptar ar
 
 =head2 readpipe() ahora es reemplazable
 
-La función incorporada readpipe() ahora es reemplazable. Sobrescribirla permite también sobrescribir su operador homólogo, C<qx//> (es decir, C<``>).
+La función predefinida readpipe() ahora es reemplazable. Sobrescribirla permite también sobrescribir su operador homólogo, C<qx//> (es decir, C<``>).
 Por otra parte, se refiere por defecto a C<$_> si no se proporciona ningún argumento. (Rafael Garcia-Suarez)
 
 =head2 Argumento por defecto para readline()
@@ -213,9 +213,9 @@ Para utilizar las variables C<state>, es necesario que las active mediante el us
 o mediante el uso de la opción de la línea de comandos C<-E> en los programas Perl de una-línea.
 Vea L<perlsub/"Variables privadas persistentes">.
 
-=head2 Operadores de test de ficheros apilados
+=head2 Operadores apilados de test de archivos
 
-Como una nueva forma de sintaxis edulcorada, ahora es posible apilar operadores de test de ficheros. Ahora puede escribir C<-f -w -x $archivo> en una fila para querer decir C<-x $archivo && -w _ && -f _>. Vea L<perlfunc/-X>.
+Como una nueva forma de sintaxis edulcorada, ahora es posible apilar operadores de test de archivos. Ahora puede escribir C<-f -w -x $archivo> en una fila para querer decir C<-x $archivo && -w _ && -f _>. Vea L<perlfunc/-X>.
 
 =head2 UNIVERSAL::DOES()
 
@@ -239,7 +239,7 @@ Ahora puede utilizar C<no> seguido por un número de versión para especificar q
 
 =head2 C<chdir>, C<chmod> y C<chown> en identificadores de archivos
 
-C<chdir>, C<chmod> y C<chown> ahora pueden trabajar tanto con nombres de ficheros como con identificadores de archivos, si el sistema soporta, respectivamente, C<fchdir>, C<fchmod> y C<fchown>, gracias a un parche proporcionado por Gisle Aas.
+C<chdir>, C<chmod> y C<chown> ahora pueden trabajar tanto con nombres de archivos como con identificadores de archivos, si el sistema soporta, respectivamente, C<fchdir>, C<fchmod> y C<fchown>, gracias a un parche proporcionado por Gisle Aas.
 
 =head2 Agrupación de SO
 
@@ -333,13 +333,13 @@ La variable obsoleta C<$#> (formato de salida para los números) se ha eliminado
 
 Dos nuevas advertencias severas, C<$#/$* is no longer supported> han sido añadidas.
 
-=head2 Los I<ivalores> de substr() ya no son de longitud fija
+=head2 Los I<valores-izquierda> de substr() ya no son de longitud fija
 
-Los I<ivalores> devueltos por la forma de tres argumento de substr() solía ser de una "ventana de longitud fija" de la cadena original. En algunos casos esto podría causar más adelante una acción sorprendente u otro comportamiento indefinido. Ahora, la longitud de la ventana se ajusta a la longitud de la cadena asignada a él.
+Los I<valores-izquierda> devueltos por la forma de tres argumento de substr() solía ser de una "ventana de longitud fija" de la cadena original. En algunos casos esto podría causar más adelante una acción sorprendente u otro comportamiento indefinido. Ahora, la longitud de la ventana se ajusta a la longitud de la cadena asignada a él.
 
 =head2 Análisis de C<-f _>
 
-Se fuerza a que el identificador C<_> sea considerada una palabra suelta después de un operador de test de fichero. Esto soluciona una serie de cuestiones de mala interpretación cuando esté definida una subrutina global C<_>.
+Se fuerza a que el identificador C<_> sea considerada una palabra suelta después de un operador de test de archivo. Esto soluciona una serie de cuestiones de mala interpretación cuando esté definida una subrutina global C<_>.
 
 =head2 C<:unique>
 
@@ -383,7 +383,7 @@ Cuando perl se ejecuta bajo el modo contaminado, C<printf()> y C<sprintf()> rech
 
 =head2 manejadores de señales y su indefinición
 
-Indefiniendo o borrando un gestor de señales con C<undef $SIG{FOO}> es ahora equivalente a ponerlo a C<'DEFAULT'>. (Rafael Garcia-Suarez)
+Indefiniendo o borrando un controlador de señales con C<undef $SIG{FOO}> es ahora equivalente a ponerlo a C<'DEFAULT'>. (Rafael Garcia-Suarez)
 
 =head2 estado estricto y desreferenciando en defined()
 
@@ -580,7 +580,7 @@ C<Module::Load::Conditional> ofrece formas sencillas de consulta y, posiblemente
 
 =item *
 
-C<Time::Piece> proporciona una interfaz orientada a objetos a las funciones de tiempo, ignorando las funciones incorporadas localtime() y gmtime().
+C<Time::Piece> proporciona una interfaz orientada a objetos a las funciones de tiempo, ignorando las funciones predefinidas localtime() y gmtime().
 
 =item *
 
@@ -927,7 +927,7 @@ Varias fugas de memoria en ithreads fueron cerradas. Además, ithreads se ha hec
 C<threads> es ahora un módulo con doble vida, también disponible en CPAN. Ha sido expandido de muchas maneras. Un método kill() está disponible para la señalización en hilos.
 Se puede obtener el estado de un hilo, o la lista de hilos en ejecución o acoplables.
 
-Un nuevo método C<< threads->exit() >> es utilizado para salir de la aplicación (esto es lo que está puesto por defecto para el hilo principal) o sólo para el hilo actual (esto es lo que está puesto por defecto para todos los otros hilos). Por otro lado, la función exit() incorporada ahora hace que toda la aplicación termine, totalmente. (Jerry D. Hedden)
+Un nuevo método C<< threads->exit() >> es utilizado para salir de la aplicación (esto es lo que está puesto por defecto para el hilo principal) o sólo para el hilo actual (esto es lo que está puesto por defecto para todos los otros hilos). Por otro lado, la función predefinida exit() ahora hace que toda la aplicación termine, totalmente. (Jerry D. Hedden)
 
 =item chr() y valores negativos
 
@@ -939,7 +939,7 @@ En Windows, ahora se comprueba la contaminación de la variable de entorno PERL5
 
 =item Usando *FILE{IO}
 
-Los test de ficheros C<stat()> y C<-X> ahora trata a los identificadores de archivo *FILE{IO} como identificadores de archivo *FILE. (Steve Peters)
+Los test de archivos C<stat()> y C<-X> ahora trata a los identificadores de archivo *FILE{IO} como identificadores de archivo *FILE. (Steve Peters)
 
 =item Sobrecargando y re-bendiciendo
 
@@ -966,7 +966,7 @@ Además, con un perl con soporte de hilos de ejecución, usar C<PERLIO_DEBUG> po
 
 =item PerlIO::scalar y escalares de solo lectura
 
-PerlIO::scalar ahora evitará la escritura a escalares de sólo lectura. Por otra parte, seek() es ahora compatible con gestores de archivo basados en PerlIO::scalar, poniéndose la cadena subyacente rellenada con ceros, según sea necesario. (Rafael, Jarkko Hietaniemi)
+PerlIO::scalar ahora evitará la escritura a escalares de sólo lectura. Por otra parte, seek() es ahora compatible con identificadores de archivo basados en PerlIO::scalar, poniéndose la cadena subyacente rellenada con ceros, según sea necesario. (Rafael, Jarkko Hietaniemi)
 
 =item study() y UTF-8
 
@@ -985,9 +985,9 @@ Cuando un módulo o un archivo se carga a través de un gancho en @INC, y cuando
 
 Las opciones C<-w> y C<-t> ahora pueden ser utilizadas juntas sin alterar qué categorías de alertas están activadas o no. (Rafael)
 
-=item Duplicando gestores de archivo UTF-8
+=item Duplicando identificadores de archivo UTF-8
 
-Duplicando un gestor de archivo que tiene la capa PerlIO C<:utf8> activada, ahora activará correctamente esa capa en el gestor de archivo duplicado. (Rafael)
+Duplicando un identificador de archivo que tiene la capa PerlIO C<:utf8> activada, ahora activará correctamente esa capa en el identificador de archivo duplicado. (Rafael)
 
 =item Localización de elementos hash
 
@@ -1096,7 +1096,7 @@ Además, Dave Mitchell mejoró la salida de depuración del analizador léxico c
 
 =head2 Uso de C<const>
 
-Andy Lester suministró muchas mejoras para determinar qué parámetros de las funciones y qué variables locales podrían realmente ser declaradas C<const> para el compilador de C. Steve Peters proporcionó nuevas macros C<*_set> y rediseñó el núcleo para utilizar éstas en lugar de asignar a macros en contexto de IVALOR.
+Andy Lester suministró muchas mejoras para determinar qué parámetros de las funciones y qué variables locales podrían realmente ser declaradas C<const> para el compilador de C. Steve Peters proporcionó nuevas macros C<*_set> y rediseñó el núcleo para utilizar éstas en lugar de asignar a macros en contexto VALOR-IZQUIERDA.
 
 =head2 Mathoms
 

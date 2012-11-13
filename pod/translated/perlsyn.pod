@@ -316,13 +316,13 @@ X<my> X<local>
 En realidad, la palabra clave C<foreach> es un sinónimo de la palabra clave C<for>, por lo que puede usar cualquiera de las dos.  Si se omite VAR, se le asigna cada valor a C<$_>.
 X<$_>
 
-Si cualquier elemento de LISTA es un I<lvalue> (un valor que puede ponerse en el lado izquierdo de una expresión de asignación), puede modificarlo, modificando VAR dentro del bucle.  Recíprocamente, si cualquier elemento de LISTA NO es un I<lvalue>, cualquier intento de modificar este elemento fallará (provocará un error).  En otras palabras, la variable índice del bucle C<foreach> es implícitamente un alias de cada elemento de la lista sobre la que está iterando.
+Si cualquier elemento de LISTA es un valor-izquierda, puede modificarlo, modificando VAR dentro del bucle.  Recíprocamente, si cualquier elemento de LISTA NO es un valor-izquierda, cualquier intento de modificar este elemento fallará (provocará un error).  En otras palabras, la variable índice del bucle C<foreach> es implícitamente un alias de cada elemento de la lista sobre la que está iterando.
 X<alias>
 
 Si cualquier parte de la LISTA es un array, C<foreach> quedará confundido si añade o quita elementos dentro del cuerpo del bucle, por ejemplo, al usar C<splice>.   Así que no lo haga.
 X<splice>
 
-C<foreach> probablemente no hará lo esperado si VAR está enlazada a otra variable especial.   Tampoco haga esto.
+C<foreach> probablemente no hará lo esperado si VAR está atada a otra variable especial.   Tampoco haga esto.
 
 Ejemplos:
 
@@ -675,7 +675,7 @@ B<NOTA:> A menudo se tiene que usar C<$c ~~ $_> porque la prueba por defecto es 
 
 =item 5.
 
-Por lo menos, las tres funciones incorporadas C<defined(...)>, C<exists(...)> y C<eof(...)>.  Algún día podríamos agregar más de estos casos, más adelante, si pensamos en ellos.
+Por lo menos, las tres funciones predefinidas C<defined(...)>, C<exists(...)> y C<eof(...)>.  Algún día podríamos agregar más de estos casos, más adelante, si pensamos en ellos.
 
 =item 6.
 

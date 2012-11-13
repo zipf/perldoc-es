@@ -213,7 +213,7 @@ Actualizado desde la versión 0.22 a la 0.23.
 
 Actualizado desde la versión 1.06 a la 1.07.
 
-El fichero base de datos Unicode F<NameAliases.txt> ha sido añadido. Esto tiene el efecto de añadir algunos caracteres C<\N> extra que antes no hubieran sido reconocidos, por ejemplo, C<"\N{LATIN CAPITAL LETTER GHA}">.
+El archivo de base de datos Unicode F<NameAliases.txt> ha sido añadido. Esto tiene el efecto de añadir algunos caracteres C<\N> extra que antes no hubieran sido reconocidos, por ejemplo, C<"\N{LATIN CAPITAL LETTER GHA}">.
 
 =item C<constant>
 
@@ -797,7 +797,7 @@ Ahora se manejan las constantes de estilo C++ (C<//>) correctamente en los enum.
 
 =item F<perl5db.pl>
 
-Las subrutinas C<LVALUE> ahora funcionan dentro del depurador.
+Las subrutinas C<VALOR-IZQUIERDA> ahora funcionan dentro del depurador.
 
 El depurador ahora, correctamente, maneja el caché de subrutinas constantes, y las plantillas de subrutina.
 
@@ -963,7 +963,7 @@ Algunos potenciales volcados del núcleo en PerlIO arreglados [RT #57322,54828].
 
 =item *
 
-El depurador ahora trabaja con subrutinas de tipo I<ivalor>.
+El depurador ahora trabaja con subrutinas de tipo I<valor-izquierda>.
 
 =item *
 
@@ -1069,7 +1069,7 @@ Bajo C<use filetest 'access'>, C<-x> estaba utiliza un modo de acceso incorrecto
 
 =item *
 
-C<length> en un escalar enlazado que devolvía un valor Unicode, podría no ser correcto, en una primera vez. Esto ha sido corregido.
+C<length> en un escalar atado que devolvía un valor Unicode, podría no ser correcto, en una primera vez. Esto ha sido corregido.
 
 =item *
 
@@ -1357,7 +1357,7 @@ Pruebas de la interacción de las propiedades Unicode y hebras.
 
 =item t/op/reg_nc_tie.t
 
-Prueba los métodos enlazados de C<Tie::Hash::NamedCapture>.
+Prueba los métodos atados de C<Tie::Hash::NamedCapture>.
 
 =item t/op/reg_posixcc.t 
 

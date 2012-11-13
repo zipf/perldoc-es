@@ -31,7 +31,7 @@ B<Perl nunca ha garantizado ningún tipo de ordenación de las claves de un hash
 
 La aleatoriedad añadida puede afectar a las aplicaciones.
 
-Un posible escenario es cuando la salida de una aplicación ha incluido datos hash.  Por ejemplo, si ha utilizado el módulo Data::Dumper para volcar los datos en diferentes archivos, y luego comparó los archivos para ver si los datos han cambiado, ahora tendrá falsos positivos ya que el orden en que los hashes se vuelcan pueden variar.  En general, la cura es ordenar las claves (o valores); en particular para Data::Dumper use la opción C<Sortkeys>.  Si un determinado orden es muy importante, utilice hashes enlazados: por ejemplo, el módulo Tie::IxHash, que por defecto preserva el orden en que los elementos de un hash han sido añadidos.
+Un posible escenario es cuando la salida de una aplicación ha incluido datos hash.  Por ejemplo, si ha utilizado el módulo Data::Dumper para volcar los datos en diferentes archivos, y luego comparó los archivos para ver si los datos han cambiado, ahora tendrá falsos positivos ya que el orden en que los hashes se vuelcan pueden variar.  En general, la cura es ordenar las claves (o valores); en particular para Data::Dumper use la opción C<Sortkeys>.  Si un determinado orden es muy importante, utilice hashes atados: por ejemplo, el módulo Tie::IxHash, que por defecto preserva el orden en que los elementos de un hash han sido añadidos.
 
 Un problema más sutil es la confianza en el orden de la "destrucción global".
 Eso es lo que ocurre al final de la ejecución: Perl destruye todas las estructuras de datos, incluyendo los datos del usuario.  If your destructors (the DESTROY
@@ -98,9 +98,9 @@ Por lo tanto, perl 5.8.1 introduce una "puerta trasera" para restaurar el compor
 
 En noticias aparte, ahora puede usar señales de forma segura con POSIX::sigaction.  Vea L<POSIX/POSIX::SigAction>.
 
-=head2 Arrays enlazados con índices de array negativos
+=head2 Arrays atados con índices de array negativos
 
-Anteriormente, los índices que se pasaban a los métodos C<FETCH>, C<STORE>, C<EXISTS>, y C<DELETE> de la clase array enlazada eran siempre no negativos.  Si el argumento era negativo, Perl llamaría a FETCHSIZE de forma implícita y sumaría el resultado al índice antes de pasar el resultado al método de array enlazado.  Este comportamiento es ahora opcional.  Si la clase de array enlazado contiene una variable de paquete denominada C<$NEGATIVE_INDICES> que se establece a un valor real, los valores negativos serán pasados directamente a C<FETCH>, C<STORE>, C<EXISTS>, y C<DELETE>.
+Anteriormente, los índices que se pasaban a los métodos C<FETCH>, C<STORE>, C<EXISTS>, y C<DELETE> de la clase array atada eran siempre no negativos.  Si el argumento era negativo, Perl llamaría a FETCHSIZE de forma implícita y sumaría el resultado al índice antes de pasar el resultado al método de array atado.  Este comportamiento es ahora opcional.  Si la clase de array atado contiene una variable de paquete denominada C<$NEGATIVE_INDICES> que se establece a un valor real, los valores negativos serán pasados directamente a C<FETCH>, C<STORE>, C<EXISTS>, y C<DELETE>.
 
 =head2 local ${$x}
 
@@ -406,7 +406,7 @@ En 5.8.0, esto
 
 no funciona correctamente, sino que corrompe los datos.  Este error ya se ha solucionado.
 
-Métodos enlazados como FETCH, etc ahora pueden acceder de forma segura a los valores enlazados, es decir, que resulta en una llamada recursiva a FETCH, etc. Recuerde, sin embargo, romper la recursión.
+Métodos atados como FETCH, etc ahora pueden acceder de forma segura a los valores enlazados, es decir, que resulta en una llamada recursiva a FETCH, etc. Recuerde, sin embargo, romper la recursión.
 
 En el arranque, Perl bloquea la señal SIGFPE, ya que no hay mucho que Perl pueda hacer al respecto.  Anteriormente, este bloqueo se encontraba en vigor también para los programas ejecutados desde dentro de Perl.  Ahora Perl restaura la rutina de manejo de SIGFPE original, fuera cual fuera, antes de ejecutar programas externos.
 
@@ -551,7 +551,7 @@ Esta advertencia debería haber salido ya desde 5.8.0.
 
 =head2 Nuevo "I<Tied variable freed while still in use>" (Variable enlazada liberada mientras todavía está en uso)
 
-Algo tiró del enchufe en una variable enlazada que seguía viva, Perl apuesta seguro por el rescate.
+Algo tiró del enchufe en una variable atada que seguía viva, Perl apuesta seguro por el rescate.
 
 =head2 Nuevo "I<To%s: illegal mapping '%s'>" (A %s: mapeo ilegal '%s')
 
@@ -604,15 +604,15 @@ También necesitará Apache::Test 1.04 o superior.
 
 Muchas de las plataformas más raras en las que funcionaba al 100% o muy cerca de ello con perl 5.8.0 se han quedado un poco descuidadas debido a que sus responsables se han ocupado últimamente de otras cosas, y por lo tanto habrá más fallos en esas plataformas.  En estas plataformas se incluyen a Mac OS Classic, IBM z/OS (y otras plataformas EBCDIC), y NetWare.  Las plataformas más comunes de Perl (Unix y familia, las plataformas Microsoft y VMS) tiene pruebas lo suficientemente grandes y una población de expertos que lo están haciendo bien.
 
-=head2 Hashes enlazados en contexto escalar
+=head2 Hashes atados en contexto escalar
 
-Actualmente, los hashes enlazados no devuelven nada útil en contexto escalar, por ejemplo cuando se utilizan como pruebas booleanas:
+Actualmente, los hashes atados no devuelven nada útil en contexto escalar, por ejemplo cuando se utilizan como pruebas booleanas:
 
 	if (%tied_hash) { ... }
 
 El comportamiento sin sentido actual siempre devolvía falso, independientemente de si el hash está vacío o si tiene elementos.
 
-La causa principal es que no existe una interfaz para los implementadores de los hashes enlazados para implementar el comportamiento de un hash en contexto escalar.
+La causa principal es que no existe una interfaz para los implementadores de los hashes atados para implementar el comportamiento de un hash en contexto escalar.
 
 =head2 Fallos en Net::Ping 450_service y 510_ping_udp
 
@@ -657,12 +657,12 @@ El malloc Perl (C<-Dusemymalloc>) no funciona en absoluto en Mac OS X. Sin embar
 
 =head2 Tru64: No compilación con threaded con el GNU cc (gcc)
 
-En las últimas versiones de Tru64 (por ejemplo, v5.1B o posterior) gcc no se puede utilizar para compilar un Perl con soporte de hilos de ejecución (-Duseithreads) debido a que el fichero del sistema C<< <pthread.h> >> no sabe nada sobre gcc.
+En las últimas versiones de Tru64 (por ejemplo, v5.1B o posterior) gcc no se puede utilizar para compilar un Perl con soporte de hilos de ejecución (-Duseithreads) debido a que el archivo del sistema C<< <pthread.h> >> no sabe nada sobre gcc.
 
 =head2 Win32: sysopen, sysread, syswrite
 
 A partir de la versión 5.8.0, sysopen()/sysread()/syswrite() no se comportan como lo hacían antes en 5.6.1 y anteriores, con respecto al modo "texto".
-Estos funciones incorporadas, ahora, funcionan siempre en modo "binario" (incluso si se pasó a sysopen() la bandera O_TEXT, o si se utilizó binmode() con el identificador de archivo).  Tenga en cuenta que este problema sólo afecta a los archivos de disco, ya que los I<sockets> y tuberías siempre han estado en modo "binario" en la versión para Windows.  Ya que este comportamiento se considera actualmente un error, un comportamiento compatible puede ser re-introducido en una futura versión.  Hasta entonces, el uso de sysopen(), sysread() y syswrite() no está soportado para las operaciones en modo "texto".
+Estos funciones predefinidas, ahora, funcionan siempre en modo "binario" (incluso si se pasó a sysopen() la bandera O_TEXT, o si se utilizó binmode() con el identificador de archivo).  Tenga en cuenta que este problema sólo afecta a los archivos de disco, ya que los I<sockets> y tuberías siempre han estado en modo "binario" en la versión para Windows.  Ya que este comportamiento se considera actualmente un error, un comportamiento compatible puede ser re-introducido en una futura versión.  Hasta entonces, el uso de sysopen(), sysread() y syswrite() no está soportado para las operaciones en modo "texto".
 
 =head1 Direcciones futuras
 

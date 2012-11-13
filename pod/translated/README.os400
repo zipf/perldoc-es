@@ -42,7 +42,7 @@ Una vez que lo tenga, simplemente lance un shell PASE y extraiga el empaquetado 
 
 Si está compilando en PASE, entonces "make install" es lo único que necesitará hacer.
 
-La ruta por defecto para el binario perl es /QOpenSys/perl/bin/perl.  Querrá hacer un enlace simbólico de /QOpenSys/usr/bin/perl a este fichero, por lo que no tiene que modificar su ruta.
+La ruta por defecto para el binario perl es /QOpenSys/perl/bin/perl.  Querrá hacer un enlace simbólico de /QOpenSys/usr/bin/perl a este archivo, por lo que no tiene que modificar su ruta.
 
 =head2 Usando Perl en OS/400 PASE
 
@@ -54,7 +54,7 @@ Scripts comenzando con #!/usr/bin/perl deberían funcionar si tiene /QOpenSys/us
 
 Cuando compile en PASE, no hay un comando "oslevel".  Por eso, puede querer crear un script llamado "oslevel" que saque el nivel de AIX que su versión del ejecutable PASE soporta.  Si no está seguro, consulte la documentación o use "4.3.3.0".
 
-Si tiene test de casos que fallan, compruebe la existencia de ficheros de I<spool>.
+Si tiene test de casos que fallan, compruebe la existencia de archivos de I<spool>.
 El test de caso puede estar intentando usar una syscall que no está implementada en PASE.  Para evitar el SIGILL, intente ajustar la variable de entorno PASE_SYSCALL_NOSIGILL o tener un controlador para SIGILL.  Si puede compilar programas para PASE, ejecute el script config y edite config.sh cuando le dé esa posibilidad.  Si desea eliminar fchdir(), que no está implementado en V5R1, simplemente cambie la línea que dice:
 
 d_fchdir='define'

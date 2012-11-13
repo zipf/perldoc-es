@@ -18,7 +18,7 @@ No hay cambios intencionadamente incompatibles con 5.8.7. Si los hay, los errore
 
 =item *
 
-C<chdir>, C<chmod> y C<chown> ahora pueden trabajar tanto con nombres de ficheros como con identificadores de archivos, si el sistema soporta, respectivamente, C<fchdir>, C<fchmod> y C<fchown>, gracias a un parche proporcionado por Gisle Aas.
+C<chdir>, C<chmod> y C<chown> ahora pueden trabajar tanto con nombres de archivos como con identificadores de archivos, si el sistema soporta, respectivamente, C<fchdir>, C<fchmod> y C<fchown>, gracias a un parche proporcionado por Gisle Aas.
 
 =back
 
@@ -1435,7 +1435,7 @@ El valor del pragma C<open> ya no es ignorado por el open de tres argumentos.
 
 =item *
 
-La optimización de C<for (reverse @a)> introducido en perl 5.8.6 puede portarse mal cuando el array tuviera elementos indefinidos y fuera usado en contexto de IVALOR. Dave Mitchell proporcionó un arreglo.
+La optimización de C<for (reverse @a)> introducido en perl 5.8.6 puede portarse mal cuando el array tuviera elementos indefinidos y fuera usado en contexto VALOR-IZQUIERDA. Dave Mitchell proporcionó un arreglo.
 
 =item *
 
@@ -1481,7 +1481,7 @@ Este error de sintaxis indica que el analizador léxico no pudo encontrar el del
 
 Se ha hecho una buena cantidad de refactorizaciones del código fuente C<C>, en parte para que sea más ordenado y más fácil de mantener. El código objeto resultante y el C<perl> binario pueden ser menores que 5.8.7, en particular, debido a un cambio aportado por Dave Mitchell, que rehízo el código de las advertencias para que fuera significativamente menor. Además de ser má pequeño y, posiblemente, más rápido, no debería haber cambios detectables por el usuario.
 
-Andy Lester suministró muchas mejoras para determinar qué parámetros de las funciones y qué variables locales podrían realmente ser declaradas C<const> para el compilador de C. Steve Peters proporcionó nuevas macros C<*_set> y rediseñó el núcleo para utilizar éstas en lugar de asignar a macros en contexto de IVALOR.
+Andy Lester suministró muchas mejoras para determinar qué parámetros de las funciones y qué variables locales podrían realmente ser declaradas C<const> para el compilador de C. Steve Peters proporcionó nuevas macros C<*_set> y rediseñó el núcleo para utilizar éstas en lugar de asignar a macros en contexto VALOR-IZQUIERDA.
 
 Dave Mitchell mejoró la salida de depura del analizador léxico con C<-DT>
 
@@ -1495,7 +1495,7 @@ Para XS o con fines de depuración embebida, si perl es compilado con C<-DDEBUG_
 
 El optimizador en HP-UX 11.23 (Itanium 2) está ahora, en parte, desactivado (reducido a +O1) cuando se usa en HP C-ANSI-C; la causa de los problemas en los niveles más altos de optimización aún no está clara.
 
-Hay un puñado de pruebas fallidas que quedan en VMS, sobre todo debido a la corrección de pruebas y ajustes menores con demasiadas dependencias como para poder integrarse en esta versión de la secuencia de desarrollo, donde todos ellas han sido corregidas.  La siguiente es una lista de los errores esperados con el número de revisión de la corrección en el que se conocen:
+Hay un puñado de pruebas fallidas que quedan en VMS, sobre todo debido a la corrección de pruebas y ajustes menores con demasiadas dependencias como para poder integrarse en esta versión de la secuencia de desarrollo, donde todos ellas han sido corregidas.  La siguiente es una lista de los errores esperados con el número de parche de la corrección en el que se conocen:
 
     ext/Devel/PPPort/t/ppphtest.t  #26913
     ext/List/Util/t/p_tainted.t    #26912

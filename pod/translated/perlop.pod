@@ -592,7 +592,7 @@ Los contextos escalar o lista se propagan hacia el operando de la derecha si es 
 =head2 Defined-Or lógico
 X<//> X<operator, logical, defined-or> X<operador, lógico, defined-or>
 
-A pesar de que no tiene equivalente directo en C, el operador Perl C<//> está relacionado con el operador or del C.  De hecho, es exactamente lo mismo que C<||>, excepto que comprueba la definición del lado izquierdo en lugar de su estado de verdad.  Por lo tanto, C<< EXPR1 // EXPR2 >> devuelve el valor de C<< EXPR1 >> si está definida, de lo contrario, es devuelto el valor de C<< EXPR2 >>. (C<< EXPR1 >> se evalúa en contexto de escalar, C<< EXPR2 >> en el propio contexto de C<< // >>). Normalmente, este es el mismo resultado que C<< defined(EXPR1) ? EXPR1 : EXPR2 >> (salvo que el operador ternario puede ser utilizado como un valor a la izquierda, mientras que C<< EXPR1 // EXPR2 >>, no puede). Esto es muy útil para proporcionar valores por defecto a las variables.  Si realmente desea probar si al menos uno de los dos, C<$a> o C<$b>, están definidos, use C<defined($a // $b)>.
+A pesar de que no tiene equivalente directo en C, el operador Perl C<//> está relacionado con el operador or del C.  De hecho, es exactamente lo mismo que C<||>, excepto que comprueba la definición del lado izquierdo en lugar de su estado de verdad.  Por lo tanto, C<< EXPR1 // EXPR2 >> devuelve el valor de C<< EXPR1 >> si está definida, de lo contrario, es devuelto el valor de C<< EXPR2 >>. (C<< EXPR1 >> se evalúa en contexto de escalar, C<< EXPR2 >> en el propio contexto de C<< // >>). Normalmente, este es el mismo resultado que C<< defined(EXPR1) ? EXPR1 : EXPR2 >> (salvo que el operador ternario puede ser utilizado como un valor-izquierda, mientras que C<< EXPR1 // EXPR2 >>, no puede). Esto es muy útil para proporcionar valores por defecto a las variables.  Si realmente desea probar si al menos uno de los dos, C<$a> o C<$b>, están definidos, use C<defined($a // $b)>.
 
 Los operadores C<||>, C<//> y C<&&> devuelven el último valor evaluado (a diferencia de los operadores del C C<||> y C<&&>, que devuelve 0 o 1). Por lo tanto, un forma razonablemente portátil para averiguar el directorio principal podría ser:
 
@@ -745,7 +745,7 @@ Contexto escalar o lista es propagado hacia adelante, en el segundo o tercer arg
     @a = $ok ? @b : @c;  # obtiene un array
     $a = $ok ? @b : @c;  # oops, ¡esto solo cuenta elementos!
 
-El operador puede ser asignado si tanto el segundo y tercer argumentos son I<ivalores> legales (lo que significa que les puede asignar valores):
+El operador puede ser asignado si tanto el segundo y tercer argumentos son valores-izquierda legales (lo que significa que les puede asignar valores):
 
     ($a_o_b ? $a : $b) = $c;
 
@@ -780,7 +780,7 @@ es equivalente a
 
     $a = $a + 2;
 
-pero sin duplicar los efectos laterales que, desreferenciando el valor de la izquierda, se podrían desencadenar, como por ejemplo, de tie().  Otros operadores de asignación funcionan de manera similar.
+pero sin duplicar los efectos laterales que, desreferenciando el valor-izquierda, se podrían desencadenar, como por ejemplo, de tie().  Otros operadores de asignación funcionan de manera similar.
 Lo siguiente es reconocido como correcto:
 
     **=    +=    *=    &=    <<=    &&=
@@ -790,7 +790,7 @@ Lo siguiente es reconocido como correcto:
 
 Aunque estos están agrupados por familia, todos ellos tienen la precedencia de la asignación.
 
-A diferencia de C, el operador de asignación escalar produce un I<ivalor> válido.
+A diferencia de C, el operador de asignación escalar produce un valor-izquierda válido.
 Modificando una asignación es equivalente a realizar la asignación y luego modificando la variable que le fue asignada.  Esto es útil para modificar una copia de algo, como esto:
 
     ($tmp = $global) =~ tr/13579/24680/;
@@ -809,7 +809,7 @@ es equivalente a
     $a += 2;
     $a *= 3;
 
-Del mismo modo, una asignación de lista en contexto de lista produce la lista de I<ivalores> asignados, y una asignación de lista en contexto escalar devuelve el número de elementos producidos por la expresión en el lado derecho de la asignación.
+Del mismo modo, una asignación de lista en contexto de lista produce la lista de valores-izquierda asignados, y una asignación de lista en contexto escalar devuelve el número de elementos producidos por la expresión en el lado derecho de la asignación.
 
 =head2 Operador coma
 X<comma> X<operator, comma> X<,> X<coma> X<operador, coma>
@@ -945,7 +945,7 @@ Mientras solemos solemos pensar de lo entrecomillado como si fueran valores lite
 		 s{}{}	    Substitución	  sí*
 		tr{}{}    Transliteración	  no (pero vea abajo)
 		 y{}{}     Transliteración	  no (pero vea abajo)
-        <<EOF               doc-empotrado	  sí*
+        <<EOF               doc incrustado        sí*
 
 	* excepto si el delimitador es ''.
 
@@ -1203,7 +1203,7 @@ X<operador, coincidencia> X<opciones, regex> X<opciones, regexp>
 
 =item /PATRÓN/msixpodualgc
 
-Busca una cadena para una coincidencia de patrones, y en un contexto escalar devuelve verdadero si tiene éxito, falso si falla.  Si no se especifica una cadena vía los operadores C<=~> o C<!~>, se busca en la cadena $_.  (La cadena especificada con C<=~> no tiene por qué ser un I<valor a la izquierda>: puede ser el resultado de una evaluación de una expresión, pero recuerde que C<=~> tiene una precedencia más alta).  Vea también L<perlre>.
+Busca una cadena para una coincidencia de patrones, y en un contexto escalar devuelve verdadero si tiene éxito, falso si falla.  Si no se especifica una cadena vía los operadores C<=~> o C<!~>, se busca en la cadena $_.  (La cadena especificada con C<=~> no tiene por qué ser un valor-izquierda: puede ser el resultado de una evaluación de una expresión, pero recuerde que C<=~> tiene una precedencia más alta).  Vea también L<perlre>.
 
 Las opciones son como se describe anteriormente en C<qr//>; además, los siguientes modificadores de coincidencia están disponibles:
 
@@ -1388,9 +1388,9 @@ X<sustitución> X<reemplazo> X<regexp, reemplazo> X<reemplazo, sustitución>
 
 Busca un patrón en una cadena, y si se encuentra, sustituye este patrón con el texto de reemplazo y devuelve el número de sustituciones.  De lo contrario, devuelve falso (en concreto, la cadena vacía).
 
-Si la opción C</r> (no destructiva) es utilizada, entonces llevará a cabo la sustitución en una copia de la cadena y en lugar de devolver el número de sustituciones, devuelve la copia, haya o no ocurrido una sustitución.  La cadena original no se cambia nunca cuando C</r> se utiliza.  La copia siempre será una cadena normal, incluso si la entrada es un objeto o una variable enlazada.
+Si la opción C</r> (no destructiva) es utilizada, entonces llevará a cabo la sustitución en una copia de la cadena y en lugar de devolver el número de sustituciones, devuelve la copia, haya o no ocurrido una sustitución.  La cadena original no se cambia nunca cuando C</r> se utiliza.  La copia siempre será una cadena normal, incluso si la entrada es un objeto o una variable atada.
 
-Si no se especifica una cadena a través de los operadores C<=~> o C<!~>, se utiliza la variable C<$_> para la búsqueda y la modificación.  A menos que se use la opción C</r>, la cadena especificada debe ser una variable escalar, un elemento de un array, un elemento hash, o una asignación a una de estas; es decir, algún tipo de I<ivalor> escalar.
+Si no se especifica una cadena a través de los operadores C<=~> o C<!~>, se utiliza la variable C<$_> para la búsqueda y la modificación.  A menos que se use la opción C</r>, la cadena especificada debe ser una variable escalar, un elemento de un array, un elemento hash, o una asignación a una de estas; es decir, algún tipo de valor-izquierda escalar.
 
 Si el delimitador elegido es una comilla simple, no se realiza ninguna interpolación, ni en el PATRÓN ni en el REEMPLAZO.  De lo contrario, si el PATRÓN contiene un $ que parece más una variable que una marca de fin de cadena, la variable será interpolada en el patrón, en tiempo de ejecución.  Si desea que el patrón sea compilado solo la primera vez que la variable sea interpola, utilice la opción C</o>.  Si el patrón se evalúa a la cadena vacía, se utiliza en su lugar la última expresión regular ejecutada con éxito.  Ver L<perlre> para una explicación más detallada sobre esto.
 
@@ -1544,7 +1544,7 @@ Por ejemplo:
     open(STDIN, "<&SPLAT") || die "no puedo duplicar SPLAT: $!";
     print STDOUT `sort`;
 
-imprimirá los contenidos ordenados del fichero nombrado como F<"stuff">.
+imprimirá los contenidos ordenados del archivo nombrado como F<"stuff">.
 
 Usando comillas simples como delimitadores impide la interpolación del doble entrecomillado de Perl, pasándolo, en su lugar, al shell:
 
@@ -1596,9 +1596,9 @@ X<transliterar>
 
 Translitera todas las apariciones de los caracteres que se encuentran en la lista de búsqueda con el carácter correspondiente en la lista de reemplazo.  Devuelve el número de caracteres sustituidos o eliminados.  Si no se especifica una cadena a través de los operadores C<=~> o C<!~>, la cadena $_ es transliterada.
 
-Si la opción C</r> (no-destructiva) está presente, se crea una nueva copia de la cadena y sus caracteres transliterados, y esta copia es devuelta sin importar si fue modificada o no: la cadena original siempre permanece sin cambios.  La nueva copia siempre será una cadena normal, incluso si la entrada es un objeto o una variable enlazada.
+Si la opción C</r> (no-destructiva) está presente, se crea una nueva copia de la cadena y sus caracteres transliterados, y esta copia es devuelta sin importar si fue modificada o no: la cadena original siempre permanece sin cambios.  La nueva copia siempre será una cadena normal, incluso si la entrada es un objeto o una variable atada.
 
-A menos que se use la opción C</r>, la cadena especificada con C<=~> debe ser una variable escalar, un elemento de un array, un elemento hash, o una asignación a una de estas, es decir, un I<ivalor>.
+A menos que se use la opción C</r>, la cadena especificada con C<=~> debe ser una variable escalar, un elemento de un array, un elemento hash, o una asignación a una de estas, es decir, un valor-izquierda.
 
 Un intervalo de caracteres se puede especificar con un guión, por lo que C<tr/A-J/0-9/> es la sustitución de C<tr/ACEGIBDFHJ/0246813579/>.
 Para los devotos de B<sed>, C<y> se ofrece como un sinónimo de C<tr>.  Si la LISTA_BÚSQUEDA está delimitada por sus propios delimitadores, la LISTA_REEMPLAZO tiene su propio par de delimitadores, que pueden o no ser los mismos delimitadores que los primeros. Por ejemplo, C<tr[aeiouy][yuoiea]> o C<tr(+\-*/)/ABCD/>.
@@ -1663,7 +1663,7 @@ Debido a que la tabla de transliteración se construye en tiempo de compilación
 =item <<EOF
 X<here-doc> X<heredoc> X<here-document> X<<< << >>> X<documento incrustado>
 
-Un formato de entrecomillado orientado a líneas basado en la sintaxis shell "here-document" (este-documento, documento incrustado).  Siguiendo a C<< << >> especifica una cadena que termine el material entrecomillado, y todas las líneas siguientes a la actual hacia abajo hasta la cadena de terminación, son el valor del elemento.
+Un formato de entrecomillado orientado a líneas basado en la sintaxis shell "here-document" (documento incrustado).  Siguiendo a C<< << >> especifica una cadena que termine el material entrecomillado, y todas las líneas siguientes a la actual hacia abajo hasta la cadena de terminación, son el valor del elemento.
 
 La cadena de terminación puede ser un identificador (una palabra), o algún texto entrecomillado.  Un identificador sin comillas funciona igual que las comillas dobles.
 No es necesario un espacio entre el C<< << >> y el identificador, a menos que el identificador esté explícitamente entrecomillado.  (Si pone un espacio será tratado como un identificador nulo, que es válido, y coincide con la primera línea en blanco).  La cadena de terminación debe aparecer a sí mismo (sin comillas y sin espacios en blanco que la rodeen) en la línea de terminación.
@@ -1703,7 +1703,7 @@ Esta es la única forma de entrecomillar en Perl donde no es necesario preocupar
 
 =item Comillas invertidas
 
-El contenido del documento indicado es tratado como si la cadena estuviera incrustada entre comillas invertidas. Así, el contenido es interpolado como si estuviera entrecomillado doble y luego ejecutado a través del shell, devolviendo los resultados de la ejecución.
+El contenido del documento incrustado es tratado como si la cadena estuviera incrustada entre comillas invertidas. Así, el contenido es interpolado como si estuviera entrecomillado doble y luego ejecutado a través del shell, devolviendo los resultados de la ejecución.
 
        print << `EOC`; # ejecuta comando y obtén resultados
     echo Hola, qué tal
@@ -1972,7 +1972,7 @@ En estas construcciones de bucle, el valor asignado (tanto si la asignación es 
     while (($_ = <STDIN>) ne '0') { ... }
     while (<STDIN>) { last unless $_; ... }
 
-En otros contextos booleanos, C<< <GESTOR_ARCHIVO> >> sin una explícita prueba C<defined> o comparación, provoca una advertencia si está en vigor el I<pragma> C<use warnings> o la opción B<-w> en la línea de comandos (la variable C<$^W>).
+En otros contextos booleanos, C<< <IDENTIFICADOR_ARCHIVO> >> sin una explícita prueba C<defined> o comparación, provoca una advertencia si está en vigor el I<pragma> C<use warnings> o la opción B<-w> en la línea de comandos (la variable C<$^W>).
 
 Los identificadores de archivo STDIN, STDOUT y STDERR están predefinidos.  (Los identificadores de archivo C<stdin>, C<stdout>, y C<stderr> también funcionarán, excepto en paquetes en los que podrían ser interpretados como identificadores locales en lugar de globales).  Identificadores de archivo adicionales pueden ser creados con la función open(), entre otros.  Vea L<perlopentut> y L<perlfunc/open> para más detalles sobre esto.
 X<stdin> X<stdout> X<sterr>

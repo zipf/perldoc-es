@@ -14,14 +14,14 @@ No hay cambios incompatibles con 5.8.2.
 
 =head1 Mejoras en los componentes
 
-Un método C<SCALAR> está ahora disponible para los hash enlazados. Esto se activa cuando un hash enlazado se utiliza en contexto escalar, como
+Un método C<SCALAR> está ahora disponible para los hash atados. Esto se activa cuando un hash atado se utiliza en contexto escalar, como
 
     if (%hash_enlazado) {
 	...
     }
 
 
-El comportamiento anterior era que %hash_enlazado devolvería todo la que hubiera devuelto este hash antes de ser enlazado (por lo general, 0). El nuevo comportamiento en ausencia de un método SCALAR es retornar verdadero si está en medio de una iteración C<each>, y de otra manera, llamar a FIRSTKEY para comprobar si el hash está vacío (asegurarse de que una posterior C<each> también comenzará llamando FIRSTKEY). Por favor, vea L<perltie/SCALAR> para ver todos los detalles y advertencias.
+El comportamiento anterior era que %hash_atado devolvería todo la que hubiera devuelto este hash antes de ser atado (por lo general, 0). El nuevo comportamiento en ausencia de un método SCALAR es retornar verdadero si está en medio de una iteración C<each>, y de otra manera, llamar a FIRSTKEY para comprobar si el hash está vacío (asegurarse de que una posterior C<each> también comenzará llamando FIRSTKEY). Por favor, vea L<perltie/SCALAR> para ver todos los detalles y advertencias.
 
 =head1 Módulos y pragmas
 
@@ -91,7 +91,7 @@ join() podría devolver basura cuando la misma instrucción join() fue anteriorm
 
 C<$a .. $b> ahora funcionará como se espera cuando $a o $b sean C<undef>
 
-Usando claves Unicode con hashes enlazados ahora debería funcionar correctamente.
+Usando claves Unicode con hashes atados ahora debería funcionar correctamente.
 
 Leyendo $^E ahora preserva $!. Anteriormente, el código en C que implementaba $^E no preservaba C<errno>, por lo que la lectura de $^E podría causar que C<errno> y, por lo tanto, C<$!> cambiaran de forma inesperada.
 

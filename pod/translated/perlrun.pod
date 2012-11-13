@@ -28,16 +28,16 @@ Especificado línea a línea por medio de las opciones B<-e> o B<-E> en la líne
 
 =item 2.
 
-Contenido en el fichero especificado por el primer nombre de fichero en la línea de comandos.
+Contenido en el archivo especificado por el primer nombre de archivo en la línea de comandos.
 (Tenga en cuenta que los sistemas que soporten la notación C<#!>, invocan a los intérpretes de esta manera. Vea L<Emplazamiento de Perl>).
 
 =item 3.
 
-Pasado implícitamente a través de la entrada estándar.  Esto sólo funciona si no hay nombres de fichero como argumentos -para pasar argumentos a un programa que lee desde el STDIN debe, explícitamente, especificar un "-" para el nombre del programa-.
+Pasado implícitamente a través de la entrada estándar.  Esto sólo funciona si no hay nombres de archivo como argumentos -para pasar argumentos a un programa que lee desde el STDIN debe, explícitamente, especificar un "-" para el nombre del programa-.
 
 =back
 
-Con los métodos 2 y 3, Perl inicia el análisis del fichero de entrada desde el comienzo, a menos que haya especificado una opción B<-x>, en cuyo caso escanea por la primera línea que comience por C<#!> y contenga la palabra "perl", y arrancará desde allí.  Esto es útil para ejecutar un programa incorporado en un correo grande.  (En este caso se indicará el final del programa, utilizando el I<token> C<__END__>).
+Con los métodos 2 y 3, Perl inicia el análisis del archivo de entrada desde el comienzo, a menos que haya especificado una opción B<-x>, en cuyo caso escanea por la primera línea que comience por C<#!> y contenga la palabra "perl", y arrancará desde allí.  Esto es útil para ejecutar un programa incorporado en un correo grande.  (En este caso se indicará el final del programa, utilizando el I<token> C<__END__>).
 
 La línea C<#!> es siempre examinada para buscar las opciones mientras la línea está siendo analizada.  Por lo tanto, si está en una máquina que sólo permite un argumento con la línea C<#!>, o peor aún, ni siquiera reconoce la línea C<#!>, todavía puede obtener un comportamiento consistente de las opciones independientemente de cómo Perl haya sido invocado, incluso si B<-x> fue utilizado para encontrar el inicio del programa.
 
@@ -85,7 +85,7 @@ como primera línea en el archivo C<*.cmd> (B<-S> si sale un error en el manejo 
 
 =item MS-DOS
 
-Cree un fichero batch para ejecutar su programa, y codifique en él un C<ALTERNATE_SHEBANG> (vea el archivo F<dosish.h> en el código fuente de su distribución para obtener más información).
+Cree un archivo batch para ejecutar su programa, y codifique en él un C<ALTERNATE_SHEBANG> (vea el archivo F<dosish.h> en el código fuente de su distribución para obtener más información).
 
 =item Win95/NT
 
@@ -159,7 +159,7 @@ especifica el delimitador de registros de entrada (C<$/>) como un número en oct
     find . -name '*.orig' -print0 | perl -n0e unlink
 
 El valor especial 00 hará que Perl succione archivos en modo párrafo.
-Cualquier valor igual o superior a 0400 hará que Perl succione todo el fichero, pero, por convención, para este propósito se usa de forma normal el valor 0777.
+Cualquier valor igual o superior a 0400 hará que Perl succione todo el archivo, pero, por convención, para este propósito se usa de forma normal el valor 0777.
 
 También puede especificar el carácter separador usando notación hexadecimal: B<-0xI<HHH...>>, donde C<I<H>> son dígitos hexadecimales válidos.  A diferencia de con la forma octal, ésta puede ser usada para especificar cualquier carácter Unicode, incluso lo que están más allá de 0xFF.  Así que si I<verdaderamente> quiere usar un separador de registro 0777, especifíquelo como B<-0x1FF>.  (Esto significa que no puede usar la opción B<-x> con un nombre de directorio que consista en dígitos hexadecimales, o sino, Perl pensará que ha especificado un número hex relativo a B<-0>).
 
@@ -213,7 +213,7 @@ Por ejemplo, B<-COE> y B<-C6> activarán el tratamiento UTF-8 tanto en STDOUT co
 
 Las opciones C<io> quieren decir que cualquier subsecuente open() (o similares operaciones de E/S) en el actual ámbito del archivo tendrá aplicado una implícita capa PerlIO C<:utf8>, en otras palabras, se espera UTF-8 en cualquier flujo de entrada, y UTF-8 es producido en cualquier flujo de salida.  Esto queda marcado como por defecto, mientras que las capas explícitas en open() y con binmode() se pueden manipular los flujos de la forma usual.
 
-Un solitario B<-C> (no seguido por ningún número ni lista de opciones), o la cadena vacía C<""> para la variable de entorno C<PERL_UNICODE>, tiene el mismo efecto que B<-CSDL>.  En otras palabras, los gestores de archivo estándares de E/S y la capa por defecto para C<open()> están en modo UTF I<pero> solo si las variables de entorno de configuración local indican que se está en un entorno local UTF-8.  Este comportamiento sigue el I<implícito> (y problemático) comportamiento de UTF-8 de Perl 5.8.0.
+Un solitario B<-C> (no seguido por ningún número ni lista de opciones), o la cadena vacía C<""> para la variable de entorno C<PERL_UNICODE>, tiene el mismo efecto que B<-CSDL>.  En otras palabras, los identificadores de archivo estándares de E/S y la capa por defecto para C<open()> están en modo UTF I<pero> solo si las variables de entorno de configuración local indican que se está en un entorno local UTF-8.  Este comportamiento sigue el I<implícito> (y problemático) comportamiento de UTF-8 de Perl 5.8.0.
 (Vea L<perl581delta/UTF-8 ya no está predeterminado bajo configuraciones regionales UTF-8>).
 
 Puede usar B<-C0> (o C<"0"> para C<PERL_UNICODE>) para desactivar explícitamente todas las características Unicode anteriores.
@@ -408,7 +408,7 @@ que es equivalente a
     }
     select(STDOUT);
 
-excepto que la opción B<-i> no necesita comparar $ARGV a $oldargv para saber cuándo el nombre de archivo ha cambiado.  Aun así, usa ARGVOUT para el gestor de archivo seleccionado.  Tenga en cuenta que STDOUT es restaurado como el gestor de archivo por defecto, después del bucle.
+excepto que la opción B<-i> no necesita comparar $ARGV a $oldargv para saber cuándo el nombre de archivo ha cambiado.  Aun así, usa ARGVOUT para el identificador de archivo seleccionado.  Tenga en cuenta que STDOUT es restaurado como el identificador de archivo por defecto, después del bucle.
 
 Como se muestra arriba, Perl crea el archivo de copia de seguridad tanto si ha ocurrido un cambio en la salida, como si no.  Así que esto es justo una manera elegante de copiar archivos:
 
@@ -466,7 +466,7 @@ B<-M>I<módulo> ejecuta C<use> I<módulo> C<;> antes de ejecutar su programa.  P
 
 Si el primer carácter después de B<-M> o B<-m> es un guion (B<->) entonces el 'use' es reemplazado por un 'no'.
 
-Un poco de endulzamiento sintáctico interno puede ayudarle para decir B<-mI<MÓDULO>=foo,bar> o B<-MI<MÓDULO>=foo,bar> como una forma abreviada de B<'-MI<MÓDULO> qw(foo bar)'>.  Esto evita la necesidad de usar comillas cuando se importan símbolos.  El código real generado por B<-MI<MÓDULO>=foo,bar> es C<use módulo split(/,/,q{foo,bar})>.  Tenga en cuenta que la forma C<=> quita la distinción entre B<-m> y B<-M>.
+Un poco de endulzamiento sintáctico predefinido puede ayudarle para decir B<-mI<MÓDULO>=foo,bar> o B<-MI<MÓDULO>=foo,bar> como una forma abreviada de B<'-MI<MÓDULO> qw(foo bar)'>.  Esto evita la necesidad de usar comillas cuando se importan símbolos.  El código real generado por B<-MI<MÓDULO>=foo,bar> es C<use módulo split(/,/,q{foo,bar})>.  Tenga en cuenta que la forma C<=> quita la distinción entre B<-m> y B<-M>.
 
 Una consecuencia de esto es que B<-MI<MÓDULO>=número> nunca hace un control de versión, a no ser que C<I<MÓDULO>::import()> tenga instalado un control de versión, lo cual podría pasar, por ejemplo, si I<MÓDULO> hereda de L<Exporter>.
 
@@ -616,7 +616,7 @@ Caracteres dos puntos precedentes y finales puedes ser usados conjuntamente si n
 =item B<-w>
 X<-w>
 
-imprime advertencias sobre construcciones dudosas, como nombres de variables mencionadas sólo una vez y variables escalares utilizadas antes de ser declaradas; subrutinas redefinidas; referencias a gestores de archivo indefinidos; gestores de archivo abiertos en sólo lectura mientras que está intentando escribir en ellos; valores utilizados como un número que no I<parecen> números; utilizando un array como si se tratara de un escalar; si sus subrutinas tienen más de 100 niveles de profundidad de recursión; y un sinnúmero de otras cosas.
+imprime advertencias sobre construcciones dudosas, como nombres de variables mencionadas sólo una vez y variables escalares utilizadas antes de ser declaradas; subrutinas redefinidas; referencias a identificadores de archivo indefinidos; identificadores de archivo abiertos en sólo lectura mientras que está intentando escribir en ellos; valores utilizados como un número que no I<parecen> números; utilizando un array como si se tratara de un escalar; si sus subrutinas tienen más de 100 niveles de profundidad de recursión; y un sinnúmero de otras cosas.
 
 Esta opción, en realidad, sólo activa la variable global C<$^W>; normalmente, es preferible usar el pragma de ámbito léxico C<use warnings>. Puede desactivar o promover en errores fatales, advertencias específicas utilizando ganchos C<__WARN__>, como se describe en L<perlvar> y L<perlfunc/warn>.
 Vea también L<perldiag> y L<perltrap>.  Una muy detallada facilidad de alertas también está disponible si quiere manipular clases enteras de advertencias; vea L<warnings> o L<perllexwarn>.
@@ -645,7 +645,7 @@ Entonces, una advertencia en la línea 2 del programa, que está en la línea 10
 Esto se puede anular mediante el uso de la directiva C<#line>.
 (Vea L<perlsyn/"Viejos y simples comentarios (¡No!)">)
 
-Si un nombre de directorio es especificado, Perl cambiará a ese directorio antes de ejecutar el programa.  La opción B<-x> controla sólo la eliminación de la basura inicial.  El programa debe terminar con C<__END__> si hay detrás la basura que debe ser ignorada; el programa puede procesar cualquier o toda la basura posterior a través del gestor de archivo C<DATA>, si así lo desea.
+Si un nombre de directorio es especificado, Perl cambiará a ese directorio antes de ejecutar el programa.  La opción B<-x> controla sólo la eliminación de la basura inicial.  El programa debe terminar con C<__END__> si hay detrás la basura que debe ser ignorada; el programa puede procesar cualquier o toda la basura posterior a través del identificador de archivo C<DATA>, si así lo desea.
 
 El directorio, si se especifica, debe aparecer inmediatamente después de B<-x>, sin espacios en blanco entremedias.
 
@@ -696,7 +696,7 @@ Lo normal es empezar los nombres de capa con un carácter dos puntos (por ejempl
 
 Un inexistente PerlIO, o vacío, es equivalente al conjunto predeterminado de capas para su plataforma; por ejemplo, C<:unix:perlio> en sistemas tipo Unix y C<:unix:crlf> en Windows y otros sistemas DOS.
 
-La lista se convierte en el valor predeterminado para I<toda> E/S de Perl. En consecuencia, sólo capas incluidas en el código pueden aparecer en esta lista, ya que las capas externas (tales como C<encoding()>) necesitan E/S para poder ser leídas! Vea L<"open pragma"|open> para saber cómo añadir codificaciones externas por defecto.
+La lista se convierte en el valor predeterminado para I<toda> E/S de Perl. En consecuencia, sólo capas predefinidas en el código pueden aparecer en esta lista, ya que las capas externas (tales como C<encoding()>) necesitan E/S para poder ser leídas! Vea L<"open pragma"|open> para saber cómo añadir codificaciones externas por defecto.
 
 Capas que tiene sentido incluir en la variable de entorno PERLIO se resumen a continuación. Para más detalles, vea L<PerlIO>.
 
@@ -756,7 +756,7 @@ Una pseudocapa que activa una bandera en la capa de abajo para avisar a Perl que
 =item :win32
 X<:win32>
 
-En plataformas Win32 esta capa I<experimental> usa "gestores" de E/S nativos en lugar de una capa de descriptor de fichero numérico tipo Unix. Se sabe que tiene errores en esta versión (5.14).
+En plataformas Win32 esta capa I<experimental> usa "identificadores" de E/S nativos en lugar de una capa de descriptor de archivo numérico tipo Unix. Se sabe que tiene errores en esta versión (5.14).
 
 =back
 
@@ -820,7 +820,7 @@ Antes de Perl 5.10.0 y 5.8.8, PERL5SHELL no era comprobada su contaminación cua
 X<PERL_ALLOW_NON_IFS_LSP>
 
 Se establece en 1 para permitir el uso de LSP (proveedores de servicio en niveles) no compatibles con IFS.
-Perl normalmente busca un LSP compatible IFS, porque es necesario para la emulación de los I<sockets> de Windows como gestores de archivo real.  Sin embargo, esto puede causar problemas si usted tiene un cortafuegos como I<McAfee Guardian>, que requiere que todas las aplicaciones utilicen su LSP, pero que no es compatible con IFS, porque es evidente que Perl normalmente evita el uso de ese LSP.
+Perl normalmente busca un LSP compatible IFS, porque es necesario para la emulación de los I<sockets> de Windows como identificadores de archivo real.  Sin embargo, esto puede causar problemas si usted tiene un cortafuegos como I<McAfee Guardian>, que requiere que todas las aplicaciones utilicen su LSP, pero que no es compatible con IFS, porque es evidente que Perl normalmente evita el uso de ese LSP.
 
 Al establecer esta variable de entorno a 1 significa que Perl simplemente utilizará el primer LSP adecuado, enumerado en el catálogo, que mantenga I<McAfee Guardian> feliz -y en ese caso en particular, Perl también funciona porque el LSP de I<McAfee Guardian> realmente juega a otros juegos que permiten trabajar a las aplicaciones que requieran compatibilidad IFS-.
 
@@ -876,7 +876,7 @@ Vea también hash_seed() en L<Hash::Util>.
 =item PERL_MEM_LOG
 X<PERL_MEM_LOG>
 
-Si su Perl se ha compilado con B<-Accflags=-DPERL_MEM_LOG>, poniendo la variable de entorno C<PERL_MEM_LOG> permite el registro de mensajes de depuración. El valor tiene la forma C<< <I<número>>[m][s][t] >>, donde C<I<número>> es el número de descriptor de archivo en donde desea escribir (2, por defecto), y la combinación de letras especifica que desea información acerca de (m)moria y/o (s)v, opcionalmente con (t)iempos. Por ejemplo, C<PERL_MEM_LOG=1mst> registra toda la información a la salida estándar. Puede escribir a otros descriptores de fichero abiertos en una variedad de formas:
+Si su Perl se ha compilado con B<-Accflags=-DPERL_MEM_LOG>, poniendo la variable de entorno C<PERL_MEM_LOG> permite el registro de mensajes de depuración. El valor tiene la forma C<< <I<número>>[m][s][t] >>, donde C<I<número>> es el número de descriptor de archivo en donde desea escribir (2, por defecto), y la combinación de letras especifica que desea información acerca de (m)moria y/o (s)v, opcionalmente con (t)iempos. Por ejemplo, C<PERL_MEM_LOG=1mst> registra toda la información a la salida estándar. Puede escribir a otros descriptores de archivo abiertos en una variedad de formas:
 
   $ 3>foo3 PERL_MEM_LOG=3m perl ...
 
