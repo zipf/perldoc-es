@@ -933,19 +933,19 @@ X<operator, quote> X<operator, quote-like> X<q> X<qq> X<qx> X<qw> X<m>
 X<qr> X<s> X<tr> X<'> X<''> X<"> X<""> X<//> X<`> X<``> X<<< << >>>
 X<escape sequence> X<escape> X<escapado> X<operador, comilla> X<operador, entrecomillado>
 
-Mientras solemos solemos pensar de lo entrecomillado como si fueran valores literales, en Perl funcionan como operadores, ofreciendo diversos tipos de interpolación y capacidades de coincidencia de patrones.  Perl no solo proporciona caracteres normales de entrecomillado para estos comportamientos, sino que también proporciona una manera para que usted elija su carácter de entrecomillado para cualquiera de ellos.  En la siguiente tabla, un C<{}> representa cualquier par de delimitadores que usted elija.
+Mientras solemos pensar de lo entrecomillado como si fueran valores literales, en Perl funcionan como operadores, ofreciendo diversos tipos de interpolación y capacidades de coincidencia de patrones.  Perl no solo proporciona caracteres normales de entrecomillado para estos comportamientos, sino que también proporciona una manera para que usted elija su carácter de entrecomillado para cualquiera de ellos.  En la siguiente tabla, un C<{}> representa cualquier par de delimitadores que usted elija.
 
-      Normal   Genérico     Significado	     Interpola
-	''	 q{}	      Literal		  no
-	""	qq{}	      Literal		  sí
-	``	qx{}	      Comando		  sí*
-		qw{}	   Lista palabras	  no
-	//	 m{}	    Coincidencia	  sí*
-		qr{}	      Patrón		  sí*
-		 s{}{}	    Substitución	  sí*
-		tr{}{}    Transliteración	  no (pero vea abajo)
-		 y{}{}     Transliteración	  no (pero vea abajo)
-        <<EOF               doc incrustado        sí*
+      Normal   Genérico       Significado         Interpola 
+	''         q{}        Literal                 no
+	""        qq{}        Literal                 sí
+	``        qx{}        Comando                 sí*
+		  qw{}        Lista palabras          no
+	//         m{}        Coincidencia            sí*
+		  qr{}        Patrón                  sí*
+		   s{}{}      Substitución            sí*
+		  tr{}{}      Transliteración         no (pero vea abajo)
+		   y{}{}      Transliteración         no (pero vea abajo)
+        <<EOF                 doc incrustado          sí*
 
 	* excepto si el delimitador es ''.
 
