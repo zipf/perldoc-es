@@ -2,8 +2,8 @@ Brief description of the available tools
 ========================================
 
 
-NOTE: Most of these scripts contain hardcoded paths that 
-should be replaced as necessary
+NOTE: Most of these scripts contain hard-coded paths that 
+should be replaced as necessary.
 
 
 
@@ -42,24 +42,17 @@ Usage:       perl get_pods.pl
 
 Audience:    Language Lead/Reviewer
 
-Description: Copies one or more reviewed files and the translation 
-             memory to different project locations. It formats and
-             copies the final file to the CPAN distribution.
-             It also checks its POD syntax, generates a WYSIWYG html 
-             file for final checks, and creates a diff file in html 
-             format to give feedback to the translators.
+Description: - Copies one or more reviewed files, along with the reviewer 
+               translation memory, to different project locations 
+             - Formats and copies the final file to the CPAN distribution, POD2::ES
+             - Checks the POD syntax
+             - Generates a WYSIWYG html file for final checks 
+             - Creates a diff file in html format to give feedback to the translator.
+             - Keeps track of who translated what, and updates the translators
+               section accordingly
+             - Sorts alphabetically the translated entries of perlglossary.pod
 
 Usage:       perl postprocess.pl --pod doc1.pod [doc2.pod]... [--nohtml] [--diff]
-
-
-
-** sort_perlglossary.pl
-
-Audience:     Language Lead/Reviewer
-
-Description:  Sorts alphabetically the translated perlglossary.pod.
-
-Usage:        perl sort_perlglossary.pl
 
 
 
