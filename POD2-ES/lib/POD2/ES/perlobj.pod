@@ -766,9 +766,10 @@ Observe que C<blessed($algo)> devolverá falso si se bendijo C<$algo> en una
 clase llamada "0". Esto es posible, pero realmente patológico. No cree una
 clase llamada "0" a menos que sepa exactamente lo que está haciendo.
 
-De forma análoga, la función C<ref> trata de forma especial las referencias a
-objetos bendecidos. Si llama a C<ref($algo)> y C<$algo> contiene una referencia
-a un objeto, devolverá el nombre de la clase en la que se bendijo el objeto.
+De forma análoga, la función predefinida C<ref> trata de forma especial las 
+referencias a objetos bendecidos. Si llama a C<ref($algo)> y C<$algo> contiene 
+una referencia a un objeto, devolverá el nombre de la clase en la que se 
+bendijo el objeto.
 
 Si únicamente desea comprobar si una variable contiene una referencia a un
 objeto, se recomienda el uso de C<defined blessed($objeto)>, ya que C<ref>

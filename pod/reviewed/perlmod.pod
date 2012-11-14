@@ -25,7 +25,7 @@ Las cadenas evaluadas con C<eval> se compilan en el paquete en que se compiló l
 
 El símbolo especial C<__PACKAGE__> contiene el paquete actual, pero no puede usarse (fácilmente) para crear nombres de variables.
 
-Vea L<perlsub> para obtener información sobre otras cuestiones relativas al ámbito y relacionadas con my() y local(); vea L<perlref> para obtener información sobre los cierres.
+Vea L<perlsub> para obtener información sobre otras cuestiones relativas al ámbito y relacionadas con my() y local(); vea L<perlref> para obtener información sobre las clausuras.
 
 =head2 Tabla de símbolos
 X<symbol table> X<tabla de símbolos> X<stash> X<%::> X<%main::> X<typeglob> X<glob> X<alias>
@@ -273,7 +273,7 @@ Por ejemplo, para empezar a desarrollar un módulo tradicional, no orientado a o
     my $var_priv    = '';
     my %hash_secreto = ();
 
-    # aquí va una función privada del archivo, como cierre
+    # aquí va una función privada del archivo, como clausura
     # puede llamarse mediante $func_priv->();
     my $func_priv = sub {
         ...
