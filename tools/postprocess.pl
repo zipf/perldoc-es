@@ -13,6 +13,8 @@ use Pod::Tidy qw( tidy_files );
 use Text::WordDiff;
 use Pod::Checker;
 use Getopt::Long;
+use Text::Unidecode;
+use Unicode::Collate::Locale;
 #use utf8;
 
 $|++;
@@ -61,7 +63,7 @@ Readonly my $DIFF_HEADER   => <<"END_HEADER";
 END_HEADER
 
 
-# read team from __DATA__ section
+# Read team from __DATA__ section
 my (%team, %files);
 
 while ( <DATA> ) {
@@ -86,11 +88,11 @@ close DATA;
 
 
 
-# copy work memory to clean project => clean memory
+# Copy work memory to clean project => clean memory
 copy($MEM_PATH, $CLEANM_PATH);
 
-# copy work memory to /memory/work in repository 
-# and rename it perlspanish-omegat.zipf.tmx
+# Copy work memory to /memory/work in repository 
+# and rename it as perlspanish-omegat.zipf.tmx
 copy($MEM_PATH, $WORK_PATH);
 
 
@@ -130,13 +132,23 @@ foreach my $pod_name (@names) {
     
     my $distr  = "$DISTR_PATH/$final_name";
 
-    # copy source file to clean project => clean memory
+        
+    # Check if file is perlglossary.pod and, in that case, sort alphabetically
+    if ( $pod_name eq "perlglossary.pod" ) {
+        
+        say "Sorting perlglossay.pod...";
+        sort_glossary( $target );
+
+    }
+
+
+    # Copy source file to clean project => clean memory
     copy($source, $clean);
         
-    # copy generated file to git archive (won't go through postprocessing)
+    # Copy generated file to git archive (won't go through postprocessing)
     copy($target, $rev_pod);
 
-    # copy generated file to distribution
+    # Copy generated file to distribution
     copy($target, $distr);
 
     
@@ -270,6 +282,68 @@ foreach my $pod_name (@names) {
     }
 
     unlink "$distr~";
+
+}
+
+
+sub sort_glossary {
+
+    my $glossary_path = shift;
+
+    open my $glos, '<:encoding(UTF-8)', $glossary_path; # OmegaT generates UTF-8 files
+   
+    my $text = do { local $/; <$glos> };
+    
+    close $glos;
+
+    my ( $header  ) = $text =~ /^(.+?)(?==head2 A)/s;
+    my ( $footer  ) = $text =~ /(=head1 AUTOR Y COPYRIGHT.+)$/s;
+    my ( @entries ) = $text =~ /(=item .+?)(?==item|=back)/gs;
+
+
+
+    my %entries;
+
+    foreach my $entry ( @entries ) {
+
+        my ( $term, $description ) = split /=item .+?\K\n\n/m, $entry;
+
+        $term =~ s/=item\s+//;
+        
+        my $initial = unidecode(uc(substr $term, 0, 1));
+
+        push @{$entries{$initial}}, { term => $term, description => $description };
+
+    }
+
+    
+    # generate sorted file, overwriting original (it can always be re-generated y OmegaT...)
+    my $collator = Unicode::Collate::Locale->new(locale => 'es');
+    
+    open my $sorted, '>:encoding(UTF-8)', $glossary_path;
+
+    print $sorted $header;
+
+    foreach my $letter ( sort keys %entries ) {
+
+        print  $sorted "=head2 $letter\n\n=over 4\n\n";
+
+        #foreach my $entry ( sort { $a->{term} cmp $b->{term} } @{ $entries{$letter} } ) {
+        foreach my $entry ( sort { $collator->cmp( $a->{term}, $b->{term} ) } @{ $entries{$letter} } ) {
+
+            print $sorted "=item ", $entry->{term}, "\n\n";
+            print $sorted $entry->{description};
+
+        }
+
+        print $sorted "=back\n\n";
+
+    }
+
+    print $sorted $footer;
+
+    close $sorted;
+
 
 }
 
