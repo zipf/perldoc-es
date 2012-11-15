@@ -1,0 +1,3492 @@
+=encoding utf8
+
+=head1 NOMBRE
+
+perlglossary - Glosario de Perl
+
+=head1 DESCRIPCIÓN
+
+Un glosario de términos (técnicos y de otro tipo) que se usan en la
+documentación de Perl. Otras fuentes útiles son: Free On-Line Dictionary of
+Computing L<http://foldoc.org/>, Jargon File L<http://catb.org/~esr/jargon/> y
+Wikipedia L<http://www.wikipedia.org/>.
+
+=head2 A
+
+=over 4
+
+=item advertencia
+
+Mensaje que se imprime en la secuencia L</STDERR> para indicar que puede haber
+un problema, pero que no es necesario detener la ejecución. Vea
+L<perlfunc/warn> y el pragma L<warnings>.
+
+=item algoritmo
+
+Secuencia bien definida de pasos, lo suficientemente bien explicados como para
+que hasta un equipo informático pueda seguirlos.
+
+=item alias
+
+Apodo de algo, que se comporta en todos los sentidos como si se usara el nombre
+original. Se crean alias temporales en la variable de los bucles C<foreach>, en
+la variable C<$_> para los operadores L<map|perlfunc/map> y
+L<grep|perlfunc/grep>, en C<$a> y C<$b> al ejecutar la función de comparación
+L<sort|perlfunc/sort> y en cada elemento de C<@_> para los L</argumentos
+reales> de la llamada a una subrutina. Se crean alias permanentes
+explícitamente en L<paquetes|/paquete> mediante la L<importación|/importar>
+de símbolos o la asignación a L<typeglobs|/typeglob>. La declaración
+L<our|perlfunc/our> crea explícitamente alias de ámbito léxico para las
+variables de paquete.
+
+=item almacenamiento en búfer de bloques
+
+Método para lograr una entrada y salida eficiente pasando un
+L<bloque|/bloqueo-bloque> cada vez. De manera predeterminada, Perl realiza el
+almacenamiento en búfer de bloques en archivos de disco. Vea L</búfer> y
+L</almacenamiento en búfer de comandos>.
+
+=item almacenamiento en búfer de comandos
+
+Mecanismo de Perl que permite almacenar la salida de cada L</comando> de Perl y
+después volcarlo como una sola solicitud al L</sistema operativo>. Para
+habilitarlo se establece la variable C<$|> (C<$AUTOFLUSH>) en un valor
+verdadero. Se usa cuando no se quiere que queden datos a la espera, sin ir a
+donde se supone que tienen que ir; esto es algo que puede suceder, ya que en un
+L</archivo> o una L</tubería> se usa L</almacenamiento en búfer de bloques>
+de manera predeterminada.
+
+=item almacenamiento en búfer de líneas
+
+Se usa en una secuencia de salida de L</EE<sol>S estándar> que vuelca el
+L</búfer> al recibir cada L</carácter de nueva línea>. Muchas bibliotecas de
+E/S estándar configuran automáticamente el almacenamiento en búfer de
+líneas en la salida que se dirige al terminal.
+
+=item alternativas
+
+Lista de elecciones posibles de las que solo se puede seleccionar una, como en
+"¿Qué sobre elige, A, B o C?". En las expresiones regulares dos alternativas
+se separan mediante una sola barra vertical: C<|>. En expresiones Perl
+normales, las alternativas se separan mediante una doble barra vertical: C<||>.
+En expresiones L<booleanas|/booleano>, las alternativas lógicas se separan
+mediante C<||> u C<or>.
+
+=item ámbito
+
+Lo que es visible desde una variable. Perl dispone de dos mecanismos de
+visibilidad: realiza un L</control de ámbito dinámico> de
+L<variables|/variable> L<locales|perlfunc/local>, lo que significa que el resto
+del L<bloque|/bloqueo-bloque> y las L<subrutinas|/subrutina> llamadas por el
+resto del bloque pueden ver las variables locales para ese bloque. Asimismo,
+Perl realiza L</control de ámbito léxico> de variables L<my|perlfunc/my>, lo
+que significa que el resto del bloque puede ver la variable, pero otras
+subrutinas llamadas por el bloque I<no> la pueden ver.
+
+=item análisis léxico
+
+Nombre elegante de L</tokenizar>.
+
+=item analizar
+
+El arte sutil, y a veces brutal, de intentar convertir un programa posiblemente
+mal escrito en un L</árbol de sintaxis> válido.
+
+=item ancho cero
+
+L<Aserción|/aserción> de subpatrón que coincide con la L</cadena nula> entre
+L<caracteres|/carácter>.
+
+=item anónimo
+
+Se usa para describir un L</referente> que no es directamente accesible a
+través de una L</variable> con nombre. Un referente de este tipo debe ser
+accesible indirectamente a través de al menos una L</referencia estricta>.
+Cuando desaparece la última referencia estricta, se destruye sin compasión el
+referente anónimo.
+
+=item árbol de análisis
+
+Vea L</árbol de sintaxis>.
+
+=item árbol de sintaxis
+
+Representación interna del programa en la que las
+L<construcciones|/construcción-construir> de bajo nivel cuelgan de las
+construcciones de nivel más alto que las contienen.
+
+=item archivo
+
+Conjunto de datos con nombre que suele estar almacenado en disco, dentro de un
+L</directorio> de un L</sistema de archivos>. Puede considerarse equivalente a
+un documento, si le agradan las metáforas relacionadas con la oficina. Los
+sistemas de archivos modernos permiten asignar varios nombres a un archivo.
+Algunos archivos, como los directorios y los dispositivos, tienen propiedades
+especiales.
+
+=item archivo de encabezado
+
+Archivo que contiene algunas definiciones necesarias que hay que incluir antes
+que el resto del programa para realizar determinadas operaciones "oscuras". Los
+archivos de encabezado de C tienen la extensión I<.h>. En realidad Perl no
+tiene archivos de encabezado, pero históricamente ha utilizado a veces
+archivos I<.h> traducidos con una extensión I<.ph>. Vea L<perlfunc/require>.
+(Los archivos de encabezado han sido reemplazados por el mecanismo de
+L<módulos|/módulo>).
+
+=item archivo ejecutable
+
+L<Archivo|/archivo> con una marca especial que indica al L</sistema operativo>
+que se puede ejecutar como un programa. Se suele usar la forma abreviada
+"ejecutable".
+
+=item archivo normal
+
+L<Archivo|/archivo> que no es un L</directorio>, un L</dispositivo>, una
+L</tubería> o un L</socket> con nombre, o un L</vínculo simbólico>. Perl usa
+la prueba de archivo C<-f> para identificar archivos normales. A veces se llama
+archivo "simple".
+
+=item argumento
+
+Elementos de datos que se suministra a un L<programa|/archivo ejecutable>, una
+L</subrutina>, una L</función> o un L</método> para indicarle qué debe
+hacer. También se denomina "parámetro".
+
+=item argumentos de línea de comandos
+
+Los L<valores|/valor> que se suministran con un nombre de programa para indicar
+a la L</shell> que debe ejecutar un L</comando>. Estos valores se pasan a un
+programa Perl a través de C<@ARGV>.
+
+=item argumentos formales
+
+Nombres genéricos con los que se designa a los L<argumentos|/argumento> de una
+L</subrutina>. En muchos lenguajes los argumentos formales siempre reciben
+nombres individuales, pero en Perl solo son los elementos de un array. Los
+argumentos formales de un programa Perl son C<$ARGV[0]>, C<$ARGV[1]>, etc. De
+manera similar, los argumentos formales de una subrutina Perl son C<$_[0]>,
+C<$_[1]>, etc. Puede dar a los argumentos nombres individuales asignando los
+valores a una lista L<my|perlfunc/my>. Vea también L</argumentos reales>.
+
+=item argumentos reales
+
+Los L<valores escalares|/valor escalar> que se suministran a una L</función> o
+L</subrutina> al llamarla. Por ejemplo, al realizar la llamada
+C<encendido("activar")>, la cadena C<"activar"> es el valor del argumento. Vea
+también L</argumento> y L</argumentos formales>.
+
+=item ARGV
+
+Nombre del array que contiene el L</vector> de L<argumentos|/argumento> de la
+línea de comandos. Si usa el operador C<< E<lt>E<gt> >> vacío, L</ARGV> es el
+nombre tanto del L</identificador de archivo> que se usa para recorrer los
+argumentos como del L</escalar> que contiene el nombre del archivo de entrada
+actual.
+
+=item arquitectura
+
+El tipo de equipo con el que se trabaja, donde "tipo de equipo" quiere decir
+todos los equipos con código máquina compatible. Como los programas Perl son
+(normalmente) archivos de texto simple, no imágenes ejecutables, un programa
+Perl es mucho menos sensible a la arquitectura en la que se ejecuta que los
+programas escritos en otros lenguajes (como C) que se compilan a código
+máquina. Vea también L</plataforma> y L</sistema operativo>.
+
+=item array
+
+Secuencia ordenada de L<valores|/valor>, almacenados de forma que se pueda
+acceder a cualquiera de esos valores mediante un L</subíndice> entero que
+especifique la L<posición|/desplazamiento> del valor en la secuencia.
+
+=item array asociativo
+
+Vea L</hash>. Por favor.
+
+=item array multidimensional
+
+Array en el que cada elemento individual se localiza mediante varios
+subíndices. Perl los implementa mediante L<referencias|/referencia> (vea
+L<perllol> y L<perldsc>).
+
+=item ASCII
+
+American Standard Code for Information Interchange (un juego de caracteres de 7
+bits que solo es adecuado para representar texto en inglés de una forma
+insuficiente). Se suele usar de manera informal para describir los primeros 128
+valores de los distintos juegos de caracteres ISO-8859-X, un conjunto de
+códigos de 8 bits mutuamente incompatibles que a veces se describen como la
+mitad de ASCII. Vea también L</Unicode>.
+
+=item aserción
+
+Componente de una L</expresión regular> que debe ser verdadero para que el
+patrón coincida, pero que no tiene por qué coincidir necesariamente con
+ningún carácter. Se suele usar específicamente para hacer referencia a una
+aserción de L</ancho cero>.
+
+=item asignación
+
+L<Operador|/operador> cuya misión en la vida es cambiar el valor de una
+L</variable>.
+
+=item asincrónico
+
+Se dice de un evento o actividad cuyo orden temporal es indeterminado porque
+suceden demasiadas cosas a la vez. Así, un evento asincrónico es un evento
+que puede suceder en cualquier momento, pero no se sabe cuándo.
+
+=item asociatividad
+
+Determina si en "A L</operador> B L</operador> C" se aplica primero el
+L</operador> de la izquierda o el L</operador> de la derecha cuando ambos
+operadores tienen la misma precedencia. Los operadores como C<+> son
+asociativos por la izquierda, mientras que operadores como C<**> son
+asociativos por la derecha. En L<perlop> encontrará una lista de operadores y
+su asociatividad.
+
+=item atadura
+
+Unión de una variable mágica a su clase de implementación. Vea
+L<perlfunc/tie> y L<perltie>.
+
+=item átomo
+
+Componente de L</expresión regular> que puede coincidir con una L</subcadena>
+de uno o más caracteres y que cualquier L</cuantificador> que venga a
+continuación puede tratar como una unidad sintáctica indivisible.  (Compare
+esta definición con la de L</aserción>, que detecta algo de L</ancho cero> y
+no se puede cuantificar).
+
+=item atributo
+
+Nueva característica que permite declarar L<variables|/variable> y
+L<subrutinas|/subrutina> como modificadores, como en C<sub foo : metodo
+bloqueado>. También es un nombre alternativo para una L</variable de
+instancia> de un L</objeto>.
+
+=item autogeneración
+
+Característica de la L</sobrecarga de operador> de L<objetos|/objeto> que
+permite deducir de forma razonable mediante operadores básicos el
+comportamiento de determinados L<operadores|/operador>. Se supone que los
+operadores sobrecargados tendrán generalmente las mismas relaciones que los
+operadores normales. Vea L<perlop>.
+
+=item autoincrementar
+
+Sumar automáticamente una unidad de algo; por eso el operador correspondiente
+se llama C<++>. Si en lugar de sumar se resta automáticamente una unidad de
+algo, la operación se llama "autodecrementar".
+
+=item autovivificación
+
+Palabra grecorromana que significa "darse vida a uno mismo". En Perl, las
+ubicaciones de almacenamiento (L<valores-izquierda|/valor-izquierda>) se
+generan espontáneamente cuando es necesario. Esto incluye la creación de
+cualquier valor de L</referencia estricta> que apunte al siguiente nivel de
+almacenamiento. La asignación C<$a[5][5][5][5][5] = "quinteto"> crea
+potencialmente cinco ubicaciones de almacenamiento escalar, además de cuatro
+referencias (en las cuatro primeras ubicaciones de escalares) que apuntan a
+cuatro arrays anónimos nuevos (que contendrán las cuatro últimas ubicaciones
+escalares). Pero la idea de la autovivificación es no tener que preocuparnos
+de esto.
+
+=item AV
+
+Abreviatura de "array value" (valor de array), que hace referencia a uno de los
+tipos de datos internos de Perl que contiene un L</array>. El tipo L</AV> es
+una subclase de L</SV>.
+
+=item avaricioso
+
+Se dice de un L</subpatrón> cuyo L</cuantificador> desea detectar la mayor
+cantidad posible de cosas.
+
+=item awk
+
+Término de edición descriptivo; abreviatura de "awkward" (poco práctico).
+Casualmente, también hace referencia a un venerable lenguaje de procesamiento
+de texto del que Perl derivó algunas de sus ideas de alto nivel.
+
+=item azúcar sintáctico
+
+Forma alternativa y más sencilla de escribir algo; un método abreviado.
+
+=back
+
+=head2 B
+
+=over 4
+
+=item bendecir
+
+En el mundo empresarial, conceder oficialmente la aprobación a algo. Por
+ejemplo, "El vicepresidente del departamento de ingeniería ha bendecido el
+proyecto WebCruncher." De forma similar, en Perl significa conceder la
+aprobación oficial a un L</referente> para que pueda funcionar como un
+L</objeto> (por ejemplo, un objeto WebCruncher). Vea L<perlfunc/"bless">.
+
+=item biblioteca
+
+Generalmente es una colección de procedimientos. Antiguamente se llamaba así
+a un conjunto de subrutinas de un archivo I<.pl>. En la actualidad suele usarse
+para hacer referencia al conjunto completo de L<módulos|/módulo> Perl del
+sistema.
+
+=item big-endian
+
+Según Swift, alguien que empieza a comer un huevo por su extremo más ancho
+(juego de palabras; en inglés "end" significa extremo). También se usa para
+designar a los equipos que almacenan el L</byte> más significativo de una
+palabra en una dirección de byte inferior a la del byte menos significativo.
+Estos equipos se suelen considerar superiores a los equipos I<little-endian>.
+Vea también L</little-endian>.
+
+=item binario
+
+Que tiene que ver con números representados en base 2. Eso significa que hay
+básicamente dos números, 0 y 1. También se usa para describir un "archivo
+que no es de texto", posiblemente porque dicho archivo usa todos los bits
+binarios de sus bytes. Con la llegada de L</Unicode>, esta distinción, ya de
+por sí sospechosa, tiene aún menos sentido.
+
+=item bit
+
+Entero en el intervalo de 0 a 1, ambos incluidos. La unidad de almacenamiento
+de información más pequeña posible. Un octavo de un L</byte> o de un dólar.
+En inglés, el término "Pieces of Eight" (partes de ocho) viene de la
+posibilidad de dividir el antiguo dólar español en 8 partes, cada una de las
+cuales se podía usar como dinero. Es por eso que actualmente una moneda de 25
+centavos sigue llamándose "two bits" (dos partes).
+
+=item bit de ejecución
+
+Marca especial que indica al sistema operativo que puede ejecutar este
+programa. En realidad hay tres bits de ejecución en Unix, y el que se usa
+dependerá de si usted es el único propietario del archivo, si forma parte de
+un grupo de propietarios, o si no es propietario del archivo.
+
+=item bits de permiso
+
+Bits que el L</propietario> de un archivo establece o quita para permitir o
+prohibir el acceso a otras personas. Estos bits de marca forman parte de la
+palabra de L</modo> devuelta por la función predefinida L<stat|perlfunc/stat>
+cuando se pregunta sobre un archivo. En sistemas Unix puede consultar la
+página de manual I<ls>(1) para obtener más información.
+
+=item bloc
+
+Abreviatura de L</bloc de notas>.
+
+=item bloc de notas
+
+Área en la que una invocación específica de un archivo o una subrutina
+concretos mantiene algunos de sus valores temporales, incluidas las variables
+de ámbito léxico.
+
+=item BLOQUE
+
+Construcción sintáctica formada por una secuencia de
+L<instrucciones|/instrucción> Perl escritas entre llaves. Las instrucciones
+C<if> y C<while>, por ejemplo, también se definen en términos de
+L<BLOQUES|/BLOQUE>. A veces también usamos la palabra "bloque" para hacer
+referencia a un ámbito léxico; es decir, una secuencia de instrucciones que
+actúan como un L</BLOQUE>, por ejemplo, dentro de una función
+L<eval|perlfunc/eval> o en un archivo, aunque las instrucciones no estén
+delimitadas por llaves.
+
+=item bloqueo-bloque
+
+Lo que un L</proceso> hace mientras espera algo: "Mi proceso se bloqueó
+esperando la respuesta del disco.". La segunda acepción hace referencia a un
+fragmento de datos grande, del tamaño que al L</sistema operativo> le gusta
+procesar (normalmente una potencia de dos, como 512 o 8192). Normalmente se
+refiere a un fragmento de datos que se lee de (o se escribe en) un archivo del
+disco.
+
+=item booleano
+
+Valor que es L</verdadero> o L</falso>.
+
+=item BSD
+
+Droga psicoactiva, popular en los años ochenta, y probablemente diseñada en
+la U. C. Berkeley o en sus alrededores. Es similar en muchos aspectos al
+medicamento "System V", que solo se puede obtener con receta, pero
+infinitamente más útil.  (O, al menos, más divertida). El nombre químico
+completo es "Berkeley Standard Distribution".
+
+=item bucle
+
+Construcción que realiza algo repetidamente, como una montaña rusa.
+
+=item búfer
+
+Ubicación para el almacenamiento temporal de datos. El L</almacenamiento en
+búfer de bloques> significa que los datos se pasan a su destino cuando se
+llena el búfer. El L</almacenamiento en búfer de líneas> significa que se
+pasa el contenido siempre que se recibe una línea completa. El
+L</almacenamiento en búfer de comandos> significa que los datos se pasan cada
+vez que se ejecuta un comando L<print|perlfunc/print> (o equivalente). Si no se
+usa búfer para la salida, el sistema la procesa de byte en byte sin usar
+espacio de almacenamiento. Esto puede ser muy ineficaz.
+
+=item búfer de captura, grupo de captura
+
+Estos dos términos son sinónimos: es una L<subcadena capturada|/capturar> por
+un subpatrón de expresión regular.
+
+=item byte
+
+En la mayoría de los contextos es un elemento de datos formado por ocho
+L<bits|/bit>.
+
+=item bytecode
+
+Lenguaje tipo pidgin que hablan los androides cuando no desean revelar su
+orientación (vea L</endian>). El nombre proviene de algunos lenguajes
+similares hablados (por razones parecidas) entre compiladores e intérpretes a
+finales del siglo XX. Estos lenguajes se caracterizan porque representan todo
+como una secuencia de bytes independiente de la arquitectura.
+
+=back
+
+=head2 C
+
+=over 4
+
+=item C
+
+Lenguaje muy querido por muchos programadores por su definiciones de
+L<tipos|/tipo> I<inside-out>, sus reglas de L</precedencia> inescrutables y la
+intensa L<sobrecarga|/sobrecargar> del mecanismo de llamada de funciones.  (En
+realidad, los programadores se pasaron a C porque les gustaban más los
+identificadores en minúsculas que en mayúsculas). Perl está escrito en C,
+por lo que no es sorprendente que haya heredado muchas ideas de C.
+
+=item cadena
+
+Secuencia de caracteres como "Dijo !@#*&%@#*?!". Una cadena no tiene por qué
+ser completamente imprimible.
+
+=item cadena de bits
+
+Secuencia de L<bits|/bit> que, por una vez, se puede considerar una secuencia
+de bits.
+
+=item cadena de versión
+
+L<Cadena|/cadena> de "versión" o de tipo "vector" especificada mediante C<v>
+seguida de una serie de enteros decimales separados por puntos; por ejemplo,
+C<v1.20.300.4000>. Cada número se convierte en un L</carácter> con el valor
+ordinal especificado.  (La C<v> es opcional si hay al menos tres enteros.)
+
+=item cadena nula
+
+L<Cadena|/cadena> que no contiene ningún carácter; no debe confundirse con
+las cadena que contienen un L</carácter nulo>, que tienen una longitud
+positiva y cuyo valor booleano es L</verdadero>.
+
+=item calabaza de parches
+
+"Testigo" teórico que se transmite en la comunidad Perl para indicar quién es
+el integrador jefe en algún campo de desarrollo.
+
+=item campo
+
+Elemento individual de datos numéricos o de cadena que forma parte de una
+L</cadena>, un L</registro> o una L</línea> de mayor longitud. Los campos de
+ancho variable se suelen dividir mediante L<separadores|/separador> (use la
+función L<split|perlfunc/split> para extraer los campos), mientras que los
+campos de ancho fijo suelen estar en posiciones fijas (use
+L<unpack|perlfunc/unpack>). Las L<variables de instancia|/variable de
+instancia> también se denominan campos.
+
+=item canal de salida seleccionado actualmente
+
+El último L</identificador de archivo> designado con
+L<select|perlfunc/select>(C<IDENTIFICADOR DE ARCHIVO>); si no se ha
+seleccionado ningún identificador de archivo, el canal de salida es
+L</STDOUT>.
+
+=item canalización
+
+Serie de L<procesos|/proceso> seguidos, vinculados mediante
+L<tuberías|/tubería>, cada una de las cuales pasa la secuencia de salida al
+siguiente proceso.
+
+=item canónico
+
+Reducido a una forma estándar para facilitar la comparación.
+
+=item capturar
+
+Escribir un L</subpatrón> entre paréntesis en una L</expresión regular> para
+almacenar la L</subcadena> detectada como una L</retrorreferencia> o un L<grupo
+de captura|/búfer de captura, grupo de captura>. (Las cadenas capturadas
+también se devuelven como una lista en L</contexto de lista>).
+
+=item carácter
+
+Entero pequeño que representa una unida de ortografía. Históricamente, los
+caracteres normalmente se almacenaban como enteros de ancho fijo (normalmente
+en un byte, o quizás en dos, en función del juego de caracteres); sin
+embargo, desde que surgió UTF-8, los caracteres se suelen almacenar en un
+número variable de bytes, en función del tamaño del entero que representa el
+carácter. Por lo general, Perl se encargará de esto automáticamente.
+
+=item carácter de nueva línea
+
+Carácter individual que representa el final de una línea, con un valor ASCII
+de 012 octal en Unix (015 en Mac) y que en las cadenas Perl se representa
+mediante C<\n>. En equipos Windows que escriben archivos de texto y en
+determinados dispositivos físicos como terminales, la biblioteca de C traduce
+automáticamente el carácter de nueva línea a un avance de línea y un
+retorno de carro, pero normalmente no hay que hacer esta traducción.
+
+=item carácter extraño
+
+El de Larry o alguno de sus peculiares amigos. También hace referencia a los
+prefijos extraños que Perl usa como marcas de nombres en sus variables.
+
+=item carácter nulo
+
+Carácter con el valor ASCII cero. En C se usa para terminar cadenas, pero Perl
+permite que las cadenas contengan caracteres nulos.
+
+=item carga automática
+
+Carga que se realiza a petición.  (También se denomina carga "perezosa").
+Específicamente, se realiza la carga automática cuando se llama a una
+subrutina L<AUTOLOAD|perlsub/Autoloading> en nombre de una subrutina
+indefinida.
+
+=item casilla
+
+Ubicación de una L</tabla hash> que puede contener varias entradas cuyas
+claves corresponde al mismo valor de hash según su función de hash.  (Como
+política interna, no tiene que preocuparse de esto, a menos que le interesen
+los componentes internos o la política).
+
+=item clase
+
+L<Tipo|/tipo> definido por el usuario, implementado en Perl mediante un
+L</paquete> que proporciona (de forma directa o mediante herencia)
+L<métodos|/método> (es decir, L<subrutinas|/subrutina>) para controlar
+L<instancias|/instancia> de la clase (sus L<objetos|/objeto>). Vea también
+L</herencia>.
+
+=item clase base
+
+Tipo de L</objeto> genérico; es decir, una L</clase> de la que se derivan
+genéticamente otras clases más específicas mediante L</herencia>. Las
+personas que respetan a sus antepasados también la denominan "superclases".
+
+=item clase de caracteres
+
+Lista de caracteres entre corchetes que se usa en una L</expresión regular>
+para indicar que cualquier carácter del conjunto puede ocurrir en un punto
+determinado. En un sentido informal, cualquier conjunto de caracteres
+predefinido que se use para ello.
+
+=item clase derivada
+
+L<Clase|/clase> que define alguno de sus L<métodos|/método> en términos de
+una clase más genérica, denominada L</clase base>. Tenga en cuenta que las
+clases no se clasifican exclusivamente en clases base y clases derivadas: una
+clase puede funcionar a la vez como clase derivada y como clase base, lo que le
+da un toque de elegancia.
+
+=item clase primaria
+
+Vea L</clase base>.
+
+=item claustro
+
+L<Clúster|/clúster> usado para restringir el ámbito de un L</modificador de
+expresión regular>.
+
+=item clausura
+
+Subrutina L<anónima|/anónimo> tal que, cuando se genera una referencia a ella
+en tiempo de ejecución, hace un seguimiento de las identidades de L<variables
+léxicas|/variable léxica> visibles externamente, incluso después de que
+dichas variables léxicas se salgan del L</ámbito>. Se llaman "clausuras"
+porque este tipo de comportamiento proporciona a los matemáticos una
+sensación de clausura, o cierre.
+
+=item clave
+
+Cadena de índice de un L</hash> que se usa para buscar el L</valor> asociado
+con esa clave.
+
+=item cliente
+
+En contexto de redes, es un L</proceso> que inicia el contacto con un proceso
+de L</servidor> para intercambiar datos y, tal vez, recibir un servicio.
+
+=item clúster
+
+L<Subpatrón|/subpatrón> escrito entre paréntesis que se usa para agrupar
+partes de una L</expresión regular> en un solo L</átomo>.
+
+=item CODE
+
+La palabra devuelta por la función L<ref|perlfunc/ref> cuando se aplica a una
+referencia a una subrutina. Significa "código". Vea también L</CV>.
+
+=item código de carácter
+
+La posición de un carácter en la codificación de un conjunto de caracteres.
+El carácter C<NULL> está casi con toda seguridad en la posición cero de
+todos los juegos de caracteres, por lo que su código de carácter es 0. El
+código de carácter para el carácter C<ESPACIO> en el juego de caracteres
+ASCII es 0x20, o 32 decimal; en EBCDIC es 0x40, o 64 decimal. La función
+L<ord|perlfunc/ord> devuelve el código de carácter de un carácter.
+
+Un "código de carácter" también se llama "posición de código" u "ordinal".
+
+=item comando
+
+En programación de L</shell>, la combinación sintáctica de un nombre de
+programa y sus argumentos. También se puede definir de forma más informal
+como cualquier cosa que, al escribirse en una shell (un intérprete de
+comandos), hace que esta inicie alguna acción. Según una definición todavía
+más informal, es una L</instrucción> Perl que puede empezar con una
+L</etiqueta> y terminar con un signo de punto y coma.
+
+=item comentario
+
+Observación que no afecta al significado del programa. En Perl se puede
+agregar un comentario mediante un carácter C<#>, y los comentarios se pueden
+extender hasta el final de la línea.
+
+=item compatibilidad con versiones anteriores
+
+Significa que aún puede usar sus programas antiguos porque no hemos modificado
+ninguna de las características o errores en los que se basaban.
+
+=item compatible con valores-izquierda
+
+Que puede funcionar como L</valor-izquierda>.
+
+=item compilador
+
+En un sentido estricto, es un programa que procesa otro programa y devuelve un
+archivo que contiene el programa en un formato "más fácil de ejecutar",
+normalmente con instrucciones nativas de código máquina. Según esta
+definición, el intérprete I<perl> no es un compilador, pero contiene una
+especie de compilador que procesa un programa para convertirlo a un formato
+más fácil de ejecutar (L<árboles de sintaxis|/árbol de sintaxis>) dentro
+del mismo proceso de I<perl> para que el L</intérprete> lo interprete a
+continuación. Sin embargo, existen L<módulos|/módulo> de extensión que
+hacen que Perl se parezca más a un compilador "real". Vea L<O>.
+
+=item concatenación
+
+El proceso de colar la punta de algo con la cola de otra cosa del mismo tipo.
+Hace referencia a una operación similar con dos L<cadenas|/cadena>.
+
+=item condicional
+
+Algo "incierto". Vea L</contexto booleano>.
+
+=item conexión
+
+En telefonía, es el circuito eléctrico temporal que se establece entre el
+teléfono que hace la llamada y el que la recibe. En tecnología de redes, el
+mismo tipo de circuito temporal entre un L</cliente> y un L</servidor>.
+
+=item conjunto
+
+Conjunto de módulos de L</CPAN> relacionados.  (También puede referirse a un
+grupo de modificadores de línea de comandos agrupados en un L</grupo de
+modificadores>).
+
+=item construcción-construir
+
+El sustantivo se refiere a un fragmento de sintaxis formado por piezas más
+pequeñas. El verbo transitivo significa crear un L</objeto> con un
+L</constructor>.
+
+=item constructor
+
+Cualquier L</método de clase>, L</método> de instancia o L</subrutina> que
+forma, inicializa, bendice y devuelve un L</objeto>. A veces usamos este
+término de forma informal para referirnos a un L</sistema de composición>.
+
+=item contaminado
+
+Se dice de los datos provenientes de las manos grasientas de un usuario y que,
+por lo tanto, deben considerarse como datos inseguros para un programa en el
+que la seguridad es importante. Perl hace comprobaciones de seguridad si se
+ejecuta un programa L</setuid> (o L</setgid>), o si se usa el modificador
+B<-T>.
+
+=item contexto
+
+El entorno (o los alrededores). El contexto proporcionado por el código del
+entorno determina el tipo de datos que se espera que una L</expresión>
+concreta devuelva. Los tres tipos de contexto principales son L</contexto de
+lista>, L</contexto escalar> y L</contexto vacío>. A veces, el contexto
+escalar se subdivide en L</contexto booleano>, L</contexto numérico>,
+L</contexto de cadena> y L</contexto vacío>. También existe un contexto
+escalar "indiferente" (si siente curiosidad, se describe como el contexto
+"don't care"  en el Capítulo 2, "Bits and Pieces", de la tercera edición de
+Programming Perl).
+
+=item contexto booleano
+
+Tipo especial de L</contexto escalar> que se usa en expresiones condicionales
+para decidir si el L</valor escalar> devuelto por una expresión es
+L</verdadero> o L</falso>. Su evaluación no devuelve una cadena ni un número.
+Vea L</contexto>.
+
+=item contexto de array
+
+Expresión arcaica que se usa para designar algo cuyo nombre correcto es
+L</contexto de lista>.
+
+=item contexto de cadena
+
+Situación en la que el entorno de una expresión (es decir, el código que la
+llama) espera que devuelva una L</cadena>. Vea también L</contexto> y
+L</contexto numérico>.
+
+=item contexto de lista
+
+Situación en la que el entorno de una L</expresión> (el código que la llama)
+espera que esta devuelva una lista de valores, en lugar de un solo valor. Las
+funciones que consumen una L</LISTA> de argumentos indican a esos argumentos
+que deben producir un valor de lista. Vea también L</contexto>.
+
+=item contexto escalar
+
+Situación en la que el entorno de una L</expresión> (el código que la llama)
+espera que esta devuelva un solo L</valor>, en lugar de una L</lista> de
+valores. Vea también L</contexto> y L</contexto de lista>. A veces un contexto
+escalar impone restricciones adicionales al valor devuelto (vea L</contexto de
+cadena> y L</contexto numérico>). A veces hablamos de un L</contexto booleano>
+en condicionales, pero esto no impone ninguna restricción adicional, puesto
+que cualquier valor escalar, tanto numérico como de tipo L</cadena>, ya es
+verdadero o falso.
+
+=item contexto numérico
+
+Situación en la que el entorno de una expresión (el código que la llama)
+espera que esta devuelva un número. Vea también L</contexto> y L</contexto de
+cadena>.
+
+=item contexto vacío
+
+Forma de L</contexto escalar> en el que no se espera que una L</expresión>
+devuelva ningún L</valor> y solo se evalúa por sus L</efectos secundarios>.
+
+=item continuación
+
+Tratar más de una L</línea> física como una sola línea lógica. Para
+continuar las líneas de un archivo L</Makefile> se coloca una barra diagonal
+inversa antes del L</carácter de nueva línea>. Los encabezados de correo
+definidos en RFC 822 se continúan colocando un espacio o una tabulación I<a
+continuación> del carácter de nueva línea. En general, las líneas de
+código Perl no necesitan ningún tipo de marca de continuación, ya que el
+L</espacio en blanco> (incluidos los caracteres de nueva línea) se ignora
+alegremente. Casi siempre.
+
+=item controlador
+
+L<Subrutina|/subrutina> o L</método> que Perl llama cuando el programa debe
+responder a algún evento interno, como una L</señal>, o un encuentro con un
+operador sujeto a L</sobrecarga de operador>. Vea también L</devolución de
+llamada>.
+
+=item controlador de señales
+
+L<Subrutina|/subrutina> que, en lugar de contentarse con recibir las llamadas
+habituales, espera a que salga un rayo de la nada antes de dignarse a
+L<ejecutarse|/ejecutar>. En Perl, los rayos que salen de la nada se llaman
+señales, y se envían con la función predefinida L<kill|perlfunc/kill>. Vea
+L<perlvar/%SIG> y L<perlipc/Señales>.
+
+=item control de ámbito dinámico
+
+El control de ámbito dinámico se hace sobre un ámbito dinámico, de forma
+que las variables estén visibles en el resto del L<bloque|/bloqueo-bloque> en
+el que se usan por primera vez y en las L<subrutinas|/subrutina> llamadas por
+el resto del bloque. Se puede cambiar temporalmente el valor de las variables
+de ámbito dinámico (y restaurarlo posteriormente) mediante un operador
+L<local|perlfunc/local>.  (Compárese con el L</control de ámbito léxico>).
+En un sentido más informal, significa que una subrutina que esté en la mitad
+de una llamada  a otra subrutina "contiene" esa subrutina en L</tiempo de
+ejecución>.
+
+=item control de ámbito estático
+
+Esto no existe. Vea L</control de ámbito léxico>.
+
+=item control de ámbito léxico
+
+Consultar en el I<Diccionario de Inglés Oxford> con un microscopio. (También
+se conoce como L</control de ámbito estático>, ya que los diccionarios no se
+actualizan rápidamente). De forma similar, significa mirar variables
+almacenadas en un diccionario (espacio de nombres) privado para cada ámbito,
+de forma que solo son visibles desde su punto de declaración hasta el final
+del ámbito léxico en que se declararon.  --Sinónimo. L</control de ámbito
+estático>. --Antónimo. L</control de ámbito dinámico>.
+
+=item control de excepciones
+
+La forma en que un programa responde a un error. En Perl, el mecanismo de
+control de excepciones es el operador L<eval|perlfunc/eval>.
+
+=item conversión de tipo
+
+Convertir datos de un tipo a otro. C lo permite. Perl no lo necesita. Ni lo
+desea.
+
+=item conversión en cadena
+
+El proceso de crear una representación en forma de L</cadena> de un objeto
+abstracto.
+
+=item CPAN
+
+Comprehensive Perl Archive Network.  (Vea L<perlfaq2/¿Qué módulos y
+extensiones están disponibles para Perl?  ¿Qué es CPAN?>).
+
+=item cracker
+
+Alguien capaz de burlar la seguridad de los sistemas informáticos. Un cracker
+puede ser un auténtico L</hacker> o simplemente un L</script kiddie>.
+
+=item cuantificador
+
+Componente de una L</expresión regular> que especifica cuántas veces puede
+ocurrir el L</átomo> precedente.
+
+=item CV
+
+Definición de tipo de valor de código ("code value") interno que contiene una
+L</subrutina>. El tipo L</CV> es una subclase de L</SV>.
+
+=back
+
+=head2 D
+
+=over 4
+
+=item datagrama
+
+Paquete de datos, como un mensaje L</UDP>, que (desde el punto de vista de los
+programas implicados) se puede enviar de forma independiente a través de la
+red. (De hecho, todos los paquetes se envían de forma independiente en el
+nivel L</IP>, pero los protocolos de envío de L<secuencias|/secuencia> como
+L</TCP> ocultan esto a los programas).
+
+=item datos de miembro
+
+Vea L</variable de instancia>.
+
+=item DBM
+
+Significa "Data Base Management" (administración de base de datos), y es un
+conjunto de rutinas que emulan un L</array asociativo> mediante archivos de
+disco. Las rutinas usan un esquema de hash dinámico para localizar cualquier
+entrada con solo dos accesos al disco. Los archivos DBM permiten que un
+programa Perl mantenga un L</hash> persistente entre varias invocaciones. Puede
+L<atar|perlfunc/tie> las variables de hash a varias implementaciones de DBM
+(vea L<AnyDBM_File> y L<DB_File>).
+
+=item declaración
+
+L<Aserción|/aserción> que declara que algo existe y que también puede
+describir cómo es, sin especificar cómo o dónde se va a usar. Una
+declaración es como la parte de una receta que dice "dos tazas de harina, un
+huevo grande, cuatro o cinco renacuajos...". Para ver una definición de su
+opuesto, vea L</instrucción>. Tenga en cuenta que algunas declaraciones
+también funcionan como instrucciones. Las declaraciones de subrutina también
+actúan como definiciones si se proporciona el cuerpo de la subrutina.
+
+=item decrementar
+
+Restar un valor de una variable, como en "decrementar C<$x>" (significa restar
+1 de su valor) o "decrementar C<$x> en 3 unidades".
+
+=item definido
+
+Que tiene un significado. Perl piensa que algunas de las cosas que las personas
+intentan hacer no tienen sentido, como usar variables a las que nunca se ha
+asignado un L</valor> o realizar determinadas operaciones con datos que no
+existen. Por ejemplo, si intenta leer datos cuando ya se ha acabado el archivo,
+Perl devolverá un valor indefinido. Vea también L</falso> y
+L<perlfunc/defined>.
+
+=item delimitador
+
+L<Carácter|/carácter> o L</cadena> que establece límites en un objeto de
+texto de tamaño arbitrario; no debe confundirse con un L</separador> o un
+L</terminador>.  "Delimitar" significa simplemente "rodear" o "envolver" (lo
+que hacen estos paréntesis).
+
+=item depurador simbólico
+
+Programa que permite recorrer paso a paso la L<ejecución|/ejecutar> del
+programa, deteniéndose en distintos puntos para ver si se ha producido algún
+error y, en caso afirmativo, cuál. El término "simbólico" simplemente quiere
+decir que puede comunicarse con el depurador mediante los mismos símbolos que
+usó para escribir el programa.
+
+=item descriptor
+
+Vea L</descriptor de archivo>.
+
+=item descriptor de archivo
+
+El número que el L</sistema operativo> usa para controlar a qué L</archivo>
+abierto se refiere. Perl oculta el descriptor de archivo dentro de una
+secuencia de L</EE<sol>S estándar> y asocia la secuencia a un L</identificador
+de archivo>.
+
+=item desencadenador
+
+Evento que hace que se ejecute un L</controlador>.
+
+=item desplazamiento
+
+El número de elementos que debe saltar al moverse desde el principio de una
+cadena o un array a una posición específica. El desplazamiento mínimo es
+cero, no uno, ya que no hay que saltar nada para llegar al primer elemento.
+
+=item desplazamiento a la derecha
+
+L<Desplazamiento de bits|/desplazamiento de bits> que divide un número por
+alguna potencia de 2.
+
+=item desplazamiento a la izquierda
+
+L<Desplazamiento de bits|/desplazamiento de bits> que multiplica un número por
+alguna potencia de 2.
+
+=item desplazamiento de bits
+
+Movimiento de bits hacia la izquierda o la derecha en una palabra de
+procesador, lo que tiene el efecto de multiplicar o dividir por una potencia de
+2.
+
+=item desreferenciar
+
+Término informático sofisticado que significa "seguir una L</referencia>
+hasta aquello a lo que apunta". El prefijo "des" hace referencia al hecho de
+que al hacer esto se elimina un nivel de L</direccionamiento indirecto>.
+
+=item destrucción global
+
+La L</recolección de elementos no utilizados> de variables globales (y la
+ejecución de cualquier destructor de objetos asociado) que tiene lugar cuando
+se cierra un  L</intérprete> de Perl. La destrucción global no debe
+confundirse con el Apocalipsis, salvo cuando se refiera a eso explícitamente.
+
+=item destructor
+
+L<Método|/método> especial que se llama cuando un L</objeto> desea
+L<destruirse|/destruir>. En realidad, el método C<DESTROY> de un programa Perl
+no se encarga de la destrucción; Perl solo L<desencadena|/desencadenador> el
+método en caso de que la L</clase> desee realizar alguna limpieza asociada.
+
+=item destruir
+
+Anular la asignación de memoria de un L</referente> (antes se desencadena su
+método C<DESTROY>, si lo tuviera).
+
+=item detección
+
+Vea L</detección de patrones>.
+
+=item detección de patrones
+
+Comparación realizada de diversas maneras de un patrón (generalmente una
+L</expresión regular>) con una cadena para intentar detectarlo. Se suele usar
+para seleccionar fragmentos interesantes de un archivo.
+
+=item detección progresiva
+
+L<Detección de patrones|/detección de patrones> que reanuda la detección
+desde el punto en que la dejó.
+
+=item devolución de llamada
+
+L<Controlador|/controlador> que se registra con alguna parte del programa para
+que otra parte del programa lo L<desencadene|/desencadenador> cuando se
+produzca algún evento de interés.
+
+=item difundir
+
+Enviar un L</datagrama> a varios destinos simultáneamente.
+
+=item direccionamiento indirecto
+
+Si algo en un programa no es el valor que se busca, sino una indicación de
+dónde se puede encontrar el valor, se habla de direccionamiento indirecto.
+Esto se puede hacer con L<referencias simbólicas|/referencia simbólica> o con
+L<referencias estrictas|/referencia estricta>.
+
+=item dirección de red
+
+El atributo más importante de un socket (equivalente al número de un
+teléfono). Generalmente una dirección IP. Vea también L</puerto-adaptar>.
+
+=item directiva
+
+Directiva L</pod>. Vea L<perlpod>.
+
+=item directorio
+
+Archivo especial que contiene otros archivos. Algunos L<sistemas
+operativos|/sistema operativo> llaman a estos archivos "carpetas", "cajones" o
+"catálogos".
+
+=item directorio de trabajo
+
+El L</directorio> actual, que L</sistema operativo> usa para interpretar las
+rutas de acceso relativas. El sistema operativo sabe cuál es el directorio
+actual porque se lo ha comunicado mediante la función L<chdir|perlfunc/chdir>
+o porque empezó en el lugar en el que nació el L</proceso> primario.
+
+=item directorio de trabajo actual
+
+Vea L</directorio de trabajo>.
+
+=item directorio principal
+
+El directorio en el que se encuentra cuando inicia sesión. En un sistema Unix,
+el I<inicio de sesión> suele colocar el nombre en C<$ENV{HOME}> o en
+C<$ENV{LOGDIR}>, pero también puede encontrarlo con C<(getpwuid($E<lt>))[7]>.
+(En algunas plataformas no existe el concepto de directorio principal).
+
+=item disponible gratuitamente
+
+Significa que no tiene que pagar a nadie para obtenerlo, pero los derechos de
+autor pueden pertenecer a alguien (como Larry).
+
+=item dispositivo
+
+Artilugio de hardware prodigioso (como un disco, una unidad de cinta, un
+módem, una palanca de control o un ratón) conectado a su equipo que el
+L</sistema operativo> trata de hacer pasar por L</archivo> (o un conjunto de
+archivos). En Unix, estos archivos simulados se encuentran en el directorio
+I</dev>.
+
+=item distribución
+
+Versión estándar empaquetada de un sistema de software. Su uso predeterminado
+implica la inclusión del código fuente. Si no es así, se dice que la
+distribución "solo incluye binarios".
+
+=item distribuir
+
+Enviar algo a su destino correcto. Normalmente se usa como metáfora para
+indicar una transferencia del control del programa a un destino seleccionado
+algorítmicamente, normalmente buscando en una tabla de
+L<referencias|/referencia> de función o, en el caso de L<métodos|/método> de
+objeto, recorriendo el árbol de herencia en busca de la definición más
+específica del método.
+
+=item división automática
+
+Operación que divide una cadena automáticamente, como el L</modificador>
+B<-a> cuando se ejecuta con B<-p> or B<-n> para emular a L</awk>.  (Vea
+también el módulo L<AutoSplit>, que no tiene nada que ver con el modificador
+B<-a>, pero está muy relacionado con la carga automática).
+
+=item documento incrustado
+
+Del inglés I<here document>. Se llama así por una construcción similar de
+las L<shells|/shell> que simula que las L<líneas|/línea> que siguen al
+L</comando>, hasta una cadena de terminación, son un L</archivo> independiente
+que se debe pasar al comando. En Perl no es más que una forma sofisticada de
+escribir algo entre comillas.
+
+=item dominio público
+
+Se dice de algo que no es propiedad de nadie. Perl está protegido por derechos
+de autor y, por consiguiente, I<no es> de dominio público, simplemente está
+L</disponible gratuitamente> y es L</redistribuible gratuitamente>.
+
+=item dweomer
+
+Un encantamiento, una ilusión, un fantasma o juegos malabares. Se dice cuando
+los efectos L</dwimmer> mágicos de Perl no ofrecen el resultado esperado, sino
+que parecen el producto de un sortilegio arcano de dweomer, brujería o un
+prodigio. [del inglés arcaico]
+
+=item dwimmer
+
+DWIM es el acrónimo de "Do What I Mean" (haz lo que te ordeno), el principio
+de que algo debe hacer lo que se le ordena sin rechistar. Se dice que un
+fragmento de código con esta propiedad es un "dwimmer". Esto puede requerir
+una gran cantidad de magia entre bastidores, en cuyo caso (si no permanece
+oculto entre bastidores) se llamará L</dweomer>.
+
+=back
+
+=head2 E
+
+=over 4
+
+=item ecléctico
+
+Derivado de muchas fuentes. Hay quien piense que de I<demasiadas>.
+
+=item efectos secundarios
+
+Algo adicional que sucede cuando se evalúa una L</expresión>. Actualmente se
+puede referir casi a cualquier cosa. Por ejemplo, la evaluación de una
+instrucción de asignación sencilla suele tener el "efecto secundario" de
+asignar un valor a una variable.  (Y usted que pensaba que su intención
+principal era asignar la variable...)  Del mismo modo, la asignación de un
+valor a la variable especial C<$|> (C<$AUTOFLUSH>) tiene el efecto secundario
+de forzar un volcado en cada operación L<write|perlfunc/write> o
+L<print|perlfunc/print> en el identificador de archivo seleccionado
+actualmente.
+
+=item ejecutar
+
+Ejecutar un L<programa|/archivo ejecutable> o una L</subrutina>.  (No tiene
+nada que ver con la función predefinida L<kill|perlfunc/kill>, a menos que
+intente ejecutar un L</controlador de señales>).
+
+=item elemento
+
+Componente básico. Cuando se refiere a un L</array>, es uno de los elementos
+que forman el array.
+
+=item elemento predefinido
+
+L<Función|/función> predefinida del lenguaje. Incluso cuando se oculta
+L<sobrescribiendo|/sobrescribir>, siempre se puede obtener una función
+predefinida usando su L</nombre completo> (completándolo con el seudopaquete
+C<CORE::>).
+
+=item encapsulación
+
+El velo de abstracción que separa la L</interfaz> de la L</implementación>
+(tanto si se fuerza como si no), que ordena que todo el acceso al estado de un
+L</objeto> sea solo a través de L<métodos|/método>.
+
+=item encapsulador
+
+Programa o subrutina que ejecuta automáticamente otro programa o subrutina,
+modificando parte de la entrada o la salida para adaptar mejor el resultado a
+sus necesidades.
+
+=item endian
+
+Vea L</little-endian> y L</big-endian>.
+
+=item enfoque de caja de herramientas
+
+La noción de que basta un conjunto completo de herramientas sencillas que
+funcionan bien juntas para construir todo lo que se desee. Lo cual es
+fantástico si lo que se pretende es montar un triciclo, pero si vamos a
+acometer una empresa faraónica necesitaremos nuestro propio taller de
+maquinaria para fabricar herramientas especiales. Perl es una especie de taller
+de maquinaria.
+
+=item enlazar
+
+Asignar una L</dirección de red> específica a un L</socket>.
+
+=item en passant
+
+Se dice de la acción de modificar un L</valor> mientras se copia.  [Del
+francés, significa "al paso", como en la exótica maniobra de captura de peón
+del ajedrez].
+
+=item entero
+
+Número sin parte fraccionaria (decimal). Es un número que sirve para contar,
+como 1, 2, 3, etc. También se incluyen el 0 y los números negativos
+correspondientes.
+
+=item entorno
+
+El conjunto colectivo de L<variables de entorno|/variable de entorno> que el
+L</proceso> hereda del proceso principal. Se puede acceder a estas variables a
+través de C<%ENV>.
+
+=item entrada estándar
+
+L<Secuencia|/secuencia> de entrada predeterminada del programa, que no debe
+preocuparse del origen de los datos, si es posible. En un programa Perl se
+representa mediante el L</identificador de archivo> L</STDIN>.
+
+=item EOF
+
+Final del archivo. A veces se usa metafóricamente como la cadena de
+terminación de un L</documento incrustado>.
+
+=item errno
+
+El número de error devuelto por una L</llamada de sistema> si no tiene éxito.
+Perl usa la variable C<$!> (o bien C<$OS_ERROR>, si usa el módulo English)
+para hacer referencia a este error.
+
+=item error
+
+Vea L</excepción> o L</error irrecuperable>.
+
+=item error estándar
+
+La L</secuencia> de salida estándar para comentarios desagradables que no
+corresponden a la L</salida estándar>. En un programa Perl se representa
+mediante el L</identificador de archivo> L</STDERR>. Puede usar esta secuencia
+explícitamente, pero las funciones predefinidas L<die|perlfunc/die> y
+L<warn|perlfunc/warn> escriben en la secuencia de error estándar
+automáticamente.
+
+=item error irrecuperable
+
+Una L</excepción> no capturada que hace que el L</proceso> finalice tras
+imprimir un mensaje en la secuencia de L</error estándar>. Los errores que se
+producen dentro de una función L<eval|perlfunc/eval> no son irrecuperables. La
+función L<eval|perlfunc/eval> termina después de colocar el mensaje de
+excepción en la variable C<$@> (C<$EVAL_ERROR>). Puede intentar provocar un
+error irrecuperable con el operador L<die|perlfunc/die> (lo que se conoce como
+desencadenar o provocar una excepción), pero esto puede ser capturado mediante
+un operador L<eval|perlfunc/eval> aplicado dinámicamente. Si no se captura, la
+llamada a L<die|perlfunc/die> se convierte en un error irrecuperable.
+
+=item E/S
+
+Entrada desde (o salida a) un L</archivo> o L</dispositivo>.
+
+=item escalar
+
+Valor singular, simple; un número, una L</cadena> o una L</referencia>.
+
+=item E/S estándar
+
+Biblioteca de C estándar para entrada y salida con L<almacenamiento en
+búfer|/búfer> en el L</sistema operativo>.  (La palabra "estándar" de E/S
+estándar solo tiene una relación tangencial con el estándar de entrada y
+salida). En general, Perl se basa en la implementación de E/S estándar
+proporcionada por un sistema operativo determinado, por lo que las
+características de almacenamiento en búfer de un programa Perl en una
+máquina pueden no coincidir exactamente con las de otra máquina. Normalmente,
+esto solo influye en la eficiencia, no en la semántica. Si el paquete de E/S
+estándar realiza almacenamiento en búfer de bloques y desea que
+L<vuelque|/vaciar> el búfer más a menudo, debe establecer la variable C<$|>
+en un valor verdadero.
+
+=item espacio de nombres
+
+Dominio de nombres. Evita tener que preocuparse de si los nombres de un dominio
+se usan en el otro. Vea L</paquete>.
+
+=item espacio en blanco
+
+L<Carácter|/carácter> que mueve el cursor pero que no imprime nada en
+pantalla. Normalmente se refiere espacios, tabulaciones, avances de línea,
+retornos de carro o avances de página.
+
+=item estado
+
+El L</valor> devuelto al L</proceso> primario cuando finaliza uno de sus
+procesos derivados. Este valor se coloca en la variable especial C<$?>. Los
+ocho L<bits|/bit> superiores son el estado de salida del proceso finalizado,
+mientras que los ocho bits inferiores identifican la señal (si existe) que
+hizo que finalizara el proceso. En sistemas Unix, este valor de estado es el
+mismo que la palabra de estado devuelta por I<wait>(2). Vea L<perlfunc/system>.
+
+=item estado de salida
+
+Vea L</estado>.
+
+=item estándar
+
+Incluido en la distribución de Perl oficial como un módulo estándar, una
+herramienta estándar o una L</página de manual> de Perl estándar.
+
+=item estático
+
+Que varía lentamente en comparación con lo demás.  (Por desgracia, todo es
+relativamente estable en comparación con otra cosa, salvo algunas partículas
+elementales, y en este caso tampoco tenemos la seguridad). En un contexto
+informático, en el que se supone que las cosas cambian rápidamente, el
+adjetivo "estático" tiene una connotación peyorativa, que indica que la
+L</variable>, L</subrutina> o L</método> es ligeramente disfuncional. En la
+cultura Perl es de buena educación evitar el uso de esta palabra.
+
+=item estructura
+
+Vea L</estructura de datos>.
+
+=item estructura de datos
+
+Manera en que diversos elementos de datos están relacionados entre sí y forma
+que adquieren cuando se colocan todos juntos (por ejemplo, en una tabla
+rectangular o en un árbol de forma triangular).
+
+=item estructura stat
+
+Área interna especial en la que Perl mantiene información sobre el último
+L</archivo> del que se solicitó información.
+
+=item etiqueta
+
+Nombre que se asigna a una L</instrucción> para poder hacer referencia a la
+misma en otro punto del programa.
+
+=item etiqueta de bucle
+
+Tipo de clave o nombre asociado a un bucle (o una montaña rusa) que permite
+especificar en instrucciones de control de bucle el bucle que se desea
+controlar.
+
+=item excepción
+
+Término pretencioso para designar un error. Vea L</error irrecuperable>.
+
+=item exec
+
+Abandonar el programa del L</proceso> actual y reemplazarlo por otro sin salir
+del proceso ni renunciar a los recursos disponibles (salvo la imagen de memoria
+antigua).
+
+=item exportar
+
+Hacer que los símbolos de un L</módulo> estén disponibles para L</importar>
+en otros módulos.
+
+=item expresión
+
+Todo lo que sea válido en un punto del programa que requiera un L</valor>.
+Normalmente consta de L<literales|/literal>, L<variables|/variable>,
+L<operadores|/operador>, L<funciones|/función> y llamadas a
+L<subrutinas|/subrutina>, no necesariamente en ese orden.
+
+=item expresión de inspección
+
+Expresión que, al cambiar de valor, activa un punto de interrupción en el
+depurador de Perl.
+
+=item expresión regular
+
+Una sola entidad con diversas interpretaciones, como un elefante. Para un
+informático, es una gramática de un minilenguaje en el que algunas cadenas
+son válidas y otras no. Para las personas normales, es un patrón que se puede
+usar para encontrar lo que se busca cuando varía según el caso. Las
+expresiones regulares de Perl no son regulares en un sentido teórico, pero su
+uso regular produce muy buenos resultados. Ejemplo de expresión regular:
+C</Ast.*ores/>. Esto detectará cadenas como "C<Asturias patria querida,
+Asturias de mis amores>" o "C<Astuto programadores>". Vea L<perlre>.
+
+=item extensión
+
+Módulo Perl que también usa código C o C++ compilado. De manera más
+general, cualquier opción experimental que se pueda compilar en Perl, como la
+compatibilidad con múltiples hilos de ejecución.
+
+=back
+
+=head2 F
+
+=over 4
+
+=item falso
+
+En Perl, cualquier valor equivalente a C<""> o C<"0">, si se evalúa en
+contexto de cadena. Puesto que los valores indefinidos se evalúan como C<"">,
+todos los valores indefinidos son falsos (incluida la L</lista nula>), pero no
+todos los valores falsos son indefinidos.
+
+=item fase de compilación
+
+Cualquier momento antes de que el intérprete de Perl inicie la ejecución del
+programa principal. Vea también L</fase de ejecución>. Durante la fase de
+compilación la mayor parte del tiempo se consume en L</tiempo de
+compilación>, pero también puede usarse en L</tiempo de ejecución> cuando se
+evalúan los bloques C<BEGIN>, las declaraciones L<use|perlfunc/use> o
+subexpresiones constantes. El código de inicio e importación de cualquier
+declaración L<use|perlfunc/use> también se ejecuta durante la fase de
+compilación.
+
+=item fase de ejecución
+
+Cualquier momento posterior al comienzo de la ejecución del programa
+principal. Vea también L</fase de compilación>. La fase de ejecución se
+dedica en su mayor parte al L</tiempo de ejecución>, pero también puede
+dedicarse a L</tiempo de compilación> si se ejecutan los operadores
+L<require|perlfunc/require>, L<do|perlfunc/do> C<ARCHIVO> o
+L<eval|perlfunc/eval> C<CADENA>, o cuando una sustitución usa el modificador
+C</ee>.
+
+=item FIFO
+
+First In, First Out (el primero que entra es el primero que sale). Vea también
+L</LIFO>. También es un apodo de L</tubería con nombre>.
+
+=item fileglob
+
+Detección con "comodines" en L<nombres de archivos|/nombre de archivo>. Vea la
+función L<glob|perlfunc/glob>.
+
+=item filtro
+
+Programa que consume una L</secuencia> de entrada y la transforma en una
+secuencia de salida.
+
+=item filtro de código fuente
+
+Tipo de L</módulo> especial que hace un L</preprocesamiento> del script justo
+antes de que llegue al L</tokenizador>.
+
+=item FMTEYEWTK
+
+I<Far More Than Everything You Ever Wanted To Know> (Mucho más que todo lo que
+siempre quisiste saber). Un tratado exhaustivo sobre un tema que no da para
+mucho, como unas súper-L</P+F>. Pregunta a Tom si quieres saber mucho más.
+
+=item fork
+
+Mecanismo que crea un L</proceso> derivado idéntico al proceso principal en el
+momento de su creación, al menos hasta que tenga sus propias ideas. Es un hilo
+de ejecución con memoria protegida.
+
+=item formato
+
+Especificación de cuántos espacios, dígitos y demás hay que poner en algún
+lugar para que el resultado impreso sea atractivo.
+
+=item freeware
+
+Históricamente, cualquier software que se regala, especialmente si también se
+incluye el código fuente. Ahora se suele llamar C<software open source>.
+Recientemente se ha puesto de moda usar este término en contradicción con
+L</software open source>, para referirse únicamente al software libre
+publicado con la licencia GPL (General Public License) de la Free Software
+Foundation, pero es difícil justificar esto desde un punto de vista
+etimológico.
+
+=item función
+
+En matemáticas es una correspondencia entre los distintos valores del conjunto
+de valores de entrada y un valor de salida específico. En programación, es
+una L</subrutina> o un L</operador> que devuelve un L</valor>. Puede tener o no
+valores de entrada (denominados L<argumentos|/argumento>).
+
+=back
+
+=head2 G
+
+=over 4
+
+=item generador de código
+
+Sistema que escribe código automáticamente en un lenguaje de bajo nivel; por
+ejemplo, el código que implementa el I<backend> de un compilador. Vea
+L</generador de programas>.
+
+=item generador de programas
+
+Sistema que usa un algoritmo para escribir código automáticamente en un
+lenguaje de alto nivel. Vea también L</generador de código>.
+
+=item GID
+
+Group ID (identificador de grupo). En Unix es el identificador de grupo
+numérico que el L</sistema operativo> usa para identificarle a usted y a los
+miembros de su L</grupo>.
+
+=item glob
+
+Estrictamente, el carácter C<*> de la shell, que detectará un "glob" de
+caracteres cuando se intenta generar una lista de nombres de archivos. En un
+sentido informal, el acto de usar globs y símbolos similares para detectar
+patrones. Vea también L</fileglob> y L</typeglob>.
+
+=item global
+
+Algo que se puede ver en cualquier lugar, generalmente L<variables|/variable> y
+L<subrutinas|/subrutina> que están visibles en cualquier punto del programa.
+En Perl, solo algunas variables especiales son realmente globales; la mayoría
+de las variables (y todas las subrutinas) solo existen en el L</paquete>
+actual. Las variables globales se pueden declarar con L<our|perlfunc/our>. Vea
+L<perlfunc/our>.
+
+=item granularidad
+
+El tamaño de los elementos con los que se trabaja (de forma abstracta).
+
+=item grep
+
+Originalmente, el antiguo comando de editor Unix "Globally search for a Regular
+Expression and Print it" (hacer una búsqueda global de una expresión regular
+e imprimir el resultado). En la actualidad se usa en el sentido general de
+cualquier tipo de búsqueda, especialmente las búsquedas de texto. Perl
+incluye una función L<grep|perlfunc/grep> predefinida que permite buscar en
+una lista los elementos que cumplan algún criterio especificado, a diferencia
+del programa I<grep>(1), que busca líneas que coincidan con una L</expresión
+regular> en uno o varios archivos.
+
+=item grupo
+
+Conjunto de usuarios del que usted forma parte. En algunos sistemas operativos
+(como Unix) puede asignar determinados permisos de acceso a archivos a otros
+miembros de su grupo.
+
+=item grupo de modificadores
+
+Combinación de varios modificadores de línea de comandos (p. ej., B<-a -b
+-c>) en un solo modificador (p. ej., B<-abc>). Cualquier modificador que tenga
+un L</argumento> adicional deberá ser el último modificador del grupo.
+
+=item GV
+
+Definición de tipo de "glob value" (valor de glob) interno que contiene un
+L</typeglob>. El tipo L</GV> es una subclase de L</SV>.
+
+=back
+
+=head2 H
+
+=over 4
+
+=item hacker
+
+Persona que se caracteriza por una persistencia brillante para resolver
+problemas técnicos, ya sean de golf, de lucha contra los orcos o de
+programación. Hacker es un término neutro, desde un punto de vista ético. No
+se deben confundir los buenos hackers con los malvados L<crackers|/cracker> ni
+con los limitados L<script kiddies|/script kiddie>. Si los confunde,
+supondremos que usted es malvado o limitado.
+
+=item hash
+
+Asociación de pares L</clave>-L</valor> sin ordenar, almacenados de forma que
+se pueda usar fácilmente una L</clave> de tipo cadena para buscar el L</valor>
+de datos asociado. Este glosario es como un hash, en el que una palabra
+definida es la clave y su definición el valor. A veces se usa el septisílabo
+"array asociativo" para designar un hash. Esto es en sí una buena razón para
+preferir el nombre "hash". Opcionalmente, un hash se puede L<restringir|/hash
+restringido> a un conjunto fijo de claves.
+
+=item hash restringido
+
+L<Hash|/hash> con un conjunto cerrado de claves permitidas. Vea L<Hash::Util>.
+
+=item herencia
+
+Lo que se obtiene de los antepasados, ya sea por vía genética o de otro modo.
+Si usted fuera una L</clase>, sus antepasados serían L<clases base|/clase
+base> y sus descendientes serían L<clases derivadas|/clase derivada>. Vea
+L</herencia simple> y L</herencia múltiple>.
+
+=item herencia múltiple
+
+Las características que heredamos de nuestra madre y nuestro padre, combinadas
+de forma impredecible.  (Vea también L</herencia> y L</herencia simple>.)  En
+lenguajes informáticos (incluido Perl), la noción de que una clase
+determinada puede tener varios antepasados directos, o L<clases base|/clase
+base>.
+
+=item herencia simple
+
+Las características que heredó de su madre, si esta le dijo que no tiene
+padre.  (Vea también L</herencia> y L</herencia múltiple>). En lenguajes
+informáticos, la noción de que las L<clases|/clase> se reproducen
+asexualmente, de forma que una clase determinada solo puede tener un antecesor
+directo (una L</clase base>). Perl no impone esta restricción, pero si lo
+desea puede programar Perl de esta manera.
+
+=item hexadecimal
+
+Número en base 16 (se suele abreviar como "hex"). Los dígitos 10 a 16 se
+suelen representar mediante las letras entre C<a> y C<f>. En Perl, las
+constantes hexadecimales empiezan por C<0x>. Vea también L<perlfunc/hex>.
+
+=item hilo de ejecución
+
+Igual que un proceso generado mediante C<fork>, pero sin la protección de
+memoria que conlleva el uso de L</fork>. Un hilo de ejecución es más ligero
+que un proceso completo, en el sentido de que un proceso puede tener varios
+hilos de ejecución compitiendo en el mismo espacio de memoria del proceso, a
+menos que se tomen las medidas adecuadas para proteger a unos hilos de otros.
+Vea L<threads>.
+
+=item host
+
+El equipo en el que reside un programa (u otros datos).
+
+=item HV
+
+Abreviatura de la definición de tipo "hash value" (valor de hash), que
+contiene la representación interna en Perl de un hash. El tipo L</HV> es una
+subclase de L</SV>.
+
+=back
+
+=head2 I
+
+=over 4
+
+=item identificador
+
+Nombre válido para prácticamente cualquier cosa que pueda interesar a un
+programa. Muchos lenguajes (Perl incluido) permiten que los identificadores
+empiecen por una letra y contengan letras y dígitos. Perl también admite el
+guión bajo como carácter válido.  (Es posible usar nombres más complicados
+en Perl, como los L<nombres completos|/nombre completo>).
+
+=item identificador de archivo
+
+Identificador (no necesariamente relacionado con el nombre real del archivo)
+que representa una instancia concreta de un archivo abierto hasta que lo
+cierre. Si va a abrir y cerrar varios archivos seguidos, puede usar el mismo
+identificador para abrir los distintos archivos; no tiene que escribir código
+de apertura para cada archivo.
+
+=item identificador de archivo indirecto
+
+L<Expresión|/expresión> que, al evaluarse, devuelve algo que se puede usar
+como L</identificador de archivo>: una L</cadena> (nombre de identificador de
+archivo), un L</typeglob>, una L</referencia> de typeglob, o un objeto L</IO>
+de bajo nivel.
+
+=item identificador de directorio
+
+Nombre que representa una instancia concreta de un directorio abierto para
+lectura, hasta que se cierra dicho directorio. Vea la función
+L<opendir|perlfunc/opendir>.
+
+=item impaciencia
+
+La rabia que se siente ante los ataques de pereza del equipo. Esta cualidad le
+permite escribir programas que no solo reaccionarán a sus necesidades, sino
+que se anticiparán a ellas. O que al menos tratarán de hacerlo. Es por ello
+la segunda gran virtud de un programador. Vea también L</pereza> y
+L</soberbia>.
+
+=item implementación
+
+La manera en que un fragmento de código hace su trabajo. Los usuarios del
+código no deben contar con que se mantengan los detalles de la
+implementación, a menos que formen parte de la L</interfaz> publicada.
+
+=item importar
+
+Obtener acceso a símbolos exportados por otro módulo. Vea L<perlfunc/use>.
+
+=item incrementar
+
+Aumentar el valor de algo en una unidad (o en cualquier otra cantidad
+especificada).
+
+=item incremento mágico
+
+Operador de L<incremento|/incrementar> que sabe cómo recorrer los caracteres
+alfabéticos y los números.
+
+=item incrustar
+
+Insertar algo dentro de otra cosa, especialmente cuando se puede considerar
+sorprendente: "¡He incrustado un intérprete de Perl completo en mi editor!".
+
+=item indexar
+
+Antiguamente era el acto de buscar una L</clave> en un índice real (como un
+listín telefónico), pero actualmente no es más que el acto de usar cualquier
+tipo de clave o posición para buscar el L</valor> correspondiente, aunque no
+exista un índice. Las cosas han degenerado hasta el punto de que la función
+L<index|perlfunc/index> de Perl simplemente localiza la posición (el índice)
+de una cadena en otra.
+
+=item infijo
+
+L<Operador|/operador> que se usa entre sus L<operandos|/operando>, como el de
+multiplicación en C<24 * 7>.
+
+=item inspección hacia adelante
+
+L<Aserción|/aserción> que mira a la cadena situada a la derecha de la
+posición de detección actual.
+
+=item inspección hacia atrás
+
+L<Aserción|/aserción> que mira a la cadena situada a la izquierda de la
+posición de detección actual.
+
+=item instancia
+
+Abreviatura de "instancia de una clase", es decir, un L</objeto> de esa
+L</clase>.
+
+=item instrucción
+
+L<Comando|/comando> que indica al equipo qué debe hacer a continuación, como
+un paso de una receta: "Añadir mermelada y batir hasta obtener una mezcla
+homogénea". Una instrucción se distingue de una L</declaración> en que esta
+última no ordena al equipo  que haga nada; simplemente informa de algo.
+
+=item instrucción colgante
+
+L<Instrucción|/instrucción> individual suelta, sin llaves, que cuelga de un
+condicional C<if> o C<while>. C las permite. Perl no.
+
+=item instrucción de control de bucle
+
+Cualquier instrucción del cuerpo de un bucle que puede hacer que el bucle se
+detenga prematuramente u omita una L</iteración>. En general, no debe probar
+esto en una montaña rusa.
+
+=item instrucción switch
+
+Técnica de programación que permite evaluar una L</expresión> y, a
+continuación, en función del valor de la expresión, bifurcar la ejecución
+al fragmento de código correspondiente a ese valor. También se denominada
+"estructura case", por una construcción similar del lenguaje Pascal. Vea
+L<perlsyn/BLOQUES básicos>.
+
+=item interfaz
+
+Los servicios que un componente de código debe mantener para siempre, a
+diferencia de su L</implementación>, que se puede modificar siempre que sea
+necesario.
+
+=item interpolación
+
+Inserción de un escalar o un valor de lista dentro de otro valor, de forma que
+parezca que siempre ha estado allí. En Perl, la interpolación de variables se
+realiza en cadenas o patrones escritos entre comillas dobles, y la
+interpolación de listas se realiza al crear la lista de valores que se van a
+pasar a un operador de lista o a otra construcción similar que consuma una
+L</LISTA>.
+
+=item interpolación de variables
+
+La L</interpolación> de una variable escalar o de array en una cadena.
+
+=item intérprete
+
+En un sentido estricto, es un programa que lee otro programa y hace lo que este
+segundo programa dice sin convertirlo en un programa distinto, que es lo que
+haría un L</compilador>. Según esta definición, Perl no es un intérprete,
+ya que contiene una especie de compilador que convierte un programa a un
+formato más fácil de ejecutar (L<árboles de sintaxis|/árbol de sintaxis>)
+dentro del mismo proceso de I<perl>, para que el sistema de L</tiempo de
+ejecución> de Perl lo interprete.
+
+=item invocación
+
+El acto de llamar a una deidad o un demonio, programa, método, subrutina o
+función para que haga lo que se supone que debe hacer. Normalmente "llamamos"
+a las subrutinas, pero a los métodos los "invocamos" porque suena mejor.
+
+=item invocante
+
+El agente en cuyo nombre se invoca un L</método>. En un método de L</clase>,
+el invocante es un nombre de paquete. En un método de L</instancia>, el
+invocante es una referencia a objeto.
+
+=item IO
+
+Objeto de E/S interno. También puede significar L</objeto indirecto>.
+
+=item IP
+
+Protocolo de Internet (o Propiedad intelectual).
+
+=item IPC
+
+Comunicación entre procesos.
+
+=item is-a
+
+es-un. Relación entre dos L<objetos|/objeto> en la que se considera que un
+objeto es una versión más específica del otro, que es un objeto genérico:
+"Un camello es un mamífero". Como en realidad el objeto genérico sólo existe
+en un sentido platónico, normalmente agregamos un pequeña abstracción a la
+noción de objetos, y pensamos en la relación como una relación entre una
+L</clase base> genérica y una L</clase derivada> específica.
+Sorprendentemente, las clases platónicas no siempre tienen relaciones
+platónicas (vea L</herencia>).
+
+=item iteración
+
+Hacer algo repetidamente.
+
+=item iterador
+
+Artilugio especial para programación que hace un seguimiento de dónde se
+está en algo que se intenta recorrer repetidamente. El bucle C<foreach> de
+Perl contiene un iterador; el hash también (es lo que permite usar la función
+L<each|perlfunc/each>).
+
+=item IV
+
+El entero cuatro; no debe confundirse con seis, el editor favorito de Tom. IV
+también puede ser un valor entero (Integer Value) interno, del tipo que un
+L</escalar> puede contener. No debe confundirse con un L</NV>.
+
+=back
+
+=head2 J
+
+=over 4
+
+=item JAPH
+
+"Just Another Perl Hacker", un fragmento de código Perl que refleja astucia,
+aunque de forma críptica, y que cuando se ejecuta devuelve la cadena anterior.
+Se suele usar para ilustrar una característica determinada de Perl, y se viene
+usando de forma continuada en las firmas de Usenix, como si de un concurso de
+Perl ofuscado se tratara.
+
+=back
+
+=head2 L
+
+=over 4
+
+=item la más larga empezando por la izquierda
+
+La preferencia del motor de L<expresiones regulares|/expresión regular> por
+detectar la primera aparición de un L</patrón> empezando por la izquierda, y
+una vez obtenida una posición de coincidencia, la preferencia por la
+coincidencia más larga (se supone que se usa un cuantificador L</avaricioso>).
+En L<perlre> encontrará I<mucha> más información sobre este tema.
+
+=item legible
+
+Si se refiere a un archivo, quiere decir que tiene establecido el bit de
+permiso apropiado para permitir el acceso al archivo. Si se refiere a un
+programa informático, indica que está lo suficientemente bien escrito para
+que otros puedan entender cómo funciona.
+
+=item lenguaje pegamento
+
+Lenguaje como Perl, que es muy útil para conectar cosas que en principio no se
+usan juntas.
+
+=item lexema
+
+Nombre elegante de L</token>.
+
+=item LIFO
+
+I<Last In, First Out> (el último que entra es el primero que sale). Vea
+también L</FIFO>. LIFO también se suele llamar L</pila>.
+
+=item línea
+
+En Unix, una serie de cero o más caracteres que no son de nueva línea,
+culminados con un L</carácter de nueva línea>. En equipos que no usan Unix
+esto se emula mediante la biblioteca de C, aunque el L</sistema operativo>
+subyacente tenga ideas distintas.
+
+=item lista
+
+Conjunto ordenado de valores escalares.
+
+=item LISTA
+
+Construcción sintáctica que representa una lista de expresiones separadas por
+comas y que al evaluarse produce un L</valor de lista>. Cada L</expresión> de
+una L</LISTA> se evalúa en L</contexto de lista> y se interpola en el valor de
+lista.
+
+=item lista nula
+
+Valor sin valores que en Perl se representa mediante C<()>. En realidad no es
+una L</LISTA>, sino una expresión que devuelve C<undef> en L</contexto
+escalar> y un L</valor de lista> con cero elementos en L</contexto de lista>.
+
+=item lista vacía
+
+Vea L</lista nula>.
+
+=item literal
+
+Token de un lenguaje de programación, como un número o una L</cadena>, que
+proporciona un L</valor> real, en lugar de simplemente representar valores
+posibles, como una L</variable>.
+
+=item literal escalar
+
+Número o L</cadena> entre comillas; un L</valor> real en el texto del
+programa, en contraste con una L</variable>.
+
+=item little-endian
+
+Según Swift, alguien que empieza a comer un huevo por su extremo menos ancho
+(Nota del traductor: juego de palabras; en inglés "end" significa extremo).
+También se usa para designar a los equipos que almacenan el L</byte> menos
+significativo de una palabra en una dirección de byte más baja que la del
+byte más significativo. Estos equipos se suelen considerar superiores a los
+equipos big-endian. Vea también L</big-endian>.
+
+=item llamada de sistema
+
+Llamada de L</función> dirigida directamente al L</sistema operativo>. Muchas
+de las subrutinas y funciones importantes que se usan no son llamadas de
+sistema directas, sino que se crean una o varias capas por encima del nivel de
+llamada de sistema. En general, los programadores que usan Perl no tienen que
+preocuparse por esta distinción. Sin embargo, si sabe qué funciones de Perl
+son realmente llamadas de sistema, puede predecir cuál de estas establecerá
+el valor de la variable C<$!> (C<$ERRNO>) cuando se produzca un error. Por
+desgracia, los programadores principiantes suelen emplear de forma confusa el
+término "llamada de sistema" para referirse a lo que sucede cuando se llama a
+la función L<system|perlfunc/system> de Perl, que es algo que en realidad
+requiere realizar muchas llamadas de sistema. Para evitar confusiones, casi
+siempre diremos "llamada de sistema" para referirnos a algo que se puede llamar
+indirectamente mediante la función L<syscall|perlfunc/syscall> de Perl; nunca
+lo usaremos para algo que se llame a través de la función
+L<system|perlfunc/system> de Perl.
+
+=item llamada por referencia
+
+Mecanismo para pasar L</argumentos> en el que los L</argumentos formales> hacen
+referencia directa a los L</argumentos reales> y la L</subrutina> puede cambiar
+los argumentos reales modificando los argumentos formales. Es decir, el
+argumento formal es un L</alias> del argumento real. Vea también L</llamada
+por valor>.
+
+=item llamada por valor
+
+Mecanismo para pasar L</argumentos> en el que los L</argumentos formales> hacen
+referencia a los L</argumentos reales> y la L</subrutina> no puede cambiar los
+argumentos reales modificando los argumentos formales. Vea también L</llamada
+por referencia>.
+
+=item local
+
+No tiene el mismo significado en todas partes. Una variable global en Perl se
+puede hacer local dentro de un L<ámbito dinámico|/control de ámbito
+dinámico> a través del operador L<local|perlfunc/local>.
+
+=back
+
+=head2 M
+
+=over 4
+
+=item magia
+
+Desde un punto de vista técnico, cualquier semántica adicional asociada a una
+variable, como C<$!>, C<$0>, C<%ENV> o C<%SIG>, o a cualquier variable atada.
+Cuando se hacen trampas con estas variables, suceden cosas mágicas.
+
+=item Makefile
+
+Archivo que controla la compilación de un programa. En general, los programas
+Perl no necesitan un archivo L</Makefile> porque el compilador de Perl destaca
+por su autocontrol.
+
+=item man
+
+Programa de Unix que muestra la documentación en pantalla (páginas de
+manual).
+
+=item mapa de tipos
+
+Descripción de cómo pueden transformarse los tipos de C en tipos de Perl y
+viceversa en un módulo de L</extensión> escrito en L</XS>.
+
+=item marca
+
+Normalmente evitamos usar este término porque tiene muchos significados
+posibles. Puede ser un L</modificador> de línea de comandos que no consume
+ningún argumento (como las marcas B<-n> y B<-p> de perl) o, de forma menos
+frecuente, un indicador de un solo bit (como las marcas C<O_CREAT> y C<O_EXCL>
+que se usan en L<sysopen|perlfunc/sysopen>).
+
+=item memoria
+
+Siempre hace referencia a la memoria principal, no al disco. Algo que enturbia
+este asunto es el hecho de que el equipo puede tener implementada memoria
+L</virtual>; es decir, simulará que dispone de más memoria de la que
+realmente tiene, y usará el espacio en disco para almacenar bits inactivos.
+Esto puede hacer que parezca que se dispone de más memoria de la que realmente
+hay, pero no sustituye la memoria real. Lo mejor que se puede decir de la
+memoria virtual es que, cuando se agota la memoria real, hace que el
+rendimiento se degrade de forma gradual, no súbitamente. Pero el programa
+también puede finalizar cuando se agota la memoria virtual, si no se ha
+liquidado el disco antes.
+
+=item memoria compartida
+
+Parte de la L</memoria> accesible para dos L<procesos|/proceso> distintos que,
+de otro modo, no podrían ver la memoria del otro.
+
+=item metacarácter
+
+L<Carácter|/carácter> que I<no> debe procesarse como un carácter normal. Los
+caracteres que deben tratarse de forma especial como metacaracteres varían en
+gran medida de un contexto a otro. Su L</shell> tendrá algunos metacaracteres,
+las L<cadenas|/cadena> de Perl entre comillas tendrán otros metacaracteres y
+los patrones de L</expresión regular> tendrán todos los metacaracteres de
+comillas dobles y otros de su propia cosecha.
+
+=item metasímbolo
+
+Algo que podríamos llamar L</metacarácter> si no fuera porque está formado
+por una secuencia de varios caracteres. En general, el primer carácter de la
+secuencia debe ser un auténtico metacarácter para que los demás caracteres
+del metasímbolo le sigan en sus fechorías.
+
+=item método
+
+Tipo de acción que un L</objeto> puede realizar si se le ordena. Vea
+L<perlobj>.
+
+=item método de clase
+
+L<Método|/método> cuyo L</invocante> es un nombre de L</paquete>, no una
+referencia a L</objeto>. Un método asociado a la clase como un todo.
+
+=item método estático
+
+Esto no existe. Vea L</método de clase>.
+
+=item métodos de acceso
+
+L<Método|/método> que se usa para actualizar o inspeccionar de forma
+indirecta el estado de un L</objeto> (sus L<variables de instancia|/variable de
+instancia>).
+
+=item minimalismo
+
+La creencia de que "lo pequeño es bello". Paradójicamente, si se dice algo en
+un lenguaje pequeño, acaba por ser grande; y si se dice en un lenguaje grande,
+acaba por ser pequeño. No hay quien lo entienda...
+
+=item modificador
+
+Vea L</modificador de instrucción>, L</modificador de expresión regular> y
+L</modificador de valor-izquierda>, no necesariamente en ese orden.
+
+=item modificador de expresión regular
+
+Opción de un patrón o sustitución, como C</i>, que hace que no se distingan
+mayúsculas de minúsculas en el patrón. Vea también L</claustro>.
+
+=item modificador de instrucción
+
+L<Condicional|/condicional> o L</bucle> que se coloca a continuación de la
+L</instrucción>, no antes.
+
+=item modificador de valor-izquierda
+
+Seudofunción de adjetivación que modifica el significado de un
+L</valor-izquierda> de alguna manera declarativa. Actualmente hay tres
+modificadores de valores-izquierda: L<my|perlfunc/my>, L<our|perlfunc/our> y
+L<local|perlfunc/local>.
+
+=item modificador/switch
+
+Opción de línea de comandos que influye en el funcionamiento de un programa.
+Generalmente se especifica con un signo menos delante.  "Switch" es un alias de
+la L</instrucción switch>.
+
+=item modo
+
+En el contexto de la llamada de sistema L<stat(2)>, se refiere al campo que
+contiene los L</bits de permiso> y el tipo del L</archivo>.
+
+=item módulo
+
+L<Archivo|/archivo> que define un L</paquete> que tiene (casi) el mismo nombre,
+y que puede L</exportar> símbolos o funcionar como una clase de L</objeto>. 
+(El archivo I<.pm> principal de un módulo también puede cargar otros archivos
+auxiliares del módulo). Vea la función predefinida L<use|perlfunc/use>.
+
+=item módulos quitados (o que se van a quitar)
+
+Cuando se lanzó Perl 5 (vea L<perlhist>) se incluyeron varios módulos que ya
+no se usan habitualmente. Se ha sugerido que hay que quitar estos módulos, ya
+que la distribución ha crecido bastante y ahora el criterio para agregar
+módulos nuevos es limitarse a aquellos módulos que ayuden a compilar, probar
+y extender el intérprete perl. Por otra parte, ahora existe CPAN (no existía
+cuando salió Perl 5.0), que puede convertirse en el nuevo hogar de los
+módulos suprimidos de la distribución. Actualmente no es posible quitar
+módulos, pero hay desarrollos recientes encaminados hacia ese fin.
+
+=item módulos y características obsoletos
+
+Las características y los módulos obsoletos son los que en su momento
+formaron parte de una versión estable pero que tienen algún defecto sutil,
+por lo que es aconsejable evitar su uso. Pueden ser eliminados o
+reimplementados eliminando los defectos en la siguiente versión principal
+(pero se conservarán en las versiones de mantenimiento). Con B<-w> o C<use
+diagnostics> se muestran advertencias de elementos obsoletos, y también se
+publican avisos en los documentos L<perldelta> y en otros documentos POD.
+Algunas prácticas de programación que hacen un uso incorrecto de
+características, como C<my $foo if 0>, también pueden quedar obsoletas.
+
+=item módulo (teoría de números)
+
+Divisor entero que se puede usar cuando se desea obtener el resto en lugar del
+cociente.
+
+=item monger
+
+Abreviatura de Perl Monger, un proveedor de servicios basados en Perl.
+
+=item mortal
+
+Valor temporal programado para morir cuando finalice la instrucción actual.
+
+=back
+
+=head2 N
+
+=over 4
+
+=item NFS
+
+Network File System. Permite montar un sistema de archivos remoto como si fuera
+local.
+
+=item nombre completo
+
+Que posee un nombre completamente cualificado. El símbolo C<$Ent::moot> es
+completo; C<$moot> no es completo. Un nombre completo de archivo se especifica
+con respecto al directorio de nivel superior.
+
+=item nombre de archivo
+
+Identificador que se asigna a un archivo. Este nombre se muestra en un
+L</directorio> y puede usarlo en una función L<open|perlfunc/open> para
+indicar al L</sistema operativo> exactamente qué archivo desea abrir, y
+asociar el archivo a un L</identificador de archivo> que asumirá la identidad
+de ese archivo en el programa hasta que lo cierre.
+
+=item nombre de comando
+
+El nombre del programa que se está ejecutando actualmente, tal como se
+escribió en la línea de comandos. En C, el nombre de un L</comando> se pasa
+al programa como el primer argumento de línea de comandos. En Perl se incluye
+por separado, como C<$0>.
+
+=item número de línea
+
+El número de líneas leídas antes que esta más 1. Perl mantiene un número
+de línea independiente para cada archivo de origen o de entrada que abre. El
+número línea actual del código se representa mediante C<__LINE__>. El
+número de línea de entrada actual (para el último archivo leído a través
+de C<< E<lt>FHE<gt> >>) se representa con la variable C<$.>
+(C<$INPUT_LINE_NUMBER>). Muchos mensajes de error notifican ambos valores (si
+están disponibles).
+
+=item NV
+
+Abreviatura de Nevada, un lugar donde no hay ni rastro de civilización. NV
+también es un valor numérico (Numeric Value) de punto flotante interno del
+tipo que un L</escalar> puede contener; no se debe confundir con un L</IV>.
+
+=item nybble
+
+La mitad de un L</byte>, equivalente a un dígito L</hexadecimal> y que
+representa cuatro L<bits|/bit>.
+
+=back
+
+=head2 O
+
+=over 4
+
+=item objeto
+
+L<Instancia|/instancia> de una L</clase>. Algo que "sabe" a qué tipo definido
+por el usuario (clase) pertenece, y lo que puede hacer por ser de esa clase. El
+programa puede pedir al objeto que haga cosas, pero es el objeto el que decide
+si las hace o no. Algunos objetos son más complacientes que otros.
+
+=item objeto indirecto
+
+En gramática inglesa, una frase nominal corta, situada entre un verbo y su
+objeto directo, que indica el beneficiario o destinatario de la acción. En
+Perl, C<print STDOUT "$foo\n";> se puede leer como "verbo objeto-indirecto
+objeto", donde L</STDOUT> es el destinatario de la acción
+L<print|perlfunc/print> y C<"$foo"> es el objeto que se imprime. De manera
+similar, al invocar un L</método> puede colocar el invocante entre el método
+y sus argumentos:
+
+  $gollum = new Criatura::Lamentable "Smeagol";
+  give $gollum "¡Pesssscar!";
+  give $gollum "¡Mi tesssoro!";
+
+En Perl moderno se considera de mal estilo llamar a los métodos de esta
+manera, por lo que debe evitarse.
+
+=item octal
+
+Número en base 8. Solo se admiten los dígitos 0 a 7. Las constantes octales
+en Perl empiezan por 0 (p. ej., 013). Vea también la función
+L<oct|perlfunc/oct>.
+
+=item opciones
+
+Vea L<modificadores|/modificador> o L</modificador de expresión regular>.
+
+=item operación atómica
+
+Cuando Demócrito llamó "átomo" a las partes indivisibles de la materia,
+quería decir literalmente algo que no se puede dividir: I<a->(no) + I<tomos>
+(divisible). Una operación atómica es una acción que no se puede
+interrumpir; no debe confundirse con una acción prohibida en una región libre
+de armas nucleares.
+
+=item operador
+
+Artilugio que transforma un número determinado de valores de entrada en un
+número determinado de valores de salida, y que suele estar predefinido en un
+lenguaje con una sintaxis o un símbolo especiales. Un operador determinado
+pueden tener expectativas específicas sobre los L<tipos|/tipo> de datos que se
+le deben pasar como argumentos (L<operandos|/operando>) y el tipo de datos que
+debe devolver.
+
+=item operador aritmético
+
+L<Símbolo|/símbolo>, como C<+> o C</>, que indica a Perl que haga una de las
+operaciones aritméticas que aprendimos en el colegio.
+
+=item operador binario
+
+L<Operador|/operador> que consume dos L<operandos|/operando>.
+
+=item operador de asignación
+
+Puede ser una L</asignación> normal o un L</operador> compuesto, formado por
+una asignación normal y otro operador que cambie el valor de una variable in
+situ, es decir, con respecto a su valor anterior. Por ejemplo, C<$a += 2> suma
+C<2> a C<$a>.
+
+=item operador de direccionamiento
+
+Algunos lenguajes usan directamente las direcciones de memoria de los valores,
+pero esto puede ser jugar con fuego. Perl proporciona un conjunto de guantes de
+asbesto para controlar toda la administración de memoria. Lo más cercano a un
+operador de direccionamiento en Perl es el operador de barra diagonal inversa.
+Este operador devuelve una L</referencia estricta>, que es mucho más segura
+que una dirección de memoria.
+
+=item operador de lista
+
+L<Operador|/operador> como L<join|perlfunc/join> o L<grep|perlfunc/grep>, que
+hace algo con una lista de valores. Se suele usar en operadores predefinidos
+con nombre (como L<print|perlfunc/print>, L<unlink|perlfunc/unlink> y
+L<system|perlfunc/system>) para los que no es necesario escribir la lista de
+L<argumentos|/argumento> entre paréntesis.
+
+=item operador de prueba de archivo
+
+Operador unario predefinido que se usa para determinar si algo referido a un
+archivo es L</verdadero>, como C<-o $archivo> para comprobar si se es el
+propietario del archivo.
+
+=item operador envolvente
+
+L<Operador|/operador> que rodea al L</operando>, como el operador de corchetes
+angulares o los paréntesis, o un abrazo.
+
+=item operador lógico
+
+Símbolo que representa conceptos como "and", "or", "xor" o "not".
+
+=item operador relacional
+
+L<Operador|/operador> que indica si una relación de orden concreta es
+L<verdadera|/verdadero> para un par de L<operandos|/operando>. Perl tiene
+operadores relaciones numéricos y de cadena. Vea L</secuencia de
+intercalación>.
+
+=item operador unario
+
+Operador que se aplica a un solo L</operando>, como C<!> o
+L<chdir|perlfunc/chdir>. Los operadores unarios son generalmente operadores de
+prefijo; es decir, preceden al operando. Los operadores C<++> y C<--> pueden
+ser de prefijo o de postfijo.  (Su posición I<cambia> su significado).
+
+=item operando
+
+L<Expresión|/expresión> que devuelve un L</valor> sobre el que actúa un
+L</operador>. Vea también L</precedencia>.
+
+=item ordinal
+
+Otro nombre para L</código de carácter>
+
+=back
+
+=head2 P
+
+=over 4
+
+=item página de manual
+
+"Página" de los manuales que se suele consultar mediante el comando I<man>(1).
+Una página de manual contiene una SINOPSIS, una DESCRIPCIÓN, una lista de
+ERRORES, etc., y generalmente no cabe en una sola página. Existen páginas de
+manual que documentan L<comandos|/comando>, L<llamadas de sistema|/llamada de
+sistema>, L<funciones|/función> de L</biblioteca>,
+L<dispositivos|/dispositivo>, L<protocolos|/protocolo>, L<archivos|/archivo>,
+etc. En este libro llamamos página de manual a cualquier archivo de
+documentación estándar de Perl (como I<perlop> o I<perldelta>),
+independientemente del formato con el que se haya instalado en el sistema.
+
+=item palabra
+
+En lenguaje informático normal, fragmento de datos del tamaño procesado de
+forma más eficiente por el equipo, normalmente 32 bits, quitando o sumando
+algunas potencias de 2. En la cultura Perl normalmente hace referencia a un
+L</identificador> alfanumérico (guiones bajos incluidos) o a una cadena de
+L<caracteres|/carácter> sin espacios en blanco limitada por espacio en blanco
+o delimitadores de cadena.
+
+=item palabra clave
+
+Vea L</palabras reservadas>.
+
+=item palabras reservadas
+
+Palabras con un significado predefinido específico para un L</compilador>,
+como C<if> o L<delete|perlfunc/delete>. A diferencia de Perl, muchos lenguajes
+permiten usar palabras reservadas para designar otras cosas.  (Por eso se
+llaman reservadas). En Perl no puede usar palabras reservadas para designar
+L<etiquetas|/etiqueta> o L<identificadores de archivo|/identificador de
+archivo>. También se denominan "palabras clave".
+
+=item palabra suelta
+
+Palabra lo suficientemente ambigua como para no ser considerada válida cuando
+se activa L<use strict 'subs'|strict/strict subs>. Si no se usa este pragma, se
+tratará la palabra como si estuviera escrita entre comillas.
+
+=item paquete
+
+L<Espacio de nombre|/espacio de nombres> para L<variables|/variable> globales,
+L<subrutinas|/subrutina>, etc., que permite distinguirlas de
+L<símbolos|/símbolo> con el mismo nombre de otros espacios de nombres. En
+cierto modo, solo el paquete es global, ya que fuera del paquete solo se puede
+acceder a los símbolos de la tabla de símbolos del paquete haciendo
+referencia al paquete. Pero en otro sentido, todos los símbolos de paquete son
+variables globales, solo que bien organizadas.
+
+=item paquete actual
+
+El L</paquete> en el que se compila la instrucción actual. Recorra hacia
+atrás el texto del programa por el L<ámbito léxico|/control de ámbito
+léxico> actual o cualquier ámbito léxico de nivel superior hasta llegar a la
+declaración del paquete. Ese es el nombre del paquete actual.
+
+=item parámetro
+
+Vea L</argumento>.
+
+=item parchear/parche
+
+Parchear consiste en aplicar un parche. En el mundo hacker, un parche es una
+lista de diferencias entre dos versiones de un programa como las que se pueden
+aplicar mediante el programa I<patch>(1) cuando se desea corregir un error o
+actualizar una versión antigua.
+
+=item PATH
+
+Lista de L<directorios|/directorio> en los que el sistema busca el programa que
+el usuario desea L</ejecutar>. La lista se almacena como una de las L<variables
+de entorno|/variable de entorno>, a la que se accede en Perl a través de
+C<$ENV{PATH}>.
+
+=item patrón
+
+Plantilla usada en L</detección de patrones>.
+
+=item patrón de tiempo de ejecución
+
+Patrón que contiene una o más variables que deben interpolarse antes de que
+se analice el patrón como una L</expresión regular> y que, por tanto, no se
+puede analizar en tiempo de compilación, sino que se debe volver a analizar
+cada vez que se evalúa el operador de detección de patrón. Los patrones de
+tiempo de ejecución son útiles pero costosos.
+
+=item pereza
+
+La cualidad que nos obliga a realizar un gran esfuerzo para reducir el gasto
+global de energía. Nos impulsa a escribir programas que nos ahorran trabajo y
+que pueden resultar útiles a otras personas, y a documentarlos para no tener
+que contestar consultas al respecto. Por esta razón, la consideremos la
+primera gran virtud de un programador. Sin ella, no estaría leyendo esto. Vea
+también L</impaciencia> y L</soberbia>.
+
+=item Pern
+
+Lo que se obtiene al ejecutar C<Perl++> dos veces. Hacerlo una sola vez
+simplemente le riza el pelo. Debe incrementar ocho veces para lavar el pelo.
+Enjabonar, aclarar, repetir.
+
+=item P+F
+
+Preguntas más frecuentes (aunque no necesariamente frecuentemente contestadas,
+especialmente si la respuesta ya aparece en los documentos de preguntas más
+frecuentes sobre Perl que se incluyen en la distribución estándar de Perl).
+
+=item pila
+
+Dispositivo en el que se pueden colocar cosas para recuperarlas posteriormente
+en orden inverso al de colocación. Vea L</LIFO>.
+
+=item plataforma
+
+El contexto de hardware y software en el que se ejecuta un programa. A 
+programa escrito en un lenguaje dependiente de la plataforma puede no funcionar
+si se cambia alguno de los elementos siguientes: el equipo, el sistema
+operativo, las bibliotecas, el compilador o la configuración del sistema. El
+intérprete I<perl> debe compilarse de distinta manera para cada plataforma, ya
+que está implementado en C, pero los programas escritos en el lenguaje Perl
+son en gran medida independientes de la plataforma.
+
+=item pod
+
+Lenguaje de marcado que se usa para incrustar documentación en código Perl.
+Vea L<perlpod>.
+
+=item polimorfismo
+
+La noción de que se puede decir a un L</objeto> que haga algo genérico y este
+interpretará el comando de distinta manera en función de su tipo.  [admitir
+muchas formas]
+
+=item porción
+
+Selección de un número de L<elementos|/elemento> de una L</lista>, un
+L</array> o un L</hash>.
+
+=item portable
+
+En su día, se llamaba así al código C compilable en BSD y SysV. En general,
+se designa así al código que se puede adaptar fácilmente a otra
+L</plataforma>; puede definir "fácilmente" como le parezca (y generalmente se
+hace así). Todo nos parecerá portable si lo deseamos con la suficiente
+intensidad. Vea I<caravana> o I<Puente de Londres>.
+
+=item porter
+
+Miembro del equipo de desarrollo principal. Alguien que adapta software de una
+L</plataforma> a otra. Adaptar programas escritos en lenguajes dependientes de
+la plataforma, como C, puede ser difícil, pero la adaptación de programas
+como Perl merece la pena.
+
+=item POSIX
+
+Especificación de la Portable Operating System Interface (Interfaz de sistema
+operativo portable).
+
+=item postfijo
+
+L<Operador|/operador> que sigue a su L</operando>, como en C<$x++>.
+
+=item pp
+
+Abreviatura interna de código "push-pop", es decir, el código C que
+implementa la pila de Perl.
+
+=item pragma
+
+Módulo estándar cuyos prácticos indicios y sugerencias se reciben (y
+posiblemente omiten) en tiempo de compilación. Los nombres de pragmas se
+escriben en minúsculas.
+
+=item precedencia
+
+Las normas de conducta que, en ausencia de otros criterios, determinan qué
+debe suceder primero. Por ejemplo, si no se usan paréntesis, una
+multiplicación siempre se realizará antes que una suma.
+
+=item prefijo
+
+L<Operador|/operador> que precede a su L</operando>, como en C<++$x>.
+
+=item preprocesador de C
+
+El primer barrido típico del compilador de C, que procesa las líneas que
+empiezan por C<#> para compilación condicional y definición de macros, y que
+manipula de varias maneras el texto del programa basándose en las definiciones
+actuales. También se denomina I<cpp>(1).
+
+=item preprocesamiento
+
+Lo que hace algún L</proceso> auxiliar para transformar los datos entrantes a
+un formato más adecuada para el proceso actual. Estos datos suelen llegar a
+través de una L</tubería>. Vea también L</preprocesador de C>.
+
+=item procedimiento
+
+Una L</subrutina>.
+
+=item proceso
+
+Instancia de un programa en ejecución. En sistemas multitarea como Unix, dos o
+más procesos independientes pueden ejecutar el mismo programa por separado
+simultáneamente; de hecho, la función L<fork|perlfunc/fork> está diseñada
+para proporcionar esta sensación de felicidad. En otros sistemas operativos,
+los procesos se llaman a veces "hilos de ejecución", "tareas" o "trabajos",
+generalmente con ligeros matices de significado.
+
+=item propiedad
+
+Vea L</variable de instancia> o L</propiedad de carácter>.
+
+=item propiedad de carácter
+
+L<Clase de caracteres|/clase de caracteres> que se puede detectar mediante el 
+L</metasímbolo> C<\p>. Hay muchas propiedades estándar definidas para
+L</Unicode>.
+
+=item propietario
+
+El usuario (aparte del superusuario) que tiene el control absoluto sobre un
+L</archivo>. Un archivo también puede tener un L</grupo> de usuarios que
+pueden ser copropietarios, si el propietario real lo permite. Vea L</bits de
+permiso>.
+
+=item protocolo
+
+En contexto de redes, una forma acordada de enviar mensajes de forma que
+ninguno de los interlocutores se confunda.
+
+=item prototipo
+
+Parte opcional de una declaración de L</subrutina> que indica al compilador de
+Perl cuántos argumentos y de qué tipo se pueden pasar como L</argumentos
+reales>, a fin de poder escribir llamadas a subrutinas que se analizan de forma
+similar a las funciones predefinidas.  (O que no se analizan, si fuera el
+caso).
+
+=item prueba de subclase vacía
+
+La noción de que una L</clase derivada> vacía debe comportarse exactamente
+igual que su L</clase base>.
+
+=item puerto-adaptar
+
+La parte de la dirección de un socket TCP o UDP que dirige los paquetes al
+proceso correcto tras localizar el equipo correcto. Es como la extensión
+telefónica que se teclea tras marcar el número. "Adaptación" es el resultado
+de convertir código para que se ejecute en una plataforma distinta de la
+original. "Adaptar" es el verbo usado para designar esta conversión.
+
+=item pumpking
+
+La persona que tiene la L</calabaza de parches> en su poder, el encargado de
+activar la bomba, o al menos de cebarla. Debe estar dispuesto a representar el
+papel de la Gran Calabaza cada cierto tiempo.
+
+=item puntero
+
+En un lenguaje como C, es una L</variable> que contiene la posición exacta de
+algún elemento en la memoria. Perl controla los punteros internamente para que
+no tengamos que preocuparnos de ello. Solo tenemos que usar punteros
+simbólicos en forma de L<claves|/clave> y nombres de L</variable>, o
+L<referencias estrictas|/referencia estricta>, que no son punteros (pero
+actúan como si lo fueran; de hecho, contienen punteros).
+
+=item punto de interrupción
+
+Punto del programa en el que se indica al depurador que debe detener la
+L<ejecución|/ejecutar> para determinar si ya se ha producido alguna anomalía.
+
+=item punto flotante
+
+Método para almacenar números con "notación científica" en el que la
+precisión del número es independiente de su magnitud (el punto decimal
+"flota"). Perl hace sus cálculos numéricos con números de punto flotante
+cuando no puede usar L<enteros|/entero> para ello. Los números de punto
+flotante son meras aproximaciones de los números reales.
+
+=item PV
+
+Un valor de puntero ("pointer value"), que en la jerga de componentes internos
+de Perl equivale a C<char*>.
+
+=back
+
+=head2 R
+
+=over 4
+
+=item recolección de elementos no utilizados
+
+Característica con un nombre desafortunado; debería llamarse "esperar que tu
+madre limpie tu desorden". En un sentido estricto, Perl no hace esto, sino que
+se basa en un mecanismo de recuento de referencias para mantener el orden. Sin
+embargo, raramente hablamos en un sentido estricto y nos referiremos
+habitualmente al esquema de recuento de referencias como una forma de
+recolección de elementos no deseados.  (Puede estar tranquilo, cuando finaliza
+la ejecución del intérprete se ejecuta un recolector de elementos no deseados
+"real" para garantizar que todo quede limpio si se ha desordenado con
+referencias circulares, etc.).
+
+=item recursividad
+
+El arte de definir algo (al menos parcialmente) en términos de sí mismo, algo
+que no está bien visto en los diccionarios pero que suele funcionar en
+programas informáticos si se procura evitar que el proceso continúe
+indefinidamente, lo que sería parecido a un bucle infinito pero con modos de
+error más espectaculares.
+
+=item redistribuible gratuitamente
+
+Significa que si proporciona copias piratas a sus amigos y nos enteramos, no
+está infringiendo las leyes. De hecho, nos gustaría que regalara una copia a
+todos sus amigos.
+
+=item referencia
+
+Donde se busca un puntero a información que está en otra parte.  (Vea
+L</direccionamiento indirecto>). Hay dos tipos de referencias: L<referencias
+simbólicas|/referencia simbólica> y L<referencias estrictas|/referencia
+estricta>.
+
+=item referencia estricta
+
+L<Valor|/valor> L</escalar> que contiene la dirección real de un
+L</referente>, de forma que el recuento de L<referencias|/referencia> del
+referente la tenga en cuenta.  (Algunas referencias estrictas se guardan
+internamente, como la referencia implícita de las vacantes de variable de un
+L</typeglob> a su referencia correspondiente). Una referencia estricta no es lo
+mismo que una L</referencia simbólica>.
+
+=item referencia no estricta
+
+Vea L</referencia simbólica>.
+
+=item referencia simbólica
+
+Variable cuyo valor es el nombre de otra variable o subrutina. Al
+L</desreferenciar> la primera variable, obtiene la segunda. Con L<use strict
+'refs'|strict/strict refs> no se admiten referencias simbólicas.
+
+=item referente
+
+Aquello a lo que una referencia hace referencia; puede tener nombre o no.
+Algunos tipos comunes de referentes son los escalares, arrays, hashes o
+subrutinas.
+
+=item regex
+
+Vea L</expresión regular>.
+
+=item registro
+
+Conjunto de valores de datos relacionados de un L</archivo> o una L</secuencia>
+que suelen estar asociados con un campo de L</clave> única. En Unix, suele
+corresponder a una L</línea>, o un conjunto de líneas que termina en una
+línea en blanco (un "párrafo"). Cada línea del archivo I</etc/passwd> es un
+registro correspondiente a un nombre de inicio de sesión, que contiene
+información sobre dicho usuario.
+
+=item retrorreferencia
+
+Subcadena L<capturada|/capturar> por un subpatrón escrito entre paréntesis
+simples en una L</expresión regular>; también se denomina grupo de captura.
+Se pueden colocar las secuencias (C<\g1>, C<\g2>, etc.) más adelante en el
+mismo patrón para hacer referencia al subpatrón correspondiente en la
+detección actual. Fuera del patrón, las variables numeradas (C<$1>, C<$2>,
+etc.) hacen referencia a estos mismos valores, con tal de que el patrón fuera
+la última detección correcta en el ámbito dinámico actual. Se puede usar
+C<\g{-1}> para hacer referencia a un grupo por posición relativa en lugar de
+absoluta; también se puede asignar un nombre a un grupo y posteriormente hacer
+referencia a ese nombre en lugar de usar el número correspondiente. Vea
+L<perlre/"Grupos de captura">.
+
+=item RFC
+
+Request For Comment (Solicitud de comentarios). Pese a sus tímidas
+connotaciones, es el nombre de una serie de importantes documentos sobre
+normas.
+
+=item root
+
+El superusuario (UID == 0). También es el directorio de nivel superior (raíz)
+del sistema de archivos.
+
+=item RTFM
+
+Read The Fine Manual, lo que le dirán cuando piensen que lo que tiene que
+hacer es leer el magnífico manual disponible.
+
+=item ruta de acceso
+
+Nombre completo de archivo, como I</usr/bin/perl>. A veces se confunde con
+L</PATH>.
+
+=item RV
+
+Vehículo recreativo ("recreational vehicle" en inglés). No debe confundirse
+con "vehicular recreation" (excursiones campo a través). RV también es un
+valor de referencia (Reference Value) interno del tipo que se puede almacenar
+en un L</escalar>. Si aún no se siente confundido, vea también L</IV> y
+L</NV>.
+
+=back
+
+=head2 S
+
+=over 4
+
+=item salida estándar
+
+L<Secuencia|/secuencia> de salida predeterminada del programa, que no debe
+preocuparse del destino de los datos, si es posible. En un programa Perl se
+representa mediante el L</identificador de archivo> L</STDOUT>.
+
+=item script
+
+L<Archivo|/archivo> de texto que es un programa que debe
+L<ejecutarse|/ejecutar> directamente, en lugar de L<compilarse|/compilador> a
+otro tipo de archivo antes de su ejecución. Además, en el contexto de
+L</Unicode>, un sistema de escritura para un lenguaje o grupo de lenguajes
+específicos, como Griego, Bengalí o Klingon.
+
+=item script de una sola línea
+
+En inglés se llama I<one-liner>. Es un programa informático completo embutido
+en una sola línea de texto.
+
+=item script kiddie
+
+Un L</cracker> que no es un L</hacker> pero que sabe lo suficiente para
+ejecutar scripts enlatados. Un programador que no sabe lo que se trae entre
+manos.
+
+=item secuencia
+
+Flujo de datos que entra o sale en un proceso como una serie continua de bytes
+o caracteres sin la apariencia de estar dividido en paquetes. Es un tipo de
+L</interfaz>; la L</implementación> subyacente puede dividir los datos en
+paquetes independientes para su entrega, pero estos detalles se ocultan.
+
+=item secuencia de escape
+
+Vea L</metasímbolo>.
+
+=item secuencia de intercalación
+
+Orden en que se ordenan los L<caracteres|/carácter>. Se usa en rutinas de
+comparación de L<cadenas|/cadena> para decidir, por ejemplo, en qué parte de
+este glosario debe ir "secuencia de intercalación".
+
+=item sed
+
+El venerable Stream EDitor del que Perl ha derivado algunas de sus ideas.
+
+=item semáforo
+
+Tipo de interbloqueo sofisticado que impide que varios L<hilos de
+ejecución|/hilo de ejecución> o L<procesos|/proceso> usen los mismos recursos
+simultáneamente.
+
+=item señal
+
+Un rayo surgido de la nada; es decir, un evento desencadenado por el L</sistema
+operativo>, probablemente cuando menos se espera.
+
+=item separador
+
+L<Carácter|/carácter> o L</cadena> que evita que dos cadenas se confundan. La
+función L<split|perlfunc/split> usa estos separadores. No se debe confundir
+con un L</delimitador> o un L</terminador>. En la frase anterior se usa la
+palabra "o" como separador de las dos alternativas.
+
+=item separador de lexemas
+
+Nombre elegante de L</tokenizador>.
+
+=item serialización
+
+Proceso de colocar una L</estructura de datos> sofisticada en orden lineal de
+forma que se pueda almacenar como una L</cadena> en un archivo de disco o una
+base de datos, o se pueda enviar a través de una L</tubería>. En inglés
+también se llama I<marshalling>.
+
+=item servicio
+
+Algo que se hace por alguien para darle felicidad, como alegrarle el día (o
+incluso justificar toda una vida). En algunos equipos, la función
+L<getservent|perlfunc/getservent> muestra los servicios conocidos.
+
+=item servidor
+
+En contexto de redes, un L</proceso> que anuncia un L</servicio> o que
+simplemente espera en una ubicación conocida a que los L<clientes|/cliente>
+que necesitan el servicio se pongan en contacto con él.
+
+=item setgid
+
+Igual que L</setuid>, solo que otorga privilegios de L</grupo>.
+
+=item setuid
+
+Se dice de un programa que se ejecuta con los privilegios de su L</propietario>
+en lugar de (como suele ser el caso) los privilegios de quien lo ejecuta.
+También describe el bit de la palabra de modo (L</bits de permiso>) que
+controla la característica. Este bit debe ser establecido explícitamente por
+el propietario y hay que tener cuidado para que el programa no otorgue más
+privilegios que los debidos.
+
+=item seudofunción
+
+Construcción que a veces parece una función, sin serlo realmente. Se suele
+reservar para modificadores de L</valor-izquierda> como L<my|perlfunc/my>, para
+modificadores de L</contexto> como L<scalar|perlfunc/scalar> y para
+construcciones con distintos tipos de comillas, C<q//>, C<qq//>, C<qx//>,
+C<qw//>, C<qr//>, C<m//>, C<s///>, C<y///> y C<tr///>.
+
+=item seudohash
+
+Referencia a un array cuyo primer elemento parece contener una referencia a un
+hash. Puede tratar una referencia de seudohash como una referencia de array o
+una referencia de hash.
+
+=item seudoliteral
+
+L<Operador|/operador> que se parece a un L</literal>, como el operador de
+recolección de salida, C<`>I<C<comando>>C<`>.
+
+=item shebang
+
+Versión irlandesa de los McGillicuddy. En la cultura Perl es la combinación
+de las palabras "sharp" y "bang", y se refiere a la secuencia C<#!> que indica
+al sistema dónde puede encontrar el intérprete.
+
+=item shell
+
+L<Intérprete|/intérprete> de línea de L<comandos|/comando>. Es el programa
+que muestra un símbolo del sistema interactivo, acepta una o varias
+L<líneas|/línea> de entrada y ejecuta los programas especificados, cada uno
+con sus L<argumentos|/argumento> y datos de entrada adecuados. Una shell
+también puede ejecutar scripts que contienen estos comandos. En Unix, las
+shells típicas son Bourne shell (I</bin/sh>), C shell (I</bin/csh>) y Korn
+shell (I</bin/ksh>). En sentido estricto, Perl no es una shell porque no es
+interactivo, aunque los programas Perl pueden ser interactivos.
+
+=item siega
+
+Los últimos rituales realizados por un L</proceso> primario en nombre de un
+proceso derivado fallecido para que no acabe convertido en un L</zombie>. Vea
+las llamadas de función L<wait|perlfunc/wait> y L<waitpid|perlfunc/waitpid>.
+
+=item símbolo
+
+Generalmente, cualquier L</token> o L</metasímbolo>. Se suele usar de manera
+más específica para designar el tipo de nombre que se puede encontrar en una
+L</tabla de símbolos>.
+
+=item sincrónico
+
+Programación en la que se puede determinar la secuencia ordenada de eventos;
+es decir, las cosas suceden de una en una, no a la vez.
+
+=item sintaxis
+
+Viene del griego y significa "con orden". Especifica cómo deben disponerse las
+cosas (en particular, los símbolos).
+
+=item sistema de archivos
+
+Conjunto de L<directorios|/directorio> y L<archivos|/archivo> que residen en
+una partición del disco. A veces se denomina "partición". Puede cambiar el
+nombre de un archivo o incluso moverlo de un directorio a otro en el sistema de
+archivos sin mover realmente el archivo (al menos en Unix).
+
+=item sistema de composición
+
+"Constructor" para un L</referente> que en realidad no es un L</objeto>, como
+un array o un hash anónimos (o, ya puestos, una sonata). Por ejemplo, un par
+de llaves actúa como un sistema de composición para un hash, y un par de
+corchetes actúa como un sistema de composición para un array. Vea
+L<perlref/Crear referencias>.
+
+=item sistema operativo
+
+Programa especial que se ejecuta directamente sobre la máquina y oculta los
+detalles poco agradables de la administración de L<procesos|/proceso> y
+L<dispositivos|/dispositivo>. Se suele usar también en un sentido más
+informal para indicar una cultura de programación específica. Este sentido
+informal se puede usar con varios niveles de especificidad. En un extremo, se
+puede decir que todas las versiones de Unix y los sistemas similares a Unix son
+un mismo sistema operativo (lo que molestará a muchas personas, especialmente
+a abogados y otros defensores). En el otro extremo, se puede decir que esta
+versión concreta del sistema operativo de este fabricante concreto es distinta
+de cualquier otra versión de sistema operativo de este fabricante o de
+cualquier otro fabricante. Perl es mucho más adaptable de un sistema operativo
+a otro que muchos lenguajes. Vea también L</arquitectura> y L</plataforma>.
+
+=item soberbia
+
+Hibris. Orgullo excesivo. El detalle por el que Zeus querría destruirle.
+También es la cualidad que permite escribir (y mantener) programas de forma
+que los demás no los puedan criticar. Es por ello la tercera gran virtud de un
+programador. Vea también L</pereza> e L</impaciencia>.
+
+=item sobrecarga de operador
+
+Tipo de L</sobrecarga> que se puede realizar en L<operadores|/operador>
+predefinidos para que se apliquen a L<objetos|/objeto> como si estos fueran
+valores escalares normales, pero con la semántica suministrada por la clase
+del objeto. Se configura con el L</pragma> L<overload>.
+
+=item sobrecargar
+
+Otorgar significados adicionales a un símbolo o una construcción. En
+realidad, todos los lenguajes usan la sobrecarga en mayor o menor medida, ya
+que los humanos tenemos facilidad para interpretar las cosas en L</contexto>.
+
+=item sobrescribir
+
+Ocultar o invalidar otra definición con el mismo nombre.  (No se debe
+confundir con L</sobrecargar>, que consiste en agregar definiciones que hay que
+desambiguar de alguna manera alternativa). Para aumentar la confusión, usamos
+la palabra con dos definiciones sobrecargadas: describir cómo puede definir su
+propia L</subrutina> para ocultar una L</función> predefinida del mismo nombre
+(vea L<perlsub/Sobrescribir funciones predefinidas>) y describir cómo se puede
+definir un L</método> de sustitución en una L</clase derivada> para ocultar
+un método de la L</clase base> con el mismo nombre (vea L<perlobj>).
+
+=item socket
+
+Extremo para comunicación de red entre varios L<procesos|/proceso> que
+representa un papel parecido al de un teléfono o un apartado de correos. La
+característica más importante de un socket es su L</dirección de red> (es
+como un número de teléfono). Los distintos tipos de sockets tienen distintos
+tipos de direcciones; algunas parecen nombres de archivo y otras no.
+
+=item software open source
+
+Programas para los que el código fuente está disponible gratuitamente y se
+puede redistribuir gratuitamente, sin descripción comercial asociada.
+Encontrará una definición más detallada en
+L<http://www.opensource.org/osd.html>.
+
+=item STDERR
+
+Vea L</error estándar>.
+
+=item STDIN
+
+Vea L</entrada estándar>.
+
+=item STDIO
+
+Vea L</EE<sol>S estándar>.
+
+=item STDOUT
+
+Vea L</salida estándar>.
+
+=item struct
+
+Palabra clave de C que introduce una definición o un nombre de estructura.
+
+=item subcadena
+
+Parte de una L</cadena>, que empieza en una posición de L</carácter>
+(L</desplazamiento>) determinada y mide un número determinado de caracteres.
+
+=item subclase
+
+Vea L</clase derivada>.
+
+=item subíndice
+
+L<Valor|/valor> que indica la posición de un L</elemento> de L</array>
+concreto de un array.
+
+=item subpatrón
+
+Componente de un patrón de L</expresión regular>.
+
+=item subpatrón de código
+
+Subpatrón de L</expresión regular> cuyo propósito real es ejecutar código
+Perl, como por ejemplo los subpatrones C<(?{...})> y C<(??{...})>.
+
+=item subrutina
+
+Parte de un programa que tiene un nombre o es accesible de otra manera, de
+forma que se pueda invocar desde otro punto del programa para realizar alguna
+tarea secundaria. Una subrutina se suele parametrizar para realizar cosas
+distintas aunque relacionadas en función de sus L<argumentos|/argumento> de
+entrada. Si la subrutina devuelve un L</valor> significativo, también se
+denomina L</función>.
+
+=item succionar
+
+(En inglés, I<slurp>). Leer un L</archivo> entero y asignar su contenido a una
+L</cadena> en una sola operación.
+
+=item superclase
+
+Vea L</clase base>.
+
+=item superusuario
+
+La persona a la que el L</sistema operativo> deja hacer casi todo. Normalmente,
+el administrador del sistema o alguien que finge ser el administrador del
+sistema. En sistemas Unix, el usuario L</root>. En sistemas Windows,
+generalmente el usuario Administrador.
+
+=item sustitución
+
+Modificación de partes de una cadena mediante el operador C<s///>.  (Evitamos
+usar este término para designar la L</interpolación de variables>).
+
+=item SV
+
+Abreviatura de "scalar value" (valor escalar). En el intérprete de Perl cada
+L</referente> se trata como un miembro de una clase derivada de SV de forma
+orientada a objetos. En Perl, todo L</valor> se pasa como un puntero C<SV*> del
+lenguaje C. La estructura de datos L</struct> de SV conoce su propio "tipo de
+referente" y el código es lo suficientemente inteligente (o eso esperamos)
+para no intentar llamar a una función de L</hash> en una L</subrutina>.
+
+=back
+
+=head2 T
+
+=over 4
+
+=item tabla de símbolos
+
+Área que un L</compilador> usa para recordar símbolos. Un programa como el
+intérprete perl debe recordar todos los nombres de todas las
+L<variables|/variable>, L<identificadores de archivos|/identificador de
+archivo> y L<subrutinas|/subrutina> que se han usado. Para ello coloca los
+nombres en un tabla de símbolos que se implementa en Perl como una L</tabla
+hash>. Existe una tabla de símbolos independiente para cada L</paquete>, a fin
+de asignar a cada paquete su propio L</espacio de nombres>.
+
+=item tabla hash
+
+Estructura de datos usada internamente por Perl para implementar arrays
+asociativos (hashes) de manera eficiente. Vea también L</casilla>.
+
+=item TCP
+
+Abreviatura de Protocolo de control de transmisión. Protocolo que envuelve al
+Protocolo de Internet y que hace que un programa de aplicación vea un
+mecanismo de transmisión de paquetes poco fiable como una L</secuencia> de
+bytes fiable.  (Casi siempre).
+
+=item terminador
+
+L<Carácter|/carácter> o L</cadena> que marca el final de otra cadena. La
+variable C<$/> contiene la cadena con la que termina una operación
+L<readline|perlfunc/readline>, que L<chomp|perlfunc/chomp> elimina del final.
+No se debe confundir con un L</delimitador> o un L</separador>. El punto al
+final de esta frase es un terminador.
+
+=item terminal/término
+
+Nodo hoja de un L</árbol de sintaxis>. Cosa que desempeña el rol gramatical
+de un L</operando> para los operadores de una expresión.
+
+=item ternario
+
+L<Operador|/operador> que consume tres L<operandos|/operando>. A veces también
+se llama L</trino>.
+
+=item texto
+
+L<Cadena|/cadena> o L</archivo> que contiene principalmente caracteres que se
+pueden imprimir.
+
+=item tiempo de compilación
+
+Tiempo en el que Perl intenta entender el código, en contraste con el
+L</tiempo de ejecución>, que es el tiempo en que piensa que ya lo entiende y
+simplemente intenta ejecutar las instrucciones del código.
+
+=item tiempo de ejecución
+
+El tiempo en el que Perl hace lo que el código dice, en contraste con el
+periodo de tiempo anterior, en el que intentaba averiguar si lo que el programa
+decía tenía sentido (el L</tiempo de compilación>).
+
+=item tipo
+
+Vea L</tipo de datos> y L</clase>.
+
+=item tipo de datos
+
+Conjunto de valores posibles, junto con todas las operaciones que manipulan
+esos valores. Por ejemplo, un tipo de datos numérico tiene un determinado
+conjunto de números que se pueden usar y varias operaciones matemáticas que
+se pueden aplicar a los números pero que tendrían poco sentido con una cadena
+como C<"Kilroy">, por ejemplo. Las cadenas tienen sus propias operaciones, como
+la L</concatenación>. Los tipos compuestos formados por elementos más
+pequeños suelen tener operaciones de composición y descomposición, y quizás
+también de reordenación. Los L<objetos|/objeto> que modelan cosas del mundo
+real suelen tener operaciones que se corresponden con actividades reales. Por
+ejemplo, si modela un ascensor, el objeto ascensor puede tener un L</método>
+C<abrir_puerta()>.
+
+=item TMTOWTDI
+
+I<There's More Than One Way To Do It> (Se puede hacer de varias maneras), el
+lema de Perl. La noción de que puede haber más de una forma válida de
+solucionar un problema de programación en un contexto determinado.  (Esto no
+significa que siempre sea mejor tener más maneras de hacer algo ni que todas
+las maneras posibles sean igualmente deseables, sino simplemente que no tiene
+que haber una única manera de hacer las cosas). En inglés se pronuncia
+TimToady.
+
+=item token
+
+Morfema en un lenguaje de programación. Es la unidad de texto con significado
+semántico más pequeña.
+
+=item tokenizador
+
+Módulo que divide el texto de un programa en una secuencia de L<tokens|/token>
+para que el analizador los analice posteriormente.
+
+=item tokenizar
+
+Dividir el texto de un programa en L<tokens|/token>. También se llama "separar
+en lexemas", en cuyo caso obtenemos "lexemas" en lugar de tokens.
+
+=item transliterar
+
+Convertir una representación de cadena en otra mediante la asignación de cada
+carácter de la cadena de origen a su carácter correspondiente en la cadena
+resultante. Vea
+L<perlop/trE<sol>LISTA_BÚSQUEDAE<sol>LISTA_SUSTITUCIÓNTE<sol>cdsr>.
+
+=item trino
+
+No es un sistema estelar con tres estrellas, sino un L</operador> que se aplica
+a tres L<operandos|/operando>. Es equivalente a L</ternario>.
+
+=item troff
+
+Venerable lenguaje de composición tipográfica del que Perl deriva el nombre
+de su variable C<$%> y que se usa en secreto para producir libros del camello.
+
+=item truncar
+
+Vaciar un archivo de contenido existente, ya sea de forma automática al abrir
+un archivo para escritura o explícitamente mediante la función
+L<truncate|perlfunc/truncate>.
+
+=item tubería
+
+L<Conexión|/conexión> directa que pasa la salida de un L</proceso> a la
+entrada de otro sin usar un archivo temporal intermedio. Una vez establecida la
+conexión, los dos procesos en cuestión pueden leer y escribir como si se
+comunicaran con un archivo normal, aunque con algunas limitaciones.
+
+=item tubería con nombre
+
+L<Tubería|/tubería> con un nombre incrustado en el L</sistema de archivos>,
+de forma que dos L<procesos|/proceso> no relacionados puedan acceder a dicha
+conexión.
+
+=item typedef
+
+Definición de tipo en el lenguaje C.
+
+=item typeglob
+
+Uso de un solo identificador con el prefijo C<*>. Por ejemplo, C<*nombre> puede
+significar C<$nombre>, C<@nombre>, C<%nombre>, C<&nombre> o simplemente
+C<nombre>. El uso que le dé determinará si se interpreta como todas las
+opciones o como una sola de ellas. Vea L<perldata/Typeglobs e identificadores
+de archivo>.
+
+=back
+
+=head2 U
+
+=over 4
+
+=item UDP
+
+Protocolo de datagramas de usuario, la manera típica de enviar
+L<datagramas|/datagrama> a través de Internet.
+
+=item UID
+
+El identificador de un usuario. Se suele usar en el contexto de propiedad de un
+L</archivo> o L</proceso>.
+
+=item umask
+
+Máscara de los L</bits de permiso> que deben desactivarse al crear archivos o
+directorios, a fin de establecer una política de usuarios a los que
+normalmente se les denegaría el acceso. Vea la función
+L<umask|perlfunc/umask>.
+
+=item Unicode
+
+Juego de caracteres que contiene prácticamente todos los juegos de caracteres
+usados en el planeta. Vea L<perlunicode> y L<http://www.unicode.org>.
+
+=item unidad de compilación
+
+El L</archivo> (o L</cadena>, en el caso de L<eval|perlfunc/eval>) que se está
+compilando actualmente.
+
+=item Unix
+
+Lenguaje muy grande y en constante evolución, con varias sintaxis alternativas
+y en gran medida incompatibles con las que todos pueden definir lo que deseen
+de la forma que prefieran, y normalmente lo hacen. Los hablantes de esta lengua
+piensan que es fácil de aprender, ya que se adapta fácilmente a sus
+necesidades, pero las diferencias entre dialectos hacen que la comunicación
+entre las distintas tribus sea prácticamente imposible; los viajeros deben
+resignarse a usar un subconjunto tipo pidgin de la lengua. Un programador de
+shell Unix debe dedicar muchos años al estudio del oficio para lograr que
+todos le entiendan. Muchos han abandonado esta disciplina y ahora se comunican
+en un lenguaje similar al Esperanto denominado Perl.
+
+Antiguamente también se llamaba Unix al código que un par de empleados de
+Bell Labs escribió para usar un equipo PDP-7 que en ese momento estaba más
+bien ocioso.
+
+=back
+
+=head2 V
+
+=over 4
+
+=item vacante de objeto indirecto
+
+La posición sintáctica situada entre una llamada a método y sus argumentos,
+cuando se usa la sintaxis indirecta de invocación de objetos.  (La vacante se
+distingue por la ausencia de una coma entre ella y el siguiente argumento).
+Aquí L</STDERR> está en la vacante de objeto indirecto:
+
+  print STDERR "¡Despierta!  ¡Despierta!  ¡Miedo, fuego,
+      enemigos!  ¡Despierta!\n";
+
+=item vaciar
+
+El acto de volcar un L</búfer>, generalmente cuando se llena.
+
+=item valor
+
+Elemento de datos real, en contraste con todas las variables, referencias,
+claves, índices, operadores, etc. que se necesitan para acceder al valor.
+
+=item valor de lista
+
+Lista sin nombre de valores escalares temporales que se puede pasar en un
+programa desde cualquier función que genere listas a cualquier función o
+construcción que proporcione un L</contexto de lista>.
+
+=item valor-derecha
+
+L<Valor|/valor> que se encuentra en el lado derecho de una L</asignación>. Vea
+también L</valor-izquierda>.
+
+=item valor devuelto
+
+El L</valor> producido al evaluar una L</subrutina> o L</expresión>. En Perl,
+un valor devuelto puede ser una L</lista> o un L</escalar>.
+
+=item valor escalar
+
+Valor que es un L</escalar>, en contraste con una L</lista>.
+
+=item valor-izquierda
+
+Término usado por defensores de la lengua para designar una ubicación de
+almacenamiento a la que se puede asignar un L</valor> nuevo, como una
+L</variable> o un elemento de un L</array>. Decimos "izquierda" porque un lugar
+típico de los valores-izquierda es el lado izquierdo de una asignación. Una
+función o expresión L</compatible con valores-izquierda> permite que se le
+asignen valores (por ejemplo, C<pos($x) = 10>).
+
+=item valor predeterminado
+
+L<Valor|/valor> elegido automáticamente si no se proporciona un valor.
+
+=item variable
+
+Ubicación de almacenamiento con nombre que puede contener cualquiera de los
+distintos tipos de L<valores|/valor> que necesite el programa.
+
+=item variable de entorno
+
+Mecanismo mediante el cual un agente de alto nivel, como un usuario, puede
+pasar sus preferencias a sus futuros descendientes (L<procesos|/proceso>
+derivados de primer nivel, de segundo nivel, etc.). Cada variable de entorno es
+un par L</clave>-L</valor>, como una entrada de un L</hash>.
+
+=item variable de instancia
+
+L<Atributo|/atributo> de un L</objeto>; datos almacenados en un objeto
+concreto, no en la clase como un todo.
+
+=item variable escalar
+
+L<Variable|/variable> con el prefijo C<$> que contiene un único valor.
+
+=item variable estática
+
+Esto no existe. Simplemente use una L</variable léxica> en un ámbito más
+amplio que el de la L</subrutina>.
+
+=item variable léxica
+
+L<Variable|/variable> sujeta a L</control de ámbito léxico>, declarada con
+L<my|perlfunc/my>. En inglés se suele llamar simplemente "lexical".  (La
+declaración L<our|perlfunc/our> declara un nombre de ámbito léxico para una
+variable global, que no es una variable léxica).
+
+=item variable léxica con tipo
+
+L<Variable léxica|/variable léxica> que se declara con un tipo de L</clase>:
+C<my Pony $guillermo>.
+
+=item variables mágicas
+
+Variables especiales que tienen efectos secundarios cuando se accede a ellas o
+se les asigna un valor. Por ejemplo, en Perl, si se cambian los elementos del
+array C<%ENV>, también se cambian las variables de entorno correspondientes
+que los subprocesos usarán. Puede leer el valor de la variable C<$!> para
+averiguar cuál es el número o mensaje de error actual del sistema.
+
+=item variádica
+
+Se dice de una L</función> que recibe alegremente un número indeterminado de
+L</argumentos reales>.
+
+=item vector
+
+En jerga matemática, una lista de L<valores escalares|/valor escalar>.
+
+=item verdadero
+
+Cualquier valor escalar cuya evaluación no devuelva 0 o C<"">.
+
+=item vínculo simbólico
+
+Nombre de archivo alternativo que apunta al L</nombre de archivo> real, que a
+su vez apunta al L</archivo> real. Siempre que el L</sistema operativo> intenta
+analizar una L</ruta de acceso> que contiene un vínculo simbólico,
+simplemente sustituye el nombre nuevo y continúa con el análisis.
+
+=item vínculo/vincular
+
+El sustantivo se refiere a un nombre de un L</archivo> contenido en un
+L</directorio>. Un archivo determinado puede tener varios vínculos asociados.
+Es como tener asociado en un listín telefónico un mismo número de teléfono
+con nombres distintos. El verbo (vincular) significa resolver los símbolos no
+resueltos de un archivo parcialmente compilado como una imagen (casi)
+ejecutable. En general, la vinculación puede ser estática o dinámica; esto
+no tiene nada que ver con el control de ámbito estático o dinámico.
+
+=item virtual
+
+Proporciona el aspecto de algo que no es real, como en "la memoria virtual no
+es memoria real".  (Vea también L</memoria>.)  Lo opuesto de "virtual" es
+"transparente", que significa que proporciona la realidad de algo sin la
+apariencia. Por ejemplo, Perl procesa la codificación de caracteres UTF-8 de
+longitud variable de forma transparente.
+
+=item volcado del núcleo
+
+Cadáver de un L</proceso>, en forma de archivo que queda en el L</directorio
+de trabajo> del proceso, generalmente como consecuencia de un determinado tipo
+de error irrecuperable.
+
+=item vuelta atrás
+
+La práctica de decir "Si pudiera volver a empezar, lo haría todo de otra
+manera", y después volver atrás y hacer las cosas de manera diferente. En
+términos matemáticos, consiste en volver de una recursión que no ha
+finalizado correctamente en un árbol de posibilidades. Perl vuelve atrás tras
+intentar detectar un patrón con una L</expresión regular> si los intentos
+realizados no logran detectarlo. Vea L<perlre/Vuelta atrás>.
+
+=back
+
+=head2 W
+
+=over 4
+
+=item WYSIWYG
+
+I<What You See Is What You Get>. Se suele usar cuando algo que aparece en
+pantalla coincide con el aspecto final, como las declaraciones
+L<format|perlfunc/format> de Perl. También para indicar lo opuesto a lo
+mágico, porque todo funciona exactamente de la manera esperada, como el
+formato de tres argumentos de la función L<open|perlfunc/open>.
+
+=back
+
+=head2 X
+
+=over 4
+
+=item XS
+
+Lenguaje que permite extender Perl con código L<C> y C++. XS es un formato de
+archivo de descripción de interfaz que se usa para crear una interfaz de
+extensión entre código Perl y código C (o una biblioteca C) que se desea
+usar en Perl. En L<perlxs> encontrará una explicación precisa. También puede
+leer el tutorial L<perlxstut>.
+
+=item XSUB
+
+L<Subrutina|/subrutina> externa definida en L</XS>.
+
+=back
+
+=head2 Y
+
+=over 4
+
+=item yacc
+
+I<Yet Another Compiler Compiler>. Un generador de analizadores sin el cual Perl
+probablemente no habría existido. Vea el archivo I<perly.y> de la
+distribución de código fuente de Perl.
+
+=back
+
+=head2 Z
+
+=over 4
+
+=item zombie
+
+Proceso fallecido (finalizado) cuyo proceso primario aún no ha recibido la
+notificación correspondiente por haber llamado a L<wait|perlfunc/wait> o
+L<waitpid|perlfunc/waitpid>. Si usó L<fork|perlfunc/fork>, debe realizar la
+limpieza de los procesos derivados que finalicen; de lo contrario, la tabla del
+proceso se llenará y esto no gustará nada al administrador del sistema.
+
+=back
+
+=head1 AUTOR Y COPYRIGHT
+
+Basado en el Glosario de Programming Perl, Tercera Edición, de Larry Wall, Tom
+Christiansen y Jon Orwant. Copyright (c) 2000, 1996, 1991 O'Reilly Media, Inc.
+Puede distribuir este documento en los mismos términos que Perl.
+
+
+=head1 TRADUCTORES
+
+=over
+
+=item * Joaquín Ferrero (Tech Lead)
+
+=item * Enrique Nell (Language Lead)
+
+=back
+
