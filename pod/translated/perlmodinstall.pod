@@ -4,17 +4,17 @@ perlmodinstall - Instalación de módulos de CPAN
 
 =head1 DESCRIPCIÓN
 
-Puede pensar en un módulo como la unidad fundamental de código Perl reutilizable; encontrará más información en L<perlmod>.  Si crea un fragmento de código Perl que considere que puede ser útil para otros programadores, debe registrarse como desarrollador de Perl en http://www.cpan.org/modules/04pause.html y subir el código a CPAN.  El CPAN es la red amplia de archivos Perl (I<Comprehensive Perl Archive Network>) y se puede acceder en http://www.cpan.org/ , y búsquedas en http://search.cpan.org/ .
+Un módulo se puede definir como la unidad fundamental de código Perl reutilizable; encontrará más información en L<perlmod>.  Si desarrolla código Perl que considera que puede ser útil para otros programadores, debería registrarse como desarrollador Perl en L<http://www.cpan.org/modules/04pause.html> y subir el código a CPAN.  CPAN es la abreviatura de I<Comprehensive Perl Archive Network>, una red de almacenamiento de recursos de Perl a la que se tiene acceso a través de L<http://www.cpan.org/> y en la que se pueden realizar búsquedas desde L<http://search.cpan.org/>.
 
-Esta documentación es para las personas que quieren descargar e instalar módulos de CPAN.
+Este documento explica lo que hay que hacer para descargar e instalar módulos de CPAN.
 
 =head2 PREÁMBULO
 
-En primer lugar, ¿está seguro de que el módulo no está ya en el sistema?  Pruebe C<perl -MFoo -e 1>.  (Reemplace "Foo" con el nombre del módulo; por ejemplo, C<perl -MCGI::Carp -e 1>.
+Primero debe asegurarse de que el módulo no está instalado en el sistema.  Ejecute C<perl -MFoo -e 1>  (reemplace "Foo" por el nombre del módulo; por ejemplo, C<perl -MCGI::Carp -e 1>).
 
-Si no ve un mensaje de error, tiene el módulo instalado.  (Si ve un mensaje de error, aún es posible que tenga el módulo, pero que no esté en su ruta, que puede ver con C<perl -e "print qq(@INC)">).  Para el resto de este documento, vamos a suponer que realmente no tiene el módulo instalado, pero que lo ha encontrado en CPAN.
+Si no aparece un mensaje de error, significa que ya tiene el módulo instalado.  Si ve un mensaje de error, puede ser que el módulo esté instalado pero no esté en la ruta (que puede ver ejecutando C<perl -e "print qq(@INC)">).  En lo sucesivo supondremos que no tiene el módulo instalado y que lo ha encontrado en CPAN.
 
-Así que ahora tiene un archivo con extensión .tar.gz (o, menos frecuente, .zip).  Sabe que hay un sabroso módulo en su interior.  Ahora debe realizar cuatro pasos:
+Así pues, ahora tiene un archivo con la extensión .tar.gz (o .zip, aunque esto es menos frecuente).  Y sabe que dentro hay un módulo interesantísimo.  A continuación debe realizar cuatro pasos:
 
 =over 5
 
@@ -28,35 +28,35 @@ Así que ahora tiene un archivo con extensión .tar.gz (o, menos frecuente, .zip
 
 =back
 
-He aquí cómo realizar cada paso para cada sistema operativo.  ¡Esto <no> es un sustituto del hecho de tener que leer los archivos README e INSTALL que podrían haber venido con su módulo!
+Veamos cómo se realizan estos pasos en los distintos sistemas operativos.  Leer esta información B<no> le exime de la lectura de los archivos README e INSTALL incluidos en un módulo.
 
-También tenga en cuenta que estas instrucciones se adaptan para la instalación del módulo en el repositorio del sistema de módulos Perl, pero se pueden instalar los módulos en cualquier directorio que desee.  Por ejemplo, cuando digo C<perl Makefile.PL>, puede sustituirlo por C<perl Makefile.PL PREFIX=/mi/directorio_perl> para instalar los módulos en C</mi/directorio_perl>.  A continuación puede usar los módulos desde sus programas Perl con C<use lib "/mi/directorio_perl/lib/site_perl";> o, a veces, con solo C<use "/mi/directorio_perl";>.  Si está en un sistema que requiere de acceso superusuario/root para la instalación de módulos en los directorios que ve cuando escribe C<perl -e "print qq(@INC)">, querrá instalarlos en un directorio local (tal como su directorio personal) y seguir con esta configuración.
+También debe tener en cuenta que, aunque estas instrucciones son específicas de la instalación del módulo en el repositorio de módulos Perl de su sistema, puede instalar un módulo en cualquier directorio que desee.  Por ejemplo, en lugar de C<perl Makefile.PL>, puede ejecutar C<perl Makefile.PL PREFIX=/mi/directorio_perl> para instalar los módulos en C</mi/directorio_perl>.  Para poder usar estos módulos en sus programas Perl, debe agregar C<use lib "/mi/directorio_perl/lib/site_perl";> al principio del programa o, en algunos casos, simplemente C<use "/mi/directorio_perl";>.  Si usa un sistema en el que la instalación de módulos en los directorios que ve al ejecutar C<perl -e "print qq(@INC)"> requiere privilegios de acceso de superusuario/raíz, posiblemente prefiera instalar los módulos en un directorio local (como su directorio personal) y usar este enfoque.
 
 =over 4
 
 =item *
 
-B<Si está en un sistema Unix o parecido a Unix>,
+B<Si usa un sistema Unix o similar>:
 
-Puede usar el módulo CPAN de Andreas Koenig ( http://www.cpan.org/modules/by-module/CPAN ) para automatizar los siguientes pasos, desde DESCOMPRIMIR a INSTALAR.
+Puede usar el módulo CPAN de Andreas Koenig ( http://www.cpan.org/modules/by-module/CPAN ) para automatizar los siguientes pasos, desde la descompresión hasta la instalación.
 
 A. DESCOMPRIMIR
 
-Descomprima el archivo con C<gzip -d sumodulo.tar.gz>
+Ejecute C<gzip -d mimodulo.tar.gz> para descomprimir el módulo
 
 Puede obtener gzip desde ftp://prep.ai.mit.edu/pub/gnu/
 
-O bien, puede combinar este paso con lo siguiente para ahorrar espacio en disco:
+O bien, puede combinar este paso con el siguiente para ahorrar espacio en disco:
 
-     gzip -dc su_modulo.tar.gz | tar -xof -
+     gzip -dc mi_modulo.tar.gz | tar -xof -
 
 B. DESEMPAQUETAR
 
-Desempaquete el resultado con C<tar -xof sumodulo.tar>
+Desempaquete el resultado con C<tar -xof mimodulo.tar>
 
-C. COMPILACIÓN
+C. COMPILAR
 
-Entre en el directorio recién creado y escriba:
+Entre en el directorio que acaba de crear y escriba:
 
       perl Makefile.PL
       make test
@@ -65,42 +65,42 @@ o bien
 
       perl Makefile.PL PREFIX=/mi/directorio_perl
 
-para instalarlo localmente.  (Recuerde que si hace esto, tendrá que poner C<use lib "/mi/directorio_perl";> cerca de la parte superior del programa que utilice ese módulo.
+para instalarlo localmente.  (Recuerde que si hace esto, tendrá que agregar C<use lib "/mi/directorio_perl";> cerca del principio de los programas que utilicen este módulo).
 
 D. INSTALAR
 
-Mientras sigue en ese directorio, escriba:
+Sin salir de ese directorio, escriba:
 
       make install
 
-Asegúrese de que tiene los permisos adecuados para instalar el módulo en el directorio de la biblioteca Perl 5.  A menudo, tendrá que ser root.
+Asegúrese de que tiene los permisos adecuados para instalar el módulo en el directorio de biblioteca de Perl 5.  Normalmente necesitará privilegios de usuario raíz.
 
-Esto es todo lo que tiene que hacer en los sistemas Unix con enlazado dinámico.
-La mayoría de los sistemas Unix disponen de vinculación dinámica. Si el suyo no lo tiene, o si por otra razón tiene un perl enlazado estáticamente, B<y> el módulo requiere compilación, tendrá que construir un nuevo binario Perl que incluye el módulo.  Una vez más, probablemente tendrá que ser root.
+Esto es todo lo que tiene que hacer en los sistemas Unix con vinculación dinámica.
+La mayoría de los sistemas Unix disponen de vinculación dinámica. Si no fuera el caso del suyo, o si por otra razón tiene un perl vinculado estáticamente B<y> el módulo requiere compilación, tendrá que compilar un nuevo binario de Perl que incluya el módulo.  Para esto también necesitará privilegios de usuario raíz.
 
 =item *
 
-B<Si usa ActivePerl (Win95/98/2K/NT/XP, Linux, Solaris)>
+B<Si usa ActivePerl (Win95/98/2K/NT/XP, Linux, Solaris)>:
 
-En primer lugar, escriba C<ppm> desde una consola y vea si en algún repositorio PPM de ActiveState está su módulo.  Si es así, puede instalarlo con C<ppm> y no tendrá que molestarse con ninguno de los siguientes pasos.  Podría intentar usar las instrucciones CPAN de la sección "Unix o Linux" anterior; dele una oportunidad.  De lo contrario, tendrá que llevar a cabo los pasos siguientes.
+En primer lugar, escriba C<ppm> en una consola y vea si el módulo está disponible en alguno de los repositorios de PPM de ActiveState.  Si es así, puede instalarlo con C<ppm> y omitir los pasos siguientes.  Es posible que las instrucciones de CPAN especificadas en la sección sobre "Unix o Linux" anterior también funcionen; haga la prueba.  De lo contrario, tendrá que realizar los pasos siguientes.
 
    A. DESCOMPRIMIR
 
-Puede usar el software shareware Winzip (http://www.winzip.com) para descomprimir y desempaquetar los módulos.
+Puede usar el software shareware WinZip (http://www.winzip.com) para descomprimir y desempaquetar el módulo.
 
    B. DESEMPAQUETAR
 
-Si utilizó WinZip, ya estará descomprimido.
+Si utilizó WinZip, ya estará desempaquetado.
 
-   C. COMPILACIÓN
+   C. COMPILAR
 
-Necesitará la utilidad C<nmake>, disponible en http://download.microsoft.com/download/vc15/Patch/1.52/W95/EN-US/nmake15.exe o dmake, disponible en CPAN.
+Necesitará la utilidad C<nmake>, disponible en http://download.microsoft.com/download/vc15/Patch/1.52/W95/EN-US/nmake15.exe, o dmake, disponible en CPAN:
 http://search.cpan.org/dist/dmake/
 
-¿El módulo requiere de compilación (es decir, contiene archivos con la extensión .xs, .c, .h, .y, .cc, .cxx o .C)?  Si lo hace, la vida se le ha vuelto oficialmente difícil, porque tiene que compilar el módulo por sí mismo (que no es tarea fácil en Windows).  Necesitará un compilador, como Visual C++.  Como alternativa, puede descargar un paquete PPM precompilado desde ActiveState.
+¿Hay que compilar el módulo (es decir, contiene archivos con la extensión .xs, .c, .h, .y, .cc, .cxx o .C)?  En ese caso la cosa se complica, ya que tendrá que encargarse de la compilación (algo que no es tarea fácil en Windows).  Necesitará un compilador (por ejemplo, Visual C++).  Como alternativa, puede descargar un paquete PPM precompilado desde ActiveState:
 http://aspn.activestate.com/ASPN/Downloads/ActivePerl/PPM/
 
-Entre en el directorio recién creado y escriba:
+Entre en el directorio que acaba de crear y escriba:
 
       perl Makefile.PL
       nmake test
@@ -108,59 +108,59 @@ Entre en el directorio recién creado y escriba:
 
    D. INSTALAR
 
-Mientras sigue en ese directorio, escriba:
+Sin salir de ese directorio, escriba:
 
       nmake install
 
 =item *
 
-B<Si usa un equipo Macintosh con MacOS "Classic" y MacPerl>,
+B<Si usa un equipo Macintosh con MacOS "Classic" y MacPerl>:
 
 
 A. DESCOMPRIMIR
 
-En primer lugar, asegúrese de que tiene la última distribución B<cpan-mac> ( http://www.cpan.org/authors/id/CNANDOR/ ), que tiene utilidades para hacer todos los pasos.  Lea atentamente las instrucciones de cpan-mac e instálelo.  Si decide no utilizar cpan-mac por alguna razón, hay algunas alternativas listadas a continuación.
+En primer lugar, asegúrese de que tiene instalada la distribución más reciente de B<cpan-mac> ( http://www.cpan.org/authors/id/CNANDOR/ ), un módulo que contiene las utilidades necesarias para realizar todos los pasos.  Lea atentamente las instrucciones de cpan-mac e instálelo.  Si prefiere no utilizar cpan-mac por alguna razón, abajo se indican algunas alternativas.
 
-Después de instalar cpan-mac, baje el archivo del módulo en el I<droplet> B<untarzipme>, que lo descomprimirá y desempaquetará.
+Una vez instalado cpan-mac, coloque el archivo comprimido del módulo en el I<droplet> B<untarzipme>, que lo descomprimirá y desempaquetará.
 
-B<O>, puede utilizar la versión shareware del programa B<StuffIt Expander> ( http://my.smithmicro.com/mac/stuffit/ ) o el programa gratuito B<MacGzip> ( http://persephone.cps.unizar.es/general/gente/spd/gzip/gzip.html ).
+B<O bien>, puede utilizar el programa shareware B<StuffIt Expander> ( http://my.smithmicro.com/mac/stuffit/ ) o el programa gratuito B<MacGzip> ( http://persephone.cps.unizar.es/general/gente/spd/gzip/gzip.html ).
 
 B. DESEMPAQUETAR
 
-Si está utilizando untarzipme o StuffIt, el archivo deberá estar ya extraído.  B<O>, puede utilizar el software gratuito B<suntar> o I<Tar> ( http://hyperarchive.lcs.mit.edu/HyperArchive/Archive/cmp/ ).
+Si usa untarzipme o StuffIt, ya se habrá extraído el contenido.  B<O bien>, puede utilizar el software gratuito B<suntar> o I<Tar> ( http://hyperarchive.lcs.mit.edu/HyperArchive/Archive/cmp/ ).
 
-C. COMPILACIÓN
+C. COMPILAR
 
 Compruebe el contenido de la distribución.
-Lea la documentación del módulo, en busca de razones por las que pueda tener problemas para usarlo con MacPerl.  Busque por archivos F<.xs> y F<.c> que, normalmente, denotan que la distribución debe ser compilada, y no se pueden instalar "recién salido de la caja". (Vea L<"PORTABILIDAD">).
+Lea la documentación del módulo en busca de razones que impidan su uso con MacPerl.  Vea si contiene archivos F<.xs> y F<.c>, que normalmente indican que no se puede instalar la distribución sin compilarla antes (vea L<"PORTABILIDAD">).
 
 D. INSTALAR
 
 Si usa cpan-mac, simplemente coloque la carpeta en el I<droplet> B<installme> y ya podrá usar el módulo.
 
-B<O>, si no está usando cpan-mac, haga un poco de trabajo manual.
+B<O bien>, si no usa cpan-mac, haga un poco de trabajo manual.
 
-Asegúrese de que los saltos de línea para los módulos están en formato Mac, no en el formato de Unix.
-Si no es así entonces podría haberlo descomprimido de forma incorrecta.  Verifique su configuración de herramientas de descompresión y desembalaje para asegurarse de que se están traduciendo archivos de texto correctamente.
+Asegúrese de que los saltos de línea de los módulos están en el formato de Mac, no en el de Unix.
+Si no fuera así, es posible que no los haya descomprimido correctamente.  Compruebe la configuración de sus herramientas para descomprimir y desempaquetar; asegúrese de que traducen correctamente los archivos de texto.
 
-Como último recurso, puede utilizar el comando perl de una sola línea:
+Como último recurso, puede ejecutar el siguiente comando perl de una sola línea:
 
     perl -i.bak -pe 's/(?:\015)?\012/\015/g' <nombres de los archivos>
 
-en los archivos de código fuente.
+donde <nombres de los archivos> son los archivos de código fuente.
 
-A continuación, mueva los archivos (probablemente sólo los archivos F<.pm>, aunque también puede haber algunos más; revise la documentación del módulo) hasta su destino final: lo más probable es que sea en C<$ENV{MACPERL}site_lib:> (es decir, C<HD:Carpeta MacPerl:site_lib:>).  Puede agregar nuevas rutas a los valores por defecto de C<@INC> en el elemento de menú Preferencias de la aplicación MacPerl (C<$ENV{MACPERL}site_lib:> se agrega automágicamente).  Cree aquellas estructuras de directorios necesarios (es decir, para C<Algun::Modulo>, cree C<$ENV{MACPERL}site_lib:Algun:> y ponga C<Modulo.pm> en ese directorio).
+A continuación, mueva los archivos (probablemente sólo los archivos F<.pm>, aunque puede que tenga que mover otros archivos; revise la documentación del módulo) hasta su destino final, que probablemente sea C<$ENV{MACPERL}site_lib:> (es decir, C<HD:Carpeta MacPerl:site_lib:>).  Puede agregar nuevas rutas a los valores predeterminados de C<@INC> a través del elemento de menú Preferencias de la aplicación MacPerl (C<$ENV{MACPERL}site_lib:> se agrega automágicamente).  Cree las estructuras de directorios necesarias (es decir, para C<Mi::Modulo>, cree C<$ENV{MACPERL}site_lib:Mi:> y coloque C<Modulo.pm> en ese directorio).
 
-A continuación, ejecute el siguiente I<script> (o algo parecido):
+A continuación, ejecute el siguiente script (o algo parecido):
 
      #!perl -w
      use AutoSplit;
      my $dir = "${MACPERL}site_perl";
-     autosplit("$dir:Algun:Modulo.pm", "$dir:auto", 0, 1, 1);
+     autosplit("$dir:Mi:Modulo.pm", "$dir:auto", 0, 1, 1);
 
 =item *
 
-B<Si está en una versión DJGPP de DOS,>
+B<Si usa una versión DJGPP de DOS>:
 
    A. DESCOMPRIMIR
 
@@ -168,46 +168,46 @@ djtarx ( ftp://ftp.delorie.com/pub/djgpp/current/v2/ ) descomprimirá y desempaq
 
    B. DESEMPAQUETAR
 
-Vea más arriba.
+Vea arriba.
 
-   C. COMPILACIÓN
+   C. COMPILAR
 
-Entre en el directorio recién creado y escriba:
+Entre en el directorio que acaba de crear y escriba:
 
       perl Makefile.PL
       make test
 
-Necesitará los paquetes indicados en F<README.dos>, en la distribución Perl.
+Necesitará los paquetes indicados en el archivo F<README.dos> incluido en la distribución de Perl.
 
    D. INSTALAR
 
-Mientras sigue en ese directorio, escriba:
+Sin salir de ese directorio, escriba:
 
      make install	
 
-Necesitará los paquetes indicados en F<README.dos>, en la distribución Perl.
+Necesitará los paquetes indicados en el archivo F<README.dos> incluido en la distribución de Perl.
 
 =item *
 
-B<Si está en OS/2>,
+B<Si usa OS/2>:
 
-Obtenga el paquete de desarrollo EMX y el gzip/tar, ya sea desde Hobbes ( http://hobbes.nmsu.edu ) o Leo ( http://www.leo.org ), y luego siga las instrucciones para Unix.
+Obtenga el paquete de desarrollo EMX y gzip/tar en Hobbes ( http://hobbes.nmsu.edu ) o Leo ( http://www.leo.org ), y siga las instrucciones para Unix.
 
 =item *
 
-B<Si está en VMS>,
+B<Si usa VMS>:
 
-Al descargar desde CPAN, guarde su archivo con una extensión C<.tgz> en lugar de C<.tar.gz>.  Todos los otros caracteres punto en el nombre del archivo deben ser reemplazado con guiones bajos.  Por ejemplo, C<Su-Modulo-1.33.tar.gz> deberá ser renombrado como C<Su-Modulo-1_33.tgz>.
+Al descargar el módulo desde CPAN, guarde el archivo con la extensión C<.tgz> en lugar de C<.tar.gz>.  Debe reemplazar los demás puntos que haya en el nombre del archivo por guiones bajos.  Por ejemplo, al descargar deberá cambiar el nombre C<Mi-Modulo-1.33.tar.gz> por C<Mi-Modulo-1_33.tgz>.
 
 A. DESCOMPRIMIR
 
-Tipo
+Escriba
 
-    gzip -d Su-Modulo.tgz
+    gzip -d Mi-Modulo.tgz
 
-o, para módulos comprimidos, escriba
+o bien, para módulos comprimidos, escriba
 
-    unzip Su-Modulo.zip
+    unzip Mi-Modulo.zip
 
 Ejecutables para gzip, zip y VMStar:
 
@@ -217,47 +217,47 @@ y su código fuente:
 
     http://www.fsf.org/order/ftp.html
 
-Tenga en cuenta que la herramienta gzip/gunzip de GNU no es lo mismo que la heramienta zip/unzip de Info-ZIP.  La primera es una simple herramienta de compresión; la segunda permite la creación de archivos multi-fichero.
+Tenga en cuenta que la herramienta gzip/gunzip de GNU no es lo mismo que la herramienta zip/unzip de Info-ZIP.  La primera es una simple herramienta de compresión; la segunda permite crear archivos de almacenamiento de varios archivos.
 
 B. DESEMPAQUETAR
 
 Si usa VMStar:
 
-     VMStar xf Su-Modulo.tar
+     VMStar xf Mi-Modulo.tar
 
-O, si es aficionado a la sintaxis de comandos VMS:
+O bien, si es aficionado a la sintaxis de comandos VMS:
 
-     tar/extract/verbose Su_Modulo.tar
+     tar/extract/verbose Mi_Modulo.tar
 
-C. COMPILACIÓN
+C. COMPILAR
 
-Asegúrese de que tiene MMS (de Digital) o el software gratuito MMK ( disponible en MadGoat en http://www.madgoat.com ).  A continuación, escriba esto para crear los DESCRIP.MMS del módulo:
+Asegúrese de que dispone de MMS (de Digital) o el software gratuito MMK ( disponible en MadGoat, en http://www.madgoat.com ).  A continuación, ejecute el comando siguiente para crear el archivo DESCRIP.MMS del módulo:
 
     perl Makefile.PL
 
-Ahora ya está listo para compilar:
+Ya está listo para compilar:
 
     mms test
 
-Sustituya C<mmk> por C<mms> en lo anterior si está utilizando MMK.
+Si usa MMK, cambie C<mmk> por C<mms>.
 
 D. INSTALAR
 
-Tipo
+Escriba
 
     mms install
 
-Sustituya C<mmk> por C<mms> en lo anterior si está utilizando MMK.
+Si usa MMK, cambie C<mmk> por C<mms>.
 
 =item *
 
-B<Si está en MVS>,
+B<Si usa MVS>:
 
 Introduzca el archivo F<.tar.gz> en un HFS como binario; no lo traduzca de ASCII a EBCDIC.
 
 A. DESCOMPRIMIR
 
-Descomprima el archivo con C<gzip -d sumodulo.tar.gz>
+Ejecute C<gzip -d mimodulo.tar.gz> para descomprimir el módulo
 
 Puede obtener gzip en http://www.s390.ibm.com/products/oe/bpxqp1.html
 
@@ -265,45 +265,45 @@ B. DESEMPAQUETAR
 
 Desempaquete el resultado con
 
-     pax -o to=IBM-1047,from=ISO8859-1 -r < sumodulo.tar
+     pax -o to=IBM-1047,from=ISO8859-1 -r < mimodulo.tar
 
-Los pasos COMPILAR e INSTALAR son idénticos a los de Unix.  Algunos módulos generan Makefiles que funcionan mejor con GNU make, que está disponible en http://www.mks.com/s390/gnu/
+Los pasos COMPILAR e INSTALAR son idénticos a los de Unix.  Los archivos Makefile generados por algunos módulos funcionan mejor con GNU make, que está disponible en http://www.mks.com/s390/gnu/
 
 =back
 
 =head1 PORTABILIDAD
 
-Tenga en cuenta que no todos los módulos funcionarán con todas las plataformas.
-Vea L<perlport> para más información sobre problemas de portabilidad.
-Lea la documentación para ver si el módulo funcionará en su sistema.  Hay básicamente tres tipos de módulos que no funcionan "recién salidos de la caja" con todas las plataformas (con alguna posibilidad de que se superpongan):
+Tenga en cuenta que no todos los módulos funcionarán en todas las plataformas.
+Vea L<perlport> para obtener más información sobre problemas de portabilidad.
+Lea la documentación para ver si el módulo funciona en su sistema.  Hay básicamente tres tipos de módulos que no funcionan en todas las plataformas sin acciones adicionales (es posible que estos tipos se solapen):
 
 =over 4
 
 =item *
 
-B<Los que deberían, pero no lo hacen>. Estos deben ser arreglados; considere ponerse en contacto con el autor y la posibilidad de escribir un parche.
+B<Los que deberían, pero no lo hacen>. Habría que arreglarlos; debe ponerse en contacto con el autor o incluso enviarle un parche.
 
 =item *
 
-B<Los que necesitan ser compilados, donde la plataforma destino no tiene compiladores fácilmente disponibles>. (Estos módulos contienen, por lo general, archivos F<.xs> o F<.c>).  Quizás sea capaz de encontrar los binarios existentes en CPAN o en otro lugar, o es posible que desee intentar conseguir los compiladores e intentar la compilación por sí mismo, y luego publique el binario para que otras pobres almas lo usen.
+B<Los que deben ser compilados, cuando la plataforma de destino no incluye compiladores>. (Estos módulos contienen, por lo general, archivos F<.xs> o F<.c>).  Quizás sea capaz de encontrar los binarios en CPAN o en otro lugar, o puede que prefiera obtener los compiladores e intentar la compilación (en ese caso, no olvide publicar luego el binario para regocijo de otras almas desventuradas).
 
 =item *
 
-B<Los que están dirigidos a una plataforma específica>. (Como los módulos Win32::).  Si el módulo está dirigido específicamente a una plataforma diferente a la suya, lo más probable es que no tenga suerte.
+B<Los que se destinan a una plataforma específica> (como los módulos Win32::).  Si el módulo se destina específicamente a una plataforma diferente a la suya, lo más probable es que no consiga instalarlo.
 
 =back
 
 
 
-Compruebe los CPAN Testers por si un módulo debería trabajar en su plataforma, pero no se comporta como era de esperar, o si no está seguro de si un módulo trabajará o no bajo su plataforma.  Si el módulo que desea no está en la lista, puede probarlo usted mismo y decírselo a los CPAN Testers, puede unirse a los CPAN Testers, o puede solicitar que sea probado.
+Consulte la información de CPAN Testers para comprobar si se espera que el módulo funcione en su plataforma en caso de que no se comporte de la manera esperada, o si no está seguro de si un módulo funcionará en su plataforma.  Si el módulo que desea no está en la lista, puede probarlo usted mismo y comunicar el resultado al grupo de CPAN Testers, puede unirse al grupo de CPAN Testers o puede solicitar que prueben ese módulo.
 
     http://testers.cpan.org/
 
 
-=head1 ¡Eh!
+=head1 UNA COSA MÁS
 
-Si tiene alguna sugerencia de cambios para esta página, hágamelo saber.  Por favor no me envíe correo con una petición de ayuda sobre cómo instalar los módulos.
-Hay demasiados módulos y muy pocos Orwants, capaces de responder o incluso entender todas sus preguntas.  En su lugar póngase en contacto con el autor del módulo, o por correo a comp.lang.perl.modules, o pregunte a alguien familiarizado con Perl en su sistema operativo.
+Si tiene alguna sugerencia relativa a esta página, le agradecería que me lo comunicara.  No deseo recibir mensajes de petición de ayuda para instalar módulos.
+Hay demasiados módulos y muy pocos Orwants; no puede resolver, ni tan siquiera contestar, todas las dudas.  Debe ponerse en contacto con el autor del módulo o enviar un mensaje a comp.lang.perl.modules; también puede pedir ayuda a alguien que esté familiarizado con el uso de Perl en su sistema operativo.
 
 =head1 AUTOR
 
@@ -311,12 +311,12 @@ Jon Orwant
 
 orwant@medita.mit.edu
 
-con la ayuda inestimable  de Chris Nandor, y la valiosa ayuda de Brandon Allbery, Charles Bailey, Graham Barr, Dunlop Domingo, Hietaniemi Jarkko, Holzman Ben, Tom Horsley, Nick Ing-Simmons, J. Tuomas Lukka, Laszlo Molnar, Olsen Alan, Peter Prymmer, Gurusamy Sarathy, Spalinger Christoph, Sugalski Dan, Larry Virden y Zakharevich Ilya.
+con la ayuda inestimable de Chris Nandor, y la valiosa ayuda de Brandon Allbery, Charles Bailey, Graham Barr, Dunlop Domingo, Hietaniemi Jarkko, Holzman Ben, Tom Horsley, Nick Ing-Simmons, J. Tuomas Lukka, Laszlo Molnar, Olsen Alan, Peter Prymmer, Gurusamy Sarathy, Spalinger Christoph, Sugalski Dan, Larry Virden y Zakharevich Ilya.
 
-Primera versión 22 de julio de 1998; última revisión 21 de noviembre de 2001.
+Primera versión: 22 de julio de 1998. Última revisión: 21 de noviembre de 2001.
 
 =head1 COPYRIGHT
 
-Copyright (C) 1998, 2002, 2003 Jon Orwant.  Reservados todos los derechos.
+Copyright (C) 1998, 2002, 2003 Jon Orwant.  Todos los derechos reservados.
 
 Puede distribuir este documento en los mismos términos que Perl.
