@@ -13,12 +13,12 @@ comienzo.
 =head2 La hoja
 
   CONTEXTOS  SIGILOS  ref        ARRAYS        HASHES
-  void       $escalar ESCALAR    @array        %hash
+  void       $escalar SCALAR     @array        %hash
   escalar    @array   ARRAY      @array[0, 2]  @hash{'a', 'b'}
   lista      %hash    HASH       $array[0]     $hash{'a'}
-             &sub     CÓDIGO
+             &sub     CODE
              *glob    GLOB       VALORES ESCALARES
-                      FORMATO    número, cadena, ref, glob, undef
+                      FORMAT     número, cadena, ref, glob, undef
   REFERENCIAS
   \      referencia       $$foo[1]       equivale a $foo->[1]
   $@%&*  desreferenciar   $$foo{bar}     equivale a $foo->{bar}
@@ -60,13 +60,13 @@ comienzo.
   CONFIGURACIÓN   (?>p)  sin vuelta atrás       \pP propiedad con nombre
   perl -V:ivsize  (?|p|p) reinicio bifurcación  \h  espacio en blanco horiz.
                   (?<NM>) capturar en nombre    \R  salto de línea
-                                       \S \W \D \H  negar
+                                                \S \W \D \H  negar
   LISTAS RETORNO FUNCIONES
   stat      localtime    caller            VARIABLES ESPECIALES
    0 dev    0 segundo    0 paquete         $_    variable predeterminada
    1 ino    1 minuto     1 nombre archivo  $0    nombre programa
    2 mode   2 hora       2 línea           $/    separador entrada
-   3 nlink  3 día        3 subrutina       $\    separador entrada
+   3 nlink  3 día        3 subrutina       $\    separador salida
    4 uid    4 mes-1      4 hasargs         $|    volcado automático
    5 gid    5 año-1900   5 wantarray       $!    error de sys/libcall
    6 rdev   6 día semana 6 evaltext        $@    error eval
