@@ -136,7 +136,7 @@ foreach my $pod_name (@names) {
     # Check if file is perlglossary.pod and, in that case, sort alphabetically
     if ( $pod_name eq "perlglossary.pod" ) {
         
-        say "Sorting perlglossay.pod...";
+        say "Sorting perlglossary.pod...";
         sort_glossary( $target );
 
     }
