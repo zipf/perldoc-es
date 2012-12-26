@@ -1542,7 +1542,7 @@ A partir de la versión v5.6.0, Perl intentará vaciar todos los archivos abiert
 
 Si usted hace un C<fork> sin luego esperar a sus hijos, irá acumulando zombies.  En algunos sistemas, puede evitar esto poniendo C<$SIG{CHLD}> a C<"IGNORE">.  Ver también L<perlipc> para más ejemplos de fork y borrado de hijos moribundos.
 
-Note que si su hijo hereda los descriptores de archivo del sistema como STDIN y STDOUT que estén conectados a un pipe o a un socket, incluso si usted sale del programa, el servidor remoto (por ejemplo, un script CGI o un proceso lanzado en segundo plano desde un shell remoto) no se dará cuenta de que se ha ido.
+Note que si su hijo hereda los descriptores de archivo del sistema como STDIN y STDOUT que estén conectados a una tubería o a un socket, incluso si usted sale del programa, el servidor remoto (por ejemplo, un script CGI o un proceso lanzado en segundo plano desde un shell remoto) no se dará cuenta de que se ha ido.
 Deberá reabrirlos a F</dev/null> si eso es un problema.
 
 En algunas plataformas, como Windows, en donde la llamada del sistema fork() no está disponible, Perl puede ser compilado para emular fork() en el intérprete de Perl.
@@ -1577,7 +1577,7 @@ X<formline>
 =for Pod::Functions internal function used for formats
 
 Esta es una función interna usada por C<format>, aunque también puede llamarla.  Formatea (ver L<perlform>) una lista de valores de acuerdo a los contenidos de CUADRO, colocando la salida en el acumulador de salida de format, C<$^A> (o C<$ACCUMULATOR> en English).
-Finalmente, cuando se hace un C<write>, los contenidos de C<$^A> se escriben al identificador de archivo.  Puede también leer C<$^A> y volver a ponerla otra vez a C<"">.  Note que un formato típicamente hace un C<formline> por línea del formato, pero a la misma función C<formline> no le preocupa cuántos avances de línea están incluidos en el CUADRO.  Esto significa que los tokens C<~> y C<~~> tratan al CUADRO entero como una única línea.
+Finalmente, cuando se hace un C<write>, los contenidos de C<$^A> se escriben al identificador de archivo.  Puede también leer C<$^A> y volver a ponerla otra vez a C<"">.  Note que un formato típicamente hace un C<formline> por línea del formato, pero a la misma función C<formline> no le preocupa cuántos avances de línea están incluidos en el CUADRO.  Esto significa que los I<tokens> C<~> y C<~~> tratan al CUADRO entero como una única línea.
 Puede por eso necesitar usar múltiples formlines para implementar un único registro format, como lo hace el propio compilador de C<format>.
 
 Tenga cuidado si pone dobles comillas alrededor del cuadro, porque un carácter C<@> puede ser tomado como el comienzo del nombre de un array.
@@ -2217,7 +2217,7 @@ Los resultados siguen la semántica ASCII.  Sólo los caracteres C<A-Z> cambian,
 
 =item De lo contrario, si C<use locale> (pero no C<use locale ':not_characters'>) está habilitado
 
-Respeta la configuración regional LC_CTYPE actual de puntos de código < 256, y utiliza la semántica Unicode para los puntos de código restantes (esto último sólo puede ocurrir si la bandera UTF8 también es establecida).  Ver L<perllocale>.
+Respeta la configuración regional LC_CTYPE actual de puntos de código < 256, y utiliza la semántica Unicode para los puntos de código restantes (esto último sólo puede ocurrir si la bandera UTF8 también es establecida).  Vea L<perllocale>.
 
 Una deficiencia en este caso es que los cambios que cruzan el límite 255/256 no están bien definidos.  Por ejemplo, la minúscula de LATIN CAPITAL LETTER SHARP S (U+1E9E) en la semántica Unicode es U+00DF (en las plataformas ASCII).   Pero bajo C<use locale>, la minúscula de U+1E9E es ella misma, porque 0xDF quizás no sea LATIN SMALL LETTER SHARP S en la configuración regional actual, y Perl no tiene forma de saber si incluso existe el carácter en la configuración regional, mucho menos qué punto de código es.  Perl devuelve el carácter de entrada sin cambios, para todas las instancias (y no hay muchas) donde el límite 255/256, de otro modo, sería traspasado.
 
@@ -2276,7 +2276,7 @@ X<__LINE__>
 
 =for Pod::Functions the current source line number
 
-Un símbolo especial que compila al actual número de línea.
+Un I<token> especial que compila al actual número de línea.
 
 =item link ARCHIVO_VIEJO,ARCHIVO_NUEVO
 X<link>
@@ -3461,7 +3461,7 @@ X<__PACKAGE__>
 
 =for Pod::Functions +5.004 the current package
 
-Un símbolo especial que devuelve el nombre del paquete en el que aparece.
+Un I<token> especial que devuelve el nombre del paquete en el que aparece.
 
 =item pipe CONTROLADOR_LECTURA,CONTROLADOR_ESCRITURA
 X<pipe> X<tubería>
@@ -3522,7 +3522,7 @@ X<print>
 =for Pod::Functions output a list to a filehandle
 
 Imprime una cadena o una lista de cadenas.  Devuelve verdadero si tuvo éxito.
-IDENTIFICADOR_ARCHIVO puede ser una variable escalar conteniendo el nombre de o una referencia al identificador de archivo, introduciendo así un nivel más de indirección.  (NOTA: Si IDENTIFICADOR_ARCHIVO es una variable y el siguiente símbolo es un término, puede ser malinterpretado como un operador a menos que interponga un C<+> o ponga los argumentos entre paréntesis).  Si se omite IDENTIFICADOR_ARCHIVO, se imprime al canal de salida seleccionado por última vez (vea L</select>).  Si la LISTA se omite, se imprime C<$_> al actual canal de salida seleccionado.  Para utilizar solamente IDENTIFICADOR_ARCHIVO para imprimir en él, el contenido de C<$_>, debe ser un identificador de archivo real, como C<FH>, no uno indirecto como C<$fh>.  Para configurar el controlador de salida predeterminado a otro valor distinto que STDOUT, use el operador C<select>.
+IDENTIFICADOR_ARCHIVO puede ser una variable escalar conteniendo el nombre de o una referencia al identificador de archivo, introduciendo así un nivel más de indirección.  (NOTA: Si IDENTIFICADOR_ARCHIVO es una variable y el siguiente I<token> es un término, puede ser malinterpretado como un operador a menos que interponga un C<+> o ponga los argumentos entre paréntesis).  Si se omite IDENTIFICADOR_ARCHIVO, se imprime al canal de salida seleccionado por última vez (vea L</select>).  Si la LISTA se omite, se imprime C<$_> al actual canal de salida seleccionado.  Para utilizar solamente IDENTIFICADOR_ARCHIVO para imprimir en él, el contenido de C<$_>, debe ser un identificador de archivo real, como C<FH>, no uno indirecto como C<$fh>.  Para configurar el controlador de salida predeterminado a otro valor distinto que STDOUT, use el operador C<select>.
 
 El valor actual de C<$,> (si lo tiene) es impreso entre cada elemento de la LISTA.  El valor actual de C<$\> (si lo tiene) es impreso después de que toda la LISTA haya sido impresa.  Debido a que print toma una LISTA, cualquier cosa en la LISTA es evaluada en contexto de lista, incluyendo cualquier subrutina que devuelva listas.  Tenga cuidado de no seguir la palabra clave print con un paréntesis de apertura a menos que desee que el correspondiente paréntesis de cierre ponga fin a los argumentos de la impresión; ponga paréntesis alrededor de todos los argumentos (o interponga un C<+>, pero esto no parece tan bonito).
 
@@ -4499,7 +4499,7 @@ Los valores a ser comparados siempre se pasan por referencia y no deben ser modi
 
 También no puede salir fuera del bloque de ordenación o de la subrutina utilizando cualquiera de los operadores de control de bucle descritos en L<perlsyn> o con C<goto>.
 
-Cuando C<use locale> está activo (pero no C<use locale 'not_characteres'>), C<sort LISTA> ordena LISTA de acuerdo con la actual configuración regional de cotejo.  Ver L<perllocale>.
+Cuando C<use locale> está activo (pero no C<use locale 'not_characteres'>), C<sort LISTA> ordena LISTA de acuerdo con la actual configuración regional de cotejo.  Vea L<perllocale>.
 
 sort() devuelve alias en la lista original, como lo hace la variable de índice de los bucles for(), que hace un alias de los elementos de la lista.  Es decir, modificar un elemento de la lista devuelto por grep (por ejemplo, en un C<foreach>, C<map> o C<grep>) modifica el elemento en la lista original.  Esto suele ser algo que debe ser evitado cuando se está escribiendo código claro.
 
@@ -5296,9 +5296,9 @@ X<__SUB__>
 
 =for Pod::Functions +current_sub the current subroutine, or C<undef> if not in a subroutine
 
-Un símbolo especial que devuelve la referencia a la subrutina actual, o C<undef> fuera de una subrutina.
+Un I<token> especial que devuelve la referencia a la subrutina actual, o C<undef> fuera de una subrutina.
 
-Este símbolo sólo está disponible bajo C<use v5.16> o la característica "current_sub".  Ver L<feature>.
+Este I<token> sólo está disponible bajo C<use v5.16> o la característica "current_sub".  Ver L<feature>.
 
 =item substr EXPR,DESPLAZAMIENTO,LONGITUD,REEMPLAZO
 X<substr> X<substring> X<mid> X<left> X<right>
