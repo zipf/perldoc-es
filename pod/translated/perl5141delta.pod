@@ -226,7 +226,7 @@ Se ha actualizado el proceso de instalación de L<ODBM_File> con las nuevas ruta
 
 =item *
 
-La representación compilada de formatos ahora es guardada a través del mg_ptr de PERL_MAGIC_fm. Anteriormente era almacenada en el búfer de cadena, más allá de SvLEN(), el final normal de la cadena. Ahora SvCOMPILED() y SvCOMPILED_{on,off}() sólo existen por compatibilidad con el código XS.
+La representación compilada de formatos ahora se guarda a través del mg_ptr de PERL_MAGIC_fm. Anteriormente era almacenada en el búfer de cadena, más allá de SvLEN(), el final normal de la cadena. Ahora SvCOMPILED() y SvCOMPILED_{on,off}() sólo existen por compatibilidad con el código XS.
 El primero es siempre 0, los otros dos ahora son no-ops.
 
 =back

@@ -68,7 +68,7 @@ v-strings con múltiples números como C<v65.66> y C<65.66.67> siguen siendo v-s
 
 =head2 (Win32) La opción -C ha sido reasignada
 
-La opción -C ha cambiado de una forma incompatible.  La semántica anterior de esta opción sólo tiene sentido en Win32 y sólo con "use utf8" en el universo de versiones 5.6.x, y no tienen sentido para la implementación de Unicode en 5.8.0.  Dado que esta opción quizás no podría haber sido utilizada más por cualquier persona, se ha reutilizado.  El comportamiento que esta opción activaba en las versiones 5.6.x puede ser soportada de manera transparente, dependiendo de la moda, en una próxima versión.
+La opción -C ha cambiado de una forma incompatible.  La semántica anterior de esta opción sólo tiene sentido en Win32 y sólo con "use utf8" en el universo de versiones 5.6.x, y no tienen sentido para la implementación de Unicode en 5.8.0.  Dado que esta opción quizás no podría haber sido utilizada más por cualquier persona, se ha reutilizado.  El comportamiento que esta opción activaba en las versiones 5.6.x se puede soportar de manera transparente, dependiendo de la moda, en una próxima versión.
 
 Para la nueva vida de esta opción, vea L<"UTF-8 ya no está por defecto bajo la configuración regional de UTF-8"> y L<perlrun/-C>.
 
@@ -145,7 +145,7 @@ Si realmente desea seguir utilizando la variable C<$*> pero no quiere ver la adv
 
 =head2 Mejoras varias
 
-C<map> en contexto vacío ya no es oneroso. C<map> ahora depende del contexto, y no construirá una lista si es llamado en contexto vacío.
+C<map> en contexto vacío ya no es oneroso. C<map> ahora depende del contexto, y no construirá una lista si se llama en contexto vacío.
 
 Si un I<socket> es cerrado por el servidor mientras se está imprimiendo en él, el cliente recibe ahora una SIGPIPE.  Aunque esta nueva característica no fue planeada, apareció de forma natural de los cambios que se hicieron a PerlIO, y se considera una característica accidental.
 
@@ -392,7 +392,7 @@ Ha habido muchas correcciones en el área de las subs anónimas, léxicas y clau
 
 =head2 Arreglos genéricos
 
-Si un identificador de archivo de entrada es marcado como C<:utf8> y Perl ve UTF-8 ilegal cuando hace C<< <FH> >>, si las advertencias están activadas, se levanta inmediatamente una advertencia - en lugar de callar y dejar Perl descontento con el resto de datos estropeados.  (La capa C<:encoding(utf8)> también funciona del mismo modo).
+Si un identificador de archivo de entrada se marca como C<:utf8> y Perl ve UTF-8 ilegal cuando hace C<< <FH> >>, si las advertencias están activadas, se levanta inmediatamente una advertencia - en lugar de callar y dejar Perl descontento con el resto de datos estropeados.  (La capa C<:encoding(utf8)> también funciona del mismo modo).
 
 binmode(SOCKET, ":utf8") solo funciona en el lado de la entrada, no en la salida del I<socket>.  Ahora funciona de las dos maneras.
 
@@ -450,7 +450,7 @@ La aritmética de punteros errónea ha sido corregida.
 
 =item *
 
-El límite de longitud en los valores (no claves) en el hash %ENV se ha elevado de 255 bytes a 32640 bytes (excepto cuando el ajuste PERL_ENV_TABLES sobreescribe el uso predeterminado de los nombres lógicos de %ENV).  Si es necesario acceder a estos valores largos desde el exterior de Perl, sea consciente de que se implementan utilizando los nombres de la lista de búsqueda lógica que almacena el valor en partes, de 255 bytes cada una (hasta 128 de ellas) de cada elemento de la lista de búsqueda. Al hacer una búsqueda en %ENV desde dentro de Perl, los elementos son combinados en un solo valor.  La actual habilidad específica de VMS de acceder a elementos individuales de un nombre lógico de lista de búsqueda a través de la sintaxis $ENV{'foo;N'} (donde N es el índice de la lista de búsqueda) no se ve afectada.
+El límite de longitud en los valores (no claves) en el hash %ENV se ha elevado de 255 bytes a 32640 bytes (excepto cuando el ajuste PERL_ENV_TABLES sobreescribe el uso predeterminado de los nombres lógicos de %ENV).  Si es necesario acceder a estos valores largos desde el exterior de Perl, sea consciente de que se implementan utilizando los nombres de la lista de búsqueda lógica que almacena el valor en partes, de 255 bytes cada una (hasta 128 de ellas) de cada elemento de la lista de búsqueda. Al hacer una búsqueda en %ENV desde dentro de Perl, los elementos se combinan en un solo valor.  La actual habilidad específica de VMS de acceder a elementos individuales de un nombre lógico de lista de búsqueda a través de la sintaxis $ENV{'foo;N'} (donde N es el índice de la lista de búsqueda) no se ve afectada.
 
 =item *
 
@@ -645,7 +645,7 @@ Con ciertas versiones del compilador de C de HP (por ejemplo, B.11.11.02) obtend
     Redeclaración de "sendpath" con un especificador de clase de almacenamiento especifico:
       "sendpath" tendrá un enlazado interno.
 
-Estas advertencias aparecen durante la compilación de Perl y durante ciertas pruebas de lib/ExtUtils que invocan al compilador de C.  La advertencia, sin embargo, no es grave y puede ser ignorada.
+Estas advertencias aparecen durante la compilación de Perl y durante ciertas pruebas de lib/ExtUtils que invocan al compilador de C.  La advertencia, sin embargo, no es grave y se puede ignorar.
 
 =head2 IRIX: t/uni/tr_7jis.t falla falsamente
 
@@ -672,7 +672,7 @@ Las siguientes cosas B<pueden> suceder en el futuro.  Los primeros lanzamientos 
 
 =item *
 
-PerlIO se convertirá en el predeterminado.  En la actualidad (en Perl 5.8.x) la biblioteca stdio todavía es utilizada si Perl piensa que puede usar ciertos trucos para hacer que stdio vaya B<realmente> más rápido.  Para futuras versiones nuestro objetivo es hacer que PerlIO vaya aún más rápido.
+PerlIO se convertirá en el predeterminado.  En la actualidad (en Perl 5.8.x) la biblioteca stdio todavía se utiliza si Perl piensa que puede usar ciertos trucos para hacer que stdio vaya B<realmente> más rápido.  Para futuras versiones nuestro objetivo es hacer que PerlIO vaya aún más rápido.
 
 =item *
 

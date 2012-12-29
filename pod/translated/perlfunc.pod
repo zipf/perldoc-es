@@ -11,7 +11,7 @@ Se agrupan en dos categorías principales: operadores de listas y operadores una
 En las descripciones sintácticas que siguen a continuación, los operadores de listas que esperan una lista (y proveen de un contexto lista para los elementos de la lista) se muestran con un argumento así: LISTA.  Tal lista puede consistir en cualquier combinación de argumentos escalares o valores de lista; los valores de lista serán incluidos en la lista como si cada elemento individual fuera interpolado en ese punto en la lista, formando un largo y unidimensional valor de lista.
 Las comas deberían separar elementos literales de la LISTA.
 
-Cualquier función en la lista de abajo puede ser usada tanto con paréntesis como sin ellos, rodeando sus argumentos.  (Las descripciones sintácticas omiten los paréntesis).  Si usa los paréntesis, la simple (pero ocasionalmente sorprendente) regla es esta: Si I<se parece> a una función, por eso I<es> una función y la precedencia no importará.  De lo contrario es un operador de lista u operador unario, y la precedencia sí importa.  El espacio en blanco entre la función y el paréntesis izquierdo no cuenta, por lo que deberá tener cuidado en algunas ocasiones:
+Cualquier función en la lista de abajo se puede usar tanto con paréntesis como sin ellos, rodeando sus argumentos.  (Las descripciones sintácticas omiten los paréntesis).  Si usa los paréntesis, la simple (pero ocasionalmente sorprendente) regla es esta: Si I<se parece> a una función, por eso I<es> una función y la precedencia no importará.  De lo contrario es un operador de lista u operador unario, y la precedencia sí importa.  El espacio en blanco entre la función y el paréntesis izquierdo no cuenta, por lo que deberá tener cuidado en algunas ocasiones:
 
     print 1+2+4;	# Imprime 7.
     print(1+2) + 4;	# Imprime 3.
@@ -317,7 +317,7 @@ Ejemplo:
         #...
     }
 
-Note que C<-s/a/b/> no realiza una substitución negada.  Decir C<-exp($foo)> sigue funcionando como se espera que lo haga: sólo letras sueltas, por detrás de un menos, son interpretadas como test de archivos.
+Note que C<-s/a/b/> no realiza una substitución negada.  Al decir C<-exp($foo)>, se sigue funcionando como se espera que lo haga: sólo letras sueltas, por detrás de un menos,  interpretadas como pruebas de archivos.
 
 Estos operadores están exentos de la regla "se parece a una función" descrita anteriormente.  Es decir, un paréntesis de apertura después del operador no influye en que el código que sigue se constituya como el argumento.  Poner el paréntesis de apertura antes del operador para separarlo del código que le sigue (esto se aplica únicamente a los operadores con mayor precedencia que los operadores unarios, por supuesto):
 
@@ -331,7 +331,7 @@ También note que, para el superusuario en el sistema de archivos local, los tes
 Si está usando ACL, hay un pragma llamado C<filetest> que puede producir resultados más precisos que los simples bits de modo de stat().
 Cuando esté bajo C<use filetest 'access'>, las comprobaciones de archivo mencionadas antes comprobarán cuándo los permisos pueden (o no) ser concedidos usando la familia de llamadas del sistema access(2).  Note también que C<-x> y C<-X> pueden, bajo este pragma, devolver valores verdaderos incluso si los bits de permiso de ejecución no están puestos (ni cualquier permiso ACL extra de ejecución).  Este comportamiento tan extraño es debido a las definiciones subyacentes de las llamadas del sistema.  Note también que, debido a la implementación de C<use filetest 'access'>, el identificador de archivo especial C<_> no almacenará los resultados de los test de archivo mientras este pragma esté activo.  Para más información, lea la documentación del pragma C<filetest>.
 
-Las opciones C<-T> y C<-B> funcionan como sigue.  El primer bloque (aprox.) del archivo, es examinado para buscar caracteres extraños como códigos de control o caracteres con el bit alto puesto.  Si se encuentran demasiados caracteres extraños (E<gt>30%), es un archivo C<-B>; de lo contrario es un archivo C<-T>.  También, cualquier archivo conteniendo bytes cero en el primer bloque es considerado como un archivo binario.  Si C<-T> o C<-B> se usan con un identificador de archivo, la memoria intermedia actual de IO es examinada en vez del primer bloque.  Ambos, C<-T> y C<-B>, devuelven verdadero en un archivo vacío o en un archivo en el EOF (marca de fin de archivo) cuando se analiza un identificador de archivo.  Debido a que tiene que leer el archivo para hacer el test C<-T>, en la mayoría de las ocasiones querrá usar primero C<-f>, como en C<next unless -f $archivo && -T $archivo>.
+Las opciones C<-T> y C<-B> funcionan como sigue.  El primer bloque (aprox.) del archivo, es examinado para buscar caracteres extraños como códigos de control o caracteres con el bit alto puesto.  Si se encuentran demasiados caracteres extraños (E<gt>30%), es un archivo C<-B>; de lo contrario es un archivo C<-T>.  También, cualquier archivo conteniendo bytes cero en el primer bloque, se le considera como un archivo binario.  Si C<-T> o C<-B> se usan con un identificador de archivo, la memoria intermedia actual de IO es examinada en vez del primer bloque.  Ambos, C<-T> y C<-B>, devuelven verdadero en un archivo vacío o en un archivo en el EOF (marca de fin de archivo) cuando se analiza un identificador de archivo.  Debido a que tiene que leer el archivo para hacer el test C<-T>, en la mayoría de las ocasiones querrá usar primero C<-f>, como en C<next unless -f $archivo && -T $archivo>.
 
 Si a cualquiera de los test de archivo (o los operadores C<stat> o C<lstat>) se les da el identificador de archivo especial consistente en un solitario guión bajo, entonces se usa la estructura stat del archivo del test anterior (u operador stat), ahorrando una llamada del sistema.  (Esto no funciona con C<-t>, y necesita recordar que lstat() y C<-l> dejarán valores en la estructura stat para el enlace simbólico, no el archivo real).  (También, si la memoria intermedia de stat se rellenó con una llamada C<lstat>, C<-T> y C<-B> serán reinicializados con los resultados de C<stat _>).
 Ejemplo:
@@ -453,7 +453,7 @@ Si se omite CAPA o se especifica como C<:raw> el identificador se prepara para p
 Note que, a pesar de estar implícito en I<"Programming Perl"> (el dromedario, 3.ª edición) o en otro lugar, C<:raw> I<no> es el simplemente el inverso de C<:crlf>
 -- otras capas que pudieran afectar la naturaleza binaria del flujo son I<también> desactivadas.  Ver L<PerlIO>, L<perlrun> y la discusión sobre la variable de entorno PERLIO.
 
-C<:bytes>, C<:crlf>, C<:utf8>, y cualquier otra directiva de la forma C<:...>, se llaman I<capas> I/O.  El pragma C<open> puede ser usado para establecer las capas I/O por defecto.  Ver L<open>.
+C<:bytes>, C<:crlf>, C<:utf8>, y cualquier otra directiva de la forma C<:...>, se llaman I<capas> I/O.  El I<pragma> C<open> se puede usar para establecer las capas I/O por defecto.  Ver L<open>.
 
 I<El parámetro CAPA de la función binmode() se describe como "DISCIPLINA" en "Programming Perl, 3rd Edition".  Sin embargo, desde la publicación de este libro, conocido por muchos como "Camel III", el consenso sobre el nombre de esta funcionalidad se ha movido desde "disciplina" a "capa".  Toda documentación desde esta versión de Perl se refiere a "capas" en vez de a "disciplinas".  Ahora volvamos a la documentación normal...>
 
@@ -715,7 +715,7 @@ Ejemplo:
     open(INPUT, 'foo')          # obtener los resultado de sort
         or die "No puedo abrir 'foo' para entrada: $!";
 
-IDENTIFICADOR_ARCHIVO puede ser una expresión cuyo valor puede ser usado como un identificador de archivo indirecto, normalmente el nombre real del identificador de archivo o un identificador autovivificado.
+IDENTIFICADOR_ARCHIVO puede ser una expresión cuyo valor se puede usar como un identificador de archivo indirecto, normalmente el nombre real del identificador de archivo o un identificador autovivificado.
 
 =item closedir IDENTIFICADOR_DIR
 X<closedir>
@@ -739,7 +739,7 @@ X<continue>
 
 =for Pod::Functions optional trailing block in a while or foreach
 
-Cuando es seguido por un BLOQUE, C<continue> es realmente una instrucción de control de flujo en lugar de una función.  Si existe un BLOQUE C<continue> adjunto a un BLOQUE (típicamente en un C<while> o C<foreach>), siempre es ejecutado justo antes de que la condicional sea de nuevo evaluada, igual que la tercera parte de un bucle C<for> en C. Esto puede ser utilizado para incrementar una variable de bucle, incluso cuando el bucle ha sido interrumpido por la instrucción C<next> (que es similar a la instrucción C<continue> del C).
+Cuando es seguido por un BLOQUE, C<continue> es realmente una instrucción de control de flujo en lugar de una función.  Si existe un BLOQUE C<continue> adjunto a un BLOQUE (típicamente en un C<while> o C<foreach>), siempre es ejecutado justo antes de que la condicional sea de nuevo evaluada, igual que la tercera parte de un bucle C<for> en C. Esto se puede utilizar para incrementar una variable de bucle, incluso cuando el bucle ha sido interrumpido por la instrucción C<next> (que es similar a la instrucción C<continue> del C).
 
 C<last>, C<next> o C<redo> puede aparecer dentro de un bucle C<continue>; C<last> y C<redo> se comportarán como si se hubieran ejecutado dentro del bloque principal.  También C<next>, pero como ejecutará un bloque C<continue>, quizás se convierta en algo divertido.
 
@@ -866,7 +866,7 @@ Devuelve un valor Booleano indicando si EXPR tiene un valor que no sea el valor 
 
 Muchas operaciones devuelven C<undef> para indicar un error, fin de archivo, error del sistema, variable no inicializada u otras condiciones excepcionales.  Esta función le permite distinguir C<undef> de otros valores.  (Un simple test Booleano no distinguirá entre C<undef>, cero, la cadena vacía y C<"0">, que son todos iguales a falso).  Note que como C<undef> es un escalar válido, su presencia no indica I<necesariamente> una condición excepcional: C<pop> devuelve C<undef> cuando su argumento es un array vacío, I<o> cuando el elemento a devolver sea un C<undef>.
 
-Puede usar también C<defined(&func)> para comprobar si la subrutina C<&func> ha sido definida.  El valor devuelto no es afectado por ninguna declaración posterior de C<&func>.  Una subrutina que no ha sido definida puede ser ejecutada: su paquete puede tener un método C<AUTOLOAD> que la hace aparecer la primera vez que es llamada; ver L<perlsub>.
+Puede usar también C<defined(&func)> para comprobar si la subrutina C<&func> ha sido definida.  El valor devuelto no queda afectado por ninguna declaración posterior de C<&func>.  Una subrutina que no ha sido definida puede ser ejecutada: su paquete puede tener un método C<AUTOLOAD> que la hace aparecer la primera vez que es llamada; ver L<perlsub>.
 
 El uso de C<defined> sobre datos agregados (hashes y arrays) está desaconsejado.  Se usó para informar si la memoria para los datos agregados había sido reservada.  Este comportamiento puede desaparecer en futuras versiones de Perl.
 Utilize en su lugar una comprobación de tamaño:
@@ -952,7 +952,7 @@ X<die> X<throw> X<exception> X<raise> X<$@> X<abort> X<excepción> X<levantar> X
 
 =for Pod::Functions raise an exception or bail out
 
-C<die> lanza una excepción.  Dentro de un C<eval()>, el mensaje de error es colocado en C<$@> y el C<eval> termina con el valor I<undef> (indefinido).
+C<die> lanza una excepción.  Dentro de un C<eval()>, el mensaje de error se coloca en C<$@> y el C<eval> termina con el valor I<undef> (indefinido).
 Si la excepción está fuera de un C<eval>, entonces la excepción no capturada imprime LISTA al C<STDERR> y sale con un valor no nulo.  Si necesita terminar el proceso con un valor de salida específico, vea L</exit>.
 
 Ejemplos equivalentes:
@@ -973,7 +973,7 @@ produce, respectivamente
     /etc/games no está bien at canasta line 123.
     /etc/games no está bien, parado at canasta line 123.
 
-Si la LISTA está vacía y C<$@> ya contiene un valor (típicamente de un eval() anterior) este valor es reutilizado después de añadirle C<"\t...propagated">.
+Si la LISTA está vacía y C<$@> ya contiene un valor (típicamente de un eval() anterior) este valor se reutiliza después de añadirle C<"\t...propagated">.
 Esto es útil para propagar excepciones:
 
     eval { ... };
@@ -991,7 +991,7 @@ Si se produce una excepción no detectada en la salida del intérprete, el códi
 
 La intención es comprimir la mayor información posible sobre la causa probable en el limitado espacio del código de salida del sistema.  Sin embargo, como C<$!> es el valor de C de C<errno>, que se puede establecer por cualquier llamada al sistema, esto significa que el valor del código de salida utilizada por C<die> puede ser no-previsible, por lo que no debe confiarse en él, aparte de ser distinto de cero.
 
-También puede llamar a C<die> con una referencia como argumento, y si éste queda atrapado en un C<eval>, C<$@> contiene esa referencia.  Esto permite un manejo de las excepciones más elaborado que usando objetos que mantengan un estado arbitrario sobre la naturaleza de la excepción.  Tal esquema es algunas veces preferible a emparejar ciertas cadenas de valores de C<$@> usando expresiones regulares.  Dado que C<$@> es una variable global y C<eval> puede ser usado dentro de las implementaciones de objetos, tenga el cuidado que al analizar el objeto error no sustituya la referencia en la variable global.  Es más fácil hacer una copia local de la referencia antes de cualquier manipulación.  Aquí hay un ejemplo:
+También puede llamar a C<die> con una referencia como argumento, y si éste queda atrapado en un C<eval>, C<$@> contiene esa referencia.  Esto permite un manejo de las excepciones más elaborado que usando objetos que mantengan un estado arbitrario sobre la naturaleza de la excepción.  Tal esquema es algunas veces preferible a emparejar ciertas cadenas de valores de C<$@> usando expresiones regulares.  Dado que C<$@> es una variable global y C<eval> se puede usar dentro de las implementaciones de objetos, tenga el cuidado que al analizar el objeto error no sustituya la referencia en la variable global.  Es más fácil hacer una copia local de la referencia antes de cualquier manipulación.  Aquí hay un ejemplo:
 
     use Scalar::Util "blessed";
 
@@ -1011,7 +1011,7 @@ Puede disponer que una retrollamada se ejecute antes de que C<die> haga sus func
 
     die @_ if $^S;
 
-como primera línea del controlador (ver L<perlvar/$^S>).  Debido a que provoca una acción extraña a gran distancia, este comportamiento no intuitivo puede ser arreglado en una distribución futura.
+como primera línea del controlador (ver L<perlvar/$^S>).  Debido a que provoca una acción extraña a gran distancia, este comportamiento no intuitivo se puede arreglar en una distribución futura.
 
 Ver también exit(), warn() y el módulo Carp.
 
@@ -1068,7 +1068,7 @@ X<dump> X<core> X<undump> X<volcado> X<núcleo>
 =for Pod::Functions create an immediate core dump
 
 Esta función provoca un volcado inmediato del núcleo de ejecución.  Ver también la opción de línea de comando B<-u> en L<perlrun>, que hace lo mismo.
-Principalmente esto se utiliza en conjunción con el programa B<undump> (no suministrado) para convertir tu volcado del núcleo en un binario ejecutable después de haber inicializado todas las variables al comienzo del programa.  Cuando el nuevo binario es ejecutado, comenzará ejecutando un C<goto ETIQUETA> (con todas las restricciones que C<goto> padece).
+Principalmente esto se utiliza en conjunción con el programa B<undump> (no suministrado) para convertir tu volcado del núcleo en un binario ejecutable después de haber inicializado todas las variables al comienzo del programa.  Cuando se ejecuta el nuevo binario, comenzará ejecutando un C<goto ETIQUETA> (con todas las restricciones que C<goto> padece).
 Piense en él como un goto entre un volcado del núcleo y una reencarnación.
 Si se omite C<ETIQUETA>, reinicia el programa desde el principio.
 
@@ -1106,7 +1106,7 @@ Esto imprime su entorno como el programa printenv(1), sólo que en un orden dife
         print "$clave=$valor\n";
     }
 
-A partir de Perl 5.14, C<each> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento es desreferenciado automáticamente.  Este aspecto de C<each> es considerado altamente experimental.
+A partir de Perl 5.14, C<each> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento se desreferencia automáticamente.  Este aspecto de C<each> se considera altamente experimental.
 El comportamiento exacto puede cambiar en una futura versión de Perl.
 
     while (($clave,$valor) = each $hashref) { ... }
@@ -1163,18 +1163,18 @@ X<eval> X<try> X<catch> X<evaluate> X<parse> X<execute> X<error, handling> X<exc
 
 En la primera forma, el valor devuelto por EXPR es interpretado y ejecutado como si fuera un pequeño programa Perl.  El valor de la expresión (que es en sí mismo determinada en contexto escalar) es primero interpretada, y si no hay ningún error, ejecutada como un bloque dentro del contexto léxico del actual programa Perl.  Esto significa que, en particular, cualquier otra variable léxica externa es visible dentro de ella, y la configuración de variable de paquete o de subrutinas y las definiciones de formato siguen permaneciendo.
 
-Note que el valor es interpretado cada vez que se ejecuta C<eval>.
+Note que el valor se interpreta cada vez que se ejecuta C<eval>.
 Si EXPR se omite, se evalúa C<$_>.  Esta forma es típicamente usada para retrasar el interpretado subsecuente ejecución del texto de EXPR hasta el momento de la ejecución.
 
-Si la característica C<unicode_eval> está habilitada (que lo es por defecto con una declaración C<use 5.16> o superior), EXPR o C<$_> es tratado como una cadena de caracteres, así que las declaraciones C<use utf8> no tienen efecto, y los filtros de código fuente quedan prohibidos.  En ausencia de la característica C<unicode_eval>, la cadena a veces será tratada como caracteres y, otras veces como bytes, dependiendo de la codificación interna, y los filtros de código fuente activados dentro de C<eval> muestran el comportamiento errático, pero histórico, comportamiento de afectar a algún archivo externo que todavía se está compilando.  Vea también la palabra clave L</evalbytes>, que siempre trata su entrada como un flujo de bytes y funciona correctamente con filtros de código fuente, y el pragma L<feature>.
+Si la característica C<unicode_eval> está habilitada (que lo es por defecto con una declaración C<use 5.16> o superior), EXPR o C<$_> se tratan como una cadena de caracteres, así que las declaraciones C<use utf8> no tienen efecto, y los filtros de código fuente quedan prohibidos.  En ausencia de la característica C<unicode_eval>, la cadena a veces será tratada como caracteres y, otras veces como bytes, dependiendo de la codificación interna, y los filtros de código fuente activados dentro de C<eval> muestran el comportamiento errático, pero histórico, comportamiento de afectar a algún archivo externo que todavía se está compilando.  Vea también la palabra clave L</evalbytes>, que siempre trata su entrada como un flujo de bytes y funciona correctamente con filtros de código fuente, y el pragma L<feature>.
 
-En la segunda forma, el código dentro del BLOQUE es interpretado sólo una vez -al mismo tiempo que el código que rodea al mismo C<eval> es interpretado- y ejecutado dentro del contexto del actual programa Perl.  Esta forma es típicamente usada para atrapar excepciones más eficientemente que la primera forma (ver arriba), mientras que también provee del beneficio de comprobar el código dentro del BLOQUE en tiempo de compilación.
+En la segunda forma, el código dentro del BLOQUE se interpreta sólo una vez -al mismo tiempo que el código que rodea al mismo C<eval> es interpretado- y ejecutado dentro del contexto del actual programa Perl.  Esta forma es típicamente usada para atrapar excepciones más eficientemente que la primera forma (ver arriba), mientras que también provee del beneficio de comprobar el código dentro del BLOQUE en tiempo de compilación.
 
 El último punto y coma, si lo hay, puede ser omitido del valor de EXPR o dentro de BLOQUE.
 
-En ambas formas, el valor devuelto es el valor de la última expresión evaluada dentro del mini-programa; una instrucción return se puede usar también, como si fuera una subrutina.  La expresión que da el valor de retorno es evaluada en contexto vacío (void), escalar o lista, dependiendo del contexto en que se encuentre el C<eval>.  Ver L</wantarray> para saber cómo determinar el contexto de la evaluación.
+En ambas formas, el valor devuelto es el valor de la última expresión evaluada dentro del mini-programa; una instrucción return se puede usar también, como si fuera una subrutina.  La expresión que da el valor de retorno se evalúa en contexto vacío (void), escalar o lista, dependiendo del contexto en que se encuentre el C<eval>.  Ver L</wantarray> para saber cómo determinar el contexto de la evaluación.
 
-Si hay algún error de sintaxis o en tiempo de ejecución, o se ejecuta una instrucción C<die>, C<eval> devuelve C<undef> en contexto escalar o una lista vacía en contexto lista, y C<$@> es inicializado al mensaje de error.  (Antes de 5,16, un error causaba que C<undef> era devuelto en contexto de lista para errores de sintaxis, pero no para errores en tiempo de ejecución).
+Si hay algún error de sintaxis o en tiempo de ejecución, o se ejecuta una instrucción C<die>, C<eval> devuelve C<undef> en contexto escalar o una lista vacía en contexto lista, y C<$@> se inicializa al mensaje de error.  (Antes de 5,16, un error causaba que C<undef> era devuelto en contexto de lista para errores de sintaxis, pero no para errores en tiempo de ejecución).
 Si no hay errores, se garantiza que C<$@> será una cadena vacía.  Un operador de control de flujo como C<last> o C<goto> puede pasar por alto el valor de C<$@>.  Tenga cuidado porque usar C<eval> ni silencia a Perl a la hora de imprimir avisos al STDERR, ni rellena el texto de los mensajes de aviso dentro de C<$@>.
 Para hacer cualquiera de estas dos cosas debe usar C<$SIG{__WARN__}>, o desactivar los avisos dentro del BLOQUE o EXPR usando S<C<no warnings 'all'>>.
 Ver L</warn>, L<perlvar>, L<warnings> y L<perllexwarn>.
@@ -1215,7 +1215,7 @@ Esto es especialmente significativo, dado que las llamadas C<__DIE__> pueden lla
        print $@ if $@;                # imprime "bar vive aquí"
     }
 
-Debido a que provoca una acción extraña a gran distancia, este comportamiento no intuitivo puede ser arreglado en una futura distribución.
+Debido a que provoca una acción extraña a gran distancia, este comportamiento no intuitivo se puede arreglar en una futura distribución.
 
 Dentro de C<eval>, debe, especialmente, recordar que es lo que está haciendo en cada momento:
 
@@ -1266,7 +1266,7 @@ X<exec> X<execute> X<ejecutar>
 
 =for Pod::Functions abandon this program to run another
 
-La función C<exec> ejecuta un comando del sistema I<y nunca regresa>; use C<system> en lugar de C<exec> si quiere que regrese.  Fallará y devolverá falso sólo si el comando no existe I<y> es ejecutado directamente en lugar de hacerlo con el shell de comandos del sistema (ver abajo).
+La función C<exec> ejecuta un comando del sistema I<y nunca regresa>; use C<system> en lugar de C<exec> si quiere que regrese.  Fallará y devolverá falso sólo si el comando no existe I<y> se ejecuta directamente en lugar de hacerlo con el shell de comandos del sistema (ver abajo).
 
 Como es un error normal usar C<exec> en lugar de C<system>, Perl le avisará si C<exec> es llamado en contexto vacío, y si hay alguna instrucción a continuación que no sea C<die>, C<warn> o C<exit> (si C<-w> está puesto -pero usted, siempre lo tiene así, ¿verdad?-).  Si I<verdaderamente> quiere continuar un C<exec> con otra instrucción, puede usar algunas de estas formas para evitar el aviso:
 
@@ -1290,7 +1290,7 @@ o, más directamente,
 
     exec {'/bin/csh'} '-sh';  # finge que es un shell de login
 
-Cuando los argumentos son ejecutados vía el shell del sistema, los resultados están sujetos a sus peculiaridades y capacidades.  Ver L<perlop/"`STRING`"> para los detalles.
+Cuando los argumentos se ejecutan por medio del shell del sistema, los resultados están sujetos a sus peculiaridades y capacidades.  Ver L<perlop/"`STRING`"> para los detalles.
 
 Usar un objeto indirecto con C<exec> o C<system> es también más seguro.  Este uso (que también funciona bien con system()) fuerza la interpretación de los argumentos como una lista multievaluada, incluso si la lista sólo tiene un argumento.  De esta forma estará protegido de la expansión de los comodines del shell o de la división en palabras con un espacio en blanco dentro de ellas.
 
@@ -1327,7 +1327,7 @@ exists también pueden ser llamado sobre elementos de array, pero su comportamie
 
 Un elemento de un hash o de un array puede ser verdadero sólo si está definido, y está definido solo si ya existe, pero lo inverso no es necesariamente cierto.
 
-Dada una expresión que especifica el nombre de una subrutina, devuelve verdadero si la subrutina especificada ha sido declarada, incluso si esta está indefinida.  Mencionar el nombre de una subrutina para saber si existe o está definida no cuenta como si fuera su declaración.  Note que una subrutina que no existe puede ser llamada: su paquete puede tener un método C<AUTOLOAD> que la hace aparecer la primera vez que es llamada; ver L<perlsub>.
+Dada una expresión que especifica el nombre de una subrutina, devuelve verdadero si la subrutina especificada ha sido declarada, incluso si esta está indefinida.  Mencionar el nombre de una subrutina para saber si existe o está definida no cuenta como si fuera su declaración.  Note que puede llamarse a una subrutina que no existe: su paquete puede tener un método C<AUTOLOAD> que la hace aparecer la primera vez que se le llama; ver L<perlsub>.
 
     print "Existe\n"   if exists  &subrutina;
     print "Definido\n" if defined &subrutina;
@@ -1373,7 +1373,7 @@ Ver también C<die>.  Si EXPR es omitida, sale con estado C<0>.  Los únicos val
 
 No use C<exit> para abortar una subrutina si existe la posibilidad de que alguien pueda capturar el error que ocurrió.  Use en su lugar C<die>, que puede ser atrapado por un C<eval>.
 
-La función exit() no siempre sale de forma inmediata.  exit() llama primero a cualquier rutina definida C<END>, pero estas rutinas C<END> pueden abortar la salida por sí mismas.  Igualmente cualquier destructor de objetos que necesite ser llamado es llamado antes de la salida real.  Las rutinas C<END> y los destructores pueden cambiar el estado de salida modificando C<$?>.  Si esto es un problema, puede llamar a C<POSIX:_exit($estado)> para saltar el procesado de END y de los destructores.
+La función exit() no siempre sale de forma inmediata.  exit() llama primero a cualquier rutina definida C<END>, pero estas rutinas C<END> pueden abortar la salida por sí mismas.  Igualmente cualquier destructor de objetos que necesite ser llamado, lo será antes de la salida real.  Las rutinas C<END> y los destructores pueden cambiar el estado de salida modificando C<$?>.  Si esto es un problema, puede llamar a C<POSIX:_exit($estado)> para saltar el procesado de END y de los destructores.
 Ver L<perlmod> para los detalles.
 
 Cuestiones de portabilidad: L<perlport/exit>.
@@ -1473,7 +1473,7 @@ X<fileno>
 Devuelve el descriptor de archivo para un identificador de archivo, o indefinido si el identificador de archivo no está abierto.  Si no hay un descriptor de archivo real al nivel del sistema operativo, como puede suceder con identificadores de archivo relacionados con objetos de memoria a través de C<open> con una referencia para el tercer argumento, se devuelve -1.
 
 Esto es principalmente útil para construir bitmaps para C<select> y operaciones POSIX de bajo nivel sobre tty.
-Si el IDENTIFICADOR_ARCHIVO es una expresión, el valor es tomado como un identificador de archivo indirecto, generalmente su nombre.
+Si el IDENTIFICADOR_ARCHIVO es una expresión, el valor se toma como un identificador de archivo indirecto, generalmente su nombre.
 
 Puede usar esto para encontrar cuándo dos identificadores de archivos se refieren al mismo descriptor subyacente:
 
@@ -1545,7 +1545,7 @@ Si usted hace un C<fork> sin luego esperar a sus hijos, irá acumulando zombies.
 Note que si su hijo hereda los descriptores de archivo del sistema como STDIN y STDOUT que estén conectados a una tubería o a un socket, incluso si usted sale del programa, el servidor remoto (por ejemplo, un script CGI o un proceso lanzado en segundo plano desde un shell remoto) no se dará cuenta de que se ha ido.
 Deberá reabrirlos a F</dev/null> si eso es un problema.
 
-En algunas plataformas, como Windows, en donde la llamada del sistema fork() no está disponible, Perl puede ser compilado para emular fork() en el intérprete de Perl.
+En algunas plataformas, como Windows, en donde la llamada del sistema fork() no está disponible, Perl se puede compilar para emular fork() en el intérprete de Perl.
 La emulación se ha diseñado, en el ámbito del programa Perl, para ser tan compatible como sea posible con el fork() de Unix.
 Sin embargo, tiene limitaciones que tienen que ser consideradas en código que pretenda ser portable.
 Vea L<perlfork> para más detalles.
@@ -1592,7 +1592,7 @@ X<getc> X<getchar> X<character> X<file, read> X<archivo, lectura> X<carácter>
 
 =for Pod::Functions get the next character from the filehandle
 
-Devuelve el siguiente carácter desde el archivo de entrada asociado a IDENTIFICADOR_ARCHIVO, o el valor indefinido al final del archivo, o si ocurrió un error (en este último caso, se actualiza C<$!>).  Si IDENTIFICADOR_ARCHIVO se omite, se lee desde STDIN.  Esto no es particularmente eficiente.  Sin embargo, esto no puede ser usado para extraer caracteres sueltos sin esperar a que el usuario pulse la tecla de I<Enter>.  Para esto, intente algo como esto:
+Devuelve el siguiente carácter desde el archivo de entrada asociado a IDENTIFICADOR_ARCHIVO, o el valor indefinido al final del archivo, o si ocurrió un error (en este último caso, se actualiza C<$!>).  Si IDENTIFICADOR_ARCHIVO se omite, se lee desde STDIN.  Esto no es particularmente eficiente.  Sin embargo, esto no se puede usar para extraer caracteres sueltos sin esperar a que el usuario pulse la tecla de I<Enter>.  Para esto, intente algo como esto:
 
     if ($BSD_STYLE) {
         system "stty cbreak </dev/tty >/dev/tty 2>&1";
@@ -1847,7 +1847,7 @@ En sentido contrario, para resolver un nombre de host a la dirección IP puede e
         $ip_address = inet_ntoa($packed_ip);
     }
 
-Cerciórese de que C<gethostbyname()> es llamado en contexto ESCALAR y compruebe que su valor de retorno está definido.
+Cerciórese de que a C<gethostbyname()> se le llama en contexto ESCALAR y compruebe que su valor de retorno está definido.
 
 La función C<getprotobynumber>, a pesar de que sólo toma un argumento, tiene la precedencia de un operador de lista, así que tenga cuidado:
 
@@ -1955,7 +1955,7 @@ X<goto> X<jump> X<jmp>
 
 =for Pod::Functions create spaghetti code
 
-La forma C<goto-ETIQUETA> busca la instrucción etiquetada con ETIQUETA y continua la ejecución desde allí.  No se puede utilizar para salir de un bloque o una subrutina pasada a C<sort>.  Puede ser utilizada para ir a casi cualquier sitio que esté dentro del ámbito dinámico, incluyendo fuera de las subrutinas, pero es usualmente mucho mejor usar otras construcciones como C<last> o C<die>.
+La forma C<goto-ETIQUETA> busca la instrucción etiquetada con ETIQUETA y continua la ejecución desde allí.  No se puede utilizar para salir de un bloque o una subrutina pasada a C<sort>.  Se puede utilizar para ir a casi cualquier sitio que esté dentro del ámbito dinámico, incluyendo fuera de las subrutinas, pero es usualmente mucho mejor usar otras construcciones como C<last> o C<die>.
 El autor de Perl nunca ha sentido la necesidad de usar esta forma de C<goto> (en Perl, desde luego. C es otra historia).  (La diferencia con C es que no ofrece bucles nominales combinados con control de bucles.  Perl sí, y esto reemplaza a la mayor parte de los usos estructurados de C<goto> en otros lenguajes).
 
 La forma C<goto>-EXPR espera un nombre de etiqueta, cuyo ámbito será resuelto dinámicamente.  Esto permite crear C<goto> calculados como en FORTRAN, pero no está necesariamente recomendado si usted está optimizando, durante el mantenimiento:
@@ -1964,7 +1964,7 @@ La forma C<goto>-EXPR espera un nombre de etiqueta, cuyo ámbito será resuelto 
 
 Como se muestra en este ejemplo, C<goto-EXPR> está exento de la regla "se parece a una función".  Un par de paréntesis puestos a continuación no (necesariamente) delimitan su argumento.  C<goto("NE")."XT"> es equivalente a C<goto NEXT>.
 
-El uso de C<goto-LABEL> o C<goto-EXPR> para saltar en una construcción es obsoleto y emitirá una advertencia.  Incluso entonces, no se puede usar para ir a cualquier construcción que requiere inicialización, como una subrutina o un bucle C<foreach>.  Tampoco puede ser usada para ir a una construcción que ha sido optimizada.
+El uso de C<goto-LABEL> o C<goto-EXPR> para saltar en una construcción es obsoleto y emitirá una advertencia.  Incluso entonces, no se puede usar para ir a cualquier construcción que requiere inicialización, como una subrutina o un bucle C<foreach>.  Tampoco se puede usar para ir a una construcción que ha sido optimizada.
 
 La forma C<goto-&NOMBRE> es muy diferente de las otras formas de C<goto>.  De hecho, no es un goto en el sentido normal y no tiene el estigma asociado con los otros gotos.  En cambio, sale de la subrutina actual (perdiendo cualquier cambio hecho por local()) e inmediatamente llama a la subrutina indicada pasándole el valor actual de @_.  Esto se usa por subrutinas C<AUTOLOAD()> que desean cargar otra subrutina y fingen que ésta otra subrutina ha sido llamada en primer lugar (excepto que cualquier modificación a C<@_> en la subrutina actual se propaga a la otra).
 Después del C<goto>, ni siquiera C<caller()> será capaz de decir qué rutina fue llamada en primer lugar.
@@ -1988,7 +1988,7 @@ o equivalentemente,
 
     @foo = grep {!/^#/} @bar;    # quitar los comentarios
 
-Note que C<$_> es un alias al valor de la lista, por lo que puede ser usado para modificar los elementos de la LISTA.  Mientras que esto suele ser útil, puede causar resultados extraños si los elementos de la LISTA no son variables.
+Note que C<$_> es un alias al valor de la lista, por lo que se puede usar para modificar los elementos de la LISTA.  Mientras que esto suele ser útil, puede causar resultados extraños si los elementos de la LISTA no son variables.
 Semejantemente, grep devuelve alias de la lista original, como los alias de los elementos de la lista de las variables de los bucles for.  Es decir, modificar un elemento de la lista devuelto por grep (por ejemplo, en un C<foreach>, C<map> u otro C<grep>) modifica el elemento en la lista original.
 Esto es algo usualmente a ser evitado cuando se está escribiendo código claro.
 
@@ -2157,7 +2157,7 @@ El comportamiento de kill cuando el I<PROCESO> es el número cero o negativo dep
 Ver L<perlipc/"Señales"> para más detalles.
 
 En algunas plataformas como Windows, donde la llamada del sistema fork() no está disponible.
-Perl puede ser compilado para emular fork() a nivel del intérprete.
+Perl se puede compilar para emular fork() a nivel del intérprete.
 Esta emulación tiene limitaciones relacionadas con la muerte que tienen que ser consideradas, para código que se ejecute en Windows y código que tenga la intención de ser portable.
 
 Vea L<perlfork> para más detalles.
@@ -2182,7 +2182,7 @@ El comando C<last> es como la instrucción C<break> del C (usada en bucles); inm
 
 C<last> no puede usarse para salir de un bloque que devuelve un valor como en C<eval {}>, C<sub {}> o C<do {}>, y no debe ser usado para salir de una operación grep() o map().
 
-Note que un bloque por sí mismo es semánticamente idéntico a un bucle que se ejecuta una vez.  Así, C<last> puede ser usado para salir prematuramente de este bloque.
+Note que un bloque por sí mismo es semánticamente idéntico a un bucle que se ejecuta una vez.  Así, C<last> se puede usar para salir prematuramente de este bloque.
 
 Ver también L</continue> para una ilustración de cómo funcionan C<last>, C<next> y C<redo>.
 
@@ -2451,7 +2451,7 @@ es sólo una manera divertida de escribir
         $hash{una_clave_para($_)} = $_;
     }
 
-Note que C<$_> es un alias al valor de la lista, por lo que puede ser usado para modificar los elementos de la LISTA.  Mientras que esto suele ser útil, puede causar resultados extraños si los elementos de la LISTA no son variables.
+Note que C<$_> es un alias al valor de la lista, por lo que se puede usar para modificar los elementos de la LISTA.  Mientras que esto suele ser útil, puede causar resultados extraños si los elementos de la LISTA no son variables.
 El uso de un bucle C<foreach> normal para este propósito sería más claro en la mayoría de los casos.  Vea también L</grep> para un array compuesto por los elementos de la lista original en que el BLOQUE o EXPR se evalúa como verdadero.
 
 Si C<$_> es léxico en el ámbito cuando el C<map> aparece (porque se ha declarado con C<my $_>), entonces, además de ser un alias local a los elementos de la lista, C<$_> sigue siendo léxico dentro del bloque, es decir, no puede ser visto desde el exterior, evitando cualquier potencial efecto secundario.
@@ -2646,7 +2646,7 @@ Estos prefijos se corresponden con los modos de la función fopen(3) de C<r>, C<
 
 En las formas de la llamada de uno y de dos argumentos, el modo y el nombre del archivo debe ser concatenados (en ese orden), preferiblemente separados por espacio en blanco.  Puede -pero no debe- omitir el modo en estos formatos cuando ese modo sea C<< < >>.  Siempre es más seguro utilizar el formato de dos argumentos de C<open> si el argumento con el nombre de archivo es un literal bien visible.
 
-Para tres o más argumentos, cuando MODO es C<|->, el nombre del archivo es interpretado como un comando cuya salida va a ser entubada, y si MODO es <-|>, el nombre del archivo es interpretado como un comando que entuba la salida hacia nosotros.  En la forma de dos argumentos (y un argumento), debe sustituir el guión (C<->) por el comando.
+Para tres o más argumentos, cuando MODO es C<|->, el nombre del archivo se interpreta como un comando cuya salida va a ser entubada, y si MODO es <-|>, el nombre del archivo se interpreta como un comando que entuba la salida hacia nosotros.  En la forma de dos argumentos (y un argumento), debe sustituir el guión (C<->) por el comando.
 Ver L<perlipc/"Usando open() por IPC"> para más ejemplos de sobre esto.
 (No se le permite hacer un C<open> a un comando que entube tanto en la entrada I<como> en la salida, pero vea L<IPC::Open2>, L<IPC::Open3>, y L<perlipc/"Comunicación bidireccional con otro proceso"> para alternativas sobre esto).
 
@@ -2867,7 +2867,7 @@ permitirá al usuario especificar un argumento de la forma C<"rsh cat archivo |"
 
 tendrá exactamente las restricciones contrarias.
 
-Si busca un "auténtico" C<open> como en C (vea C<open(2)> en su sistema), entonces debe usar la función C<sysopen>, que no incluye ninguna magia (pero puede utilizar, sutilmente, diferentes modos de acceso a archivos que con el open() de Perl, que es asignado a la función del C fopen()).  Esta es otra manera de proteger los nombres de archivo de su interpretación.  Por ejemplo:
+Si busca un "auténtico" C<open> como en C (vea C<open(2)> en su sistema), entonces debe usar la función C<sysopen>, que no incluye ninguna magia (pero puede utilizar, sutilmente, diferentes modos de acceso a archivos que con el open() de Perl, que se asigna a la función del C fopen()).  Esta es otra manera de proteger los nombres de archivo de su interpretación.  Por ejemplo:
 
     use IO::Handle;
     sysopen(HANDLE, $ruta, O_RDWR|O_CREAT|O_EXCL)
@@ -2908,7 +2908,7 @@ X<opendir>
 =for Pod::Functions open a directory
 
 Abre un directorio llamado EXPR para ser procesado por C<readdir>, C<telldir>, C<seekdir>, C<rewinddir>, y C<closedir>.  Devuelve verdadero si tuvo éxito.
-IDENTIFICADOR_DIR puede ser una expresión cuyo valor puede ser usado como un identificador de directorio indirecto, normalmente el nombre real del identificador.  Si IDENTIFICADOR_DIR es una variable escalar indefinida (o elemento array o hash), a la variable se le asigna una referencia a un nuevo identificador de directorio anónimo; es decir, es autovivificado.
+IDENTIFICADOR_DIR puede ser una expresión cuyo valor se puede usar como un identificador de directorio indirecto, normalmente el nombre real del identificador.  Si IDENTIFICADOR_DIR es una variable escalar indefinida (o elemento array o hash), a la variable se le asigna una referencia a un nuevo identificador de directorio anónimo; es decir, es autovivificado.
 Los IDENTIFICADOR_DIR tienen su propio espacio de nombres separados de los IDENTIFICADORes de archivo.
 
 Vea el ejemplo en C<readdir>.
@@ -2981,7 +2981,7 @@ X<pack>
 
 =for Pod::Functions convert a list into a binary representation
 
-Toma una LISTA de valores y la convierte en una cadena usando las reglas dadas por la PLANTILLA.  La cadena resultante es la concatenación de los valores convertidos.  Normalmente, cada valor convertido se parece a su representación a nivel de máquina.  Por ejemplo, en máquinas de 32 bits, un entero puede ser representado por una secuencia de 4 bytes, que en Perl se presentará como una cadena de cuatro caracteres de longitud. 
+Toma una LISTA de valores y la convierte en una cadena usando las reglas dadas por la PLANTILLA.  La cadena resultante es la concatenación de los valores convertidos.  Normalmente, cada valor convertido se parece a su representación a nivel de máquina.  Por ejemplo, en máquinas de 32 bits, un entero se puede representar por una secuencia de 4 bytes, que en Perl se presentará como una cadena de cuatro caracteres de longitud. 
 
 Vea L<perlpacktut> para una introducción a esta función.
 
@@ -3083,7 +3083,7 @@ Se aplica las siguientes reglas:
 
 =item *
 
-Cada letra puede ser seguida opcionalmente por un número que indica el número de repeticiones.  Un número de repeticiones podría estar opcionalmente encerrada entre paréntesis, como en C<pack("C[80]", @arr)>.  El número de repeticiones engulle a tantos valores de la LISTA cuando es usada con todos los tipos de formato que no sean C<a>, C<A>, C<Z>, C<b>, C<B>, C<h>, C<H>, C<@>, C<.>, C<x>, C<X> y C<P>, donde significa otra cosa, descrita abajo.  El suministro de un C<*> para el número de repeticiones en lugar de un número significa usar tantos elementos como queden, a excepción de:
+Cada letra puede, opcionalmente, estar seguida por un número que indica el número de repeticiones.  Un número de repeticiones podría estar opcionalmente encerrada entre paréntesis, como en C<pack("C[80]", @arr)>.  El número de repeticiones engulle a tantos valores de la LISTA cuando se usa con todos los tipos de formato que no sean C<a>, C<A>, C<Z>, C<b>, C<B>, C<h>, C<H>, C<@>, C<.>, C<x>, C<X> y C<P>, donde significa otra cosa, descrita abajo.  El suministro de un C<*> para el número de repeticiones en lugar de un número significa usar tantos elementos como queden, a excepción de:
 
 =over 
 
@@ -3149,7 +3149,7 @@ Si la longitud de la cadena de entrada no es divisible por 8, el resto se rellen
 Si la cadena de entrada es más larga de lo necesario, los caracteres sobrantes se ignoran.
 
 Un C<*> como contador de repetición utiliza todos los caracteres del campo de entrada.  
-Al desempaquetar, los bits son convertidos a una cadena de C<0> y C<1>.
+Al desempaquetar, los bits se convierten a una cadena de C<0> y C<1>.
 
 =item *
 
@@ -3178,7 +3178,7 @@ La plantilla C</> permite empaquetar y desempaquetar una secuencia de elementos 
 
 Para C<pack>, escriba I<longitud-item>C</>I<secuencia-item>, y la I<longitud-item> indica el valor de la longitud de lo que está empaquetado.  Formatos de mayor uso son los empaquetados de enteros como C<n> para las cadenas de Java, C<w> de ASN.1 o SNMP, y C<N> de XDR de Sun
 
-Para C<pack>, I<secuencia-item> puede tener un contador de repeticiones, en cuyo caso el mínimo de él y del número de elementos disponibles es usado como el argumento para <longitud-item>.  Si no tiene contador de repeticiones o utiliza un '*', se utiliza el número de elementos disponibles.
+Para C<pack>, I<secuencia-item> puede tener un contador de repeticiones, en cuyo caso el mínimo de él y del número de elementos disponibles se usa como el argumento para <longitud-item>.  Si no tiene contador de repeticiones o utiliza un '*', se utiliza el número de elementos disponibles.
 
 Para C<unpack>, se usa una pila interna de argumentos enteros desempaquetados.  Escriba C</>I<secuencia-item> y el contador de repeticiones se obtiene extrayéndolo del último elemento de la pila.  La I<secuencia-item> no debe tener un contador de repeticiones.
 
@@ -3431,7 +3431,7 @@ Ejemplos:
     $foo = pack('(sl)<', -42, 4711);
     # exactamente lo mismo
 
-La misma plantilla puede ser usada, generalmente, con unpack().
+La misma plantilla se puede usar, generalmente, con unpack().
 
 =item package ESPACIO_NOMBRES
 
@@ -3488,7 +3488,7 @@ Extrae y devuelve el último valor del array, acortando el array en un elemento.
 
 Devuelve el valor indefinido si el array está vacío, aunque esto también puede suceder en otras situaciones.  Si ARRAY se omite, se extrae desde el array C<@ARGV> en el programa principal, y del array C<@_> en subrutinas, igual que C<shift>.
 
-A partir de Perl 5.14, C<pop> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento es desreferenciado automáticamente.  Este aspecto de C<pop> es considerado altamente experimental.
+A partir de Perl 5.14, C<pop> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento se desreferencia automáticamente.  Este aspecto de C<pop> es considerado altamente experimental.
 El comportamiento exacto puede cambiar en una futura versión de Perl.
 
 Para no confundir a los posibles usuarios de su código, que ejecuten versiones anteriores de Perl, con errores de sintaxis misteriosos, ponga este tipo de cosas en la parte superior de su archivo para indicar que el código funciona I<sólo> en versiones Perl de cosechas recientes:
@@ -3502,7 +3502,7 @@ X<pos> X<match, position> X<coincidencia, posición>
 
 =for Pod::Functions find or set the offset for the last/next m//g search
 
-Devuelve el desplazamiento donde la última búsqueda C<m//g> terminó para la variable en cuestión (C<$_> es usada cuando no se especifica ninguna variable).  Tenga en cuenta que 0 es un desplazamiento válido de la coincidencia.  C<undef> indica que la posición de búsqueda se restablece (generalmente debido a un error de coincidencia, pero también puede ser porque aún no ha sido ejecutada la coincidencia sobre el escalar).
+Devuelve el desplazamiento donde la última búsqueda C<m//g> terminó para la variable en cuestión (C<$_> se usa cuando no se especifica ninguna variable).  Tenga en cuenta que 0 es un desplazamiento válido de la coincidencia.  C<undef> indica que la posición de búsqueda se restablece (generalmente debido a un error de coincidencia, pero también puede ser porque aún no ha sido ejecutada la coincidencia sobre el escalar).
 
 C<pos> accede directamente a la ubicación utilizada por el motor de expresiones regulares para almacenar el desplazamiento, por lo que asignar a C<pos> cambiará ese desplazamiento, por lo que también influirá en la aserción de ancho cero C<\G> en las expresiones regulares.  Estos dos efectos toman lugar en la siguiente coincidencia, por lo que no puede afectar a la posición con C<pos> durante la coincidencia actual, como en C<(?{pos() = 5})> o C<s//pos() = 5/e>.
 
@@ -3522,11 +3522,11 @@ X<print>
 =for Pod::Functions output a list to a filehandle
 
 Imprime una cadena o una lista de cadenas.  Devuelve verdadero si tuvo éxito.
-IDENTIFICADOR_ARCHIVO puede ser una variable escalar conteniendo el nombre de o una referencia al identificador de archivo, introduciendo así un nivel más de indirección.  (NOTA: Si IDENTIFICADOR_ARCHIVO es una variable y el siguiente I<token> es un término, puede ser malinterpretado como un operador a menos que interponga un C<+> o ponga los argumentos entre paréntesis).  Si se omite IDENTIFICADOR_ARCHIVO, se imprime al canal de salida seleccionado por última vez (vea L</select>).  Si la LISTA se omite, se imprime C<$_> al actual canal de salida seleccionado.  Para utilizar solamente IDENTIFICADOR_ARCHIVO para imprimir en él, el contenido de C<$_>, debe ser un identificador de archivo real, como C<FH>, no uno indirecto como C<$fh>.  Para configurar el controlador de salida predeterminado a otro valor distinto que STDOUT, use el operador C<select>.
+IDENTIFICADOR_ARCHIVO puede ser una variable escalar conteniendo el nombre de o una referencia al identificador de archivo, introduciendo así un nivel más de indirección.  (NOTA: Si IDENTIFICADOR_ARCHIVO es una variable y el siguiente I<token> es un término, se puede malinterpretar como un operador a menos que interponga un C<+> o ponga los argumentos entre paréntesis).  Si se omite IDENTIFICADOR_ARCHIVO, se imprime al canal de salida seleccionado por última vez (vea L</select>).  Si la LISTA se omite, se imprime C<$_> al actual canal de salida seleccionado.  Para utilizar solamente IDENTIFICADOR_ARCHIVO para imprimir en él, el contenido de C<$_>, debe ser un identificador de archivo real, como C<FH>, no uno indirecto como C<$fh>.  Para configurar el controlador de salida predeterminado a otro valor distinto que STDOUT, use el operador C<select>.
 
-El valor actual de C<$,> (si lo tiene) es impreso entre cada elemento de la LISTA.  El valor actual de C<$\> (si lo tiene) es impreso después de que toda la LISTA haya sido impresa.  Debido a que print toma una LISTA, cualquier cosa en la LISTA es evaluada en contexto de lista, incluyendo cualquier subrutina que devuelva listas.  Tenga cuidado de no seguir la palabra clave print con un paréntesis de apertura a menos que desee que el correspondiente paréntesis de cierre ponga fin a los argumentos de la impresión; ponga paréntesis alrededor de todos los argumentos (o interponga un C<+>, pero esto no parece tan bonito).
+El valor actual de C<$,> (si lo tiene) es impreso entre cada elemento de la LISTA.  El valor actual de C<$\> (si lo tiene) es impreso después de que toda la LISTA haya sido impresa.  Debido a que print toma una LISTA, cualquier cosa en la LISTA se evalúa en contexto de lista, incluyendo cualquier subrutina que devuelva listas.  Tenga cuidado de no seguir la palabra clave print con un paréntesis de apertura a menos que desee que el correspondiente paréntesis de cierre ponga fin a los argumentos de la impresión; ponga paréntesis alrededor de todos los argumentos (o interponga un C<+>, pero esto no parece tan bonito).
 
-Si está almacenando identificadores en un array o hash, o en general, en cualquier expresión más compleja que un simple identificador o una sencilla variable escalar sin subíndice, para acceder a él, tendrá que utilizar un bloque que retorne el valor del identificador de archivo, en cuyo caso la LISTA no puede ser omitida:
+Si está almacenando identificadores en un array o hash, o en general, en cualquier expresión más compleja que un simple identificador o una sencilla variable escalar sin subíndice, para acceder a él, tendrá que utilizar un bloque que retorne el valor del identificador de archivo, en cuyo caso la LISTA no se puede omitir:
 
     print { $archivos[$i] } "cosas\n";
     print { $OK ? STDOUT : STDERR } "cosas\n";
@@ -3572,7 +3572,7 @@ Considera a ARRAY como una pila añadiendo los valores de LISTA al final de ARRA
 
 pero es más eficiente.  Devuelve el número de elementos en el ARRAY tras la llamada a C<push>.
 
-A partir de Perl 5.14, C<push> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento es desreferenciado automáticamente.  Este aspecto de C<push> es considerado altamente experimental.
+A partir de Perl 5.14, C<push> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento se desreferencia automáticamente.  Este aspecto de C<push> está considerado altamente experimental.
 El comportamiento exacto puede cambiar en una futura versión de Perl.
 
 Para no confundir a los posibles usuarios de su código, que ejecuten versiones anteriores de Perl, con errores de sintaxis misteriosos, ponga este tipo de cosas en la parte superior de su archivo para indicar que el código funciona I<sólo> en versiones Perl de cosechas recientes:
@@ -3640,7 +3640,7 @@ o:
 Ambas dejará la instrucción como estaba.
 Normalmente, quotemeta() o C<\Q> deben ser usados al aceptar cadenas de entrada provenientes del usuario.
 
-En Perl 5.14, todos los caracteres no ASCII son escapados en cadenas no codificadas como UTF-8, pero sí son escapadas en cadenas UTF-8.
+En Perl 5.14, todos los caracteres no ASCII se marcan con caracteres de escape en las cadenas no codificadas como UTF-8; en las cadenas UTF-8 no se marcan.
 
 A partir de Perl v5.16, Perl adopta una estrategia definida en Unicode en el escapado de caracteres no ASCII; el escapado de caracteres ASCII no ha cambiado.
 
@@ -3689,9 +3689,9 @@ X<read> X<file, read> X<archivo, leer>
 
 Intento de leer LONGITUD I<caracteres> de datos en la variable ESCALAR del IDENTIFICADOR_ARCHIVO especificado.  Devuelve el número de caracteres actualmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso se actualiza el valor de C<$!>).  ESCALAR crecerá o se reducirá de manera que el último carácter leído es el último carácter del escalar después de la lectura.
 
-Un DESPLAZAMIENTO puede ser especificado para colocar los datos leídos en algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
+Un DESPLAZAMIENTO se puede especificar para colocar los datos leídos en algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
 
-La llamada es implementada en términos de Perl o de la función nativa fread(3) de su sistema.  Para obtener una auténtica llamada del sistema read(2), vea L<sysread|/sysread IDENTIFICADOR_ARCHIVO,ESCALAR,LONGITUD,DESPLAZAMIENTO>.
+La llamada se implementa en términos de Perl o de la función nativa fread(3) de su sistema.  Para obtener una auténtica llamada del sistema read(2), vea L<sysread|/sysread IDENTIFICADOR_ARCHIVO,ESCALAR,LONGITUD,DESPLAZAMIENTO>.
 
 Note los I<caracteres>: dependiendo del estado del identificador de archivo, son leídos bytes (8-bit) o caracteres.  Por defecto, todos los identificadores de archivo operan en bytes, pero por ejemplo, si el identificador ha sido abierto con la capa de E/S C<:utf8> (vea L</open>, y el pragma C<open>, L<open>), la E/S operará en caracteres codificados en UTF-8, no bytes.  Del mismo modo, para el pragma C<:encoding>: en este caso casi todos los caracteres se pueden leer.
 
@@ -4058,7 +4058,7 @@ Si se utiliza sin argumentos en contexto escalar, reverse() invierte C<$_>.
 
 Tenga en cuenta que invertir un array en sí mismo (como en C<@a = reverse @a>) preservará elementos inexistentes cuando le sea posible, es decir, para arrays no mágicos o arrays atados con métodos C<EXISTS> y C<DELETE>.
 
-Este operador también es útil para invertir un hash, aunque existen algunas salvedades.  Si un valor está duplicado en el hash original, sólo uno de ellos puede ser representado como clave en el hash invertido.  Además, esto tiene el efecto de desmontar un hash y construir uno nuevo, algo que puede tardar algún tiempo en un hash grande, como en un archivo DBM.
+Este operador también es útil para invertir un hash, aunque existen algunas salvedades.  Si un valor está duplicado en el hash original, sólo uno de ellos se puede representar como clave en el hash invertido.  Además, esto tiene el efecto de desmontar un hash y construir uno nuevo, algo que puede tardar algún tiempo en un hash grande, como en un archivo DBM.
 
     %por_nombre = reverse %por_direccion;  # Invierte el hash
 
@@ -4345,7 +4345,7 @@ X<shift>
 
 Extrae el primer valor del array y lo devuelve, acortando el array en uno y moviendo todos los demás hacia arriba.  Si no hay elementos en el array, devuelve el valor undef.  Si se omite ARRAY, se desplaza el array C<@_> dentro del ámbito léxico de subrutinas y formatos, y el array C<@ARGV> si está fuera de una subrutina y también dentro de los ámbitos léxicos establecidos por construcciones como C<eval CADENA>, C<BEGIN {}>, C<INIT {}>, C<CHECK {}>, C<UNITCHECK {}> y C<END {}>.
 
-A partir de Perl 5.14, C<shift> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento es desreferenciado automáticamente.  Este aspecto de C<shift> es considerado altamente experimental.
+A partir de Perl 5.14, C<shift> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento se desreferencia automáticamente.  Este aspecto de C<shift> es considerado altamente experimental.
 El comportamiento exacto puede cambiar en una futura versión de Perl.
 
 Para no confundir a los posibles usuarios de su código, que ejecuten versiones anteriores de Perl, con errores de sintaxis misteriosos, ponga este tipo de cosas en la parte superior de su archivo para indicar que el código funciona I<sólo> en versiones Perl de cosechas recientes:
@@ -4662,7 +4662,7 @@ Ejemplo, suponiendo que las longitudes de array se pasan antes que los propios a
     }
     if (&aeq($len,@foo[1..$len],0+@bar,@bar)) { ... }
 
-A partir de Perl 5.14, C<splice> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento es desreferenciado automáticamente.  Este aspecto de C<splice> es considerado altamente experimental.
+A partir de Perl 5.14, C<splice> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento se desreferencia automáticamente.  Este aspecto de C<splice> es considerado altamente experimental.
 El comportamiento exacto puede cambiar en una futura versión de Perl.
 
 Para no confundir a los posibles usuarios de su código, que ejecuten versiones anteriores de Perl, con errores de sintaxis misteriosos, ponga este tipo de cosas en la parte superior de su archivo para indicar que el código funciona I<sólo> en versiones Perl de cosechas recientes:
@@ -5434,7 +5434,7 @@ X<sysread>
 
 Intenta leer LONGITUD bytes de datos en la variable ESCALAR desde el IDENTIFICADOR_ARCHIVO especificado, utilizando read(2).  Omite E/S con búfer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búfer de datos.  Devuelve el número de bytes realmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso, también se establece C<$!>).  ESCALAR crecerá o se reducirá de manera que el último byte leído sea el último byte del escalar después de la lectura.
 
-Un DESPLAZAMIENTO puede ser especificado para colocar los datos leídos en algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
+Un DESPLAZAMIENTO se puede especificar para colocar los datos leídos en algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
 
 No hay función syseof(), que está bien, ya que, de todos modos, eof() no funciona bien con los archivos de dispositivo (como los ttys).  Use sysread() y compruebe si el valor devuelto es 0 para decidir si ha llegado al final.
 
@@ -5840,7 +5840,7 @@ El opuesto de un C<shift>.  O lo contrario de un C<push>, dependiendo de cómo s
 
 Note que la LISTA se antepone en su conjunto, no un elemento a la vez, por lo que los elementos añadidos se mantienen en el mismo orden.  Utilice C<reverse> para hacer lo contrario.
 
-A partir de Perl 5.14, C<unshift> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento es desreferenciado automáticamente.  Este aspecto de C<unshift> es considerado altamente experimental.  El comportamiento exacto puede cambiar en una futura versión de Perl.
+A partir de Perl 5.14, C<unshift> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento se desreferencia automáticamente.  Este aspecto de C<unshift> es considerado altamente experimental.  El comportamiento exacto puede cambiar en una futura versión de Perl.
 
 Para no confundir a los posibles usuarios de su código, que ejecuten versiones anteriores de Perl, con errores de sintaxis misteriosos, ponga este tipo de cosas en la parte superior de su archivo para indicar que el código funciona I<sólo> en versiones Perl de cosechas recientes:
 

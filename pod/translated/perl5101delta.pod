@@ -18,7 +18,7 @@ El manejo de expresiones complejas por C<given>/C<when> de la instrucción switc
 
 =item Operadores flip-flop
 
-Los operadores flip-flop C<..> y C<...> ahora son evaluados en contexto booleano, siguiendo su semántica normal; vea L<perlop/"Operadores de rango">.
+Los operadores flip-flop C<..> y C<...> ahora se evalúan en contexto booleano, siguiendo su semántica normal; vea L<perlop/"Operadores de rango">.
 
 Tenga en cuenta que, como en Perl 5.10.0, C<when (1..10)> no servirá para probar si un valor es un número entero entre 1 y 10, así que en su lugar debería usar C<when ([1..10])> (nótese la referencia al array).
 
@@ -46,7 +46,7 @@ El operador de coincidencia inteligente C<~~> ya no es conmutativo. El comportam
 
 =item *
 
-Referencias a código con un prototipo vacío ya no son tratadas de forma especial.
+Ya no son tratadas de forma especial las referencias a código con un prototipo vacío.
 Se les pasa un argumento como a otras referencias de código (incluso si deciden ignorarlo).
 
 =item *
@@ -856,7 +856,7 @@ Bajo C<use locale>, la información local relevante está ahora almacenada en va
 
 =item *
 
-Ya no son llamados los métodos C<DESTROY> vacíos.
+Ya no se llaman los métodos C<DESTROY> vacíos.
 
 =back
 
@@ -1151,7 +1151,7 @@ En la versión 5.10.0, una combinación de C<use feature> y C<//ee> podría caus
 
 =item *
 
-C<-C> en la línea shebang (C<#!>) está una vez más permitido si también es especificado en la línea de comandos. C<-C> en la línea shebang era una muda no-operación I<si> no estaba también en la línea de comandos, por lo que Perl 5.10.0 lo rechazaba, lo que provocaba la ruptura de algunos scripts. Ahora perl comprueba si está también en la línea de comandos, y sólo muere si no es así [RT #67880].
+C<-C> en la línea shebang (C<#!>) está una vez más permitido si también se especifica en la línea de comandos. C<-C> en la línea I<shebang> era una muda no-operación I<si> no estaba también en la línea de comandos, por lo que Perl 5.10.0 lo rechazaba, lo que provocaba la ruptura de algunos I<scripts>. Ahora perl comprueba si está también en la línea de comandos, y sólo muere si no es así [RT #67880].
 
 =item *
 
@@ -1234,7 +1234,7 @@ La función C<Perl_croak_xs_usage> ha sido añadida como una envoltura para la C
 
 =item *
 
-Las funciones C<PerlIO_find_layer> y C<PerlIO_list_alloc> ahora son exportadas.
+Ahora son exportadas las funciones C<PerlIO_find_layer> y C<PerlIO_list_alloc>.
 
 =item *
 

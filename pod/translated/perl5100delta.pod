@@ -71,7 +71,7 @@ Esta característica fue aportada por Robin Houston.
 
 Ahora es posible escribir patrones recursivos sin usar la construcción C<(??{})>. Esta nueva manera es más eficiente, y en muchos casos, más fácil de leer.
 
-Cada paréntesis de captura puede ahora ser tratado como un patrón independiente que puede ser escrito con la sintaxis C<(?PARNO)> (C<PARNO> quiere decir "número de paréntesis"). Por ejemplo, el siguiente patrón coincidirá con pares de ángulos anidados y balanceados:
+Cada paréntesis de captura se puede tratar ahora como un patrón independiente que puede ser escrito con la sintaxis C<(?PARNO)> (C<PARNO> quiere decir "número de paréntesis"). Por ejemplo, el siguiente patrón coincidirá con pares de ángulos anidados y balanceados:
 
     /
      ^                      # comienzo de línea
@@ -94,7 +94,7 @@ Los usuarios PCRE deben tener en cuenta que la función recursiva de las expresi
 =item Búferes de captura nombrados
 
 Ahora es posible poner nombres a los paréntesis de captura en un patrón, y referirse a los contenidos capturados por ese nombre. La sintaxis del nombrado es C<< (?<NOMBRE>...) >>.
-Es posible retrorreferirse a un búfer nombrado con la sintaxis C<< \k<NOMBRE> >>. En código, los nuevos hash mágicos C<%+> y C<%-> puede ser usados para acceder a los contenidos de los búfer de captura.
+Es posible retrorreferirse a un búfer nombrado con la sintaxis C<< \k<NOMBRE> >>. En código, se pueden usar los nuevos hash mágicos C<%+> y C<%-> para acceder a los contenidos de los búferes de captura.
 
 Por lo tanto, para reemplazar todos los caracteres duplicados con una sola copia, se podría escribir
 
@@ -108,9 +108,9 @@ Solo los búfer con contenido definido será "visible" en el hash C<%+>, por lo 
 
 El hash C<%-> es un poco más completo, ya que él contendrá referencias a array que almacenan valores para todos los búfer de captura con el mismo nombre, si existiera más de uno de ellos.
 
-C<%+> y C<%-> son implementados como hash atados a través del nuevo módulo C<Tie::Hash::NamedCapture>.
+C<%+> y C<%-> se implementan como hash enlazados a través del nuevo módulo C<Tie::Hash::NamedCapture>.
 
-Los usuarios expuestos al motor de expresiones regulares de .NET encontrarán que la implementación de perl difiere en que la ordenación numérica de los búfer es secuencial, y no "sin nombre, primero, con nombre, después". Así, en el patrón
+Los usuarios expuestos al motor de expresiones regulares de .NET encontrarán que la implementación de perl difiere en que la ordenación numérica de los búferes es secuencial, y no "sin nombre, primero, con nombre, después". Así, en el patrón
 
    /(A)(?<B>B)(C)(?<D>D)/
 
@@ -154,7 +154,7 @@ say() es una nueva función predefinida; sólo está disponible cuando C<use fea
 
 =head2 C<$_> léxico
 
-La variable por defecto C<$_> ahora puede ser lexicalizada, declarándola como cualquier otra variable léxica, con un simple
+La variable por defecto C<$_> se puede ahora lexicalizar, declarándola como cualquier otra variable léxica, con un simple
 
     my $_;
 
@@ -174,7 +174,7 @@ Esto tiene una pequeña consecuencia de incompatibilidad: la función prototype(
 
 C<UNITCHECK>, un nuevo bloque de código especial ha sido incorporado, además de C<BEGIN>, C<CHECK>, C<INIT> y C<END>.
 
-Los bloques C<CHECK> e C<INIT>, si bien son útiles para algunos propósitos específicos, siempre son ejecutados en la transición entre la compilación y la ejecución del programa principal, y por lo tanto no sirven para nada cada vez que el código se carga en tiempo de ejecución. Por otro lado, los bloques C<UNITCHECK> se ejecutan justo después de que la unidad que los ha definido ha sido compilada. Vea L<perlmod> para más información. (Alex Gough)
+Los bloques C<CHECK> e C<INIT>, si bien son útiles para algunos propósitos específicos, siempre se ejecutan en la transición entre la compilación y la ejecución del programa principal, y por lo tanto no sirven para nada cada vez que el código se carga en tiempo de ejecución. Por otro lado, los bloques C<UNITCHECK> se ejecutan justo después de que la unidad que los ha definido ha sido compilada. Vea L<perlmod> para más información. (Alex Gough)
 
 =head2 Nuevo pragma, C<mro>
 
@@ -187,9 +187,9 @@ Tenga en cuenta que, debido a los cambios en la implementación de la búsqueda 
 
 La función readdir() puede devolver un "nombre de archivo corto" cuando el nombre de archivo largo contiene caracteres fuera de la página de códigos ANSI.  Del mismo modo Cwd::cwd() puede devolver un nombre de directorio corto, y glob() también puede devolver nombres cortos.  En el sistema de archivos NTFS estos nombres cortos siempre se pueden representar en la página de códigos ANSI.  Esto no será cierto para todos los controladores del sistema de archivos; por ejemplo, el sistema de archivos FAT almacena los nombres de archivo cortos en la página de códigos OEM, por lo que algunos archivos en volúmenes FAT permanecerán inaccesibles usando la API ANSI.
 
-Del mismo modo, $^X, @INC, y $ENV{PATH} son preprocesadas en el arranque para asegurarse de que todas las rutas son válidos con la página de códigos ANSI (si es posible).
+Del mismo modo, $^X, @INC, y $ENV{PATH} son preprocesadas en el arranque para asegurarse de que todas las rutas son válidas con la página de códigos ANSI (si es posible).
 
-La función Win32::GetLongPathName() ahora devuelve en codificación UTF-8 el nombre correcto del archivo largo en lugar de utilizar caracteres de reemplazo para forzar a que el nombre esté en la página de códigos ANSI.  La nueva función Win32::GetANSIPathName() puede ser utilizada para convertir una ruta larga en una corta sólo si no puede ser representada con la página de códigos ANSI.
+La función Win32::GetLongPathName() ahora devuelve en codificación UTF-8 el nombre correcto del archivo largo en lugar de utilizar caracteres de reemplazo para forzar a que el nombre esté en la página de códigos ANSI.  La nueva función Win32::GetANSIPathName() se puede utilizar para convertir una ruta larga en una corta sólo si no puede ser representada con la página de códigos ANSI.
 
 Muchas otras funciones en el módulo C<Win32> han sido mejorados para aceptar argumentos codificados en UTF-8.  Por favor, vea L<Win32> para más detalles.
 
@@ -204,7 +204,7 @@ readline() ahora se refiere, por defecto, a C<*ARGV> si no se proporciona ningú
 
 =head2 Variables state()
 
-Una nueva clase de variables ha sido introducida. Las variables C<state> son similares a las variables C<my>, pero son declaradas con la palabra clave C<state> en lugar de C<my>. Son visibles sólo en su ámbito léxico, pero su valor es persistente: a diferencia de las variables C<my>, que no están definidos a la entrada de su ámbito, sino que conservan su valor anterior. (Rafael Garcia-Suarez, Nicholas Clark)
+Una nueva clase de variables ha sido introducida. Las variables C<state> son similares a las variables C<my>, pero se declaran con la palabra clave C<state> en lugar de C<my>. Son visibles sólo en su ámbito léxico, pero su valor es persistente: a diferencia de las variables C<my>, que no están definidos a la entrada de su ámbito, sino que conservan su valor anterior. (Rafael Garcia-Suarez, Nicholas Clark)
 
 Para utilizar las variables C<state>, es necesario que las active mediante el uso de
 
@@ -225,7 +225,7 @@ Vea L<< UNIVERSAL/"$obj->DOES( ROL )" >>.
 
 =head2 Formatos
 
-Los formatos se han mejorado en varios aspectos. Un nuevo campo, C<^*>, puede ser utilizado como ancho variable, en el texto una-línea-cada-vez. Caracteres nulos son ahora manejados correctamente en líneas de la imagen. Usando C<@#> y C<~~> juntos ahora producirán un error en tiempo de compilación, ya que esos campos de formato son incompatibles.
+Los formatos se han mejorado en varios aspectos. Un nuevo campo, C<^*>, se puede utilizar como ancho variable, en el texto una-línea-cada-vez. Caracteres nulos son ahora manejados correctamente en líneas de la imagen. Usando C<@#> y C<~~> juntos ahora producirán un error en tiempo de compilación, ya que esos campos de formato son incompatibles.
 L<perlform> ha sido mejorado, y diversos errores, corregidos.
 
 =head2 Modificadores de orden de bytes, para pack() y unpack()
@@ -288,7 +288,7 @@ C<mkdir()> sin argumentos ahora se refiere a C<$_>.
 
 La salida del comando interno dump se ha mejorado, de modo que los caracteres no imprimibles, como el nueva línea y la tecla de retroceso se emiten en notación C<\x>, en lugar de octal.
 
-La opción B<-C> no puede ser utilizada en la línea C<#!>. De todos modos no estaba funcionando de ninguna manera, ya que los flujos estándares ya estarían configurados en ese punto de la ejecución del intérprete de Perl. Puede utilizar binmode() en su lugar para obtener el comportamiento deseado.
+La opción B<-C> no se puede utilizar en la línea C<#!>. De todos modos no estaba funcionando de ninguna manera, ya que los flujos estándares ya estarían configurados en ese punto de la ejecución del intérprete de Perl. Puede utilizar binmode() en su lugar para obtener el comportamiento deseado.
 
 =head2 UCD 5.0.0
 
@@ -307,9 +307,9 @@ En plataformas Windows, C<kill(-9, $pid)> ahora mata a un árbol de procesos.
 
 =head2 Cadenas UTF-8 y empaquetamiento
 
-La semántica de pack() y unpack() en relación con datos codificados en UTF-8, ha cambiado. El procesamiento es ahora, por defecto, de carácter en carácter, en lugar de byte por byte siguiendo la codificación subyacente. En particular, el código que utiliza cosas como C<pack("a*", $cadena)> para mirar a través de la codificación de la $cadena, ahora, simplemente, devuelve la $cadena original. Las cadenas empaquetadas pueden también ser actualizadas durante el procesado, cuando almacene caracteres actualizados. Puede obtener el comportamiento anterior mediante el uso de C<use bytes>.
+La semántica de pack() y unpack() en relación con datos codificados en UTF-8, ha cambiado. El procesamiento es ahora, por defecto, de carácter en carácter, en lugar de byte por byte siguiendo la codificación subyacente. En particular, el código que utiliza cosas como C<pack("a*", $cadena)> para mirar a través de la codificación de la $cadena, ahora, simplemente, devuelve la $cadena original. Las cadenas empaquetadas también se pueden actualizar durante el procesado, cuando almacene caracteres actualizados. Puede obtener el comportamiento anterior mediante el uso de C<use bytes>.
 
-Para ser consistente con pack(), C<C0> en las plantillas de unpack(), indica que los datos se procesan en modo de caracteres, es decir, carácter por carácter; por el contrario, C<U0> en unpack() indica modo UTF-8, donde la cadena empaquetada se procesa en su formato codificado en Unicode UTF-8, de byte en byte. Esto es invertido con respecto a Perl 5.8.X, pero ahora es consistente entre pack() y unpack().
+Para ser consistente con pack(), C<C0> en las plantillas de unpack(), indica que los datos se procesan en modo de caracteres, es decir, carácter por carácter; por el contrario, C<U0> en unpack() indica modo UTF-8, donde la cadena empaquetada se procesa en su formato codificado en Unicode UTF-8, de byte en byte. Esto es lo contrario con respecto a Perl 5.8.X, pero ahora es consistente entre pack() y unpack().
 
 Además, C<C0> y C<U0> también se pueden utilizar en plantillas pack() para especificar, respectivamente, modo carácter y modo bytes.
 
@@ -353,7 +353,7 @@ Como un efecto secundario de esto, la sobrecarga de las constantes ahora se prop
 
 =head2 chdir FOO
 
-Una palabra sencilla como argumento a chdir() ahora es reconocida como un identificador de archivo.
+Una palabra sencilla como argumento a chdir() ahora se reconoce como un identificador de archivo.
 Versiones anteriores interpretaban la palabra sencilla como un nombre de directorio.
 (Gisle Aas)
 
@@ -451,7 +451,7 @@ Aún más módulos básicos están ahora también disponibles por separado a tra
 
 =item C<feature>
 
-El nuevo pragma C<feature> es utilizado para habilitar las nuevas características que puedan romper código antiguo. Vea L</"El pragma C<feature>"> más arriba.
+El nuevo pragma C<feature> se utiliza para habilitar las nuevas características que puedan romper código antiguo. Vea L</"El pragma C<feature>"> más arriba.
 
 =item C<mro>
 
@@ -621,7 +621,7 @@ C<Pod::Simple> ahora es la trastienda de varios módulos relacionados con Pod in
 C<Attribute::Handlers> ahora puede informar del archivo y número de línea del llamador.
 (David Feldman)
 
-Todos los atributos interpretados ahora son pasados como referencias de array. (Damian Conway)
+Todos los atributos interpretados ahora se pasan como referencias de array. (Damian Conway)
 
 =item C<B::Lint>
 
@@ -740,7 +740,7 @@ Algunos códigos escritos en puro perl que se estaban usando para recuperar las 
 =head2 Subrutinas constantes
 
 Las funciones incorporadas del intérprete ahora soportan un formato de memoria mucho más eficiente de las constantes que se pueden insertar en la traza del código (I<inline>). Almacenar una referencia a un valor constante en una tabla de símbolos es equivalente a un completo typeglob referenciando a una subrutina constante, pero usando unos 400 bytes menos de memoria. Este cacheo de la subrutina constante se actualiza automáticamente a un typeglob real con subrutina, si es necesario.
-El enfoque adoptado es análogo a la optimización del espacio existente para las declaraciones básicas de subrutinas, que son almacenadas como escalares normales en lugar del typeglob completo.
+El enfoque adoptado es análogo a la optimización del espacio existente para las declaraciones básicas de subrutinas, que se almacenan como escalares normales en lugar del typeglob completo.
 
 Varios de los módulos básicos se han convertido para usar esta característica para sus constantes dependientes del sistema - como resultado de esto, C<use POSIX;> ahora ocupa 200K menos de memoria.
 
@@ -750,7 +750,7 @@ La nueva opción de compilación C<PERL_DONT_CREATE_GVSV>, presentado como una o
 
 =head2 Referencias débiles son ahora más livianas
 
-La creación de referencias débiles es ahora I<O(1)> en lugar de I<O(n)>, cortesía de Nicholas Clark. El borrado de referencias débiles sigue siendo I<O(n)>, pero si el borrado solo sucede en la salida del programa, puede ser omitido por completo.
+La creación de referencias débiles es ahora I<O(1)> en lugar de I<O(n)>, cortesía de Nicholas Clark. El borrado de referencias débiles sigue siendo I<O(n)>, pero si el borrado solo sucede en la salida del programa, se puede omitir por completo.
 
 =head2 Mejoras en sort()
 
@@ -802,7 +802,7 @@ Cuando un patrón comienza con una alternancia capaz de ser optimizada en un ár
 
 =item C<-Dusesitecustomize>
 
-La personalización en tiempo de ejecución de @INC ahora puede ser activada pasando la opción C<-Dusesitecustomize> a Configure. Cuando está activada, hará que perl ejecute F<$sitelibexp/sitecustomize.pl> antes que cualquier otra cosa.  Este script puede, entonces, ajustarse para que añada entradas adicionales a @INC.
+La personalización en tiempo de ejecución de @INC ahora se puede activar pasando la opción C<-Dusesitecustomize> a Configure. Cuando está activada, hará que perl ejecute F<$sitelibexp/sitecustomize.pl> antes que cualquier otra cosa.  Este script puede, entonces, ajustarse para que añada entradas adicionales a @INC.
 
 =item Instalaciones reubicables
 
@@ -859,7 +859,7 @@ Se ha mejorado el soporte para la compilación de perl con el compilador de 64 b
 
 =item Visual C++
 
-Ahora Perl puede ser compilado con Microsoft Visual C++ 2005 (y 2008 Beta 2).
+Ahora Perl se puede compilar con Microsoft Visual C++ 2005 (y 2008 Beta 2).
 
 =item Compilaciones Win32
 
@@ -873,7 +873,7 @@ Todas las compilaciones en Win32 (MS-Windows, WinCE) se han fusionado y limpiado
 
 =item Archivos auxiliares de los módulos
 
-Los archivos README y registros de cambios de los módulos de CPAN incluidos con perl ya no son  instalados.
+Los archivos README y registros de cambios de los módulos de CPAN incluidos con perl ya no se instalan.
 
 =back
 
@@ -975,7 +975,7 @@ Ahora es una no-operación en datos UTF-8. (Yves Orton)
 
 =item Señales críticas
 
-Las señales SIGILL, SIGBUS y SIGSEGV ahora siempre se entregan en una forma "insegura" (a diferencia de otras señales, que son diferidos hasta que el intérprete perl llega a un estado razonablemente estable; vea L<perlipc/"Señales Diferidas (Señales Seguras)">). (Rafael)
+Las señales SIGILL, SIGBUS y SIGSEGV ahora siempre se entregan en una forma "insegura" (a diferencia de otras señales, que son diferidas hasta que el intérprete perl llega a un estado razonablemente estable; vea L<perlipc/"Señales Diferidas (Señales Seguras)">). (Rafael)
 
 =item Arreglado el enganche con @INC
 
@@ -983,7 +983,7 @@ Cuando un módulo o un archivo se carga a través de un gancho en @INC, y cuando
 
 =item Arreglada opción C<-t>
 
-Las opciones C<-w> y C<-t> ahora pueden ser utilizadas juntas sin alterar qué categorías de alertas están activadas o no. (Rafael)
+Las opciones C<-w> y C<-t> ahora se pueden utilizar juntas sin alterar qué categorías de alertas están activadas o no. (Rafael)
 
 =item Duplicando identificadores de archivo UTF-8
 
@@ -1039,7 +1039,7 @@ ahora da una advertencia C<"our" variable %s redeclared>.
 
 =item readdir()/closedir()/etc. attempted on invalid dirhandle
 
-Estas nuevas advertencias son ahora emitidas cuando un identificador de directorio que es usado ya está cerrado o no es realmente un identificador de directorio.
+Estas nuevas advertencias son ahora emitidas cuando un identificador de directorio que se está usando ya está cerrado, o no es realmente un identificador de directorio.
 
 =item Opening dirhandle/filehandle %s also as a file/directory
 
@@ -1078,7 +1078,7 @@ Relacionado con esto, el tipo interno C<SVt_PVBM> ha sido eliminado. Este tipo e
 
 =head2 Nuevo tipo SVt_BIND
 
-Un nuevo tipo C<SVt_BIND> ha sido añadido, en preparación para el proyecto de implementación de Perl 6 sobre Perl 5. Sin embargo, no hay ninguna implementación deliberada, y aún no puede ser creada ni destruida.
+Un nuevo tipo C<SVt_BIND> ha sido añadido, en preparación para el proyecto de implementación de Perl 6 sobre Perl 5. Sin embargo, no hay ninguna implementación deliberada, y aún no se puede crear ni destruir.
 
 =head2 Eliminación de los símbolos CPP
 
@@ -1090,7 +1090,7 @@ La estructura C<BASEOP> ahora ocupa menos espacio. El campo C<op_seq> ha sido el
 
 =head2 Nuevo analizador
 
-El analizador de perl ahora es generado por bison (que antes solía ser generado por byacc). Como resultado de ello, parece ser un poco más robusto.
+El analizador de perl ahora se genera por medio de bison (que antes solía ser generado por byacc). Como resultado de ello, parece ser un poco más robusto.
 
 Además, Dave Mitchell mejoró la salida de depuración del analizador léxico con C<-DT>.
 
