@@ -194,7 +194,7 @@ pods pasados como argumentos.
 =item * C<search_perlfunc_re>
 
 F<Pod/Perldoc.pm> llama a este método para determinar qué cadena debe 
-buscar en perlfunc.pod, a fin omitir la introducción y localizar la
+buscar en perlfunc.pod, a fin de omitir la introducción y localizar la
 posición donde comienza la definición de la función que el usuario
 solicita a C<perldoc> mediante la opción C<-f>.
 
