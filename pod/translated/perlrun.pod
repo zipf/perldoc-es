@@ -130,7 +130,7 @@ No existe una solución general para todo esto.  Es un completo enredo.
 =head2 Emplazamiento de Perl
 X<perl, emplazamiento del intérprete>
 
-Parce obvio decirlo, pero Perl solo es útil cuando los usuarios pueden encontrarlo fácilmente.  Cuando sea posible, sería bueno que tanto F</usr/bin/perl> como F</usr/local/bin/perl> sean enlaces simbólicos al binario efectivo.  Si eso no se puede hacer, se solicita a los administradores del sistema que pongan (enlaces simbólicos) a perl y sus utilerías asociadas en un directorio que esté normalmente en el PATH del usuario, o en algún otro obvio y conveniente lugar.
+Parce obvio decirlo, pero Perl solo es útil cuando los usuarios pueden encontrarlo fácilmente.  Cuando sea posible, sería bueno que tanto F</usr/bin/perl> como F</usr/local/bin/perl> sean enlaces simbólicos al binario real.  Si eso no se puede hacer, se solicita a los administradores del sistema que pongan (enlaces simbólicos) a perl y sus utilerías asociadas en un directorio que esté normalmente en el PATH del usuario, o en algún otro obvio y conveniente lugar.
 
 En esta documentación, C<#!/usr/bin/perl> en la primera línea del programa aparecerá sin importar qué método funcione es su sistema.  Se le aconseja que use una ruta específica si le interesa usar una versión específica.
 
@@ -326,7 +326,7 @@ Perl realmente inserta el siguiente código:
             && do "$Config{sitelib}/sitecustomize.pl";
     }
 
-Debido a que es un C<do> (no un C<require>), F<sitecustomize.pl> no retorna un valor verdadero. El código se ejecuta en el paquete C<main>, en su propio ámbito léxico. Sin embargo, el el script muere, C<$@> no será actualizado.
+Debido a que es un C<do> real (no un C<require>), F<sitecustomize.pl> no retorna un valor verdadero. El código se ejecuta en el paquete C<main>, en su propio ámbito léxico. Sin embargo, el el script muere, C<$@> no será actualizado.
 
 El valor de C<$Config{sitelib}> también está determinado en el código C, no leído desde C<Config.pm>, que no es cargado.
 
@@ -569,7 +569,7 @@ Esto acelera el inicio a costa de espacio en disco (que puede minimizar mediante
 X<-U>
 
 permite a Perl hacer operaciones inseguras.  En la actualidad las únicas operaciones "no seguras" son las tratan de eliminar directorios mientras se ejecuta como superusuario y ejecutar programas setuid con comprobaciones fatales de contaminación convertidas en advertencias.
-Tenga en cuenta que las advertencias deben estar habilitadas con esta opción para I<generar> las advertencias de contaminación.
+Tenga en cuenta que las advertencias deben estar habilitadas con esta opción para I<generar> realmente las advertencias de contaminación.
 
 =item B<-v>
 X<-v>
@@ -696,7 +696,7 @@ Lo normal es empezar los nombres de capa con un carácter dos puntos (por ejempl
 
 Un inexistente PerlIO, o vacío, es equivalente al conjunto predeterminado de capas para su plataforma; por ejemplo, C<:unix:perlio> en sistemas tipo Unix y C<:unix:crlf> en Windows y otros sistemas DOS.
 
-La lista se convierte en el valor predeterminado para I<toda> E/S de Perl. En consecuencia, sólo capas predefinidas en el código pueden aparecer en esta lista, ya que las capas externas (tales como C<encoding()>) necesitan E/S para poder ser leídas! Vea L<"open pragma"|open> para saber cómo añadir codificaciones externas por defecto.
+La lista se convierte en el valor predeterminado para I<toda> E/S de Perl. En consecuencia, sólo capas predefinidas en el código pueden aparecer en esta lista, ya que las capas externas (tales como C<encoding()>) ¡necesitan E/S para poder ser leídas! Vea L<"open pragma"|open> para saber cómo añadir codificaciones externas por defecto.
 
 Capas que tiene sentido incluir en la variable de entorno PERLIO se resumen a continuación. Para más detalles, vea L<PerlIO>.
 
@@ -774,7 +774,7 @@ La variable de entorno PERLIO es completamente ignorada cuando Perl se ejecuta e
 =item PERLIO_DEBUG
 X<PERLIO_DEBUG>
 
-Si se establece al nombre de un archivo o dispositivo, ciertas operaciones del subsistema PerlIO serán registradas en ese archivo, que se abre en el modo añadir típico de Unix:
+Si se establece al nombre de un archivo o dispositivo, ciertas operaciones del subsistema PerlIO se registrarán en ese archivo, que se abre en el modo añadir. Usos típicos en Unix:
 
    % env PERLIO_DEBUG=/dev/tty perl script ...
 

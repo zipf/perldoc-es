@@ -1485,7 +1485,7 @@ Andy Lester suministró muchas mejoras para determinar qué parámetros de las f
 
 Dave Mitchell mejoró la salida de depura del analizador léxico con C<-DT>
 
-Nicholas Clark cambió la asignación del búfer de cadena de texto por lo que ahora es redondeado al siguiente múltiplo de 4 (u 8 en las plataformas con punteros de 64 bits). Esto debería reducir el número de llamadas a C<realloc> sin tener que llegar a utilizar ningún otro espacio de memoria adicional.
+Nicholas Clark cambió la asignación del búfer de cadena de texto por lo que ahora es redondeado al siguiente múltiplo de 4 (u 8 en las plataformas con punteros de 64 bits). Esto debería reducir el número de llamadas a C<realloc> sin tener que llegar a utilizar realmente ningún otro espacio de memoria adicional.
 
 El array de C<HV> de los C<HE*> es ahora asignado al correcto (y mínimo) tamaño, gracias a un nuevo cambio de Nicholas Clark. Compile con C<-DPERL_USE_LARGE_HV_ALLOC> para usar el viejo, descuidado, valor por defecto.
 

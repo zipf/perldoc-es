@@ -335,7 +335,7 @@ Considere el módulo C<MiMod::Abc> siguiente.
 
     1;
 
-La llamada a C<warnings::register> creará una nueva categoría de advertencias llamada "MiMod::Abc", es decir, el nuevo nombre de la categoría coincide con el nombre del paquete actual. La función C<open> en el módulo mostrará un mensaje de advertencia si se da una ruta relativa como parámetro. Esta advertencia sólo será mostrará si el código que utiliza C<MiMod::Abc> tiene activado el pragma C<warnings> como se indica a continuación.
+La llamada a C<warnings::register> creará una nueva categoría de advertencias llamada "MiMod::Abc", es decir, el nuevo nombre de la categoría coincide con el nombre del paquete actual. La función C<open> en el módulo mostrará un mensaje de advertencia si se da una ruta relativa como parámetro. Estas advertencias sólo se mostrarán si el código que utiliza C<MiMod::Abc> realmente ha activado el pragma C<warnings>, como se indica a continuación.
 
     use MiMod::Abc;
     use warnings 'MiMod::Abc';
