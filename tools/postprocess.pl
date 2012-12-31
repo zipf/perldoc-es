@@ -353,13 +353,20 @@ sub diff_file {
     my %params = @_;
 
     my (@trans, @rev);
-    open my $trans, "<:encoding(UTF-8)", $params{trans};
-    chomp(@trans = <$trans>);
-    close $trans;
 
-    open my $rev, "<:encoding(UTF-8)", $params{rev};
-    chomp(@rev = <$rev>);
-    close $rev;
+    {
+
+        local $/ = "\n\n";
+    
+        open my $trans, "<:encoding(UTF-8)", $params{trans};
+        chomp(@trans = <$trans>);
+        close $trans;
+
+        open my $rev, "<:encoding(UTF-8)", $params{rev};
+        chomp(@rev = <$rev>);
+        close $rev;
+
+    }
 
     my $target = "$params{path}/$params{name}_diff.html"; 
 
@@ -368,7 +375,7 @@ sub diff_file {
     say $out $DIFF_HEADER;
     say $out "<h1>Comparison results for $params{name}.$params{extension}</h1>\n</br>";
 
-    for (my $i=0; $i < $#trans; $i++) {
+    for (my $i=0; $i <= $#trans; $i++) {
        
         $trans[$i] =~ s/</\(/g;
         $trans[$i] =~ s/>/\)/g;
