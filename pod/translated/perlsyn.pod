@@ -44,7 +44,7 @@ Ahora se analiza como era de esperar, pero aún debe adquirir el hábito de uso 
 Las declaraciones de subrutinas pueden cargarse también con la instrucción C<require> o cargadas e importadas en su espacio de nombres con la instrucción C<use>.
 Ver L<perlmod> para detalles sobre esto.
 
-Una secuencia de instrucciones pueden contener declaraciones de variables en ámbito léxico (privado), pero, aparte de declarar un nombre de variable, la declaración actúa como una instrucción normal y es elaborada dentro de la secuencia de instrucciones como si fuera una instrucción normal.  Esto significa que tiene efectos tanto en tiempo de compilación como en tiempo de ejecución.
+Una secuencia de instrucciones pueden contener declaraciones de variables en ámbito léxico (privado), pero, aparte de declarar un nombre de variable, la declaración actúa como una instrucción normal y es elaborada dentro de la secuencia de instrucciones como si fuera una instrucción normal.  Esto significa que realmente tiene efectos tanto en tiempo de compilación como en tiempo de ejecución.
 
 =head2 Comentarios
 X<comment> X<#> X<comentario>
@@ -486,7 +486,7 @@ X<triple-dot operator> X<operador puntos suspensivos>
 
 A partir de Perl 5.12, Perl acepta los puntos suspensivos (elipsis), "C<...>", como un marcador de posición para el código que aún no ha implementado.  Esta forma de elipsis, la instrucción no implementada, no debe confundirse con el operador binario flip-flop C<...>.  El primero es una instrucción y el otro es un operador.  (Perl no suele confundirlos, porque, por lo general, Perl puede decidir si espera un operador o una instrucción, pero vea a continuación las excepciones).
 
-Cuando Perl 5.12 o posterior encuentra una elipsis, lo analiza como si no tuviera errores, pero siempre y cuando lo trate de ejecutar, Perl produce una excepción con el texto C<Unimplemented> (No implementado):
+Cuando Perl 5.12 o posterior encuentra una elipsis, lo analiza como si no tuviera errores, pero siempre y cuando lo trate realmente de ejecutar, Perl produce una excepción con el texto C<Unimplemented> (No implementado):
 
     use v5.12;
     sub no_implementado { ... }

@@ -364,7 +364,7 @@ X<\g> X<\k> X<\K> X<backreference> X<retrorreferencia>
                    que puede terminar con partes incorrectas de UTF-8.  No soportado en
                    inspecciones hacia atrás.
   \1        [5]  Retrorreferencia a un grupo específico de captura o búfer.
-                   '1' puede ser cualquier entero positivo.
+                   '1' puede ser realmente cualquier entero positivo.
   \g1       [5]  Retrorreferencia a un grupo específico o anterior,
   \g{-1}    [5]  El número puede ser negativo, indicando la posición relativa de
                    un grupo anterior y puede, opcionalmente, estar rodeado por
@@ -432,11 +432,11 @@ X<expresión regular, aserción ancho cero>
         de la anterior m//g)
 
 Un límite de palabra (C<\b>) es un punto que hay entre dos caracteres que tienen un C<\w> a un lado y un C<\W> al otro lado de él (en cualquier orden), contando con los caracteres imaginarios del principio y final de la cadena coincidentes con un C<\W>.  (Dentro de las clases carácter, C<\b> representa el retroceso (I<backspace>) en lugar del límite de palabra, tal como lo hace normalmente en cualquier cadena doblemente entrecomillada.)
-Los C<\A> y C<\Z> son como los "^" y "$", excepto que no coincidirán múltiples veces cuando se use el modificador C</m>, mientras que "^" y "$" coincidirán en cada límite de línea que contenga la cadena.  Para coincidir con el final actual de la cadena, sin ignorar un posible carácter de fin de línea, use C<\z>.
+Los C<\A> y C<\Z> son como los "^" y "$", excepto que no coincidirán múltiples veces cuando se use el modificador C</m>, mientras que "^" y "$" coincidirán en cada límite de línea que contenga la cadena.  Para coincidir con el final real de la cadena, sin ignorar un posible carácter de fin de línea, use C<\z>.
 X<\b> X<\A> X<\Z> X<\z> X</m>
 
 La aserción C<\G> puede ser usada para encadenar coincidencias globales (usando C<m//g>), como se describe en L<perlop/"Operadores Regexp Entrecomillados">.
-También es útil cuando se escriben escáneres C<lex>, cuando tiene varios patrones que desea hacer coincidir contra consiguientes subcadenas de su cadena; vea la referencia anterior.  La ubicación actual donde C<\G> coincidirá también puede modificarse usando C<pos()> como un valor-izquierda: vea L<perlfunc/pos>. Tenga en cuanto que la norma para las coincidencias de tamaño cero (vea L</"Patrones repetidos coincidiendo con subcadenas de longitud cero">) ha sido modificada en cierta medida, en que los contenidos a la izquierda de C<\G> no son tenidos en cuenta cuando se determina la longitud de la coincidencia. Así, lo siguiente no coincidirá nunca:
+También es útil cuando se escriben escáneres C<lex>, cuando tiene varios patrones que desea hacer coincidir contra consiguientes subcadenas de su cadena; vea la referencia anterior.  La ubicación real donde C<\G> coincidirá también puede modificarse usando C<pos()> como un valor-izquierda: vea L<perlfunc/pos>. Tenga en cuanto que la norma para las coincidencias de tamaño cero (vea L</"Patrones repetidos coincidiendo con subcadenas de longitud cero">) ha sido modificada en cierta medida, en que los contenidos a la izquierda de C<\G> no son tenidos en cuenta cuando se determina la longitud de la coincidencia. Así, lo siguiente no coincidirá nunca:
 X<\G>
 
      my $string = 'ABC';
@@ -1096,7 +1096,7 @@ X<(*PRUNE)> X<(*PRUNE:NOMBRE)>
 
 Este patrón de ancho cero poda el árbol de vuelta atrás en el punto actual de cuando dio vuelta atrás a causa de un fallo. Considere el patrón C<A (*PRUNE) B>, donde A y B son patrones complejos. Hasta que el verbo C<(*PRUNE)> se alcance, A puede volver atrás tanto como sea necesario para que se produzca la coincidencia. Una vez que se alcanza, la coincidencia continúa en B, que también puede hacer una vuelta atrás cuando sea necesario; sin embargo, si no hubiera coincidencia con B, entonces ya no se llevará a cabo la vuelta atrás, y el patrón fallará de forma absoluta en la actual posición de inicio.
 
-El siguiente ejemplo cuenta todas las posibles cadenas coincidentes con un patrón (sin que se produzca una coincidencia con ninguna de ellas, por efecto del C<(*FAIL)>).
+El siguiente ejemplo cuenta todas las posibles cadenas coincidentes con un patrón (sin que se produzca realmente una coincidencia con ninguna de ellas, por efecto del C<(*FAIL)>).
 
     'aaab' =~ /a+b?(?{print "$&\n"; $contador++})(*FAIL)/;
     print "Contador=$contador\n";
@@ -1228,7 +1228,7 @@ X<(*ACCEPT)>
 
 B<ADVERTENCIA:> Esta característica es muy experimental. No se recomienda para código en producción.
 
-Este patrón no coincide con nada y provoca el final de una coincidencia con éxito en el lugar en que el patrón C<(*ACCEPT)> se encontraba, sin importar si pudiera haber más coincidencias en la cadena. Cuando, dentro de un patrón anidado, tales como una recursión, o en un sub-patrón generado de forma dinámica a través de C<(??{})>, sólo el patrón más interno es terminado inmediatamente.
+Este patrón no coincide con nada y provoca el final de una coincidencia con éxito en el lugar en que el patrón C<(*ACCEPT)> se encontraba, sin importar si pudiera haber realmente más coincidencias en la cadena. Cuando, dentro de un patrón anidado, tales como una recursión, o en un sub-patrón generado de forma dinámica a través de C<(??{})>, sólo el patrón más interno es terminado inmediatamente.
 
 Si el C<(*ACCEPT)> se encuentra dentro de grupos de captura entonces los grupos son marcados para terminar en el lugar en que se encontró el C<(*ACCEPT)>.
 Por ejemplo:

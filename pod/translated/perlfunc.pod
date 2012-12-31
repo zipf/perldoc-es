@@ -324,9 +324,9 @@ Estos operadores están exentos de la regla "se parece a una función" descrita 
     -s($archivo) + 1024   # probablemente mal; lo mismo que -s($archivo + 1024)
     (-s $archivo) + 1024  # correcto
 
-La interpretación de los operadores de permisos de archivo C<-r>, C<-R>, C<-w>, C<-W>, C<-x> y C<-X> es por defecto basado sólamente en el modo del archivo y en los uid y gid del usuario.  Puede haber otras razones por las que no pueda leer, escribir o ejecutar un archivo: por ejemplo, controles de acceso a sistemas de archivos en red, ACL (listas de control de acceso), sistemas de archivos de solo lectura, y formatos irreconocibles de ejecutables.  Note que el uso de seis operadores específicos para verificar si cierta operación es posible, es usualmente una equivocación, porque puede ser el inicio de bloqueos de carrera.
+La interpretación de los operadores de permisos de archivo C<-r>, C<-R>, C<-w>, C<-W>, C<-x> y C<-X> es por defecto basado sólamente en el modo del archivo y en los uid y gid del usuario.  Puede haber otras razones por las que realmente no pueda leer, escribir o ejecutar un archivo: por ejemplo, controles de acceso a sistemas de archivos en red, ACL (listas de control de acceso), sistemas de archivos de solo lectura, y formatos irreconocibles de ejecutables.  Note que el uso de seis operadores específicos para verificar si cierta operación es posible, es usualmente una equivocación, porque puede ser el inicio de bloqueos de carrera.
 
-También note que, para el superusuario en el sistema de archivos local, los test C<-r>, C<-R>, C<-w> y C<-W> siempre devuelven 1, y C<-x> y C<-X> devuelven 1 si cualquier bit de ejecución está puesto en el modo del archivo.  Scripts ejecutados por el superusuario pueden necesitar hacer un stat() para determinar el modo actual del archivo, o temporalmente poner su uid efectivo a otro valor.
+También note que, para el superusuario en el sistema de archivos local, los test C<-r>, C<-R>, C<-w> y C<-W> siempre devuelven 1, y C<-x> y C<-X> devuelven 1 si cualquier bit de ejecución está puesto en el modo del archivo.  Scripts ejecutados por el superusuario pueden necesitar hacer un stat() para determinar el modo real del archivo, o temporalmente poner su uid efectivo a otro valor.
 
 Si está usando ACL, hay un pragma llamado C<filetest> que puede producir resultados más precisos que los simples bits de modo de stat().
 Cuando esté bajo C<use filetest 'access'>, las comprobaciones de archivo mencionadas antes comprobarán cuándo los permisos pueden (o no) ser concedidos usando la familia de llamadas del sistema access(2).  Note también que C<-x> y C<-X> pueden, bajo este pragma, devolver valores verdaderos incluso si los bits de permiso de ejecución no están puestos (ni cualquier permiso ACL extra de ejecución).  Este comportamiento tan extraño es debido a las definiciones subyacentes de las llamadas del sistema.  Note también que, debido a la implementación de C<use filetest 'access'>, el identificador de archivo especial C<_> no almacenará los resultados de los test de archivo mientras este pragma esté activo.  Para más información, lea la documentación del pragma C<filetest>.
@@ -458,7 +458,7 @@ C<:bytes>, C<:crlf>, C<:utf8>, y cualquier otra directiva de la forma C<:...>, s
 I<El parámetro CAPA de la función binmode() se describe como "DISCIPLINA" en "Programming Perl, 3rd Edition".  Sin embargo, desde la publicación de este libro, conocido por muchos como "Camel III", el consenso sobre el nombre de esta funcionalidad se ha movido desde "disciplina" a "capa".  Toda documentación desde esta versión de Perl se refiere a "capas" en vez de a "disciplinas".  Ahora volvamos a la documentación normal...>
 
 Para indicar IDENTIFICADOR_ARCHIVO como UTF-8, use C<:utf8> o C<:encoding(UTF-8)>.
-C<:utf8> solo marca los datos como UTF-8 sin más comprobaciones ulteriores, mientras que C<:encoding(UTF-8)> comprueba que los datos sean UTF-8 válidos.  Más detalles se pueden encontrar en L<PerlIO::encoding>.
+C<:utf8> solo marca los datos como UTF-8 sin más comprobaciones ulteriores, mientras que C<:encoding(UTF-8)> comprueba que los datos sean realmente UTF-8 válidos.  Más detalles se pueden encontrar en L<PerlIO::encoding>.
 
 En general, binmode() debe ser llamada después de open() pero antes de que cualquier I/O se realice sobre el identificador de archivo.  Llamando a binmode(), normalmente vaciará cualquier dato pendiente que esté almacenado en la salida (y quizás datos pendientes a la entrada) del identificador de archivo.  Una excepción a esto es la capa C<:encoding> que cambia la codificación por defecto del identificador de archivo; ver L</open>.
 La capa C<:encoding> algunas veces necesita ser llamada en mitad del flujo de datos y no lo vacía.  C<:encoding> también se coloca, implícitamente, por encima de la capa C<:utf8> porque Perl, internamente, opera con caracteres Unicode codificados en UTF-8.
@@ -594,7 +594,7 @@ Si VARIABLE se omite, usa C<$_>.  Ejemplo:
 
 Si VARIABLE es un hash, recorta los valores del hash, pero no sus claves.
 
-Puede recortar cualquier cosa que sea un valor-izquierda, incluyendo una asignación:
+Puede realmente recortar cualquier cosa que sea un valor-izquierda, incluyendo una asignación:
 
     chomp($cwd = `pwd`);
     chomp($respuesta = <STDIN>);
@@ -615,7 +615,7 @@ X<chop>
 Recorta el último carácter de un string y devuelve el carácter recortado.  Es más eficiente que C<s/.$//s> porque ni escanea ni copia el string.  Si VARIABLE se omite, recorta C<$_>.
 Si VARIABLE es un hash, recorta los valores del hash, pero no sus claves.
 
-Puede recortar cualquier cosa que sea un valor-izquierda, incluyendo una asignación.
+Puede realmente recortar cualquier cosa que sea un valor-izquierda, incluyendo una asignación.
 
 Si recorta una lista, cada elemento es recortado.  Sólo se devuelve el valor del último recorte.
 
@@ -1090,7 +1090,7 @@ X<array, iterator> X<array, iterador>
 
 Cuando se llama en un hash en contexto de lista, devuelve una lista de dos elementos consistentes en la clave y el valor del siguiente elementos del hash.  En Perl 5.12 y superiores, también devolverá el índice y el valor del siguiente elemento de un array, de modo que puede iterar sobre él; Perl más antiguos consideran esto como un error de sintaxis.  Cuando se le llama en contexto escalar, sólo devuelve la clave (no el valor) del hash, o el índice del array.
 
-Las entradas de un hash son devueltas en un aparente orden aleatorio.  El actual orden aleatorio está sujeto a cambio en futuras versiones de Perl, pero se garantiza que sea el mismo orden que las funciones C<keys> o C<values> producirían (mientras que el hash no haya sido modificado).  Desde Perl 5.8.2 la ordenación puede ser diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (ver L<perlsec/"Ataques por Complejidad Algorítmica">).
+Las entradas de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real está sujeto a cambio en futuras versiones de Perl, pero se garantiza que sea el mismo orden que las funciones C<keys> o C<values> producirían (mientras que el hash no haya sido modificado).  Desde Perl 5.8.2 la ordenación puede ser diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (ver L<perlsec/"Ataques por Complejidad Algorítmica">).
 
 Después de que C<each> haya devuelto todas las entradas del hash o del array, la siguiente llamada a C<each> devuelve la lista vacía, en contexto lista, y C<undef> en contexto escalar; la siguiente llamada a I<ésa> reiniciará la iteración.
 Cada hash o array tiene su propio iterador interno, accedido por C<each>, C<keys>, y C<values>.  El iterador es implícitamente restablecido cuando C<each> ha llegado al final como se acaba de describir; puede ser explícitamente restablecido llamando a C<keys> o C<values> sobre el hash o array.  Si añade o borra un elemento de un hash mientras está iterando sobre él, puede encontrarse con entradas desaparecidas o duplicadas, así que, es mejor que no lo haga.  Excepción: en la implementación actual, siempre es seguro borrar el último ítem devuelto por C<each()>, por lo que entonces el siguiente código funcionará correctamente:
@@ -1281,7 +1281,7 @@ Ejemplos:
     exec '/bin/echo', 'Tus argumentos son: ', @ARGV;
     exec "sort $salida | uniq";
 
-Si realmente no quiere ejecutar el primer argumento, pero quiere engañar al programa que está ejecutando sobre su propio nombre, puede especificar el programa que quiera ejecutar como un "objeto indirecto" (sin la coma) enfrente de la LISTA.  (Esto siempre fuerza la interpretación de la LISTA como una lista multievaluada, incluso si sólo hay un único escalar en la lista).  Ejemplo:
+Si verdaderamente no quiere ejecutar el primer argumento, pero quiere engañar al programa que está ejecutando sobre su propio nombre, puede especificar el programa que realmente quiere ejecutar como un "objeto indirecto" (sin la coma) enfrente de la LISTA.  (Esto siempre fuerza la interpretación de la LISTA como una lista multievaluada, incluso si sólo hay un único escalar en la lista).  Ejemplo:
 
     $shell = '/bin/csh';
     exec $shell '-sh';    # finge que es un shell de login
@@ -1542,7 +1542,7 @@ A partir de la versión v5.6.0, Perl intentará vaciar todos los archivos abiert
 
 Si usted hace un C<fork> sin luego esperar a sus hijos, irá acumulando zombies.  En algunos sistemas, puede evitar esto poniendo C<$SIG{CHLD}> a C<"IGNORE">.  Ver también L<perlipc> para más ejemplos de fork y borrado de hijos moribundos.
 
-Note que si su hijo hereda los descriptores de archivo del sistema como STDIN y STDOUT que estén conectados a una tubería o a un socket, incluso si usted sale del programa, el servidor remoto (por ejemplo, un script CGI o un proceso lanzado en segundo plano desde un shell remoto) no se dará cuenta de que se ha ido.
+Note que si su hijo hereda los descriptores de archivo del sistema como STDIN y STDOUT que estén realmente conectados a una tubería o a un socket, incluso si usted sale del programa, el servidor remoto (por ejemplo, un script CGI o un proceso lanzado en segundo plano desde un shell remoto) no se dará cuenta de que se ha ido.
 Deberá reabrirlos a F</dev/null> si eso es un problema.
 
 En algunas plataformas, como Windows, en donde la llamada del sistema fork() no está disponible, Perl se puede compilar para emular fork() en el intérprete de Perl.
@@ -1989,7 +1989,7 @@ o equivalentemente,
     @foo = grep {!/^#/} @bar;    # quitar los comentarios
 
 Note que C<$_> es un alias al valor de la lista, por lo que se puede usar para modificar los elementos de la LISTA.  Mientras que esto suele ser útil, puede causar resultados extraños si los elementos de la LISTA no son variables.
-Semejantemente, grep devuelve alias de la lista original, como los alias de los elementos de la lista de las variables de los bucles for.  Es decir, modificar un elemento de la lista devuelto por grep (por ejemplo, en un C<foreach>, C<map> u otro C<grep>) modifica el elemento en la lista original.
+De forma semejante, grep devuelve alias de la lista original, como los alias de los elementos de la lista de las variables de los bucles for.  Es decir, modificar un elemento de la lista devuelto por grep (por ejemplo, en un C<foreach>, C<map> u otro C<grep>) modifica realmente el elemento en la lista original.
 Esto es algo usualmente a ser evitado cuando se está escribiendo código claro.
 
 Si C<$_> es léxica en el ámbito de aplicación donde C<grep> aparece (porque se ha declarado con C<my $_>) entonces, además de ser un alias local a los elementos de la lista, C<$_> se mantiene léxica dentro del bloque; es decir, no puede ser vista desde el exterior, evitando cualquier potencial efecto colateral.
@@ -2049,7 +2049,7 @@ Implementa la función ioctl(2).  Probablemente primero querrá escribir
     require "sys/ioctl.ph";  # probablemente en $Config{archlib}/sys/ioctl.ph
 
 para obtener las correctas definiciones de la función.  Si F<sys/ioctl.ph> no existe o no tiene las definiciones correctas, tendrá que incorporar las suyas propias, basadas en sus archivos de cabecera C como las de F<< <sys/ioctl.h> >>.
-(Existe un script Perl llamado B<h2ph> que viene con el kit Perl que puede ayudarle en esto, pero no es nada trivial).  ESCALAR será leído o escrito dependiendo de la FUNCIÓN; un puntero C al valor de la cadena ESCALAR será pasado como tercer argumento de la actual llamada C<ioctl>.  (Si ESCALAR no tiene un valor de cadena sino que tiene un valor numérico, ese valor será el que se pase, en lugar de un puntero al valor de la cadena.  Para garantizar que esto sea cierto, sume un C<0> al escalar antes de usarlo).  Las funciones C<pack> y C<unpack> pueden ser necesarias para manipular los valores de las estructuras utilizadas por C<ioctl>.
+(Existe un script Perl llamado B<h2ph> que viene con el kit Perl que puede ayudarle en esto, pero no es nada trivial).  ESCALAR será leído o escrito dependiendo de la FUNCIÓN; un puntero C al valor de la cadena ESCALAR será pasado como tercer argumento de la llamada real a C<ioctl>.  (Si ESCALAR no tiene un valor de cadena sino que tiene un valor numérico, ese valor será el que se pase, en lugar de un puntero al valor de la cadena.  Para garantizar que esto sea cierto, sume un C<0> al escalar antes de usarlo).  Las funciones C<pack> y C<unpack> pueden ser necesarias para manipular los valores de las estructuras utilizadas por C<ioctl>.
 
 El valor devuelto de C<ioctl> (y C<fcntl>) es como sigue:
 
@@ -2058,7 +2058,7 @@ El valor devuelto de C<ioctl> (y C<fcntl>) es como sigue:
          0              cadena "0 but true"
     otra cosa          ese número
 
-Así, Perl devuelve verdadero en éxito y falso en caso de error, por lo que aún podemos determinar el valor actual devuelto por el sistema operativo:
+Así, Perl devuelve verdadero en éxito y falso en caso de error, por lo que aún podemos determinar el valor real devuelto por el sistema operativo:
 
     $retval = ioctl(...) || -1;
     printf "Sistema devolvió %d\n", $retval;
@@ -2089,7 +2089,7 @@ X<keys> X<key> X<clave>
 
 Llamado en contexto de lista, devuelve una lista consistente en todas las claves del hash indicado, o en Perl 5.12 o posteriores, los índices de un array.  Versiones de Perl anteriores a 5.12 producirán un error de sintaxis si intenta utilizar un array como argumento.  En contexto escalar, devuelve el número de claves o índices.
 
-Las claves de un hash son devueltas en un aparente orden aleatorio.  El actual orden aleatorio está sujeto a cambio en futuras versiones de Perl, pero se garantiza que sea el mismo orden que las funciones C<values> o C<each> producirían (mientras que el hash no haya sido modificado).  Desde Perl 5.8.1 la ordenación puede ser diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (ver L<perlsec/"Ataques por Complejidad Algorítmica">).
+Las claves de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real está sujeto a cambio en futuras versiones de Perl, pero se garantiza que sea el mismo orden que las funciones C<values> o C<each> producirían (mientras que el hash no haya sido modificado).  Desde Perl 5.8.1 la ordenación puede ser diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (ver L<perlsec/"Ataques por Complejidad Algorítmica">).
 
 Como efecto colateral, llamando a keys() reinicia el iterador interno del HASH o del ARRAY (vea L</each>).  De forma particular, llamando a keys() en contexto nulo (void) resetea el iterador sin otro efecto.
 
@@ -2142,7 +2142,7 @@ X<kill> X<signal> X<señal>
 
 =for Pod::Functions send a signal to a process or process group
 
-Manda una señal a una lista de procesos.  Devuelve el número de procesos señalados exitosamente (que no es necesariamente el mismo número de los llamados).
+Manda una señal a una lista de procesos.  Devuelve el número de procesos señalados exitosamente (que no es necesariamente el mismo número de los realmente asesinados).
 
     $cnt = kill 1, $child1, $child2;
     kill 9, @finalizadores;
@@ -2528,7 +2528,7 @@ X<msgsnd>
 
 =for Pod::Functions send a SysV IPC message to a message queue
 
-Llama a la función msgsnd de System V IPC para enviar el mensaje MSG a la cola de mensajes ID.  MSG debe comenzar con un tipo de mensaje, contenido en un entero nativo largo, seguido por la longitud del mensaje, y finalmente el mensaje mismo.  Este tipo de empaquetado se puede lograr con C<pack("l! a*", $tipo, $mensaje)>.  Devuelve verdadero si tuvo éxito, falso en caso de error.  Vea también la documentación de C<IPC::SysV> y C<IPC::SysV::Msg>.
+Llama a la función msgsnd de System V IPC para enviar el mensaje MSG a la cola de mensajes ID.  MSG debe comenzar con un tipo de mensaje, contenido en un entero nativo largo, seguido por la longitud del mensaje real, y finalmente el mensaje mismo.  Este tipo de empaquetado se puede lograr con C<pack("l! a*", $tipo, $mensaje)>.  Devuelve verdadero si tuvo éxito, falso en caso de error.  Vea también la documentación de C<IPC::SysV> y C<IPC::SysV::Msg>.
 
 Cuestiones de portabilidad: L<perlport/msgsnd>.
 
@@ -3656,7 +3656,7 @@ De estas propiedades, los dos más importantes son Pattern_Syntax y Pattern_Whit
 
 Perl promete, que si alguna vez añadimos metacaracteres de patrones de expresión regular a la docena que ya está definida (C<\ E<verbar> ( ) [ { ^ * $ + ? .>), sólo usaremos aquellos que tengan la propiedad Pattern_Syntax.  Perl también promete, que si alguna vez añadimos caracteres que han de ser considerados como espacio en blanco en las expresiones regulares (actualmente, las más afectadas serán las que tengan el C</x>), todos ellos tendrán la propiedad Pattern_White_Space.
 
-Unicode promete que el conjunto de puntos de código que tienen estas dos propiedades nunca cambiará, así que algo que no se escape en v5.16 nunca tendrá que ser escapado en cualquier futura versión de Perl.  (No todos los puntos de código que coinciden con Pattern_Syntax tienen caracteres asignados a ellos; así que hay espacio para crecer, pero son escapados tanto si están asignados como si no.  Perl, por supuesto, nunca usaría un punto de código asignado como un metacarácter actual).
+Unicode promete que el conjunto de puntos de código que tienen estas dos propiedades nunca cambiará, así que algo que no se escape en v5.16 nunca tendrá que ser escapado en cualquier futura versión de Perl.  (No todos los puntos de código que coinciden con Pattern_Syntax tienen realmente caracteres asignados a ellos; así que hay espacio para crecer, pero son desactivados tanto si están asignados como si no.  Perl, por supuesto, nunca usaría un punto de código asignado como un metacarácter real).
 
 Escapar caracteres que tienen las otras 3 propiedades se hace para mejorar la legibilidad de la expresión regular y no porque realmente se necesita que estén escapados para los fines de las expresiones regulares (caracteres con la propiedad White_Space es probable que sean indistinguibles en la página o en la pantalla de los que tienen la propiedad Pattern_White_Space; y las otras dos propiedades contienen caracteres no imprimibles).
 
@@ -3687,9 +3687,9 @@ X<read> X<file, read> X<archivo, leer>
 
 =for Pod::Functions fixed-length buffered input from a filehandle
 
-Intento de leer LONGITUD I<caracteres> de datos en la variable ESCALAR del IDENTIFICADOR_ARCHIVO especificado.  Devuelve el número de caracteres actualmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso se actualiza el valor de C<$!>).  ESCALAR crecerá o se reducirá de manera que el último carácter leído es el último carácter del escalar después de la lectura.
+Intento de leer LONGITUD I<caracteres> de datos en la variable ESCALAR del IDENTIFICADOR_ARCHIVO especificado.  Devuelve el número de caracteres realmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso se actualiza el valor de C<$!>).  ESCALAR crecerá o se reducirá de manera que el último carácter realmente leído es el último carácter del escalar después de la lectura.
 
-Un DESPLAZAMIENTO se puede especificar para colocar los datos leídos en algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
+Un DESPLAZAMIENTO se puede especificar para colocar los datos leídos en algún otro lugar de la cadena, distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
 
 La llamada se implementa en términos de Perl o de la función nativa fread(3) de su sistema.  Para obtener una auténtica llamada del sistema read(2), vea L<sysread|/sysread IDENTIFICADOR_ARCHIVO,ESCALAR,LONGITUD,DESPLAZAMIENTO>.
 
@@ -3786,8 +3786,8 @@ X<recv>
 =for Pod::Functions receive a message over a Socket
 
 Recibe un mensaje de un socket.  Intenta leer LONGITUD I<caracteres> de datos en la variable ESCALAR del identificador de archivo SOCKET especificado.
-ESCALAR crecerá o se reducirá a la longitud de la lectura actual.  Toma las mismas banderas que la llamada al sistema del mismo nombre.  Devuelve la dirección del remitente si el protocolo del SOCKET lo soporta; de otra manera, devuelve una cadena vacía.  Si hay un error, devuelve el valor indefinido.
-Esta llamada está implementada actualmente en términos de la llamada del sistema recvfrom(2).
+ESCALAR crecerá o se reducirá a la longitud de la lectura real.  Toma las mismas banderas que la llamada al sistema del mismo nombre.  Devuelve la dirección del remitente si el protocolo del SOCKET lo soporta; de otra manera, devuelve una cadena vacía.  Si hay un error, devuelve el valor indefinido.
+Esta llamada está implementada realmente en términos de la llamada del sistema recvfrom(2).
 Ver L<perlipc/"UDP: Paso de mensajes"> para ejemplos.
 
 Note los I<caracteres>: dependiendo del estado del socket, son leídos bytes (8-bit) o caracteres.  Por defecto todos los I<sockets> operan en bytes, pero por ejemplo si el I<socket> ha sido cambiado usando binmode() para operar con la capa de E/S C<:encoding(utf8)> (ver el pragma C<open>, L<open>), la E/S operará en caracteres codificados en UTF-8, no bytes.  Del mismo modo, para el pragma C<:encoding>: en este caso casi todos los caracteres se pueden leer.
@@ -4489,7 +4489,7 @@ En contexto lista, ordena la LISTA y devuelve los valores de la lista ordenados.
 En contexto escalar, el comportamiento de C<sort()> es indefinido.
 
 Si NOMBRE_SUB O BLOQUE se omite, se ordena siguiendo una comparación estándar de cadenas de caracteres.  Si se ha especificado NOMBRE_SUB, da el nombre de la subrutina que devuelve un entero menor que, igual que, o mayor que C<0>, dependiendo de cómo los elementos de la lista tienen que ser ordenados.  (Los operadores C<< <=> >> y C<cmp> son muy útiles en este tipo de rutinas).
-NOMBRE_SUB puede ser el nombre de una variable escalar, en cuyo caso el valor provee el nombre de (o la referencia a) la actual subrutina a usar.  En lugar de un NOMBRE_SUB, puede proporcionar un BLOQUE como si fuera una subrutina de ordenación anónima.
+NOMBRE_SUB puede ser el nombre de una variable escalar, en cuyo caso el valor provee el nombre de (o la referencia a) la subrutina real a usar.  En lugar de un NOMBRE_SUB, puede proporcionar un BLOQUE como si fuera una subrutina de ordenación anónima.
 
 Si el prototipo de la subrutina es C<($$)>, los elementos a ser comparados son pasados por referencia en C<@_>, como en una subrutina normal.  Esto es más lento que las subrutinas no prototipadas, donde los elementos a comparar son pasados a la subrutina en las variables globales del paquete actual $a y $b (ver ejemplo más abajo).  Tenga en cuenta que en el último caso, suele ser altamente contraproducente declarar $a y $b como léxicas.
 
@@ -4501,7 +4501,7 @@ También no puede salir fuera del bloque de ordenación o de la subrutina utiliz
 
 Cuando C<use locale> está activo (pero no C<use locale 'not_characteres'>), C<sort LISTA> ordena LISTA de acuerdo con la actual configuración regional de cotejo.  Vea L<perllocale>.
 
-sort() devuelve alias en la lista original, como lo hace la variable de índice de los bucles for(), que hace un alias de los elementos de la lista.  Es decir, modificar un elemento de la lista devuelto por grep (por ejemplo, en un C<foreach>, C<map> o C<grep>) modifica el elemento en la lista original.  Esto suele ser algo que debe ser evitado cuando se está escribiendo código claro.
+sort() devuelve alias en la lista original, como lo hace la variable de índice de los bucles for(), que hace un alias de los elementos de la lista.  Es decir, modificar un elemento de la lista devuelto por grep (por ejemplo, en un C<foreach>, C<map> o C<grep>) modifica realmente el elemento en la lista original.  Esto suele ser algo que debe ser evitado cuando se está escribiendo código claro.
 
 Perl v5.6 y anteriores usaban un algoritmo quicksort para implementar sort.
 Este algoritmo no era estable, y I<podría> ser cuadrático.  (Un sort I<estable> preserva el orden de los elementos de entrada que sean iguales en la comparación.  Aunque el tiempo de ejecución de quicksort es O(NlogN) de promedio de todos los arrays de longitud N, el tiempo puede ser O(N**2), comportamiento I<cuadrático>, para algunas entradas).  En v5.7 la implementación de quicksort fue reemplazada con un algoritmo estable mergesort cuyo peor comportamiento es O(NlogN).
@@ -5126,7 +5126,7 @@ No todos los campos están soportados por todos los sistemas de archivos.  Aquí
   9 mtime    tiempo última modificación, en segundos desde el epoch
  10 ctime    tiempo cambio inodo, en segundos desde el (*)
  11 blksize  tamaño preferido del bloque de E/S para el sistema de archivos
- 12 blocks   número actual de bloques reservados
+ 12 blocks   número real de bloques reservados
 
 (El epoch fue a las 00:00 GMT del 1 de enero de 1970)
 
@@ -5432,9 +5432,9 @@ X<sysread>
 
 =for Pod::Functions fixed-length unbuffered input from a filehandle
 
-Intenta leer LONGITUD bytes de datos en la variable ESCALAR desde el IDENTIFICADOR_ARCHIVO especificado, utilizando read(2).  Omite E/S con búfer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búfer de datos.  Devuelve el número de bytes realmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso, también se establece C<$!>).  ESCALAR crecerá o se reducirá de manera que el último byte leído sea el último byte del escalar después de la lectura.
+Intenta leer LONGITUD bytes de datos en la variable ESCALAR desde el IDENTIFICADOR_ARCHIVO especificado, utilizando read(2).  Omite E/S con búfer, por lo que mezclar esto con otros tipos de lecturas, C<print>, C<write>, C<seek>, C<tell>, o C<eof> puede causar confusión porque las capas Perlio o stdio por lo general usan búfer de datos.  Devuelve el número de bytes realmente leídos, C<0> al final del archivo, o undef si hubo un error (en este último caso, también se establece C<$!>).  ESCALAR crecerá o se reducirá de manera que el último byte realmente leído sea el último byte del escalar después de la lectura.
 
-Un DESPLAZAMIENTO se puede especificar para colocar los datos leídos en algún otro lugar de la cadena distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
+Un DESPLAZAMIENTO se puede especificar para colocar los datos leídos en algún otro lugar de la cadena, distinto del principio.  Un DESPLAZAMIENTO negativo especifica el desplazamiento en número de caracteres contando desde el final de la cadena.  Un DESPLAZAMIENTO positivo mayor que la longitud de ESCALAR resulta en un cadena rellenada al tamaño requerido con bytes C<"\0"> antes de que el resultado de la lectura sea añadido.
 
 No hay función syseof(), que está bien, ya que, de todos modos, eof() no funciona bien con los archivos de dispositivo (como los ttys).  Use sysread() y compruebe si el valor devuelto es 0 para decidir si ha llegado al final.
 
@@ -5724,7 +5724,7 @@ X<umask>
 Establece la umask para el proceso a EXPR y devuelve el valor anterior.
 Si EXPR se omite, simplemente devuelve la umask actual.
 
-Los permisos Unix C<rwxr-x---> son representados como tres conjuntos de tres bits, o tres dígitos octales: C<0750> (el 0 precedente indica que es octal, y que no es uno de los dígitos).  El valor de C<umask> es un número que representa los bits de lso permisos que quedan desactivados.  El valor de permiso (o "modo") que se pasa a C<mkdir> o C<sysopen> son modificados por su C<umask>, así que incluso si usted le pide a C<sysopen> crear un archivo con permisos C<0777>, y su C<umask> es C<0022>, entonces el archivo realmente es creado con permisos C<0755>.  Si su C<umask> fuera C<0027> (el grupo no puede escribir; los otros no pueden leer, escribir o ejecutar), entonces pasando a C<sysopen> C<0666> creará un archivo con el modo C<0640> (porque C<0666 &~ 027> es C<0640>).
+Los permisos Unix C<rwxr-x---> son representados como tres conjuntos de tres bits, o tres dígitos octales: C<0750> (el 0 precedente indica que es octal, y que no es uno de los dígitos).  El valor de C<umask> es un número que representa los bits de lso permisos que quedan desactivados.  El valor de permiso (o "modo") que se pasa a C<mkdir> o C<sysopen> son modificados por su C<umask>, así que incluso si usted le pide a C<sysopen> crear un archivo con permisos C<0777>, y su C<umask> es C<0022>, entonces el archivo realmente se crea con permisos C<0755>.  Si su C<umask> fuera C<0027> (el grupo no puede escribir; los otros no pueden leer, escribir o ejecutar), entonces pasando a C<sysopen> C<0666> creará un archivo con el modo C<0640> (porque C<0666 &~ 027> es C<0640>).
 
 He aquí algunos consejos: suministre un modo de creación de C<0666> para archivos regulares (en C<sysopen>) y uno de C<0777> para directorios (en C<mkdir>) y los archivos ejecutables.  Esto ofrece a los usuarios la libertad de elección: si quieren archivos protegidos, podrían elegir un umasks para el proceso de C<022>, C<027>, o incluso la máscara, particularmente antisocial, de C<077>.
 Los programas rara vez o nunca deben tomar decisiones políticas, que es mejor dejar al usuario.  La excepción a esto es cuando se escriben archivos que deben mantenerse de forma privada: archivos de correo, los cookies del navegador web, archivos I<rhosts>, y así sucesivamente.
@@ -5888,7 +5888,7 @@ Suele ser útil si necesita comprobar la versión actual de Perl antes de que C<
 (Tratamos de no hacer esto no más de lo necesario).
 
 C<use VERSIÓN> también activará todas las características disponibles en la versión solicitada tal como son definidas por el pragma C<feature>, desactivando cualquier característica no incluida en la versión solicitada.  Ver L<feature>.
-Del mismo modo, si la versión especificada de Perl es mayor o igual a 5.11.0, el modo de trabajo estricto quedará activado léxicamente, igual a como lo hace C<use strict>.  Cualquier uso explícito de C<use strict> o C<no strict> anula C<use VERSIÓN>, incluso si se coloca antes de él.  En ambos casos, los archivos F<feature.pm> y F<strict.pm> no son cargados.
+Del mismo modo, si la versión especificada de Perl es mayor o igual a 5.11.0, el modo de trabajo estricto quedará activado léxicamente, igual a como lo hace C<use strict>.  Cualquier uso explícito de C<use strict> o C<no strict> anula C<use VERSIÓN>, incluso si se coloca antes de él.  En ambos casos, los archivos F<feature.pm> y F<strict.pm> no son realmente cargados.
 
 El C<BEGIN> fuerza a ejecutar a C<require> e C<import> en tiempo de compilación.  El C<require> se asegura que el módulo esté cargado en memoria, si todavía no lo está.  El C<import> no es una función predefinida; es sólo una llamada al método estático ordinario en el paquete C<Módulo> para indicar al módulo que importe la lista de características en el paquete actual.  El módulo puede implementar su propio método C<import> de la forma que desee, aunque la mayoría de los módulos sólo eligen derivar su método C<import> vía herencia desde la clase C<Exporter> que se define en el módulo C<Exporter>.  Ver L<Exporter>.  Si no se puede encontrar ningún método C<import> entonces la llamada se pasa por alto, incluso si hay un método AUTOLOAD.
 
@@ -5970,7 +5970,7 @@ X<values>
 
 En contexto de lista, devuelve una lista que consta de todos los valores del hash indicado.  En Perl 5.12 y superiores, también devolverá una lista de los valores de un array; Perl más antiguos considerarán esto como un error de sintaxis.  En contexto escalar, devuelve el número de valores.
 
-Cuando se llama sobre un hash, los valores son devueltos en un aparente orden aleatorio.  El orden aleatorio actual está sujeto a cambio en futuras versiones de Perl, pero se garantiza que es el mismo orden que las funciones C<keys> o C<each> producirían con el mismo (no modificado) hash.  Desde Perl 5.8.1 la ordenación es diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (vea L<perlsec/"Ataques por Complejidad Algorítmica">).
+Cuando se llama sobre un hash, los valores son devueltos en un aparente orden aleatorio.  El orden aleatorio real está sujeto a cambio en futuras versiones de Perl, pero se garantiza que es el mismo orden que las funciones C<keys> o C<each> producirían con el mismo (no modificado) hash.  Desde Perl 5.8.1 la ordenación es diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (vea L<perlsec/"Ataques por Complejidad Algorítmica">).
 
 Como efecto colateral, llamando a values() reinicia el iterador interno del HASH o ARRAY (vea L</each>).  (De forma particular, llamando a values() en contexto nulo (void) reinicia el iterador sin otro efecto adicional.  Además de restablecer el iterador, C<values @array> en contexto lista es lo mismo que un simple C<@array>.
 (Le recomendamos que para esto utilice el contexto vacío C<keys @array>, pero razonando que quitar C<values @array> exigirá dar más explicaciones que dejarlo tal cual).
@@ -6045,7 +6045,7 @@ Para transformar un vector de bits en una cadena o una lista de 0 y 1, utilice l
 
 Si conoce la longitud exacta en bits, puede ser utilizada en lugar de la C<*>.
 
-Este es un ejemplo para ilustrar cómo los bits están amparados efectivamente en su lugar:
+Este es un ejemplo para ilustrar cómo los bits están realmente amparados en su lugar:
 
     #!/usr/bin/perl -wl
 
@@ -6268,7 +6268,7 @@ Si la salida está vacía y C<$@> ya contiene un valor (típicamente de un eval(
 
 Si C<$@> está vacío entonces se usa la cadena C<"Warning: Something's wrong">.
 
-Ningún mensaje se imprime si hay instalado un controlador C<$SIG{__WARN__}>.  Es responsabilidad del controlador tratar el mensaje como lo considere oportuno (como, por ejemplo, convertirlo en un C<die>).  La mayoría de los controladores, por lo tanto, deben hacer los arreglos necesarios para mostrar las advertencias de las que no están preparados para hacer frente, llamando a C<warn> de nuevo en el controlador.  Tenga en cuenta que esto es bastante seguro y no producirá un bucle sin fin, puesto que los enganches C<__WARN__> no son llamados desde el interior de uno mismo.
+Ningún mensaje se imprime si hay instalado un controlador C<$SIG{__WARN__}>.  Es responsabilidad del controlador tratar el mensaje como lo considere oportuno (como, por ejemplo, convertirlo en un C<die>).  La mayoría de los controladores, por lo tanto, deben hacer los arreglos necesarios para realmente mostrar las advertencias de las que no están preparados para hacer frente, llamando a C<warn> de nuevo en el controlador.  Tenga en cuenta que esto es bastante seguro y no producirá un bucle sin fin, puesto que los enganches C<__WARN__> no son llamados desde el interior de uno mismo.
 
 Usted encontrará que este comportamiento es ligeramente diferente a la de los controladores C<$SIG{__DIE__}> (que no suprimen el texto de error, pero puede llamar, en su lugar, a C<die> de nuevo para cambiarlo).
 

@@ -1080,7 +1080,7 @@ X<$^CHILD_ERROR_NATIVE>
 
 El estado nativo devuelto por la última tubería cerrada, acento grave (C<``>) de comandos, llamada con éxito a C<wait()> o C<waitpid()>, o del operador C<system()>.  En sistemas tipo POSIX este valor puede ser decodificado con las funciones WEXITSTATUS, WIFEXITED, WIFSIGNALED, WTERMSIG, WIFSTOPPED, WSTOPSIG, y WIFCONTINUED proporcionadas por el módulo L<POSIX>.
 
-Bajo VMS esto refleja el estado de salida VMS actual; es decir, es lo mismo que C<$?> cuando está en vigor el pragma C<use vmsish 'status'>.
+Bajo VMS esto refleja el estado real de la salida VMS; es decir, es lo mismo que C<$?> cuando está en vigor el pragma C<use vmsish 'status'>.
 
 Esta variable se incorporó en Perl 5.8.9.
 
@@ -1198,7 +1198,7 @@ Dentro de una subrutina C<END> C<$?> contiene el valor que se le va a dar a C<ex
 	$? = 1 if $? == 255;  # die lo tendría en 255
     }
 
-Bajo VMS, el pragma C<use vmsish 'status'> hace que C<$?> refleje el estado actual de la salida VMS, en lugar de la emulación predeterminada del estado POSIX; vea L<perlvms/$?> para más detalles.
+Bajo VMS, el pragma C<use vmsish 'status'> hace que C<$?> refleje el estado real de la salida VMS, en lugar de la emulación predeterminada del estado POSIX; vea L<perlvms/$?> para más detalles.
 
 Mnemónico: lo mismo que en B<sh> y B<ksh>.
 
