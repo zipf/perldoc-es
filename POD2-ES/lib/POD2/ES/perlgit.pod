@@ -1,0 +1,882 @@
+=encoding utf8
+
+=for comment
+Para aplicar un formato uniforme a este archivo, use:
+  perl ./Porting/podtidy pod/perlgit.pod
+
+=head1 NOMBRE
+
+perlgit - Información detallada sobre git y el repositorio de Perl
+
+=head1 DESCRIPCIÓN
+
+Este documento proporciona información detallada sobre el uso de git para el
+desarrollo de Perl. Si solo desea crear un parche rápido, consulte primero
+L<perlhack>. Este documento se destina a aquellas personas que contribuyan
+regularmente al desarrollo de Perl, incluidas las que tienen acceso de
+escritura al repositorio git.
+
+=head1 CLONAR EL REPOSITORIO
+
+Todo el código fuente de Perl se almacena en un repositorio central de Git en
+I<perl5.git.perl.org>.
+
+Puede crear un clon de solo lectura de este repositorio. Para ello, ejecute:
+
+  % git clone git://perl5.git.perl.org/perl.git perl
+
+Este comando usa el protocolo git (puerto 9418).
+
+Si un firewall le impide usar el protocolo git, puede clonar el repositorio a
+través de http, aunque este método es mucho más lento:
+
+  % git clone http://perl5.git.perl.org/perl.git perl
+
+=head1 TRABAJAR CON EL REPOSITORIO
+
+Puede entrar en el directorio del repositorio para inspeccionarlo. Tras la
+clonación, el repositorio contendrá una sola rama local, que también será
+la rama actual, indicada mediante el asterisco.
+
+  % git branch
+  * blead
+
+Si usa el modificador -a con el comando C<branch>, también se mostrarán las
+ramas de seguimiento remoto del repositorio:
+
+  % git branch -a
+  * blead
+    origin/HEAD
+    origin/blead
+  ...
+
+Las ramas que empiezan por "origin" corresponden al repositorio "git remoto"
+del que ha generado un clon (se llama "origin"). Estas ramas harán un
+seguimiento exacto de cada rama del repositorio remoto. NUNCA debe trabajar en
+estas ramas de seguimiento remoto. Solo se trabaja en una rama local. Las ramas
+locales se pueden configurar para realizar una combinación automática (al
+traer cambios) desde una rama de seguimiento remoto designada. Este es el caso
+de la rama predeterminada, C<blead>, que se configurará para combinarse desde
+la rama de seguimiento remoto C<origin/blead>.
+
+Para ver las confirmaciones recientes:
+
+  % git log
+
+Para incorporar cambios nuevos del repositorio y actualizar su repositorio
+local (antes debe limpiarlo)
+
+  % git pull
+
+Suponiendo que estamos en la rama C<blead> inmediatamente después de
+incorporar cambios, este comando será aproximadamente equivalente a:
+
+  % git fetch
+  % git merge origin/blead
+
+De hecho, si desea actualizar el repositorio local sin tocar su directorio de
+trabajo, ejecute:
+
+  % git fetch
+
+Y si desea actualizar las ramas de seguimiento remoto para todos los
+repositorios remotos definidos simultáneamente, puede ejecutar:
+
+  % git remote update
+
+Ninguno de los dos comandos anteriores actualizará el directorio de trabajo.
+Sin embargo, ambos actualizarán las ramas de seguimiento remoto del
+repositorio.
+
+Para crear una rama local de una rama remota:
+
+  % git checkout -b maint-5.10 origin/maint-5.10
+
+Para volver a blead:
+
+  % git checkout blead
+
+=head2 Determinar el estado actual
+
+El comando de git que usará con más frecuencia probablemente sea
+
+  % git status
+
+Este comando produce como resultado una descripción del estado actual del
+repositorio, que incluye los archivos modificados y los archivos sin
+seguimiento no ignorados; además, muestra cosas como los archivos que están
+preparado para la siguiente confirmación y, en general, información útil
+sobre cómo se pueden cambiar determinadas cosas. Por ejemplo:
+
+  $ git status
+  # On branch blead
+  # Your branch is ahead of 'origin/blead' by 1 commit.
+  #
+  # Changes to be committed:
+  #   (use "git reset HEAD <file>..." to unstage)
+  #
+  #       modified:   pod/perlgit.pod
+  #
+  # Changed but not updated:
+  #   (use "git add <file>..." to update what will be committed)
+  #
+  #       modified:   pod/perlgit.pod
+  #
+  # Untracked files:
+  #   (use "git add <file>..." to include in what will be committed)
+  #
+  #       deliberate.untracked
+
+Indica que los cambios realizados a este documento se han preparado y están
+pendientes de confirmación, y que en el directorio de trabajo hay más cambios
+que aún no están preparados. También muestra que en el directorio de trabajo
+hay un archivo sin seguimiento y, como se puede ver, explica qué tiene que
+hacer para cambiar esto. Además, indica que hay una confirmación en la rama
+de trabajo C<blead> que aún no se ha enviado al repositorio remoto C<origin>.
+B<NOTA>: este resultado también es la plantilla de lo que se ve si no se
+proporciona un mensaje a C<git commit>.
+
+=head2 Flujo de trabajo con parches
+
+En primer lugar, lea L<perlhack> para obtener información detallada sobre
+cómo trabajar en el núcleo de Perl. Este documento explica muchos detalles
+sobre la manera correcta de crear un parche.
+
+Si ya tiene un repositorio de Perl, debe asegurarse de que está en la rama
+I<blead> y que el repositorio está actualizado:
+
+  % git checkout blead
+  % git pull
+
+Es preferible aplicar un parche a la versión más reciente de blead, ya que es
+donde tiene lugar el desarrollo actual para todos los cambios que no sean
+correcciones de errores graves. Los parches de corrección de errores graves
+deben aplicarse a las ramas de mantenimiento correspondientes, o enviarse con
+una nota que indique todas las ramas a las que se debe aplicar la corrección.
+
+Ahora que está todo actualizado, tenemos que crear una nueva rama temporal
+para estos cambios y cambiar a dicha rama:
+
+  % git checkout -b orange
+
+que es la forma abreviada de escribir
+
+  % git branch orange
+  % git checkout orange
+
+La creación de una rama puntual facilita a los mantenedores la reorganización
+o combinación en la rama blead principal, a fin de tener un historial más
+lineal. Si no trabaja en una rama puntual, el mantenedor tendrá que
+seleccionar manualmente los cambios que va a incorporar a blead antes de poder
+aplicarlos.
+
+Eso hará que los perl5-porters le regañen, así que procure evitarlo.
+Pórtese bien.
+
+A continuación, haga los cambios. Por ejemplo, si Leon Brocard decide cambiar
+de nombre y pasar a llamarse Orange Brocard, tendremos que actualizar su nombre
+en el archivo AUTHORS:
+
+  % perl -pi -e 's{Leon Brocard}{Orange Brocard}' AUTHORS
+
+Puede ver qué archivos han cambiado:
+
+  % git status
+  # On branch orange
+  # Changes to be committed:
+  #   (use "git reset HEAD <file>..." to unstage)
+  #
+  #    modified:   AUTHORS
+  #
+
+Y puede ver los cambios:
+
+  % git diff
+  diff --git a/AUTHORS b/AUTHORS
+  index 293dd70..722c93e 100644
+  --- a/AUTHORS
+  +++ b/AUTHORS
+  @@ -541,7 +541,7 @@    Lars Hecking                  <lhecking@nmrc.ucc.ie>
+   Laszlo Molnar                  <laszlo.molnar@eth.ericsson.se>
+   Leif Huhn                      <leif@hale.dkstat.com>
+   Len Johnson                    <lenjay@ibm.net>
+  -Leon Brocard                   <acme@astray.com>
+  +Orange Brocard                 <acme@astray.com>
+   Les Peters                     <lpeters@aol.net>
+   Lesley Binks                   <lesley.binks@gmail.com>
+   Lincoln D. Stein               <lstein@cshl.org>
+
+Ahora confirme el cambio localmente:
+
+  % git commit -a -m 'Cambio de nombre de Leon Brocard a Orange Brocard'
+  Created commit 6196c1d: Cambio de nombre de Leon Brocard a Orange Brocard
+   1 files changed, 1 insertions(+), 1 deletions(-)
+
+La opción C<-a> se usa para incluir todos los archivos modificados que están
+en la lista de seguimiento de git. Si en este momento sólo desea confirmar
+parte de los archivos en los que ha trabajado, puede omitir el modificador
+C<-a> y usar el comando C<S<git add I<ARCHIVO...>>> antes de confirmar. C<S<git
+add --interactive>> permite confirmar sólo partes de archivos, en lugar de
+todos los cambios de los archivos.
+
+La opción C<-m> se usa para especificar el mensaje de confirmación. Si la
+omite, git abrirá un editor de texto para que redacte el mensaje de forma
+interactiva. Esto resulta útil cuando los cambios son más complejos que los
+mostrados aquí como ejemplo y, en función del editor utilizado, debe tener en
+cuenta que la primera línea del mensaje de confirmación no debe superar la
+longitud máxima admitida de 50 caracteres.
+
+Cuando haya terminado de escribir su mensaje de confirmación y salga del
+editor, git escribirá el cambio en el disco y mostrará un mensaje similar al
+siguiente:
+
+  Created commit daf8e63: explain git status and stuff about remotes
+   1 files changed, 83 insertions(+), 3 deletions(-)
+
+Si vuelve a ejecutar C<git status>, verá algo parecido a lo siguiente:
+
+  % git status
+  # On branch blead
+  # Your branch is ahead of 'origin/blead' by 2 commits.
+  #
+  # Untracked files:
+  #   (use "git add <file>..." to include in what will be committed)
+  #
+  #       deliberate.untracked
+  	nothing added to commit but untracked files present (use "git add" to track)
+
+En caso de duda, y antes de hacer cualquier otra cosa, compruebe el estado y
+léalo atentamente. Encontrará la respuesta a muchas preguntas en la salida
+del comando C<git status>.
+
+Puede examinar su última confirmación con el siguiente comando:
+
+  % git show HEAD
+
+y si no queda satisfecho con la descripción o con el parche, puede editar los
+archivos para corregirlos y ejecutar a continuación:
+
+  % git commit -a --amend
+
+Ahora debe crear un parche para todos los cambios locales:
+
+  % git format-patch -M origin..
+  0001-Cambiar-nombre-de-Leon-Brocard-a-Orange-Brocard.patch
+
+Una vez hecho esto, debe enviar un mensaje de correo electrónico a
+L<perlbug@perl.org|mailto:perlbug@perl.org> con una descripción de los cambios
+y adjuntar el parche al mensaje. Además de iniciar el seguimiento mediante RT,
+un mensaje enviado a perlbug se reenviará automáticamente a perl5-porters (la
+lista tiene moderador, por lo que debe ser paciente). Solo debe enviar parches
+a L<perl5-porters@perl.org|mailto:perl5-porters@perl.org> directamente si el
+parche no está listo para aplicarse y desea que lo evalúen.
+
+En la siguiente sección aprenderá a configurar y usar git para que envíe
+automáticamente estos mensajes de correo electrónico.
+
+Si desea eliminar su rama temporal, puede hacerlo con el siguiente comando:
+
+  % git checkout blead
+  % git branch -d orange
+  error: The branch 'orange' is not an ancestor of your current HEAD.
+  If you are sure you want to delete it, run 'git branch -D orange'.
+  % git branch -D orange
+  Deleted branch orange.
+
+=head2 Confirmar los cambios
+
+Suponiendo que desea confirmar todos los cambios que ha realizado como una
+unidad atómica individual, ejecute este comando:
+
+   % git commit -a
+
+(El modificador C<-a> indica a git que debe agregar todos los archivos
+modificados a esta confirmación. Si se usa C<commit -a>, los archivos nuevos
+se agregan automáticamente a la confirmación. Si desea agregar archivos o
+confirmar solo algunos de los cambios, consulte la documentación de C<git
+add>).
+
+Git abrirá su editor de texto favorito para que redacte un mensaje de
+confirmación para el cambio. Vea L<perlhack/Mensaje de confirmación> para
+obtener más información sobre cómo debe ser un mensaje de confirmación.
+
+Cuando haya terminado de escribir su mensaje de confirmación y salga del
+editor, git escribirá el cambio en el disco y mostrará un mensaje similar al
+siguiente:
+
+  Created commit daf8e63: explain git status and stuff about remotes
+   1 files changed, 83 insertions(+), 3 deletions(-)
+
+Si vuelve a ejecutar C<git status>, verá algo parecido a lo siguiente:
+
+  % git status
+  # On branch blead
+  # Your branch is ahead of 'origin/blead' by 2 commits.
+  #
+  # Untracked files:
+  #   (use "git add <file>..." to include in what will be committed)
+  #
+  #       deliberate.untracked
+  	nothing added to commit but untracked files present (use "git add" to track)
+
+En caso de duda, y antes de hacer cualquier otra cosa, compruebe el estado y
+léalo atentamente. Encontrará la respuesta a muchas preguntas en la salida
+del comando C<git status>.
+
+=head2 Usar git para enviar parches por correo electrónico
+
+En L<perlhack> encontrará la dirección a la que debe enviar sus parches.
+
+En su repositorio ~/git/perl, establezca como dirección de correo de destino
+la del sistema de seguimiento de errores de perl:
+
+  $ git config sendemail.to perlbug@perl.org
+
+O incluso la de perl5-porters:
+
+  $ git config sendemail.to perl5-porters@perl.org
+
+Después puede usar git directamente para enviar mensajes de correo
+electrónico con parches adjuntos:
+
+  $ git send-email 0001-Cambiar-nombre-de-Leon-Brocard-a-Orange-Brocard.patch
+
+Es posible que tenga que establecer algunas variables de configuración
+específicas de su proveedor de correo electrónico. Por ejemplo, para
+establecer la configuración global de git para enviar correo electrónico a
+través de una cuenta de gmail:
+
+  $ git config --global sendemail.smtpserver smtp.gmail.com
+  $ git config --global sendemail.smtpssl 1
+  $ git config --global sendemail.smtpuser NOMBRE.USUARIO@gmail.com
+
+Con esta configuración se le pedirá su contraseña de gmail cuando ejecute
+'git send-email'. También puede configurar C<sendemail.smtppass> con su
+contraseña si no le importa almacenarla en el archivo .gitconfig.
+
+=head2 Nota sobre archivos derivados
+
+Tenga en cuenta que muchos de los archivos de la distribución están
+derivados, por lo que debe evitar aplicarles parches, ya que git no verá los
+cambios que les aplique y el proceso de compilación los sobrescribirá. Debe
+aplicar los parches a los archivos originales. La mayoría de las utilidades
+(como perldoc) pertenecen a esta categoría; es decir, debe aplicar un parche a
+F<utils/perldoc.PL> en lugar de aplicárselo a F<utils/perldoc>. Por la misma
+razón, no debe crear parches para archivos de $src_root/ext a partir de las
+copias que se encuentran en $install_root/lib. Si no está seguro de cuál es
+la ubicación correcta de un archivo que podría haberse copiado al compilar la
+distribución de código fuente, consulte el archivo C<MANIFEST>.
+
+=head2 Limpiar un directorio de trabajo
+
+Puede usar el comando C<git clean> con diversos argumentos como sustituto de
+C<make clean>.
+
+Para limpiar el directorio de trabajo puede ejecutar el siguiente comando:
+
+  % git clean -dxf
+
+Sin embargo, tenga en cuenta que esto eliminará TODO el contenido sin
+seguimiento. Puede usar
+
+  % git clean -Xf
+
+para eliminar todos los archivos sin seguimiento ignorados, como los creados al
+compilar o realizar pruebas, conservando los archivos creados manualmente.
+
+Si sólo desea cancelar algunos cambios sin confirmar, puede usar C<git
+checkout> con una lista de archivos que hay que revertir, o C<git checkout -f>
+para revertirlos todos.
+
+Si desea cancelar una o varias confirmaciones, puede usar C<git reset>.
+
+=head2 Bisecar
+
+C<git> proporciona una forma integrada de determinar qué confirmación es
+responsable de un error. C<git bisect> realiza una búsqueda binaria del
+historial para localizar la primera confirmación en la que se produjo el
+error. Es un comando rápido, eficaz y flexible, pero debe ser configurado y la
+automatización del proceso requiere un script de shell auxiliar.
+
+El núcleo proporciona un programa encapsulador, F<Porting/bisect.pl>, que
+simplifica al máximo la bisección, convirtiéndola en algo tan sencillo como
+ejecutar un script de una línea. Por ejemplo, si desea saber en qué
+confirmación la línea siguiente pasó a ser un error:
+
+    perl -e 'my $a := 2'
+
+solo tiene que ejecutar esto:
+
+    .../Porting/bisect.pl -e 'my $a := 2;'
+
+Con C<bisect.pl> sólo tiene que usar un comando (y ningún otro archivo) para
+averiguar fácilmente lo siguiente:
+
+=over 4
+
+=item *
+
+La confirmación en la que este ejemplo de código dejó de funcionar
+
+=item *
+
+La confirmación en la que este ejemplo de código volvió a funcionar
+
+=item *
+
+La confirmación que agregó el primer archivo coincidente con esta expresión
+regular
+
+=item *
+
+La confirmación que eliminó el último archivo coincidente con esta
+expresión regular
+
+=back
+
+generalmente sin necesidad de saber qué versiones de perl hay que usar como
+revisiones inicial y final, ya que F<bisect.pl> buscará automáticamente la
+versión estable más reciente que supera el caso de prueba. Ejecute
+C<Porting/bisect.pl --help> para ver toda la documentación, que incluye una
+descripción de la configuración mediante C<Configure> y las opciones de
+tiempo de compilación.
+
+Si necesita más flexibilidad que la que ofrece F<Porting/bisect.pl> tendrá
+que usar C<git bisect> directamente. El uso de C<git bisect run> resulta muy
+útil para automatizar la compilación y prueba de las revisiones de perl. Para
+ello necesitará un script de shell que haga que C<git> llame una revisión
+concreta para realizar pruebas. Se proporciona un script de ejemplo,
+F<Porting/bisect-example.sh>, que debe copiar B<fuera> del repositorio, ya que
+al ejecutar el proceso de bisección restablece el estado a una copia limpia.
+En las instrucciones siguientes se supone que lo ha copiado como F<~/run> y ha
+hecho las modificaciones necesarias.
+
+Primero debe entrar en modo de bisección con:
+
+  % git bisect start
+
+Por ejemplo, si el error está presente en C<HEAD> pero no estaba en la
+versión 5.10.0, C<git> lo averiguará cuando ejecute:
+
+  % git bisect bad
+  % git bisect good perl-5.10.0
+  Bisecting: 853 revisions left to test after this
+
+Esto hace que se obtenga la confirmación intermedia entre C<HEAD> y
+C<perl-5.10.0>. Después se ejecuta el proceso de bisección con:
+
+  % git bisect run ~/run
+
+Cuando se haya aislado la primera confirmación en la que esté presente el
+error, C<git bisect> se lo indicará:
+
+  ca4cfd28534303b82a216cfe83a1c80cbc3b9dc5 is first bad commit
+  commit ca4cfd28534303b82a216cfe83a1c80cbc3b9dc5
+  Author: Dave Mitchell <davem@fdisolutions.com>
+  Date:   Sat Feb 9 14:56:23 2008 +0000
+
+      [perl #49472] Attributes + Unknown Error
+      ...
+
+  bisect run success
+
+Si desea analizar el proceso de bisección, puede usar C<git bisect log> y
+C<git bisect visualize>. Con C<git bisect reset> saldrá del modo de
+bisección.
+
+Tenga en cuenta que el primer estado C<correcto> debe ser un antecesor del
+primer estado C<incorrecto>. Si desea buscar la confirmación que I<solucionó>
+algún error, debe negar el caso de prueba (es decir, salir devolviendo C<1> si
+el resultado es correcto y C<0> en caso contrario) y marcar el límite inferior
+como C<correcto> y el superior como C<incorrecto>. Se considera que la "primera
+confirmación incorrecta" es la "primera confirmación en la que el error está
+solucionado".
+
+C<git help bisect> ofrece mucha más información sobre cómo puede manipular
+las búsquedas binarias.
+
+=head1 Ramas puntuales e historial de reescritura
+
+Los usuarios individuales que deseen aplicar cambios deben crear ramas
+puntuales en B<nombre>/B<nombre_descriptivo>. Si desea contribuir cambios a una
+rama puntual de otra persona, antes deberá consultárselo al autor de la rama.
+
+La forma más sencilla de crear una rama puntual remota que funcione en todas
+las versiones de git es enviar la rama de encabezado actual como nueva rama en
+el repositorio remoto y después obtener una copia local:
+
+  $ rama="$nombre/$nombre_descriptivo"
+  $ git push origin HEAD:$rama
+  $ git checkout -b $rama origin/$rama
+
+Los usuarios de git 1.7 o posterior pueden hacerlo de una manera más obvia:
+
+  $ rama="$nombre/$nombre_descriptivo"
+  $ git checkout -b $rama
+  $ git push origin -u $rama
+
+Si no es el autor de B<nombre>/B<nombre_descriptivo>, a veces verá que el
+autor original ha editado el historial de la rama. Hay muchas razones de peso
+para ello. En algunos casos, el autor simplemente reorganiza la rama para
+asignarle un nuevo punto de origen. También puede ocurrir que un autor haya
+detectado un error en una confirmación anterior que desea corregir antes de
+combinar la rama con blead.
+
+Actualmente el repositorio principal está configurado para prohibir
+combinaciones que no sean de avance rápido. Esto significa que las ramas que
+contiene no se pueden reorganizar y enviar en un solo paso.
+
+La única manera de reorganizar o modificar el historial de una rama enviada es
+eliminarla y enviarla como una rama nueva con el mismo nombre. Antes de hacer
+esto, piénselo. Puede ser mejor cambiar el nombre de las ramas secuencialmente
+para que sus colaboradores puedan seleccionar fácilmente sus cambios locales
+para aplicárselos a la nueva versión. (XXX: necesita una explicación).
+
+Si desea reorganizar una rama puntual personal tendrá que eliminar la rama
+puntual existente y enviarla como una nueva versión de la misma. Puede hacer
+esto con la fórmula siguiente (para obtener más información, vea la
+descripción de C<refspec> en la documentación sobre git push) tras
+reorganizar la rama:
+
+   # primero reorganizar
+   $ git checkout $usuario/$tema
+   $ git fetch
+   $ git rebase origin/blead
+
+   # después "eliminar y enviar cambios"
+   $ git push origin :$usuario/$tema
+   $ git push origin $usuario/$tema
+
+B<NOTA:> está prohibido eliminar ramas "principales" de un repositorio. Es
+decir, cualquier rama cuyo nombre coincida con C<m!^(blead|maint|perl)!>. Si se
+intenta eliminar una de estas ramas, git generará un error parecido al
+siguiente:
+
+    $ git push origin :blead
+    *** It is forbidden to delete blead/maint branches in this repository
+    error: hooks/update exited with error code 1
+    error: hook declined to update refs/heads/blead
+    To ssh://perl5.git.perl.org/perl
+     ! [remote rejected] blead (hook declined)
+     error: failed to push some refs to 'ssh://perl5.git.perl.org/perl'
+
+Tenemos la política de B<no> editar el historial las ramas de blead y maint-*.
+Si se colara un error ortográfico (o algo más grave) en una confirmación en
+blead o maint-*, lo corregiremos en una confirmación posterior. Los únicos
+tipos de actualización que se permiten en estas ramas son los de "avance
+rápido", que conservan el historial.
+
+Las etiquetas con anotaciones del repositorio perl.git canónico nunca se
+eliminarán ni modificarán. Si desea enviar una etiqueta local a perl.git,
+piénselo detenidamente antes de hacerlo. (No se permite insertar etiquetas sin
+anotaciones).
+
+=head2 Injertos
+
+El historial de perl contiene un error que no se detectó en la conversión: se
+registró en el historial una combinación entre blead y maint-5.10 que en
+realidad no tuvo lugar. Por la naturaleza de git, es imposible corregir esto en
+el repositorio público. Pero puede eliminar localmente esta combinación
+incorrecta agregando la línea siguiente a su archivo C<.git/info/grafts>:
+
+  296f12bbbbaa06de9be9d09d3dcf8f4528898a49 434946e0cb7a32589ed92d18008aaa1d88515930
+
+Es especialmente importante injertar esta línea si se va a realizar alguna
+bisección en el área de la "combinación" en cuestión.
+
+=head1 ACCESO DE ESCRITURA AL REPOSITORIO DE GIT
+
+Cuando tenga acceso de escritura, tendrá que modificar la dirección URL del
+repositorio remoto de origen para el que desea habilitar la capacidad de enviar
+cambios. Edite F<.git/config> con el comando git-config(1):
+
+  % git config remote.origin.url ssh://perl5.git.perl.org/perl.git
+
+También puede configurar su nombre de usuario y su dirección de correo
+electrónico. La mayor parte de los usuarios hacen esto una sola vez en el
+archivo F<~/.gitconfig>, con comandos similares a los siguientes:
+
+  % git config --global user.name "Ævar Arnfjörð Bjarmason"
+  % git config --global user.email avarab@gmail.com
+
+Sin embargo, si desea sobrescribir esa configuración solo para perl, debe
+ejecutar algo parecido a lo siguiente en F<perl>:
+
+  % git config user.email avar@cpan.org
+
+También es posible mantener C<origin> como un repositorio remoto de git y
+agregar un repositorio remoto nuevo para acceso ssh:
+
+  % git remote add camel perl5.git.perl.org:/perl.git
+
+Esto permite actualizar el repositorio local trayendo los cambios desde
+C<origin>, lo cual es más rápido y no requiere autenticación, y volver a
+enviar los cambios con el servidor C<camel> remoto:
+
+  % git fetch camel
+  % git push camel
+
+El comando C<fetch> solo actualiza las referencias de C<camel>, ya que se deben
+haber obtenido los objetos al traer cambios desde C<origin>.
+
+=head1 Aceptar un parche
+
+Si recibe un parche generado siguiendo los pasos descritos en la sección
+anterior, debe probarlo.
+
+En primer lugar, debe crear una nueva rama temporal para estos cambios y
+cambiar a dicha rama:
+
+  % git checkout -b experimental
+
+Los parches a los que se aplicó formato con C<git format-patch> se aplican
+mediante C<git am>:
+
+  % git am 0001-Cambiar-nombre-de-Leon-Brocard-a-Orange-Brocard.patch
+  Applying Cambiar nombre de Leon Brocard a Orange Brocard
+
+Si solo se proporciona un archivo de diferencias sin formato, también se puede
+seguir este proceso en dos pasos:
+
+  % git apply bugfix.diff
+  % git commit -a -m "Corrección" --author="Un colaborador <un.colaborador@internets.com>"
+
+Ahora podemos inspeccionar el cambio:
+
+  % git show HEAD
+  commit b1b3dab48344cff6de4087efca3dbd63548ab5e2
+  Author: Leon Brocard <acme@astray.com>
+  Date:   Fri Dec 19 17:02:59 2008 +0000
+
+    Rename Leon Brocard to Orange Brocard
+
+  diff --git a/AUTHORS b/AUTHORS
+  index 293dd70..722c93e 100644
+  --- a/AUTHORS
+  +++ b/AUTHORS
+  @@ -541,7 +541,7 @@ Lars Hecking                        <lhecking@nmrc.ucc.ie>
+   Laszlo Molnar                  <laszlo.molnar@eth.ericsson.se>
+   Leif Huhn                      <leif@hale.dkstat.com>
+   Len Johnson                    <lenjay@ibm.net>
+  -Leon Brocard                   <acme@astray.com>
+  +Orange Brocard                 <acme@astray.com>
+   Les Peters                     <lpeters@aol.net>
+   Lesley Binks                   <lesley.binks@gmail.com>
+   Lincoln D. Stein               <lstein@cshl.org>
+
+Si tiene permiso para contribuir cambios a Perl y considera que el parche es
+correcto, puede combinarlo en blead y después enviarlo al repositorio
+principal:
+
+  % git checkout blead
+  % git merge experimental
+  % git push
+
+Si desea eliminar su rama temporal, puede hacerlo con el siguiente comando:
+
+  % git checkout blead
+  % git branch -d experimental
+  error: The branch 'experimental' is not an ancestor of your current HEAD.
+  If you are sure you want to delete it, run 'git branch -D experimental'.
+  % git branch -D experimental
+  Deleted branch experimental.
+
+=head2 Confirmar en blead
+
+La rama 'blead' se convertirá en la siguiente versión de producción de Perl.
+
+Antes de enviar un cambio local a blead, es muy importante que haga una serie
+de cosas (si no quiere que los demás colaboradores le persigan munidos de
+horcas de labrador y antorchas):
+
+=over
+
+=item *
+
+Asegúrese de escribir un mensaje de confirmación adecuado. Encontrará
+información detallada en L<perlhack/Mensaje de confirmación>.
+
+=item *
+
+Ejecute el conjunto de pruebas. Seguramente crea que es imposible que un error
+ortográfico genere un error de un archivo de prueba. Se equivoca. En el caso
+que se describe a continuación, hubo problemas por no ejecutar la batería de
+pruebas. Se envió un parche para agregar un par de pruebas a un archivo .t
+existente. No podía afectar a nada más, por lo que no era necesario probar
+más que el archivo .t en cuestión. Pero la dirección de correo electrónico
+del remitente había cambiado desde su último envío, y esto hizo que se
+produjeran errores en otras pruebas. Si se hubiera ejecutado el objetivo de
+prueba del siguiente elemento, se habría detectado este problema.
+
+=item *
+
+Si no ejecuta toda la batería de pruebas, ejecute al menos C<make
+test_porting>. Esto realizará comprobaciones básicas. Si desea ver qué
+comprobaciones se van a realizar, consulte F<t/porting>.
+
+=item *
+
+Si hace cambios que afecten a rutinas de miniperl o del núcleo que tienen
+rutas de código distintas para miniperl, asegúrese de ejecutar C<make
+minitest>. Eso detectará problemas que ni la batería de pruebas completa
+puede detectar, ya que ejecuta un subconjunto de las pruebas con miniperl, en
+lugar de perl.
+
+=back
+
+=head3 Sobre la combinación y la reorganización
+
+Las confirmaciones puntuales sencillas enviadas a la rama "blead" deben ser
+simples y aplicarse limpiamente. Es decir, debe asegurarse de confirmar su
+trabajo en la posición actual de blead, para poder enviar los cambios al
+repositorio principal sin tener que combinar.
+
+A veces blead se mueve mientras usted compila o prueba sus cambios. En este
+caso, los cambios enviados se rechazarán con un mensaje como este:
+
+  To ssh://perl5.git.perl.org/perl.git
+   ! [rejected]        blead -> blead (non-fast-forward)
+  error: failed to push some refs to 'ssh://perl5.git.perl.org/perl.git'
+  To prevent you from losing history, non-fast-forward updates were rejected
+  Merge the remote changes (e.g. 'git pull') before pushing again. See the
+  'Note about fast-forwards' section of 'git push --help' for details.
+
+Cuando esto ocurre, solo tiene que I<reorganizar> su trabajo con la nueva
+posición de blead, de esta manera (suponiendo que el repositorio remoto del
+repositorio principal es "p5p"):
+
+  $ git fetch p5p
+  $ git rebase p5p/blead
+
+Se volverán a aplicar sus confirmaciones y entonces podrá enviar cambios de
+forma segura. Encontrará más información sobre la reorganización en la
+documentación del comando git-rebase(1).
+
+Para grandes conjuntos de confirmaciones que solo tienen sentido juntas, o que
+puedan beneficiarse de disponer de un resumen de propósito del conjunto, es
+recomendable usar una confirmación de combinación. Debe realizar el trabajo
+en una L<rama puntual|/Ramas puntuales e historial de reescritura>, que habrá
+que reorganizar regularmente con blead para asegurarse de que el código no
+deja de funcionar cuando blead se mueva. Cuando haya terminado su trabajo, haga
+una última reorganización y ejecute las pruebas. El historial deja de ser
+lineal cada vez que se realiza una confirmación en blead, pero una
+reorganización final restablece la linealidad del historial, lo que facilita a
+los futuros mantenedores la labor de comprobar los cambios realizados. La
+reorganización se realiza como se indica a continuación (suponiendo que el
+trabajo está en la rama C<< contribuidor/trabajo >>):
+
+  $ git checkout contribuidor/trabajo
+  $ git rebase blead
+
+Después puede combinarla en la rama principal de esta manera:
+
+  $ git checkout blead
+  $ git merge --no-ff --no-commit contribuidor/trabajo
+  $ git commit -a
+
+A continuación se describen estos modificadores. C<--no-ff> indica que aunque
+se pueda aplicar todo el trabajo de forma lineal a blead, debe prepararse una
+confirmación de combinación. Esto garantiza que se mostrará todo el trabajo
+como una rama paralela, con todas las confirmaciones combinadas en la rama
+blead principal mediante la combinación de mezcla.
+
+C<--no-commit> significa que la confirmación de combinación se I<preparará>,
+pero no se I<confirmará>. La confirmación se realiza realmente cuando se
+ejecuta el siguiente comando, que abre el editor para que especifique una
+descripción de la confirmación. Sin C<--no-commit>, se realizará la
+confirmación sin que se muestre prácticamente ningún mensaje de utilidad, lo
+que restará mucho valor a la confirmación de combinación como marcador para
+la descripción del trabajo.
+
+Al describir la confirmación de combinación, explique el propósito de la
+rama y tenga en mente que esta descripción será la que use el ingeniero a
+cargo de lanzar la siguiente versión cuando revise el documento perldelta
+correspondiente.
+
+=head2 Confirmar en versiones de mantenimiento
+
+Las versiones de mantenimiento sólo se deben modificar para corregir errores
+graves; vea L<perlpolicy>.
+
+Para confirmar en una versión de mantenimiento de perl debe crear una rama de
+seguimiento local:
+
+  % git checkout --track -b maint-5.005 origin/maint-5.005
+
+Esto crea una rama local denominada C<maint-5.005> que hace un seguimiento de
+la rama remota C<origin/maint-5.005>. Después podrá traer, confirmar,
+combinar y enviar, como antes.
+
+También puede seleccionar confirmaciones de blead y de otra rama mediante el
+comando C<git cherry-pick>. Se recomienda usar la opción B<-x> de C<git
+cherry-pick> para registrar la función hash SHA1 de la confirmación original
+en el nuevo mensaje de confirmación.
+
+Antes de enviar cambios a la versión maint debe asegurarse de haber realizado
+los pasos descritos en L</Confirmar en blead> más arriba.
+
+=head2 Combinar desde una rama a través de GitHub
+
+Aunque no recomendamos enviar parches a través de GitHub, es inevitable que
+siga ocurriendo. A continuación se ofrece una guía breve para combinar
+parches de un repositorio de GitHub.
+
+  % git remote add avar git://github.com/avar/perl.git
+  % git fetch avar
+
+Ahora puede ver las diferencias entre la rama y blead:
+
+  % git diff avar/orange
+
+Y puede ver las confirmaciones:
+
+  % git log avar/orange
+
+Si aprueba una confirmación específica, puede seleccionarla:
+
+  % git cherry-pick 0c24b290ae02b2ab3304f51d5e11e85eb3659eae
+
+O puede simplemente combinar la rama completa si lo desea:
+
+  % git merge avar/orange
+
+Y después enviar los cambios al repositorio:
+
+  % git push
+
+=head2 Nota sobre los servidores I<camel> (camello) y I<dromedary> (dromedario)
+
+Las personas que contribuyen cambios tienen acceso SSH a los dos servidores que
+ofrecen servicio a C<perl5.git.perl.org>. Uno es C<perl5.git.perl.org>
+(I<camel>), el repositorio "principal". El otro es C<users.perl5.git.perl.org>
+(I<dromedary>), que se puede usar para pruebas y desarrollo general. El
+servidor I<dromedary> sincroniza el árbol git de I<camel> cada pocos minutos.
+No debe insertar cambios en I<camel>. Ambos equipos también tienen un servidor
+reflejado de CPAN completo en /srv/CPAN. Use estos servidores. Para compartir
+archivos con el público general, I<dromedary> ofrece ~/public_html/ como
+C<http://users.perl5.git.perl.org/~usuario/>
+
+El acceso de estos hosts al exterior está considerablemente restringido
+mediante firewall. Hacia fuera, solo se admiten rsync, ssh y git. Para http y
+ftp puede usar http://webproxy:3128 como proxy. Para la entrada, el firewall
+trata de detectar ataques y bloquea las direcciones IP con actividad
+sospechosa. A veces (aunque raramente) esto produce falsos positivos y en ese
+caso se le bloqueará. La forma más rápida de conseguir que le desbloqueen es
+notificárselo a los administradores.
+
+Estos dos equipos son propiedad de booking.com, que se encarga de su
+alojamiento y administración. Puede ponerse en contacto con los
+administradores del sistema en el canal #p5p de irc.perl.org o enviar un
+mensaje de correo electrónico a C<perl5-porters@perl.org>.
+
+
+=head1 TRADUCTORES
+
+=over
+
+=item * Joaquín Ferrero (Tech Lead)
+
+=item * Enrique Nell (Language Lead)
+
+=back
+
