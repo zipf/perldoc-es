@@ -30,7 +30,8 @@ L<perlop/"Detalles complejos del análisis de construcciones entrecomilladas">.
 =over 4
 
 =item m
-X</m> X<regex, multiline> X<regexp, multiline> X<regular expression, multiline> X<regex, multilínea> X<regexp, multilínea> X<expresión regular, multilínea>
+X</m> X<regex, multiline> X<regexp, multiline> X<regular expression, multiline>
+X<regex, multilínea> X<regexp, multilínea> X<expresión regular, multilínea>
 
 Trata la cadena como si fuera un conjunto de líneas. Es decir, cambia el
 significado de "^" y "$", que detectan el principio y el final de la cadena
@@ -38,7 +39,9 @@ respectivamente, para que detecten el principio y el final de cualquier línea
 en cualquier parte de la cadena.
 
 =item s
-X</s> X<regex, single-line> X<regexp, single-line> X<regular expression, single-line> X<regex, una línea> X<regexp, una línea> X<expresión regular, una línea>
+X</s> X<regex, single-line> X<regexp, single-line> 
+X<regular expression, single-line> X<regex, una línea> X<regexp, una línea> 
+X<expresión regular, una línea>
 
 Trata la cadena como una sola línea. Es decir, cambia el significado de "."
 para que detecte cualquier carácter, incluso el de nueva línea, que
@@ -50,7 +53,11 @@ continuación e inmediatamente antes de los caracteres de nueva línea en la
 cadena.
 
 =item i
-X</i> X<regex, case-insensitive> X<regexp, case-insensitive> X<regular expression, case-insensitive> X<regex, no distinguir mayúsculas de minúsculas> X<regexp, no distinguir mayúsculas de minúsculas> X<expresión regular, no distinguir mayúsculas de minúsculas>
+X</i> X<regex, case-insensitive> X<regexp, case-insensitive> 
+X<regular expression, case-insensitive> 
+X<regex, no distinguir mayúsculas de minúsculas> 
+X<regexp, no distinguir mayúsculas de minúsculas> 
+X<expresión regular, no distinguir mayúsculas de minúsculas>
 
 Busca coincidencias de patrones sin distinguir mayúsculas de minúsculas.
 
@@ -59,7 +66,7 @@ configuración regional, la asignación de mayúsculas o minúsculas se basa en
 la configuración regional actual para los códigos de carácter inferiores a
 255 y en las reglas de Unicode para códigos de carácter superiores. Sin
 embargo, no se detectarán coincidencias que atraviesen los límites de las
-reglas Unicode/no Unicode (ordinales 255/256). Vea L<perllocale>.
+reglas de Unicode/no Unicode (ordinales 255/256). Vea L<perllocale>.
 
 Con el modificador C</i> activado, hay varios caracteres Unicode que coinciden
 con secuencias de caracteres (caracteres múltiples). Por ejemplo, C<LATIN
@@ -72,8 +79,8 @@ de estos caracteres. Por lo tanto
  "\N{LATIN SMALL LIGATURE FI}" =~ /[fi][fi]/i;    # No hay coincidencia
  "\N{LATIN SMALL LIGATURE FI}" =~ /fi*/i;         # No hay coincidencia
 
- # En la siguiente comparación no hay coincidencia, y no está claro qué contendrían $1 y $2
- # aunque hubiera coincidencia
+ # En la siguiente comparación no hay coincidencia, y no está claro
+ # qué contendrían $1 y $2 aunque hubiera coincidencia
  "\N{LATIN SMALL LIGATURE FI}" =~ /(f)(i)/i;      # No hay coincidencia
 
 Perl no detecta caracteres múltiples en una clase invertida de caracteres
@@ -110,12 +117,12 @@ X</p> X<regex, preserve> X<regexp, preserve> X<regex, conservar> X<regexp, conse
 Conserva la cadena coincidente, de manera que ${^PREMATCH}, ${^MATCH} y
 ${^POSTMATCH} estén disponibles tras la detección.
 
-=item g y c
+=item g, c
 X</g> X</c>
 
 C<g> realiza una detección de coincidencias global y C<c> conserva la
 posición actual tras un error de detección de coincidencia. A diferencia de
-i, m, s y x, estas dos marcas afectan a la forma en que se utiliza la
+i, m, s y x, estos dos modificadores afectan a la forma en que se utiliza la
 expresión regular, no a la propia expresión regular. En L<perlretut/"Usar
 expresiones regulares en Perl"> encontrará una explicación más detallada de
 los modificadores g y c.
@@ -163,7 +170,7 @@ esta, con cualquier tipo de delimitadores, los espacios permitidos no se verán
 afectados por C</x>, y dependen de la propia construcción. Por ejemplo,
 C<\x{...}> no puede contener espacios porque los números hexadecimales no
 contienen espacios. Pero las propiedades Unicode sí pueden contener espacios,
-por lo que en C<\p{...}> puede haber espacios que cumplan las reglas Unicode
+por lo que en C<\p{...}> puede haber espacios que cumplan las reglas de Unicode
 (vea L<perluniprops.pod/Propiedades accesibles a través de \p{} y \P{}>).
 X</x>
 
@@ -198,12 +205,12 @@ C</d> usa el comportamiento preB<d>eterminado de juego caracteres de las
 versiones anteriores a la 5.14, que era problemático. Su única misión es
 forzar el comportamiento anterior.
 
-En un momento dado solo puede estar en vigor uno de estos modificadores. Estos
-modificadores permiten que Perl mantenga el comportamiento originalmente
-compilado de una expresión regular, independientemente de las normas que
-estén en vigor cuando se ejecute dicha expresión. Y si se interpola en una
-expresión regular más grande, las normas originales se siguen aplicando a
-esta expresión regular (y solo a ella).
+En un momento dado solo puede estar en vigor uno de estos modificadores. Con
+ellos, Perl puede mantener el comportamiento originalmente compilado de una
+expresión regular, independientemente de las normas que estén en vigor cuando
+se ejecute dicha expresión. Y si se interpola en una expresión regular más
+grande, las normas originales se siguen aplicando a esta expresión regular (y
+solo a ella).
 
 Los modificadores C</l> y C</u> se seleccionan automáticamente para las
 expresiones regulares compiladas dentro del ámbito de diversos pragmas y, en
@@ -222,7 +229,7 @@ C</l> no afecta al funcionamiento de C<\U>. Lo más probable es que desee que
 ambas operaciones usen las reglas de la configuración regional. Para ello debe
 compilar la expresión regular dentro del ámbito de C<use locale>. De manera
 implícita, esto agrega C</l> y aplica las reglas de configuración regional
-para C<\U>.   Así pues, debe usar C<use locale> en lugar de agregar C</l>
+para C<\U>. Así pues, debe utilizar C<use locale> en lugar de agregar C</l>
 explícitamente.
 
 De manera similar, es mejor utilizar C<use feature 'unicode_strings'> en lugar
@@ -231,8 +238,8 @@ de
  s/foo/\Lbar/iu
 
 para aplicar reglas de Unicode, ya que con esta característica C<\L> también
-usaría las reglas de Unicode (pero no necesariamente en la sustitución
-anterior).
+usará las reglas de Unicode (pero no las usará necesariamente en la
+sustitución anterior).
 
 A continuación se ofrecen más detalles sobre cada uno de los modificadores.
 Lo más probable es que no necesite conocer estos detalles para C</l>, C</u> y
@@ -254,7 +261,7 @@ setlocale()|perllocale/La función setlocale>.
 Perl solo admite configuraciones regionales de byte único. Esto significa que
 los códigos de carácter por encima de 255 se consideran como Unicode,
 independientemente de la configuración regional que esté en vigor. Según las
-normas Unicode, hay unos pocos casos de coincidencias que no distinguen
+normas de Unicode, hay unos pocos casos de coincidencias que no distinguen
 mayúsculas de minúsculas y cruzan el límite 255/256. Con C</l> no se
 permiten. Por ejemplo, 0xFF (en plataformas ASCII) no coincide con el carácter
 0x178, C<LATIN CAPITAL LETTER Y WITH DIAERESIS> sin distinguir mayúsculas de
@@ -269,13 +276,13 @@ vigor?>. X</l>
 
 =head4 /u
 
-significa que se usan las reglas Unicode al detectar coincidencias de patrones.
-En plataformas ASCII, esto significa que los códigos de carácter entre 128 y
-255 se usan como si fueran Latin-1 (ISO-8859-1) (que son los mismos que en
-Unicode). (De lo contrario, Perl considerará que no están definidos). Así,
-con este modificador la plataforma ASCII se convierte de forma efectiva en una
-plataforma Unicode. Por ejemplo, C<\w> detectará cualquiera de los más de 100
-000 caracteres de Unicode que pueden formar parte de una "palabra".
+significa que se usan las reglas de Unicode al detectar coincidencias de
+patrones. En plataformas ASCII, esto significa que los códigos de carácter
+entre 128 y 255 se usan como si fueran Latin-1 (ISO-8859-1) (que son los mismos
+que en Unicode). (De lo contrario, Perl considerará que no están definidos).
+Así, con este modificador la plataforma ASCII se convierte de forma efectiva
+en una plataforma Unicode. Por ejemplo, C<\w> detectará cualquiera de los más
+de 100 000 caracteres de Unicode que pueden formar parte de una "palabra".
 
 A diferencia de la mayoría de las configuraciones regionales, que son
 específicas de un par idioma/país, Unicode clasifica como C<\w> todos los
@@ -320,7 +327,7 @@ juego de caracteres está en vigor?>. X</u>
 
 Este modificador hace que se usen las reglas nativas "predeterminadas" (por
 I<d>efecto) de la plataforma, excepto cuando hay razones para usar las reglas
-Unicode, de la siguiente manera:
+de Unicode, de la siguiente manera:
 
 =over 4
 
@@ -354,17 +361,17 @@ obtener resultados inesperados. Vea L<perlunicode/El "Error de Unicode">. El
 otro nombre (imprimible) en inglés para este modificador: "Dodgy" (poco
 fiable).
 
-En plataformas ASCII, las reglas nativas son ASCII, y en plataformas EBCDIC (al
-menos en las compatibles con Perl), son Latin-1.
+En plataformas ASCII, las reglas nativas son las de ASCII, y en plataformas
+EBCDIC (al menos en las compatibles con Perl) son las de Latin-1.
 
 Veamos algunos ejemplos de cómo funciona esto en una plataforma ASCII:
 
  $str =  "\xDF";      # $str no está en formato UTF-8.
  $str =~ /^\w/;       # No hay coincidencia porque $str no está en formato UTF-8.
  $str .= "\x{0e0b}";  # Ahora $str está en formato UTF-8.
- $str =~ /^\w/;       # Hay coincidencia Ahora $str tiene formato UTF-8.
+ $str =~ /^\w/;       # Hay coincidencia. Ahora $str tiene formato UTF-8.
  chop $str;
- $str =~ /^\w/;       # Sigue habiendo coincidencia $str sigue estando en formato UTF-8.
+ $str =~ /^\w/;       # Sigue habiendo coincidencia. $str sigue estando en formato UTF-8.
 
 Este modificador se selecciona automáticamente de forma predeterminada si
 ninguno de los demás están presentes, por lo que también se conoce como el
@@ -376,7 +383,7 @@ anteriores en casos raros.
 
 =head4 /a (y /aa)
 
-A este modificador se le conoce como el ASCII-restrictivo (o ASCII-seguro). A
+A este modificador se le conoce como ASCII-restrictivo (o ASCII-seguro). A
 diferencia de los demás modificadores, se puede duplicar para aumentar su
 efecto.
 
@@ -411,15 +418,15 @@ Por lo demás, C</a> se comporta como el modificador C</u>, puesto que la
 detección que no distingue mayúsculas de minúsculas utiliza semántica
 Unicode; por ejemplo, "k" coincidirá con el carácter Unicode C<\N{KELVIN
 SIGN}> si se usa C</i>, y los códigos de caracteres Latin1 no incluidos en
-ASCII seguirán reglas Unicode para la detección de coincidencias sin
+ASCII seguirán reglas de Unicode para la detección de coincidencias sin
 distinguir mayúsculas de minúsculas.
 
 Para prohibir coincidencias ASCII/no-ASCII (como "k" con C<\N{KELVIN SIGN}>),
-especifique la "a" dos veces, por ejemplo C</aai> o C</aia>.  (La primera "a"
+especifique la "a" dos veces, por ejemplo C</aai> o C</aia>. (La primera "a"
 restringe C<\d>, etc. y la segunda agrega restricciones a C</i>). Sin embargo,
 tenga en cuenta que para los códigos de caracteres que estén fuera del rango
 ASCII se usarán las reglas de Unicode para la detección de coincidencias con
-C</i>, por lo que el modificador no restringe el uso a únicamente ASCII, sino
+C</i>, por lo que el modificador no restringe el uso a ASCII únicamente, sino
 que prohíbe mezclar caracteres ASCII con caracteres que no pertenecen a ASCII.
 
 En resumen, este modificador proporciona protección para aplicaciones que no
@@ -480,15 +487,15 @@ ignoraría la compilación original en favor de lo que estaba en vigor en el
 momento de la segunda compilación. Había varias incoherencias (errores)
 relacionadas con el uso del modificador C</d>: se usaban las reglas de Unicode
 cuando no era adecuado hacerlo, y viceversa. C<\p{}> no implicaba usar las
-reglas de Unicode, como era el caso de C<\N{}> hasta 5.12.
+reglas de Unicode, como era el caso de C<\N{}>, hasta 5.12.
 
-=head2 Expresiones Regulares
+=head2 Expresiones regulares
 
 =head3 Metacaracteres
 
 Los patrones usados en el sistema de detección de coincidencias de Perl
-evolucionaron desde los suministrados por la versión 8 de las rutinas de
-expresiones regulares.  (Las rutinas se derivan lejanamente de la
+evolucionaron a partir de los suministrados por la versión 8 de las rutinas de
+expresiones regulares. (Las rutinas se derivan lejanamente de la
 reimplementación redistribuible de las rutinas V8 realizada por Henry
 Spencer). Para obtener más información, vea L<Expresiones regulares versión
 8>.
@@ -517,10 +524,10 @@ carácter de nueva línea que haya en la cadena (excepto si dicho carácter es
 el último en la cadena), y "$" coincida delante de cualquier carácter de
 nueva línea. A costa de una ligera sobrecarga, puede hacer esto mediante el
 modificador /m en el patrón del operador de detección de coincidencias de
-patrones.  (En los programas antiguos se hacía por medio de C<$*>, pero esta
+patrones. (En los programas antiguos se hacía por medio de C<$*>, pero esta
 opción se eliminó en perl 5.9). X<^> X<$> X</m>
 
-Para simplificar la sustitución de varias líneas, el carácter "."  no
+Para simplificar la sustitución de varias líneas, el carácter "." no
 coincide con un carácter de nueva línea a menos que utilice el modificador
 C</s>, que indica a Perl que suponga que la cadena es una sola línea, aunque
 no lo sea. X<.> X</s>
@@ -553,16 +560,15 @@ que si fueran caracteres literales sin emitir ninguna advertencia. Por ejemplo,
 
     /o{4,3}/
 
-parece a un cuantificador que coincide 0 veces (ya que 4 es mayor que 3), pero
-en realidad esta expresión detecta la secuencia de seis caracteres S<C<"o { 4
-, 3 }">>).
+parece un cuantificador que coincide 0 veces (ya que 4 es mayor que 3), pero en
+realidad esta expresión detecta la secuencia de seis caracteres S<C<"o { 4 , 3
+}">>).
 
-El cuantificador "*" es equivalente a C<{0,}>, el cuantificador "+" a C<{1,}>,
-y el cuantificador "?" a C<{0,1}>.  n y m están limitados a enteros no
-negativos menores que un límite predefinido establecido al compilar perl.
-Normalmente, este límite es 32766 para la mayoría de las plataformas. El
-límite real se puede ver en el mensaje de error generado por código como el
-siguiente:
+El cuantificador "*" es equivalente a C<{0,}>, el cuantificador "+" a C<{1,}> y
+el cuantificador "?" a C<{0,1}>. n y m están limitados a enteros no negativos
+menores que un límite predefinido establecido al compilar perl. Normalmente,
+este límite es 32766 para la mayoría de las plataformas. El límite real se
+puede ver en el mensaje de error generado por código como el siguiente:
 
     $_ **= $_ , / {$_} / for 2 .. 42;
 
@@ -618,7 +624,7 @@ anterior también se podría escribir de la siguiente manera:
 Puesto que los patrones se procesan como cadenas entre comillas dobles, lo que
 sigue también funciona:
 
- \t          tabulación            (HT, TAB)
+ \t		tabulación		(HT, TAB)
  \n		nueva línea		(LF, NL)
  \r		retorno			(CR)
  \f		avance de página	(FF)
@@ -634,7 +640,7 @@ sigue también funciona:
  \L		pasar a minúscula hasta \E (como en vi)
  \U		pasar a mayúscula hasta \E (como en vi)
  \Q		deshabilitar los metacaracteres hasta \E
- \E		fin de cambio a mayúsculas/minúsculas o sección entrecomillada, como en vi
+ \E		fin cambio mayúsculas/minúsculas o parte con escape (vi)
 
 Puede ver los detalles en L<perlop/Comillas y operadores de comillas>.
 
@@ -659,7 +665,7 @@ X<retrorreferencia>
   \S        [3]  Coincide con un carácter que no sea un espacio en blanco
   \d        [3]  Coincide con un dígito decimal
   \D        [3]  Coincide con un carácter que no sea un dígito
-  \pP       [3]  Coincide con P, una propiedad con nombre. Use \p{Prop} para los nombres largos
+  \pP       [3]  Coincide con P, una propiedad con nombre.  \p{Prop} para nombres largos
   \PP       [3]  Coincide con algo que no sea una propiedad
   \X        [4]  Coincide con una "agrupación de grafemas eXtendida" de Unicode
   \C             Coincide con un char (octeto, en lenguaje C) incluso si forma
@@ -676,7 +682,7 @@ X<retrorreferencia>
   \g{nomb}  [5]  Retrorreferencia con nombre
   \k<nomb>  [5]  Retrorreferencia con nombre
   \K        [6]  Olvidar lo que está a la izquierda de \K, no incluir en $&
-  \N        [7]  Cualquier carácter excepto \n (experimental)  No se ve afectado por el
+  \N        [7]  Cualquier carácter excepto \n (experimental). No se ve afectado por el
                    modificador /s
   \v        [3]  Espacio en blanco vertical
   \V        [3]  No espacio en blanco vertical
@@ -734,9 +740,9 @@ aserción ancho cero> X<expresión regular, aserción ancho cero>
     \b  Límite de una palabra
     \B  Cualquier cosa excepto un límite de una palabra
     \A  Comienzo de la cadena únicamente
-    \Z  Final de la cadena únicamente o posición anterior al carácter de nueva línea al final
-    \z  Final de la cadena únicamente
-    \G  Coincidencia en pos() únicamente (p. ej. en la posición del final de la última coincidencia
+    \Z  Final de cadena únicamente, posición anterior a carácter de nueva línea al final
+    \z  Final de cadena únicamente
+    \G  Coincidencia en pos() únicamente (p. ej. en posición final de última coincidencia
         antes de m//g)
 
 Un límite de palabra (C<\b>) es un punto que hay entre dos caracteres, un
@@ -817,7 +823,7 @@ preocuparse por el cambio en la numeración de los grupos de captura.
 
 Puede prescindir de los números y crear grupos de captura con nombres. Se usa
 la notación C<(?E<lt>I<nombre>E<gt>...)> para declarar el grupo y
-C<\g{I<nombre>}> para hacer referencia al mismo.  (Por compatibilidad con las
+C<\g{I<nombre>}> para hacer referencia al mismo. (Por compatibilidad con las
 expresiones regulares de .NET, C<\g{I<nombre>}> también se puede escribir como
 C<\k{I<nombre>}>, C<\kE<lt>I<nombre>E<gt>> o C<\k'I<nombre>'>). I<nombre> no
 debe comenzar con un número, ni contener guiones. Cuando diferentes grupos
@@ -830,7 +836,7 @@ requerirían código C<(??{})>).
 
 El contenido de un grupo de captura tiene ámbito dinámico y está disponible
 fuera del patrón hasta el final del bloque que lo define o hasta la siguiente
-coincidencia, lo que ocurra primero.  (Vea L<perlsyn/"Instrucciones
+coincidencia, lo que ocurra primero. (Vea L<perlsyn/"Instrucciones
 compuestas">). Puede hacer referencia a un grupo de captura mediante un número
 absoluto (usando C<"$1"> en lugar de C<"\g1">, etc.), o mediante un nombre a
 través del hash C<%+>, usando C<"$+{I<nombre>}">.
@@ -850,18 +856,18 @@ probablemente siempre lo será). No obstante, genera algunas ambigüedades si
 hay más de 9 grupos de captura, ya que C<\10> podría referirse al décimo
 grupo de captura, o al carácter cuyo ordinal en octal es 010 (un carácter de
 retroceso en ASCII). Perl resuelve esta ambigüedad interpretando C<\10> como
-una retrorreferencia si antes se han abierto, como mínimo, 10 paréntesis de
-apertura. Asimismo, \11 es una retrorreferencia solo si antes hay como mínimo
-11 paréntesis de apertura. Y así sucesivamente. C<\1> a C<\9> siempre se
+una retrorreferencia si antes hay, como mínimo, 10 paréntesis de apertura.
+Asimismo, \11 es una retrorreferencia solo si antes hay como mínimo 11
+paréntesis de apertura. Y así sucesivamente. C<\1> a C<\9> siempre se
 interpretan como retrorreferencias. Hay varios ejemplos a continuación que
 ilustran estos peligros. Puede evitar la ambigüedad usando siempre C<\g{}> o
-C<\g> si se refiere a grupos de captura y C<\o{}> para las constantes octales;
-o bien, para C<\077> e inferiores, usando 3 dígitos rellenados con ceros a la
+C<\g> si se refiere a grupos de captura, y C<\o{}> para las constantes octales;
+o bien, para C<\077> e inferiores, usando 3 dígitos con ceros de relleno a la
 izquierda, ya que un cero a la izquierda implica una constante octal.
 
 En determinadas circunstancias, la notación C<\I<dígito>> también funciona
-fuera del patrón. Puede ver los detalles en L</Advertencia de \1 en lugar de
-$1>, más abajo.
+fuera del patrón. Puede ver los detalles en L</Advertencia sobre \1 en lugar
+de $1>, más abajo.
 
 Ejemplos:
 
@@ -921,7 +927,7 @@ C<$&>, C<$`> o C<$'> en cualquier parte del programa, las proporcionará cada
 vez que se busquen coincidencias de patrones. Esto puede ralentizar
 considerablemente el programa. Perl utiliza el mismo mecanismo para producir
 C<$1>, C<$2>, etc., por lo que también se paga un precio por cada patrón que
-contenga paréntesis de captura.  (Para evitar este coste y conservar el
+contenga paréntesis de captura. (Para evitar este coste y conservar el
 comportamiento de agrupación, se debe usar en su lugar la expresión regular
 extendida C<(?: ... )>). Pero si nunca se usa C<$&>, C<$`> o C<$'>, no se
 penalizarán los patrones I<sin> paréntesis de captura. Por tanto, es
@@ -1037,12 +1043,12 @@ patrón "NOMBRE" distinga mayúsculas de minúsculas.
 
 Cualquiera de estos modificadores se puede aplicar globalmente a todas las
 expresiones regulares compiladas dentro del ámbito de C<use re>. Vea
-L<re/"modo '/flags'">.
+L<re/"modo '/modificadores'">.
 
 A partir de Perl 5.14, un signo C<"^"> (signo de intercalación o acento
 circunflejo) inmediatamente después de un signo C<"?"> equivale a C<d-imsx>.
-Detrás del signo de intercalación pueden ir marcas (salvo C<"d">) para anular
-el efecto. Pero no se puede usar un signo menos.
+Detrás del signo de intercalación pueden ir modificadores (salvo C<"d">) para
+anular el efecto. Pero no se puede usar un signo menos.
 
 Tenga en cuenta que los modificadores C<a>, C<d>, C<l>, C<p> y C<u> son
 especiales, en el sentido de que solo se pueden habilitar (no se pueden
@@ -1164,7 +1170,8 @@ El problema es que tanto el grupo con el nombre C<< a >> como el grupo con el
 nombre C<< b >> son alias del grupo perteneciente a C<< $1 >>.
 
 =item Aserciones de inspección
-X<look-around assertion> X<lookaround assertion> X<look-around> X<lookaround> X<aserciones de inspección> X<aserción de inspección> X<inspección>
+X<look-around assertion> X<lookaround assertion> X<look-around> X<lookaround> 
+X<aserciones de inspección> X<aserción de inspección> X<inspección>
 
 Las aserciones de inspección (I<look-around>) son patrones de ancho cero que
 detectan un patrón específico sin incluirlo en C<$&>. Se detectan aserciones
@@ -1195,11 +1202,12 @@ inspecciones hacia atrás.
 Si busca una instancia de "bar" que no esté precedida de "foo",
 C</(?!foo)bar/> no hará lo que espera. Esto se debe a que C<(?!foo)> solo dice
 que lo siguiente no puede ser "foo" (y no lo es, es "bar", por lo que se
-detectará "foobar". En su lugar debe usar inspección hacia atrás (se explica
-más abajo).
+detectará "foobar"). En su lugar debe usar inspección hacia atrás (se
+explica más abajo).
 
 =item C<(?<=patrón)> C<\K>
-X<(?<=)> X<look-behind, positive> X<lookbehind, positive> X<inspección hacia atrás, positiva> X<\K>
+X<(?<=)> X<look-behind, positive> X<lookbehind, positive> 
+X<inspección hacia atrás, positiva> X<\K>
 
 Una aserción de inspección hacia atrás positiva de ancho cero. Por ejemplo,
 C</(?<=\t)\w+/> detecta una palabra que sigue a una tabulación, sin incluir la
@@ -1225,7 +1233,8 @@ se puede reescribir de forma mucho más eficiente como
   s/foo\Kbar//g;
 
 =item C<(?<!patrón)>
-X<(?<!)> X<look-behind, negative> X<lookbehind, negative> X<inspección hacia atrás, negativa>
+X<(?<!)> X<look-behind, negative> X<lookbehind, negative> 
+X<inspección hacia atrás, negativa>
 
 Una aserción de inspección hacia atrás negativa de ancho cero. Por ejemplo
 C</(?<!bar)foo/> detecta cualquier instancia de "foo" que no siga a "bar". Solo
@@ -1236,7 +1245,8 @@ funciona para inspecciones hacia atrás de ancho fijo.
 =item C<(?'NOMBRE'patrón)>
 
 =item C<< (?<NOMBRE>patrón) >>
-X<< (?<NAME>) >> X<(?'NAME')> X<named capture> X<capture> X<< (?<NOMBRE>) >> X<(?'NOMBRE')> X<captura con nombre> X<captura>
+X<< (?<NAME>) >> X<(?'NAME')> X<named capture> X<capture> X<< (?<NOMBRE>) >> 
+X<(?'NOMBRE')> X<captura con nombre> X<captura>
 
 Un grupo de captura con nombre. Idéntico en todos los sentidos a la captura
 normal con paréntesis C<()>, pero con la ventaja adicional de que se pueden
@@ -1262,7 +1272,7 @@ es lo que esperaría un hacker de expresiones regulares de .NET.
 
 Actualmente NOMBRE está limitado a identificadores sencillos únicamente. Es
 decir, debe coincidir con C</^[_A-Za-z][_A-Za-z0-9]*\z/> o su extensión
-Unicode (ver L<utf8>), pero no se amplia mediante la configuración regional
+Unicode (vea L<utf8>), pero no se amplia mediante la configuración regional
 (vea L<perllocale>).
 
 B<NOTA:> con el fin de facilitar las cosas a los programadores con experiencia
@@ -1290,7 +1300,9 @@ los motores de expresiones regulares de Python o PCRE, se puede usar el patrón
 C<< (?P=NOMBRE) >> en lugar de C<< \k<NOMBRE> >>.
 
 =item C<(?{ código })>
-X<(?{})> X<regex, code in> X<regexp, code in> X<regular expression, code in> X<regex, código interior> X<regexp, código interior> X<expresión regular, código interior>
+X<(?{})> X<regex, code in> X<regexp, code in> X<regular expression, code in> 
+X<regex, código interior> X<regexp, código interior> 
+X<expresión regular, código interior>
 
 B<AVISO>: esta característica de expresión regular extendida se considera
 experimental y se puede modificar sin previo aviso. El código ejecutado que
@@ -1354,7 +1366,7 @@ contengan resultados del operador C<qr//> (vea
 L<perlop/"qr/CADENAE<sol>msixpodual">).
 
 Esta restricción se debe a la costumbre, muy extendida y bastante cómoda, de
-usar cadenas determinadas en tiempo de ejecución como patrones. Por ejemplo:
+usar como patrones cadenas determinadas en tiempo de ejecución. Por ejemplo:
 
     $re = <>;
     chomp $re;
@@ -1380,7 +1392,9 @@ motor de expresiones regulares en estos bloques provocaría inestabilidad en
 perl.
 
 =item C<(??{ código })>
-X<(??{})> X<regex, postponed> X<regexp, postponed> X<regular expression, postponed> X<regex, pospuesta> X<regexp, pospuesta> X<expresión regular, pospuesta>
+X<(??{})> X<regex, postponed> X<regexp, postponed> 
+X<regular expression, postponed> X<regex, pospuesta> X<regexp, pospuesta> 
+X<expresión regular, pospuesta>
 
 B<AVISO>: esta característica de expresión regular extendida se considera
 experimental y se puede modificar sin previo aviso. El código ejecutado que
@@ -1395,13 +1409,13 @@ como si estuviera insertada en lugar de esta construcción. Tenga en cuenta que
 esto significa que el contenido de los grupos de captura definidos dentro de un
 patrón evaluado no están disponibles fuera del patrón, y viceversa; no hay
 manera de que el patrón interno devuelto por un bloque de código haga
-referencia a un grupo de captura definido fuera.  (El bloque de código puede
+referencia a un grupo de captura definido fuera. (El bloque de código puede
 utilizar C<$1>, etc., para hacer referencia a grupos de captura del patrón que
 lo contiene). Por lo tanto,
 
     ('a' x 100)=~/(??{'(.)' x 100})/
 
-B<habrá> coincidencia, pero B<no> actualizará $1.
+B<coincidirá>, pero B<no> actualizará $1.
 
 El C<código> no se interpola. Como antes, las reglas para determinar el lugar
 donde el C<código> termina son algo enrevesadas.
@@ -1438,8 +1452,11 @@ compilada en perl, por lo que su modificación requiere una compilación
 personalizada.
 
 =item C<(?PARNO)> C<(?-PARNO)> C<(?+PARNO)> C<(?R)> C<(?0)>
-X<(?PARNO)> X<(?1)> X<(?R)> X<(?0)> X<(?-1)> X<(?+1)> X<(?-PARNO)> X<(?+PARNO)> X<regex, recursive> X<regexp, recursive> X<regular expression, recursive>
-X<regex, relative recursion> X<regex, recursiva> X<regexp, recursiva> X<expresión regular, recursiva> X<regex, recursión relativa>
+X<(?PARNO)> X<(?1)> X<(?R)> X<(?0)> X<(?-1)> X<(?+1)> 
+X<(?-PARNO)> X<(?+PARNO)> X<regex, recursive> X<regexp, recursive> 
+X<regular expression, recursive> X<regex, relative recursion> 
+X<regex, recursiva> X<regexp, recursiva> X<expresión regular, recursiva> 
+X<regex, recursión relativa>
 
 Similar a C<(??{ código })>, salvo que no incluye la compilación de código;
 en su lugar, trata el contenido de un grupo de captura como un patrón
@@ -1502,7 +1519,7 @@ facilitar la incrustación de patrones recursivos dentro de una construcción
 C<qr//> para su uso posterior:
 
     my $parentesis = qr/(\((?:[^()]++|(?-1))*+\))/;
-    if (/foo $parentesis \s+ + \s+ bar $parentesis/x) {
+    if (/foo $parentesis \s+ \+ \s+ bar $parentesis/x) {
        # hacer algo aquí...
     }
 
@@ -1544,7 +1561,7 @@ o comillas simples (válido si se detecta un grupo con ese nombre), o el
 símbolo especial (R) (verdadero cuando se evalúa dentro de una recursión o
 un bloque eval). Además, el símbolo R puede ir seguido de un número (que
 será verdadero cuando se evalúa en un proceso recursivo dentro del grupo
-correspondiente) o de C<&NOMBRE>, en cuyo caso solo será verdadera cuando se
+correspondiente) o de C<&NOMBRE>, en cuyo caso sólo será verdadera cuando se
 evalúe durante la recursión en el grupo con nombre.
 
 A continuación se muestra un resumen de los predicados posibles:
@@ -1614,7 +1631,7 @@ definir un conjunto de reglas de expresiones regulares y agruparlas en
 cualquier patrón que elija.
 
 Para este uso, se recomienda colocar el bloque DEFINE al final del patrón, y
-asignar nombres los subpatrones definidos en su interior.
+asignar nombres a los subpatrones definidos en su interior.
 
 Además, hay que tener en cuenta que los patrones definidos de esta manera
 probablemente no sean tan eficientes, debido a que el optimizador no está
@@ -1644,11 +1661,12 @@ lo que:
     say scalar @capturas;
 
 Mostrará 2, no 1. Esto es especialmente importante si se tiene la intención
-de compilar las definiciones con el operador C<qr//> y más tarde interpolarlos
+de compilar las definiciones con el operador C<qr//> y más tarde interpolarlas
 en otro patrón.
 
 =item C<< (?>patrón) >>
-X<backtrack> X<backtracking> X<atomic> X<possessive> X<vuelta atrás> X<volver atrás> X<atómico> X<posesivo>
+X<backtrack> X<backtracking> X<atomic> X<possessive> X<vuelta atrás> 
+X<volver atrás> X<atómico> X<posesivo>
 
 Un subexpresión "independiente", que coincide con la subcadena con la que
 coincidiría un C<patrón> I<independiente> si estuviera anclado en la
@@ -1715,8 +1733,8 @@ la cuarta parte de tiempo cuando se usa en una cadena similar con 1 000 000 de
 letras C<a>. Sin embargo, debe tener en cuenta que, cuando esta construcción
 va seguida de un cuantificador y el pragma C<use warnings> o la opción B<-w>
 están activos, actualmente muestra el mensaje de advertencia C<"matches null
-string many times in regex"> (I<se detecta la cadena nula muchas veces en la
-expresión regular>)).
+string many times in regex"> (se detecta la cadena nula muchas veces en la
+expresión regular).
 
 En grupos sencillos, como en el patrón C<< (?> [^()]+ ) >>, se puede conseguir
 un efecto comparable por medio de una aserción de inspección hacia adelante,
@@ -1751,7 +1769,7 @@ Los cuantificadores posesivos equivalen a colocar dentro de una de estas
 construcciones el elemento a los que se aplican los cuantificadores. Se aplican
 las siguientes equivalencias:
 
-    Forma de cuantificador Forma con paréntesis
+    Forma cuantificador Forma con paréntesis
     ---------------     ---------------
     PAT*+               (?>PAT*)
     PAT++               (?>PAT+)
@@ -1768,7 +1786,7 @@ código de producción para evitar problemas al actualizar.
 
 Estos patrones especiales son, generalmente, de la forma C<(*VERBO:ARG)>. A
 menos que se indique lo contrario, el argumento ARG es opcional; y en algunos
-casos, está prohibido.
+casos está prohibido.
 
 Cualquier patrón con un verbo especial para la vuelta atrás que admita un
 argumento tiene un comportamiento especial consistente en que, cuando se
@@ -2093,8 +2111,8 @@ probar con:
         print "El comienzo es <$1>, número es <$2>.\n";
     }
 
-Eso no funcionará, ya que C<.*> es codicioso y engullirá toda la cadena. Como
-C<\d*> puede coincidir con una cadena vacía, coincide toda la expresión
+Eso no funcionará, ya que C<.*> es avaricioso y engullirá toda la cadena.
+Como C<\d*> puede coincidir con una cadena vacía, coincide toda la expresión
 regular.
 
     El comienzo es <Tengo 2 números: 53147>, número es <>.
@@ -2239,7 +2257,8 @@ ejemplo en el que los efectos secundarios de la inspección hacia adelante
 I<pueden> haber influido en la coincidencia siguiente.
 
 =head2 Expresiones regulares versión 8
-X<regular expression, version 8> X<regex, version 8> X<regexp, version 8> X<expresión regular, versión 8> X<regex, versión 8> X<regexp, versión 8>
+X<regular expression, version 8> X<regex, version 8> X<regexp, version 8> 
+X<expresión regular, versión 8> X<regex, versión 8> X<regexp, versión 8>
 
 En caso de que no esté familiarizado con la versión 8 "normal" de las rutinas
 de expresiones regulares, se indican aquí las reglas de coincidencia de
@@ -2264,9 +2283,9 @@ detectará cualquier carácter que no esté en la lista. Dentro de una lista,
 el carácter "-" indica un intervalo, de modo que C<a-z> representa todos los
 caracteres entre "a" y "z", ambos incluidos. Si desea incluir el carácter "-"
 o "]" en una clase, debe ponerlos al principio de la lista (o a continuación
-de un signo "^"), o marcarlos con una barra diagonal inversa de escape.  "-"
+de un signo "^"), o marcarlos con una barra diagonal inversa de escape. "-"
 también se trata literalmente cuando se encuentra al final de la lista, justo
-antes del carácter "]" final.  (Los siguientes ejemplos especifican la misma
+antes del carácter "]" final. (Los siguientes ejemplos especifican la misma
 clase de tres caracteres: C<[-az]>, C<[az-]> y C>[a\-z]>. Todas son diferentes
 de C<[a-z]>, que especifica una clase que contiene veintiséis caracteres,
 incluso en los juegos de caracteres basados en EBCDIC). Además, si intenta
@@ -2276,10 +2295,10 @@ como valores finales de un rango, se trata el carácter "-" de forma literal.
 Tenga en cuenta también que la idea de rango es poco transportable entre
 juegos de caracteres; e incluso dentro de los mismos juegos de caracteres puede
 causar resultados probablemente inesperados. Un buen principio es el de usar
-solo rangos que comiencen y terminen con caracteres alfabéticos del mismo
-tamaño tipo (solo minúsculas [a-e], solo mayúsculas [A-E]), o con dígitos
-([0-9]). Cualquier otro caso no es seguro. En caso de duda, especifique
-completamente los juegos de caracteres.
+solo rangos que comiencen y terminen con caracteres alfabéticos del mismo tipo
+(solo minúsculas [a-e], solo mayúsculas [A-E]), o con dígitos ([0-9]).
+Cualquier otro caso no es seguro. En caso de duda, especifique completamente
+los juegos de caracteres.
 
 Los caracteres se pueden especificar con una sintaxis de metacaracteres,
 similar a la utilizada en C: "\n" detecta una nueva línea, "\t" una
@@ -2320,10 +2339,10 @@ apertura, de izquierda a derecha. Una retrorreferencia coincide con lo que
 coincidía realmente el subpatrón en la cadena examinada, no con las reglas de
 ese subpatrón. Por lo tanto, C<(0|0x)\d*\s\g1\d*> coincidirá con "0x1234
 0x4321", pero no con "0x1234 01234", debido a que el subpatrón 1 detectó
-"0x", aunque la regla C<0|0x> podría detectar con el 0 inicial del segundo
+"0x", aunque la regla C<0|0x> podría detectar el 0 inicial del segundo
 número.
 
-=head2 Advertencia de \1 en lugar de $1
+=head2 Advertencia sobre \1 en lugar de $1
 
 Algunas personas se acostumbran a escribir cosas como:
 
@@ -2334,7 +2353,7 @@ no escandalizar a los adictos a B<sed>, pero es un hábito poco recomendable.
 No se recomienda porque en el Pensamiento Perliano, el lado derecho de una
 construcción C<s///> es una cadena entre comillas dobles. C<\1> en una cadena
 escrita entre comillas dobles normal equivale a control-A. El significado
-habitual de C<\1> en Unix se emula de mala manera en C<s///>  Sin embargo, si
+habitual de C<\1> en Unix se emula de mala manera en C<s///>. Sin embargo, si
 se acostumbra a esto, tendrá problemas al agregar un modificador C</e>.
 
     s/(\d+)/ \1 + 1 /eg;            # provoca una advertencia con -w
@@ -2350,8 +2369,9 @@ distintas en el lado I<izquierdo> de C<s///>.
 
 =head2 Patrones repetidos que coinciden con subcadenas de longitud cero
 
-B<ADVERTENCIA>: el material que se expone a continuación difícil, y la prosa
-usada para ello también. Esta sección debería reescribirse.
+B<ADVERTENCIA>: el material que se expone a continuación es difícil, y
+también lo es la prosa usada para exponerlo. Esta sección debería
+reescribirse.
 
 Las expresiones regulares proporcionan un lenguaje de programación conciso y
 eficaz. Como ocurre con la mayoría de las herramientas eficaces, esta gran
@@ -2390,7 +2410,7 @@ alto nivel, como el modificador C</g> o el operador split().
 
 Los bucles de bajo nivel se I<interrumpen> (es decir, se sale del bucle) cuando
 Perl detecta que una expresión repetida coincide con una subcadena de longitud
-cero.   Por lo tanto
+cero. Por lo tanto
 
    m{ (?: LONGITUD_DISTINTA_CERO | LONGITUD_CERO )* }x;
 
@@ -2462,9 +2482,9 @@ regulares).
 
 Estas combinaciones pueden incluir alternativas, dando lugar a un problema de
 elección: si comparamos una expresión regular C<a|ab> con la cadena C<"abc">,
-¿coincidirá con la subcadena C<"a"> o con C<"ab">?  Una forma de describir
+¿coincidirá con la subcadena C<"a"> o con C<"ab">? Una forma de describir
 qué subcadena coincidente realmente, es usar el concepto de la vuelta atrás
-(vea L<"Vuelta atrás">). Sin embargo, esta descripción es muy bajo nivel y
+(vea L<"Vuelta atrás">). Sin embargo, esta descripción es de muy bajo nivel y
 hace pensar en términos de una implementación concreta.
 
 Otra descripción empieza por los conceptos de "mejor"/"peor". Todas las
@@ -2530,7 +2550,7 @@ Coincide con la mejor coincidencia de C<S> y solo con esa.
 
 =item C<(?=S)>, C<(?<=S)>
 
-Solo se considera la mejor coincidencia para C<S>.  (Esto solo es importante si
+Solo se considera la mejor coincidencia para C<S>. (Esto solo es importante si
 C<S> tiene paréntesis de captura y las retrorreferencias se usan en otra parte
 de la expresión regular).
 
@@ -2565,8 +2585,8 @@ personalizados. Esto no es para quienes buscan la tranquilidad, ya que requiere
 usar C. En L<perlreapi> encontrará más detalles.
 
 Como alternativa, las constantes sobrecargadas (vea L<overload>) proporcionan
-una manera sencilla de extender la funcionalidad del motor de RE mediante la
-sustitución de un patrón por otro.
+una manera sencilla de extender la funcionalidad del motor de expresiones
+regulares mediante la sustitución de un patrón por otro.
 
 Suponga que desea habilitar una nueva secuencia de escape de expresiones
 regulares, C<\Y|>, que coincide en el límite entre los espacios en blanco y
@@ -2647,9 +2667,9 @@ Hay una serie de problemas relacionados con la coincidencia de mayúsculas y
 minúsculas en las reglas de Unicode. Vea C<i> en L</Modificadores>, más
 arriba.
 
-El nivel de dificultad de este documento varía de "difícil de entender" a
+El nivel de dificultad de este documento varía entre "difícil de entender" y
 "completa y totalmente opaco". Las digresiones de la prosa y la gran cantidad
-de jerga hacen que sea difícil de entender en algunos puntos.
+de jerga hacen que cueste entender algunos puntos.
 
 Este documento necesita una reescritura que separe el contenido de manual del
 contenido de referencia.
