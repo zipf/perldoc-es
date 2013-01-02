@@ -1,0 +1,1645 @@
+=head1 NOMBRE
+X<regular expression> X<expresión regular> X<regex> X<regexp>
+
+perlre - Expresiones regulares en Perl
+
+=head1 DESCRIPCIÓN
+
+En esta página se describe la sintaxis de las expresiones regulares en Perl.
+
+Si nunca ha utilizado expresiones regulares, puede leer antes una introducción rápida en L<perlrequick> y un tutorial más detallado en L<perlretut>.
+
+Si desea consultar una referencia de uso de expresiones regulares en operaciones de detección de coincidencias, con ejemplos variados, puede ver las descripciones de C<m//>, C<s///>, C<qr//> y C<??> en L<perlop/"Operadores de entrecomillado para expresiones regulares">.
+
+
+=head2 Modificadores
+
+En las operaciones de detección de coincidencias se pueden usar varios modificadores.  Se muestran a continuación los modificadores relacionados con la interpretación de una expresión regular.  Los modificadores que cambian la forma en que Perl usa una expresión regular se describen en L<perlop/"Operadores de entrecomillado para expresiones regulares"> y en L<perlop/"Detalles complejos del análisis de construcciones entrecomilladas">.
+
+=over 4
+
+=item m
+X</m> X<regex, multiline> X<regexp, multiline> X<regular expression, multiline> X<regex, multilínea> X<regexp, multilínea> X<expresión regular, multilínea>
+
+Trata la cadena como si fuera un conjunto de líneas.  Es decir, cambia el significado de "^" y "$", que detectan el principio y el final de la cadena respectivamente, para que detecten el principio y el final de cualquier línea en cualquier parte de la cadena.
+
+=item s
+X</s> X<regex, single-line> X<regexp, single-line> X<regular expression, single-line> X<regex, una línea> X<regexp, una línea> X<expresión regular, una línea>
+
+Trata la cadena como una sola línea.  Es decir, cambia el significado de "." para que detecte cualquier carácter, incluso el de nueva línea, que normalmente no detectaría.
+
+Si se usan juntos, como C</ms>, permiten que "." detecte cualquier carácter y, a la vez, que "^" y "$" detecten, respectivamente, las posiciones justo a continuación e inmediatamente antes de los caracteres de nueva línea en la cadena.
+
+=item i
+X</i> X<regex, case-insensitive> X<regexp, case-insensitive> X<regular expression, case-insensitive> X<regex, no distinguir mayúsculas de minúsculas> X<regexp, no distinguir mayúsculas de minúsculas> X<expresión regular, no distinguir mayúsculas de minúsculas>
+
+Busca coincidencias de patrones sin distinguir mayúsculas de minúsculas.
+
+Si están activas las reglas de detección de coincidencias basadas en la configuración regional, la asignación de mayúsculas o minúsculas se basa en la configuración regional actual para los códigos de carácter inferiores a 255 y en las reglas de Unicode para códigos de carácter superiores.  Sin embargo, no se detectarán coincidencias que atraviesen los límites de las reglas de Unicode/no Unicode (ordinales 255/256).  Vea L<perllocale>.
+
+Con el modificador C</i> activado, hay varios caracteres Unicode que coinciden con secuencias de caracteres (caracteres múltiples).  Por ejemplo, C<LATIN SMALL LIGATURE FI> debería detectar la secuencia C<fi>.  Actualmente, Perl no es capaz de hacer esto cuando las secuencias de caracteres están en el patrón y se dividen en agrupaciones, o cuando se usa un cuantificador en uno o varios de estos caracteres.  Por lo tanto
+
+ "\N{LATIN SMALL LIGATURE FI}" =~ /fi/i;          # Hay coincidencia
+ "\N{LATIN SMALL LIGATURE FI}" =~ /[fi][fi]/i;    # No hay coincidencia
+ "\N{LATIN SMALL LIGATURE FI}" =~ /fi*/i;         # No hay coincidencia
+
+ # En la siguiente comparación no hay coincidencia, y no está claro
+ # qué contendrían $1 y $2 aunque hubiera coincidencia
+ "\N{LATIN SMALL LIGATURE FI}" =~ /(f)(i)/i;      # No hay coincidencia
+
+Perl no detecta caracteres múltiples en una clase invertida de caracteres entre corchetes (si lo hiciera podría ser muy confuso).  Vea L<perlrecharclass/Negación>.
+
+Otro error está relacionado con clases de caracteres que coinciden tanto con una secuencia de caracteres múltiples como con una subcadena inicial de esa secuencia.  Por ejemplo,
+
+ /[s\xDF]/i
+
+debe detectar tanto una "s" simple como una "s" doble, ya que C<\xDF> coincide con "ss" (en plataformas ASCII).  Sin embargo, un error (L<[perl #89774]|https://rt.perl.org/rt3/Ticket/Display.html?id=89774>) hace que detecte una sola "s", aunque no se detecte una coincidencia final más grande (y, por tanto, fuera posible detectar "ss").
+
+Además, el sistema de detección de coincidencias de Perl no se ajusta plenamente a las recomendaciones actuales de Unicode relacionadas con C</i>, que piden que la coincidencia se base en la NFD (I<Normalization Form Decomposed>, o forma de normalización descompuesta) del texto.  Sin embargo, el consorcio Unicode está reconsiderando y revisando sus recomendaciones.
+
+=item x
+X</x>
+
+Mejora la legibilidad del patrón, al permitir espacios en blanco y comentarios.
+Para obtener más información, vea L</"/x">
+
+=item p
+X</p> X<regex, preserve> X<regexp, preserve> X<regex, conservar> X<regexp, conservar>
+
+Conserva la cadena coincidente, de manera que ${^PREMATCH}, ${^MATCH} y ${^POSTMATCH} estén disponibles tras la detección.
+
+=item g, c
+X</g> X</c>
+
+C<g> realiza una detección de coincidencias global y C<c> conserva la posición actual tras un error de detección de coincidencia.
+A diferencia de i, m, s y x, estos dos modificadores afectan a la forma en que se utiliza la expresión regular, no a la propia expresión regular. En L<perlretut/"Usar expresiones regulares en Perl"> encontrará una explicación más detallada de los modificadores g y c.
+
+=item a, d, l, u
+X</a> X</d> X</l> X</u>
+
+Estos modificadores, incorporados en la versión 5.14, afectan a la semántica de juego de caracteres (Unicode, etc.) usada, como se explica más abajo, en L</Modificadores de juego de caracteres>.
+
+=back
+
+En la documentación se suele hacer referencia a los modificadores de expresiones regulares como "el modificador C</x>" (p. ej.), aunque el delimitador en cuestión puede no ser una barra diagonal.  Estos modificadores C</imsxadlup> también se pueden incrustar dentro de la propia expresión regular mediante la construcción C<(?...)>. Vea L</Patrones extendidos> más abajo.
+
+=head3 /x
+
+C</x> indica al analizador de expresiones regulares que ignore el espacio en blanco que no esté marcado con barras diagonales inversas de escape o que no esté dentro de una clase de caracteres.  Puede usar esto para descomponer la expresión regular en partes (un poco) más legibles.  El carácter C<#> también es un metacarácter que antecede a un comentario, al igual que en el código Perl normal.  Esto también significa que si desea usar espacio en blanco real o caracteres C<#> en el patrón (excepto en una clase de caracteres, donde no les afecta C</x>), tendrá que marcarlos con barras diagonales inversas de escape o C<\Q...\E>, o codificarlos en octal, hexadecimal o secuencias de escape C<\N{}>.  En conjunto, estas características mejoran en gran medida la legibilidad de las expresiones regulares de Perl.  Debe tener cuidado para no incluir el delimitador de patrón en el comentario: perl no puede adivinar que no pretendía cerrar el patrón en ese punto.  Vea el código de eliminación de comentarios estilo C en L<perlop>.  Recuerde también que lo que esté dentro de una secuencia C<\Q...\E> no se ve afectado por C</x>.  Y tenga en cuenta que C</x> no afecta a la interpretación de los espacios dentro de una construcción multicarácter.  Por ejemplo, en C<\x{...}> no puede haber espacios, independientemente de que se use el modificador C</x>.  Y lo mismo para un L<cuantificador|Cuantificadores>, como C<{3}> o C<{5,}>.  De forma similar, en C<(?:...)> no puede haber ningún espacio entre C<?> y C<:>, pero sí puede haber espacios entre C<(> y C<?>.  Para una construcción como esta, con cualquier tipo de delimitadores, los espacios permitidos no se verán afectados por C</x>, y dependen de la propia construcción.  Por ejemplo, C<\x{...}> no puede contener espacios porque los números hexadecimales no contienen espacios.  Pero las propiedades Unicode sí pueden contener espacios, por lo que en C<\p{...}> puede haber espacios que cumplan las reglas de Unicode (vea L<perluniprops.pod/Propiedades accesibles a través de \p{} y \P{}>).
+X</x>
+
+=head3 Modificadores de juego de caracteres
+
+C</d>, C</u>, C</a> y C</l>, disponibles a partir de la versión 5.14, se denominan modificadores de juego de caracteres; afectan a la semántica del juego de caracteres usado en la expresión regular.
+
+Los modificadores C</d>, C</u> y C</l> no serán, probablemente, de gran utilidad para la mayoría de los usuarios, por lo que no es necesario que los tenga en cuenta.  Son para uso interno de Perl, para que las estructuras de datos complejas de las expresiones regulares se puedan serializar automáticamente y reconstituirse posteriormente de forma precisa, con todos sus matices.  Pero se mencionan en este documento porque Perl no sabe callar un secreto y porque puede haber casos excepcionales para los que sí sean útiles.
+
+En cambio, el modificador C</a> le puede resultar útil.  Su propósito es permitir que el código que usa principalmente datos ASCII no tenga que preocuparse de Unicode.
+
+De forma resumida, C</l> establece como juego de caracteres el indicado por la configuración regionaB<l> que esté activa en el momento de buscar coincidencias del patrón.
+
+C</u> establece el juego de caracteres en B<U>nicode.
+
+C</a> también establece el juego de caracteres en Unicode, pero agrega una serie de restricciones para la detección segura de coincidencias B<A>SCII.
+
+C</d> usa el comportamiento preB<d>eterminado de juego caracteres de las versiones anteriores a la 5.14, que era problemático.  Su única misión es forzar el comportamiento anterior.
+
+En un momento dado solo puede estar en vigor uno de estos modificadores.  Con ellos, Perl puede mantener el comportamiento originalmente compilado de una expresión regular, independientemente de las normas que estén en vigor cuando se ejecute dicha expresión.  Y si se interpola en una expresión regular más grande, las normas originales se siguen aplicando a esta expresión regular (y solo a ella).
+
+Los modificadores C</l> y C</u> se seleccionan automáticamente para las expresiones regulares compiladas dentro del ámbito de diversos pragmas y, en general, se recomienda utilizar los pragmas en lugar de especificar de forma explícita estos modificadores.  Por una parte, los modificadores solo afectan a la detección de coincidencias de patrones y no se extienden ni siquiera a las sustituciones, mientras que el uso de los pragmas produce resultados coherentes para todas las operaciones apropiadas dentro de sus ámbitos de aplicación.  Por ejemplo,
+
+ s/foo/\Ubar/il
+
+detectará "foo" basándose en las reglas de la configuración regional para la detección de coincidencias sin distinguir mayúsculas de minúsculas, pero C</l> no afecta al funcionamiento de C<\U>.  Lo más probable es que desee que ambas operaciones usen las reglas de la configuración regional.  Para ello debe compilar la expresión regular dentro del ámbito de C<use locale>.  De manera implícita, esto agrega C</l> y aplica las reglas de configuración regional para C<\U>.   Así pues, debe utilizar C<use locale> en lugar de agregar C</l> explícitamente.
+
+De manera similar, es mejor utilizar C<use feature 'unicode_strings'> en lugar de
+
+ s/foo/\Lbar/iu
+
+para aplicar reglas de Unicode, ya que con esta característica C<\L> también usará las reglas de Unicode (pero no las usará necesariamente en la sustitución anterior).
+
+A continuación se ofrecen más detalles sobre cada uno de los modificadores.  Lo más probable es que no necesite conocer estos detalles para C</l>, C</u> y C</d>, por lo que puede pasar directamente a L<E<sol>a|/E<sol>a (y E<sol>aa)>.
+
+=head4 /l
+
+significa que se usan las reglas de la configuración regional en vigor (vea L<perllocale>) al detectar coincidencias de patrones.  Por ejemplo, C<\w> detectará los caracteres de tipo "palabra" de esa configuración regional y la detección sin distinguir mayúsculas de minúsculas que ofrece C<"/i"> funcionará según las reglas correspondientes de la configuración regional.  La configuración regional usada será la que esté vigente en el momento de ejecutar la detección de coincidencias de patrón.  Puede no ser la misma que la configuración regional en tiempo de compilación y puede variar de una coincidencia a otra, si hay una llamada a la L<función setlocale()|perllocale/La función setlocale>.
+
+Perl solo admite configuraciones regionales de byte único.  Esto significa que los códigos de carácter por encima de 255 se consideran como Unicode, independientemente de la configuración regional que esté en vigor.
+Según las normas de Unicode, hay unos pocos casos de coincidencias que no distinguen mayúsculas de minúsculas y cruzan el límite 255/256.  Con C</l> no se permiten.  Por ejemplo, 0xFF (en plataformas ASCII) no coincide con el carácter 0x178, C<LATIN CAPITAL LETTER Y WITH DIAERESIS> sin distinguir mayúsculas de minúsculas, ya que 0xFF quizás no sea C<LATIN SMALL LETTER Y WITH DIAERESIS> en la configuración regional actual, y Perl no puede determinar si ese carácter existe en la configuración regional, y mucho menos a qué código de carácter corresponde.
+
+Se puede especificar este modificador como el predeterminado mediante C<use locale>, pero vea L</¿Qué modificador de juego de caracteres está en vigor?>.
+X</l>
+
+=head4 /u
+
+significa que se usan las reglas de Unicode al detectar coincidencias de patrones.  En plataformas ASCII, esto significa que los códigos de carácter entre 128 y 255 se usan como si fueran Latin-1 (ISO-8859-1) (que son los mismos que en Unicode).
+(De lo contrario, Perl considerará que no están definidos).  Así, con este modificador la plataforma ASCII se convierte de forma efectiva en una plataforma Unicode. Por ejemplo, C<\w> detectará cualquiera de los más de 100 000 caracteres de Unicode que pueden formar parte de una "palabra".
+
+A diferencia de la mayoría de las configuraciones regionales, que son específicas de un par idioma/país, Unicode clasifica como C<\w> todos los caracteres que son letras I<en cualquier parte> del mundo.  Por ejemplo, aunque una configuración regional no considere que C<LATIN SMALL LETTER ETH> es una letra (a menos que corresponda a un sistema islandés), Unicode sí lo considerará como una letra.  Del mismo modo, C<\d> detectará todos los caracteres que son dígitos decimales en algún lugar del mundo; esto supone detectar cientos de posibles coincidencias, no diez.  Y algunas de esas cifras se parecen a algunos de los 10 dígitos ASCII, pero se refieren a un número diferente, por lo que un ser humano podría pensar que un número se refiere a una cantidad distinta de la real.  Por ejemplo, C<BENGALI DIGIT FOUR> (U+09EA) se parece mucho a C<ASCII DIGIT EIGHT> (U+0038).  Y C<\d+> puede detectar coincidencias en cadenas de dígitos que son una mezcla de diferentes sistemas de escritura, lo que crea un problema de seguridad.  Para solucionar este problema puede usar L<Unicode::UCD/num()>.  O bien, puede usar el modificador C</a> para forzar que C<\d> solo detecte los caracteres ASCII 0 a 9.
+
+Además, con este modificador, la detección de coincidencias sin distinguir mayúsculas de minúsculas estará disponible para todo el juego de caracteres Unicode.  Por ejemplo, C<KELVIN SIGN> coincide con las letras "k" y "K", y C<LATIN SMALL LIGATURE FF> coincide con la secuencia "ff", por lo que, si no esta preparado, puede hacer que se vea como una constante hexadecimal, lo que presenta otro posible problema de seguridad.  En L<http://unicode.org/reports/tr36> encontrará una explicación detallada de los problemas de seguridad en Unicode.
+
+En las plataformas EBCDIC compatibles con Perl, el juego de caracteres nativo es equivalente a Latin-1.  Así, este modificador sólo cambia el comportamiento si también se especifica el modificador C<"/i">, y resulta que sólo afecta a dos caracteres, dándoles una semántica completa de Unicode: C<MICRO SIGN> coincidirá con las letras griegas C<MU> mayúscula y minúscula; de lo contrario, no. Y C<LATIN CAPITAL LETTER SHARP S> coincidirá con cualquiera de C<SS>, C<Ss>, C<sS>, y C<ss>; de lo contrario, no.
+
+Se puede especificar este modificador como predeterminado por medio de C<use feature 'unicode_strings'>, C<use locale ':not_characters'> o C<L<use 5.012|perlfunc/use VERSION>> (o superior), pero vea L</¿Qué modificador de juego de caracteres está en vigor?>.
+X</u>
+
+=head4 /d
+
+Este modificador hace que se usen las reglas nativas "predeterminadas" (por I<d>efecto) de la plataforma, excepto cuando hay razones para usar las reglas de Unicode, de la siguiente manera:
+
+=over 4
+
+=item 1
+
+la cadena de comparación está codificada en UTF-8; o
+
+=item 2
+
+el patrón está codificado en UTF-8; o
+
+=item 3
+
+el patrón menciona explícitamente un código de carácter que está por encima de 255 (por ejemplo, C<\x{100}>); o
+
+=item 4
+
+el patrón usa un nombre Unicode (C<\N{...}>); o
+
+=item 5
+
+el patrón usa una propiedad Unicode (C<\p{...}>)
+
+=back
+
+Otra regla mnemotécnica para este modificador es "Depende", ya que las reglas utilizadas realmente dependen de varias cosas, y como consecuencia se pueden obtener resultados inesperados.  Vea L<perlunicode/El "Error de Unicode">.  El "Error de Unicode" se ha convertido en algo más bien infame, que conduce a otro nombre (imprimible) en inglés para este modificador: "Dodgy" (poco fiable).
+
+En plataformas ASCII, las reglas nativas son las de ASCII, y en plataformas EBCDIC (al menos en las compatibles con Perl) son las de Latin-1.
+
+Veamos algunos ejemplos de cómo funciona esto en una plataforma ASCII:
+
+ $str =  "\xDF";      # $str no está en formato UTF-8.
+ $str =~ /^\w/;       # No hay coincidencia porque $str no está en formato UTF-8.
+ $str .= "\x{0e0b}";  # Ahora $str está en formato UTF-8.
+ $str =~ /^\w/;       # Hay coincidencia. Ahora $str tiene formato UTF-8.
+ chop $str;
+ $str =~ /^\w/;       # Sigue habiendo coincidencia. $str sigue estando en formato UTF-8.
+
+Este modificador se selecciona automáticamente de forma predeterminada si ninguno de los demás están presentes, por lo que también se conoce como el modificador "por Defecto" (predeterminado).
+
+A causa de los comportamientos inesperados asociados con este modificador, es probable que solo deba utilizarlo para mantener la compatibilidad con versiones anteriores en casos raros.
+
+=head4 /a (y /aa)
+
+A este modificador se le conoce como ASCII-restrictivo (o ASCII-seguro).  A diferencia de los demás modificadores, se puede duplicar para aumentar su efecto.
+
+Cuando aparece solo una vez, hace que las secuencias C<\d>, C<\s>, C<\w> y las clases de caracteres Posix solo detecten en ASCII.  De este modo, recuperan sus significados anteriores a la versión 5.6 y a Unicode.  Con C</a>, C<\d> siempre representa exactamente a los dígitos C<"0"> a C<"9">; C<\s> representa a los cinco caracteres C<[ \f\n\r\t]>; C<\w> representa a los 63 caracteres C<[A-Za-z0-9_]>; y, del mismo modo, todas las clases Posix, como C<[[:print:]]> solo coinciden con los caracteres correspondientes de ASCII.
+
+Este modificador es útil para personas que solo usan Unicode ocasionalmente y para quienes no deseen enfrentarse a su complejidad y sus problemas de seguridad.
+
+Con C</a>, se puede escribir C<\d> con la confianza de que solo detectará caracteres ASCII, y si fuera necesario detectar dígitos o caracteres no incluidos en ASCII, se puede usar C<\p{Digit}> o C<\p{Word}> en lugar de C<\w>.  Hay construcciones similares a C<\p{...}> que permiten detectar espacio en blanco (vea L<perlrecharclass/Espacio en blanco>) y clases Posix (vea L<perlrecharclass/Clases de caracteres POSIX>) más allá de ASCII.  Por lo tanto, este modificador no significa que no pueda utilizar Unicode, sino que para detectar coincidencias con Unicode hay que usar explícitamente una construcción (C<\p{}>, C<\P{}>) específica para Unicode.
+
+Como era de esperar, este modificador hace que, por ejemplo, C<\D> quiera decir lo mismo que C<[^0-9]>; de hecho, todos los caracteres no incluidos en ASCII coinciden con C<\D>, C<\S> y C<\W>.  Con la definición de C</a>, C<\b> sigue detectando el límite entre C<\w> y C<\W> (y lo mismo para C<\B>).
+
+Por lo demás, C</a> se comporta como el modificador C</u>, puesto que la detección que no distingue mayúsculas de minúsculas utiliza semántica Unicode; por ejemplo, "k" coincidirá con el carácter Unicode C<\N{KELVIN SIGN}> si se usa C</i>, y los códigos de caracteres Latin1 no incluidos en ASCII seguirán reglas de Unicode para la detección de coincidencias sin distinguir mayúsculas de minúsculas.
+
+Para prohibir coincidencias ASCII/no-ASCII (como "k" con C<\N{KELVIN SIGN}>), especifique la "a" dos veces, por ejemplo C</aai> o C</aia>.  (La primera "a" restringe C<\d>, etc. y la segunda agrega restricciones a C</i>).  Sin embargo, tenga en cuenta que para los códigos de caracteres que estén fuera del rango ASCII se usarán las reglas de Unicode para la detección de coincidencias con C</i>, por lo que el modificador no restringe el uso a ASCII únicamente, sino que prohíbe mezclar caracteres ASCII con caracteres que no pertenecen a ASCII.
+
+En resumen, este modificador proporciona protección para aplicaciones que no se quieran exponer a todo el juego de caracteres Unicode.  Si se especifica dos veces, proporciona protección adicional.
+
+Se puede especificar este modificador como predeterminado mediante C<use re '/a'>
+o C<use re '/aa'>.  Si lo hace así puede, realmente, tener la oportunidad de utilizar el modificador C</u> de forma explícita si hay algunas expresiones regulares para las que desea aplicar todas las reglas de Unicode (pero incluso en este caso, es mejor usar la característica C<"unicode_strings">, junto con C<use re '/aa'>).  Vea también L</¿Qué modificador de juego de caracteres está en vigor?>.
+X</a>
+X</aa>
+
+=head4 ¿Qué modificador de juego de caracteres está en vigor?
+
+El modificador que está en vigor en un punto determinado de una expresión regular depende de un conjunto de interacciones muy complejo.  Estas interacciones se han diseñado de forma que, en general, no tenga que preocuparse por ello, pero en esta sección se explican los detalles más complejos.  Como se explica más abajo en L</Patrones extendidos>, es posible especificar explícitamente los modificadores que se aplican solo a unas partes de una expresión regular.
+La parte más interior siempre tiene prioridad sobre cualquier otra externa, y la que se aplica a toda la expresión tiene prioridad sobre cualquiera de los valores por defecto que se describen en el resto de esta sección.
+
+El pragma C<L<use re 'E<sol>foo'|re/"modo '/flags'">> se puede utilizar para establecer los modificadores predeterminados (estos también) para las expresiones regulares compiladas dentro de su ámbito.  Este pragma tiene precedencia sobre otros pragmas que se muestran a continuación, que también cambian los valores predeterminados.
+
+De lo contrario, C<L<use locale|perllocale>> establece el modificador predeterminado en C</l>; y C<L<use feature 'unicode_strings|feature>> o C<L<use 5.012|perlfunc/use VERSION>> (o superior) establece el valor predeterminado en C</u> cuando no estén en el mismo ámbito tanto si está en efecto C<L<use locale|perllocale>> como C<L<use bytes|bytes>>.
+(C<L<use locale ':not_characters'|perllocale/Unicode and UTF-8>> también establece C</u> como predeterminado, anulando cualquier otro C<use locale>).
+A diferencia de los mecanismos antes mencionados, estos afectan a otras operaciones aparte de las de detección de coincidencias de expresiones regulares, por lo que ofrecen resultados más coherentes con los de otros operadores, como el uso de C<\U>, C<\l>, etc. en las sustituciones.
+
+Si no se aplica ninguna de estas situaciones, por compatibilidad con las versiones anteriores el modificador C</d> será el que está activo de manera predeterminada.  Como esto puede producir resultados inesperados, lo mejor es especificar el conjunto de reglas que se debe usar.
+
+=head4 Comportamiento del modificador de juego de caracteres antes de Perl 5.14
+
+Antes de la versión 5.14 no existían modificadores explícitos, pero C</l> estaba implícito para expresiones regulares compiladas en el ámbito de C<use locale>, y en los demás casos estaba implícito C</d>.  Sin embargo, la interpolación de una expresión regular en una expresión regular más grande ignoraría la compilación original en favor de lo que estaba en vigor en el momento de la segunda compilación.  Había varias incoherencias (errores) relacionadas con el uso del modificador C</d>: se usaban las reglas de Unicode cuando no era adecuado hacerlo, y viceversa.  C<\p{}> no implicaba usar las reglas de Unicode, como era el caso de C<\N{}>, hasta 5.12.
+
+=head2 Expresiones regulares
+
+=head3 Metacaracteres
+
+Los patrones usados en el sistema de detección de coincidencias de Perl evolucionaron a partir de los suministrados por la versión 8 de las rutinas de expresiones regulares.  (Las rutinas se derivan lejanamente de la reimplementación redistribuible de las rutinas V8 realizada por Henry Spencer).  Para obtener más información, vea L<Expresiones regulares versión 8>.
+
+En particular, los siguientes metacaracteres mantienen sus significados estándar heredados de C<egrep>:
+X<metacarácter>
+X<\> X<^> X<.> X<$> X<|> X<(> X<()> X<[> X<[]>
+
+
+    \	Escape del metacarácter a continuación
+    ^	Principio de la línea
+    .	Cualquier carácter (excepto el de nueva línea)
+    $	Final de línea (o antes del carácter de nueva línea al final)
+    |	Alternativas
+    ()	Agrupación
+    []	Clase de caracteres entre corchetes
+
+De manera predeterminada se garantiza que el carácter "^" detecte sólo el principio de la cadena, el carácter "$" sólo el final (o la posición anterior al carácter de nueva línea al final) y Perl hará determinadas optimizaciones suponiendo que la cadena contiene una sola línea.  Los caracteres de nueva línea incrustados dentro de la cadena no se pueden detectar con "^" o "$".  Sin embargo, puede que desee tratar a la cadena como un búfer de varias líneas, de modo que "^" coincida después de cualquier carácter de nueva línea que haya en la cadena (excepto si dicho carácter es el último en la cadena), y "$" coincida delante de cualquier carácter de nueva línea.  A costa de una ligera sobrecarga, puede hacer esto mediante el modificador /m en el patrón del operador de detección de coincidencias de patrones.  (En los programas antiguos se hacía por medio de C<$*>, pero esta opción se eliminó en perl 5.9).
+X<^> X<$> X</m>
+
+Para simplificar la sustitución de varias líneas, el carácter "."  no coincide con un carácter de nueva línea a menos que utilice el modificador C</s>, que indica a Perl que suponga que la cadena es una sola línea, aunque no lo sea.
+X<.> X</s>
+
+=head3 Cuantificadores
+
+Se reconocen los siguientes cuantificadores estándar:
+X<metacharacter> X<quantifier> X<*> X<+> X<?> X<{n}> X<{n,}> X<{n,m}> X<metacarácter> X<cuantificador>
+
+    *           0 o más veces
+    +           1 o más veces
+    ?           1 o 0 veces
+    {n}         Exactamente n veces
+    {n,}        Al menos n veces
+    {n,m}       Al menos n veces, pero no más de m veces
+
+(Si aparece una llave en cualquier otro contexto y no forma parte de una secuencia marcada con un carácter de escape, como en C<\x{...}>, se tratará como un carácter normal.  En particular, el cuantificador de límite inferior no es opcional.  Sin embargo, en Perl v5.18 está previsto que emita una advertencia de obsolescencia para todos estos casos, y en Perl v5.20 que exija que el uso literal de una llave se marque con un carácter de escape, por ejemplo, precediendo la llave con una barra diagonal inversa o escribiéndola entre corchetes, (C<"\{"> o C<"[{]">).  Este cambio permitirá futuras extensiones de la sintaxis (como hacer opcional el límite inferior de un cuantificador) y una mejor comprobación de errores de los cuantificadores.  Actualmente, un error tipográfico en un cuantificador, hace que se trate igual que si fueran caracteres literales sin emitir ninguna advertencia.  Por ejemplo,
+
+    /o{4,3}/
+
+parece un cuantificador que coincide 0 veces (ya que 4 es mayor que 3), pero en realidad esta expresión detecta la secuencia de seis caracteres S<C<"o { 4 , 3 }">>).
+
+El cuantificador "*" es equivalente a C<{0,}>, el cuantificador "+" a C<{1,}> y el cuantificador "?" a C<{0,1}>.  n y m están limitados a enteros no negativos menores que un límite predefinido establecido al compilar perl.
+Normalmente, este límite es 32766 para la mayoría de las plataformas.  El límite real se puede ver en el mensaje de error generado por código como el siguiente:
+
+    $_ **= $_ , / {$_} / for 2 .. 42;
+
+De forma predeterminada, un subpatrón cuantificado es "avaricioso", es decir, busca la coincidencia más larga posible (dado un determinado punto de partida) que a la vez permita que el resto del patrón coincida.  Si desea que coincida el menor número de veces posible, debe agregar al cuantificador un signo "?".  Tenga en cuenta que los significados no cambian, solo cambia la "avaricia":
+X<metacharacter> X<greedy> X<greediness> X<metacarácter> X<avaricioso> X<avaricia>
+X<?> X<*?> X<+?> X<??> X<{n}?> X<{n,}?> X<{n,m}?>
+
+    *?        0 o más veces, sin avaricia
+    +?        1 o más veces, sin avaricia
+    ??        0 o 1 veces, sin avaricia
+    {n}?      Exactamente n veces, sin avaricia (redundante)
+    {n,}?     Al menos n veces, sin avaricia
+    {n,m}?    Al menos n veces, pero no más de m veces, sin avaricia
+
+De forma predeterminada, cuando un subpatrón cuantificado no permite que el resto del patrón coincida, Perl dará marcha atrás. Sin embargo, a veces este comportamiento no es el deseado. Por esta razón, Perl proporciona también el cuantificador "posesivo".
+
+ *+     0 o más veces sin devolver nada
+ ++     1 o más veces sin devolver nada
+ ?+     0 o 1 veces sin devolver nada
+ {n}+   Exactamente n veces sin devolver nada (redundante)
+ {n,}+  Al menos n veces sin devolver nada
+ {n,m}+ Al menos n veces, pero no más de m veces, sin devolver nada
+
+Por ejemplo,
+
+   'aaaa' =~ /a++a/
+
+nunca coincidirá, ya que C<a++> devorará todas las letras C<a> de la cadena y no dejará ninguna para el resto del patrón. Esta característica puede ser muy útil para dar pistas a perl sobre dónde no se debe dar marcha atrás. Por ejemplo, el problema típico de "detectar una cadena escrita entre comillas dobles" se puede solucionar de forma más eficaz mediante:
+
+   /"(?:[^"\\]++|\\.)*+"/
+
+ya que sabemos que si no se detecta la comilla doble final, no servirá de nada dar marcha atrás. Vea la subexpresión independiente L</C<< (?>patrón) >>> para obtener más detalles; los cuantificadores posesivos no son más que una simplificación sintáctica de esta construcción. Por ejemplo, el patrón anterior también se podría escribir de la siguiente manera:
+
+   /"(?>(?:(?>[^"\\]+)|\\.)*)"/
+
+=head3 Secuencias de escape
+
+Puesto que los patrones se procesan como cadenas entre comillas dobles, lo que sigue también funciona:
+
+ \t		tabulación		(HT, TAB)
+ \n		nueva línea		(LF, NL)
+ \r		retorno			(CR)
+ \f		avance de página	(FF)
+ \a		alarma (campana)	(BEL)
+ \e		escape (como en troff)	(ESC)
+ \cK		carácter de control	(ejemplo: VT)
+ \x{}, \x00	carácter cuyo ordinal es el número hexadecimal indicado
+ \N{nombre}	carácter o secuencia de caracteres Unicode con nombre
+ \N{U+263D}	carácter Unicode	(ejemplo: FIRST QUARTER MOON)
+ \o{}, \000	carácter cuyo ordinal es el número octal indicado
+ \l		pasar a minúscula el siguiente carácter (como en vi)
+ \u		pasar a mayúscula el siguiente carácter (como en vi)
+ \L		pasar a minúscula hasta \E (como en vi)
+ \U		pasar a mayúscula hasta \E (como en vi)
+ \Q		deshabilitar los metacaracteres hasta \E
+ \E		fin cambio mayúsculas/minúsculas o parte con escape (vi)
+
+Puede ver los detalles en L<perlop/Comillas y operadores de comillas>.
+
+=head3 Clases de caracteres y otros caracteres de escape especiales
+
+Además, Perl define lo siguiente:
+X<\g> X<\k> X<\K> X<backreference> X<retrorreferencia>
+
+ Secuencia  Nota    Descripción
+  [...]     [1]  Coincidencia de carácter según las reglas de la clase
+                   de caracteres definida por "...".
+                   Ejemplo: [a-z] coincide con "a" o "b" o "c" ... o "z"
+  [[:...:]] [2]  Coincidencia de carácter según las reglas de la clase
+                   de caracteres POSIX "..." dentro de la clase de caracteres
+                   más exterior.  Ejemplo: [[:upper:]] coincide con cualquier
+                   carácter en mayúscula.
+  \w        [3]  Coincide con un carácter de "palabra" (alfanuméricos más "_", 
+                   otros caracteres de puntuación de continuación y marcas
+                   Unicode)
+  \W        [3]  Coincide con un carácter que no sea de tipo "palabra"
+  \s        [3]  Coincide con un espacio en blanco
+  \S        [3]  Coincide con un carácter que no sea un espacio en blanco
+  \d        [3]  Coincide con un dígito decimal
+  \D        [3]  Coincide con un carácter que no sea un dígito
+  \pP       [3]  Coincide con P, una propiedad con nombre.  \p{Prop} para nombres largos
+  \PP       [3]  Coincide con algo que no sea una propiedad
+  \X        [4]  Coincide con una "agrupación de grafemas eXtendida" de Unicode
+  \C             Coincide con un char (octeto, en lenguaje C) incluso si forma
+                   parte de un carácter UTF-8 más grande.  Por lo tanto, descompone
+                   los caracteres UTF-8 en sus respectivos bytes, por lo
+                   que puede terminar con componentes UTF-8 incorrectos.  No se admite en
+                   inspecciones hacia atrás.
+  \1        [5]  Retrorreferencia a un grupo específico de captura o búfer.
+                   '1' puede ser cualquier entero positivo.
+  \g1       [5]  Retrorreferencia a un grupo específico o anterior.
+  \g{-1}    [5]  El número puede ser negativo, para indicar la posición relativa de
+                   un grupo anterior y, opcionalmente, puede escribirse entre 
+                   llaves, para facilitar el análisis de la expresión regular.
+  \g{nomb}  [5]  Retrorreferencia con nombre
+  \k<nomb>  [5]  Retrorreferencia con nombre
+  \K        [6]  Olvidar lo que está a la izquierda de \K, no incluir en $&
+  \N        [7]  Cualquier carácter excepto \n (experimental).  No se ve afectado por el
+                   modificador /s
+  \v        [3]  Espacio en blanco vertical
+  \V        [3]  No espacio en blanco vertical
+  \h        [3]  Espacio en blanco horizontal
+  \H        [3]  No espacio en blanco horizontal
+  \R        [4]  Salto de línea
+
+=over 4
+
+=item [1]
+
+Vea L<perlrecharclass/Clases de caracteres entre corchetes> para obtener más información.
+
+=item [2]
+
+Vea L<perlrecharclass/Clases de caracteres POSIX> para obtener más información.
+
+=item [3]
+
+Vea L<perlrecharclass/Secuencias con barra diagonal inversa> para obtener más información.
+
+=item [4]
+
+Vea L<perlrebackslash/Miscelánea> para obtener más información.
+
+=item [5]
+
+Vea L</Grupos de captura> más abajo para obtener más información.
+
+=item [6]
+
+Vea L</Patrones extendidos> más abajo para obtener más información.
+
+=item [7]
+
+Tenga en cuenta que C<\N> tiene dos significados.  Cuando es de la forma C<\N{NOMBRE}>, coincide con el carácter o la secuencia de caracteres cuyo nombre es C<NOMBRE>; de manera similar, cuando es de la forma C<\N{U+I<hex>}>, coincide con el carácter cuyo código de carácter Unicode es I<hex>.  En los demás casos coincide con cualquier carácter, excepto C<\n>.
+
+=back
+
+=head3 Aserciones
+
+Perl define las siguientes aserciones de ancho cero:
+X<zero-width assertion> X<assertion> X<regex, zero-width assertion>
+X<regexp, zero-width assertion>
+X<regular expression, zero-width assertion>
+X<\b> X<\B> X<\A> X<\Z> X<\z> X<\G>
+X<aserción ancho cero> X<aserción> X<regex, aserción ancho cero>
+X<regexp, aserción ancho cero>
+X<expresión regular, aserción ancho cero>
+
+    \b  Límite de una palabra
+    \B  Cualquier cosa excepto un límite de una palabra
+    \A  Comienzo de la cadena únicamente
+    \Z  Final de cadena únicamente, posición anterior a carácter de nueva línea al final
+    \z  Final de cadena únicamente
+    \G  Coincidencia en pos() únicamente (p. ej. en posición final de última coincidencia
+        antes de m//g)
+
+Un límite de palabra (C<\b>) es un punto que hay entre dos caracteres, un C<\w> a un lado y un C<\W> al otro (en cualquier orden), contando con que los caracteres imaginarios del principio y final de la cadena coinciden con C<\W>.  (Dentro de una clase de caracteres, C<\b> representa el retroceso (I<backspace>) en lugar del límite de palabra, tal como lo hace normalmente en cualquier cadena escrita entre comillas dobles).
+C<\A> y C<\Z> son como "^" y "$", pero no coincidirán múltiples veces cuando se usa el modificador C</m>, mientras que "^" y "$" coincidirán en cada límite de línea de la cadena.  Para coincidir con el final real de la cadena, sin omitir un posible carácter de fin de línea, use C<\z>.
+X<\b> X<\A> X<\Z> X<\z> X</m>
+
+La aserción C<\G> se puede usar para encadenar coincidencias globales (obtenidas mediante C<m//g>), como se describe en L<perlop/"Operadores de entrecomillado para expresiones regulares">.
+También es útil al escribir escáneres tipo C<lex>, cuando se tienen varios patrones de los que se desea buscar coincidencias con subcadenas posteriores de la cadena. Vea la referencia anterior.  La ubicación real donde C<\G> coincidirá también puede modificarse mediante C<pos()> como un valor-izquierda (vea L<perlfunc/pos>). Tenga en cuenta que la norma para las coincidencias de tamaño cero (vea L</"Patrones repetidos que coinciden con subcadenas de longitud cero">) se ha modificado algo, puesto que el contenido a la izquierda de C<\G> no se tiene en cuenta para determinar la longitud de la coincidencia. Así, lo siguiente no coincidirá nunca:
+X<\G>
+
+     my $cadena = 'ABC';
+     pos($cadena) = 1;
+     while ($cadena =~ /(.\G)/g) {
+         print $1;
+     }
+
+Imprime 'A' y termina, pues considera que la coincidencia es de ancho cero y, por lo tanto, no coincidirá dos veces seguidas en la misma posición.
+
+Cabe señalar que un uso incorrecto de C<\G> puede provocar un bucle infinito. Tenga cuidado al utilizar patrones que incluyan C<\G> en una serie de alternativas.
+
+=head3 Grupos de captura
+
+Los paréntesis C<( ... )> crean grupos de captura (también denominados búferes de captura). Para hacer referencia posteriormente, dentro del mismo patrón, al contenido actual de un grupo de captura, use C<\g1> (o C<\g{1}>) para el primero, C<\g2> (o C<\g{2}>) para el segundo, y así sucesivamente.
+Esto se denomina I<retrorreferencia>.
+X<regex, búfer de captura> X<regexp, búfer de captura>
+X<regex, grupo de captura> X<regexp, grupo de captura>
+X<expresión regular, búfer de captura> X<retrorreferencia>
+X<expresión regular, grupo de captura>
+X<\g{1}> X<\g{-1}> X<\g{nombre}> X<retrorreferencia relativa> X<retrorreferencia con nombre>
+X<búfer captura con nombre> X<expresión regular, búfer de captura con nombre>
+X<grupo de captura con nombre> X<expresión regular, grupo de captura con nombre>
+X<%+> X<$+{nombre}> X<< \k<nombre> >>
+No hay límite al número de subcadenas capturadas que se pueden usar.
+Los grupos se numeran, siendo el paréntesis abierto más a la izquierda el número 1, etc. Si no se detecta un grupo, no se inicializará la retrorreferencia asociada. (Esto puede ocurrir si el grupo es opcional o está en una rama diferente de la alternancia).
+Puede omitir la C<"g">, y escribir C<"\1">, etc., pero esta forma presenta algunos problemas, como se explica más abajo.
+
+También puede hacer referencia a los grupos de captura de forma relativa, con un número negativo, por lo que C<\g-1> y C<\g{-1}> hacen referencia al grupo de captura inmediatamente anterior, y C<\g-2> y C<\g{-2}> hacen referencia al grupo anterior a este.  Por ejemplo:
+
+        /
+         (Y)            # grupo 1
+         (              # grupo 2
+            (X)         # grupo 3
+            \g{-1}      # retrorreferencia a grupo 3
+            \g{-3}      # retrorreferencia a grupo 1
+         )
+        /x
+
+coincidiría igual que con C</(Y) ( (X) \g3 \g1 )/x>.  Esto permite interpolar expresiones regulares en grandes expresiones regulares sin tener que preocuparse por el cambio en la numeración de los grupos de captura.
+
+Puede prescindir de los números y crear grupos de captura con nombres.
+Se usa la notación C<(?E<lt>I<nombre>E<gt>...)> para declarar el grupo y C<\g{I<nombre>}> para hacer referencia al mismo.  (Por compatibilidad con las expresiones regulares de .NET, C<\g{I<nombre>}> también se puede escribir como C<\k{I<nombre>}>, C<\kE<lt>I<nombre>E<gt>> o C<\k'I<nombre>'>).
+I<nombre> no debe comenzar con un número, ni contener guiones.
+Cuando diferentes grupos dentro del mismo patrón tienen el mismo nombre, se supone que cualquier referencia a ese nombre será al grupo definido que esté más a la izquierda.  Los grupos con nombre se numeran de forma absoluta y relativa, por lo que también se puede hacer referencia a ellos con esos números.
+(Así, es posible hacer cosas con los grupos de captura con nombres que, de otro modo, requerirían código C<(??{})>).
+
+El contenido de un grupo de captura tiene ámbito dinámico y está disponible fuera del patrón hasta el final del bloque que lo define o hasta la siguiente coincidencia, lo que ocurra primero.  (Vea L<perlsyn/"Instrucciones compuestas">).
+Puede hacer referencia a un grupo de captura mediante un número absoluto (usando C<"$1"> en lugar de C<"\g1">, etc.), o mediante un nombre a través del hash C<%+>, usando C<"$+{I<nombre>}">.
+
+Para hacer referencia a grupos de captura con nombre deben usarse llaves obligatoriamente, pero si se usan números absolutos o relativos, las llaves son opcionales.  Las llaves son más seguras cuando se crea una expresión regular mediante la concatenación de cadenas más pequeñas.  Por ejemplo, si tiene C<qr/$a$b/>, donde C<$a> contiene C<"\g1"> y C<$b> contiene C<"37">, obtendrá C<\g137/> que, probablemente, no sea lo que pretendía.
+
+Las notaciones C<\g> y C<\k> se introdujeron en Perl 5.10.0.  Antes de esta versión no existían los grupos de captura con nombre o numerados de forma relativa.  Se hacía referencia a los grupos numerados de forma absoluta mediante C<\1>, C<\2>, etc. Esta notación sigue siendo válida (y probablemente siempre lo será).  No obstante, genera algunas ambigüedades si hay más de 9 grupos de captura, ya que C<\10> podría referirse al décimo grupo de captura, o al carácter cuyo ordinal en octal es 010 (un carácter de retroceso en ASCII).  Perl resuelve esta ambigüedad interpretando C<\10> como una retrorreferencia si antes hay, como mínimo, 10 paréntesis de apertura.  Asimismo, \11 es una retrorreferencia solo si antes hay como mínimo 11 paréntesis de apertura.
+Y así sucesivamente.  C<\1> a C<\9> siempre se interpretan como retrorreferencias.
+Hay varios ejemplos a continuación que ilustran estos peligros.  Puede evitar la ambigüedad usando siempre C<\g{}> o C<\g> si se refiere a grupos de captura, y C<\o{}> para las constantes octales; o bien, para C<\077> e inferiores, usando 3 dígitos con ceros de relleno a la izquierda, ya que un cero a la izquierda implica una constante octal.
+
+En determinadas circunstancias, la notación C<\I<dígito>> también funciona fuera del patrón.  Puede ver los detalles en L</Advertencia sobre \1 en lugar de $1>, más abajo.
+
+Ejemplos:
+
+    s/^([^ ]*) *([^ ]*)/$2 $1/;     # intercambia las dos primeras palabras
+
+    /(.)\g1/                        # busca el primer carácter repetido
+         and print "'$1' es el primer carácter repetido\n";
+
+    /(?<car>.)\k<car>/              # ... de otra forma
+         and print "'$+{car}' es el primer carácter repetido\n";
+
+    /(?'char'.)\g1/                 # ... combinación de las anteriores
+         and print "'$1' es el primer carácter repetido\n";
+
+    if (/Tiempo: (..):(..):(..)/) {   # extrae valores
+        $horas = $1;
+        $minutos = $2;
+        $segundos = $3;
+    }
+
+    /(.)(.)(.)(.)(.)(.)(.)(.)(.)\g10/   # \g10 es una retrorreferencia
+    /(.)(.)(.)(.)(.)(.)(.)(.)(.)\10/    # \10 es octal
+    /((.)(.)(.)(.)(.)(.)(.)(.)(.))\10/  # \10 es una retrorreferencia
+    /((.)(.)(.)(.)(.)(.)(.)(.)(.))\010/ # \010 es octal
+
+    $a = '(.)\1';        # Provoca problemas cuando se concatena.
+    $b = '(.)\g{1}';     # Evita los problemas.
+    "aa" =~ /${a}/;      # Verdadero
+    "aa" =~ /${b}/;      # Verdadero
+    "aa0" =~ /${a}0/;    # ¡Falso!
+    "aa0" =~ /${b}0/;    # Verdadero
+    "aa\x08" =~ /${a}0/; # ¡Verdadero!
+    "aa\x08" =~ /${b}0/; # Falso
+
+También se pueden usar varias variables especiales para hacer referencia a partes de la coincidencia anterior.  C<$+> devuelve el contenido del último paréntesis de captura coincidente.
+C<$&> devuelve toda la cadena coincidente.  (Antes C<$0> también lo hacía, pero ahora devuelve el nombre del programa).  C<$`> devuelve todo lo anterior a la cadena coincidente.  C<$'> devuelve todo lo posterior a la cadena coincidente. Y C<$^N> contiene el fragmento capturado (subcoincidencia) por el grupo de captura más reciente. C<$^N> se puede usar en patrones extendidos (como se indica más abajo), por ejemplo para asignar una subcoincidencia a una variable.
+X<$+> X<$^N> X<$&> X<$`> X<$'>
+
+Estas variables especiales, como el hash C<%+> y las variables de coincidencia numeradas (C<$1>, C<$2>, C<$3>, etc.) tienen ámbito dinámico hasta el final del bloque actual o hasta la siguiente coincidencia, lo que ocurra primero.  (Vea L<perlsyn/"Instrucciones compuestas">).
+X<$+> X<$^N> X<$&> X<$`> X<$'>
+X<$1> X<$2> X<$3> X<$4> X<$5> X<$6> X<$7> X<$8> X<$9>
+
+B<NOTA>: en Perl las coincidencias fallidas no reinicializan las variables de coincidencia, lo que facilita escribir código que haga comprobaciones para una serie específica de casos y recuerde la mejor coincidencia.
+
+B<ADVERTENCIA>: cuando Perl considera que se necesita una de las variables C<$&>, C<$`> o C<$'> en cualquier parte del programa, las proporcionará cada vez que se busquen coincidencias de patrones.  Esto puede ralentizar considerablemente el programa.  Perl utiliza el mismo mecanismo para producir C<$1>, C<$2>, etc., por lo que también se paga un precio por cada patrón que contenga paréntesis de captura.  (Para evitar este coste y conservar el comportamiento de agrupación, se debe usar en su lugar la expresión regular extendida C<(?: ... )>).  Pero si nunca se usa C<$&>, C<$`> o C<$'>, no se penalizarán los patrones I<sin> paréntesis de captura.  Por tanto, es recomendable evitar el uso de C<$&>, C<$'> y C<$`>, pero si no es posible (para algunos algoritmos su uso es inevitable), una vez usados ya ha pagado el precio, por lo que podrá seguir usándolos a voluntad.  A partir de la versión 5.005, el uso de C<$&> no es tan costoso como el de las otras variables.
+X<$&> X<$`> X<$'>
+
+Como solución para este problema, en Perl 5.10.0 se incluyeron C<${^PREMATCH}>,
+C<${^MATCH}> y C<${^POSTMATCH}>, que son equivalentes a C<$`>, C<$&>
+y C<$'>, B<con la diferencia> de que solo se garantiza que estén definidos tras encontrar una coincidencia con el modificador C</p> (preservar).
+El uso de estas variables no implica una penalización en el rendimiento global, a diferencia de sus predecesoras, pero a cambio requieren que indique a perl que desea utilizarlas.
+X</p> X<p modifier> X<modificador p>
+
+=head2 Escape de metacaracteres
+
+En Perl los metacaracteres con carácter de escape son alfanuméricos, como C<\b>, C<\w>, C<\n>.  A diferencia de otros lenguajes de expresiones regulares, no se usan símbolos no alfanuméricos con caracteres de escape.  Así, cosas como \\, \(, \), \<, \>, \{ o \} siempre deben interpretarse como caracteres literales, no como metacaracteres.  Esto se usaba como un modismo común para deshabilitar los significados especiales de los metacaracteres de expresiones regulares en una cadena que se desea utilizar para un patrón. Para marcar con un carácter de escape todos los caracteres que no sean de tipo "palabra":
+
+    $patrón =~ s/(\W)/\\$1/g;
+
+(Si se habilita C<use locale>, esto dependerá de la configuración regional actual).
+Actualmente es más común usar la función quotemeta() o la secuencia de escape C<\Q> para deshabilitar todos los significados especiales de los metacaracteres:
+
+    /$activados\Q$desactivados\E$activados/
+
+Tenga en cuenta que si pone barras diagonales inversas literales (no dentro de las variables interpoladas) entre C<\Q> y C<\E>, una interpolación con escape doble de barras diagonales inversas puede llevar a resultados confusos.  Si I<necesita> usar barras diagonales inversas literales dentro de C<\Q...\E>,
+consulte L<perlop/"Detalles complejos del análisis de construcciones entrecomilladas">.
+
+C<quotemeta()> y C<\Q> se describen de forma detallada en L<perlfunc/quotemeta>.
+
+=head2 Patrones extendidos
+
+Perl también define una sintaxis extendida coherente para características que no se encuentran en herramientas estándar, como B<awk> y B<lex>.  La sintaxis, para la mayor parte de estos casos, es un par de paréntesis con un signo de interrogación como primer elemento dentro de los paréntesis.  El carácter que va detrás del signo de interrogación indica la extensión.
+
+La estabilidad de estas extensiones varía mucho.  Algunas forman parte del núcleo del lenguaje desde hace muchos años.  Otras son experimentales y pueden cambiar sin previo aviso o ser retiradas.  Consulte la documentación de una característica individual para comprobar su estado actual de implementación.
+
+Se eligió un signo de interrogación para esto y para la construcción de detección de coincidencias mínima porque: 1) los signos de interrogación son poco frecuentes en expresiones regulares antiguas, y 2) cada vez que se ve uno, hay que pararse a pensar qué es lo que hace.  Usamos técnicas psicológicas...
+
+=over 4
+
+=item C<(?#texto)>
+X<(?#)>
+
+Un comentario.  Se ignora el texto.  Si el modificador C</x> habilita el uso de espacio en blanco para dar formato, bastará un simple C<#>.  Tenga en cuenta que Perl cierra el comentario tan pronto como ve un C<)>, por lo que no hay manera de poner un C<)> literal en el comentario.
+
+=item C<(?adlupimsx-imsx)>
+
+=item C<(?^alupimsx)>
+X<(?)> X<(?^)>
+
+Uno o más modificadores de detección de coincidencias de patrón incrustados, que han de ser activados (o desactivados, si van precedidos de C<->) para el resto del patrón o el resto del grupo de patrones que lo contiene (si existe).
+
+Esto es especialmente útil para los patrones dinámicos, como los que se leen desde un archivo de configuración, se reciben como un argumento o se especifican en alguna tabla.  Considere el caso en el que algunos patrones distinguen mayúsculas de minúsculas mientras otros no: los que no distinguen mayúsculas de minúsculas solo tienen que incluir C<(?i)> al principio del patrón.  Por ejemplo:
+
+    $patron = "foobar";
+    if ( /$patron/i ) { }
+
+    # más flexible:
+
+    $patron = "(?i)foobar";
+    if ( /$patron/ ) { }
+
+Estos modificadores se restauran al final del grupo que los contiene. Por ejemplo,
+
+    ( (?i) bla ) \s+ \g1
+
+coincidirá con C<bla> tanto en mayúsculas como en minúsculas, con algunos espacios y una repetición exacta
+(también de mayúsculas y minúsculas) de la palabra anterior, suponiendo que se usa el modificador C</x>, y no el modificador C</i>, fuera de este grupo.
+
+Estos modificadores no se transfieren a subpatrones con nombre del grupo que los contiene. Es decir, un patrón como C<((?i)(&NOMBRE))> no hace que el patrón "NOMBRE" distinga mayúsculas de minúsculas.
+
+Cualquiera de estos modificadores se puede aplicar globalmente a todas las expresiones regulares compiladas dentro del ámbito de C<use re>.  Vea L<re/"modo '/modificadores'">.
+
+A partir de Perl 5.14, un signo C<"^"> (signo de intercalación o acento circunflejo) inmediatamente después de un signo C<"?"> equivale a C<d-imsx>.  Detrás del signo de intercalación pueden ir modificadores (salvo C<"d">) para anular el efecto.
+Pero no se puede usar un signo menos.
+
+Tenga en cuenta que los modificadores C<a>, C<d>, C<l>, C<p> y C<u> son especiales, en el sentido de que solo se pueden habilitar (no se pueden deshabilitar), y los modificadores C<a>, C<d>, C<l> y C<u> son mutuamente excluyentes: si se especifica uno, se anula la especificación de los demás, y no puede haber más de uno (o dos C<a>) en la construcción.  Así, por ejemplo, C<(?-p)> mostrará una advertencia si se compila con C<use warnings>; C<(?-d:...)> y C<(?dl:...)> son errores irrecuperables.
+
+También debe tener en cuenta que el modificador C<p> es especial, ya que su presencia en cualquier lugar del patrón tiene un efecto global.
+
+=item C<(?:patrón)>
+X<(?:)>
+
+=item C<(?adluimsx-imsx:patrón)>
+
+=item C<(?^aluimsx:patrón)>
+X<(?^:)>
+
+Este es para agrupación, no para captura; agrupa subexpresiones como lo hace "()", pero a diferencia de "()" no crea retrorreferencias.  Así que
+
+    @campos = split(/\b(?:a|b|c)\b/)
+
+es como
+
+    @campos = split(/\b(a|b|c)\b/)
+
+pero no devuelve campos adicionales.  También sale más barato no capturar caracteres si no son necesarios.
+
+Cualquier letra entre C<?> y C<:> actúa como modificador de marca con C<(?adluimsx-imsx)>.  Por ejemplo,
+
+    /(?s-i:más.*que).*millones/i
+
+es equivalente a la siguiente expresión más larga
+
+    /(?:(?s-i)más.*que).*millones/i
+
+A partir de Perl 5.14, un signo C<"^"> (signo de intercalación o acento circunflejo) inmediatamente después de un signo C<"?"> equivale a C<d-imsx>.  El signo de intercalación puede ir seguido de cualquier marca positiva (salvo C<"d">), por lo que
+
+    (?^x:foo)
+
+es equivalente a
+
+    (?x-ims:foo)
+
+El signo de intercalación indica a Perl que esta agrupación no hereda las marcas de ningún patrón vecino, sino que usa los valores predeterminados del sistema (C<d-imsx>), modificados por las marcas especificadas.
+
+El signo de intercalación permite una conversión más sencilla de las expresiones regulares compiladas a cadena de caracteres.  La sintaxis es
+
+    (?^:patrón)
+
+y cualquier marca que no sea predeterminada aparece entre el signo de intercalación y el signo de dos puntos.
+Una prueba que examine esta conversión a cadena de caracteres no tiene por qué tener las marcas predeterminadas del sistema especificadas en el propio código, solo el signo de intercalación.  Si se agregan nuevas marcas a Perl, el significado de la expansión del signo de intercalación cambiará para incluir el valor predeterminado de estas marcas, por lo que la prueba seguirá funcionando sin cambios.
+
+Especificar una marca negativa después del signo de intercalación es un error, ya que la marca es redundante.
+
+Mnemotécnico para C<(?^...)>: un nuevo comienzo, ya que el uso normal de este signo es coincidir con el comienzo de la cadena.
+
+=item C<(?|patrón)>
+X<(?|)> X<Branch reset> X<reinicio de rama>
+
+Este es el patrón de "reinicio de rama", que tiene la propiedad especial de numerar los grupos de captura desde el mismo punto inicial en cada rama alternativa. Está disponible a partir de perl 5.10.0.
+
+Los grupos de captura se numeran de izquierda a derecha, pero dentro de esta construcción la numeración se reinicia en cada rama.
+
+La numeración dentro de cada rama será la normal, y cualquier grupo después de esta construcción se numerará como si la construcción contuviera una sola rama, que es la que contiene más grupos de captura.
+
+Esta construcción es útil cuando se desea capturar una sola coincidencia de una serie de coincidencias alternativas.
+
+Considere el siguiente patrón.  Los números de abajo muestran en qué grupo se almacenará el contenido capturado.
+
+
+    # antes   -------------reinicio de rama--------- después        
+    / ( a )  (?| x ( y ) z | (p (q) r) | (t) u (v) ) ( z ) /x
+    # 1            2         2  3        2     3     4  
+
+Tenga cuidado al utilizar el patrón de reinicio de rama en combinación con las capturas con nombre. Las capturas con nombre se implementan como alias de los grupos numerados que almacenan las capturas, y esto interfiere con la implementación del patrón de reinicio de rama. Si usa capturas con nombre en un patrón de reinicio de rama, es mejor utilizar los mismos nombres, en el mismo orden, en cada una de las alternativas:
+
+   /(?|  (?<a> x ) (?<b> y )
+      |  (?<a> z ) (?<b> w )) /x
+
+De lo contrario pueden producirse sorpresas:
+
+  "12" =~ /(?| (?<a> \d+ ) | (?<b> \D+))/x;
+  say $+ {a};   # Imprime '12'
+  say $+ {b};   # *También* imprime '12'.
+
+El problema es que tanto el grupo con el nombre C<< a >> como el grupo con el nombre C<< b >> son alias del grupo perteneciente a C<< $1 >>.
+
+=item Aserciones de inspección
+X<look-around assertion> X<lookaround assertion> X<look-around> X<lookaround> X<aserciones de inspección> X<aserción de inspección> X<inspección>
+
+Las aserciones de inspección (I<look-around>) son patrones de ancho cero que detectan un patrón específico sin incluirlo en C<$&>. Se detectan aserciones positivas cuando los subpatrones coinciden y aserciones negativas cuando los subpatrones no coinciden. La inspección hacia atrás (I<look-behind>) coincide con texto hasta la posición actual de coincidencia, mientras que la inspección hacia adelante (I<look-ahead>) coincide con texto que sigue a la posición actual de coincidencia.
+
+=over 4
+
+=item C<(?=patrón)>
+X<(?=)> X<inspección hacia adelante, positiva>
+
+Una aserción de inspección hacia adelante positiva de ancho cero.  Por ejemplo, C</\w+(?=\t)/> detecta una palabra seguida de una tabulación, sin incluir la tabulación en C<$&>.
+
+=item C<(?!patrón)>
+X<(?!)> X<inspección hacia adelante, negativa>
+
+Una aserción de inspección hacia adelante negativa de ancho cero.  Por ejemplo, C</foo(?!bar)/> detecta cualquier instancia de "foo" que no esté seguida de "bar".  Sin embargo, debe tener en cuenta que las inspecciones hacia adelante y hacia atrás NO funcionan igual.  No puede usar esto en las inspecciones hacia atrás.
+
+Si busca una instancia de "bar" que no esté precedida de "foo", C</(?!foo)bar/> no hará lo que espera.  Esto se debe a que C<(?!foo)> solo dice que lo siguiente no puede ser "foo" (y no lo es, es "bar", por lo que se detectará "foobar").  En su lugar debe usar inspección hacia atrás (se explica más abajo).
+
+=item C<(?<=patrón)> C<\K>
+X<(?<=)> X<look-behind, positive> X<lookbehind, positive> X<inspección hacia atrás, positiva> X<\K>
+
+Una aserción de inspección hacia atrás positiva de ancho cero.  Por ejemplo, C</(?<=\t)\w+/> detecta una palabra que sigue a una tabulación, sin incluir la tabulación en C<$&>.
+Solo funciona para inspecciones hacia atrás de ancho fijo.
+
+Esta construcción tiene una forma especial, llamada C<\K>, que hace que el motor de expresiones regulares "omita" todo lo que haya antes de C<\K> y no lo incluya en C<$&>. Esto ofrece la posibilidad efectiva de realizar inspecciones hacia atrás de longitud variable. El uso de C<\K> dentro de otra aserción de inspección está permitido, pero su comportamiento aún no está bien definido.
+
+Por diversas razones, C<\K> puede ser considerablemente más eficiente que la construcción equivalente C<< (?<=...) >>, y resulta especialmente útil en situaciones en las que se desea quitar algo que siga a otra cosa, dentro de una cadena. Por ejemplo
+
+  s/(foo)bar/$1/g;
+
+se puede reescribir de forma mucho más eficiente como
+
+  s/foo\Kbar//g;
+
+=item C<(?<!patrón)>
+X<(?<!)> X<look-behind, negative> X<lookbehind, negative> X<inspección hacia atrás, negativa>
+
+Una aserción de inspección hacia atrás negativa de ancho cero.  Por ejemplo C</(?<!bar)foo/> detecta cualquier instancia de "foo" que no siga a "bar".  Solo funciona para inspecciones hacia atrás de ancho fijo.
+
+=back
+
+=item C<(?'NOMBRE'patrón)>
+
+=item C<< (?<NOMBRE>patrón) >>
+X<< (?<NAME>) >> X<(?'NAME')> X<named capture> X<capture> X<< (?<NOMBRE>) >> X<(?'NOMBRE')> X<captura con nombre> X<captura>
+
+Un grupo de captura con nombre. Idéntico en todos los sentidos a la captura normal con paréntesis C<()>, pero con la ventaja adicional de que se pueden usar C<%+> o C<%-> para hacer referencia por nombre en distintas construcciones de expresiones regulares (como C<\g{NOMBRE}>) y después de una coincidencia se puede acceder a su contenido a través de C<%+> o C<%->. En C<perlvar> encontrará más detalles sobre los hashes C<%+> y C<%->.
+
+Si varios grupos de captura tienen el mismo nombre, $+{NOMBRE} hará referencia al grupo definido situado más a la izquierda en la coincidencia.
+
+Las formas C<(?'NOMBRE'patrón)> y C<< (?<NOMBRE>patrón) >> son equivalentes.
+
+B<NOTA:> si bien la notación de esta construcción es la misma que la de la función similar de las expresiones regulares en .NET, el comportamiento no lo es. En Perl los grupos se numeran secuencialmente, independientemente de si tienen nombre o no. Así, en el patrón
+
+  /(x)(?<foo>y)(z)/
+
+$+{foo} será lo mismo que $2 y $3 contendrá 'z' en lugar de lo opuesto, que es lo que esperaría un hacker de expresiones regulares de .NET.
+
+Actualmente NOMBRE está limitado a identificadores sencillos únicamente.
+Es decir, debe coincidir con C</^[_A-Za-z][_A-Za-z0-9]*\z/> o
+su extensión Unicode (vea L<utf8>), pero no se amplia mediante la configuración regional (vea L<perllocale>).
+
+B<NOTA:> con el fin de facilitar las cosas a los programadores con experiencia de uso de los motores de expresiones regulares de Python o PCRE, se puede usar el patrón C<< (?PE<lt>NOMBREE<gt>patrón) >> en lugar de C<< (?<NOMBRE>patrón) >>; sin embargo, esta forma no permite usar comillas simples como el delimitador del nombre.
+
+=item C<< \k<NOMBRE> >>
+
+=item C<< \k'NOMBRE' >>
+
+Retrorreferencia con nombre. Son similares a las retrorreferencias numéricas, con la diferencia de que el grupo se designa por nombre, no por número. Si varios grupos tienen el mismo nombre, dicho nombre hace referencia al grupo situado más a la izquierda de la coincidencia actual.
+
+Es un error usar C<< (?<NOMBRE>) >> para hacer referencia a un nombre no definido anteriormente en el patrón.
+
+Ambas formas son equivalentes.
+
+B<NOTA:> para facilitar las cosas a los programadores con experiencia de uso de los motores de expresiones regulares de Python o PCRE, se puede usar el patrón C<< (?P=NOMBRE) >> en lugar de C<< \k<NOMBRE> >>.
+
+=item C<(?{ código })>
+X<(?{})> X<regex, code in> X<regexp, code in> X<regular expression, code in> X<regex, código interior> X<regexp, código interior> X<expresión regular, código interior>
+
+B<AVISO>: esta característica de expresión regular extendida se considera experimental y se puede modificar sin previo aviso. El código ejecutado que tenga efectos secundarios puede no funcionar de forma idéntica de una versión a otra debido al efecto de futuras optimizaciones del motor de expresiones regulares.
+
+Esta aserción de ancho cero evalúa código Perl incrustado.  Siempre finaliza correctamente y su C<código> no se interpola.  En la actualidad, las reglas para determinar dónde finaliza el C<código> son algo enrevesadas.
+
+Esta característica se puede utilizar con la variable especial C<$^N> para capturar los resultados de las coincidencias parciales en variables sin tener que seguir la pista del número de paréntesis anidados. Por ejemplo:
+
+  $_ = "El zorro marrón saltó sobre el perro perezoso";
+  /el (\S+)(?{ $animal = $^N }) (\S+)(?{ $color = $^N })/i;
+  print "color = $color, animal = $animal\n";
+
+Dentro del bloque C<(?{...})>, C<$_> hace referencia a la cadena con la que se compara la expresión regular. También puede usar C<pos()> para determinar la posición actual de coincidencia dentro de esa cadena.
+
+El C<código> se circunscribe a un ámbito, en el sentido siguiente: si se vuelve atrás en la aserción (comparar con L<"Vuelta atrás">), se deshacen todos los cambios introducidos tras la C<local>ización, de forma que
+
+  $_ = 'a' x 8;
+  m<
+     (?{ $cnt = 0 })               # Inicializa $cnt.
+     (
+       a
+       (?{
+           local $cnt = $cnt + 1;  # Actualiza $cnt,
+                                   # independiente de vuelta atrás.
+       })
+     )*
+     aaaa
+     (?{ $res = $cnt })            # En caso de éxito, copia a
+                                   # una ubicación no localizada
+   >x;
+
+establecerá C<$res = 4>.  Tenga en cuenta que, después de la coincidencia, C<$cnt> devuelve el valor introducido globalmente, porque los ámbitos que limitan los operadores C<local> se desarman en orden inverso al de creación.
+
+Esta aserción se puede usar con un modificador C<(?(condición)patrón-sí|patrón-no)>.  Si I<no> se usa de esta manera, el resultado de la evaluación de C<código> se asigna a la variable especial C<$^R>.  Esto ocurre de forma inmediata, por lo que se puede usar C<$^R> en otras aserciones C<(?{ código })> dentro de la misma expresión regular.
+
+La asignación a C<$^R> anterior está correctamente localizada, por lo que se restaura el valor anterior de C<$^R> si se vuelve atrás en la aserción; vea L<"Vuelta atrás">.
+
+Por razones de seguridad, esta construcción está prohibida si la expresión regular requiere interpolar variables en tiempo de ejecución, a menos que el peligroso pragma C<use re 'eval'> esté activo (vea L<re>) o las variables contengan resultados del operador C<qr//> (vea L<perlop/"qr/CADENAE<sol>msixpodual">).
+
+Esta restricción se debe a la costumbre, muy extendida y bastante cómoda, de usar como patrones cadenas determinadas en tiempo de ejecución.  Por ejemplo:
+
+    $re = <>;
+    chomp $re;
+    $cadena =~ /$re/;
+
+Antes de que Perl supiera cómo ejecutar código interpolado dentro de un patrón, esta operación era completamente segura, desde el punto de vista de la seguridad, aunque un patrón ilegal podía generar una excepción.  Sin embargo, deja de ser segura si activa C<use re 'eval'>, por lo que solo se debe usar para realizar comprobaciones de seguridad.
+Una alternativa mejor es usar la evaluación minuciosamente limitada dentro de un compartimento de seguridad.  Vea L<perlsec> para obtener más detalles sobre estos dos mecanismos.
+
+B<AVISO>: el uso de variables léxicas (C<my>) en estos bloques no funciona correctamente. El resultado es impredecible y hará que perl sea inestable. La solución consiste en usar variables globales (C<our>).
+
+B<AVISO>: en perl 5.12.x y versiones anteriores no había reentrada en el motor de expresiones regulares, por lo que el código interpolado no podía invocar de forma segura el motor de expresiones regulares directamente con C<m//> o C<s///>, o indirectamente a través de funciones, como C<split>. Invocar el motor de expresiones regulares en estos bloques provocaría inestabilidad en perl.
+
+=item C<(??{ código })>
+X<(??{})> X<regex, postponed> X<regexp, postponed> X<regular expression, postponed> X<regex, pospuesta> X<regexp, pospuesta> X<expresión regular, pospuesta>
+
+B<AVISO>: esta característica de expresión regular extendida se considera experimental y se puede modificar sin previo aviso. El código ejecutado que tenga efectos secundarios puede no funcionar de forma idéntica de una versión a otra debido al efecto de futuras optimizaciones del motor de expresiones regulares.
+
+Esta es una subexpresión regular "pospuesta".  El C<código> se evalúa en tiempo de ejecución, en el momento en que esta subexpresión puede coincidir.  El resultado de la evaluación se considera una expresión regular y se compara como si estuviera insertada en lugar de esta construcción.  Tenga en cuenta que esto significa que el contenido de los grupos de captura definidos dentro de un patrón evaluado no están disponibles fuera del patrón, y viceversa; no hay manera de que el patrón interno devuelto por un bloque de código haga referencia a un grupo de captura definido fuera.  (El bloque de código puede utilizar C<$1>, etc., para hacer referencia a grupos de captura del patrón que lo contiene).  Por lo tanto,
+
+    ('a' x 100)=~/(??{'(.)' x 100})/
+
+B<coincidirá>, pero B<no> actualizará $1.
+
+El C<código> no se interpola.  Como antes, las reglas para determinar el lugar donde el C<código> termina son algo enrevesadas.
+
+El siguiente patrón detecta un grupo entre paréntesis:
+
+ $re = qr{
+             \(
+             (?:
+                (?> [^()]+ )  # No paréntesis, sin vuelta atrás
+              |
+                (??{ $re })   # Grupo con paréntesis emparejados
+             )*
+             \)
+          }x;
+
+Vea también C<(?PARNO)>, que describe una manera alternativa y más eficaz de realizar la misma tarea.
+
+Por razones de seguridad, esta construcción está prohibida si la expresión regular incluye interpolación de variables en tiempo de ejecución, a menos que el peligroso pragma C<use re 'eval'> esté en uso (vea L<re>), o las variables contengan resultados del operador C<qr//> (vea L<perlop/"qr/CADENAE<sol>msixpodual">).
+
+En perl 5.12.x y versiones anteriores no había reentrada en el motor de expresiones regulares, por lo que el código interpolado no podía invocar de forma segura el motor de expresiones regulares directamente con C<m//> o C<s///>, o indirectamente a través de funciones, como C<split>.
+
+Realizar un proceso recursivo más de 50 veces sin consumir ninguna cadena de entrada generará un error irrecuperable.  La profundidad máxima está compilada en perl, por lo que su modificación requiere una compilación personalizada.
+
+=item C<(?PARNO)> C<(?-PARNO)> C<(?+PARNO)> C<(?R)> C<(?0)>
+X<(?PARNO)> X<(?1)> X<(?R)> X<(?0)> X<(?-1)> X<(?+1)> X<(?-PARNO)> X<(?+PARNO)> X<regex, recursive> X<regexp, recursive> X<regular expression, recursive>
+X<regex, relative recursion> X<regex, recursiva> X<regexp, recursiva> X<expresión regular, recursiva> X<regex, recursión relativa>
+
+Similar a C<(??{ código })>, salvo que no incluye la compilación de código; en su lugar, trata el contenido de un grupo de captura como un patrón independiente que debe coincidir en la posición actual.  Los grupos de captura contenidos en el patrón tendrán el valor determinado por la recursividad más externa.
+
+PARNO es una secuencia de dígitos (que no empieza en 0) cuyo valor refleja el número del par de paréntesis del grupo de captura al que se llega por recursividad. C<(?R)> se ejecuta de forma recursiva hasta el comienzo del patrón completo. C<(?0)> es una sintaxis alternativa para C<(?R)>. Si PARNO va precedido de un signo más o menos, se supone que es relativo, donde los números negativos indican los grupos de captura anteriores y los positivos indican los posteriores. Así, C<(?-1)> hace referencia al último grupo declarado y C<(?+1)> hace referencia al siguiente grupo que se va a declarar.
+Tenga en cuenta que el recuento de la recursión relativa difiere del de retrorreferencias relativas en que con la recursión B<se incluyen> grupos no cerrados.
+
+El siguiente patrón detecta una función foo() que puede contener paréntesis emparejados como argumento.
+
+  $re = qr{ (                    # grupo de paréntesis 1 (toda la función)
+              foo
+              (                  # grupo de paréntesis 2 (paréntesis)
+                \(
+                  (              # grupo de paréntesis 2 (contenido de paréntesis)
+                  (?:
+                   (?> [^()]+ )  # No paréntesis sin vuelta atrás
+                  |
+                   (?3)          # Recursión para iniciar grupo de paréntesis 2
+                  )*
+                  )
+                \)
+              )
+            )
+          }x;
+
+Si el patrón se usa de esta manera:
+
+    'foo(bar(baz)+baz(bop))'=~/$re/
+        and print "\$1 = $1\n",
+                  "\$2 = $2\n",
+                  "\$3 = $3\n";
+
+debe generar la siguiente salida:
+
+    $1 = foo(bar(baz)+baz(bop))
+    $2 = (bar(baz)+baz(bop))
+    $3 = bar(baz)+baz(bop)
+
+Si no hay ningún grupo de captura correspondiente definido, se producirá un error irrecuperable.  Realizar un proceso recursivo más de 50 veces sin consumir ninguna cadena de entrada generará un error irrecuperable.  La profundidad máxima está compilada en perl, por lo que su modificación requiere una compilación personalizada.
+
+A continuación se muestra cómo el uso de la indexación negativa puede facilitar la incrustación de patrones recursivos dentro de una construcción C<qr//> para su uso posterior:
+
+    my $parentesis = qr/(\((?:[^()]++|(?-1))*+\))/;
+    if (/foo $parentesis \s+ \+ \s+ bar $parentesis/x) {
+       # hacer algo aquí...
+    }
+
+B<Tenga en cuenta> que este patrón no se comporta del mismo modo que la construcción equivalente de PCRE o Python. En Perl se puede dar marcha atrás en un grupo recursivo, mientras que en PCRE y en Python el grupo al que se llega de forma recursiva se trata como si fuera atómico. Además, los modificadores se resuelven en tiempo de compilación, por lo que construcciones como (?i:(?1)) o (?:(?i)(?1)) no afectan al modo en que se va a procesar el subpatrón.
+
+=item C<(?&NOMBRE)>
+X<(?&NOMBRE)>
+
+Se ejecuta de forma recursiva hasta un subpatrón con nombre. Idéntico a C<(?PARNO)>, salvo que el paréntesis al que se llega de forma recursiva se determina por su nombre. Si varios paréntesis tienen el mismo nombre, entonces llega de forma recursiva al que esté más a la izquierda.
+
+Es un error hacer referencia a un nombre que no se haya declarado en ninguna parte del patrón.
+
+B<NOTA:> para facilitar las cosas a los programadores con experiencia de uso de los motores de expresiones regulares de Python o PCRE, se puede usar el patrón C<< (?P>NOMBRE) >> en lugar de C<< (?&NOMBRE) >>.
+
+=item C<(?(condición)patrón-sí|patrón-no)>
+X<(?()>
+
+=item C<(?(condición)patrón-sí)>
+
+Expresión condicional. Busca C<patrón-sí> si C<condición> devuelve un valor verdadero; si no, busca C<patrón-no>. Un patrón no presente siempre coincide.
+
+C<(condición)> debe ser un número entero entre paréntesis (válido si se detecta el par de paréntesis correspondiente), una aserción de inspección hacia adelante/hacia atrás de ancho cero, un nombre entre corchetes angulares o comillas simples (válido si se detecta un grupo con ese nombre), o el símbolo especial (R) (verdadero cuando se evalúa dentro de una recursión o un bloque eval). Además, el símbolo R puede ir seguido de un número (que será verdadero cuando se evalúa en un proceso recursivo dentro del grupo correspondiente) o de C<&NOMBRE>, en cuyo caso sólo será verdadera cuando se evalúe durante la recursión en el grupo con nombre.
+
+A continuación se muestra un resumen de los predicados posibles:
+
+=over 4
+
+=item (1) (2) ...
+
+Comprueba si el grupo de captura numerado coincide con algo.
+
+=item (<NOMBRE>) ('NOMBRE')
+
+Comprueba si un grupo con el nombre especificado coincide con algo.
+
+=item (?=...) (?!...) (?<=...) (?<!...)
+
+Comprueba si el patrón coincide (o no coincide, para las variantes con '!').
+
+=item (?{ CÓDIGO })
+
+Trata el valor devuelto como la condición del bloque de código.
+
+=item (R)
+
+Comprueba si la expresión se ha evaluado dentro de la recursión.
+
+=item (R1) (R2) ...
+
+Comprueba si la expresión se ha evaluado al ejecutarse directamente en el interior del n-ésimo grupo de captura. Esta comprobación es el equivalente en expresiones regulares a
+
+  if ((caller(0))[3] eq 'subnombre') { ... }
+
+Es decir, no comprueba toda la pila de recursión.
+
+=item (R&NOMBRE)
+
+De manera similar a C<(R1)>, este predicado comprueba si la ejecución se realiza directamente dentro del grupo con nombre más a la izquierda (es la misma lógica usada por C<(?&NOMBRE)> para eliminar la ambigüedad). No comprueba toda la pila; solo comprueba el nombre de la recursión activa más interna.
+
+=item (DEFINE)
+
+En este caso, el patrón-sí no se ejecuta nunca directamente y no se permite un patrón-no. Es similar a C<(?{0})>, pero más eficiente.
+Vea los detalles a continuación.
+
+=back
+
+Por ejemplo:
+
+    m{ ( \( )?
+       [^()]+
+       (?(1) \) )
+     }x
+
+detecta un fragmento de caracteres que no son paréntesis, posiblemente entre paréntesis.
+
+El predicado C<(DEFINE)> es una forma especial que nunca ejecuta directamente su patrón-sí, y no admite un patrón-no. Esto permite definir subpatrones que solo serán ejecutados por el mecanismo de recursión.
+De esta manera, puede definir un conjunto de reglas de expresiones regulares y agruparlas en cualquier patrón que elija.
+
+Para este uso, se recomienda colocar el bloque DEFINE al final del patrón, y asignar nombres a los subpatrones definidos en su interior.
+
+Además, hay que tener en cuenta que los patrones definidos de esta manera probablemente no sean tan eficientes, debido a que el optimizador no está preparado para procesarlos de forma eficaz.
+
+Un ejemplo de cómo se podría usar esto:
+
+  /(?<NOMBRE>(?&NOMBRE_PAT))(?<DIR>(?&DIRECCIÓN_PAT))
+   (?(DEFINE)
+     (?<NOMBRE_PAT>...)
+     (?<DIRECCIÓN_PAT>...)
+   )/x
+
+Tenga en cuenta que los grupos de captura encontrados dentro de la recursión no son accesibles después del regreso de la recursión, por lo que es necesaria una capa extra de grupos de captura. Así, C<$+{NOMBRE_PAT}> no estará definido a pesar de que C<$+{NOMBRE}> sí lo esté.
+
+Por último, tenga en cuenta que los subpatrones creados dentro de un bloque DEFINE también cuentan para el número de capturas absolutas y relativas, por lo que:
+
+    my @capturas = "a" =~ /(.)                  # Primera captura
+                           (?(DEFINE)
+                               (?<EJEMPLO> 1 )  # Segunda captura
+                           )/x;
+    say scalar @capturas;
+
+Mostrará 2, no 1. Esto es especialmente importante si se tiene la intención de compilar las definiciones con el operador C<qr//> y más tarde interpolarlas en otro patrón.
+
+=item C<< (?>patrón) >>
+X<backtrack> X<backtracking> X<atomic> X<possessive> X<vuelta atrás> X<volver atrás> X<atómico> X<posesivo>
+
+Un subexpresión "independiente", que coincide con la subcadena con la que coincidiría un C<patrón> I<independiente> si estuviera anclado en la posición indicada, y no coincide con I<nada más que con esta subcadena>.  Esta construcción es útil para la optimización de lo que de otro modo serían comparaciones "eternas", puesto que no hay vuelta atrás (vea L<"Vuelta atrás">).
+También puede ser útil cuando la semántica "capturar todo lo que se pueda y no devolver nada" sea deseable.
+
+Por ejemplo: C<< ^(?>a*)ab >> nunca coincidirá, ya que C<< (?>a*) >> (anclada al comienzo de la cadena, como antes) encontrará I<todos> los caracteres C<a> al comienzo de la cadena, sin dejar ninguno para que C<ab> coincida.  En cambio, C<a*ab> coincidirá igual que C<a+b>, ya que la coincidencia del subgrupo C<a*> está influenciada por el texto del grupo C<ab> siguiente (vea L<"Vuelta atrás">).  En particular, C<a*> dentro de C<a*ab> coincidirá con menos caracteres que el patrón C<a*> independiente, para permitir que el resto del patrón coincida.
+
+C<< (?>patrón) >> no deshabilita la vuelta atrás una vez que ha coincidido. Se puede dar marcha atrás más allá de la construcción, pero no volver a entrar en ella. Por tanto C<< ((?>a*)|(?>b*))ar >> aún coincidirá con "bar".
+
+Se puede lograr un efecto similar al de C<< (?>patrón) >> con C<(?=(patrón))\g{-1}>.  Esto coincide con la misma subcadena que un patrón C<a+> independiente, y el siguiente C<\g{-1}> consume la cadena coincidente; por lo tanto, hace una aserción de longitud cero, como un análogo de C<< (?>...) >>.
+(La diferencia entre estas dos construcciones es que la segunda utiliza un grupo de captura, por lo que incrementa el número de las retrorreferencias en el resto de la expresión regular).
+
+Considere este patrón:
+
+    m{ \(
+          (
+            [^()]+           # x+
+          |
+            \( [^()]* \)
+          )+
+       \)
+     }x
+
+Detectará de manera eficiente un grupo no vacío de parejas de paréntesis anidados a dos niveles de profundidad o menos.  Sin embargo, si no existe tal grupo y la cadena es muy larga, tardará un tiempo casi infinito.  Esto se debe a que hay muchas maneras distintas de dividir una cadena larga en subcadenas.  Esto es lo que hace C<(.+)+>, y C<(.+)+> es similar a un subpatrón del patrón mostrado arriba.  El patrón anterior detecta una no-coincidencia en C<((()aaaaaaaaaaaaaaaaaa> en unos segundos, pero cada letra adicional duplica ese tiempo.  Esta degradación exponencial del rendimiento le hará creer que su programa se ha bloqueado.  Sin embargo, con un pequeño cambio en este patrón
+
+    m{ \(
+          (
+            (?> [^()]+ )        # cambiar x+ anterior a (?> x+ )
+          |
+            \( [^()]* \)
+          )+
+       \)
+     }x
+
+que usa C<< (?>...) >>, coincidirá exactamente con la cadena anterior (comprobar esto manualmente es un ejercicio muy interesante), pero termina en la cuarta parte de tiempo cuando se usa en una cadena similar con 1 000 000 de letras C<a>.  Sin embargo, debe tener en cuenta que, cuando esta construcción va seguida de un cuantificador y el pragma C<use warnings> o la opción B<-w> están activos, actualmente muestra el mensaje de advertencia C<"matches null string many times in regex"> (se detecta la cadena nula muchas veces en la expresión regular).
+
+En grupos sencillos, como en el patrón C<< (?> [^()]+ ) >>, se puede conseguir un efecto comparable por medio de una aserción de inspección hacia adelante, como en C<[^()]+ (?! [^()] )>.
+Esto solo tarda 4 veces más en una cadena con un 1 000 000 de letras C<a>.
+
+La semántica "capturar todo lo que se pueda y no devolver nada" es deseable en muchas situaciones en las que, a primera vista, un simple patrón C<()*> parece la solución correcta.  Supongamos que tenemos que analizar un texto con comentarios delimitados por signos C<#> seguidos, opcionalmente, de espacio en blanco (horizontal) adicional.  Contrariamente a lo que parece, C<#[ \t]*> I<no es> la subexpresión correcta para detectar el delimitador de comentario, ya que puede dejarse parte del espacio en blanco si de ese modo consigue detectar el resto del patrón.  La respuesta correcta es una de estas:
+
+    (?>#[ \t]*)
+    #[ \t]*(?![ \t])
+
+Por ejemplo, para capturar la parte no vacía de los comentarios en $1, hay que usar uno de estos patrones:
+
+    / (?> \# [ \t]* ) (        .+ ) /x;
+    /     \# [ \t]*   ( [^ \t] .* ) /x;
+
+Debe elegir el que refleje mejor la especificación de los comentarios mencionada arriba.
+
+En algunos artículos sobre el tema, esta construcción se denomina "detección de coincidencias atómica" o "detección de coincidencias posesiva".
+
+Los cuantificadores posesivos equivalen a colocar dentro de una de estas construcciones el elemento a los que se aplican los cuantificadores. Se aplican las siguientes equivalencias:
+
+    Forma cuantificador Forma con paréntesis
+    ---------------     ---------------
+    PAT*+               (?>PAT*)
+    PAT++               (?>PAT+)
+    PAT?+               (?>PAT?)
+    PAT{min,max}+       (?>PAT{min,max})
+
+=back
+
+=head2 Verbos especiales para el control de la vuelta atrás
+
+B<ADVERTENCIA:> estos patrones son experimentales y están sujetos a cambios o a su eliminación en una versión futura de Perl. Debe anotarse su uso en código de producción para evitar problemas al actualizar.
+
+Estos patrones especiales son, generalmente, de la forma C<(*VERBO:ARG)>. A menos que se indique lo contrario, el argumento ARG es opcional; y en algunos casos está prohibido.
+
+Cualquier patrón con un verbo especial para la vuelta atrás que admita un argumento tiene un comportamiento especial consistente en que, cuando se ejecuta, establece los valores de las variables C<$REGERROR> y C<$REGMARK> del paquete actual. Al hacerlo se aplicarán las siguientes reglas:
+
+En caso de error, se establecerá como valor de la variable C<$REGERROR> el valor de ARG del patrón de verbo, si el verbo está involucrado en el error de coincidencia. Si se omite la parte ARG del patrón, se establece como valor de C<$REGERROR> el nombre del último patrón C<(*MARK:NOMBRE)> ejecutado, o TRUE si no hay ninguno. Además, la variable C<$REGMARK> se establece en FALSE.
+
+Si hay coincidencia, se establece la variable C<$REGERROR> en FALSE y la variable C<$REGMARK> en el nombre del último patrón C<(*MARK:NOMBRE)> ejecutado.  Vea abajo la descripción del verbo C<(*MARK:NOMBRE)> para obtener más información.
+
+B<NOTA:> C<$REGERROR> y C<$REGMARK> no son variables mágicas como C<$1> y la mayoría de las demás variables relacionadas con las expresiones regulares. No son locales en un ámbito, ni de solo lectura; son variables de paquete volátiles, similares a C<$AUTOLOAD>.
+Si es necesario localizar cambios de las variables en un ámbito determinado, use C<local>.
+
+Si un patrón no contiene un verbo especial de vuelta atrás que admita un argumento, no se modifican los valores de C<$REGERROR> y C<$REGMARK>.
+
+=over 3
+
+=item Verbos con un argumento
+
+=over 4
+
+=item C<(*PRUNE)> C<(*PRUNE:NOMBRE)>
+X<(*PRUNE)> X<(*PRUNE:NAME)> X<(*PRUNE:NOMBRE)>
+
+Este patrón de ancho cero poda el árbol de vuelta atrás en el punto actual de vuelta atrás a causa de un error. Considere el patrón C<A (*PRUNE) B>, donde A y B son patrones complejos. Hasta que se llega al verbo C<(*PRUNE)>, A puede volver atrás siempre que sea necesario para que se produzca la coincidencia. Cuando se llega a dicho verbo, la coincidencia continúa en B, que también puede hacer una vuelta atrás cuando sea necesario; sin embargo, si no hubiera coincidencia con B, entonces ya no se llevará a cabo la vuelta atrás, y el patrón no coincidirá en la actual posición de inicio.
+
+El siguiente ejemplo cuenta todas las posibles cadenas coincidentes de un patrón (sin que se produzca una coincidencia con ninguna de ellas, por efecto de C<(*FAIL)>).
+
+    'aaab' =~ /a+b?(?{print "$&\n"; $contador++})(*FAIL)/;
+    print "Contador=$contador\n";
+
+que produce:
+
+    aaab
+    aaa
+    aa
+    a
+    aab
+    aa
+    a
+    ab
+    a
+    Contador=9
+
+Si agregamos C<(*PRUNE)> antes de la cuenta,
+
+    'aaab' =~ /a+b?(*PRUNE)(?{print "$&\n"; $contador++})(*FAIL)/;
+    print "Contador=$contador\n";
+
+evitamos la vuelta atrás y hacemos el recuento de la cadena más larga coincidente en cada punto inicial de la coincidencia:
+
+    aaab
+    aab
+    ab
+    Contador=3
+
+Un patrón puede incluir un número arbitrario de aserciones C<(*PRUNE)>.
+
+Vea también las descripciones C<< (?>patrón) >> y los cuantificadores posesivos, donde se describen otras maneras de controlar la vuelta atrás. En algunos casos, se puede reemplazar el uso de C<(*PRUNE)> por C<< (?>patrón) >> sin ninguna diferencia funcional; sin embargo, C<(*PRUNE)> permite controlar casos que no se pueden expresar con una única construcción C<< (?>patrón) >>.
+
+=item C<(*SKIP)> C<(*SKIP:NOMBRE)>
+X<(*SKIP)>
+
+Este patrón de ancho cero es similar a C<(*PRUNE)> con la excepción de que, en caso de error de coincidencia, también significa que cualquier texto encontrado que active la ejecución del patrón C<(*SKIP)> no puede formar parte de I<ninguna> coincidencia de este patrón. Esto significa que, efectivamente, el motor de expresiones regulares "salta" hacia adelante a esta posición en caso de error y vuelve a intentar detectar una coincidencia (suponiendo que haya espacio suficiente para la coincidencia).
+
+El nombre del patrón C<(*SKIP:NOMBRE)> tiene un significado especial. Si se encuentra una construcción C<(*MARK:NOMBRE)> durante la búsqueda de coincidencia, esa será la posición utilizada como "punto de salto". Si no se encuentra ningún verbo C<(*MARK)> con ese nombre, el operador C<(*SKIP)> no tiene ningún efecto. Cuando se usa sin nombre, el "punto de salto" será la posición en la que estaba el punto de coincidencia al ejecutar el patrón (*SKIP).
+
+Compare lo siguiente con los ejemplos de C<(*PRUNE)>; observe que la cadena es el doble de larga:
+
+ 'aaabaaab' =~ /a+b?(*SKIP)(?{print "$&\n"; $contador++})(*FAIL)/;
+ print "Contador=$contador\n";
+
+produce como salida:
+
+    aaab
+    aaab
+    Contador=2
+
+Una vez que se detecta 'aaab' al principio de la cadena y se ejecuta el patrón C<(*SKIP)>, el siguiente punto de partida será el lugar donde estaba el cursor cuando se ejecutó C<(*SKIP)>.
+
+=item C<(*MARK:NOMBRE)> C<(*:NOMBRE)>
+X<(*MARK)> X<(*MARK:NAME)> X<(*:NAME)> C<(*MARK:NOMBRE)> C<(*:NOMBRE)>
+
+Este patrón de ancho cero se puede utilizar para marcar el punto alcanzado en una cadena cuando se ha detectado una parte del patrón. A esta marca se le puede asignar un nombre. Un patrón C<(*SKIP)> posterior saltará a ese punto si hace una vuelta atrás a causa de un error de coincidencia. Se puede usar un número arbitrario de patrones C<(*MARK)> y la parte del NOMBRE puede estar duplicada.
+
+Además de para interactuar con el patrón C<(*SKIP)>, se puede usar C<(*MARK:NOMBRE)> para "marcar" una rama del patrón, de forma que después de la búsqueda de coincidencias el programa pueda determinar qué ramas del patrón participaron en la coincidencia.
+
+Cuando se detecta una coincidencia, se establece como valor de la variable C<$REGMARK> el nombre del último patrón C<(*MARK:NOMBRE)> ejecutado que participó en la coincidencia.
+
+Esto se puede usar para determinar la rama de un patrón que coincidió sin necesidad de utilizar un grupo de captura independiente para cada rama, lo que puede suponer una mejora de rendimiento, ya que Perl no puede optimizar C</(?:(x)|(y)|(z))/> de forma tan eficiente como algo parecido a C</(?:x(*MARK:x)|y(*MARK:y)|z(*MARK:z))/>.
+
+Cuando se produce un error de coincidencia, y a menos que haya participado otro verbo en dicho error de coincidencia y haya proporcionado su propio nombre, se establecerá como valor de la variable C<$REGERROR> el nombre del último patrón C<(*MARK:NOMBRE)> ejecutado.
+
+Vea L</(*SKIP)> para obtener más información.
+
+C<(*MARK:NOMBRE)> se puede abreviar como C<(*:NOMBRE)>.
+
+=item C<(*THEN)> C<(*THEN:NOMBRE)>
+
+Este patrón es similar al operador C<::> "grupo de corte" de Perl 6.  Al igual que C<(*PRUNE)>, este verbo siempre coincide, y cuando se da marcha atrás a causa de un error, hace que el motor de expresiones regulares intente la alternativa siguiente en el grupo contenedor más interno (de captura o de otro tipo) que tenga alternativas.
+En lo que se refiere a C<(*THEN)>, las dos ramas de C<(?(condición)patrón-sí|patrón-no)> no cuentan como una alternativa.
+
+Su nombre proviene de la observación de que esta operación combinada con el operador de alternancia (C<|>) se puede utilizar para crear lo que, en esencia, es un bloque if/then/else basado en un patrón:
+
+  ( COND (*THEN) FOO | COND2 (*THEN) BAR | COND3 (*THEN) BAZ )
+
+Tenga en cuenta que, si se usa este operador, y NO está dentro de una alternancia, entonces actúa exactamente igual que el operador C<(*PRUNE)>.
+
+  / A (*PRUNE) B /
+
+es lo mismo que
+
+  / A (*THEN) B /
+
+pero
+
+  / ( A (*THEN) B | C (*THEN) D ) /
+
+no es lo mismo que
+
+  / ( A (*PRUNE) B | C (*PRUNE) D ) /
+
+ya que, si se detecta A pero no se detecta B, el verbo C<(*THEN)> volverá atrás y probará con C; en cambio, el verbo C<(*PRUNE)> simplemente generará un error de coincidencia.
+
+=back
+
+=item Verbos sin argumento
+
+=over 4
+
+=item C<(*COMMIT)>
+X<(*COMMIT)>
+
+Este es "patrón de compromiso" C<< <commit> >> o C<:::> de Perl 6. Es un patrón de ancho cero similar a C<(*SKIP)>, con la diferencia de que, cuando se produce la vuelta atrás a causa de un error, provoca un error de coincidencia de todo el patrón. No habrá nuevos intentos para encontrar una coincidencia válida avanzando el puntero de inicio.
+Por ejemplo,
+
+ 'aaabaaab' =~ /a+b?(*COMMIT)(?{print "$&\n"; $contador++})(*FAIL)/;
+ print "Contador=$contador\n";
+
+produce como salida:
+
+    aaab
+    Contador=1
+
+Es decir, cuando se entra en C<(*COMMIT)>, y si el patrón no coincide, el motor de expresiones regulares no tratará de encontrar nada más en el resto de la cadena.
+
+=item C<(*FAIL)> C<(*F)>
+X<(*FAIL)> X<(*F)>
+
+Este patrón no coincide con nada y siempre produce un error de coincidencia. Se puede utilizar para forzar al motor a volver atrás. Es equivalente a C<(?!)>, pero más fácil de leer. De hecho, internamente C<(?!)> se optimiza a C<(*FAIL)>.
+
+Es probable que sólo sea útil cuando se combina con C<(?{})> o C<(??{})>.
+
+=item C<(*ACCEPT)>
+X<(*ACCEPT)>
+
+B<ADVERTENCIA:> esta característica es muy experimental. No se recomienda para código en producción.
+
+Este patrón no coincide con nada y provoca el final de una coincidencia correcta en el lugar en que se detecta el patrón C<(*ACCEPT)>, independientemente de que haya más coincidencias en la cadena. Si está dentro de un patrón anidado, como en la recursión, o en un subpatrón generado dinámicamente a través de C<(??{})>, solo se termina inmediatamente el patrón más interno.
+
+Si C<(*ACCEPT)> se encuentra dentro de grupos de captura, se marcan los grupos como terminados en el lugar en que se encontró el patrón C<(*ACCEPT)>.
+Por ejemplo:
+
+  'AB' =~ /(A (A|B(*ACCEPT)|C) D)(E)/x;
+
+coincidirá, y C<$1> será C<AB> y C<$2> será C<B>; no se establecerá el valor de C<$3>. Si se detecta otra rama en el paréntesis interior, como en el caso de la cadena 'ACDE', entonces también habría que detectar C<D> y C<E>.
+
+=back
+
+=back
+
+=head2 Vuelta atrás
+X<backtrack> X<backtracking> X<volver atrás> X<vuelta atrás>
+
+NOTA: en esta sección se presenta una aproximación abstracta del comportamiento de las expresiones regulares.  Para un análisis más riguroso (y complejo) de las normas involucradas en la selección de una coincidencia entre las alternativas posibles, vea L<Combinación de partes de expresiones regulares>.
+
+Una característica fundamental de las expresiones regulares es la noción de la vuelta atrás (I<backtracking>), que actualmente usan (cuando es necesario) todos los cuantificadores de expresiones regulares no posesivos: C<*>, C<*?>, C<+>, C<+?>, C<{n,m}> y C<{n,m}?>.  La vuelta atrás se suele optimizar internamente, pero el principio general sigue siendo válido.
+
+Para que una expresión regular coincida, debe coincidir la expresión I<entera>, no una parte de ella.  Así, si el principio de un patrón que contiene un cuantificador coincide de manera que partes posteriores del patrón no coincidan, el motor retrocede y recalcula la parte inicial. Por esto se denomina vuelta atrás.
+
+Veamos un ejemplo de vuelta atrás: suponga que desea encontrar la palabra que sigue a "come" en la cadena "En el Comedor Principal el niño come espinacas.":
+
+    $_ = "En el Comedor Principal el niño come espinacas.";
+    if ( /\b(come)\s+(\w+)/i ) {
+        print "$2 sigue a $1.\n";
+    }
+
+Cuando se ejecuta la detección de coincidencias, la primera parte de la expresión regular (C<\b(come)>) encuentra una posible coincidencia al principio de la cadena y asigna "Come" a $1.  Sin embargo, tan pronto como el motor de coincidencias ve que no hay espacio en blanco después de la instancia de "Come" que había guardado en $1, se da cuenta de su error y comienza de nuevo un carácter después de donde había intentado coincidir.  Esta vez recorre todo el camino hasta la siguiente instancia de "come". Ahora la expresión regular completa coincide, y se obtiene el resultado esperado de "espinacas sigue a come".
+
+A veces una coincidencia mínima puede ser de gran ayuda.  Suponga que desea buscar todo lo que hay entre "mesa" y "come".  Para empezar, lo intenta con:
+
+    $_ = "En la mesa, al mediodía, se come, y en el comedor se cena.";
+    if ( /mesa(.*)come/ ) {
+        print "se obtiene <$1>\n";
+    }
+
+del que, inesperadamente, resulta:
+
+  se obtiene <, al mediodía, se come, y en el >
+
+Esto se debe a que C<.*> es avaricioso, por lo que obtiene todo lo que hay entre la I<primera> instancia de "mesa" y la I<última> instancia de "come".  Aquí es más eficaz utilizar una coincidencia mínima para asegurarse de obtener el texto entre una instancia de "mesa" y la primera instancia de "come" que haya a continuación.
+
+    if ( /mesa(.*?)come/ ) { print "obtiene <$1>\n" }
+  se obtiene <, al mediodía, se >
+
+Veamos otro ejemplo: Suponga que desea buscar la coincidencia con un número al final de una cadena y mantener la parte que precede a esa coincidencia.
+Podemos probar con:
+
+    $_ = "Tengo 2 números: 53147";
+    if ( /(.*)(\d*)/ ) {                                # ¡Incorrecto!
+        print "El comienzo es <$1>, número es <$2>.\n";
+    }
+
+Eso no funcionará, ya que C<.*> es avaricioso y engullirá toda la cadena. Como C<\d*> puede coincidir con una cadena vacía, coincide toda la expresión regular.
+
+    El comienzo es <Tengo 2 números: 53147>, número es <>.
+
+Veamos otras variantes, la mayoría de las cuales tampoco funcionarán:
+
+    $_ = "Tengo 2 números: 53147";
+    @pats = qw{
+        (.*)(\d*)
+        (.*)(\d+)
+        (.*?)(\d*)
+        (.*?)(\d+)
+        (.*)(\d+)$
+        (.*?)(\d+)$
+        (.*)\b(\d+)$
+        (.*\D)(\d+)$
+    };
+
+    for $patron (@patrones) {
+        printf "%-12s ", $patron;
+        if ( /$patron/ ) {
+            print "<$1> <$2>\n";
+        } else {
+            print "ERROR\n";
+        }
+    }
+
+Esto imprimirá:
+
+    (.*)(\d*)    <Tengo 2 números: 53147> <>
+    (.*)(\d+)    <Tengo 2 números: 5314> <7>
+    (.*?)(\d*)   <> <>
+    (.*?)(\d+)   <Tengo > <2>
+    (.*)(\d+)$   <Tengo 2 números: 5314> <7>
+    (.*)(\d+)$   <Tengo 2 números: > <53147>
+    (.*)\b(\d+)$ <Tengo 2 números: > <53147>
+    (.*\D)(\d+)$ <Tengo 2 números: > <53147>
+
+Como ve, esto puede ser un poco complicado.  Es importante darse cuenta de que una expresión regular no es más que un conjunto de aserciones que establece una definición de coincidencia.  Puede ser 0, 1 u otras formas diferentes para las que la definición puede obtener una coincidencia con una cadena de caracteres determinada.  Y si puede coincidir de varias maneras, debe saber cómo funciona la vuelta atrás para entender qué variedad de coincidencia va a obtener.
+
+Cuando se utiliza con aserciones de inspección hacia adelante y negaciones, todo esto puede complicarse aún más.  Suponga que desea encontrar una secuencia de caracteres que no son dígitos y que no esté seguida de "123".  Puede probar con
+
+    $_ = "ABC123";
+    if ( /^\D*(?!123)/ ) {                # ¡Incorrecto!
+        print "Efectivamente, no hay 123 en $_\n";
+    }
+
+Pero eso no va a devolver una coincidencia; al menos, no de la forma esperada.  Afirma que la cadena no contiene 123.  Veamos una explicación más clara de por qué ese patrón produce una coincidencia, en contra de lo esperado:
+
+    $x = 'ABC123';
+    $y = 'ABC445';
+
+    print "1: se obtiene $1\n" if $x =~ /^(ABC)(?!123)/;
+    print "2: se obtiene $1\n" if $y =~ /^(ABC)(?!123)/;
+
+    print "3: se obtiene $1\n" if $x =~ /^(\D*)(?!123)/;
+    print "4: se obtiene $1\n" if $y =~ /^(\D*)(?!123)/;
+
+Esto imprime
+
+    2: se obtiene ABC
+    3: se obtiene AB
+    4: se obtiene ABC
+
+Puede que esperara un error en la prueba 3, ya que parece una versión más general de la prueba 1.  La diferencia importante es que, a diferencia de la prueba 1, la prueba 3 contiene un cuantificador (C<\D*>), por lo que puede usar la vuelta atrás.  Lo que pasa es que hemos preguntado "¿Es verdad que, al principio de $x, después de 0 o más caracteres que no son dígitos, hay algo que no es 123?". Si el detector de patrones hubiese dejado que C<\D*> se expandiera a "ABC", se habría producido un error de coincidencia de todo el patrón.
+
+El motor de búsqueda asocia inicialmente C<\D*> con "ABC".  Después intenta asociar C<(?!123)> con "123", y no hay coincidencia.  Pero como se ha utilizado un cuantificador (C<\D*>) en la expresión regular, el motor de búsqueda puede dar marcha atrás y volver a intentar la coincidencia de manera diferente con la esperanza de encontrar una coincidencia de la expresión regular completa.
+
+El patrón realmente I<quiere> coincidir, por lo que utiliza el modelo estándar de volver atrás y reintentar, y deja que C<\D*> se expanda esta vez a solo "AB".  Ahora hay algo después de "AB" que no es "123".  Se trata de "C123", que es suficiente.
+
+Podemos abordar este problema con una aserción y una negación.
+Decimos que la primera parte en $1 debe ir seguida de un dígito y de algo que no es "123".  Recuerde que las aserciones de inspección hacia adelante son expresiones de ancho cero: solo inspeccionan, pero no utilizan ninguna parte de la cadena de caracteres en su coincidencia.  Si reescribimos el código anterior de esta manera se obtiene el resultado esperado. Es decir, no habrá coincidencia en el caso 5 pero sí la habrá en el caso 6:
+
+    print "5: se obtiene $1\n" if $x =~ /^(\D*)(?=\d)(?!123)/;
+    print "6: se obtiene $1\n" if $y =~ /^(\D*)(?=\d)(?!123)/;
+
+    6: se obtiene ABC
+
+Es decir, las dos aserciones de ancho cero, una junto a la otra, funcionan como si estuvieran unidas por una conjunción Y, como si se hubieran usando aserciones predefinidas: C</^$/> solo coincide si está simultáneamente al comienzo de la línea Y al final de la línea.  La verdad más profunda que subyace es que la yuxtaposición de las expresiones regulares siempre significa Y, salvo cuando se usa una conjunción O explícita mediante la barra vertical.  C</ab/> significa buscar una coincidencia con "a" Y (a continuación) buscar una coincidencia con "b", aunque los intentos de coincidencia se realicen en posiciones distintas, ya que "a" no es una aserción de ancho cero, sino una aserción de ancho uno.
+
+B<ADVERTENCIA>: la resolución de expresiones regulares muy complicadas puede tardar un tiempo exponencial, por la inmensa cantidad de formas posibles de vuelta atrás existentes para lograr una coincidencia.  Por ejemplo, sin las optimizaciones internas del motor de expresiones regulares, la siguiente detección de coincidencias tardará muchísimo tiempo:
+
+    'aaaaaaaaaaaa' =~ /((a{0,5}){0,5})*[c]/
+
+Y si utiliza algún C<*> en los grupos internos en lugar de limitarlos a un número de coincidencias entre 0 y 5, se ejecutará indefinidamente, hasta que se agote el espacio de pila.  Por otra parte, estas optimizaciones internas no siempre son aplicables.  Por ejemplo, si usa C<{0,5}> en lugar de C<*> en el grupo externo, no se aplica ninguna optimización, y la búsqueda de coincidencia tardará mucho tiempo en terminar.
+
+Una herramienta eficaz para optimizar estos engendros es lo que se conoce como un "grupo independiente", que no vuelve atrás (vea L</C<< (?>patrón) >>>).  Tenga en cuenta también que las aserciones de inspección hacia adelante/hacia atrás de longitud cero no darán marcha atrás para que la parte final coincida, ya que están en un contexto "lógico": lo único que importa es si coinciden o no.  En la descripción de L</C<< (?>patrón) >>> encontrará un ejemplo en el que los efectos secundarios de la inspección hacia adelante I<pueden> haber influido en la coincidencia siguiente.
+
+=head2 Expresiones regulares versión 8
+X<regular expression, version 8> X<regex, version 8> X<regexp, version 8> X<expresión regular, versión 8> X<regex, versión 8> X<regexp, versión 8>
+
+En caso de que no esté familiarizado con la versión 8 "normal" de las rutinas de expresiones regulares, se indican aquí las reglas de coincidencia de patrones no descritas anteriormente.
+
+Cualquier carácter individual coincide consigo mismo, a menos que sea un I<metacarácter> con un significado especial descrito aquí o más arriba.  Puede hacer que los caracteres que normalmente funcionan como metacaracteres se interpreten literalmente mediante el prefijo "\" (p.ej., "\." detecta un "." literal, no cualquier carácter; "\\" detecta una barra diagonal inversa, "\"). Este mecanismo de escape también es necesario para el carácter utilizado como delimitador de patrón.
+
+Una serie de caracteres coincide con la serie de caracteres en la cadena usada para la comparación; así, el patrón C<blurfl> detectaría "blurfl" en la cadena.
+
+Para especificar una clase de caracteres, se escribe la lista de caracteres entre corchetes (C<[]>). La clase de caracteres permite detectar cualquier carácter de la lista.  Si el primer carácter después de "[" es "^", la clase detectará cualquier carácter que no esté en la lista.  Dentro de una lista, el carácter "-" indica un intervalo, de modo que C<a-z> representa todos los caracteres entre "a" y "z", ambos incluidos.  Si desea incluir el carácter "-" o "]" en una clase, debe ponerlos al principio de la lista (o a continuación de un signo "^"), o marcarlos con una barra diagonal inversa de escape.  "-" también se trata literalmente cuando se encuentra al final de la lista, justo antes del carácter "]" final.  (Los siguientes ejemplos especifican la misma clase de tres caracteres: C<[-az]>, C<[az-]> y C>[a\-z]>.  Todas son diferentes de C<[a-z]>, que especifica una clase que contiene veintiséis caracteres, incluso en los juegos de caracteres basados en EBCDIC).  Además, si intenta utilizar las clases de caracteres C<\w>, C<\W>, C<\s>, C<\S>, C<\d> o C<\D> como valores finales de un rango, se trata el carácter "-" de forma literal.
+
+Tenga en cuenta también que la idea de rango es poco transportable entre juegos de caracteres; e incluso dentro de los mismos juegos de caracteres puede causar resultados probablemente inesperados.  Un buen principio es el de usar solo rangos que comiencen y terminen con caracteres alfabéticos del mismo tipo (solo minúsculas [a-e], solo mayúsculas [A-E]), o con dígitos ([0-9]).  Cualquier otro caso no es seguro.  En caso de duda, especifique completamente los juegos de caracteres.
+
+Los caracteres se pueden especificar con una sintaxis de metacaracteres, similar a la utilizada en C: "\n" detecta una nueva línea, "\t" una tabulación, "\r" un retorno de carro, "\f" un avance de página, etc. En términos más generales, \I<nnn>, donde I<nnn> es una cadena de tres dígitos octales, detecta el carácter cuyo valor codificado del juego de caracteres es I<nnn>.  Del mismo modo, \xI<nn>, donde I<nn> son dígitos hexadecimales, detecta el carácter cuyo ordinal es I<nn>. La expresión \cI<x> detecta el carácter de control I<x>.  Por último, el metacarácter "." detecta cualquier carácter salvo "\n" (a menos que se utilice el modificador C</s>).
+
+Puede especificar una serie de alternativas para un patrón separándolas con "|", por lo que C<fee|fie|foe> detectará cualquier instancia de "fee", "fie" o "foe" en la cadena de búsqueda (al igual que C<f(e|i|o)e>).  La primera alternativa incluye todo, desde el último delimitador de patrón ("(", "(?:", etc. o el comienzo del patrón) hasta el primer "|"; la última alternativa contiene todo desde el último "|" hasta el siguiente delimitador de cierre del patrón.  Por eso, es una práctica común incluir las alternativas entre paréntesis, para minimizar la confusión acerca de dónde empiezan y dónde acaban.
+
+Las alternativas se procesan de izquierda a derecha, de modo que la primera alternativa encontrada que coincida con toda la expresión será la elegida. Esto significa que las alternativas no son necesariamente avariciosas. Por ejemplo, cuando se compara C<foo|foot> con "barefoot", solo coincidirá la parte "foo", ya que es la primera alternativa intentada y se detecta correctamente en la cadena. (Esto puede no parecer importante, pero lo es cuando se está capturando texto con paréntesis).
+
+Debe recordar también que "|" se interpreta como un literal cuando está entre corchetes, por lo que buscar C<[fee|fie|foe]> equivale a buscar C<[feio|]>.
+
+Dentro de un patrón, puede designar subpatrones escribiéndolos entre paréntesis para consultarlos posteriormente, y puede hacer referencia al subpatrón I<n>-ésimo más adelante en el patrón mediante el metacarácter \I<n> o \gI<n>.  Los subpatrones se numeran por orden de paréntesis de apertura, de izquierda a derecha.  Una retrorreferencia coincide con lo que coincidía realmente el subpatrón en la cadena examinada, no con las reglas de ese subpatrón.  Por lo tanto, C<(0|0x)\d*\s\g1\d*> coincidirá con "0x1234 0x4321", pero no con "0x1234 01234", debido a que el subpatrón 1 detectó "0x", aunque la regla C<0|0x> podría detectar el 0 inicial del segundo número.
+
+=head2 Advertencia sobre \1 en lugar de $1
+
+Algunas personas se acostumbran a escribir cosas como:
+
+    $patron  =~ s/(\W)/\\\1/g;
+
+Son vicios adquiridos (por \1 a \9) en el lado derecho de una sustitución para no escandalizar a los adictos a B<sed>, pero es un hábito poco recomendable.  No se recomienda porque en el Pensamiento Perliano, el lado derecho de una construcción C<s///> es una cadena entre comillas dobles.  C<\1> en una cadena escrita entre comillas dobles normal equivale a control-A.  El significado habitual de C<\1> en Unix se emula de mala manera en C<s///>.  Sin embargo, si se acostumbra a esto, tendrá problemas al agregar un modificador C</e>.
+
+    s/(\d+)/ \1 + 1 /eg;            # provoca una advertencia con -w
+
+O si intenta esto
+
+    s/(\d+)/\1000/;
+
+No puede eliminar la ambigüedad con C<\{1}000>, pero lo puede arreglar con C<${1}000>.  La operación de interpolación no se debe confundir con la operación de coincidencia con una retrorreferencia.  Significan dos cosas distintas en el lado I<izquierdo> de C<s///>.
+
+=head2 Patrones repetidos que coinciden con subcadenas de longitud cero
+
+B<ADVERTENCIA>: el material que se expone a continuación es difícil, y también lo es la prosa usada para exponerlo.  Esta sección debería reescribirse.
+
+Las expresiones regulares proporcionan un lenguaje de programación conciso y eficaz.  Como ocurre con la mayoría de las herramientas eficaces, esta gran eficacia va a acompañada de la capacidad de causar estragos.
+
+Un abuso común de esta eficacia se deriva de la capacidad de crear bucles infinitos mediante expresiones regulares, con algo tan inocuo como:
+
+    'foo' =~ m{ ( o? )* }x;
+
+C<o?> coincide con el inicio de C<'foo'>, y como la posición en la cadena no se ha movido por la coincidencia, C<o?> coincidirá una y otra vez a causa del cuantificador C<*>.  Otra forma común de crear un ciclo similar es usar el modificador de bucle C<//g>:
+
+    @coincidencias = ( 'foo' =~ m{ o? }xg );
+
+o bien
+
+    print "coincidencia: <$&>\n" while 'foo' =~ m{ o? }xg;
+
+o el bucle implícito de split().
+
+Sin embargo, la experiencia demuestra que muchas de las tareas de programación se pueden simplificar considerablemente mediante el uso de subexpresiones repetidas que coincidan con subcadenas de longitud cero.  Veamos un ejemplo sencillo:
+
+    @chars = split //, $cadena;           # // no es mágico en split
+    ($muchoespacio = $cadena) =~ s/()/ /g;# los paréntesis evitan la magia de s// /
+
+Perl permite estas construcciones I<forzando la interrupción del bucle infinito>.  Las reglas que usa son distintas de las de los bucles de bajo nivel proporcionados por los cuantificadores avariciosos C<*+{}> y para los de más alto nivel, como el modificador C</g> o el operador split().
+
+Los bucles de bajo nivel se I<interrumpen> (es decir, se sale del bucle) cuando Perl detecta que una expresión repetida coincide con una subcadena de longitud cero.   Por lo tanto
+
+   m{ (?: LONGITUD_DISTINTA_CERO | LONGITUD_CERO )* }x;
+
+es equivalente a
+
+   m{ (?: LONGITUD_DISTINTA_CERO )* (?: LONGITUD_CERO )? }x;
+
+Por ejemplo, este programa
+
+   #!perl -l
+   "aaaaab" =~ /
+     (?:
+        a                 # distinto de cero
+        |                 # o
+       (?{print "hola"})  # imprime hola cuando se
+                          #    comprueba esta rama
+       (?=(b))            # aserción de ancho cero
+     )*  # cualquier número de veces
+    /x;
+   print $&;
+   print $1;
+
+imprime
+
+   hola
+   aaaaa
+   b
+
+Tenga en cuenta que "hola" sólo se imprime una vez, ya que cuando Perl ve que la sexta iteración de la construcción C<(?:)*> más exterior coincide con una cadena de longitud cero, detiene al cuantificador C<*>.
+
+Los bucles de alto nivel preservan un estado adicional entre las iteraciones: si la última coincidencia fue de longitud cero.  Para interrumpir el bucle, se prohíbe que tenga una longitud cero la siguiente coincidencia después de una coincidencia de longitud cero.
+Esta prohibición interactúa con la vuelta atrás (vea L<"Vuelta atrás">), por lo que se elige la I<segunda mejor> coincidencia si la I<mejor> coincidencia es de longitud cero.
+
+Por ejemplo:
+
+    $_ = 'bar';
+    s/\w??/<$&>/g;
+
+produce C<< <><b><><a><><r><> >>.  En cada posición de la cadena, la mejor opción dada por el modificador no avaricioso C<??> es la coincidencia de longitud cero, y la I<segunda mejor> coincidencia es la que se corresponde con C<\w>.  Así, las coincidencias de longitud cero se alternan con coincidencias de un carácter de longitud.
+
+Del mismo modo, para construcciones C<m/()/g> repetidas, la segunda mejor coincidencia es la coincidencia en la posición situada un carácter más allá en la cadena.
+
+El estado adicional de I<encontrado con longitud cero> se asocia a la cadena coincidente y se restablece con cada asignación a pos().
+Las coincidencias de longitud cero al final de la coincidencia anterior se ignoran al ejecutar C<split>.
+
+=head2 Combinación de partes de expresiones regulares
+
+Cada una de las partes elementales de las expresiones regulares que se han descrito anteriormente (por ejemplo, C<ab> o C<\Z>) podría coincidir como mucho con una subcadena en la posición indicada de la cadena de entrada.  Sin embargo, en una expresión regular típica, estas partes elementales se combinan en patrones más complicados mediante los operadores de combinación C<ST>, C<S|T>, C<S*>, etc. (en estos ejemplos, C<S> y C<T> son subexpresiones regulares).
+
+Estas combinaciones pueden incluir alternativas, dando lugar a un problema de elección: si comparamos una expresión regular C<a|ab> con la cadena C<"abc">, ¿coincidirá con la subcadena C<"a"> o con C<"ab">?  Una forma de describir qué subcadena coincidente realmente, es usar el concepto de la vuelta atrás (vea L<"Vuelta atrás">).
+Sin embargo, esta descripción es de muy bajo nivel y hace pensar en términos de una implementación concreta.
+
+Otra descripción empieza por los conceptos de "mejor"/"peor".  Todas las subcadenas que pueden coincidir con la expresión regular dada se pueden clasificar desde la "mejor" coincidencia hasta la "peor" coincidencia, y la elegida es la "mejor" coincidencia.  Esto sustituye la pregunta "¿qué se elige?" por "¿cuáles son las mejores coincidencias y cuáles son las peores?".
+
+En este caso también, esta pregunta no tiene sentido para las partes elementales, ya que en una posición dada solo puede haber una coincidencia como máximo.  En esta sección se describe el concepto de mejor/peor para los operadores de combinación.  En la siguiente descripción, C<S> y C<T> son subexpresiones regulares.
+
+=over 4
+
+=item C<ST>
+
+Consideremos dos posibles coincidencias, C<AB> y C<A'B'>; C<A> y C<A'> son subcadenas que pueden coincidir con C<S>; C<B> y C<B'> son subcadenas que pueden coincidir con C<T>.
+
+Si C<A> es una coincidencia mejor que C<A'> para C<S>, C<AB> es una coincidencia mejor que C<A'B'>.
+
+Si C<A> y C<A'> coinciden: C<AB> es una coincidencia mejor que C<AB'> si C<B> es una coincidencia mejor que C<B'> para C<T>.
+
+=item C<S|T>
+
+Cuando C<S> puede coincidir, es una coincidencia mejor que cuando solo puede coincidir C<T>.
+
+El orden de dos coincidencias para C<S> es el mismo que para C<S>.  Y es similar para las dos coincidencias de C<T>.
+
+=item C<S{CONTADOR_REPETICIÓN}>
+
+Coincide con C<SSS...S> (repetido tantas veces como sea necesario).
+
+=item C<S{mín,máx}>
+
+Coincide con C<S{máx}|S{máx-1}|...|S{mín+1}|S{mín}>.
+
+=item C<S{mín,máx}?>
+
+Coincide con C<S{mín}|S{mín+1}|...|S{máx-1}|S{máx}>.
+
+=item C<S?>, C<S*>, C<S+>
+
+Lo mismo que C<S{0,1}>, C<S{0,BIG_NUMBER}>, C<S{1,BIG_NUMBER}>, respectivamente.
+
+=item C<S??>, C<S*?>, C<S+?>
+
+Lo mismo que C<S{0,1}?>, C<S{0,BIG_NUMBER}?>, C<S{1,BIG_NUMBER}?> respectivamente.
+
+=item C<< (?>S) >>
+
+Coincide con la mejor coincidencia de C<S> y solo con esa.
+
+=item C<(?=S)>, C<(?<=S)>
+
+Solo se considera la mejor coincidencia para C<S>.  (Esto solo es importante si C<S> tiene paréntesis de captura y las retrorreferencias se usan en otra parte de la expresión regular).
+
+=item C<(?!S)>, C<(?<!S)>
+
+Para este operador de agrupación no hay necesidad de describir el orden, ya que sólo es importante si C<S> puede coincidir.
+
+=item C<(??{ EXPR })>, C<(?PARNO)>
+
+El orden es el mismo que para la expresión regular que sea el resultado de EXPR o el patrón capturado en el grupo de captura PARNO.
+
+=item C<(?(condición)patrón-sí|patrón-no)>
+
+Recuerde que la coincidencia de C<patrón-sí> o de C<patrón-no> ya está determinada.  El orden de las coincidencias es el mismo que para la subexpresión seleccionada.
+
+=back
+
+Las recetas anteriores describen el orden de las coincidencias I<en una determinada posición>.
+Otra regla que es necesaria para entender cómo se determina una coincidencia para la expresión regular completa: una coincidencia en una posición anterior es siempre mejor que una coincidencia en una posición posterior.
+
+=head2 Crear motores de expresiones regulares personalizados
+
+A partir de Perl 5.10.0 es posible crear motores de expresiones regulares personalizados.  Esto no es para quienes buscan la tranquilidad, ya que requiere usar C.  En L<perlreapi> encontrará más detalles.
+
+Como alternativa, las constantes sobrecargadas (vea L<overload>) proporcionan una manera sencilla de extender la funcionalidad del motor de expresiones regulares mediante la sustitución de un patrón por otro.
+
+Suponga que desea habilitar una nueva secuencia de escape de expresiones regulares, C<\Y|>, que coincide en el límite entre los espacios en blanco y los caracteres que no son espacios en blanco.  Observe que C<(?=\S)(?<!\S)|(?!\S)(?<=\S)> coincide exactamente con esas posiciones, así que lo que queremos es usar C<\Y|> en lugar de esta expresión más complicada.  Podemos crear para ello un módulo C<rxpersonal>:
+
+    package rxpersonal;
+    use overload;
+
+    sub import {
+      shift;
+      die "No se permiten argumentos para rxpersonal::import" if @_;
+      overload::constant 'qr' => \&convertir;
+    }
+
+    sub no_valido { die "/$_[0]/: escape no válido '\\$_[1]'"}
+
+    # También hay que tener cuidado de no marcar con un escape
+    # la secuencia \\Y| válida (por eso usamos '\\' en las reglas de conversión).
+    my %reglas = ( '\\' => '\\\\',
+                  'Y|' => qr/(?=\S)(?<!\S)|(?!\S)(?<=\S)/ );
+    sub convertir {
+      my $re = shift;
+      $re =~ s{
+                \\ ( \\ | Y . )
+              }
+              { $reglas{$1} or no_valido($re,$1) }sgex;
+      return $re;
+    }
+
+Ahora C<use rxpersonal> permite usar el nuevo escape en expresiones regulares constantes, es decir, aquellas que no realizan interpolación de variables en tiempo de ejecución.
+Como se documenta en L<overload>, esta conversión funcionará solo en las partes literales de las expresiones regulares.  Para C<\Y|$re\Y|>, la parte variable de esta expresión regular debe convertirse explícitamente (pero solo si hay que habilitar el significado especial de C<\Y|> dentro de $re):
+
+    use rxpersonal;
+    $re = <>;
+    chomp $re;
+    $re = rxpersonal::convertir $re;
+    /\Y|$re\Y|/;
+
+=head2 Compatibilidad con PCRE/Python
+
+A partir de Perl 5.10.0 se admiten varias extensiones específicas de Python/PCRE para la sintaxis de expresiones regulares. Aunque se anima a los programadores de Perl a usar la sintaxis específica de Perl, también se acepta lo siguiente:
+
+=over 4
+
+=item C<< (?PE<lt>NOMBREE<gt>patrón) >>
+
+Define un grupo de captura con nombre. Equivalente a C<< (?<NOMBRE>patrón) >>.
+
+=item C<< (?P=NOMBRE) >>
+
+Retrorreferencia a un grupo de captura con nombre. Equivalente a C<< \g{NOMBRE} >>.
+
+=item C<< (?P>NOMBRE) >>
+
+Llamada de subrutina a un grupo de captura con nombre. Equivalente a C<< (?&NOMBRE) >>.
+
+=back
+
+=head1 ERRORES
+
+Muchas construcciones de expresiones regulares no funcionan en plataformas EBCDIC.
+
+Hay una serie de problemas relacionados con la coincidencia de mayúsculas y minúsculas en las reglas de Unicode.  Vea C<i> en L</Modificadores>, más arriba.
+
+El nivel de dificultad de este documento varía entre "difícil de entender" y "completa y totalmente opaco".  Las digresiones de la prosa y la gran cantidad de jerga hacen que cueste entender algunos puntos.
+
+Este documento necesita una reescritura que separe el contenido de manual del contenido de referencia.
+
+=head1 VEA TAMBIÉN
+
+L<perlrequick>.
+
+L<perlretut>.
+
+L<perlop/"Operadores de entrecomillado para expresiones regulares">.
+
+L<perlop/"Detalles complejos del análisis de construcciones entrecomilladas">.
+
+L<perlfaq6>.
+
+L<perlfunc/pos>.
+
+L<perllocale>.
+
+L<perlebcdic>.
+
+I<Mastering Regular Expressions> de Jeffrey Friedl, publicado por O'Reilly and Associates.

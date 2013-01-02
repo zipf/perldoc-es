@@ -6,7 +6,7 @@ use open ':locale';
 use base 'Exporter';
 use base 'POD2::Base';
 
-our $VERSION = '5.16.2.01';
+our $VERSION = '5.16.2.02';
 
 our @EXPORT = qw(print_pod print_pods);
 
@@ -26,6 +26,7 @@ sub pod_info {{
     perlfaq1          => '5.16.2',
     perlfaq2          => '5.16.2',
     perlfreebsd       => '5.16.2',
+    perlgit           => '5.16.2',
     perlglossary      => '5.16.2',
     perlhacktut       => '5.16.2',
     perlhist          => '5.16.2',
@@ -40,6 +41,7 @@ sub pod_info {{
     perlootut         => '5.16.2',
     perlopenbsd       => '5.16.2',
     perlpragma        => '5.16.2',
+    perlre            => '5.16.2',
     perlsource        => '5.16.2',
     perlstyle         => '5.16.2',
     perltodo          => '5.16.2',
@@ -331,7 +333,7 @@ Proyecto OmegaT: L<http://omegat.org/>
 
 =head1 LICENCIA Y COPYRIGHT
 
-Copyright (C) 2011-2012 Equipo de Perl en Español.
+Copyright (C) 2011-2013 Equipo de Perl en Español.
 
 Este programa es software libre; puede redistribuirlo o modificarlo bajo los
 términos de la licencia GNU General Public License publicada por la Free
