@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 #
 # Compare versions of pod documents.
 # Joaquin Ferrero. 2012.07.25
@@ -43,10 +43,10 @@ MEDIO=$[$COLS/2]
 W_EN=$[$MEDIO*95/100]
 W_ES=$[$MEDIO*100/100]
 
-#echo "Columnas: $COLS"
-#echo "Medio:    $MEDIO"
-#echo "EN:       $W_EN"
-#echo "ES:       $W_ES"
+echo "Columnas: $COLS"
+echo "Medio:    $MEDIO"
+echo "EN:       $W_EN"
+echo "ES:       $W_ES"
 #exit
 
 ### Format pod with MANWIDTH width
