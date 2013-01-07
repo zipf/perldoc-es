@@ -150,7 +150,7 @@ Y puede ver los cambios:
   index 293dd70..722c93e 100644
   --- a/AUTHORS
   +++ b/AUTHORS
-  @@ -541,7 +541,7 @@    Lars Hecking                  <lhecking@nmrc.ucc.ie>
+  @@ -541,7 +541,7 @@    Lars Hecking                   <lhecking@nmrc.ucc.ie>
    Laszlo Molnar                  <laszlo.molnar@eth.ericsson.se>
    Leif Huhn                      <leif@hale.dkstat.com>
    Len Johnson                    <lenjay@ibm.net>
@@ -185,7 +185,7 @@ Si vuelve a ejecutar C<git status>, verá algo parecido a lo siguiente:
   #   (use "git add <file>..." to include in what will be committed)
   #
   #       deliberate.untracked
-  	nothing added to commit but untracked files present (use "git add" to track)
+  nothing added to commit but untracked files present (use "git add" to track)
 
 En caso de duda, y antes de hacer cualquier otra cosa, compruebe el estado y léalo atentamente. Encontrará la respuesta a muchas preguntas en la salida del comando C<git status>.
 
@@ -241,7 +241,7 @@ Si vuelve a ejecutar C<git status>, verá algo parecido a lo siguiente:
   #   (use "git add <file>..." to include in what will be committed)
   #
   #       deliberate.untracked
-  	nothing added to commit but untracked files present (use "git add" to track)
+  nothing added to commit but untracked files present (use "git add" to track)
 
 En caso de duda, y antes de hacer cualquier otra cosa, compruebe el estado y léalo atentamente. Encontrará la respuesta a muchas preguntas en la salida del comando C<git status>.
 
@@ -363,7 +363,7 @@ C<git help bisect> ofrece mucha más información sobre cómo puede manipular la
 
 =head1 Ramas puntuales e historial de reescritura
 
-Los usuarios individuales que deseen aplicar cambios deben crear ramas puntuales en B<nombre>/B<nombre_descriptivo>. Si desea contribuir cambios a una rama puntual de otra persona, antes deberá consultárselo al autor de la rama.
+Los usuarios individuales que deseen aplicar cambios deben crear ramas puntuales en B<nombre>/B<nombre_descriptivo>. Si desea colaborar aportando cambios a una rama puntual de otra persona, antes deberá consultárselo al autor de la rama.
 
 La forma más sencilla de crear una rama puntual remota que funcione en todas las versiones de git es enviar la rama de encabezado actual como nueva rama en el repositorio remoto y después obtener una copia local:
 
@@ -405,7 +405,7 @@ B<NOTA:> está prohibido eliminar ramas "principales" de un repositorio. Es deci
      ! [remote rejected] blead (hook declined)
      error: failed to push some refs to 'ssh://perl5.git.perl.org/perl'
 
-Tenemos la política de B<no> editar el historial las ramas de blead y maint-*. Si se colara un error ortográfico (o algo más grave) en una confirmación en blead o
+Tenemos la política de B<no> editar el historial de las ramas blead y maint-*. Si se colara un error ortográfico (o algo más grave) en una confirmación en blead o
 maint-*, lo corregiremos en una confirmación posterior. Los únicos tipos de actualización que se permiten en estas ramas son los de "avance rápido", que conservan el historial.
 
 Las etiquetas con anotaciones del repositorio perl.git canónico nunca se eliminarán ni modificarán. Si desea enviar una etiqueta local a perl.git, piénselo detenidamente antes de hacerlo. (No se permite insertar etiquetas sin anotaciones).
@@ -485,7 +485,7 @@ Ahora podemos inspeccionar el cambio:
    Lesley Binks                   <lesley.binks@gmail.com>
    Lincoln D. Stein               <lstein@cshl.org>
 
-Si tiene permiso para contribuir cambios a Perl y considera que el parche es correcto, puede combinarlo en blead y después enviarlo al repositorio principal:
+Si tiene permiso para realizar cambios en Perl y considera que el parche es correcto, puede combinarlo en blead y después enviarlo al repositorio principal:
 
   % git checkout blead
   % git merge experimental
@@ -610,7 +610,7 @@ Y después enviar los cambios al repositorio:
 
 =head2 Nota sobre los servidores I<camel> (camello) y I<dromedary> (dromedario)
 
-Las personas que contribuyen cambios tienen acceso SSH a los dos servidores que ofrecen servicio a C<perl5.git.perl.org>. Uno es C<perl5.git.perl.org> (I<camel>), el repositorio "principal". El otro es C<users.perl5.git.perl.org> (I<dromedary>), que se puede usar para pruebas y desarrollo general. El servidor I<dromedary> sincroniza el árbol git de I<camel> cada pocos minutos. No debe insertar cambios en I<camel>. Ambos equipos también tienen un servidor reflejado de CPAN completo en /srv/CPAN. Use estos servidores. Para compartir archivos con el público general, I<dromedary> ofrece ~/public_html/ como
+Las personas que colaboran aportando cambios tienen acceso SSH a los dos servidores que prestan servicio a C<perl5.git.perl.org>. Uno es C<perl5.git.perl.org> (I<camel>), el repositorio "principal". El otro es C<users.perl5.git.perl.org> (I<dromedary>), que se puede usar para pruebas y desarrollo general. El servidor I<dromedary> sincroniza el árbol git de I<camel> cada pocos minutos. No debe insertar cambios en I<camel>. Ambos equipos también tienen un servidor reflejado de CPAN completo en /srv/CPAN. Use estos servidores. Para compartir archivos con el público general, I<dromedary> ofrece ~/public_html/ como
 C<http://users.perl5.git.perl.org/~usuario/>
 
 El acceso de estos hosts al exterior está considerablemente restringido mediante firewall. Hacia fuera, solo se admiten rsync, ssh y git. Para http y ftp puede usar http://webproxy:3128 como proxy. Para la entrada, el firewall trata de detectar ataques y bloquea las direcciones IP con actividad sospechosa. A veces (aunque raramente) esto produce falsos positivos y en ese caso se le bloqueará. La forma más rápida de conseguir que le desbloqueen es notificárselo a los administradores.
