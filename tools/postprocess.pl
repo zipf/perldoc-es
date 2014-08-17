@@ -34,9 +34,9 @@ die "Usage: perl postprocess.pl --pod <pod_name1> <pod_name2> ... [--nohtml] [--
 
 # Hard-coded paths relative to /perldoc-es/tools
 # OmegaT project
-Readonly my $SOURCE_PATH   => "../../omegat_518/source";
-Readonly my $TARGET_PATH   => "../../omegat_518/target";
-Readonly my $MEM_PATH      => "../../omegat_518/omegat/project_save.tmx";   
+Readonly my $SOURCE_PATH   => "../../omegat_work_prj/source";
+Readonly my $TARGET_PATH   => "../../omegat_work_prj/target";
+Readonly my $MEM_PATH      => "../../omegat_work_prj/omegat/project_save.tmx";   
 # Clean OmegaT project (only reviewed segments)
 Readonly my $CLEAN_PATH    => "../../omegat_clean_prj/source";
 Readonly my $CLEANM_PATH   => "../../omegat_clean_prj/omegat/project_save.tmx";
