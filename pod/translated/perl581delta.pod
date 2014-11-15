@@ -12,14 +12,14 @@ En caso de que usted se está preguntando sobre 5.6.1, fue una corrección de er
 
           Nuevo	Mantenimiento	Desarrollo
 
-          5.6.0				2000-Mar-22
-			5.7.0		2000-Sep-02
-	5.6.1				2001-Apr-08
-			5.7.1		2001-Apr-09
-			5.7.2		2001-Jul-13
-			5.7.3		2002-Mar-05
-	5.8.0				2002-Jul-18
-		5.8.1			2003-Sep-25
+          5.6.0                             2000-Mar-22
+                               5.7.0        2000-Sep-02
+                  5.6.1                     2001-Apr-08
+                               5.7.1        2001-Apr-09
+                               5.7.2        2001-Jul-13
+                               5.7.3        2002-Mar-05
+          5.8.0                             2002-Jul-18
+                  5.8.1                     2003-Sep-25
 
 =head1 Cambios incompatibles
 
@@ -721,7 +721,7 @@ Se seguirá trabajando en el bytecompiler y byteloader.
 
 =item *
 
-Los v-strings, tal como existen en la actualidad, está previsto que sean descartados.  La forma v-less (1.2.3) se convertirá en un "objeto de versión" cuando se utilice con C<use>, C<require> y C<$VERSION>.  $^V también será un "objeto de versión", por lo que la construcción printf("%vd",...) ya no será necesaria.  La versión v-ful (v1.2.3) se convertirá en obsoleta.  La equivalencia de cadenas y v-strings (p. e., que en la actualidad 5.8.0 es igual a "\5\8\0") va a desaparecer.  Sin embargo, B<puede no haber advertencias con los v-strings>: es muy difícil detectar cuándo los v-strings se están utilizando de forma segura, y cuándo no.
+Los v-strings, tal como existen en la actualidad, está previsto que sean descartados.  La forma v-less (1.2.3) se convertirá en un "objeto de versión" cuando se utilice con C<use>, C<require> y C<$VERSION>.  $^V será también un "objeto versión" así que la construcción printf("%vd",...) ya no será necesaria.  La versión v-ful (v1.2.3) se convertirá en obsoleta.  La equivalencia de cadenas y v-strings (p. e., que en la actualidad 5.8.0 es igual a "\5\8\0") va a desaparecer.  Sin embargo, B<puede no haber advertencias con los v-strings>: es muy difícil detectar cuándo los v-strings se están utilizando de forma segura, y cuándo no.
 
 =item *
 
@@ -740,7 +740,7 @@ Pseudo-hashes serán eliminados
 
 =head1 Notificación de errores
 
-Si encuentra algo que piensa que es un error, debe revisar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/ . Hay también información en la página principal de Perl, http://www.perl.org/ .
+Si encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://bugs.perl.org/  También puede haber información en http://www.perl.com/ , la página oficial de Perl.
 
 Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.  Puede navegar y buscar en el web de los errores de Perl 5 en http://bugs.perl.org/
 

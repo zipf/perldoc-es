@@ -78,8 +78,8 @@ Cada paréntesis de captura se puede tratar ahora como un patrón independiente 
      (                      # comienzo búfer de captura 1
 	<                   #   coincide con un ángulo inicial
 	(?:                 #   coincide con uno de:
-	    (?>             #     no hacer marcha atrás en el interior de este grupo
-	        [^<>]+      #       uno o más caracteres que no son ángulos
+	    (?>             #     no retroceda sobre el interior de este grupo
+	        [^<>]+      #       uno o más caracteres no ángulos
 	    )               #     fin del grupo del no-vuelta atrás
 	|                   #     ... o ...
 	    (?1)            #     recursivo al grupo 1, e inténtalo de nuevo
@@ -145,6 +145,15 @@ que es mucho más eficiente. (Yves Orton)
 Las expresiones regulares reconocen ahora los escapes C<\v> y C<\h>, que coinciden con los espacios en blanco vertical y horizontal, respectivamente. C<\V> y C<\H>, lógicamente, coinciden con sus complementarios.
 
 C<\R> coincide con un salto de línea genérica, es decir, espacio en blanco vertical, además de la secuencia de caracteres C<"\x0D\x0A">.
+
+=item Capturas opcionales pre-correspondencia y post-correspondencia con la bandera /p
+
+Existe una nueva bandera C</p> para expresiones regulares.  Al usarla, el motor preserva una copia de la parte de la cadena a emparejar anterior a la subcadena coincidente en la nueva variable especial C<${^PREMATCH}>; la parte posterior a la subcadena coincidente en C<${^POSTMATCH}>, y la propia subcadena
+coincidente en C<${^MATCH}>.
+
+Perl sigue siendo capaz de almacenar estas subcadenas en las variables especiales C<$`>, C<$'>, C<$&>, pero utilizando estas variables en cualquier parte del programa añade una penalización a todas las expresiones regulares, mientras que si en cambio utiliza la bandera C</p> y las nuevas variables especiales, sólo paga por la expresión regular donde la bandera se use.
+
+Para más detalles sobre las nuevas variables, vea L<perlvar>; para el uso de la bandera de expresión regular, vea L<perlop> y L<perlre>.
 
 =back
 
@@ -409,7 +418,7 @@ Soporte para pseudo-hashes ha sido eliminado a partir de Perl 5.9. (El pragma C<
 
 =head2 Eliminación del compilador de bytecode  y de perlcc
 
-C<perlcc>, el cargador de bytecode y sus módulos asociados (B::C, B::CC, B::Bytecode, etc.) ya no se distribuyen con el código fuente de perl. Estas herramientas experimentales nunca han funcionado apropiadamente, y debido a la falta de voluntarios para mantenerlos en línea con los desarrollos en el intérprete perl, se ha decidido eliminarlos en lugar de incluir una versión rota de ellos.
+C<perlcc>, el cargador binario y los módulos que lo soportan (B::C, B::CC, B::Bytecode, etc.) ya no se distribuyen con el código fuente de perl. Estas herramientas experimentales nunca han funcionado apropiadamente, y debido a la falta de voluntarios para mantenerlos en línea con los desarrollos en el intérprete perl, se ha decidido eliminarlos en lugar de incluir una versión rota de ellos.
 La última versión de estos módulos se puede encontrar en perl 5.9.4.
 
 Sin embargo, el entorno de trabajo del compilador B sigue estando soportado en el núcleo de perl, así como con los módulos más útiles dependientes de él (entre otro, B::Deparse y B::Concise).
@@ -1138,7 +1147,7 @@ Cuando se compila con g++ y soporte para hebras en Linux, se ha informado que C<
 
 =head1 Notificación de errores
 
-Si encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/rt3/ . Hay también información en la página principal de Perl, http://www.perl.org/ .
+Si usted encuentra algo que piensa que es un error, podría verificar los artículos publicados recientemente en el grupo de noticias comp.lang.perl.misc y la base de datos de errores de perl en http://rt.perl.org/rt3/  También puede haber información en http://www.perl.org/, la página oficial de Perl.
 
 Si usted cree que tiene un error no declarado, por favor, ejecute el programa B<perlbug> incluido en su distribución.  Asegúrese de reducir la aparición del error en un programa que sea pequeño, pero suficiente.  Su informe de error, junto con la salida de C<perl -V>, serán enviados a perlbug@perl.org para ser analizado por el equipo de adaptación de Perl.
 

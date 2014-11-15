@@ -5,6 +5,12 @@ perlop - Operadores y precedencia en Perl
 
 =head1 DESCRIPCIÓN
 
+En Perl, el operador determina qué operación se realiza, independiente del tipo de los operandos. Por ejemplo, C<$a + $b> siempre es una adición numérica, y si C<$a> o C<$b> no contienen números, se hace un intento para convertirles primero a números.
+
+Esto contrasta con muchos otros lenguajes dinámicos, donde la operación se determina por el tipo del primer argumento. También significa que Perl tiene dos versiones de algunos operadores: uno para numérico y otro para cadenas de caracteres. Por ejemplo, C<$a == $b> compara dos números por su igualdad, y C<$a eq $b> comparas dos cadenas.
+
+Aun así existen unas pocas excepciones: C<x> puede ser una repetición de cadenas o repetición de lista, dependiendo del tipo del operando de la izquierda, y C<&>, C<|> y C<^> son operaciones de bit tanto numéricas como de cadena.
+
 =head2 Precedencia de operadores y asociatividad
 X<operator, precedence> X<precedence> X<associativity> X<operador, precedencia> X<precedencia> X<asociatividad>
 
@@ -20,7 +26,7 @@ Los operadores Perl tienen la asociatividad y precedencia siguientes, enumerados
     izquierda	->
     no asoc.	++ --
     derecha	**
-    right	! ~ \ unarios + y -
+    derecha	! ~ \ y los unarios + y -
     izquierda	=~ !~
     izquierda	* / % x
     izquierda	+ - .
@@ -34,7 +40,7 @@ Los operadores Perl tienen la asociatividad y precedencia siguientes, enumerados
     izquierda	|| //
     no asoc.	..  ...
     derecha	?:
-    derecha	= += -= *= etc.
+    right	= += -= *= etc. goto last next redo dump
     izquierda	, =>
     no asoc.	operadores de lista (por la derecha)
     derecha	not
@@ -50,7 +56,8 @@ X<list operator> X<operator, list> X<term> X<operador lista> X<operador, lista> 
 
 Un TÉRMINO tiene la mayor precedencia en Perl.  Esto incluye a las variables, comillas y operadores de comillas, cualquier expresión entre paréntesis, y cualquier función cuyos argumentos estén entre paréntesis.  En realidad, no son realmente funciones en ese sentido, solo son operadores de lista y operadores unarios que se comportan como funciones porque usted pone paréntesis a los argumentos.  Están todas documentadas en L<perlfunc>.
 
-Si cualquier operador de lista (print(), etc.) o cualquier otro operador unario (chdir(), etc.) es seguido por un paréntesis de apertura como el siguiente I<token>, el operador y los argumentos entre paréntesis se considera que son de mayor precedencia, como en una llamada a una función normal.
+Si cualquier operador de lista (print(), etc.) o cualquier operador unario (chdir(), etc.)
+se sigue por un paréntesis de apertura como el siguiente I<token>, el operador y los argumentos entre paréntesis se considera que son de mayor precedencia, como en una llamada a una función normal.
 
 En ausencia de paréntesis, la precedencia de los operadores de lista como C<print>, C<sort>, o C<chmod> es, o muy alta o muy baja, dependiendo de si usted está mirando al lado izquierdo o al lado derecho del operador.
 Por ejemplo, en
@@ -95,6 +102,8 @@ X<arrow> X<dereference> X<< -> >> X<flecha> X<desreferencia>
 (O técnicamente hablando, un lugar capaz de contener una referencia dura, si se trata de una asignación de una referencia a un array o un hash).  Vea L<perlreftut> y L<perlref>.
 
 De lo contrario, el lado derecho es un nombre de método o una variable escalar simple conteniendo ya sea el nombre del método o una referencia a una subrutina, y el lado izquierdo debe ser un objeto (una referencia bendecida) o un nombre de clase (es decir, un nombre de paquete).  Vea L<perlobj>.
+
+Los casos de desreferencia (opuestos a los casos de llamada a métodos) están un poco más extendidos por la característica experimental C<postderef>.  Para los detalles sobre esta característica, consulte L<perlref/Sintaxis de desreferencia postfija>.
 
 =head2 Auto incremento y auto decremento
 X<increment> X<auto-increment> X<++> X<decrement> X<auto-decrement> X<--> X<incremento> X<auto incremento> X<decremento> X<auto decremento>
@@ -222,7 +231,7 @@ El resultado del desbordamiento del rango de los números enteros no está defin
 Si se aburre de estar sujeto a los enteros de su plataforma, el pragma C<use bigint> elude claramente el tema por completo:
 
     print 20 << 20;  # 20971520
-    print 20 << 40;  # 5120 en máquinas de 32 bit,
+    print 20 << 40;  # 5120 en máquinas de 32 bit, 
                      # 21990232555520 en máquinas de 64 bit
     use bigint;
     print 20 << 100; # 25353012004564588029934064107520
@@ -232,7 +241,8 @@ X<operator, named unary> X<operador, unario con nombre>
 
 Los distintos operadores unarios con nombre se tratan como funciones con un argumento, con paréntesis opcionales.
 
-Si cualquier operador de lista (print(), etc.) o cualquier otro operador unario (chdir(), etc.) es seguido por un paréntesis de apertura como el siguiente I<token>, el operador y los argumentos entre paréntesis se considera que son de mayor precedencia, como en una llamada a una función normal.  Por ejemplo, debido a que los operadores unarios, con nombre, tienen mayor precedencia que C<||>:
+Si cualquier operador de lista (print(), etc.) o cualquier operador unario (chdir(), etc.)
+se sigue por un paréntesis de apertura como el siguiente I<token>, el operador y los argumentos entre paréntesis se considera que son de mayor precedencia, como en una llamada a una función normal.  Por ejemplo, debido a que los operadores unarios, con nombre, tienen mayor precedencia que C<||>:
 
     chdir $foo    || die;	# (chdir $foo) || die
     chdir($foo)   || die;	# (chdir $foo) || die
@@ -318,17 +328,17 @@ X<~~>
 
 =head2 Operador Coincidencia inteligente
 
-Disponible por primera vez en Perl 5.10.1 (la versión 5.10.0 se comportaba de manera diferente), el binario C<~~> hace una "coincidencia inteligente" entre sus argumentos.  Casi siempre se usa implícitamente en la construcción C<when> descrito en L<perlsyn>, aunque no todas las cláusulas C<when> llaman al operador coincidencia inteligente.  Único entre todos los operadores de Perl, el operador coincidencia inteligente puede ser recursivo.
+Disponible por primera vez en Perl 5.10.1 (la versión 5.10.0 se comportaba de manera diferente), el binario C<~~> hace una "coincidencia inteligente" entre sus argumentos.  Casi siempre se usa implícitamente en la construcción C<when> descrito en L<perlsyn>, aunque no todas las cláusulas C<when> llaman al operador coincidencia inteligente.  Único entre todos los operadores de Perl, el operador coincidencia inteligente puede ser recursivo.  El operador coincidencia inteligente es L<experimental|perlpolicy/experimental> y su comportamiento está sujeto a cambio.
 
 También es único en que todos los demás operadores de Perl imponen un contexto (generalmente contexto numérico o de cadena) en sus operandos, autoconvirtiendo estos operandos a esos contextos impuestos.  En contraste, la coincidencia inteligente I<infiere> el contexto a partir de los tipos reales de sus operandos, y usa esta información para seleccionar un mecanismo de comparación adecuado.
 
-El operador C<~~> compara sus operandos de forma "polimórfica", determinando cómo compararlos en función de sus tipos reales (numérico, cadena, matriz, hash, etc.). Al igual que los operadores de igualdad con los que comparte la misma prioridad, C<~~> devuelve 1 para verdadero y C<""> para falso.  A menudo es mejor leerlo en voz alta como "en", "dentro de", o "está contenido en", ya que a menudo el operando de la izquierda es visto como I<dentro> del operando derecho.  Esto hace que el orden de los operandos del operador coincidencia inteligente a menudo es opuesto a la del operador expresión regular.  En otras palabras, la cosa más "pequeña" se suele colocar en el operando de la izquierda y el más grande en el de la derecha.
+El operador C<~~> compara sus operandos de forma "polimórfica", determinando cómo compararlos en función de sus tipos reales (numérico, cadena, array, hash, etc.).  Al igual que los operadores de igualdad con los que comparte la misma precedencia, C<~~> devuelve 1 para verdadero y C<""> para falso.  A menudo es mejor leerlo en voz alta como "en", "dentro de", o "está contenido en", ya que a menudo el operando de la izquierda es visto como I<dentro> del operando derecho.  Esto hace que el orden de los operandos del operador coincidencia inteligente a menudo es opuesto a la del operador expresión regular.  En otras palabras, la cosa más "pequeña" se suele colocar en el operando de la izquierda y el más grande en el de la derecha.
 
 El comportamiento del operador coincidencia inteligente depende del tipo de sus argumentos, según lo determinado por la siguiente tabla.  La primera fila de la tabla cuyos tipos coincidan determina el comportamiento de coincidencia inteligente.  Debido a que lo que realmente sucede es determinado principalmente por el tipo del segundo operando, la tabla está ordenada alfabéticamente por el operando de la derecha en vez de por el de la izquierda.
 
  Izquierdo     Derecho     Descripción y pseudocódigo                               
  ===============================================================
- Cualquiera    undef       comprueba cuándo Cualquiera es indefinido
+ Cualquiera    undef       comprueba cuándo Cualquiera es indefinido                    
                 igual que: !defined Cualquiera
 
  Cualquiera    Objeto      invoca ~~ sobrecargado en Objeto, o muere
@@ -340,51 +350,51 @@ El comportamiento del operador coincidencia inteligente depende del tipo de sus 
  ARRAY1        ARRAY2      repite acción en cada par de elementos de ARRAY1 y ARRAY2[2]
                 igual que: (ARRAY1[0] ~~ ARRAY2[0])
                         && (ARRAY1[1] ~~ ARRAY2[1]) && ...
- HASH          ARRAY       cualquier elemento de ARRAY que exista como clave de HASH
+ HASH          ARRAY       cualquier elemento de ARRAY que exista como clave de HASH             
                 igual que: grep { exists HASH->{$_} } ARRAY
  Regexp        ARRAY       cualquier elemento de ARRAY que coincida con el patrón Regexp
                 igual que: grep { /Regexp/ } ARRAY
- undef         ARRAY       undef en el ARRAY
+ undef         ARRAY       undef en el ARRAY                                    
                 igual que: grep { !defined } ARRAY
- Cualquier     ARRAY       coincidencia inteligente en cada elemento de ARRAY[3]
+ Cualquier     ARRAY       coincidencia inteligente en cada elemento de ARRAY[3]                   
                 igual que: grep { Cualquiera ~~ $_ } ARRAY
 
  Operando derecho es un HASH:
 
  Izquierdo     Derecho     Descripción y pseudocódigo                               
  ===============================================================
- HASH1         HASH2       todas y las mismas claves en ambos HASHes
+ HASH1     HASH2           las mismas claves en ambos HASHes                      
                 igual que: keys HASH1 ==
-                           grep { exists HASH2->{$_} } keys HASH1
- ARRAY         HASH        cualquier elemento de ARRAY que existe como clave del HASH
+                         grep { exists HASH2->{$_} } keys HASH1
+ HASH          ARRAY       cualquier elemento de ARRAY que exista como clave de HASH             
                 igual que: grep { exists HASH->{$_} } ARRAY
- Regexp        HASH        cualquier clave del HASH que coincida con el patrón Regexp
+ Regexp        HASH        cualquier clave del HASH que coincida con el patrón Regexp                
                 igual que: grep { /Regexp/ } keys HASH
- undef         HASH        siempre falso (undef no puede ser una clave)
+ undef         HASH        siempre falso (undef no puede ser una clave)               
                 igual que: 0 == 1
- Cualquiera    HASH        existencia de una clave HASH
+ Cualquiera    HASH        existencia de una clave HASH                                
                 igual que: exists HASH->{Cualquiera}
 
  Operando derecho es CÓDIGO:
-   
+
  Izquierdo     Derecho     Descripción y pseudocódigo                               
  ===============================================================
  ARRAY         CÓDIGO      sub devuelve verdadero en todos los elementos de ARRAY[1]
                 igual que: !grep { !CÓDIGO->($_) } ARRAY
  HASH          CÓDIGO      sub devuelve verdadero en todas las claves del HASH[1]
                 igual que: !grep { !CÓDIGO->($_) } keys HASH
- Cualquiera    CÓDIGO      a sub se le pasa Cualquiera y devuelve verdadero
+ Cualquiera    CÓDIGO      a sub se le pasa Cualquiera y devuelve verdadero              
                 igual que: CÓDIGO->(Cualquiera)
 
 Operando derecho es una Regexp:
 
  Izquierdo     Derecho     Descripción y pseudocódigo                               
  ===============================================================
- ARRAY         Regexp      cualquier elemento de ARRAY que coincida con Regexp
+ ARRAY         Regexp      cualquier elemento de ARRAY que coincida con Regexp                   
                 igual que: grep { /Regexp/ } ARRAY
- HASH          Regexp      cualquier elemento de HASH que coincida con Regexp
+ HASH          Regexp      cualquier clave de HASH que coincida con Regexp                        
                 igual que: grep { /Regexp/ } keys HASH
- Cualquiera    Regexp      coincidencia
+ Cualquiera    Regexp      coincidencia                                     
                 igual que: Cualquiera =~ /Regexp/
 
  Otro:
@@ -392,16 +402,16 @@ Operando derecho es una Regexp:
  Izquierdo     Derecho     Descripción y pseudocódigo                               
  ===============================================================
  Objeto        Cualquiera  invoca ~~ sobrecargado en el Objeto,
-                           o si no...
+                      o si no...
 
- Cualquiera    Número      igualdad numérica
-                igual que: Cualquiera == Número
- Número        numeral[4]  igualdad numérica
-                igual que: Número == numeral
+ Cualquiera    Número      igualdad numérica                                  
+                 igual que: Cualquiera == Número
+ Cualquiera    Número[4]   igualdad numérica
+                 igual que: Número == es_como_un_número
  undef         Cualquiera  comprueba cuándo es indefinido
-                igual que: !defined(Cualquiera)
- Cualquiera    Cualquiera  igualdad de cadena
-                igual que: Cualquiera eq Cualquiera
+                 igual que: !defined(Cualquiera)
+ Cualquiera    Cualquiera  igualdad de cadena                                   
+                 igual que: Cualquiera eq Cualquiera
 
 
 Notas:
@@ -437,9 +447,9 @@ Cada operando es considerado en un contexto de escalar modificado, siendo esa mo
 
     use v5.10.1;
 
-    my %hash = (rojo    => 1, azul     => 2, verde  => 3,
-                naranja => 4, amarillo => 5, morado => 6,
-                negro   => 7, gris     => 8, blanco => 9);
+    my %hash = (rojo    => 1, azul     => 2, verde   => 3,
+                naranja => 4, amarillo => 5, purpura => 6,
+                negro  => 7, gris   => 8, blanco  => 9);
 
     my @array = qw(rojo azul verde);
 
@@ -499,7 +509,7 @@ Coincidencia inteligente de un hash contra otro informa que ambos contienen las 
 
         my ($clase, $inic_campos) = @_;
 
-        die "Debe indicar (solamente) nombre, rango, y número de serie"
+        die "Debe indicar (solamente el) nombre, rango, y número de serie"
             unless $inic_campos ~~ $CAMPOS_REQUERIDOS;
 
         ...
@@ -513,7 +523,7 @@ o, si se permiten otros campos no obligatorios, use ARRAY ~~ HASH:
 
         my ($clase, $inic_campos) = @_;
 
-        die "Debe indicar (al menos) nombre, rango, y número de serie"
+        die "Debe indicar (solamente el) nombre, rango, y número de serie"
             unless [keys %{$inic_campos}] ~~ $CAMPOS_REQUERIDOS;
 
         ...
@@ -556,8 +566,7 @@ Esto se debe a que trata C<$fh> como una cadena como C<"IO::Handle=glob(0x8039e0
 =head2 And binario
 X<operator, bitwise, and> X<bitwise and> X<&> X<operador, binario, and> X<binario and>
 
-El binario "&" devuelve la operación AND, bit a bit, de sus operandos.
-(Vea también L<Aritmética entera> y L<Operadores de bit en cadenas>).
+El binario "&" devuelve la operación AND, bit a bit, de sus operandos.  A pesar de que no se levante en este momento ninguna advertencia, el resultado no está bien definido cuando esta operación actúa en operandos que no son ni números (vea L<Aritmética entera>) o cadenas de bit (vea L<Operadores de cadenas de bit>).
 
 Tenga en cuenta que "&" tiene una menor prioridad que los operadores relaciones, así que, por ejemplo, los paréntesis son esenciales en una prueba como
 
@@ -567,10 +576,10 @@ Tenga en cuenta que "&" tiene una menor prioridad que los operadores relaciones,
 X<operator, bitwise, or> X<bitwise or> X<|> X<operator, bitwise, xor> X<operador, binario, or> X<binario or> X<operador, binario, xor> X<binario xor>
 
 El binario "|" devuelve la operación OR, bit a bit, de sus operandos.
-(Vea también L<Aritmética entera> y L<Operadores de bit en cadenas>).
 
 El binario "^" devuelve la operación XOR, bit a bit, de sus operandos.
-(Vea también L<Aritmética entera> y L<Operadores de bit en cadenas>).
+
+A pesar de que no se levante en este momento ninguna advertencia, el resultado no está bien definido cuando esta operación actúa en operandos que no son ni números (vea L<Aritmética entera>) o cadenas de bit (vea L<Operadores de cadenas de bit>).
 
 Tenga en cuenta que "|" y "^" tienen menor prioridad que los operadores relacionales, así que, por ejemplo, los paréntesis son esenciales en una prueba como
 
@@ -591,7 +600,7 @@ Los contextos escalar o lista se propagan hacia el operando de la derecha si és
 =head2 Defined-Or lógico
 X<//> X<operator, logical, defined-or> X<operador, lógico, defined-or>
 
-A pesar de que no tiene equivalente directo en C, el operador Perl C<//> está relacionado con el operador or del C.  De hecho, es exactamente lo mismo que C<||>, excepto que comprueba la definición del lado izquierdo en lugar de su estado de verdad.  Por lo tanto, C<< EXPR1 // EXPR2 >> devuelve el valor de C<< EXPR1 >> si está definida, de lo contrario, es devuelto el valor de C<< EXPR2 >>. (C<< EXPR1 >> se evalúa en contexto de escalar, C<< EXPR2 >> en el propio contexto de C<< // >>). Normalmente, este es el mismo resultado que C<< defined(EXPR1) ? EXPR1 : EXPR2 >> (salvo que el operador ternario puede ser utilizado como un valor-izquierda, mientras que C<< EXPR1 // EXPR2 >>, no puede). Esto es muy útil para proporcionar valores por defecto a las variables.  Si realmente desea probar si al menos uno de los dos, C<$a> o C<$b>, están definidos, use C<defined($a // $b)>.
+A pesar de que no tiene equivalente directo en C, el operador Perl C<//> está relacionado con el operador or del C.  De hecho, es exactamente lo mismo que C<||>, excepto que comprueba la definición del lado izquierdo en lugar de su estado de verdad.  Por lo tanto, C<< EXPR1 // EXPR2 >> devuelve el valor de C<< EXPR1 >> si está definida, de lo contrario, es devuelto el valor de C<< EXPR2 >>. (C<< EXPR1 >> se evalúa en contexto de escalar, C<< EXPR2 >> en el propio contexto de C<< // >>). Normalmente, este es el mismo resultado que C<< defined(EXPR1) ? EXPR1 : EXPR2 >> (salvo que el operador ternario se puede utilizar como un valor-izquierda, mientras que C<< EXPR1 // EXPR2 >>, no). Esto es muy útil para proporcionar valores por defecto a las variables.  Si realmente desea probar si al menos uno de los dos, C<$a> o C<$b>, están definidos, use C<defined($a // $b)>.
 
 Los operadores C<||>, C<//> y C<&&> devuelven el último valor evaluado (a diferencia de los operadores del C C<||> y C<&&>, que devuelve 0 o 1). Por lo tanto, un forma razonablemente portátil para averiguar nuestro directorio principal podría ser:
 
@@ -651,8 +660,8 @@ Ejemplos:
 
 Como operador escalar:
 
-    if (101 .. 200) { print; } # imprime las segundas cien líneas,
-                               # versión corta de if ($. == 101 .. $. == 200) { print; }
+    if (101 .. 200) { print; } # imprime las segundas cien líneas, versión corta de
+                               #  if ($. == 101 .. $. == 200) { print; }
 
     next LINEA if (1 .. /^$/); # salta las líneas de cabecera, resumen de
                                #   next LINEA if ($. == 1 .. /^$/);
@@ -667,7 +676,7 @@ Como operador escalar:
         if ($en_cabecera) {
             # hacer algo
         } else { # en cuerpo
-            # hacer otra cosa
+            # hacer sino otra cosa
         }
     } continue {
         close ARGV if eof;     # reinicia $. por cada archivo
@@ -676,9 +685,9 @@ Como operador escalar:
 He aquí un ejemplo sencillo para ilustrar la diferencia entre los dos operadores rango:
 
     @lineas = ("   - Foo",
-               "01 - Bar",
-               "1  - Baz",
-               "   - Quux");
+              "01 - Bar",
+              "1  - Baz",
+              "   - Quux");
 
     foreach (@lineas) {
         if (/0/ .. /1/) {
@@ -719,12 +728,12 @@ Si el valor inicial especificado no es parte de una secuencia mágica de increme
 Para obtener las 25 letras minúsculas griegas, incluyendo ambos sigmas, puede usar esto:
 
     use charnames "greek";
-    my @griegas_minusculas =  map { chr } ( ord("\N{alpha}")
+    my @griegas_minusculas =  map { chr } ( ord("\N{alpha}") 
                                         ..
                                      ord("\N{omega}") 
                                    );
 
-Sin embargo, debido a existen I<muchos> otros caracteres griegos en minúscula aparte de estos, para buscar por caracteres griegos en minúscula en una expresión regular, se utiliza el patrón C</(?:(?=\p{Greek})\p{Lower})+/>.
+Sin embargo, debido a existen I<muchos> otros caracteres griegos en minúscula aparte de estos, para buscar por caracteres griegos en minúscula en una expresión regular, podría utilizar el patrón C</(?:(?=\p{Greek})\p{Lower})+/> (o la L<característica experimental|perlrecharclass/Clases de carácter entre corchetes extendidas> C<S</(?[ \p{Greek} & \p{Lower} ])+/>>).
 
 Debido a que cada operando es evaluado en forma de número entero, C<2,18 .. 3,14> devolverá dos elementos en el contexto lista.
 
@@ -741,12 +750,12 @@ El ternario "?:" es el operador condicional, al igual que en C. Funciona como un
 Contexto escalar o lista es propagado hacia adelante, en el segundo o tercer argumento, cualquiera que sea el seleccionado.
 
     $a = $ok ? $b : $c;  # obtiene un escalar
-    @a = $ok ? @b : @c;  # obtiene un array
-    $a = $ok ? @b : @c;  # oops, ¡esto solo cuenta elementos!
+    @a = $ok ? @b : @c;  # obtener un array
+    $a = $ok ? @b : @c;  # oops, ¡esto sólo cuenta elementos!
 
 El operador puede ser asignado si tanto el segundo y tercer argumentos son valores-izquierda legales (lo que significa que se les puede asignar valores):
 
-    ($a_o_b ? $a : $b) = $c;
+    ($a_or_b ? $a : $b) = $c;
 
 Debido a que este operador produce un resultado asignable, usar asignaciones sin paréntesis hará que se meta en problemas.  Por ejemplo, esto:
 
@@ -1037,8 +1046,7 @@ El carácter que siga a C<\c> es mapeado a algún otro carácter, tal como se mu
    \c^      chr(30)
    \c?      chr(127)
 
-En otras palabras, es el carácter cuyo código de punto era 64 xor con su mayúscula.  C<\c?> es DELETE porque C<ord("?") ^ 64> es 127, y
-C<\c@> es NULL porque el ord de "@" es 64, por lo que haciendo el xor 64 produce un 0.
+En otras palabras, es el carácter cuyo código de punto era 64 xor con su mayúscula.  C<\c?> es DELETE porque C<ord("?") ^ 64> es 127, y C<\c@> es NULL porque el ord de "@" es 64, por lo que haciendo el xor 64 produce un 0.
 
 Además, C<\c\I<X>> es igual a C< chr(28) . "I<X>"> para cualquier I<X>, pero no puede estar al final de una cadena, porque la barra diagonal inversa se interpretaría como que se estaría escapando la comilla final.
 
@@ -1073,18 +1081,18 @@ Hay un par de excepciones a la regla anterior.  S<C<\N{U+I<número hex.>}>> siem
 
 =back
 
-B<NOTA>: A diferencia de C y otros lenguajes, Perl no tiene una secuencia de escape C<\v> para el tabulado vertical (VT - ASCII 11), pero puede usar C<\ck> o C<\x0b>.  (C<\v> tiene significado en los patrones de las expresiones regulares en Perl, vea L<perlre>).
+B<NOTA>: A diferencia de C y otros lenguajes, Perl no tiene una secuencia de escape C<\v> para el tabulado vertical (VT, que es 11 tanto en ASCII como en EBCDIC), pero puede usar C<\ck> o C<\x0b>.  (C<\v> tiene significado en los patrones de las expresiones regulares en Perl, vea L<perlre>).
 
 Las siguientes secuencias de escape están disponibles en construcciones que interpolan, pero no en transliteraciones.
 X<\l> X<\u> X<\L> X<\U> X<\E> X<\Q> X<\F>
 
     \l		siguiente car. en minúscula
-    \u		capitalizar (¡no mayúscula!) solo el siguiente carácter
+    \u		capitalizar (¡no mayúscula!) sólo el siguiente carácter
     \L		en minúscula todos los caracteres hasta \E o fin de cadena
     \U		en mayúscula todos los caracteres hasta \E o fin de cadena
     \F		pliega el tamaño de caja hasta \E o fin de cadena
-    \Q		escapa (desactiva) los metacaracteres de patrón hasta \E o
-		fin de cadena
+    \Q		entrecomilla (deshabilita) los metacaracteres de patrón hasta \E o
+                final de cadena
     \E		fin de modificación de tamaño de caja o sección entrecomillada
 		(lo que se haya visto por última vez)
 
@@ -1097,7 +1105,7 @@ C<\L>, C<\U>, C<\F> y C<\Q> pueden apilarse, en cuyo caso necesita un C<\E> para
 
 Si C<use locale> está en vigor (pero no C<use locale ':not_characters'>), el mapeo de tamaños de caja usado por C<\l>, C<\L>, C<\u> y C<\U> es tomado de la configuración regional actual.  Vea L<perllocale>.
 Si se usa Unicode (por ejemplo, C<\N{}> o códigos de punto de 0x100 o superiores), el mapeo de tamaño de caja usado por C<\l>, C<\L>, C<\u> y C<\U> está definido por Unicode.  Esto significa que el mapeo de un único carácter a veces puede producir varios caracteres.
-Bajo C<use locale>, C<\F> produce los mismos resultados que C<\L>.
+Bajo C<use locale>, C<\F> produce los mismos resultados que C<\L> para todas las localizaciones excepto UTF-8, donde, en su lugar, se usa la definición Unicode.
 
 Todos los sistemas usan el carácter virtual C<"\n"> para representar un terminador de línea, llamado un "nueva línea".  No existe tal cosa como un invariable o físico, carácter de nueva línea.  Es sólo una ilusión que el sistema operativo, controladores de dispositivo, bibliotecas de C, y Perl, conspiran para preservar.  No todos los sistemas leen C<"\r"> como ASCII CR y C<"\n"> como ASCII LF.  Por ejemplo, en los antiguos Mac (pre MacOS X) de antaño, estos solían estar invertidos, y en los sistemas sin terminador de línea, la impresión de un C<"\n"> podría no emitir ningún dato real.  En general, utilice C<"\n"> cuando se refiera a una "nueva línea" para su sistema, pero use el literal ASCII cuando necesite un carácter exacto.  Por ejemplo, la mayoría de protocolos de red esperan y prefieren un CR+LF (C<"\015\012"> o C<"\cM\cJ">) como terminadores de línea, y aunque a menudo aceptan sólo C<"\012">, rara vez tolerarán sólo un C<"\015">.  Si se mete en el hábito de usar C<"\n"> en la gestión de redes, es posible que un día se queme.
 X<newline> X<line terminator> X<eol> X<end of line>
@@ -1152,7 +1160,8 @@ es equivalente a
 El resultado puede ser utilizado como un sub-patrón en una coincidencia:
 
     $re = qr/$patron/;
-    $cadena =~ /foo${re}bar/;	# puede ser interpolado en otros patrones
+    $cadena =~ /foo${re}bar/;	# se puede interpolar en otros
+                                # patrones
     $cadena =~ $re;		# o usado de forma aislada
     $cadena =~ /$re/;		# o de esta manera
 
@@ -1174,23 +1183,24 @@ La precompilación del patrón en una representación interna en el momento de q
 
 Opciones (especificado por los siguientes modificadores) son:
 
-    m	Trata la cadena como un conjunto de múltiples líneas.
-    s	Trata la cadena como una única línea. (Hace que . coincida con un car. de nueva línea)
-    i	Hace coincidencia de patrones independiente del tamaño de caja.
-    x	Usa expresiones regulares extendidas.
+    m	Trata la cadena como un conjunto de múltiples líneas
+    s	Trata la cadena como una única línea (Hace que . coincida con un car. de nueva línea)
+    i	Hace coincidencia de patrones independiente del tamaño de caja
+    x	Usa expresiones regulares extendidas
     p	Cuando exista una coincidencia preserva una copia de la cadena concordante,
-        de tal manera que serán definidas ${^PREMATCH}, ${^MATCH} y ${^POSTMATCH}.
-    o	Compila el patrón solo una vez.
-    a	ASCII-restrictivo: Use ASCII para \d, \s, \w; especificando dos "a"
-        restringe aún más la concordancia de /i por lo que ningún carácter ASCII
+        de tal manera que ${^PREMATCH}, ${^MATCH} y ${^POSTMATCH} quedarán
+        definidas
+    o	Compila el patrón solo una vez
+    a	ASCII-restrictivo: Use ASCII para \d, \s, \w; especificando dos
+        "a" restringe aún más la concordancia de /i por lo que ningún carácter ASCII
         coincidirá con ningún carácter que no sea ASCII
     l	Usa la definición regional local (I<locale>)
     u	Usa las reglas Unicode
-    d	Usa conjunto de caracteres Unicode o nativo, como en 5.12 y anteriores
+    d	Usa el conjunto de caracteres Unicode o nativo, como en 5.12 y anteriores
 
 Si un patrón precompilado se incrusta en un patrón más grande entonces los efectos de 'msixpluad' serán propagados apropiadamente.  El efecto del modificador "o" no es propagado, se limita a los patrones que lo utilicen de forma explícita.
 
-Los últimos cuatro modificadores enumerados anteriormente, agregados en Perl 5.14, controlan las semánticas del juego de caracteres, pero C</a> es el único que querrá especificar explícitamente; los otros tres son seleccionados automáticamente por medio de diversos I<pragmas>.
+Los últimos cuatro modificadores enumerados anteriormente, agregados en Perl 5.14, controlan las reglas del juego de caracteres, pero C</a> es el único que querrá especificar explícitamente; los otros tres se seleccionan automáticamente por medio de diversos I<pragmas>.
 
 Vea L<perlre> para obtener información adicional sobre la sintaxis válida para CADENA, y para una vista detallada de la semántica de las expresiones regulares.  En particular, todos los modificadores, excepto el largamente obsoleto C</o> se explican más adelante en L<perlre/Modificadores>.  C</o> se describe en la sección siguiente.
 
@@ -1207,10 +1217,10 @@ Busca una cadena para una coincidencia de patrones, y en un contexto escalar dev
 Las opciones son como se describe anteriormente en C<qr//>; además, los siguientes modificadores de coincidencia están disponibles:
 
  g	Coincidencia global, es decir, busca todas las ocurrencias.
- c	No reinicia la posición de búsqueda en una coincidencia fallida cuando /g está activa.
+ c	No reinicia la posición de búsqueda en una coincidencia fallida cuando /g está
+    activa.
 
-Si "/" es el delimitador entonces la inicial C<m> es opcional.  Con la C<m> puede usar cualquier par de caracteres no-blancos (ASCII) como delimitadores.  Esto es particularmente útil para hacer coincidencia con los nombres de ruta que contienen "/", para evitar el "síndrome del palillo de dientes".  Si "?" es el delimitador, entonces se aplica la regla coincide-solo-una-vez, descrito más abajo, en C<?PATRÓN?>.
-Si "'" "es el delimitador, no se realiza interpolación en el PATRÓN.
+Si "/" es el delimitador entonces la inicial C<m> es opcional.  Con la C<m> puede usar cualquier par de caracteres no-blancos (ASCII) como delimitadores.  Esto es particularmente útil para hacer coincidencia con los nombres de ruta que contienen "/", para evitar el "síndrome del palillo de dientes".  Si "?" es el delimitador, entonces se aplica la regla coincide-solo-una-vez, descrito más abajo, en C<?PATRÓN?>. Si "'" (comilla simple) es el delimitador, no se realiza ninguna interpolación en el PATRÓN.
 Cuando se utiliza un carácter que puede ser válido en un identificador, se requiere espacio en blanco después de la C<m>.
 
 PATRÓN puede contener variables, que serán interpoladas cada vez que el patrón de búsqueda sea evaluado, a excepción de cuando el delimitador sea una comilla simple.  (Tenga en cuenta que C<$(>, C<$)>, y C<$|> no son interpoladas porque tienen la apariencia de test de final-de-cadena).
@@ -1227,6 +1237,17 @@ Las variables tienen miles y miles de caracteres de longitud y sabe que no cambi
 
 desea que el patrón use los valores iniciales de las variables, independientemente de si van a cambiar o no.  (Pero hay formas más sanas de lograr esto que usando C</o>).
 
+=item 3
+
+Si el patrón contiene código incrustado, como lo siguiente:
+
+    use re 'eval';
+    $codigo = 'foo(?{ $x })';
+    /$codigo/
+
+entonces perl lo recompilará en cada ocasión, incluso aunque la cadena del patrón no cambie, para asegurarse que el valor de C<$x> es analizado en cada ocasión.
+Use C</o>, si quiere evitarlo.
+
 =back
 
 La conclusión es que el uso de C</o> casi nunca es una buena idea.
@@ -1235,30 +1256,31 @@ La conclusión es que el uso de C</o> casi nunca es una buena idea.
 
 Si el PATRÓN se evalúa como la cadena vacía, se usa en su lugar la última I<exitosa> expresión regular coincidente. En este caso, sólo las opciones C<g> y C<c> en el patrón vacío se toman en cuenta; las otras opciones se toman del patrón original. Si no hubo una coincidencia exitosa, actuará (silenciosamente) como un verdadero patrón vacío (que siempre coincidirá con cualquier cadena).
 
-Tenga en cuenta que es posible confundir a Perl haciéndolo creer que C<//> (la expresión regular vacía) es en realidad C<//> (el operador definido-o).  Perl es, por lo general, bastante bueno sobre esto, pero algunos casos patológicos podrían dar lugar a esa confusión, como en C<$a///> (¿esto es C<($a) / (//)> o C<$a // />?) y C<print $fh //> (¿C<print $fh(//> o C<print($fh //>?).  En todos estos ejemplos, Perl asumirá que significaba definido-o.  Si usted quiere decir la expresión regular vacía, sólo tiene que utilizar paréntesis o espacios para eliminar la ambigüedad, o incluso el prefijar con una C<m> (así que C<//> se convierte en C<m//>).
+Tenga en cuenta que es posible confundir a Perl haciéndolo creer que C<//> (la expresión regular vacía) es en realidad C<//> (el operador definido-o).  Perl es, por lo general, bastante bueno en esto, pero algunos casos patológicos podrían dar lugar a esa confusión, como en C<$a///> (¿esto es C<($a) / (//)> o C<$a // />?) y C<print $fh //> (¿C<print $fh(//> o C<print($fh //>?)  En todos estos ejemplos, Perl asumirá que significaba definido-o.  Si lo que quiere expresar es una expresión regular vacía, sólo tiene que utilizar paréntesis o espacios para eliminar la ambigüedad, o incluso el prefijar con una C<m> (así que C<//> se convierte en C<m//>).
 
 =item Coincidencia en contexto de lista
 
-Si no se utiliza la opción C</g>, C<m//> en contexto de lista devuelve una lista compuesta de las subexpresiones coincidentes por los paréntesis en el patrón, es decir, (C<$1>, C<$2>, C<$3>...).  (Tenga en cuenta que aquí C<$1>, etc., también son establecidas, y que esto difiere del comportamiento de Perl 4).  Cuando no hay paréntesis en el patrón, en caso de éxito el valor de retorno es la lista C<(1)>.  Con o sin paréntesis, se devuelve una lista vacía en caso de error.
+Si no se utiliza la opción C</g>, C<m//> en contexto de lista devuelve una lista compuesta de las subexpresiones coincidentes por los paréntesis en el patrón, es decir, (C<$1>, C<$2>, C<$3>...).  (Tenga en cuenta que C<$1> y demás también son ajustados).  Cuando no hay paréntesis en el patrón, en caso de éxito el valor de retorno es la lista C<(1)>.  
+Con o sin paréntesis, se devuelve una lista vacía en caso de error.
 
 Ejemplos:
 
-    open(TTY, "+>/dev/tty");
-	|| die "no puedo acceder a /dev/tty: $!";
+ open(TTY, "+>/dev/tty");
+    || die "no puedo acceder a /dev/tty: $!";
 
-    <TTY> =~ /^s/i && foo();	# hacer foo() si así se desea
+ <TTY> =~ /^s/i && foo();	# hacer foo() si así se desea
 
-    if (/Version: *([0-9.]*)/) { $version = $1; }
+ if (/Version: *([0-9.]*)/) { $version = $1; }
 
-    next if m#^/usr/spool/uucp#;
+ next if m#^/usr/spool/uucp#;
 
-    # un grep para pobres
-    $arg = shift;
-    while (<>) {
-	print if /$arg/o;	# compilar solo una vez (¡ya no es necesario!)
-    }
+ # un grep para pobres
+ $arg = shift;
+ while (<>) {
+    print if /$arg/o;	# compilar solo una vez (¡ya no es necesario!)
+ }
 
-    if (($F1, $F2, $Etc) = ($foo =~ /^(\S+)\s+(\S+)\s*(.*)/))
+ if (($F1, $F2, $Etc) = ($foo =~ /^(\S+)\s+(\S+)\s*(.*)/))
 
 Este último ejemplo divide $foo en las dos primeras palabras y el resto de la línea, y asigna los tres campos a $F1, $F2, y $Etc.  La condición es verdadera si cualquiera de las variables fue establecida; es decir, si el patrón coincidió.
 
@@ -1287,26 +1309,30 @@ Ejemplos:
 
 Aquí hay otra forma de buscar sentencias en un párrafo:
 
-    my $sentencia_rx = qr{
-	(?: (?<= ^ ) | (?<= \s ) )  # después de inicio-de-cadena o espacio en blanco
-	\p{Lu}                      # letra mayúscula
-	.*?                         # un montón de nada
-	(?<= \S )                   # que termina en un no-blanco
-	(?<! \b [DMS]r  )           # pero no es una abreviatura conocida
-	(?<! \b Mrs )
-	(?<! \b Sra )
-	(?<! \b St  )
-	[.?!]                       # seguido por un terminador de sentencia
-	(?= $ | \s )                # delante de un final-de-cadena o espacio en blanco
-    }sx;
-    local $/ = "";
-    while (my $parrafo = <>) {
-	say "NUEVO PÁRRAFO";
-	my $cuenta = 0;
-	while ($parrafo =~ /($sentencia_rx)/g) {
-	    printf "\tnueva sentencia %d: <%s>\n", ++$cuenta, $1;
-	}
+ my $sentencia_rx = qr{
+    (?: (?<= ^ ) | (?<= \s ) )  # después de inicio-de-cadena o
+                                # espacio en blanco
+    \p{Lu}                      # letra mayúscula
+    .*?                         # un montón de nada
+    (?<= \S )                   # que termina en un no
+                                # espacio en blanco
+    (?<! \b [DMS]r  )           # pero no es una abreviatura conocida
+    (?<! \b Mrs )
+    (?<! \b Sra )
+    (?<! \b St  )
+    [.?!]                       # seguido por una sentencia
+                                # terminada
+    (?= $ | \s )                # delante de un final-de-cadena
+                                # o espacio en blanco
+ }sx;
+ local $/ = "";
+ while (my $parrafo = <>) {
+    say "NUEVO PÁRRAFO";
+    my $cuenta = 0;
+    while ($parrafo =~ /($sentencia_rx)/g) {
+        printf "\tnueva sentencia %d: <%s>\n", ++$cuenta, $1;
     }
+ }
 
 Aquí está cómo se usa C<m//gc> con C<\G>:
 
@@ -1336,26 +1362,31 @@ Observe que el último emparejamiento es C<q> en vez de C<p>, que una coincidenc
 Un modismo útil para escáneres tipo C<lex> es C</\G.../gc>.  Puede combinar varias expresiones regulares como ésta para procesar una cadena parte por parte, haciendo diferentes acciones dependiendo de la expresión regular coincidente.  Cada regexp intenta coincidir donde la anterior lo dejó.
 
  $_ = <<'EOL';
-    $url = URI::URL->new( "http://ejemplo.com/" ); die if $url eq "xXx";
+    $url = URI::URL->new( "http://example.com/" );
+    die if $url eq "xXx";
  EOL
 
  BUCLE: {
      print(" dígitos"),      redo LOOP if /\G\d+\b[,.;]?\s*/gc;
-     print(" minúscula"),    redo LOOP if /\G\p{Ll}+\b[,.;]?\s*/gc;
-     print(" MAYÚSCULA"),    redo LOOP if /\G\p{Lu}+\b[,.;]?\s*/gc;
-     print(" Capitalizado"), redo LOOP if /\G\p{Lu}\p{Ll}+\b[,.;]?\s*/gc;
+     print(" minúscula"),    redo LOOP
+                                    if /\G\p{Ll}+\b[,.;]?\s*/gc;
+     print(" MAYÚSCULA"),    redo LOOP
+                                    if /\G\p{Lu}+\b[,.;]?\s*/gc;
+     print(" Capitalizada"),  redo LOOP
+                              if /\G\p{Lu}\p{Ll}+\b[,.;]?\s*/gc;
      print(" MeZcLaDoS"),    redo LOOP if /\G\pL+\b[,.;]?\s*/gc;
-     print(" alfanumérico"), redo LOOP if /\G[\p{Alpha}\pN]+\b[,.;]?\s*/gc;
+     print(" alfanumérico"), redo LOOP
+                            if /\G[\p{Alpha}\pN]+\b[,.;]?\s*/gc;
      print(" línea-ruido"),  redo LOOP if /\G\W+/gc;
      print ". ¡Eso es todo!\n";
  }
 
 Aquí está la salida (dividido en varias líneas):
 
-    línea-ruido minúsculas línea-ruido MAYÚSCULAS línea-ruido MAYÚSCULAS
-    línea-ruido minúsculas línea-ruido minúsculas línea-ruido minúsculas
-    minúsculas línea-ruido minúsculas minúsculas línea-ruido minúsculas
-    minúsculas línea-ruido MeZcLaDoS línea-ruido. ¡Eso es todo!
+ línea-ruido minúsculas línea-ruido MAYÚSCULAS línea-ruido MAYÚSCULAS
+ línea-ruido minúsculas línea-ruido minúsculas línea-ruido minúsculas
+ minúsculas línea-ruido minúsculas minúsculas línea-ruido minúsculas
+ minúsculas línea-ruido MeZcLaDoS línea-ruido. ¡Eso es todo!
 
 =item m?PATRÓN?msixpodualgc
 X<?> X<operator, match-once> X<operador, coincide una vez>
@@ -1396,40 +1427,47 @@ Si el delimitador elegido es una comilla simple, no se realiza ninguna interpola
 Las opciones son como las de m// con la adición de las específicas opciones de reemplazo siguientes:
 
     e	Evalúa el lado derecho como una expresión.
-    ee	Evalúa el lado derecho como una cadena que es pasada por eval() para obtener el resultado
-    r	Devuelve la sustitución y deja la cadena original intacta.
+    ee	Evalúa el lado derecho como una cadena que es pasada por eval() para obtener el
+        resultado.
+    r	Devuelve la sustitución y deja la cadena original
+        intacta.
 
-Cualquier delimitador distinto del espacio en blanco puede sustituir a las barras diagonales.  Añadir un espacio después de la C<s> cuando se utilice un carácter permitido en identificadores.  Si se utilizan comillas simples, no se realiza ninguna interpretación en la cadena de reemplazo (sin embargo, el modificador C</e> reemplaza a ésta).  A diferencia de Perl 4, Perl 5 trata las comillas simples invertidas como delimitadores normales; el texto de reemplazo no es evaluado como un comando.
+Cualquier delimitador distinto del espacio en blanco puede sustituir a las barras diagonales.  Añadir un espacio después de la C<s> cuando se utilice un carácter permitido en identificadores.  Si se utilizan comillas simples, no se realiza ninguna interpretación en la cadena de reemplazo (sin embargo, el modificador C</e> reemplaza a ésta).  Note que Perl trata las comillas simples invertidas como delimitadores normales; el texto de reemplazo no se evalúa como un comando.
 Si el PATRÓN está delimitado por paréntesis, corchetes, llaves, el REEMPLAZO tiene su propio par de delimitadores, que puede o no estar encerrado entre los mismos delimitadores; por ejemplo, C<s(foo)(bar)> o C<< s<foo>/bar/ >>.  Un C</e> hará que la parte de reemplazo sea tratada como una verdadera expresión Perl y evaluada ahí y en ese mismo momento.  Será, sin embargo, comprobada la sintaxis en tiempo de compilación. Un segundo modificador C<e> hará que la parte de reemplazo sea C<eval>uada antes de la ejecución como una expresión Perl.
 
 Ejemplos:
 
-    s/\bverde\b/malva/g;			# no cambia verdeazul
+    s/\bverde\b/malva/g;		# no cambia verdeazul
 
     $ruta =~ s|/usr/bin|/usr/local/bin|;
 
-    s/Login: $foo/Login: $bar/;			# patrón en tiempo de ejecución
+    s/Login: $foo/Login: $bar/;		# patrón en tiempo de ejecución
 
-    ($foo = $bar) =~ s/este/aquel/;		# primero copiar, luego cambiar
-    ($foo = "$bar") =~ s/este/aquel/;		# convierte a cadena, copia, y luego cambia
-    $foo = $bar =~ s/este/aquel/r;		# Lo mismo que antes usando /r
+    ($foo = $bar) =~ s/este/aquel/;	# primero copiar, luego
+                                        # cambiar
+    ($foo = "$bar") =~ s/este/aquel/;	# convierte a cadena,
+                                        # copia y luego cambia
+    $foo = $bar =~ s/este/aquel/r;	# Lo mismo que antes usando /r
     $foo = $bar =~ s/este/aquel/r
-                =~ s/ese/el otro/r;		# Sustituciones encadenadas usando /r
-    @foo = map { s/este/aquel/r } @bar		# /r es muy útil con map
+                =~ s/aquel/el otro/r;	# Sustituciones encadenadas
+                                        # usando /r
+    @foo = map { s/este/aquel/r } @bar	# /r es muy útil con
+                                        # map
 
     $contador = ($parrafo =~ s/Señor\b/Sr./g);  # obtener el número de cambios
 
     $_ = 'abc123xyz';
-    s/\d+/$&*2/e;				# queda como 'abc246xyz'
-    s/\d+/sprintf("%5d",$&)/e;			# queda como 'abc  246xyz'
-    s/\w/$& x 2/eg;				# queda como 'aabbcc  224466xxyyzz'
+    s/\d+/$&*2/e;			# queda como 'abc246xyz'
+    s/\d+/sprintf("%5d",$&)/e;		# queda como 'abc  246xyz'
+    s/\w/$& x 2/eg;			# queda como 'aabbcc  224466xxyyzz'
 
-    s/%(.)/$porciento{$1}/g;			# cambia los escapados con el %; sin /e
-    s/%(.)/$porciento{$1} || $&/ge;		# ahora es una expr., así que /e
-    s/^=(\w+)/pod($1)/ge;			# usa una función de llamada
+    s/%(.)/$porciento{$1}/g;		# cambia los escapados con el %; sin /e
+    s/%(.)/$porciento{$1} || $&/ge;	# ahora es una expr., así que /e
+    s/^=(\w+)/pod($1)/ge;		# usa una función de llamada
 
     $_ = 'abc123xyz';
-    $a = s/abc/def/r;		# $a es 'def123xyz' y $_ queda como 'abc123xyz'
+    $a = s/abc/def/r;			# $a es 'def123xyz' y
+                                	# $_ queda como 'abc123xyz'
 
     # expandir variables en $_, pero solo dinámicamente, usando
     # desreferencia simbólica
@@ -1453,9 +1491,11 @@ Ejemplos:
 	\*/	# Busca el delimitador de cierre.
     } []gsx;
 
-    s/^\s*(.*?)\s*$/$1/;	# recorta el espacio en blanco en $_, de forma onerosa
+    s/^\s*(.*?)\s*$/$1/;	# recorta el espacio en blanco en $_,
+                                # de forma onerosa
 
-    for ($variable) {		# recorta el espacio en blanco en $variable, de forma más simple
+    for ($variable) {		# recorta el espacio en blanco en $variable,
+                                # de forma más simple
 	s/^\s+//;
 	s/\s+$//;
     }
@@ -1472,11 +1512,6 @@ De vez en cuando, no puede utilizar un simple C</g> para obtener todos los cambi
 
     # expandir tabuladores a un espaciado de 8 columnas
     1 while s/\t+/' ' x (length($&)*8 - length($`)%8)/e;
-
-C<s///le> es tratada como una sustitución seguida por el operador C<le>, no las opciones C</le>.  Esto puede cambiar en una futura versión de Perl.  Genera una advertencia si las advertencias están habilitadas.  Para eliminar la ambigüedad, use un espacio o cambie el orden de las opciones:
-
-    s/foo/bar/ le 5;  # "le" operador infijo
-    s/foo/bar/el;     # opciones "e" y "l"
 
 =back
 
@@ -1513,7 +1548,7 @@ X<qx> X<`> X<``> X<backtick> X<comilla invertida>
 
 =item `CADENA`
 
-Una cadena que es (posiblemente) interpolada y luego ejecutada como un comando del sistema con C</bin/sh> o su equivalente.  Los comodines del intérprete, tuberías y redirecciones serán respetados.  Todo lo que salga por la salida estándar del comando se devuelve; la salida estándar de error no se verá afectada.  En contexto escalar, se devuelve como una sola cadena de caracteres (con, posiblemente, múltiples líneas dentro), o undef si el comando ha fallado.  En contexto de lista, devuelve una lista de líneas (según haya definido líneas con $/ o $INPUT_RECORD_SEPARATOR), o una lista vacía si el comando ha fallado.
+Una cadena que es (posiblemente) interpolada y entonces ejecutada como un comando del sistema con F</bin/sh> o su equivalente.  Los comodines del intérprete, tuberías y redirecciones serán respetados.  Todo lo que salga por la salida estándar del comando se devuelve; la salida estándar de error no se verá afectada.  En contexto escalar, se devuelve como una sola cadena de caracteres (con, posiblemente, múltiples líneas dentro), o undef si el comando ha fallado.  En contexto de lista, devuelve una lista de líneas (según haya definido líneas con $/ o $INPUT_RECORD_SEPARATOR), o una lista vacía si el comando ha fallado.
 
 Como las comillas invertidas no afectan a la salida de error estándar, use la sintaxis del shell del descriptor de archivos (asumiendo que el shell soporte esto) si es que quiere tenerlo en cuenta.
 Para capturar el STDOUT y STDERR del comando, juntos:
@@ -1555,7 +1590,7 @@ Vea L<perlsec> para un ejemplo seguro y limpio de un fork() y exec() manual para
 
 En algunas plataformas (especialmente las de tipo DOS), el shell quizás no pueda ser capaz de tratar con los comandos de múltiples líneas, así que poner saltos de línea quizás no le permita obtener lo que quiere.  Quizás sea capaz de evaluar múltiples comandos en una sola línea, separándoles con el carácter separador de comandos, si el shell lo soporta (por ejemplo, C<;> en muchos shell Unix, y C<&> en el shell C<cmd> de Windows NT).
 
-A partir de la versión v5.6.0, Perl intentará vaciar todos los archivos abiertos para salida antes de iniciar un proceso hijo, pero esto puede no estar soportado en todas las plataformas (vea L<perlport>).  Para estar seguro, es posible que necesite establecer C<$|> ($AUTOFLUSH en English) o llamar al método C<autoflush()> de C<IO::Handle> en cualquier identificador abierto.
+Perl intentará vaciar todos los archivos abiertos para salida antes de iniciar un proceso hijo, pero esto puede no estar soportado en todas las plataformas (vea L<perlport>).  Para estar seguro, es posible que necesite establecer C<$|> ($AUTOFLUSH en English) o llamar al método C<autoflush()> de C<IO::Handle> en cualquier identificador abierto.
 
 Tenga en cuenta que algunos shell de comandos pueden imponer restricciones a la longitud de la línea de comandos.  Debe asegurarse de que sus cadenas de texto no superan ese límite después de cualquier interpolación necesaria.  Vea las notas específicas de la plataforma para obtener más detalles acerca de su entorno particular.
 
@@ -1604,7 +1639,7 @@ Para los devotos de B<sed>, C<y> se ofrece como un sinónimo de C<tr>.  Si la LI
 
 Tenga en cuenta que C<tr> B<no> usa expresiones regulares de clases de caracteres, tales como C<\d> o C<\pL>.  El operador C<tr> no es equivalente a la utilidad tr(1).  Si desea mapear cadenas entre minúsculas/mayúsculas, vea L<perlfunc/lc> y L<perlfunc/uc>; y, en general, considere usar el operador C<s> si necesita usar expresiones regulares.  Las secuencias de escapado en la interpolación de cadenas (C<\U>, C<\u>, C<\L>, y C<\l>) en el lado derecho de un operador de sustitución realizará un correcto mapeado entre mayúsculas y minúsculas, pero C<tr[a-z][A-Z]>, no (excepto en algunos viejos sistemas de 7 bits).
 
-Tenga en cuenta también que la idea de rango es poco transportable entre conjuntos de caracteres; e incluso dentro de los mismos conjuntos de caracteres pueden causar resultados que probablemente no espera.  Un buen principio es el de usar rangos que sólo comiencen y terminen, en cualquier alfabeto, con un mismo tamaño de caja (a-e, A-E), o dígitos (0-4).  Cualquier otro caso no es seguro.  En caso de duda, explicite los conjuntos de caracteres completamente.
+Tenga en cuenta también que la idea de rango es poco transportable entre juegos de caracteres; e incluso dentro de los mismos juegos de caracteres puede causar resultados probablemente inesperados.  Un buen principio es el de usar rangos que sólo comiencen y terminen, en cualquier alfabeto, con un mismo tamaño de caja (a-e, A-E), o dígitos (0-4).  Cualquier otro caso no es seguro.  En caso de duda, explicite los conjuntos de caracteres completamente.
 
 Opciones:
 
@@ -1745,22 +1780,21 @@ Si quiere que su documento incrustado esté sangrado con el resto del código, t
        detrás de la puerta donde comenzó.
     FINIS
 
-Si utiliza un documento incrustado en una construcción delimitada, como en C<s///eg>, el material entrecomillado debe venir en las siguientes líneas al delimitador final.
-Así que en lugar de
+Si utiliza un documento incrustado en una construcción delimitada, como en C<s///eg>, el material entrecomillado debe seguir a la línea que sigue al delimitador C<<< <<FOO >>>, significando que puede estar dentro de la construcción delimitada.
 
     s/este/<<E . 'ese'
     el otro
     E
      . 'más '/eg;
 
-tiene que escribir
+Esto funciona así en Perl 5.18.  Históricamente, era inconsistente, y tendría que escribir
 
     s/este/<<E . 'ese'
      . 'más '/eg;
     el otro
     E
 
-Si el identificador de final está en la última línea del programa, debe asegurarse de que hay un carácter de nueva línea después de él; de lo contrario, Perl dará la advertencia B<Can't find string terminator "END" anywhere before EOF...>.
+fuera de las evaluaciones de cadenas.
 
 Además, no están relacionadas las reglas de entrecomillado para el identificador del fin-de-cadena con las reglas de entrecomillado de Perl. C<q()>, C<qq()>, y similares no están soportadas, en lugar de C<''> y C<"">, y la única interpolación es para escapar el carácter de entrecomillado:
 
@@ -1800,7 +1834,7 @@ Por lo tanto, una C</> termina una construcción C<qq//>, mientras que un C<]> t
 
 Durante la búsqueda de caracteres delimitadores individuales, los delimitadores escapados y los C<\\> son omitidos.  Por ejemplo, mientras se busca por el C</> final, las combinaciones de C<\\> y C<\/> son omitidas.  Si los delimitadores están emparejados, las parejas anidadas también se omiten.  Por ejemplo, mientras se busca el C<]> de cierre emparejado con el de apertura C<[>, combinaciones de C<\\>, C<\]> y C<\[> son todos omitidos, y los caracteres anidados de C<[> y C<]> se pasan también por alto.
 Sin embargo, cuando se usan las barras diagonales inversas como delimitadores (como C<qq\\> y C<tr\\\>), no se omite nada.
-Durante la búsqueda del final, las barras diagonales inversas que escapan delimitadores son eliminados (hablando más exactamente, no se copian al lugar seguro).
+Durante la búsqueda del final, las barras diagonales inversas que escapan delimitadores u otras barras, son eliminadas (hablando más exactamente, no se copian al lugar seguro).
 
 Para construcciones con delimitadores en tres partes (C<s///>, C<y///>, y C<tr///>), la búsqueda se repite una vez más.
 Si el primer delimitador no es un carácter de puntuación de apertura, los tres delimitadores deben ser el mismo, como C<s!!!> y C<tr)))>, en cuyo caso el segundo delimitador termina la parte izquierda y, a la vez, comienza la parte derecha.
@@ -1854,10 +1888,10 @@ El carácter C<-> es tratado de forma especial y por lo tanto C<\-> es tratado c
 
 =item C<"">, C<``>, C<qq//>, C<qx//>, C<< <file*glob> >>, C<<<"EOF">
 
-C<\Q>, C<\U>, C<\u>, C<\L>, C<\l>, C<\F> (posiblemente emparejadas con C<\E>) se convierten a las correspondientes construcciones Perl.  Así, C<"$foo\Qbaz$bar"> se convierte internamente a C<$foo . (quotemeta("baz" . $bar))>.
+C<\Q>, C<\U>, C<\u>, C<\L>, C<\l>, C<\F> (posiblemente emparejadas con C<\E>) se convierten a las correspondientes construcciones Perl.  Así, C<"$foo\Qbaz$bar"> se convierte a C<$foo . (quotemeta("baz" . $bar))>, internamente.
 Las otras secuencias de escape, como C<\200> y C<\t> y caracteres escapados con barras diagonales inversas, como C<\\> y C<\->, se reemplazan con expansiones apropiadas.
 
-Hay que hacer hincapié en que I<lo que caiga dentro de C<\Q> y C<\E>> se interpola de forma normal.  Algo como C<"\Q\\E"> no tiene dentro a C<\E>.  en cambio, tiene a C<\Q>, C<\\>, y C<E>, por lo que el resultado es el mismo que para C<"\\\\E">.  Como regla general, las barras diagonales inversas entre C<\Q> y C<\E> pueden dar lugar a resultados no intuitivos.  Así, C<"\Q\t\E"> se convierte a C<quotemeta("\t")>, que es lo mismo que C<"\\\t"> (porque TAB no es alfanumérico).  Tenga en cuenta también que:
+Hay que hacer hincapié en que I<lo que caiga dentro de C<\Q> y C<\E>> se interpola de forma normal.  Algo como C<"\Q\\E"> no tiene dentro a C<\E>.  En cambio, tiene a C<\Q>, C<\\>, y C<E>, por lo que el resultado es el mismo que para C<"\\\\E">.  Como regla general, las barras diagonales inversas entre C<\Q> y C<\E> pueden dar lugar a resultados no intuitivos.  Así, C<"\Q\t\E"> se convierte a C<quotemeta("\t")>, que es lo mismo que C<"\\\t"> (porque TAB no es alfanumérico).  Tenga en cuenta también que:
 
   $str = '\t';
   return "\Q$str";
@@ -1898,6 +1932,8 @@ El procesamiento de C<\N{...}> también se hace aquí, y compilado en una forma 
 No obstante, cualquier otra combinación de C<\> seguida de un carácter no va a ser sustituida, sino sólo obviada, con el fin de analizarlas como expresiones regulares en el paso siguiente.
 Como C<\c> se omite en este paso, C<@> de C<\c@> en RE se trata, posiblemente, como un símbolo de array (por ejemplo C<@foo>), incluso aunque el mismo texto en C<qq//> sí da la interpolación de C<\c@>.
 
+Bloques de código como C<(?{BLOQUE})> se manejan devolviendo temporalmente el control al intérprete de perl, de una forma similar a lo que sería la expresión con subíndices interpolados en un array, como lo sería en C<"foo$array[1+f("[xyz")]bar">.
+
 Por otra parte, dentro de C<(?{BLOQUE})>, C<(?# comentario )>, y un C<#>-comentario en una C<//x>-expresión regular, no se realiza ningún tipo de procesamiento.  Este es el primer caso en el que la presencia del modificador C<//x> es relevante.
 
 La interpolación en los patrones tiene varias peculiaridades: C<$|>, C<$(>, C<$)>, C<@+> y C<@-> no son interpoladas, y las construcciones C<$var[ALGO]> son promovidas (por varios estimadores diferentes) a ser un elemento de array o C<$var> seguida de una RE alternativa.  Aquí es donde la notación C<${arr[$bar]}> es muy útil: C</${arr[0-9]}/> se interpreta como un elemento de array C<-9>, no como una expresión regular desde la variable C<$arr> seguida por un dígito, que puede ser la interpretación de C</$arr[0-9]/>.  Debido a que la promoción puede ocurrir desde distintos estimadores, el resultado no es predecible.
@@ -1924,7 +1960,9 @@ Este es otro paso donde la presencia del modificador C<//x> es relevante.  El mo
 Los caracteres escapados con una barra diagonal inversa son sustituidos por sus correspondientes cadenas de texto literales (como en C<\{>), o sino generan nodos especiales en el autómata finito (como en C<\b>).  Caracteres especiales al motor de RE (como C<|>) generan sus correspondientes nodos o grupos de nodos.  C<(?#...)> los comentarios son ignorados.  Todo lo demás es, o bien convertido en cadenas de literales para ser cotejados, o bien es ignorado (como lo es el espacio en blanco y los comentarios C<#>, si C<//x> está presente).
 
 El análisis de la construcción clase de caracteres, entre corchetes, C<[...]>, es bastante diferente a la regla utilizada para el resto del patrón.
-El terminador de esta construcción es encontrado usando las mismas reglas que para encontrar el terminador de la construcción delimitada por llaves, C<{}>, con la única excepción de que C<]> inmediatamente después de un C<[> se trata como si estuviera precedido por una barra diagonal inversa.  Del mismo modo, el terminador de C<(?{...})> se encuentra usando las mismas reglas que para encontrar el terminador de una construcción delimitada por C<{}>.
+El terminador de esta construcción es encontrado usando las mismas reglas que para encontrar el terminador de la construcción delimitada por llaves, C<{}>, con la única excepción de que C<]> inmediatamente después de un C<[> se trata como si estuviera precedido por una barra diagonal inversa.
+
+El finalizador en tiempo de ejecución de C<(?{...})> se encuentra cambiando temporalmente el control al intérprete de perl, que tendría parar en el punto donde se encuentra la C<}> que balancea la terminación lógica.
 
 Es posible inspeccionar tanto la cadena dada al motor RE y el autómata finito que resulta.  Ver los argumentos C<debug>/C<debugcolor> en el I<pragma> C<use L<re>>, así como la opción en línea de comandos de Perl B<-Dr> documentado en L<perlrun/"Opciones de comando">.
 
@@ -2173,7 +2211,7 @@ El redondeo en las aplicaciones financieras puede tener consecuencias graves, y 
 =head2 Grandes números
 X<number, arbitrary precision> X<número, precisión arbitraria>
 
-Los módulos estándares C<Math::BigInt>, C<Math::BigRat>, y C<Math::BigFloat>, junto con los pragmas C<bigint>, C<bigrat> y C<bigfloat>, proporcionan aritmética con precisión variable y sobrecarga de operadores, aunque, en la actualidad, son bastante lentos. A costa de algún espacio y velocidad, evitan los peligros asociados a la limitada precisión de las representaciones.
+Los módulos estándares C<Math::BigInt>, C<Math::BigRat>, y C<Math::BigFloat>, junto con los pragmas C<bignum>, C<bigint> y C<bigrat>, proporcionan aritmética de precisión variable y sobrecarga de operadores, aunque en la actualidad, son bastante lentos. A costa de algún espacio y velocidad, evitan los peligros asociados a la limitada precisión de las representaciones.
 
 	use 5.010;
 	use bigint;  # interfaz sencillo para Math::BigInt
@@ -2196,17 +2234,19 @@ Hay varios módulos que permiten calcular con precisión fija o ilimitada (limit
 
 Aquí hay un breve resumen, aunque incompleto:
 
-  Math::Fraction		grandes e ilimitadas fracciones, como 9973 / 12967
   Math::String			trata secuencias de cadenas como números
   Math::FixedPrecision		calcula con una precisión fija
   Math::Currency		para cálculos monetarios
   Bit::Vector			manipula vectores bit rápidamente (usa C)
   Math::BigIntFast		envoltorio de Bit::Vector para grandes números
   Math::Pari			ofrece acceso a la biblioteca Pari, en C
-  Math::BigInteger		usa una biblioteca C externa
-  Math::Cephes			usa biblioteca externa en C Cephes (no para grandes números)
+  Math::Cephes		usa la biblioteca externa en C Cephes (no
+                         para grandes números)
   Math::Cephes::Fraction	fracciones vía la biblioteca Cephes
   Math::GMP			otro usando una biblioteca C externa
+  Math::GMPz			una interfaz alternativa a los grandes int de libgmp
+  Math::GMPq			una interfaz a los números fraccionarios de libgmp
+  Math::GMPf			una interfaz a los números en punto flotante de libgmp
 
 Elija con cuidado.
 

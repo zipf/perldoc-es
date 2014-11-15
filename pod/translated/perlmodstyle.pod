@@ -316,7 +316,7 @@ Use parámetros con nombre. Es más fácil utilizar un hash de esta manera:
 
 Si bien la lista de argumentos puede funcionar bien para uno, dos o incluso tres argumentos, los siguientes argumentos le serán más difícil de recordar para el usuario del módulo, y difícil de mantener para el autor del módulo.  Si desea agregar un nuevo parámetro lo tendrá que añadir al final de la lista, para mantener la compatibilidad con versiones anteriores, y esto probablemente hará que su orden de lista sea poco intuitivo.  Además, si muchos elementos pueden estar indefinidos puede ver las siguientes poco atractivas llamadas de métodos:
 
-    $obj->hacer_algo(undef, undef, undef, undef, undef, undef, 1024);
+    $obj->hacer_algo(undef, undef, undef, undef, undef, 1024);
 
 Proporcione parámetros por defecto para los parámetros que los tengan.  No haga que los usuarios especifiquen parámetros que casi siempre sean los mismos.
 
@@ -478,6 +478,8 @@ Al utilizar el Module::Build, suele ser así:
 =back
 
 Notas de versión o las listas de cambios deben producirse para cada versión de su software que describa los cambios visibles de su módulo, en términos relevantes para el usuario.
+
+A menos que tenga una buena razón para utilizar algún otro formato (por ejemplo, un formato utilizado en su empresa), la convención es nombrar el archivo de cambios como C<Changes>, y seguir el formato sencillo descrito en L<CPAN::Changes::Spec>.
 
 =head1 CONSIDERACIONES DEL LANZAMIENTO
 

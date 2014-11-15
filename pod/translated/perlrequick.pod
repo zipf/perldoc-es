@@ -15,9 +15,9 @@ La forma más simple de I<regex> es solo una palabra, o más generalmente, una c
 
     "Hola Mundo" =~ /Mundo/;  # coincide
 
-en esta sentencia, C<Mundo> es una I<regex> y los delimitadores C<//> que engloban a C</Mundo/> le dicen a Perl que busque una cadena para conseguir una coincidencia.  El operador C<=~> asocia la cadena con la coicidencia de la I<regex>, y produce un valor de verdad si la I<regex> coincide, o falso si la I<regex> no coincide.  En nuestro caso, C<Mundo> coincide con la segunda palabra de C<"Hola Mundo">, así que la expresión es verdadera.  Esta idea tiene algunas variaciones.
+en esta sentencia, C<Mundo> es una I<regex> y los delimitadores C<//> que engloban a C</Mundo/> le dicen a Perl que busque una cadena para conseguir una coincidencia.  El operador C<=~> asocia la cadena con la coincidencia de la I<regex>, y produce un valor de verdad si la I<regex> coincide, o falso si la I<regex> no coincide.  En nuestro caso, C<Mundo> coincide con la segunda palabra de C<"Hola Mundo">, así que la expresión es verdadera.  Esta idea tiene algunas variaciones.
 
-Expresiones como esta son útiles para los condicionales:
+Expresiones como esta son útiles para las condicionales:
 
     print "Sí coincide\n" if "Hola Mundo" =~ /Mundo/;
 
@@ -25,17 +25,17 @@ El sentido de la coincidencia se puede invertir mediante el uso del operador C<!
 
     print "No coincide\n" if "Hola Mundo" !~ /Mundo/;
 
-La cadena literal en la I<regex> puede ser reemplazado por una variable:
+La cadena literal en la I<regex> se puede reemplazar por una variable:
 
     $saludo = "Mundo";
     print "Sí coincide\n" if "Hola Mundo" =~ /$saludo/;
 
-Si está haciendo la búsqueda en C<$_>, la parte C<$_ =~> puede ser omitida:
+Si está haciendo la búsqueda en C<$_>, la parte C<$_ =~> se puede omitir:
 
     $_ = "Hola Mundo";
     print "Sí coincide\n" if /Mundo/;
 
-Finalmente, los delimitadores por defecto C<//> para una coincidencia pueden ser cambiados por cualesquiera otros delimitadores arbitrarios poniendo delante C<'m'>:
+Finalmente, los delimitadores por defecto C<//> para una coincidencia se pueden cambiar por cualesquiera otros delimitadores arbitrarios poniendo delante C<'m'>:
 
     "Hola Mundo" =~ m!Mundo!;    # coincide, delimitado con '!'
     "Hola Mundo" =~ m{Mundo};    # coincide, note la correspondencia de las '{}'
@@ -53,28 +53,29 @@ Perl siempre coincidirá con el primer punto de coincidencia de la cadena:
     "Hola Mundo" =~ /o/;            # coincide con la 'o' en 'Hola'
     "ese sombrero es rojo" =~ /es/; # coincide con 'es' en 'ese'
 
-No todos los caracteres pueden ser usados 'tal cual' en una coincidencia.  Algunos caracteres llamados B<metacaracteres>, están reservados para ser usados en la notación I<regex>.
+No todos los caracteres se pueden usar 'tal cual' en una coincidencia.  Algunos caracteres llamados B<metacaracteres>, están reservados para usarse en la notación I<regex>.
 Los metacaracteres son
 
     {}[]()^$.|*+?\
 
-Un metacarácter puede ser buscado poniendo una barra diagonal inversa delante de él:
+Un metacarácter se puede buscar poniendo una barra diagonal inversa delante de él:
 
     "2+2=4" =~ /2+2/;                       # no coincide, + es un metacarácter
-    "2+2=4" =~ /2\+2/;                      # coincide, \+ es tratado como un + cualquiera
+    "2+2=4" =~ /2\+2/;                      # coincide, \+ se trata como un + cualquiera
     'C:\WIN32' =~ /C:\\WIN/;                # coincide
     "/usr/bin/perl" =~ /\/usr\/bin\/perl/;  # coincide
 
-En esta última I<regex>, la barra inclinada C<'/'> también es escapada, porque está siendo usada para delimitar la I<regex>.
+En esta última I<regex>, la barra inclinada C<'/'> también se escapa, porque se está usando para delimitar la I<regex>.
 
-Caracteres ASCII no imprimibles son representados por B<secuencias de escape>.
+Caracteres ASCII no imprimibles se representan por B<secuencias de escape>.
 Ejemplos comunes son C<\t> para un tabulador, C<\n> para un carácter de nueva línea, y C<\r>
-para un retorno de carro.  Bytes arbitrarios son representados por secuencias de escape octales, como por ejemplo, C<\033>, o secuencias de escape hexadecimales, como por ejemplo C<\x1B>:
+para un retorno de carro.  Bytes arbitrarios se representan por secuencias de escape octales, como por ejemplo, C<\033>, o secuencias de escape hexadecimales, como por ejemplo C<\x1B>:
 
-    "1000\t2000" =~ m(0\t2)      # coincide
-    "cat"      =~ /\143\x61\x74/ # coincide en ASCII, pero es una forma extraña de deletrear cat
+    "1000\t2000" =~ m(0\t2)  # coincide
+    "cat" =~ /\143\x61\x74/  # coincide en ASCII, pero 
+                             # es una forma extraña de deletrear cat
 
-Las I<regexes> son tratadas como si fueran cadenas doblemente entrecomilladas, así que la funciona la sustitución de variables:
+Las I<regexes> se tratan como si fueran cadenas doblemente entrecomilladas, así que la sustitución de variables funciona:
 
     $foo = 'casa';
     'casa del gato' =~ /$foo del gato/;   # coincide
@@ -91,7 +92,7 @@ Con todas estas I<regexes> que hemos visto, si la I<regex> coincide en alguna pa
 =head2 Usando clases de caracteres
 
 Una B<clase de caracteres> permite que un conjunto de caracteres, en lugar de uno solo, coincidan en un punto en particular en una I<regex>.
-Las clases de caracteres se indican con corchetes C<[...]>, con el conjunto de caracteres que pueden ser posiblemente encontrados en su interior.  Aquí hay algunos ejemplos:
+Las clases de caracteres se indican con corchetes C<[...]>, con el conjunto de caracteres que pueden, posiblemente, encontrarse en su interior.  Aquí hay algunos ejemplos:
 
     /gato/;           # coincide con 'gato'
     /[gr]at[oa]/;     # coincide con 'gato', 'gata', 'rato' o 'rata'
@@ -99,12 +100,13 @@ Las clases de caracteres se indican con corchetes C<[...]>, con el conjunto de c
 
 En esta última sentencia, aunque C<'c'> es el primer carácter en la clase, el primer punto en que la I<regex> coincide es con C<'a'>.
 
-    /[Ss][iI]/;     # coincide con 'si', 'sI', 'Si' y 'SI'
+    /[sS][iI]/;     # coincide con 'si' con independencia del tamaño de caja
+                    # 'si', 'Si', 'SI', etc.
     /si/i;          # también coincide con 'si' sin importar el tamaño de caja
 
 El último ejemplo muestra una coincidencia con un B<modificador> C<'i'>, lo que hace que la búsqueda sea independiente del tamaño de caja.
 
-Las clases de caracteres también tienen caracteres comunes y especiales, pero los conjuntos de caracteres ordinarios y especiales dentro de una clase de caracteres son diferentes a los que están fuera de una clase de caracteres.  Los caracteres especiales para una clase de caracteres son C<-]\^$> y son encontrados si antes se les escapa:
+Las clases de caracteres también tienen caracteres comunes y especiales, pero los conjuntos de caracteres ordinarios y especiales dentro de una clase de caracteres son diferentes a los que están fuera de una clase de caracteres.  Los caracteres especiales para una clase de caracteres son C<-]\^$> y se encuentran si antes se les escapa:
 
    /[\]c]def/; # coincide con ']def' o 'cdef'
    $x = 'bcr';
@@ -117,12 +119,12 @@ El carácter especial C<'-'> actúa como un operador de rango dentro de las clas
     /item[0-9]/;    # coincide con 'item0' o ... o 'item9'
     /[0-9a-fA-F]/;  # coincide con un dígito hexadecimal
 
-Si C<'-'> es el primer o último carácter en una clase de caracteres, es tratado como un carácter normal.
+Si C<'-'> es el primer o último carácter en una clase de caracteres, se trata como un carácter normal.
 
-El carácter especial C<^> en la primera posición de una clase de caracteres denota un B<clase de caracteres negada>, que coincide con cualquier carácter, excepto los indicados en los corchetes.  Tanto C<[...]> como C<[^...]> deben coincidir con un carácter, o la coincidencia falla.  Entonces
+El carácter especial C<^> en la primera posición de una clase de caracteres denota una B<clase de caracteres negada>, que coincide con cualquier carácter, excepto los indicados en los corchetes.  Tanto C<[...]> como C<[^...]> deben coincidir con un carácter, o la coincidencia falla.  Entonces
 
     /[^a]at/;  # no coincide con 'aat' o 'at', pero coincide
-               # con todos los demás: 'bat', 'cat, '0at', '%at', etc.
+               # con los demás 'bat', 'cat, '0at', '%at', etc.
     /[^0-9]/;  # coincide con un carácter no numérico
     /[a^]at/;  # coincide con 'aat' o '^at'; aquí, '^' es un carácter normal
 
@@ -202,28 +204,28 @@ Si C<gato> tampoco corresponde, entonces la búsqueda falla y Perl se mueve a la
 
 Aunque C<perro> es la primera alternativa en la segunda I<regex>, C<gato> coincide en primer lugar, en la cadena.
 
-    "gato"          =~ /g|ga|gat|gato/; # coincide con "c"
+    "gato"          =~ /g|ga|gat|gato/; # coincide con "g"
     "gato"          =~ /gato|gat|ga|g/; # coincide con "gato"
 
 En una determinada posición de carácter, la primera alternancia que permite que la I<regex> tenga éxito será la que corresponda. Aquí, todas las alternancias coinciden con la primera posición de la cadena, así que los primeros caracteres serán la coincidencia.
 
 =head2 Agrupando cosas y jerarquía de coincidencia
 
-Los metacaracteres de B<agrupación> C<()> permite a una parte de una I<regex> que sea tratada como una unidad.  Partes de una I<regex> son agrupadas encerrándolas entre paréntesis.  La regex C<gat(o|era)> significa que coincide con C<gat> seguido tanto por C<o> o C<era>.  Algunos ejemplos más
+Los metacaracteres de B<agrupación> C<()> permite a una parte de una I<regex> que se trate como una unidad.  Partes de una I<regex> se agrupan encerrándolas entre paréntesis.  La regex C<gat(o|era)> significa que coincide con C<gat> seguido tanto por C<o> o C<era>.  Algunos ejemplos más
 
     /(a|b)b/;    # coincide con 'ab' o 'bb'
     /(^a|b)c/;   # coincide con 'ac' al comienzo de la cadena o 'bc' en cualquier parte
 
     /espanta(pajaros|)/;     # coincide con 'espantapajaros' o 'espanta'
-    /espanta(pajaro(s|)|)/;  # coincide tanto con 'espantapajaros', 'espantapajaro'
-                             # o 'espanta'.  Note que los grupos pueden ser anidados.
+    /espanta(pajaro(s|)|)/;  # coincide tanto con 'espantapajaros', 'espantapajaro' o
+                        # 'espanta'.  Note que los grupos pueden estar anidados.
 
     "20" =~ /(19|20|)\d\d/;  # coincide con la alternancia nula '()\d\d',
-                             # porque con '20\d\d' no coincide
+                             # porque '20\d\d' no coincide
 
 =head2 Extrayendo coincidencias
 
-Los metacaracteres de agrupación C<()> también permiten la extracción de partes de una cadena que han sido encontradas.  Para cada grupo, la parte que coincide es almacenada en las variables especiales C<$1>, C<$2>, etc.
+Los metacaracteres de agrupación C<()> permiten también la extracción de partes de una cadena que hayan sido encontradas.  Para cada grupo, la parte que coincide se almacena en las variables especiales C<$1>, C<$2>, etc.
 Se pueden utilizar como variables ordinarias:
 
     # extraer horas, minutos, segundos
@@ -241,7 +243,7 @@ Si las agrupaciones en una I<regex> están anidadas, C<$1> devuelve el grupo con
     /(ab(cd|ef)((gi)|j))/;
      1  2      34
 
-Asociado con las variables de emparejamiento C<$1> C<$2>, ... son las B<retrorreferencias> C<\g1> C<\g2>, ... Las retrorreferencias son variables de emparejamiento que pueden ser utilizadas I<dentro> una I<regex>:
+Asociado con las variables de emparejamiento C<$1> C<$2>, ... son las B<retrorreferencias> C<\g1> C<\g2>, ... Las retrorreferencias son variables de emparejamiento que pueden utilizarse I<dentro> una I<regex>:
 
     /(\w\w\w)\s\g1/; # encuentra secuencias como 'por por' en la cadena
 
@@ -281,22 +283,22 @@ C<a{n}> = coincide exactamente C<n> veces
 
 Aquí hay algunos ejemplos:
 
-    /[a-z]+\s+\d*/;                # coincide con una palabra en minúsculas, algún espacio, y
-                                   # cualquier número de dígitos
-    /(\w+)\s+\g1/;                 # coincide con palabras duplicadas de cualquier longitud
-    $year =~ /^\d{2,4}$/;          # se asegura que year sea al menos 2 pero no más
-                                   # de 4 dígitos
-    $year =~ /^\d{4}$|^\d{2}$/;    # mejor coincidencia, descartando fechas de 3 dígitos
+    /[a-z]+\s+\d*/;  # coincide con una palabra en minúsculas, algún espacio, y
+                     # cualquier número de dígitos
+    /(\w+)\s+\g1/;   # coincide con palabras duplicadas de cualquier longitud
+    $year =~ /^\d{2,4}$/;  # se asegura que year sea al menos 2 pero no más
+                           # de 4 dígitos
+    $year =~ /^\d{4}$|^\d{2}$/;  # mejor coincidencia, descartando fechas de 3 dígitos
 
 Estos cuantificadores tratarán de satisfacer la mayor cantidad de la cadena como sea posible, al tiempo que permita a la I<regex> coincidir.  Por lo que tenemos
 
     $x = 'the cat in the hat';
-    $x =~ /^(.*)(at)(.*)$/; # coincide con,
+    $x =~ /^(.*)(at)(.*)$/; # coincide,
                             # $1 = 'the cat in the h'
                             # $2 = 'at'
                             # $3 = ''   (0 coincidencias)
 
-El primer cuantificador C<.*> reserva tanto de la cadena como sea posible mientras la I<regex> funcione. Al segundo cuantificador C<.*> no le queda caracteres para emparejar, así que coincide 0 veces.
+El primer cuantificador C<.*> reserva tanto de la cadena como sea posible mientras la I<regex> funcione. Al segundo cuantificador C<.*> no le quedan caracteres para emparejar, así que coincide 0 veces.
 
 =head2 Más coincidencia
 
@@ -320,15 +322,15 @@ Una coincidencia fallida o cambiar la cadena objetivo reinicializa la posición.
 
 En contexto de lista, C<//g> devuelve una lista de las agrupaciones coincidentes, o si no hay agrupaciones, una lista de coincidencias con toda la I<regex>.  Así que
 
-    @palabras = ($x =~ /(\w+)/g);  # coincide con,
-                                   # $palabras[0] = 'gato'
-                                   # $palabras[1] = 'perro'
-                                   # $palabras[2] = 'casa'
+    @palabras = ($x =~ /(\w+)/g);  # coincide,
+                                # $palabra[0] = 'cat'
+                                # $palabra[1] = 'dog'
+                                # $casa[2] = 'house'
 
 =head2 Buscar y reemplazar
 
 Buscar y reemplazar se realiza utilizando C<s/regex/reemplazo/modificadores>.
-El C<reemplazo> es una cadena Perl entre comillas dobles que reemplaza en la cadena lo que haya coincidido con la C<regex>.  El operador C<=~> también se utiliza aquí para asociar una cadena con C<s///>.  Si está haciendo la búsqueda en C<$_>, el S<C<$_ =~>> puede ser omitido.  Si hay alguna coincidencia, C<s///> devuelve el número de sustituciones realizadas; de lo contrario devuelve falso.  Aquí hay algunos pocos ejemplos:
+El C<reemplazo> es una cadena Perl entre comillas dobles que reemplaza en la cadena lo que haya coincidido con la C<regex>.  El operador C<=~> también se utiliza aquí para asociar una cadena con C<s///>.  Si está haciendo la búsqueda en C<$_>, el S<C<$_ =~>> se puede omitir.  Si hay alguna coincidencia, C<s///> devuelve el número de sustituciones realizadas; de lo contrario devuelve falso.  Aquí hay algunos pocos ejemplos:
 
     $x = "¡Es hora de alimentar al gato!";
     $x =~ s/gato/hacker/;  # $x contiene "¡Es hora de alimentar al hacker!"
@@ -350,13 +352,14 @@ El modificador no destructivo C<s///r> hace que el resultado de la sustitución 
     print "$x $y\n"; # imprime "Me gustan los perros. Me gustan los gatos."
 
     $x = "Los gatos son lo más.";
-    print $x =~ s/gatos/perros/r =~ s/perros/ranas/r =~ s/ranas/puercoespines/r, "\n";
+    print $x =~ s/gatos/perros/r =~ s/perros/ranas/r =~
+        s/ranas/puercoespines/r, "\n";
     # imprime "Los puercoespines son lo más."
 
     @foo = map { s/[a-z]/X/r } qw(a b c 1 2 3);
     # @foo ahora es qw(X X X 1 2 3)
 
-El modificador de evaluación C<s///e> envuelve un C<eval{...}> alrededor de la cadena de reemplazo y el resultado evaluado es sustituido en la subcadena coincidente.  Algunos ejemplos:
+El modificador de evaluación C<s///e> envuelve un C<eval{...}> alrededor de la cadena de reemplazo y el resultado evaluado se sustituye en la subcadena coincidente.  Algunos ejemplos:
 
     # invertir todas las palabras de la cadena
     $x = 'el gato en el sombrero';
@@ -366,16 +369,16 @@ El modificador de evaluación C<s///e> envuelve un C<eval{...}> alrededor de la 
     $x = "Un 39% de éxito";
     $x =~ s!(\d+)%!$1/100!e;       # $x contiene "Un 0.39 de éxito"
 
-El último ejemplo muestra que C<s///> puede utilizar otros delimitadores, como C<s!!!> y C<s{}{}>, e incluso C<s{}//>.  Si se utilizan comillas simples C<s'''>, entonces la I<regex> y el reemplazo son tratados como cadenas entre comillas simples.
+El último ejemplo muestra que C<s///> puede utilizar otros delimitadores, como C<s!!!> y C<s{}{}>, e incluso C<s{}//>.  Si se utilizan comillas simples C<s'''>, entonces la I<regex> y el reemplazo se tratan como cadenas entre comillas simples.
 
 =head2 El operador split
 
-C<split /regex/, cadena> divide la C<cadena> en una lista de subcadenas y devuelve esa lista.  La I<regex> determina la secuencia de caracteres por la que la C<cadena> es dividida.  Por ejemplo, para dividir una cadena en palabras, utilice
+C<split /regex/, cadena> divide la C<cadena> en una lista de subcadenas y devuelve esa lista.  La I<regex> determina la secuencia de caracteres por la que la C<cadena> se divide.  Por ejemplo, para dividir una cadena en palabras, utilice
 
     $x = "Calvin y Hobbes";
     @palabra = split /\s+/, $x;  # $palabra[0] = 'Calvin'
-                                 # $palabra[1] = 'y'
-                                 # $palabra[2] = 'Hobbes'
+                              # $palabra[1] = 'y'
+                              # $palabra[2] = 'Hobbes'
 
 Para extraer una lista de números separada por comas, use
 
@@ -384,14 +387,14 @@ Para extraer una lista de números separada por comas, use
                                 # $const[1] = '2.718'
                                 # $const[2] = '3.142'
 
-Si se utiliza la I<regex> vacía C<//>, la cadena es dividida en caracteres individuales.  Si la I<regex> tiene agrupaciones, entonces la lista producida contiene las subcadenas coincidentes de los agrupaciones, así:
+Si se utiliza la I<regex> vacía C<//>, la cadena se divide en caracteres individuales.  Si la I<regex> tiene agrupaciones, entonces la lista producida contiene las subcadenas coincidentes con las agrupaciones, así:
 
     $x = "/usr/bin";
-    @partes = split m!(/)!, $x;  # $partes[0] = ''
-                                 # $partes[1] = '/'
-                                 # $partes[2] = 'usr'
-                                 # $partes[3] = '/'
-                                 # $partes[4] = 'bin'
+    @partes = split m!(/)!, $x; # $partes[0] = ''
+                                # $partes[1] = '/'
+                                # $partes[2] = 'usr'
+                                # $partes[3] = '/'
+                                # $partes[4] = 'bin'
 
 Debido a que el primer carácter de $x coincidía con la I<regex>, C<split> antepuso al principio de la lista un elemento vacío.
 

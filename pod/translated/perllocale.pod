@@ -2,7 +2,7 @@
 
 =head1 NOMBRE
 
-perllocale - Gestión de la configuración regional en Perl (internacionalización y localización)
+perllocale - Gestión de la configuración regional (internacionalización y localización) en Perl
 
 =head1 DESCRIPCIÓN
 
@@ -10,13 +10,12 @@ En el principio era el ASCII, el "Código Estándar Americano para Intercambio d
 
 Para hacer frente a estas deficiencias, fue inventado el concepto de configuraciones regionales (formalmente la ISO C, XPG4, POSIX 1.c "sistema de configuración regional").  Y aplicaciones que han sido y están siendo escritas que utilizan el mecanismo de configuración regional.  El proceso de hacer que una aplicación tenga en cuenta las preferencias de los usuarios en estos temas se llama B<internacionalización> (a menudo abreviado como B<i18n>); solicitarle a una aplicación un conjunto particular de preferencias se conoce como B<localización> (B<l10n>).
 
-Perl se extendió, a partir de 5.004, para apoyar el sistema de configuración regional.  Éste es controlado por la aplicación utilizando un pragma, una llamada a una función, y distintas variables de entorno.
+Perl se extendió para soportar el sistema de configuración regional.  Éste es controlado por la aplicación utilizando un pragma, una llamada a una función, y distintas variables de entorno.
 
-Por desgracia, hay bastantes deficiencias con el diseño (y, a menudo, las implementaciones) de las configuraciones regionales, y su uso para los juegos de caracteres, en su mayoría, ha sido suplantado por Unicode (vea L<perlunitut> para una introducción a ese tema, y siga leyendo aquí para saber cómo interactúa Unicode con las configuraciones regionales en Perl).
+Desafortunadamente, hay bastantes deficiencias con el diseño (y a menudo, las implementaciones) de las configuraciones regionales.  Unicode se inventó (vea L<perlunitut> para una introducción del mismo) en parte para arreglar esas deficiencias de diseño, y hoy en día, existen una serie de "configuraciones UTF-8", basado en Unicode.  Son configuraciones cuyo conjunto de caracteres es Unicode, codificado en UTF-8.  Empezando en v5.20, Perl soporta completamente las configuraciones regionales UTF-8, excepto para ordenar y comparar cadenas de caracteres.  (Use L<Unicode::Collate> para esos casos).  Perl también continúa soportando las viejas configuraciones regionales que no son UTF-8.
 
-Perl sigue apoyando el antiguo sistema de configuración regional, y a partir de v5.16, proporciona una forma híbrida que utiliza el juego de caracteres Unicode, junto con las demás partes de configuraciones regionales que pueden no ser tan problemáticas.
 (Unicode también está creando C<CLDR>, los "Repositorio de Datos de Configuración Regional Comunes", L<http://cldr.unicode.org/> que incluye más tipos de información que están disponibles en el sistema de configuración regional POSIX.  En el momento de escribir esto, no había ningún módulo en CPAN que proporcione acceso a estos datos codificados en XML.
-Sin embargo, muchas de sus configuraciones regionales solo tienen disponible los datos extraídos desde POSIX, y están disponibles en L<http://unicode.org/Public/cldr/latest/>).
+Sin embargo, muchas de sus configuraciones regionales solo tienen disponible los datos extraídos desde POSIX, y están disponibles como configuraciones regionales UTF-8 en L<http://unicode.org/Public/cldr/latest/>).
 
 =head1 QUÉ ES UNA CONFIGURACIÓN REGIONAL
 
@@ -31,20 +30,20 @@ Esto indica cómo los números deben ser formateados para facilitar la lectura p
 =item Categoría LC_MONETARY: Formateo de cantidades monetarias
 
 =for comment
-El nbsp inferior facilita la apariencia
+El nbsp inferior facilita la apariencia (aunque no demasiado)
 
 E<160>
 
 =item Categoría LC_TIME: Formateo de Fecha/Hora
 
 =for comment
-El nbsp inferior facilita la apariencia
+El nbsp inferior facilita la apariencia (aunque no demasiado)
 
 E<160>
 
 =item Categoría LC_MESSAGES: Mensajes de Error y otros
 
-Esto, en su mayor parte, está fuera del alcance de Perl
+Perl lo usa sólo para acceder a mensajes de error del sistema operativo a través de L<$!|perlvar/$ERRNO> y L<$^E|perlvar/$EXTENDED_OS_ERROR>.
 
 =item Categoría LC_COLLATE: Cotejo
 
@@ -55,25 +54,29 @@ En los alfabetos latinos, por ejemplo, "b", por lo general sigue a "a".
 
 Esto indica, por ejemplo, si un carácter es una letra mayúscula.
 
+=item Otras categorías
+
+Algunas plataformas tienen otras categorías, tales como unidades de medida y tamaños de papel.  Ninguno de estos se utiliza directamente por Perl, pero operaciones externas con las que Perl interacciona puede utilizarlos.  Vea L</Fuera del ámbito de cualquier variante de "use locale"> más abajo.
+
 =back
 
-Más detalles sobre las categorías se dan a continuación en L</CATEGORÍAS DE CONFIGURACIONES REGIONALES>.
+A continuación se dan más detalles sobre las categorías en L</CATEGORÍAS DE CONFIGURACIONES REGIONALES>.
 
 En conjunto, estas categorías ofrecen la posibilidad de que un único programa pueda funcionar en muchos lugares diferentes.  Sin embargo, hay deficiencias, así que siga leyendo.
 
 =head1 PREPARARSE PARA USAR LAS CONFIGURACIONES REGIONALES
 
-Perl no usará las configuraciones regionales a menos que lo solicite (vea L</NOTAS> más abajo para ver la excepción parcial de C<write()>).  Pero incluso si existe tal petición, B<todo> lo siguiente debe ser verdad para que funcione correctamente:
+Perl no usará las configuraciones regionales a menos que lo solicite (pero, de nuevo, note que Perl puede interactuar con código que las utiliza).  Incluso si existe tal petición, B<todo> lo siguiente debe darse para que funcione correctamente:
 
 =over 4
 
 =item *
 
-B<Su sistema operativo debe soportar el sistema de configuración regional>.  Si lo hace, debe encontrar que la función setlocale() está documentada en alguna parte de su biblioteca de C.
+B<Su sistema operativo debe soportar el sistema de configuración regional>.  Si lo hace, debe encontrar que la función C<setlocale()> está documentada en alguna parte de su biblioteca de C.
 
 =item *
 
-B<Las definiciones de sus configuraciones regionales deben estar instaladas>.  Usted o el administrador del sistema, debe asegurarse de que este es el caso. Las configuraciones regionales disponibles, la ubicación en la que se mantienen, y la manera en que están instaladas, todos ellas, varían de sistema en sistema.  Algunos sistemas ofrecen sólo algunas de ellas, fijas, y no permiten añadir más.  Otros le permiten añadir configuraciones regionales "enlatadas" proporcionadas por el proveedor del sistema.  Otros permiten a usted o al administrador del sistema definir y agregar configuraciones regionales arbitrarias.  (Puede que tenga que pedir a su proveedor proporcionar configuraciones regionales que no se entregan con el sistema operativo).  Lea la documentación del sistema para una iluminación adicional.
+B<Las definiciones de sus configuraciones regionales deben estar instaladas>.  Usted o el administrador del sistema, debe asegurarse de que este es el caso. Las configuraciones regionales disponibles, la ubicación en la que se mantienen, y la manera en que están instaladas, todos ellas, varían de sistema en sistema.  Algunos sistemas ofrecen sólo algunas de ellas, fijas, y no permiten añadir más.  Otros le permiten añadir configuraciones regionales "enlatadas" proporcionadas por el proveedor del sistema.  Otros le permiten a usted o al administrador del sistema definir y agregar configuraciones regionales de forma arbitraria.  (Puede que tenga que pedir a su proveedor que proporcione configuraciones regionales que no se entreguen con el sistema operativo).  Lea la documentación del sistema para una iluminación adicional.
 
 =item *
 
@@ -87,7 +90,7 @@ Si quiere que una aplicación Perl procese y presente sus datos de acuerdo con u
 
 =item 1
 
-B<Las variables de entorno que determinan la configuración regional (ver L</"ENTORNO">) deben estar correctamente puestas> en el momento del arranque de la aplicación, ya sea por usted mismo o por quien configuró la cuenta en el sistema; o
+B<Las variables de entorno que determinan la configuración regional (ver L</"ENTORNO">) deben estar correctamente ajustadas> en el momento del arranque de la aplicación, ya sea por usted mismo o por quien configuró la cuenta en el sistema; o
 
 =item 2
 
@@ -99,62 +102,121 @@ B<La aplicación debe ajustar su propia configuración regional> usando el méto
 
 =head2 El pragma use locale
 
-Por defecto, Perl ignora la configuración regional actual.  El pragma S<C<use locale>> le piden a Perl que utilice la configuración regional actual para algunas operaciones.
+Por defecto, el propio Perl ignora la configuración regional en vigor.  El pragma S<C<use locale>> le pide a Perl que utilice la configuración regional actual para algunas operaciones.
 A partir de v5.16, hay un parámetro opcional para este pragma:
 
     use locale ':not_characters';
 
-Este parámetro permite una mejor mezcla de las configuraciones regionales y Unicode, y se describen detalladamente en L</Unicode y UTF-8> pero, en pocas palabras, le dice a Perl que no utilice las partes que describen a los caracteres en la definición de la configuración regional, es decir, las categorías C<LC_CTYPE> y C<LC_COLLATE>.  En su lugar, utilizará el juego de caracteres nativo (ampliado por Unicode).  Cuando use este parámetro, usted es el responsable de ajustar el conjunto de caracteres externo para que sea tratado como el nativo/Unicode (que ahora, realmente, se tratará de uno de las cada vez más populares configuraciones regionales UTF-8).  Hay varias formas convenientes de hacer esto, como se describe en L</Unicode y UTF-8>.
+Este parámetro permite una mejor mezcla de las configuraciones regionales y Unicode (menos útil en v5.20 y siguientes), y se describen detalladamente en L</Unicode y UTF-8> pero, en pocas palabras, le dice a Perl que no utilice las partes que describen a los caracteres en la definición de la configuración regional, es decir, las categorías C<LC_CTYPE> y C<LC_COLLATE>.  En su lugar, utilizará el juego de caracteres nativo (ampliado por Unicode).  Cuando use este parámetro, usted es el responsable de que el conjunto de caracteres externo sea traducido al nativo/Unicode (que ahora, realmente, se tratará de uno de las cada vez más populares configuraciones regionales UTF-8).  Hay varias formas convenientes de hacer esto, como se describe en L</Unicode y UTF-8>.
 
-La configuración regional actual se establece en tiempo de ejecución por L<setlocale()|/La función setlocale> tal como se describe a continuación.  Si esa función aún no ha sido llamada en el curso de la ejecución del programa, la configuración regional actual es la que se determina a partir del L</"ENTORNO"> que esté configurado al comienzo del programa, excepto por C<L<LC_NUMERIC|/Categoría LC_NUMERIC: Formateo numérico>>, que siempre es inicializado a la configuración regional C (mencionada en L<Encontrando configuraciones regionales>).
-Si no hay un entorno válido, la configuración regional actual quedará indefinida.  No necesariamente que sea así, pero lo más probable es que se quede como la configuración regional "C".
+La configuración regional actual se establece en tiempo de ejecución por L<setlocale()|/La función setlocale> tal como se describe a continuación.  Si esa función aún no se ha llamado en el curso de la ejecución del programa, la configuración regional actual es la que se determina a partir del L</"ENTORNO"> que esté configurado al comienzo del programa.
+Si no hay un entorno válido, la configuración regional actual es la que el sistema haya ajustado por defecto.   En sistemas POSIX, probablemente, pero no necesariamente, será la configuración regional "C".  En Windows, el valor por defecto se ajusta a través del <C<Panel de control-E<gt>Configuración regional y de idioma>> del ordenador (o su equivalente actual).
 
 Las operaciones que se ven afectadas por la configuración regional son las siguientes:
 
 =over 4
 
-=item B<Bajo la influencia de C<use locale ':not_characters';>>
+=item B<Fuera del ámbito de cualquier variante de "use locale">
+
+Solo deben quedar afectadas las operaciones originadas fuera de Perl, como las que sigue:
 
 =over 4
 
 =item *
 
-B<Declaraciones de formatos> (format()) usan C<LC_NUMERIC>
+Las variables L<$!|perlvar/$ERRNO> (y sus sinónimas C<$ERRNO> y C<$OS_ERROR>) y L<$^E|perlvar/$EXTENDED_OS_ERROR> (y su sinónima C<$EXTENDED_OS_ERROR>) cuando se usan como cadenas de caracteres siempre es en función de la configuración regional actual, y como si estuvieran dentro del ámbito de L<"use bytes"|bytes>.  Esto probablemente cambie en Perl v5.22.
 
 =item *
 
-B<La función POSIX de formateo de fechas> (strftime()) usa C<LC_TIME>.
+La configuración regional actual también se usa cuando se va hacia afuera de Perl con operaciones como L<system()|perlfunc/system LIST> o L<qxE<sol>E<sol>|perlop/qxE<sol>STRINGE<sol>>, si aquellas operaciones son sensibles a la configuración regional.
+
+=item *
+
+También Perl da acceso a varias funciones de biblioteca de C a través del módulo L<POSIX>.  Algunas de esas funciones están siempre afectadas por la configuración regional actual.  Por ejemplo, C<POSIX::strftime()> usa C<LC_TIME>; C<POSIX::strtod()> usa C<LC_NUMERIC>; C<POSIX::strcoll()> y C<POSIX::strxfrm()> usa C<LC_COLLATE>; y funciones de clasificación de caracteres como C<POSIX::isalnum()> usa C<LC_CTYPE>.  Todas esas funciones se comportarán de acuerdo a la configuración regional subyacente, incluso si esa configuración no está expuesta al espacio Perl.
+
+=item *
+
+Módulos XS para todas las categorías excepto C<LC_NUMERIC> obtienen la configuración regional subyacente, y por ello cualquier función de biblioteca C que llamen usará esa configuración regional.  Perl siempre inicializa C<LC_NUMERIC> a C<"C"> porque demasiados módulos son incapaces de soportar el punto decimal en
+un numero flotante que no tiene un punto (en muchas configuraciones regionales es una coma).
+Pero note que estos módulos son vulnerables porque C<LC_NUMERIC>, actualmente, se puede cambiar en cualquier momento con una llamada a la función C C<set_locale()> por el código XS o por algo que el código XS llame, o por el C<POSIX::setlocale()> por código Perl.  Esto también es cierto para los pequeños envoltorios proporcionados por Perl para módulos XS para usar algunas funciones de biblioteca C C<printf>: C<Gconvert>, L<my_sprintf|perlapi/my_sprintf>, L<my_snprintf|perlapi/my_snprintf>, y L<my_vsnprintf|perlapi/my_vsnprintf>.
 
 =back
 
 =for comment
-El nbsp inferior facilita la apariencia
+El nbsp inferior facilita la apariencia (aunque no demasiado)
 
 E<160>
 
-=item B<Bajo la influencia de solo C<use locale;>>
+=item B<Efectos prolongados de C<S<use locale>>>
 
-Las operaciones anteriores quedan afectadas, así como las siguientes:
+Ciertas operaciones Perl que están activadas dentro del ámbito de una variante C<use locale> retienen ese efecto incluso fuera del ámbito.
+Eso incluye:
 
 =over 4
 
 =item *
 
-B<Los operadores de comparación> (C<lt>, C<le>, C<cmp>, C<ge>, y C<gt>) y las funciones de intercalación POSIX de cadenas strcoll() y strxfrm() usan <LC_COLLATE>.  sort() también es afectado si es usado sin una explícita función de comparación, porque, por defecto usa C<cmp>.
-
-B<Nota:> C<eq> y C<ne> no son afectado por la configuración regional: siempre realizan una comparación carácter a carácter de sus operandos escalares.  Es más, si C<cmp> considera que sus operandos son iguales de acuerdo a la secuencia de intercalación especificada por la configuración regional actual, realiza una comparación carácter-a-carácter, y sólo devuelve I<0> (igual) si los operandos son idénticos carácter-a-carácter .  Si realmente quiere saber si dos cadenas -que C<eq> y C<cmp> pueden considerar diferentes- son iguales según la intercalación indicada por la configuración regional, vea la discusión en L<Categoría LC_COLLATE: Intercalación>.
+El formato de salida de un L<write()|perlfunc/write> se determina por una declaración temprana de formato (L<perlfunc/format>), así que si la salida queda o no afectada por la configuración regional queda determinado por si C<format()> está dentro del ámbito de una variante C<use locale>, no el del C<write()>.
 
 =item *
 
-B<Las expresiones regulares y las funciones de modificación de tamaño de caja>> (uc(), lc(),
-ucfirst(), y lcfirst()) usan C<LC_CTYPE>
+Se pueden compilar patrones de expresiones regulares utilizando L<qrE<sol>E<sol>|perlop/qrE<sol>STRINGE<sol>msixpodual> para utilizarlas más tarde en las coincidencias.  De nuevo, si la compilación se hace o no dentro del ámbito de C<use locale> determina el comportamiento de la coincidencia, no si las coincidencias se realizan dentro de tal ámbito o no.
+
+=back
+
+=for comment
+El nbsp inferior facilita la apariencia (aunque no demasiado)
+
+E<160>
+
+=item B<Bajo la influencia de C<"use locale ':not_characters';">>
+
+=over 4
+
+=item *
+
+Todas las operaciones que no son de Perl.
+
+=item *
+
+B<Declaraciones de formato> (L<perlfunc/format>) y por ello cualquier subsecuente C<write()> usa C<LC_NUMERIC>.
+
+=item *
+
+B<cadenificación y salida> usa C<LC_NUMERIC>.
+Eso incluye los resultados de C<print()>, C<printf()>, C<say()>, y C<sprintf()>.
+
+=back
+
+=for comment
+El nbsp inferior facilita la apariencia (aunque no demasiado)
+
+E<160>
+
+=item B<Bajo de un simple C<"use locale;">>
+
+=over 4
+
+=item *
+
+Todas las operaciones anteriores
+
+=item *
+
+B<Los operadores de comparación> (C<lt>, C<le>, C<cmp>, C<ge>, y C<gt>) usa C<LC_COLLATE>.  C<sort()> también queda afectada si se usa sin una función de comparación explícita, porque por defecto usa C<cmp>.
+
+B<Nota:> C<eq> y C<ne> no quedan afectadas por la configuración regional: siempre realizan una comparación carácter a carácter de sus operandos escalares.  Es más, si C<cmp> considera que sus operandos son iguales de acuerdo a la secuencia de intercalación especificada por la configuración regional actual, realiza una comparación carácter-a-carácter, y sólo devuelve I<0> (igual) si los operandos son idénticos carácter-a-carácter.  Si realmente quiere saber si dos cadenas -que C<eq> y C<cmp> pueden considerar diferentes- son iguales según la intercalación indicada por la configuración regional, vea la discusión en L<Categoría LC_COLLATE: Intercalación>.
+
+=item *
+
+B<Las expresiones regulares y las funciones de modificación de tamaño de caja> (C<uc()>, C<lc()>, C<ucfirst()>, y C<lcfirst()>) usan C<LC_CTYPE>
 
 =back
 
 =back
 
-El comportamiento por defecto es restaurado con el pragma S<C<no locale>>, o al llegar al final del bloque que encierra a C<use locale>.
-Nótese que C<use locale> y C<use locale ':not_characters'> pueden ser anidados, y que lo que está en vigor dentro de un ámbito interno volverá a las reglas del ámbito externo al final del ámbito interno.
+El comportamiento por defecto se restaura con el pragma S<C<no locale>>, o al llegar al final del bloque que encierra a C<use locale>.
+Nótese que C<use locale> y C<use locale ':not_characters'> se pueden anidar, y que lo que está en vigor dentro de un ámbito interno volverá a las reglas del ámbito externo al final del ámbito interno.
 
 La cadena resultado de cualquier operación que utiliza la configuración regional está contaminada, ya que es posible que una configuración regional no sea digna de confianza.  Vea L<"SEGURIDAD">.
 
@@ -162,13 +224,16 @@ La cadena resultado de cualquier operación que utiliza la configuración region
 
 Puede cambiar de configuración regional tan a menudo como desee en tiempo de ejecución con la función estándar POSIX::setlocale():
 
-        # Esta funcionalidad no existía antes de Perl 5.004
-        require 5.004;
-
         # Importa el conjunto de herramientas de configuración regional desde el módulo POSIX.
         # Este ejemplo usa: setlocale -- la llamada a la función
         #                    LC_CTYPE -- explicado más abajo
+        # (Mostrar la comprobación del éxito/fracaso de operaciones se
+        # omite en estos ejemplos para evitar distracciones de nuestro principal
+        # punto)
+
         use POSIX qw(locale_h);
+        use locale;
+        my $old_locale;
 
         # consultar y guardar la anterior configuración regional
         $old_locale = setlocale(LC_CTYPE);
@@ -177,31 +242,33 @@ Puede cambiar de configuración regional tan a menudo como desee en tiempo de ej
         # LC_CTYPE ahora en la configuración regional "francesa, Canadá, conjunto de códigos ISO 8859-1"
 
         setlocale(LC_CTYPE, "");
-        # LC_CTYPE ahora se pone al valor por defecto definido por LC_ALL/LC_CTYPE/LANG
-        # variables de entorno.  Vea abajo para más documentación.
+        # LC_CTYPE ahora reinicia al valor definida por defecto por
+        # las variables de entorno LC_ALL/LC_CTYPE/LANG, o el del sistema por
+        # defecto.  Vea abajo para más documentación.
 
         # restaurar la anterior configuración regional
         setlocale(LC_CTYPE, $old_locale);
 
-El primer argumento de setlocale() devuelve la B<categoría>, el segundo la B<configuración regional>.  La categoría indica en qué aspecto del procesamiento de datos desea aplicar las reglas específicas de la configuración regional.  Los nombres de las categorías se discuten en L</CATEGORÍAS DE CONFIGURACIÓN REGIONAL> y L</"ENTORNO">.  La configuración regional es el nombre de una colección de información de personalización que corresponde a una combinación particular de idioma, país o territorio, y un conjunto de códigos.  Siga leyendo para obtener sugerencias sobre los nombres de las configuraciones regionales: no todos los sistemas nombran las configuraciones regionales como en el ejemplo.
+El primer argumento de C<setlocale()> devuelve la B<categoría>, el segundo la B<configuración regional>.  La categoría indica en qué aspecto del procesamiento de datos desea aplicar las reglas específicas de la configuración regional.  Los nombres de las categorías se discuten en L</CATEGORÍAS DE CONFIGURACIÓN REGIONAL> y L</"ENTORNO">.  La configuración regional es el nombre de una colección de información de personalización que corresponde a una combinación particular de idioma, país o territorio, y un conjunto de códigos.  Siga leyendo para obtener sugerencias sobre los nombres de las configuraciones regionales: no todos los sistemas nombran las configuraciones regionales como en el ejemplo.
 
-Si no se indica el segundo argumento y la categoría es distinta que LC_ALL, la función devuelve una cadena con el nombre de la configuración regional actual de esa categoría.  Puede utilizar este valor como el segundo argumento en una llamada posterior a setlocale().
+Si no se indica el segundo argumento y la categoría es distinta que LC_ALL, la función devuelve una cadena con el nombre de la configuración regional actual de esa categoría.  Puede utilizar este valor como el segundo argumento en una llamada posterior a C<setlocale()>, B<pero> en algunas plataformas la cadena es opaca, no algo que la mayor parte de la gente sea capaz de descifrar lo que quiere decir configuración regional.
 
-Si no hay segundo argumento y la categoría es LC_ALL, el resultado depende de la implementación.  Puede ser una cadena de nombres de configuración regional concatenados (cuyo separador también depende de la implementación) o un solo nombre de una configuración regional.  Por favor, consulte su página de manual de setlocale(3) para más detalles.
+Si no hay segundo argumento y la categoría es LC_ALL, el resultado depende de la implementación.  Puede ser una cadena de nombres de configuración regional concatenados (cuyo separador también depende de la implementación) o un solo nombre de una configuración regional.  Por favor, consulte su página de manual de L<setlocale(3)> para más detalles.
 
-Si hay un segundo argumento y corresponde a una configuración regional válida, la configuración regional de esa categoría se establece en ese valor, y la función devuelve el valor de esa configuración regional, ahora en curso.  A continuación, puede utilizarlo en una nueva llamada a setlocale().  (En algunas implementaciones, el valor devuelto a veces puede ser diferente del valor que dio como segundo argumento -piense en él como un alias para el valor que dio.)
+Si hay un segundo argumento y corresponde a una configuración regional válida, la configuración regional de esa categoría se establece en ese valor, y la función devuelve el valor de esa configuración regional, ahora en curso.  Puede utilizarlo, entonces, en una otra llamada a C<setlocale()>.  (En algunas implementaciones, el valor devuelto a veces puede ser diferente del valor que dio como segundo argumento -piense en él como un alias para el valor que dio.)
 
 Como muestra el ejemplo, si el segundo argumento es una cadena vacía, la configuración regional de la categoría regresa al valor predeterminado especificado por las correspondientes variables de entorno.  Por lo general, esto se traduce en un retorno a los valores predeterminados que se encontraban en vigor cuando Perl arrancó: los cambios en el entorno realizados por la aplicación después del inicio pueden o no pasar desapercibidos, en función de su biblioteca C de su sistema.
 
-Si el segundo argumento no corresponde a una configuración regional válida, la configuración regional de la categoría no se cambia, y la función devuelve I<undef>.
-
 Tenga en cuenta que Perl ignora las actuales configuraciones regionales C<LC_CTYPE> y C<LC_COLLATE> dentro del ámbito de un C<use locale ':not_characters'>.
 
-Para más información acerca de las categorías, consulte setlocale(3).
+Si C<set_locale()> falla por alguna razón (por ejemplo, un intento para activar una configuración regional desconocida al sistema), la configuración regional de la categoría no se cambia, y la función devuelve C<undef>.
+
+
+Para más información acerca de las categorías, consulte L<setlocale(3)>.
 
 =head2 Buscando configuraciones regionales
 
-Para conocer la lista de configuraciones regionales disponibles en su sistema, consulte también setlocale(3) para ver si contiene una lista de configuraciones regionales disponibles (busque por la sección I<VEA TAMBIÉN>).  Si eso no funciona, pruebe las siguientes líneas de comando:
+Para conocer la lista de configuraciones regionales disponibles en su sistema, consulte también L<setlocale(3)> para ver si contiene una lista de configuraciones regionales disponibles (busque por la sección I<VEA TAMBIÉN>).  Si eso no funciona, pruebe las siguientes líneas de comando:
 
         locale -a
 
@@ -225,13 +292,12 @@ y vea si aparece una lista parecida a esta
         english.iso88591    german.iso88591     russian.iso88595
         english.roman8                          russian.koi8r
 
-Lamentablemente, a pesar de que la interfaz de llamada a setlocale() está normalizada, los nombres de las configuraciones regionales y de los directorios donde reside la configuración, no lo están.  La forma básica del nombre es I<territorio_idioma>B<.>I<conjunto de códigos>, pero la última parte después de I<idioma> no siempre está presente.  El I<idioma> y el I<país>, usualmente, siguen los estándares B<ISO 3166> y B<ISO 639>, las abreviaturas de dos letras para los países y los idiomas del mundo, respectivamente.  La parte del I<conjunto de códigos> a menudo menciona algunos juego de caracteres B<ISO 8859>, los conjuntos de códigos B<Latin>.  Por ejemplo, C<ISO 8859-1> es el llamado "juego de códigos de Europea occidental" que pueden ser utilizados para codificar adecuadamente los idiomas europeos occidentales.  Una vez más, hay varias formas de escribir incluso el nombre de ese estándar.  Lamentablemente.
+Lamentablemente, a pesar de que está normalizada la interfaz de llamada a C<setlocale()>, los nombres de las configuraciones regionales y de los directorios donde reside la configuración, no lo están.  La forma básica del nombre es I<territorio_idioma>B<.>I<conjunto de códigos>, pero la última parte después de I<idioma> no siempre está presente.  El I<idioma> y el I<país>, usualmente, siguen los estándares B<ISO 3166> y B<ISO 639>, las abreviaturas de dos letras para los países y los idiomas del mundo, respectivamente.  La parte del I<conjunto de códigos> a menudo menciona algunos juego de caracteres B<ISO 8859>, los conjuntos de códigos B<Latin>.  Por ejemplo, C<ISO 8859-1> es el llamado "juego de códigos de Europea occidental" que pueden ser utilizados para codificar adecuadamente los idiomas europeos occidentales.  Una vez más, hay varias formas de escribir incluso el nombre de ese estándar.  Lamentablemente.
 
 Dos configuraciones regionales especiales son dignas de mención particular: "C" y "POSIX".
-Actualmente, son, de forma efectiva, la misma configuración regional: la diferencia está principalmente en que la primera está definida por el estándar C, mientras que la segunda lo es por el estándar POSIX.  Definen la B<configuración regional por defecto> con la que todo programa se inicia, en ausencia de información de configuración regional por parte de su entorno.  (La configuración regional por defecto I<predeterminada>, si así lo prefiere).  Su idioma es Inglés (americano) y su juego de caracteres, ASCII.
-B<Advertencia>. La configuración regional C incluida por algunos vendedores puede no coincidir realmente, y de forma exacta, con lo que exige el estándar de llamadas en C.  Así que tenga cuidado.
+Actualmente, son, de forma efectiva, la misma configuración regional: la diferencia está principalmente en que la primera está definida por el estándar C, mientras que la segunda lo es por el estándar POSIX.  Definen la B<configuración regional por defecto> con la que todo programa se inicia, en ausencia de información de configuración regional por parte de su entorno.  (La configuración regional por defecto I<predeterminada>, si así lo prefiere).  Su idioma es Inglés (americano) y su juego de caracteres, ASCII o, más raramente, un superconjunto de él (como el "DEC Multinational Character Set (DEC-MCS)").  B<Advertencia>. La configuración regional C incluida por algunos vendedores puede no coincidir realmente, y de forma exacta, con lo que exige el estándar de llamadas en C.  Así que tenga cuidado.
 
-B<NOTA>: No todos los sistemas tienen la configuración regional "POSIX" (no todos los sistemas son conformes con POSIX), así que use "C" cuando necesita explícitamente especificar esta configuración regional predeterminada.
+B<NOTA>: No todos los sistemas tienen la configuración regional "POSIX" (no todos los sistemas son conformes con POSIX), así que use "C" cuando necesite explícitamente especificar esta configuración regional predeterminada.
 
 =head2 PROBLEMAS CON LA CONFIGURACIÓN REGIONAL
 
@@ -245,23 +311,32 @@ Puede encontrarse con el siguiente mensaje de advertencia, al arrancar Perl:
 	perl: warning: Falling back to the standard locale ("C").
 
 Significa que sus valores de configuración regional tenían LC_ALL puesto a "En_US", y que LANG existía pero que no tenía ningún valor.  Perl intentó creerle, pero no pudo.
-En vez de eso, Perl se dio por vencido y regresó a la configuración regional "C", la configuración regional predeterminada que se supone que funciona, sin importar lo que pase.  Esto, generalmente, significa que los valores de la configuración regional estaban equivocados, mencionan configuraciones regionales que su sistema nunca ha oído hablar, o la configuración regional en su sistema tiene problemas (por ejemplo, algunos archivos del sistema están rotos o faltan).  Hay soluciones rápidas y temporales a estos problemas, así como soluciones más minuciosas y duraderas.
+En vez de eso, Perl se dio por vencido y regresó a la configuración regional "C", la configuración regional predeterminada que se supone que funciona, sin importar lo que pase.  (En Windows, primero intenta regresar a la configuración regional por defecto del sistema).  Esto, generalmente, significa que sus ajustes de la configuración regional estaban mal, pues mencionan configuraciones regionales del que su sistema nunca ha oído hablar, o la instalación de la configuración regional en su sistema tiene problemas (por ejemplo, algunos archivos del sistema están rotos o faltan).  Hay soluciones rápidas y temporales para estos problemas, así como soluciones más minuciosas y duraderas.
+
+=head2 Comprobando configuraciones regionales rotas
+
+Si está compilando Perl, el archivo de prueba F<lib/locale.t> se puede usar para comprobar las configuraciones regionales en su sistema.
+Ajustando la variable de entorno C<PERL_DEBUG_FULL_TEST> a 1 hará que salgan resultados más detallados.  Por ejemplo, en Linux, podría decir
+
+ PERL_DEBUG_FULL_TEST=1 ./perl -T -Ilib lib/locale.t > locale.log 2>&1
+
+Además de muchos otras pruebas, probará cada configuración regional que encuentre en su sistema para ver si es conforme con el estándar POSIX.  Si alguna tiene errores, incluirá un resumen cerca del final de la salida donde las configuraciones regionales pasan todos las pruebas, y cuáles fallaron, y por qué.
 
 =head2 Arreglando temporalmente los problemas de las configuraciones regionales
 
 Los dos arreglos más rápidos son: hacer que Perl silencie las incoherencias de la configuración regional o ejecutar Perl bajo la configuración regional predeterminada "C".
 
-El gemido de Perl sobre los problemas con la configuración regional puede ser silenciado mediante el establecimiento de la variable de entorno PERL_BADLANG a un valor cero, por ejemplo, "0".
-Este método realmente barre el problema debajo de la alfombra: le dice a Perl que se calle, incluso cuando Perl ve que algo está mal.  No se sorprenda si más tarde algo dependiente de la configuración regional se porta mal.
+Las quejas de Perl sobre los problemas con la configuración regional se pueden silenciar mediante el ajuste de la variable de entorno PERL_BADLANG a un valor cero, por ejemplo, "0".
+Este método, en realidad, barre el problema bajo la alfombra: le dice a Perl que se calle, incluso cuando Perl ve que algo está mal.  No se sorprenda si, más tarde, algo dependiente de la configuración regional se porta mal.
 
-Perl puede ejecutarse bajo la configuración regional "C" al establecer la variable de entorno LC_ALL a "C".  Este método es tal vez un poco más civilizado que el enfoque PERL_BADLANG, pero ajustando LC_ALL (u otras variables de configuración regional) puede afectar a otros programas también, no sólo a Perl.  En particular, los programas externos ejecutados desde dentro de Perl verán estos cambios.  Si hace la nueva configuración permanente (siga leyendo), todos los programas que ejecute ven esos cambios.  Vea L<"ENTORNO"> para la lista completa de variables de entorno relevantes y L<USANDO CONFIGURACIONES REGIONALES> para sus efectos en Perl.  Los efectos en otros programas son fácilmente deducibles.  Por ejemplo, la variable LC_COLLATE también puede afectar a su programa B<sort> (o como se llame cualquier otro programa que organice "registros" alfabéticamente en su sistema).
+Perl puede ejecutarse bajo la configuración regional "C" al establecer la variable de entorno LC_ALL a "C".  Este método es tal vez un poco más civilizado que el enfoque PERL_BADLANG, pero ajustando LC_ALL (u otras variables de configuración regional) puede afectar también a otros programas, no sólo a Perl.  En particular, los programas externos que se ejecuten desde Perl verán estos cambios.  Si hace la nueva configuración permanente (siga leyendo), todos los programas que ejecute verán esos cambios.  Vea L<"ENTORNO"> para la lista completa de variables de entorno relevantes y L<USANDO CONFIGURACIONES REGIONALES> para sus efectos en Perl.  Los efectos en otros programas son fácilmente deducibles.  Por ejemplo, la variable LC_COLLATE también puede afectar a su programa B<sort> (o como se llame cualquier otro programa que organice "registros" alfabéticamente en su sistema).
 
-Puede probar a cambiar las variables temporalmente, y si los nuevos valores parecen ayudar, poner esos valores en los archivos de inicio del I<shell>.  Consulte la documentación de la configuración local para los detalles exactos.  Para los I<shells> de la familia Bourne (B<sh>, B<ksh>, B<bash>, B<zsh>):
+Puede probar a cambiar las variables temporalmente, y si los nuevos valores parecen ayudar, poner esos valores en los archivos de inicio del I<shell>.  Consulte la documentación de la configuración regional para los detalles exactos.  Para los I<shells> de la familia Bourne (B<sh>, B<ksh>, B<bash>, B<zsh>):
 
 	LC_ALL=en_US.ISO8859-1
 	export LC_ALL
 
-Esto supone que hemos visto la configuración regional "en_US.ISO8859-1" usando los comandos mencionados anteriormente.  Decidimos probar esto en lugar de la anterior configuración regional fallida "En_US". Y en los I<shells> estilo Cshell (B<csh>, B<tcsh>)
+Esto asume que hemos visto la configuración regional "en_US.ISO8859-1" usando los comandos mencionados anteriormente.  Decidimos probarlo en lugar de la anterior fallida configuración regional "En_US". Y en los I<shells> estilo Cshell (B<csh>, B<tcsh>)
 
 	setenv LC_ALL en_US.ISO8859-1
 
@@ -273,7 +348,7 @@ Si no sabe qué I<shell> tiene, consulte a su servicio de asistencia local o su 
 
 =head2 Arreglo permanente de los problemas de configuración regional
 
-Los arreglos más lentos pero más seguros, son aquellos que te son capaces de solucionar el error de configuración de sus variables de entorno.  La (mala) configuración de las configuraciones regionales del sistema, por lo general, requiere la ayuda de su amigable administrador de sistema.
+Los arreglos más lentos pero más seguros, son aquellos que le son capaces de solucionar el error de configuración de sus variables de entorno.  La (mala) configuración de las configuraciones regionales del sistema, por lo general, requiere la ayuda de su amigable administrador de sistemas.
 
 En primer lugar, vea más arriba, en este documento, sobre L<Buscando configuraciones regionales>.  Eso indica cómo encontrar qué configuraciones regionales están realmente soportadas -y lo más importante, instaladas- en su sistema.  En nuestro ejemplo de mensaje de error, las variables de entorno que afectan a la configuración regional están listadas en el orden de importancia decreciente (y las variables que no estén definidas, no importan).  Por lo tanto, tener LC_ALL puesto a "En_US" debe haber sido una mala elección, como lo demuestra el mensaje de error.  En primer lugar trate de arreglar la configuración regional listada en primer lugar.
 
@@ -289,15 +364,15 @@ Esto es cuando se ve algo como esto:
 	        LANG = (unset)
 	    are supported and installed on your system.
 
-pero luego no ve este "En_US" listado por los comandos mencionados anteriormente.  Puede que vea cosas como "en_US.ISO8859-1", pero no es lo mismo.  En este caso, pruebe a ejecutar bajo una configuración regional que pueda enumerar y que de alguna manera coincida con lo que intentó antes.  Las reglas para nombres de configuraciones regionales son un poco vagas, porque no existe una fuerte normalización en esta área.  Vea de nuevo L<Buscando configuraciones regionales> acerca de cómo son las reglas generales.
+pero entonces no ve ese "En_US" listado por los comandos mencionados anteriormente.  Puede que vea cosas como "en_US.ISO8859-1", pero no es lo mismo.  En este caso, pruebe a ejecutar bajo una configuración regional que pueda enumerar y que de alguna manera coincida con lo que intentó antes.  Las reglas para nombres de configuraciones regionales son un poco vagas, porque no existe una fuerte normalización en esta área.  Vea de nuevo L<Buscando configuraciones regionales> acerca de cómo son las reglas generales.
 
 =head2 Arreglando la configuración regional del sistema
 
-Póngase en contacto con el administrador del sistema (preferentemente el suyo propio) e infórmele del mensaje de error exacto que recibe, y pídale que lea esta misma documentación que ahora usted está leyendo.  Deberían ser capaces de comprobar si hay algo mal en la configuración regional del sistema.  La sección L<Buscando configuraciones regionales> es, por desgracia, un poco vaga acerca de los comandos y los lugares exactos, porque estas cosas no están estandarizadas.
+Póngase en contacto con el administrador del sistema (preferentemente el suyo propio) e infórmele del mensaje de error exacto que recibe, y pídale que lea esta misma documentación que ahora usted está leyendo.  Deberían ser capaces de comprobar si algo está mal en la configuración regional del sistema.  La sección L<Buscando configuraciones regionales> es, por desgracia, un poco vaga acerca de los comandos y los lugares exactos, porque estas cosas no están estandarizadas.
 
 =head2 La función localeconv
 
-La función POSIX::localeconv() le permite obtener datos de la información del formateo numérico dependiente de la configuración regional especificada por las actuales configuraciones regionales C<LC_NUMERIC> y C<LC_MONETARY>.  (Si sólo desea el nombre de la configuración regional actual para una determinada categoría, use POSIX::setlocale() con un solo parámetro -vea L<La función setlocale>).
+La función C<POSIX::localeconv()> le permite obtener datos de la información del formateo numérico dependiente de la configuración regional especificada por las actuales configuraciones regionales C<LC_NUMERIC> y C<LC_MONETARY>.  (Si sólo desea el nombre de la configuración regional actual para una determinada categoría, use C<POSIX::setlocale()> con un solo parámetro -vea L<La función setlocale>).
 
         use POSIX qw(locale_h);
 
@@ -305,17 +380,15 @@ La función POSIX::localeconv() le permite obtener datos de la información del 
         $locale_valores = localeconv();
 
         # Salida ordenada de los valores
-        for (sort keys %$locale_valores) {
-            printf "%-20s = %s\n", $_, $locale_valores->{$_}
+        for (sort keys %$locale_values) {
+            printf "%-20s = %s\n", $_, $locale_values->{$_}
         }
 
-localeconv() no tiene argumentos, y devuelve B<a referencia a> un hash.
-Las claves de este hash son los nombres de variables para el formateo, como C<decimal_point> y C<thousands_sep>.  Los valores son los correspondientes, hummm... valores.  Vea L<POSIX/localeconv> para ver un ejemplo más largo de una lista de las categorías que una aplicación podría esperar recibir; algunas proporcionan más y otras menos.  No necesita un explícito C<use locale>, porque localeconv() siempre sigue la configuración regional actual.
+C<localeconv()> no tiene argumentos, y devuelve B<a referencia a> un hash.
+Las claves de este hash son los nombres de variables para el formateo, como C<decimal_point> y C<thousands_sep>.  Los valores son los correspondientes, hummm... valores.  Vea L<POSIX/localeconv> para ver un ejemplo más largo de una lista de las categorías que una aplicación podría esperar recibir; algunas proporcionan más y otras menos.  No necesita un explícito C<use locale>, porque C<localeconv()> siempre sigue la configuración regional actual.
 
 He aquí un ejemplo de un programa sencillo que reescribe sus parámetros de línea de comandos como enteros correctamente formateados según la actual configuración regional:
 
-    # Vea los comentarios del ejemplo anterior
-    require 5.004;
     use POSIX qw(locale_h);
 
     # Obtener algunos de los parámetros de formateo numérico de la configuración regional
@@ -353,9 +426,9 @@ He aquí un ejemplo de un programa sencillo que reescribe sus parámetros de lí
 
 =head2 I18N::Langinfo
 
-Otra interfaz para consultar la información dependiente de la configuración regional es la función I18N::Langinfo::langinfo(), disponible, al menos, en sistemas tipo Unix y VMS.
+Otra interfaz para consultar la información dependiente de la configuración regional es la función C<I18N::Langinfo::langinfo()>, disponible, al menos, en sistemas tipo Unix y VMS.
 
-El siguiente ejemplo importará la propia función langinfo() y tres constantes que se utilizarán como argumentos a langinfo(): una constante para el primer día abreviado de la semana (la numeración empieza a partir del domingo = 1) y dos constantes más para las respuestas afirmativas y negativas para una pregunta del tipo sí/no en la configuración regional actual.
+El siguiente ejemplo importará la propia función C<langinfo()> y tres constantes que se utilizarán como argumentos a C<langinfo()>: una constante para el primer día abreviado de la semana (la numeración empieza a partir del domingo = 1) y dos constantes más para las respuestas afirmativas y negativas para una pregunta del tipo sí/no en la configuración regional actual.
 
     use I18N::Langinfo qw(langinfo ABDAY_1 YESSTR NOSTR);
 
@@ -364,7 +437,7 @@ El siguiente ejemplo importará la propia función langinfo() y tres constantes 
 
     print "$abdia_1? [$si/$no] ";
 
-En otras palabras, en la configuración regional "C" (o English) lo anterior probablemente imprimirá algo como:
+En otras palabras, en la configuración regional "C" (o inglesa) lo anterior probablemente imprimirá algo como:
 
     Sun? [yes/no]
 
@@ -378,14 +451,14 @@ Las siguientes subsecciones describen las categorías básicas de las configurac
 
 En el ámbito de S<C<use locale>> (pero no en un C<use locale ':not_characters'>), Perl mira la variable de entorno C<LC_COLLATE> para determinar las nociones de la aplicación en el tema del cotejo (ordenación) de los caracteres.  Por ejemplo, "b" sigue a "a" en los alfabetos latinos, pero ¿dónde se colocan "E<aacute>" y "E<aring>"?  Y mientras que "color" sigue a "chocolate" en Inglés, ¿qué pasa en Español?
 
-Todas las ordenaciones siguientes tienen sentido y usted puede seguir alguna de ellas si usa "use locale".
+Todas las ordenaciones siguientes tienen sentido y usted puede seguir cualquiera de ellas si usa "use locale".
 
 	A B C D E a b c d e
 	A a B b C c D d E e
 	a A b B c C d D e E
 	a b c d e A B C D E
 
-Aquí hay un fragmento de código para decir que son los caracteres que forman una "palabra" según la configuración regional actual, en el orden indicado por ella:
+Aquí hay un fragmento de código para decir qué caracteres forman una "palabra" según la configuración regional actual, en el orden indicado por ella:
 
         use locale;
         print +(sort grep /\w/, map { chr } 0..255), "\n";
@@ -395,9 +468,9 @@ Compare esto con los caracteres que ve y su orden si declara expresamente que la
         no locale;
         print +(sort grep /\w/, map { chr } 0..255), "\n";
 
-Esta ordenación nativa de la máquina (que es lo que obtiene a menos que S<C<use locale>> esté al principio del mismo bloque) debe ser utilizado para ordenar datos binarios sin formato, mientras que el cotejo dependiente de la configuración regional del primer ejemplo es útil para texto natural.
+Esta ordenación nativa de la máquina (que es lo que obtiene a menos que S<C<use locale>> esté al principio del mismo bloque) se debe utilizar para ordenar datos binarios sin formato, mientras que el cotejo dependiente de la configuración regional del primer ejemplo es útil para texto natural.
 
-Como se ha indicado en L<USANDO CONFIGURACIONES REGIONALES>, C<cmp> compara de acuerdo a la configuración regional de cotejo actual cuando C<use locale> está activo, pero se cambia por una comparación del tipo carácter-por-carácter para cadenas cuando la configuración regional dice que esas cadenas son iguales. Puede utilizar POSIX::strcoll() si no desea que ocurra este comportamiento:
+Como se ha indicado en L<USANDO CONFIGURACIONES REGIONALES>, C<cmp> compara de acuerdo a la configuración regional de cotejo actual cuando C<use locale> está activo, pero se cambia por una comparación del tipo carácter-por-carácter para cadenas cuando la configuración regional dice que esas cadenas son iguales. Puede utilizar C<POSIX::strcoll()> si no desea que ocurra este comportamiento:
 
         use POSIX qw(strcoll);
         $igual_en_locale =
@@ -405,7 +478,10 @@ Como se ha indicado en L<USANDO CONFIGURACIONES REGIONALES>, C<cmp> compara de a
 
 $igual_en_locale será verdadero si la configuración regional de cotejo especifica una ordenación parecida a la de un diccionario, que ignore los caracteres de espacio por completo y que pliegue los tamaños de caja.
 
-Si tiene una sola cadena que desea comprobar por su "igualdad en la configuración regional" con respecto a otras, podría pensar en ganar un poco de eficiencia mediante el uso de POSIX::strxfrm() junto con C<eq>:
+Perl solo admite configuraciones regionales de un solo byte para C<LC_COLLATE>.  Eso significa que una configuración regional UTF-8 probablemente sólo le dará una ordenación nativa de la máquina.
+Use L<Unicode::Collate> para tener toda la implementación del Algoritmo de Cotejo Unicode.
+
+Si tiene una sola cadena que desea comprobar por su "igualdad en la configuración regional" con respecto a otras, podría pensar en ganar un poco de eficiencia mediante el uso de C<POSIX::strxfrm()> junto con C<eq>:
 
         use POSIX qw(strxfrm);
         $xfrm_cadena = strxfrm("Cadena con Mayúsculas-Minúsculas");
@@ -414,70 +490,79 @@ Si tiene una sola cadena que desea comprobar por su "igualdad en la configuraci�
         print "cotejo ignora guiones\n"
             if $xfrm_cadena eq strxfrm("Cadena con MayúsculasMinúsculas");
         print "cotejo ignora tamaño de caja\n"
-            if $xfrm_cadena eq strxfrm("cadena con mayúsculas-minúsculas");
+            if $xfrm_cadena eq strxfrm("Cadena con Mayúsculas-Minúsculas");
 
-strxfrm() toma una cadena y la traduce en una cadena transformada para su uso en una comparación carácter-por-carácter con otras cadenas transformadas durante el cotejo.  "Bajo el capó", los operadores de comparación Perl afectados por la configuración regional llaman a strxfrm() para los dos operandos, y luego hacen una comparación carácter-por-carácter de las cadenas transformadas.  Al llamar a strxfrm() de forma explícita y con una comparación no afectada por la configuración regional, el ejemplo intenta ahorrar una pareja de transformaciones.  Pero, en realidad, no se ahorra nada: Perl, mágicamente (vea L<perlguts/Variables mágicas>) crea la versión transformada de una cadena la primera vez que se necesita en una comparación, y a continuación, guarda esta versión para el caso de que se necesite de nuevo.  Un ejemplo reescrito de forma más fácil con C<cmp> corre igual de rápido.  Además gestiona mejor los caracteres nulos incrustados en las cadenas; si llama a strxfrm() directamente, tratará el primer carácter nulo que encuentre como un terminador.  no espere que las cadenas transformadas que produce sean portables a través de los sistemas -o incluso de una revisión de su sistema operativo a la siguiente-.  En resumen, no llame a strxfrm() directamente: Deje que Perl lo haga por usted.
+C<strxfrm()> toma una cadena y la traduce en una cadena transformada para su uso en una comparación carácter-por-carácter con otras cadenas transformadas durante el cotejo.  "Bajo el capó", los operadores de comparación Perl afectados por la configuración regional llaman a C<strxfrm()> para los dos operandos, y luego hacen una comparación carácter-por-carácter de las cadenas transformadas.  Al llamar a C<strxfrm()> de forma explícita y con una comparación no afectada por la configuración regional, el ejemplo intenta ahorrar una pareja de transformaciones.  Pero, en realidad, no se ahorra nada: Perl, mágicamente (vea L<perlguts/Variables mágicas>) crea la versión transformada de una cadena la primera vez que se necesita en una comparación, y a continuación, guarda esta versión para el caso de que se necesite de nuevo.  Un ejemplo reescrito de forma más fácil con C<cmp> corre igual de rápido.  Además gestiona mejor los caracteres nulos incrustados en las cadenas; si llama a C<strxfrm()> directamente, tratará el primer carácter nulo que encuentre como un terminador.  no espere que las cadenas transformadas que produce sean portátiles a través de los sistemas -o incluso de una revisión de su sistema operativo a la siguiente-.  En resumen, no llame a C<strxfrm()> directamente: deje que Perl lo haga por usted.
 
-Nota: C<use locale> no se muestra en algunos de estos ejemplos, ya que no es necesario: strcoll() y strxfrm() sólo existen para generar resultados dependientes de la configuración regional, por lo que siempre obedecen a la actual configuración regional de C<LC_COLLATE>.
+Nota: C<use locale> no se muestra en algunos de estos ejemplos, ya que no es necesario: C<strcoll()> y C<strxfrm()> son funciones POSIX que usan las funciones C<libc> suministradas por el sistema, que siempre obedecen a la actual configuración regional de C<LC_COLLATE>.
 
 =head2 Categoría LC_CTYPE: Tipos de caracteres
 
-En el ámbito de S<C<use locale>> (pero no C<use locale ':not_characters'>), Perl obedece la configuración regional C<LC_CTYPE>.  Ésta controla la noción de la aplicación de qué caracteres son alfabéticos.  Esto afecta a la metanotación de expresión regular C<\w> de Perl, que representa caracteres alfanuméricos -esto es, alfabéticos, numéricos, e incluyendo otros caracteres especiales como el subrayado o guión bajo-.  (Consulte L<perlre> para obtener más información acerca de las expresiones regulares).  Gracias a C<LC_CTYPE>, dependiendo de su configuración regional, los caracteres como "E<aelig>","E<eth>","E<szlig>", y "E<oslash>" puede ser entendidos como caracteres C<\w>.
+En el ámbito de S<C<use locale>> (pero no C<use locale ':not_characters'>), Perl obedece la configuración regional C<LC_CTYPE>.  Esto controla la noción de la aplicación de qué caracteres son alfabéticos, numéricos, de puntuación, etc.  Esto afecta a la metanotación de expresión regular C<\w> de Perl, que representa caracteres alfanuméricos -esto es, alfabéticos, numéricos, e incluyendo otros caracteres especiales como el subrayado o guión bajo-.
+(Consulte L<perlre> para obtener más información acerca de las expresiones regulares).  Gracias a C<LC_CTYPE>, dependiendo de su configuración regional, los caracteres como "E<aelig>","E<eth>","E<szlig>", y "E<oslash>" se pueden entender como caracteres C<\w>.
+También afecta a cosas como C<\s>, C<\D>, y las clases carácter POSIX, como C<[[:graph:]]>.  (Vea L<perlrecharclass> para más información sobre todo esto).
 
-La configuración regional C<LC_CTYPE> también proporciona el mapa utilizado en la transliteración de caracteres entre mayúsculas y minúsculas.  Esto afecta a las funciones de cambio de tamaño de caja -lc(), lcfirst(), uc() y ucfirst(); interpolación de cambio de tamaño de caja con C<\l>, C<\L>, C<\u>, o C<\U> en cadenas entre comillas dobles y sustituciones C<s///>; y la coincidencia de patrones en expresiones regulares independiente del tamaño de caja usando el modificador C<i>-.
+La configuración regional C<LC_CTYPE> también proporciona el mapa utilizado en la transliteración de caracteres entre mayúsculas y minúsculas.  Esto afecta a las funciones de cambio de tamaño de caja -C<fc()>, C<lc()>, C<lcfirst()>, C<uc()> y C<ucfirst()>; interpolación de cambio de tamaño de caja con C<\F>, C<\l>, C<\L>, C<\u>, o C<\U> en cadenas entre comillas dobles y sustituciones C<s///>; y la coincidencia de patrones en expresiones regulares independiente del tamaño de caja usando el modificador C<i>-.
 
-Finalmente, C<LC_CTYPE> afecta a las funciones de prueba de clases de caracteres POSIX -isalpha(), islower(), y así sucesivamente-.  Por ejemplo, si se muda de la configuración regional "C" a una escandinava de 7-bit, puede encontrar -posiblemente, para su sorpresa- que "|" se mueve desde la clase ispunct() a la isalpha().
+Finalmente, C<LC_CTYPE> afecta a las funciones de prueba de clases de caracteres POSIX (obsoletas) -C<POSIX::isalpha()>, C<POSIX::islower()>, y así sucesivamente-.  Por ejemplo, si se muda de la configuración regional "C" a una escandinava de 7-bit, puede encontrar -posiblemente, para su sorpresa- que "|" se mueve desde la clase C<POSIX::ispunct()> a la C<POSIX::isalpha()>.
 Por desgracia, esto crea grandes problemas para las expresiones regulares. "|" aún significa alternancia a pesar de que también coincide con C<\w>.
+
+Comenzando en v5.20, Perl soporta configuraciones regionales UTF-8 para C<LC_CTYPE>, pero, por contra, Perl sólo soporta configuraciones regionales basadas en bytes únicos, como la serie ISO 8859.  Esto significa que las configuraciones regionales con caracteres anchos, como por ejemplo las lenguas asiáticas, no están soportadas.  El soporte para la configuración regional UTF-8 es, actualmente, un superconjunto de las configuraciones regionales POSIX, porque tiene un completo comportamiento Unicode como si no estuviera en efecto ninguna configuración regional (excepto para el entintado; vea L</SECURITY>).  Las configuraciones regionales POSIX, incluso las UTF-8, carecen de ciertos conceptos de Unicode, como la idea de que al cambiar de tamaño de caja un carácter, éste podría expandirse a más de un carácter.
+Perl en una configuración regional UTF-8, le dará esa expansión.  Antes de v5.20, Perl trataba a la configuración regional UTF-8, en algunas plataformas, como si fuera la ISO 8859-1, con algunas restricciones, y en otras plataformas, más como si fuese la configuración regional "C".
+Para las publicaciones v5.16 y v5.18, C<S<use locale 'not_characters>> se podría usar como solución temporal (vea L</Unicode and UTF-8>).
+
+Note que existen unas cosillas que quedan sin quedar afectadas por la configuración regional actual.  Todas las secuencias de escape para ciertos caracteres particulares, C<\n>, por ejemplo, siempre tienen el significado del carácter nativo de la plataforma.  Esto significa, por ejemplo, que C<\N> en expresiones regulares (cualquier carácter excepto los de nueva línea) trabaja en el conjunto de caracteres de la plataforma.
 
 B<Nota:> A definición de configuración regional C<LC_CTYPE> rota o maliciosa puede resultar en que caracteres claramente inelegibles, sean considerados como alfanuméricos por su aplicación.  Para la coincidencia estricta (mundana) de letras ASCII y dígitos -por ejemplo, en cadenas de comandos- aplicaciones compatibles con la configuración regional deben utilizar C<\w> con el modificador de expresión regular C</a>.  Vea L<"SEGURIDAD">.
 
 =head2 Categoria LC_NUMERIC: Formateo numérico
 
-Después de una apropiada llamada POSIX::setlocale(), Perl obedece la información de configuración regional C<LC_NUMERIC>, que controla la idea que tienes la aplicación de cómo los números deben ser formateados para facilitar su legibilidad humana por medio de las funciones printf(), sprintf() y write(). La conversión cadena-a-número de la función POSIX::strtod() también se ve afectada.  En la mayoría de las implementaciones, el único efecto es cambiar el carácter utilizado para el punto decimal -tal vez de "." a ","-.
-Estas funciones no son conscientes de detalles tales como la separación de los miles y cosas así. (Vea L<La función localeconv> si le interesan estas cosas).
+Después de una apropiada llamada C<POSIX::setlocale()>, y dentro del ámbito de una de las variantes de C<use locale>, Perl sigue la información de configuración regional C<LC_NUMERIC>, que controla la idea que tiene la aplicación de cómo los números deben ser formateados para facilitar su legibilidad humana.
+En la mayoría de las implementaciones, el único efecto es cambiar el carácter utilizado para el punto decimal -tal vez de "." a ","-.
+Las funciones no son conscientes de detalles tales como la separación de los miles y cosas así. (Vea L<La función localeconv> si le interesan estas cosas).
 
-La salida producida por print() también se ve afectada por la configuración regional actual: corresponde a la que se obtiene con printf() en la configuración regional "C".  Lo mismo es cierto para las conversiones internas de Perl entre formatos numéricos y de cadena:
+ use POSIX qw(strtod setlocale LC_NUMERIC);
+ use locale;
 
-        use POSIX qw(strtod setlocale LC_NUMERIC);
+ setlocale LC_NUMERIC, "";
 
-	setlocale LC_NUMERIC, "";
+ $n = 5/2;   # Asigna número 2.5 a $n
 
-        $n = 5/2;   # Asigna número 2.5 a $n
+ $a = " $n"; # Conversión a cadena dependiendo de la configuración regional
 
-        $a = " $n"; # Conversión a cadena dependiendo de la configuración regional
+ print "la mitad de cinco es $n\n";       # Salida dependiente de la configuración regional
 
-        print "la mitad de cinco es $n\n";       # Salida dependiente de la configuración regional
+ printf "la mitad de cinco es %g\n", $n;  # Salida dependiente de la configuración regional
 
-        printf "la mitad de cinco es %g\n", $n;  # Salida dependiente de la configuración regional
-
-        print "PUNTO DECIMAL ES COMA\n"
-            if $n == (strtod("2,5"))[0]; # Conversión dependiente de la configuración regional
+ print "PUNTO DECIMAL ES COMA\n"
+          if $n == (strtod("2,5"))[0]; # Conversión dependiente de la configuración regional
 
 Vea también L<I18N::Langinfo> y C<RADIXCHAR>.
 
 =head2 Categoría LC_MONETARY: Formateando cantidades monetarias
 
-El estándar C define la categoría C<LC_MONETARY>, pero no hay ninguna función que se vea afectada por sus contenidos.  (Los que tienen experiencia en comités de estándares reconocerán que el grupo de trabajo decidió deshacerse del tema).  Por lo tanto, Perl no toma cuenta de ello.  Si realmente quiere usar C<LC_MONETARY>, puede consultar su contenido -vea L<La función localeconv>- y utilizar la información que devuelve en sus rutinas de formateo de cantidades de divisas, de su propia aplicación.  Sin embargo, también puede encontrar que esta información, a pesar de que puede ser voluminosa y compleja, todavía no acabe de satisfacer sus necesidades: el formato de moneda es un hueso duro de roer.
+El estándar C define la categoría C<LC_MONETARY>, pero no hay ninguna función que se vea afectada por sus contenidos.  (Los que tienen experiencia en comités de estándares reconocerán que el grupo de trabajo decidió deshacerse del tema).  Por lo tanto, Perl, esencialmente, no toma cuenta de ello.  Si realmente quiere usar C<LC_MONETARY>, puede consultar su contenido -vea L<La función localeconv>- y utilizar la información que devuelve en sus rutinas de formateo de cantidades de divisas, de su propia aplicación.  Sin embargo, también puede encontrar que esta información, a pesar de que puede ser voluminosa y compleja, todavía no acabe de satisfacer sus necesidades: el formato de moneda es un hueso duro de roer.
 
 Vea también L<I18N::Langinfo> y C<CRNCYSTR>.
 
 =head2 LC_TIME
 
-La salida producida por POSIX::strftime(), que construye un formato legible para las cadenas de fecha/hora, se ve afectado por la configuración regional C<LC_TIME> actual.  Por lo tanto, en una configuración regional francesa, la salida producida por el elemento de formato C<%B> (nombre completo del mes) para el primer mes del año sería "janvier".  Aquí se muestra cómo obtener una lista de nombres largos de meses en la configuración regional actual:
+La salida producida por C<POSIX::strftime()>, que construye un formato legible para las cadenas de fecha/hora, queda afectada por la configuración regional C<LC_TIME> actual.  Por lo tanto, en una configuración regional francesa, la salida producida por el elemento de formato C<%B> (nombre completo del mes) para el primer mes del año sería "janvier".  Aquí se muestra cómo obtener una lista de nombres largos de meses en la configuración regional actual:
 
         use POSIX qw(strftime);
         for (0..11) {
-            $nombre_largo_mes[$_] =
+            $nombre_mes_largo[$_] =
                 strftime("%B", 0, 0, 0, 1, $_, 96);
         }
 
-Nota: C<use locale> no es necesario en este ejemplo: como es una función que solo existe para generar resultados dependientes de la configuración regional, strftime () siempre obedece la configuración regional C<LC_TIME> actual.
+Nota: C<use locale> no se muestra en algunos de estos ejemplos: C<strftime()> es una función POSIX que usan las funciones C<libc> suministradas por el sistema, que siempre obedecen a la actual configuración regional de C<LC_TIME>.
 
 Vea también L<I18N::Langinfo> y C<ABDAY_1>..C<ABDAY_7>, C<DAY_1>..C<DAY_7>, C<ABMON_1>..C<ABMON_12>, y C<ABMON_1>..C<ABMON_12>.
 
 =head2 Otras categorías
 
-La categoría restante, C<LC_MESSAGES> (posiblemente complementada por otras en algunas implementaciones particulares) no es utilizado actualmente por Perl -excepto, tal vez, para afectar el comportamiento de las funciones de biblioteca llamadas por extensiones fuera de la distribución estándar de Perl y por el sistema operativo y sus utilerías-.  Note, especialmente, que el valor de cadena de C<$!> y los mensajes de error propuestos por utilidades externas pueden ser modificados por C<LC_MESSAGES>.  Si quiere tener códigos de error portables, utilice C<%!>.  Vea L<Errno>.
+El resto de categorías de las configuraciones regionales, Perl no las utiliza.
+Pero, otra vez, note que Perl, al interaccionar, puede usar algunos de ellos, incluyendo extensiones que estén fuera de la distribución estándar de Perl, y por el sistema operativo y sus utilidades.  Note, especialmente, que el valor de cadena de C<$!> y los mensajes de error propuestos por utilidades externas pueden quedar modificados por C<LC_MESSAGES>.  Si quiere tener códigos de error portátiles, utilice C<%!>.  Vea L<Errno>.
 
 =head1 SEGURIDAD
 
@@ -492,7 +577,7 @@ Los controles de expresiones regulares para nombres de archivo seguros o direcci
 
 =item *
 
-La interpolación de cadenas con cambios de tamaño de caja, como en, por ejemplo, C<$destino = "C:\U$nombre.$ext">, puede producir resultados peligrosos si una tabla falsa C<LC_CTYPE> de correspondencia de caja está en vigor.
+La interpolación de cadenas con cambios de tamaño de caja, como en, por ejemplo, C<$destino = "C:\U$nombre.$ext">, puede producir resultados peligrosos si una tabla falsa LC_CTYPE de correspondencia de caja está en vigor.
 
 =item *
 
@@ -504,7 +589,7 @@ Una aplicación que se tome la molestia de utilizar la información en C<LC_MONE
 
 =item *
 
-Los nombres de la fecha y el día en fechas formateadas por strftime() podrían ser manipuladas para aprovecharse de un usuario malicioso capaz de subvertir la configuración regional C<LC_DATE>.  ("¡Mira!: Me dice que no estaba en el edificio, el domingo").
+Los nombres de la fecha y el día en fechas formateadas por C<strftime()> podrían manipularse para aprovecharse de un usuario malicioso capaz de subvertir la configuración regional C<LC_DATE>.  ("¡Mira!: Me dice que no estaba en el edificio, el domingo").
 
 =back
 
@@ -518,99 +603,102 @@ Perl no puede protegerlo de todas las posibilidades que aparecen en los ejemplos
 
 B<Operadores de comparación> (C<lt>, C<le>, C<ge>, C<gt> y C<cmp>):
 
-Resultado escalar verdadero/falso (o menor/igual/mayor) que nunca es contaminado.
+Resultado escalar verdadero/falso (o menor/igual/mayor) que nunca es entintado.
 
 =item  *
 
-B<Interpolación de tamaño de caja> (con C<\l>, C<\L>, C<\u> o C<\U>)
+B<Interpolación de tamaño de caja> (con C<\l>, C<\L>, C<\u>,  C<\U> o C<\F>)
 
-La cadena resultante conteniendo material interpolado queda contaminada si C<use locale> (pero no S<C<use locale ':not_characters'>>) está en vigor.
+La cadena resultante conteniendo material interpolado queda entintada si C<use locale> (pero no S<C<use locale ':not_characters'>>) está en vigor.
 
 =item  *
 
 B<Operador de coincidencia> (C<m//>):
 
-El resultado escalar verdadero/falso nunca es contaminado.
+El resultado escalar verdadero/falso nunca es entintado.
 
-Subpatrones, tanto si son entregados como resultado de un contexto lista o como $1, etc.,
-quedan contaminados si C<use locale> (pero no S<C<use locale ':not_characters'>>) está en vigor, y el subpatrón de la expresión regular contiene C<\w> (para coincidir con un carácter alfanumérico), C<\W> (carácter no-alfanumérico), C<\s> (carácter espacio en blanco), o C<\S>
-(carácter no-espacio en blanco).  La variable de patrón coincidente, $&, $` (pre-coincidente), $' (pos-coincidente), y $+ (última coincidencia) también quedan contaminados si C<use locale> está en vigor y la expresión regular contiene C<\w>, C<\W>, C<\s>, o C<\S>.
+Todos los subpatrones, tanto si son entregados como resultado en un contexto en lista, o como C<$1>, etc., quedan entintados si C<use locale> (pero no S<C<use locale ':not_characters'>>) está en efecto, y el subpatrón de expresión regular contiene una construcción dependiente de la configuración regional.  Estas construcciones incluyen C<\w> (para coincidir con un carácter alfanumérico), C<\W> (carácter no-alfanumérico), C<\b> y C<\B> (márgenes y no-márgenes de palabra, que dependen de lo que coinciden con C<\w> y C<\W>), C<\s> (carácter espacio en blanco), C<\S> (no carácter espacio en blanco), C<\d> y C<\D> (dígitos y no-dígitos), y las clases de caracteres POSIX, tales como C<[:alpha:]> (vea L<perlrecharclass/POSIX Character Classes>).
+
+Entintar también es posible si el patrón para la coincidencia es independiente del tamaño de caja (vía C</i>).  La excepción es si todos los códigos de carácter que buscamos de esta manera están por encima del 255 y no se pliegan bajo las reglas Unicode por debajo de 256.  El entintado no se realiza para ellos, porque Perl sólo usa reglas Unicode para tales códigos de carácter, y esas reglas son las mismas sin importar qué configuración regional esté en activo.
+
+Las variables de coincidencia de patrones, C<$&>, C<$`> (pre-coincidencia), C<$'> (pos-coindencia), y C<$+> (última coincidencia) también quedan entintadas.
 
 =item  *
 
 B<Operador de sustitución> (C<s///>):
 
-Tiene el mismo comportamiento que el operador de coincidencia.  También, el operador izquierdo de C<=~> queda contaminado cuando C<use locale> (pero no S<C<use locale ':not_characters'>>) está en vigor si es modificado como resultado de una sustitución basada en una expresión regular que contenga C<\w>, C<\W>, C<\s> o C<\S>; o de cambio de tamaño de caja con C<\l>, C<\L>,C<\u> o C<\U>.
+Tiene el mismo comportamiento que el operador de coincidencia.  También, el operando a la izquierda de C<=~> queda entintado cuando C<use locale> (pero no S<C<use locale ':not_characters'>>) está en efecto si queda modificado como resultado de una substitución basada en una coincidencia de expresión regular incluyendo cualquiera de las cosas mencionadas en el ítem anterior, o de mapeo de cambio de tamaño de caja, como C<\l>, C<\L>,C<\u>, C<\U>, o C<\F>.
 
 =item *
 
-B<Funciones para el formateo de la salida> (printf() y write()):
+B<Funciones de formateo de la salida> (C<printf()> y C<write()>):
 
-Los resultados son quedan contaminados, porque de lo contrario hasta la salida con print, por ejemplo, C<print(1/7)>, debería quedar contaminado si C<use locale> estuviera en vigor.
-
-=item *
-
-B<Funciones de translación de tamaño de caja> (lc(), lcfirst(), uc(), ucfirst()):
-
-Los resultados son contaminados si C<use locale> (pero no S<C<use locale ':not_characters'>>) está en vigor.
+Los resultados nunca quedan entintados, porque de lo contrario, incluso hasta la salida con print, por ejemplo, C<print(1/7)>, debería quedar entintado si C<use locale> estuviera en efecto.
 
 =item *
 
-B<Funciones dependientes de la configuración regional POSIX> (localeconv(), strcoll(),
-strftime(), strxfrm()):
+B<Funciones de translación de tamaño de caja> (C<lc()>, C<lcfirst()>, C<uc()>, C<ucfirst()>):
 
-Los resultados nunca son contaminados.
+Los resultados quedan entintados si C<use locale> (pero no S<C<use locale ':not_characters'>>) está en efecto.
 
 =item *
 
-B<Pruebas de la clase carácter POSIX> (isalnum(), isalpha(), isdigit(),
-isgraph(), islower(), isprint(), ispunct(), isspace(), isupper(),
-isxdigit()):
+B<Funciones dependientes de la configuración regional POSIX> (C<localeconv()>, C<strcoll()>, C<strftime()>, C<strxfrm()>):
 
-Los resultados verdadero/falso nunca son contaminados.
+Los resultados nunca quedan entintados.
+
+=item *
+
+B<Pruebas de la clase carácter POSIX> (C<POSIX::isalnum()>, C<POSIX::isalpha()>, C<POSIX::isdigit()>, C<POSIX::isgraph()>, C<POSIX::islower()>, C<POSIX::isprint()>, C<POSIX::ispunct()>, C<POSIX::isspace()>, C<POSIX::isupper()>, C<POSIX::isxdigit()>):
+
+Los resultados verdadero/falso nunca quedan entintados.
 
 =back
 
-Tres ejemplos ilustran la contaminación dependiente de la configuración regional.
-El primer programa, que ignora su configuración regional, no se ejecutará: un valor tomado directamente de la línea de comandos no puede ser utilizado para nombrar un archivo de salida cuando los controles de contaminación están habilitados.
+Tres ejemplos ilustran el entintado dependiente de la configuración regional.
+El primer programa, que ignora su configuración regional, no se ejecutará: un valor tomado directamente de la línea de comandos no puede ser utilizado para nombrar un archivo de salida cuando los controles de entintado están habilitados.
 
         #/usr/local/bin/perl -T
         # Ejecutar con comprobación de contaminación
 
         # Omitida la comprobación de la línea de comandos...
-        $archivo_salida_contaminado = shift;
+        $archivo_salida_entintado = shift;
 
-        open(F, ">$archivo_salida_contaminado")
-            or warn "Salida hacia $archivo_salida_contaminado falló: $!\n";
+        open(F, ">$archivo_salida_entintado")
+            or warn "La apertura de $archivo_salida_entintado falló: $!\n";
 
-Se puede obligar a que el programa haga un "lavado" del valor contaminado llevándolo a través de una expresión regular: el segundo ejemplo -que todavía ignora la información de la configuración regional- se ejecuta, creando el archivo con el nombre indicado en su línea de comando, si lo puede hacer.
+Se puede obligar a que el programa haga un "lavado" del valor entintado llevándolo a través de una expresión regular: el segundo ejemplo -que todavía ignora la información de la configuración regional- se ejecuta, creando el archivo con el nombre indicado en su línea de comando, si lo puede hacer.
 
         #/usr/local/bin/perl -T
 
-        $archivo_salida_contaminado = shift;
-        $archivo_salida_contaminado =~ m%[\w/]+%;
-        $archivo_salida_descontaminado = $&;
+        $archivo_salida_entintado = shift;
+        $archivo_salida_entintado =~ m%[\w/]+%;
+        $archivo_salida_entintado = $&;
 
-        open(F, ">$archivo_salida_descontaminado")
-            or warn "Salida hacia $archivo_salida_descontaminado falló: $!\n";
+        open(F, ">$archivo_salida_entintado")
+            or warn "La apertura de $archivo_salida_entintado falló: $!\n";
 
 Compare esto con un programa similar, pero consciente de la configuración regional:
 
         #/usr/local/bin/perl -T
 
-        $archivo_salida_contaminado = shift;
+        $archivo_salida_entintado = shift;
         use locale;
-        $archivo_salida_contaminado =~ m%[\w/]+%;
+        $archivo_salida_entintado =~ m%[\w/]+%;
         $archivo_salida_localizado = $&;
 
         open(F, ">$archivo_salida_localizado")
-            or warn "Salida hacia $archivo_salida_localizado falló: $!\n";
+            or warn "La apertura de $archivo_salida_localizado falló: $!\n";
 
-Este tercer programa no se ejecuta porque $& está contaminado: es el resultado de una coincidencia que contiene C<\w>, mientras que C<use locale> estaba en vigor.
+Este tercer programa falla porque C<$&> está entintado: es el resultado de una coincidencia que contiene C<\w>, mientras que C<use locale> estaba en efecto.
 
 =head1 ENTORNO
 
 =over 12
+
+=item PERL_SKIP_LOCALE_INIT
+
+Esta variable de entorno, disponible a partir de Perl v5.20, y si se evalúa a VERDADERO, le indica a Perl que no use el resto de las variables de entorno en la inicialización.  De lo contrario, Perl usa lo que esté ajustado en la actual configuración regional.  Esto es particularmente útil en entornos incrustados. Vea L<perlembed/Usando Perl incrustado con configuraciones regionales POSIX>.
 
 =item PERL_BADLANG
 
@@ -621,7 +709,8 @@ El mensaje indica algún problema en el soporte de configuraciones regionales de
 
 =back
 
-Las siguientes variables del entorno no son específicos de Perl: son parte del método estándar setlocale() (ISO C, XPG4, POSIX 1.c) para controlar la postura de la aplicación sobre los datos.
+Las siguientes variables de entorno no son específicas de Perl: son parte del método estándar C<setlocale()> (ISO C, XPG4, POSIX 1.c) para controlar la postura de la aplicación sobre los datos.  Windows no es POSIX, pero de todos modos Perl organiza lo siguiente para trabajar como se describió.
+Si la configuración regional, indicada por una variable de entorno, no es válida, Perl lo intenta con la siguiente más baja, en orden de prioridad.  Si ninguna es válida, en Windows, se intenta con la configuración regional por defecto del sistema.  Si todo esto falla, se usa la configuración regional C<"C">.  Si incluso esto no funciona, algo esta mal, pero Perl lo intentará con cualquier ajuste de configuración regional.
 
 =over 12
 
@@ -672,7 +761,7 @@ El LC_NUMERIC controla la salida numérica:
    setlocale(LC_NUMERIC, "fr_FR") or die "Pardon";
    printf "%g\n", 1.23; # Si "fr_FR" fue exitoso, probablemente mostrará 1,23.
 
-y también cómo las cadenas son interpretadas como números por POSIX::strtod():
+y también cómo las cadenas son interpretadas como números por C<POSIX::strtod()>:
 
    use locale;
    use POSIX qw(locale_h strtod);
@@ -681,6 +770,27 @@ y también cómo las cadenas son interpretadas como números por POSIX::strtod()
    print $x, "\n"; # Probablemente mostrará 7,34.
 
 =head1 NOTAS
+
+=head2 Cadena de caracteres C<eval> y C<LC_NUMERIC>
+
+Una cadena L<eval|perlfunc/eval EXPR> interpreta su expresión como Perl estándar.  Por eso se espera que el punto decimal sea un punto.  Si C<LC_NUMERIC> se ajusta para que, en cambio, sea una coma, la interpretación será confusa, quizás silenciosamente.
+
+ use locale;
+ use POSIX qw(locale_h);
+ setlocale(LC_NUMERIC, "fr_FR") or die "Pardon";
+ my $a = 1.2;
+ print eval "$a + 1.5";
+ print "\n";
+
+imprime C<13,5>.  Esto es porque en esa configuración regional, la coma es el carácter del punto decimal.  El C<eval> se expande, por ello, en:
+
+ eval "1,2 + 1.5"
+
+y el resultado no es lo que se esperaba.  No se generan advertencias.  Si usa una cadena C<eval> dentro del ámbito de S<C<use locale>>, debería cambiar la línea C<eval> a algo como lo siguiente:
+
+ print eval "no locale; $a + 1.5";
+
+Esto imprime C<2.7>.
 
 =head2 Compatibilidad con versiones anteriores
 
@@ -697,10 +807,6 @@ En versiones de Perl anteriores a 5.004, el cotejo por cada configuración regio
 
 Comparar y ordenar siguiendo la configuración regional es, generalmente, más lento que la ordenación predeterminada; se han observado desaceleraciones de dos a cuatro veces.  También consumen más memoria: una vez que una variable escalar Perl ha participado en cualquier comparación de cadenas u operación de ordenación obedeciendo las reglas del cotejo regional, ocupará una cantidad de memoria de 3 a 15 veces más que antes.  (El multiplicador exacto depende del contenido de la cadena, el sistema operativo y la configuración regional). Estas desventajas son dictadas más por la implementación de la configuración regional del sistema por parte del sistema operativo, que por Perl.
 
-=head2 write() y LC_NUMERIC
-
-Si el entorno de un programa especifica una configuración regional LC_NUMERIC y C<use locale> está en vigor cuando el formato está declarado, se utiliza la configuración regional para especificar el carácter de punto decimal en la salida formateada.  La salida formateada no se puede controlar por C<use locale> en el momento cuando se llama a write().
-
 =head2 Definiciones de configuraciones regionales disponibles de forma libre
 
 El proyecto Unicode CLDR extrae la parte POSIX de muchas de sus configuraciones regionales, disponible en
@@ -715,7 +821,7 @@ Debe ser consciente de que no están soportadas, y que no se requiere que sean a
 
 =head2 I18n y l10n
 
-"Internacionalización" es a menudo abreviado como B<i18n> debido a que su primera y última letra están separadas por otras dieciocho.  (Puede adivinar por qué la internalina ... internaliza ... i18n, tiende a ser abreviado).  De la misma manera, la "localización" (configuración regional) es a menudo abreviado como B<l10n>.
+A menudo, "Internacionalización" se abrevia como B<i18n> debido a que su primera y última letra están separadas por otras dieciocho.  (Puede adivinar por qué la internalina ... internaliza ... i18n, tiende a abreviarse).  De la misma manera, la "localización" (configuración regional) a menudo se abrevia como B<l10n>.
 
 =head2 Un estándar imperfecto
 
@@ -724,7 +830,9 @@ La internacionalización, tal como se define en las normas C y POSIX, puede ser 
 
 =head1 Unicode y UTF-8
 
-El soporte de Unicode es nuevo a partir de la versión Perl v5.6, y más ampliamente implementado en la versión v5.8 y posteriores.  Vea L<perluniintro>.  Se recomienda encarecidamente que, cuando se combine Unicode y configuración regional (a partir de v5.16), se utilice
+El soporte de Unicode es nuevo a partir de la versión Perl v5.6, y más ampliamente implementado en la versión v5.8 y posteriores.  Vea L<perluniintro>.
+
+Comenzando en Perl v5.20, las configuraciones regionales UTF-8 se soportan en Perl, excepto por C<LC_COLLATE> (use en su lugar L<Unicode::Collate>).  Si tiene Perl v5.16 o v5.18 y no puedo actualizarlo, puede usar
 
     use locale ':not_characters';
 
@@ -732,24 +840,30 @@ Cuando se utilice esta forma de pragma, serán utilizados por Perl sólo las par
 
     use open ':locale';
 
-Este pragma se encarga de que todas las entradas desde los archivos sean traducidos en Unicode desde la configuración regional actual, como se especifica en el entorno (vea L</ENVIRONMENT>), y todas las salidas hacia los archivos sean traducidos de nuevo en la configuración regional.  (Vea L<open>).  En un proceso que use identificadores de archivo puede, en lugar de eso, utilizar el módulo L<PerlIO::locale>, o el módulo L<Encode::Locale>, ambos disponibles en CPAN.  El último módulo también cuenta con métodos para facilitar el manejo de C<ARGV> y las variables de entorno, y se puede utilizar en cadenas individuales.  Además, si sabe que todos sus configuraciones regionales serán UTF-8, como muchas ya lo son en estos días, puede utilizar la opción de línea de comandos L<B<-C>|perlrun/-C>.
+Este pragma se encarga de que todas las entradas desde los archivos sean traducidos en Unicode desde la configuración regional actual, como se especifica en el entorno (vea L</ENVIRONMENT>), y todas las salidas hacia los archivos sean traducidos de nuevo en la configuración regional.  (Vea L<open>).  En un proceso que use identificadores de archivo puede, en lugar de eso, utilizar el módulo L<PerlIO::locale>, o el módulo L<Encode::Locale>, ambos disponibles en CPAN.  El último módulo también cuenta con métodos para facilitar el manejo de C<ARGV> y las variables de entorno, y se puede utilizar en cadenas individuales.  Si sabe que todas sus configuraciones regionales serán UTF-8, como muchas ya lo son en estos días, puede utilizar la opción de línea de comandos L<B<-C>|perlrun/-C>.
 
-Esta forma de pragma permite un manejo esencialmente sin fisuras de las configuraciones regionales con Unicode.  El orden indicado para el cotejo será el de Unicode.  Se recomienda que cuando necesite ordenar cadenas de caracteres, utilice el módulo estándar L<Unicode::Collate> que da resultados mucho mejores en muchos casos de lo que podría obtener con el antiguo estilo de la configuración regional.
+Esta forma de pragma permite un manejo esencialmente sin fisuras de las configuraciones regionales con Unicode.  El orden indicado para el cotejo será el del orden de punto de código Unicode.
+Se recomienda que cuando necesite ordenar cadenas de caracteres, utilice el módulo estándar L<Unicode::Collate> que da resultados mucho mejores en muchos casos de lo que podría obtener con el antiguo estilo de la configuración regional.
 
-Para versiones de Perl pre-v5.16, o si se utiliza el pragma 'locale' sin el parámetro C<:not_characters>, Perl trata de trabajar tanto con Unicode como con configuraciones regionales-, pero hay problemas.
+Todos los módulos y opciones descritos antes pueden usarse en v5.20 con un simple C<use locale>, y si las configuraciones regionales de la entrada no deberían ser UTF-8, obtendrá algo menos que el comportamiento ideal, descrita abajo, que obtiene con Perl anteriores a v5.16, o cuando usa el pragma locale sin el parámetro C<:not_characters> en v5.16 y v5.18.  Si está usando exclusivamente configuraciones regionales UTF-8 en v5.20 y superior, el resto de esta sección ya no se aplica a usted.
 
-Perl no maneja, en este caso, configuraciones regionales multi-byte, como se han utilizado para diversos idiomas de Asia, como Big5 o Shift JIS.  Sin embargo, la cada vez más común configuración regional multi-byte UTF-8, si se aplica adecuadamente, puede funcionar razonablemente bien (dependiendo de la implementación de la biblioteca C) en esta forma de la pragma locale, simplemente porque tanto esa configuración regional como Perl, almacenan los caracteres que ocupan varios bytes, del mismo modo.
+Hay dos casos, configuraciones regionales multi-byte y de un solo byte.  Primero, multi-byte:
+
+La única configuración regional multi-byte (o carácter ancho) que Perl probablemente siempre soporte sea UTF-8.  Esto es debido a la dificultad de la implementación, el hecho que configuraciones regionales UTF-8 de alta calidad son publicados por cada área del mundo (L<http://unicode.org/Public/cldr/latest/>), y si esto no funciona puede usar el módulo L<Encode> para traducir a/desde su configuración regional.  Así que, tendrá que hacer una de estas cosas, si está usando una de estas configuraciones regionales, como la Big5 o Shift JIS.  Para configuraciones regionales UTF-8, en los Perl (pre v5.20) que no tienen un soporte completo de la configuración regional UTF-8, puede funcionar razonablemente bien (dependiendo de la implementación de la biblioteca C) simplemente porque ellas y Perl almacenan caracteres que toman múltiples bytes de la misma manera.
 Sin embargo, algunos, si no la mayoría, de las implementaciones de la biblioteca C no pueden procesar los caracteres de la mitad superior del rango Latin-1 (128 - 255) de forma correcta bajo LC_CTYPE.  Para ver si un carácter es de un tipo particular en una configuración regional, Perl utiliza funciones como C<isalnum()>.  Su biblioteca C quizás no funcione para las configuraciones regionales UTF-8 con esas funciones, sino que sólo trabaje con las funciones de biblioteca para el nuevo ancho, como C<iswalnum()>.
+Sin embargo, son tratados como configuraciones regionales de un solo byte, y tendrá las restricciones indicadas a continuación.
 
-Perl, en general, asume la postura de utilizar las reglas de la configuración regional en códigos de carácter que pueden caber en un solo byte, y las reglas Unicode para aquellos que no pueden (aunque esto no se aplica uniformemente, vea la nota al final de esta sección).  Esto evita muchos problemas en configuraciones regionales que no son UTF-8.  Supongamos que la configuración regional es ISO8859-7, Griego.  El carácter en 0xD7 es una Chi mayúscula. Sin embargo, en la configuración regional ISO8859-1, Latin1, es un signo de multiplicación.  La expresión regular de clase de caracteres POSIX C<[[:alpha:]]>, por arte de magia coincidirá con 0xD7 en la configuración regional de Griego, pero no en la Latin1.
+Para configuraciones regionales de un solo byte, Perl, en general, asume la postura de utilizar las reglas de la configuración regional en códigos de carácter que pueden caber en un solo byte, y las reglas Unicode para aquellos que no pueden (aunque esto no se aplica uniformemente, vea la nota al final de esta sección).  Esto evita muchos problemas en configuraciones regionales que no son UTF-8.  Supongamos que la configuración regional es ISO8859-7, Griego.  El carácter en 0xD7 es una Chi mayúscula. Sin embargo, en la configuración regional ISO8859-1, Latin1, es un signo de multiplicación.  La expresión regular de clase de caracteres POSIX C<[[:alpha:]]>, por arte de magia coincidirá con 0xD7 en la configuración regional de Griego, pero no en la Latin1.
 
-Sin embargo, hay lugares en los que esto se rompe.  Algunas construcciones son sólo para Unicode, como por ejemplo C<\p{Alpha}>.  Asumen que 0xD7 siempre tiene su significado en Unicode (o el equivalente en plataformas EBCDIC).  Como Latin1 es un subconjunto de Unicode y 0xD7 es el signo de multiplicación, tanto en Latin1 como en Unicode, C<\p{Alpha}> nunca coincidirá con él, independientemente de la configuración regional.  Un problema similar ocurre con C<\N{...}>.  Por tanto, es una mala idea usar C<\p{}> o C<\N{}> bajo un simple C<use locale> -I<a menos que> pueda garantizar que la configuración regional será una ISO8859-1-.  Utilice en su lugar las clases de caracteres POSIX.
+Sin embargo, hay lugares en los que esto se rompe.  Algunas construcciones de Perl son sólo para Unicode, como por ejemplo C<\p{Alpha}>.  Asumen que 0xD7 siempre tiene su significado en Unicode (o el equivalente en plataformas EBCDIC).  Como Latin1 es un subconjunto de Unicode y 0xD7 es el signo de multiplicación, tanto en Latin1 como en Unicode, C<\p{Alpha}> nunca coincidirá con él, independientemente de la configuración regional.  Un problema similar ocurre con C<\N{...}>.  Antes de v5.20, por tanto, es una mala idea usar C<\p{}> o C<\N{}> bajo un simple C<use locale> -I<a menos que> pueda garantizar que la configuración regional será una ISO8859-1-.  Utilice en su lugar las clases de caracteres POSIX.
 
 Otro problema con este enfoque es que las operaciones que cruzan límite entre un simple byte múltiple byte, no están bien definidos, y por lo tanto no están permitidas.  (Este límite está entre los códigos de carácter 255 y 256).
 Por ejemplo, la minúscula de LATIN CAPITAL LETTER Y WITH DIAERESIS (U+0178) debe devolver LATIN SMALL LETTER Y WITH DIAERESIS (U+00FF).  Sin embargo, en la configuración regional griega, por ejemplo, no hay ningún carácter en 0xFF, y Perl no tiene manera de saber lo que el carácter en 0xFF se supone que debe representar.  Por lo tanto, no permite hacer esa operación.  De este modo, la minúscula de U+0178 es ella misma.
 
 Los mismos problemas se reproducirán si se habilita la conversión automática a UTF8 de los identificadores de archivo estándar, en la capa predeterminada C<open()>, y en C<@ARGV> en configuraciones regionales que no sean ISO8859-1, ni UTF-8 (mediante el uso de la opción en la línea de comandos B<-C> o la variable de entorno C<PERL_UNICODE>; vea L<perlrun>).
 Las cosas se leen como UTF-8, que normalmente implica una interpretación Unicode, pero la presencia de una configuración regional hace que sean interpretadas, en su lugar, con esa configuración regional.  Por ejemplo, un código de carácter 0xD7 en la entrada Unicode, lo que debería significar el signo de multiplicación, no será interpretado por Perl de esa manera en la configuración regional griega.  Esto no es un problema si tiene la seguridad que todas las configuraciones regionales siempre sean y sólo sean ISO8859-1, o, si no tiene una deficiente biblioteca C, una configuración regional UTF-8.
+
+Aún así, otro problema es que esta aproximación pueden llevar a que dos códigos de carácter signifiquen el mismo carácter.  Así, en la configuración regional griega, tanto U+03A7 como U+00D7 son GREEK CAPITAL LETTER CHI.
 
 Las configuraciones regionales ofrecidas por los fabricantes están notablemente llenas de errores, y es difícil para Perl probar su código de gestión de configuración regional porque éste interactúa con código sobre el que Perl no tiene control; por lo tanto el código de gestión de configuración regional en Perl también puede tener errores.  (Sin embargo, las configuracionres regionales proporcionadas por Unicode deberían ser mejores, y existe un mecanismo de retroalimentación para corregir cualquier problema.  Vea L</Definiciones libres de configuraciones regionales>).
 
@@ -762,7 +876,7 @@ Pre-v5.12, era algo irregular; en v5.12 se ha aplicado de manera consistente con
 
 =head2 Sistemas rotos
 
-En ciertos sistemas, el soporte del sistema operativo para la configuración regional está roto y no puede ser arreglado o utilizado por Perl.  Estas deficiencias pueden y se traducirán en cuelgues misteriosos y/o volcados de memoria de Perl cuando C<use locale> esté en efecto.  Cuando nos enfrentamos a un sistema así, por favor informe con exquisito detalle en <F<perlbug@perl.org>>, y también contacte con su proveedor: pueden existir correcciones de errores para estos problemas de su sistema operativo.  A veces esos arreglos de errores se llaman actualización del sistema operativo.
+En ciertos sistemas, el soporte del sistema operativo para la configuración regional está roto y no puede ser arreglado o utilizado por Perl.  Estas deficiencias pueden y se traducirán en cuelgues misteriosos y/o volcados de memoria de Perl cuando C<use locale> esté en efecto.  Cuando nos enfrentamos a un sistema así, por favor informe con exquisito detalle en <F<perlbug@perl.org>>, y también contacte con su proveedor: pueden existir correcciones de errores para estos problemas de su sistema operativo.  A veces esos arreglos de errores se llaman actualización del sistema operativo.  Si tiene el código fuente para Perl, incluya en el correo a perlbug la salida de la prueba descrita antes en L</Comprobando configuraciones regionales rotas>.
 
 =head1 VEA TAMBIÉN
 
@@ -773,6 +887,8 @@ L<POSIX/isprint>, L<POSIX/ispunct>, L<POSIX/isspace>,
 L<POSIX/isupper>, L<POSIX/isxdigit>, L<POSIX/localeconv>,
 L<POSIX/setlocale>, L<POSIX/strcoll>, L<POSIX/strftime>,
 L<POSIX/strtod>, L<POSIX/strxfrm>.
+
+Para consideraciones especiales cuando Perl se incrusta en programas C, vea L<perlembed/Usando Perl incrustado con configuraciones regionales POSIX>.
 
 =head1 HISTORIA
 

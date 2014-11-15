@@ -168,6 +168,11 @@ Si elige a gcc para compilar un Perl de 64-bit, entonces necesita agregar la sig
     -Dcc='gcc -maix64'
 
 
+=head2 Compilando Perl 5 en AIX 7.1.0
+
+Una regresión en AIX 7 causa un fallo en el make test en Time::Piece durante los momentos de ahorro energético (DST).  APAR IV16514 ofrece un arreglo para esto.  Una prueba rápida para ver si se requiere, asumiendo que estamos en tiempo de ahorro energético en la zona horario Eastern Time, sería ejecutar C< TZ=EST5 date +%Z >.  Esto normalmente devolverá C<EST>, pero nada si hay algún problema.
+
+
 =head2 Compilando Perl 5 en versiones AIX anteriores a 4.3.3
 
 Debido al hecho de que AIX 4.3.3 llegó al final de su servicio efectivo el 31 de diciembre de 2003, esta información se proporciona tal cual. Las versiones anteriores de Perl a Perl 5.8.9 pueden ser compiladas en AIX 4.3.3 con las siguientes opciones activadas (su experiencia puede variar):

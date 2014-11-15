@@ -72,7 +72,8 @@ De "head1" a "head4" produce encabezados, siendo "head1" el de mayor nivel.  El 
 
   =head2 Atributos de objeto
 
-El texto "Atributos de objeto" forma el encabezado.  (Note que "head3" y "head4" son adiciones recientes, no soportadas en traductores de Pod antiguos).  El texto en estos comandos de encabezamiento puede usar códigos de formateo, como se muestra aquí:
+El texto "Atributos de objeto" forma el encabezado.
+El texto en estos comandos de encabezamiento puede usar códigos de formateo, como se muestra aquí:
 
   =head2 Valores posibles de C<$/>
 
@@ -169,7 +170,7 @@ El comando "=for I<nombre de formato> I<texto...>" especifica que lo que sigue j
 
 Esto muestra lo mismo que la región anterior "=begin html" ... "=end html".
 
-Es decir, con "=for" solo puede tener un párrafo de texto (p. ej., el texto en "=foo objetivo texto..."), pero con "=begin objetivo" ... "=end objetivo", puede tener cualquier cantidad de contenido entre los dos.  (Note que debe seguir estando una línea en blanco después del comando "=begin" y una línea en blanco antes del comando "=end".
+Es decir, con "=for" solo puede tener un párrafo de texto (p. ej., el texto en "=foo objetivo texto..."), pero con "=begin objetivo" ... "=end objetivo", puede tener cualquier cantidad de contenido entre los dos.  (Note que debe seguir existiendo una línea en blanco después del comando "=begin" y una línea en blanco antes del comando "=end").
 
 A continuación algunos ejemplos de cómo usarlos:
 
@@ -207,16 +208,16 @@ Este comando se utiliza para declarar la codificación de un documento.  La mayo
   =encoding utf8
 
   =encoding koi8-r
-  
-  =encoding ShiftJIS
-  
-  =encoding big5
 
-=back
+  =encoding ShiftJIS
+
+  =encoding big5
 
 C<=encoding> afecta a todo el documento, y solo debe aparecer una vez.
 
-Y no lo olvide: cuándo use cualquier otro comando, éste tiene efecto hasta el fin del I<párrafo>, no de su línea.  Así, en los ejemplos anteriores, puede ver que cada comando necesita una línea en blanco después de él, para acabar su párrafo.
+=back
+
+Y no lo olvide: todos los comandos excepto C<=encoding>, tienen efecto hasta el final del I<párrafo>, no de su línea.  Así, en los ejemplos anteriores, puede ver que cada comando necesita una línea en blanco después de él, para acabar su párrafo.  (Y algunos antiguos traductores pueden requerir que la línea C<=encoding> esté también separada).
 
 Algunos ejemplos de listas:
 
@@ -464,8 +465,9 @@ El formato Pod no es necesariamente suficiente para escribir un libro.  Pod es s
 =head2 Incrustando Pod en módulos Perl
 X<POD, embedding> X<POD, incrustando>
 
-Puede incrustar documentación Pod en sus módulos y guiones Perl.
-Inicie su documentación con una línea vacía, una comando "=head1" al principio, y termine con un comando "=cut" y una línea vacía.  Perl ignorará el texto Pod.  Vea como ejemplo cualquiera de los módulos de biblioteca suministrados.  Si va a poner su Pod al final del archivo, y está utilizando una marca de corte __END__ o __DATA__, asegúrese que pone una línea vacía antes del primer comando Pod.
+Puede incrustar documentación Pod en sus módulos y guiones Perl.  Inicie su documentación con una línea vacía, un comando "=head1" al principio, y termine con un comando "=cut" y una línea vacía.  El ejecutable B<perl> ignorará el texto Pod.  Puede colocar una sentencia Pod donde B<perl> espera el comienzo de una nueva sentencia, pero no dentro de una sentencia, ya que resultaría en un error.  Vea como ejemplo cualquiera de los módulos de biblioteca suministrados.
+
+Si va a poner su Pod al final del archivo, y está utilizando una marca de corte C<__END__> o C<__DATA__>, asegúrese que pone una línea vacía antes del primer comando Pod.
 
   __END__
 

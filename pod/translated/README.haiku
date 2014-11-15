@@ -20,9 +20,9 @@ El procedimiento de construcción es completamente estándar:
 Hace a perl ejecutable y crea un enlace simbólico para libperl:
 
   chmod a+x /boot/common/bin/perl
-  cd /boot/common/lib; ln -s perl5/5.16.2/BePC-haiku/CORE/libperl.so .
+  cd /boot/common/lib; ln -s perl5/5.20.0/BePC-haiku/CORE/libperl.so .
 
-Reemplace C<5.16.2> con su respectiva versión de Perl.
+Reemplace C<5.20.0> con su respectiva versión de Perl.
 
 =head1 PROBLEMAS CONOCIDOS
 
@@ -40,7 +40,7 @@ El test F<ext/Socket/t/socketpair.t> falla. Precisando más: las subpruebas usan
 
 =item *
 
-Una subprueba del test F<ext/Sys/Syslog/t/syslog.t> falla. Esto se debe a que Haiku aún no implementa soporte para C</dev/log>.
+Una subprueba del test F<ext/Sys/Syslog/t/syslog.t> falla. Esto se debe a que Haiku aún no implementa soporte para F</dev/log>.
 
 =item *
 

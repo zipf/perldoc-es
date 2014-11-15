@@ -6,9 +6,7 @@ perldsc - Introducción a las estructuras de datos
 
 =head1 DESCRIPCIÓN
 
-La única característica con más carencias que tenía el lenguaje de programación Perl antes de la versión 5.0 eran las complejas estructuras de datos.  Incluso sin tener soporte directo en el lenguaje, algunos valientes programadores se las arreglaron para emularlas, pero era un trabajo duro y no para los débiles de corazón.  De vez en cuando se podía solventar este asunto con la notación C<$m{$AoA,$b}> tomado del B<awk> en el que las claves son en realidad más como una sola cadena concatenada C<"$AoA$b">, pero el recorrido y ordenación eran muy dificultosos.  Los programadores más desesperados incluso hackearon la tabla de símbolos internos de Perl, directamente, una estrategia que demostró ser difícil de desarrollar y mantener -por decirlo suavemente-.
-
-La versión 5.0 de Perl nos permite tener complejas estructuras de datos.  Ahora puede escribir algo como lo siguiente, y de repente, ¡tiene una matriz de tres dimensiones!
+Perl nos permite tener estructuras de datos complejos.  Ahora puede escribir algo como lo siguiente, y de repente, ¡tiene una matriz de tres dimensiones!
 
     for $x (1 .. 10) {
 	for $y (1 .. 10) {
@@ -143,7 +141,7 @@ entonces la asignación con la indirección en el lado izquierdo podría usar la
 
     @{$AoA[3]} = @array;
 
-Naturalmente, esto I<podría> tener el "interesante" efecto de sobreescribir @otro_array.  (¿Alguna vez ha notado que cuando un programador dice que algo es "interesante" en lugar de decir "intrigante", inquietantemente quiere decir que es algo "molesto", "difícil", o ambas cosas?   
+Naturalmente, esto I<podría> tener el "interesante" efecto de sobreescribir @otro_array.  (¿Alguna vez ha notado que cuando un programador dice que algo es "interesante" en lugar de decir "intrigante", inquietantemente quiere decir que es algo "molesto", "difícil", o ambas cosas?  :-) 
 
 Así que recuerde siempre utilizar constructores de array o hash con C<[]> o C<{}>, y todo irá bien, aunque no siempre sea óptimamente eficiente.
 
@@ -208,7 +206,8 @@ X<AoA, depuración> X<HoA, depuración> X<AoH, depuración> X<HoH, depuración>
 X<array de arrays, depuración> X<hash de arrays, depuración>
 X<array de hashes, depuración> X<hash de hashes, depuración>
 
-Antes de la versión 5.002, el depurador estándar de Perl no hacía un buen trabajo a la hora de imprimir complejas estructuras de datos.  A partir de la 5.002, el depurador incluye nuevas características, incluyendo la edición en línea de comandos, así como el comando C<x> para volcar las complejas estructuras de datos.  Por ejemplo, dada la asignación a $AoA de más arriba, aquí está la salida del depurador:
+Puede utilizar el comando C<x> del depurador para volcar estructuras de datos complejos.
+Por ejemplo, dada la asignación anterior a $AoA, aquí está la salida del depurador:
 
     DB<1> x $AoA
     $AoA = ARRAY(0x13b5a0)
@@ -466,7 +465,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
 =head2 Declaración de un HASH DE HASHES
 
  %HoH = (
-        picapiedra => {
+        picapiedra  => {
 		lider     => "pedro",
 		amigo     => "pablo",
         },
@@ -617,13 +616,13 @@ Aquí hay un ejemplo que muestra cómo crear y usar un registro cuyos campos pue
 =head2 Declaración de un HASH DE REGISTROS COMPLEJOS
 
      %TV = (
-        picapiedra => {
+        picapiedra  => {
             series   => "picapiedra",
             noches   => [ qw(lunes jueves viernes) ],
             miembros => [
-                { nombre => "pedro",   rol => "líder",  edad => 36, },
-                { nombre => "wilma",   rol => "esposa", edad => 31, },
-                { nombre => "pebbles", rol => "hijo",   edad =>  4, },
+                { nombre => "pedro",   rol => "líder",  edad  => 36, },
+                { nombre => "wilma",   rol => "esposa", edad  => 31, },
+                { nombre => "pebbles", rol => "niño",   edad  =>  4, },
             ],
         },
 
@@ -631,9 +630,9 @@ Aquí hay un ejemplo que muestra cómo crear y usar un registro cuyos campos pue
             series   => "jetsons",
             noches   => [ qw(miércoles sábado) ],
             miembros => [
-                { nombre => "george", rol => "líder",  edad  => 41, },
-                { nombre => "jane",   rol => "esposa", edad  => 39, },
-                { nombre => "elroy",  rol => "hijo",   edad  =>  9, },
+                { nombre => "george",  rol => "líder",  edad  => 41, },
+                { nombre => "jane",    rol => "esposa", edad  => 39, },
+                { nombre => "elroy",   rol => "niño",   edad  =>  9, },
             ],
          },
 
@@ -641,9 +640,9 @@ Aquí hay un ejemplo que muestra cómo crear y usar un registro cuyos campos pue
             series   => "simpsons",
             noches   => [ qw(lunes) ],
             miembros => [
-                { nombre => "homer", rol => "líder",  edad  => 34, },
-                { nombre => "marge", rol => "esposa", edad  => 37, },
-                { nombre => "bart",  rol => "hijo",   edad  => 11, },
+                { nombre => "homer",   rol => "líder",  edad => 34, },
+                { nombre => "marge",   rol => "esposa", edad => 37, },
+                { nombre => "bart",    rol => "niño",   edad => 11, },
             ],
          },
       );
@@ -684,11 +683,11 @@ Aquí hay un ejemplo que muestra cómo crear y usar un registro cuyos campos pue
          $reg = $TV{$familia}; # puntero temporal
          @hijos = ();
          for $persona ( @{ $reg->{miembros} } ) {
-             if ($persona->{rol} =~ /hijo|hija/) {
+             if ($persona->{rol} =~ /niño|hijo|hija/) {
                  push @hijos, $persona;
              }
          }
-         # RECUERDE: ¡¡¡$reg y $TV{$familia} apuntan a los mismos datos!!!
+         # RECUERDE: ¡$reg y $TV{$familia} apuntan a los mismos datos!!
          $reg->{hijos} = [ @hijos ];
      }
 
@@ -706,14 +705,14 @@ Aquí hay un ejemplo que muestra cómo crear y usar un registro cuyos campos pue
 
      # imprimirlo todo
      foreach $familia ( keys %TV ) {
-         print "la $familia";
-         print " está durante @{ $TV{$familia}{noches} }\n";
+         print "los $familia";
+         print " se emiten @{ $TV{$familia}{noches} }\n";
          print "sus miembros son:\n";
          for $quien ( @{ $TV{$familia}{miembros} } ) {
-             print " $quien->{nombre} ($quien->{rol}), de edad $quien->{edad}\n";
+             print " $quien->{nombre} ($quien->{rol}), edad $quien->{edad}\n";
          }
-         print "parece que $TV{$familia}{lider} tiene ";
-         print scalar ( @{ $TV{$familia}{hijos} } ), " cuyos nombres son ";
+         print "resulta que $TV{$familia}{lider} tiene ";
+         print scalar ( @{ $TV{$familia}{hijos} } ), " hijos, que se llaman ";
          print join (", ", map { $_->{nombre} } @{ $TV{$familia}{hijos} } );
          print "\n";
      }
@@ -729,6 +728,3 @@ L<perlref>, L<perllol>, L<perldata>, L<perlobj>
 =head1 AUTOR
 
 Tom Christiansen <F<tchrist@perl.com>>
-
-Última actualización:
-Wed Oct 23 04:57:50 MET DST 1996

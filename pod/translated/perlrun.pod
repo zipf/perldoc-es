@@ -60,7 +60,7 @@ Un truco similar hay con el programa I<env>, si lo tiene instalado.
 
     #!/usr/bin/env perl
 
-Los ejemplos anteriores usan una ruta relativa al intérprete perl, accediendo al primero que se encuentre en la ruta del usuario, sin fijarse en qué versión sea.  Si necesita una versión específica de Perl, por ejemplo, la perl5.005_57, debe colocarla directamente en la ruta de la línea  C<#!>.
+Los ejemplos anteriores usan una ruta relativa al intérprete perl, accediendo al primero que se encuentre en la ruta del usuario, sin fijarse en qué versión sea.  Si necesita una versión específica de Perl, por ejemplo, la perl5.14.1, debe colocarla directamente en la ruta de la línea C<#!>.
 
 Si la línea C<#!> no contiene la palabra "perl" ni la palabra "indir", el programa nombrado después de C<#!> es ejecutado en lugar del intérprete de Perl.  Esto es algo extraño, pero ayuda a personas en máquinas que no pueden trabajar con C<#!>, porque ellas pueden indicar a un programa que su SHELL es F</usr/bin/perl>, y Perl, entonces, despachará, por ellos, el programa al intérprete correcto.
 
@@ -134,11 +134,11 @@ Parce obvio decirlo, pero Perl solo es útil cuando los usuarios pueden encontra
 
 En esta documentación, C<#!/usr/bin/perl> en la primera línea del programa aparecerá sin importar qué método funcione es su sistema.  Se le aconseja que use una ruta específica si le interesa usar una versión específica.
 
-    #!/usr/local/bin/perl5.00554
+    #!/usr/local/bin/perl5.14
 
 o si solo quiere ejecutar una cierta versión, coloca una instrucción como esta al principio de su programa:
 
-    use 5.005_54;
+    use 5.014;
 
 =head2 Opciones de comando
 X<perl, opciones comando> X<opciones comando>
@@ -146,6 +146,8 @@ X<perl, opciones comando> X<opciones comando>
 Como con todos los comandos estándares, una opción de un sólo carácter puede ser agrupado con la siguiente opción, si la hubiera.
 
     #!/usr/bin/perl -spi.orig	# lo mismo que -s -p -i.orig
+
+Un C<--> señala el final de las opciones y desactiva el procesamiento de las siguientes opciones. Cualesquiera argumentos después de los C<--> se tratan como nombres de archivos y argumentos.
 
 Las opciones son:
 
@@ -177,7 +179,9 @@ es equivalente a
 	print pop(@F), "\n";
     }
 
-Se puede especificar un delimitar alternativo usando B<-F>.
+Se puede especificar un delimitador alternativo usando B<-F>.
+
+B<-a> activa implícitamente B<-n>.
 
 =item B<-C [I<número/lista>]>
 X<-C>
@@ -193,15 +197,15 @@ A partir de 5.8.1, el B<-C> puede ser seguido tanto por un número como una list
     i     8   UTF-8 es la capa PerlIO por defecto para los flujos de entrada
     o    16   UTF-8 es la capa PerlIO por defecto para los flujos de salida
     D    24   i + o
-    A    32   los elementos @ARGV se espera que sean cadenas codificados
+    A    32   se espera que los elementos de @ARGV sean cadenas codificadas
               en UTF-8
-    L    64   normalmente, el "IOEioA" es incondicional, la L las hace
-              condicionales según las variables de entorno de
-              configuración local (LC_ALL, LC_TYPE, y LANG, en
-              orden de precedencia decreciente) Si las variables
-              indican UTF-8, entonces toman efecto las opciones "IOEioA"
-    a   256   Pone ${^UTF8CACHE} a -1, para ejecutar el código de caché
-              UTF-8 en modo depuración.
+    L    64   normalmente, "IOEioA" es incondicional, pero L les hace
+              condicionales a las variables de entorno de la configuración regional
+              (los LC_ALL, LC_TYPE y LANG, en orden de
+              precedencia decreciente) -- si las variables indican
+              UTF-8, entonces queda activo el seleccionado "IOEioA"
+    a   256   Pone ${^UTF8CACHE} a -1, para ejecutar en modo depuración
+              el código almacenado.
 
 =for documentando_lo_indocumentado
 perl.h ofrece W/128 como PERL_UNICODE_WIDESYSCALLS "/* por Sarathy */"
@@ -267,22 +271,25 @@ Como alternativa, especifique un número en lugar de una lista de letras (ej., B
       512  r  Análisis y ejecución de expresiones regulares
      1024  x  Volcado del árbol sintáctico
      2048  u  Comprobaciones de contaminación
-     4096  U  No oficial, para hackeo de usuarios (reservado para uso privado, y no distribuible)
+     4096  U  No oficial, para hackeo de usuarios (reservado para uso privado,
+              no distribuible)
      8192  H  Volcado de Hash -- usurpa values()
     16384  X  Reserva del Scratchpad
     32768  D  Limpieza
+    65536  S  Reserva de Op slab
    131072  T  I<Tokenización>
-   262144  R  Incluye el contador de referencias de las variables
-              volcadas (ej. cuando se usa -Ds)
-   524288  J  muestra s,t,P-debug (no salta afuera) en códigos de
-              operación dentro del paquete DB
+   262144  R  Incluye el contador de referencias de las variables volcadas (ej. cuando
+              se usa -Ds)
+   524288  J  muestra s,t,P-debug (no salta afuera) en códigos de operación dentro del
+              package DB
   1048576  v  Verboso: usar junto con otras banderas
   2097152  C  Copiar En Escritura
   4194304  A  Comprueba la consistencia en las estructuras internas
-  8388608  q  silencio - actualmente solo suprime el mensaje "EXECUTING"
+  8388608  q  silencio - actualmente sólo suprime el "EXECUTING"
+              mensaje
  16777216  M  traza la resolución de la coincidencia inteligente
- 33554432  B  vuelca las definiciones de suBrutinas, incluyendo los
-              Bloques especiales como BEGIN
+ 33554432  B  vuelca las definiciones de suBrutinas, incluyendo los Bloques especiales
+              como BEGIN
 
 Todas estas banderas requieren B<-DDEBUGGING> cuando compile el ejecutable Perl (pero vea C<:opd> en L<Devel::Peek> o L<re/modo 'debug'> que puede cambiar esto).
 Vea el archivo F<INSTALL> en la distribución del código fuente para saber cómo hacerlo.  Esta bandera es automáticamente puesta si incluye la opción B<-g> cuando C<Configure> pregunte sobre banderas para el optimizador/depurador.
@@ -337,7 +344,9 @@ Para determinar en tiempo de ejecución si esta capacidad ha sido compilada en s
 =item B<-F>I<patrón>
 X<-F>
 
-especifica el patrón a split si B<-a> también está en activo.  El patrón puede estar rodeado de C<//>, C<""> o C<''>, o de lo contrario se pondrá entre comillas simples. Puede usar espacio en blanco literal dentro del patrón.
+especifica el patrón a split para la opción B<-a>. El patrón puede estar rodeado de C<//>, C<""> o C<''>, o de lo contrario se pondrá entre comillas simples. Puede usar espacio en blanco literal dentro del patrón.
+
+B<-F> activa implícitamente tanto B<-a> como B<-n>.
 
 =item B<-h>
 X<-h>
@@ -349,8 +358,7 @@ X<-i> X<in situ>
 
 especifica que los archivos procesados por la construcción C<E<lt>E<gt>> han de ser editados in situ.  Lo hace renombrando el archivo de entrada, abriendo el archivo de salida con el nombre original, y seleccionando este archivo de salida como el de por defecto para las instrucciones print().  La extensión, si es suministrada, es usada para modificar el nombre del viejo archivo para hacer una copia de seguridad, siguiendo estas reglas:
 
-Si no se indica ninguna extensión, no se realiza ninguna copia de seguridad y el archivo actual es
-sobreescrito.
+Si no se suministra ninguna extensión, y su sistema lo soporta, el I<archivo> original se mantiene abierto, sin nombre, mientras que la salida se redirige a un archivo nuevo con el I<nombre> original.  Cuándo perl salga, limpiamente o no, se elimina el I<archivo> original.
 
 Si la extensión no contiene un C<*>, entonces es añadida al final del nombre de archivo actual como sufijo.  Si la extensión contiene uno o más caracteres C<*>, entonces cada C<*> es reemplazado por el nombre del archivo actual.  En términos Perl, se podría pensar que se está haciendo esto:
 
@@ -359,13 +367,13 @@ Si la extensión no contiene un C<*>, entonces es añadida al final del nombre d
 Esto le permite añadir un prefijo al archivo de copia de seguridad, en vez de (o además de)
 un sufijo:
 
- $ perl -pi'orig_*' -e 's/bar/baz/' fileA  # copia de seguridad
-                                           # a 'orig_fileA'
+ $ perl -pi'orig_*' -e 's/bar/baz/' fileA  # copia de seguridad a
+                                           # 'orig_fileA'
 
 O incluso para colocar copias de seguridad de los archivos originales en otro directorio (suponiendo que el directorio ya existe):
 
- $ perl -pi'old/*.orig' -e 's/bar/baz/' fileA  # copia de seguridad
-                                               # a 'old/fileA.orig'
+ $ perl -pi'old/*.orig' -e 's/bar/baz/' fileA  # copia de seguridad a
+                                               # 'old/fileA.orig'
 
 Este conjunto de una-líneas son equivalentes:
 
@@ -375,7 +383,7 @@ Este conjunto de una-líneas son equivalentes:
  $ perl -pi'.orig' -e 's/bar/baz/' fileA   # copia de seguridad a 'fileA.orig'
  $ perl -pi'*.orig' -e 's/bar/baz/' fileA  # copia de seguridad a 'fileA.orig'
 
-Dese el shell, decir
+Desde el shell, decir
 
     $ perl -p -i.orig -e "s/foo/bar/; ... "
 
@@ -466,7 +474,7 @@ B<-M>I<módulo> ejecuta C<use> I<módulo> C<;> antes de ejecutar su programa.  P
 
 Si el primer carácter después de B<-M> o B<-m> es un guion (B<->) entonces el 'use' es reemplazado por un 'no'.
 
-Un poco de endulzamiento sintáctico predefinido puede ayudarle para decir B<-mI<MÓDULO>=foo,bar> o B<-MI<MÓDULO>=foo,bar> como una forma abreviada de B<'-MI<MÓDULO> qw(foo bar)'>.  Esto evita la necesidad de usar comillas cuando se importan símbolos.  El código real generado por B<-MI<MÓDULO>=foo,bar> es C<use módulo split(/,/,q{foo,bar})>.  Tenga en cuenta que la forma C<=> quita la distinción entre B<-m> y B<-M>.
+Un poco de endulzamiento sintáctico predefinido puede ayudarle para decir B<-mI<MÓDULO>=foo,bar> o B<-MI<MÓDULO>=foo,bar> como una forma abreviada de B<'-MI<MÓDULO> qw(foo bar)'>.  Esto evita la necesidad de usar comillas cuando se importan símbolos.  El código real generado por B<-MI<MÓDULO>=foo,bar> es C<use módulo split(/,/,q{foo,bar})>.  Note que la forma C<=> quita la distinción entre B<-m> y B<-M>, es decir, B<-mI<MODULO>=foo,bar> es lo mismo que B<-MI<MODULO>=foo,bar>.
 
 Una consecuencia de esto es que B<-MI<MÓDULO>=número> nunca hace un control de versión, a no ser que C<I<MÓDULO>::import()> tenga instalado un control de versión, lo cual podría pasar, por ejemplo, si I<MÓDULO> hereda de L<Exporter>.
 
@@ -519,7 +527,7 @@ habilita un rudimentario análisis de opciones en la línea de comando después 
     #!/usr/bin/perl -s
     if ($xyz) { print "$xyz\n" }
 
-Tenga en cuenta que una opción como B<--help> crea la variable C<${-help}>, el cual no es acorde con C<use strict "refs">.  También, cuándo utilice esta opción en un guión con avisos habilitados, puede obtener avisos espurios de la forma "utilizado sólo una vez (I<used only once>)".
+Tenga en cuenta que una opción como B<--help> crea la variable C<${-help}>, el cual no es acorde con C<use strict "refs">.  También, cuándo use esta opción en un guión con las advertencias habilitadas, puede obtener avisos espurios de la forma "utilizado sólo una vez (I<used only once>)".
 
 =item B<-S>
 X<-S>
@@ -619,19 +627,19 @@ X<-w>
 imprime advertencias sobre construcciones dudosas, como nombres de variables mencionadas sólo una vez y variables escalares utilizadas antes de ser declaradas; subrutinas redefinidas; referencias a identificadores de archivo indefinidos; identificadores de archivo abiertos en sólo lectura mientras que está intentando escribir en ellos; valores utilizados como un número que no I<parecen> números; utilizando un array como si se tratara de un escalar; si sus subrutinas tienen más de 100 niveles de profundidad de recursión; y un sinnúmero de otras cosas.
 
 Esta opción, en realidad, sólo activa la variable global C<$^W>; normalmente, es preferible usar el pragma de ámbito léxico C<use warnings>. Puede desactivar o promover en errores fatales, advertencias específicas utilizando ganchos C<__WARN__>, como se describe en L<perlvar> y L<perlfunc/warn>.
-Vea también L<perldiag> y L<perltrap>.  Una muy detallada facilidad de alertas también está disponible si quiere manipular clases enteras de advertencias; vea L<warnings> o L<perllexwarn>.
+Vea también L<perldiag> y L<perltrap>.  También está disponible una muy detallada facilidad de advertencias si quiere manipular clases enteras de advertencias; vea L<warnings>.
 
 =item B<-W>
 X<-W>
 
 Activa todas las advertencias independientemente de C<no warnings> o C<$^W>.
-Vea L<perllexwarn>.
+Vea L<warnings>.
 
 =item B<-X>
 X<-X>
 
 Activa todas las advertencias independientemente de C<no warnings> o C<$^W>.
-Vea L<perllexwarn>.
+Vea L<warnings>.
 
 =item B<-x>
 X<-x>
@@ -640,7 +648,8 @@ X<-x>
 
 le dice a Perl que el programa está incrustado en un pedazo más grande de texto, sin ninguna relación con él, como por ejemplo, en un mensaje de correo electrónico.  La basura inicial será descartada hasta la primera línea que comience con C<#!> y contenga la cadena "perl".  Se aplicará cualquier opción significativa de esa línea.
 
-Todas las referencias a números de línea en el programa (avisos, errores, ...) serán tratados como si la línea C<#!> fuera la primera línea.
+Todas las referencias a números de línea en el programa (avisos, errores, ...)
+se tratan como si la línea C<#!> fuera la primera.
 Entonces, una advertencia en la línea 2 del programa, que está en la línea 100 en el archivo será reportada como la línea 2, no como la línea 100.
 Esto se puede anular mediante el uso de la directiva C<#line>.
 (Vea L<perlsyn/"Viejos y simples comentarios (¡No!)">)
@@ -674,7 +683,8 @@ Usada en la ejecución de subprocesos, y en la búsqueda del programa, si se usa
 =item PERL5LIB
 X<PERL5LIB>
 
-Una lista de directorios en los que buscar archivos de bibliotecas Perl antes de buscar en la biblioteca estándar y en el directorio actual.  Cualesquiera directorios específicos de la arquitectura, bajo las ubicaciones indicadas, son automáticamente incluidos, si existen, realizando la búsqueda en el arranque del intérprete.
+Una lista de directorios en los que buscar archivos de bibliotecas Perl antes de buscar en la biblioteca estándar y en el directorio actual.  Cualesquiera directorios y versiones específicos de la arquitectura, tales como F<version/archname/>, F<version/> o F<archname/> bajo las ubicaciones indicadas, son automáticamente incluidos, si existen, realizando la búsqueda en el arranque del intérprete.  Además, se añade cualquier directorio que coincida con C<$Config{inc_version_list}>.
+(Esto sería para ser compatibles con versiones más antiguas de perl instaladas en el mismo árbol de directorio).
 
 Si PERL5LIB no está definido, se usa PERLLIB.  Los directorios están separados (como en PATH) por un carácter dos puntos en las plataformas Unix y por un punto y coma en Windows (el separador de ruta adecuado viene dado por el comando C<perl -V:I<path_sep>>).
 
@@ -685,7 +695,7 @@ Cuando ejecuta test de contaminación, ya sea porque el programa se estaba ejecu
 =item PERL5OPT
 X<PERL5OPT>
 
-Opciones en línea de comandos.  Las opciones en esta variable son tratadas como si estuvieran en cada línea de comandos Perl.  Solo se permiten las opciones B<-[CDIMUdmtwW]>.  Cuando se ejecutan test de contaminación (ya sea porque el programa se estaba ejecutando setuid o setgid, o especificadas las opciones B<-T> o B<-t>), esta variable es ignorada.  Si PERL5OPT comienza con B<-T>, la contaminación es activada, y las siguientes opciones ignoradas.  Si PERL5OPT comienza con B<-t>, la contaminación será activada, un modificable punto eliminado de @INC, y las posteriores opciones tenidas en cuenta.
+Opciones en línea de comandos.  Las opciones en esta variable son tratadas como si estuvieran en cada línea de comandos Perl.  Solo se permiten las opciones B<-[CDIMUdmtwW]>.  Cuando se ejecutan test de contaminación (ya sea porque el programa se estaba ejecutando setuid o setgid, o especificadas las opciones B<-T> o B<-t>), esta variable es ignorada.  Si PERL5OPT comienza con B<-T>, la contaminación se activa, y se ignoran las opciones siguientes.  Si PERL5OPT comienza con B<-t>, la contaminación será activada, un modificable punto eliminado de @INC, y las posteriores opciones tenidas en cuenta.
 
 =item PERLIO
 X<PERLIO>
@@ -696,7 +706,7 @@ Lo normal es empezar los nombres de capa con un carácter dos puntos (por ejempl
 
 Un inexistente PerlIO, o vacío, es equivalente al conjunto predeterminado de capas para su plataforma; por ejemplo, C<:unix:perlio> en sistemas tipo Unix y C<:unix:crlf> en Windows y otros sistemas DOS.
 
-La lista se convierte en el valor predeterminado para I<toda> E/S de Perl. En consecuencia, sólo capas predefinidas en el código pueden aparecer en esta lista, ya que las capas externas (tales como C<encoding()>) ¡necesitan E/S para poder ser leídas! Vea L<"open pragma"|open> para saber cómo añadir codificaciones externas por defecto.
+La lista se convierte en el valor predeterminado para I<toda> E/S de Perl. En consecuencia, sólo capas predefinidas en el código pueden aparecer en esta lista, ya que las capas externas (tales como C<encoding()>) ¡necesitan de E/S para poder leerse!  Vea L<"open pragma"|open> para saber cómo añadir codificaciones externas por defecto.
 
 Capas que tiene sentido incluir en la variable de entorno PERLIO se resumen a continuación. Para más detalles, vea L<PerlIO>.
 
@@ -774,7 +784,8 @@ La variable de entorno PERLIO es completamente ignorada cuando Perl se ejecuta e
 =item PERLIO_DEBUG
 X<PERLIO_DEBUG>
 
-Si se establece al nombre de un archivo o dispositivo, ciertas operaciones del subsistema PerlIO se registrarán en ese archivo, que se abre en el modo añadir. Usos típicos en Unix:
+Si se establece al nombre de un archivo o dispositivo, ciertas operaciones del subsistema PerlIO se registrarán en ese archivo, que se abre en el modo añadir.
+Usos típicos en Unix:
 
    % env PERLIO_DEBUG=/dev/tty perl script ...
 
@@ -849,29 +860,39 @@ Si se utiliza el pragma C<use encoding> sin un nombre de codificación explícit
 =item PERL_HASH_SEED
 X<PERL_HASH_SEED>
 
-(Desde Perl 5.8.1.)  Se utiliza para aleatorizar la función hash interna de Perl.
-Para emular el comportamiento pre-5.8.1, establezca a un número entero; C<"0"> significa exactamente el mismo orden que en 5.8.0.  "Pre-5.8.1" significa, entre otras cosas, que las claves de hash siempre tendrá el mismo orden entre las diferentes ejecuciones de Perl.
+(Desde Perl 5.8.1, nuevas semánticas en Perl 5.18.0) Se usa para reescribir la aleatorización de la función hash interna de Perl. El valor se expresa en hexadecimal, y puede incluir un 0x inicial. Los patrones truncados se tratan como si tuvieran suficientes 0 por detrás.
 
-La mayoría de los hashes, por defecto, devuelven elementos en el mismo orden que en Perl 5.8.0.
-En un trabajo normal con un hash, si se detectan datos patológicos durante una inserción de clave hash, entonces ese hash pasará a una alternativa de semillas de hash aleatorias.
-
-El comportamiento por defecto es el azar a menos que se establezca PERL_HASH_SEED.
-Si Perl se ha compilado con B<-DUSE_HASH_SEED_EXPLICIT>, el comportamiento por defecto es I<no> seleccionar al azar a menos que se establezca PERL_HASH_SEED.
-
-Si PERL_HASH_SEED no está definida o está establecida a una cadena no numérica, Perl utiliza la semilla pseudoaleatoria suministrada por el sistema operativo y las bibliotecas.
+Si se indica esa opción, y C<PERL_PERTURB_KEYS> no está inicializado, entonces un valor de '0' implica que C<PERL_PERTURB_KEYS=0> y cualquier otro valor implica que C<PERL_PERTURB_KEYS=2>.
 
 B<POR FAVOR, TENGA EN CUENTA: La semilla hash es información sensible>. Los hash son asignados al azar para protegerse contra los ataques locales y remotos contra el código Perl. Poniendo manualmente una semilla, esta protección puede quedar parcial o completamente perdida.
 
-Vea L<perlsec/"Ataques de Complejidad Algorítmica"> y L</PERL_HASH_SEED_DEBUG> para más información.
+Vea L<perlsec/"Ataques de Complejidad Algorítmica">, L</PERL_PERTURB_KEYS> y L</PERL_HASH_SEED_DEBUG>, para más información.
+
+=item PERL_PERTURB_KEYS
+X<PERL_PERTURB_KEYS>
+
+(A partir de Perl 5.18.0) Poniéndolo a C<"0"> o C<"NO">, pasar por las claves será repetible de ejecución en ejecución, para el mismo valor de PERL_HASH_SEED.
+La inserción en un hash no cambiará el orden, excepto para proporcionar más espacio en el hash. Cuándo se combina con PERL_HASH_SEED, lo que se consigue es un comportamiento pre-5.18.
+
+Cuando se inicializa a C<"1"> o C<"RANDOM">, entonces pasar por las claves será de forma aleatoria.
+Cada vez que se inserte en un hash, el orden de las claves cambiará de forma aleatoria. El orden puede no ser repetible en una siguiente ejecución del programa incluso si se ha especificado PERL_HASH_SEED. Este es el modo por defecto, para *perl.
+
+Cuando se inicializa a C<"2"> o C<"DETERMINISTIC"> entonces insertar claves en un hash provocará que el orden de las claves cambie, pero en una manera que es repetible entre varias ejecuciones del programa.
+
+B<NOTA:> El uso de esta opción se considera insegura, y se pretende que sirva para depurar el comportamiento no determinista de la función hash de Perl. No lo use en producción.
+
+Vea L<perlsec/"Ataques de Complejidad Algorítmica">, L</PERL_HASH_SEED> y L</PERL_HASH_SEED_DEBUG>, para más información. Puede obtener e inicializar la máscara del modo de paso de las claves para un hash específico usando la función C<hash_traversal_mask()>, de L<Hash::Util>.
 
 =item PERL_HASH_SEED_DEBUG
 X<PERL_HASH_SEED_DEBUG>
 
-(Desde Perl 5.8.1.)  Establecido a C<"1"> para mostrar (en STDERR) el valor de la semilla de hash al comienzo de la ejecución.  Esto, combinado con L</PERL_HASH_SEED> está destinado a ayudar a depurar el comportamiento no determinista causado por la aleatorización de los hash.
+(Desde Perl 5.8.1.)  Poner a C<"1"> para mostrar (en STDERR) información sobre la función hash, la semilla, y qué tipo de paso aleatorio por las claves está activado al comienzo de la ejecución.  Esto, combinado con L</PERL_HASH_SEED> y L</PERL_PERTURB_KEYS> se destina a ayudar en la depuración del comportamiento no determinista causado por la aleatorización de los hash.
 
-B <Note que la semilla hash es información sensible>: conociéndolo, se puede elaborar un ataque de denegación de servicio contra el código Perl, incluso remotamente; vea L<perlsec/"Ataques de Complejidad Algorítmica"> para más información.
-B<No muestre la semilla hash> a personas que no necesiten conocerla.
-Vea también hash_seed() en L<Hash::Util>.
+B <Note> que cualquier información sobre la función hash, especialmente la semilla hash, es B<información sensible>: conociéndolo, se puede elaborar un ataque de denegación de servicio contra el código Perl, incluso remotamente; vea L<perlsec/"Ataques de Complejidad Algorítmica"> para más información. B<No muestre la semilla hash> a personas que no necesiten conocerla. Vea también C<hash_seed()> y C<key_traversal_mask()> en L<Hash::Util>.
+
+Un de ejemplo de la salida podría ser:
+
+    HASH_FUNCTION = ONE_AT_A_TIME_HARD HASH_SEED = 0x652e9b9349a7a032 PERTURB_KEYS = 1 (RANDOM)
 
 =item PERL_MEM_LOG
 X<PERL_MEM_LOG>

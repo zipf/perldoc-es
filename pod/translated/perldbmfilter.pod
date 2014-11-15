@@ -99,7 +99,7 @@ Otro ejemplo del mundo real: de manera predeterminada, cuando Perl escribe en un
 
     $hash{12345} = "algo";
 
-la clave 12345 se almacenará en la base de datos DBM como una cadena de 5 bytes, "12345". Si realmente desea almacenarla como un entero de C, debe usar C<pack> al escribir y C<unpack> al leer.
+la clave 12345 se almacenará en la base de datos DBM como una cadena de 5 bytes, "12345". Si desea almacenarla como un entero de C, debe usar C<pack> al escribir y C<unpack> al leer.
 
 El siguiente filtro DBM hace esto:
 
@@ -111,8 +111,8 @@ El siguiente filtro DBM hace esto:
     unlink $archivo;
 
 
-    my $db = tie %hash, 'DB_File', $archivo, O_CREAT|O_RDWR, 0666, $DB_HASH 
-      or die "No se puede abrir $archivo: $!\n";
+    my $db = tie %hash, 'DB_File', $archivo, O_CREAT|O_RDWR, 0666,
+        $DB_HASH or die "No se puede abrir $archivo: $!\n";
 
     $db->filter_fetch_key  ( sub { $_ = unpack("i", $_) } );
     $db->filter_store_key  ( sub { $_ = pack ("i", $_) } );

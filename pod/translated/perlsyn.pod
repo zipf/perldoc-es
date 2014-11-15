@@ -39,7 +39,7 @@ Una declaración simple como ésta declara que la función es un operador de lis
   sub minombre ($);
   $me = minombre $0 		|| die "no puedo obtener minombre";
 
-Ahora se analiza como era de esperar, pero aún debe adquirir el hábito de uso de los paréntesis en esa situación.  Para más información sobre prototipos, vea L<perlsub>
+Ahora se analiza como era de esperar, pero aún debe adquirir el hábito de uso de los paréntesis en esa situación.  Para más información sobre prototipos, vea L<perlsub>.
 
 Las declaraciones de subrutinas pueden cargarse también con la instrucción C<require> o cargadas e importadas en su espacio de nombres con la instrucción C<use>.
 Ver L<perlmod> para detalles sobre esto.
@@ -182,7 +182,7 @@ A diferencia del C y Pascal, en Perl están definidas en términos de BLOQUES, n
     if (!open(FOO)) { die "No puedo abrir $FOO: $!" }
     die "No se puede abrir $FOO: $!" unless open(FOO);
     open(FOO)  || die "No puedo abrir $FOO: $!";
-    open(FOO) ? () : die "No puedo abrir $FOO: $!";
+    open(FOO) ? () : die "no puedo abrir $FOO: $!";
 			# Un poco exótico, este último
 
 La instrucción C<if> es sencilla.  Como los BLOQUES están siempre rodeados de llaves, nunca hay ambigüedad sobre dónde van el C<if> y el C<else>.  Si usa C<unless> en lugar de C<if>, el sentido del test se invierte.  Como C<if>, C<unless> puede ser seguido por C<else>.  C<unless> puede, incluso, ser seguido por una o más instrucciones C<elsif>, aunque quizás quiera pensarlo dos veces antes de usar esta construcción del lenguaje tan particular, lo mismo que cualquiera que al leer su código tendrá que pensar al menos dos veces antes de entender qué ha querido decir.
@@ -209,7 +209,7 @@ El comando C<next> inicia la siguiente iteración del bucle:
 	...
     }
 
-El comando C<last> sale inmediatamente del bucle en cuestión.  El bloque C<continue>, si está, no es ejecutado:
+El comando C<last> sale inmediatamente del bucle en cuestión.  El bloque C<continue>, si está, no se ejecuta:
 
     LINEA: while (<STDIN>) {
 	last LINEA if /^$/;	# salir cuando se termine la cabecera
@@ -366,6 +366,9 @@ Y aquí está cómo un programador de Perl, más cómodo con el lenguaje, puede 
 
 ¿Ha visto que es mucho más fácil?  Es más limpio, seguro y rápido.  Es más limpio porque es menos ruidoso.  Es más seguro porque si se añade nuevo código entre los bucles interno y externo, ese nuevo código no será ejecutado accidentalmente.  El C<next> explícitamente itera sobre el otro bucle en vez de meramente terminar el interno.  Y es más rápido porque Perl ejecuta una instrucción C<foreach> más rápidamente que su equivalente en un bucle C<for>.
 
+Hackers Perl perspicaces pueden haber notado que un bucle C<for> tiene un valor de retorno, y ese valor puede capturarse envolviendo el bucle en un bloque C<do>.  La recompensa de este descubrimiento es una advertencia en forma de consejo: El valor de retorno de un bucle C<for> no está especificado y puede cambiar sin previo aviso.
+No confíe en él.
+
 =head2 BLOQUES básicos
 X<block> X<bloque>
 
@@ -450,11 +453,11 @@ Los argumentos de C<given> y C<when> están en contexto escalar, y C<given> asig
 
 Lo que el argumento I<EXPR> hace en C<when> es difícil de describir con precisión, pero en general, trata de adivinar lo que quiere hacer.  A veces se interpreta como C<< $_ ~~ I<EXPR> >>, y a veces no.  También se comporta de forma diferente cuando está léxicamente encerrada por un bloque C<given> que cuando está dinámicamente encerrada por un bucle C<foreach>.  Las reglas son demasiado difíciles de entender como para describirlas aquí.  Vea L</"Detalles experimentales en given y when">, más adelante.
 
-Debido a un desafortunado error en la forma en que se implementó C<given> entre Perl 5.10 y 5.14, la versión de C<$_> gobernada por C<given> no es más que una copia léxica contextualizada del original, no un alias dinámicamente contextualizada del original, como lo sería si se tratara de un C<foreach> o del original de la actual especificación del lenguaje Perl 6.  Se espera que este error sea arreglado en una futura versión de Perl.  Para mantener la compatibilidad hacia adelante, si realmente quiere un C<$_> léxica, especifíquelo explícitamente:
+Debido a un desafortunado error en la forma en que se implementó C<given> entre Perl 5.10 y 5.16, la versión de C<$_> gobernada por C<given> no es más que una copia léxica contextualizada del original, no un alias dinámicamente contextualizado del original, como lo sería si se tratara de un C<foreach> o del original de la actual especificación del lenguaje Perl 6.  Este error fue corregido en Perl 5.18.  Si quiere, realmente, tener una C<$_> léxica, especifíquelo explícitamente, pero note que C<my $_> es obsoleto y lanzará una advertencia a menos que las advertencias estén desactivadas:
 
     given(my $_ = EXPR) { ... }
 
-Mientras tanto, péguese a C<foreach> como su actualizador y será menos infeliz.
+Si su código sigue necesitando ejecutarse en versiones anteriores, únase a C<foreach> como su actualizador y será más feliz.
 
 =head2 Goto
 X<goto>
@@ -573,8 +576,8 @@ No todos los traductores pod están bien entrenados a este respecto y quizá el 
 
 Uno puede también usar directivas pod para comentar, de forma rápida, una sección de código.
 
-=head2 Comentarios a la vieja usanza
-X<comentario> X<línea> X<#> X<preprocesador> X<eval>
+=head2 Comentarios sencillos y viejos (¡No!)
+X<comment> X<line> X<#> X<preprocessor> X<eval>
 
 Perl puede procesar directivas como lo hace el preprocesador de C.  Usando esto, uno puede controlar la idea que tiene Perl de los nombres de archivos y número de líneas en los mensajes de avisos y errores (especialmente para las cadenas procesadas con C<eval()>).  La sintaxis de este mecanismo es el mismo que para la mayoría de preprocesadores de C: coincide con la expresión regular
 
@@ -610,14 +613,15 @@ Aquí hay algunos ejemplos que será capaz de escribir en la línea de comandos 
 
     % perl
     # line 345 "goop"
-    eval "\n#línea " . __LINE__ . ' "' . __FILE__ ."\"\ndie 'foo'";
+    eval "\n#line " . __LINE__ . ' "' . __FILE__ ."\"\ndie 'foo'";
     print $@;
     __END__
     foo at goop line 345.
 
 =head2 Detalles experimentales en given y when
 
-Como se mencionó anteriormente, la característica "switch" está considerada como altamente experimental; está sujeta a cambios sin previo aviso.  En particular, tanto C<given> como C<when> tienen comportamientos complicados, de los que se espera que cambien en el futuro, para que sean menos complicados.  No confíe en sus actuales (y malas) implementaciones.
+Como se mencionó anteriormente, la característica "switch" está considerada como altamente experimental; está sujeta a cambios sin previo aviso.  En particular, C<when> tienen comportamientos complicados, de los que se espera que cambien en el futuro, para que sean menos complicados.  No confíe en sus actuales (y malas) implementaciones.
+Antes de Perl 5.18, C<given> también tiene comportamientos complicados de los que debería estar atento si su código debe ejecutarse en versiones anteriores de Perl.
 
 He aquí un ejemplo más largo de C<given>:
 
@@ -644,48 +648,48 @@ He aquí un ejemplo más largo de C<given>:
 	}
     }
 
-Tal como está implementado, C<given(EXPR)> asigna el valor de I<EXPR> a un mera I<B<copia>> (!) léxicamente contextualizada  de C<$_>, no a un alias dinámicamente contextualizado de la misma forma en que lo hace C<foreach>.  Eso hace que sea similar a
+Antes de Perl 5.18, C<given(EXPR)> asignaba el valor de I<EXPR> a una I<B<copia>> (!) de ámbito léxico de C<$_>, no un alias dinámicamente contextualizado de la forma que C<foreach> hace.  Eso hace que sea similar a
 
 	do { my $_ = EXPR; ... }
 
-excepto que el bloque es, automáticamente, parado, por un C<when> con éxito o un explícito C<break>.  Debido a que es sólo una copia, y porque sólo está léxicamente contextualizada, no puede realizar mismas cosas que podría hacer en un bucle C<foreach>.  En particular, es probable que no puede usar llamadas arbitrarias a funciones.  Para eso, es mejor que apueste por C<foreach>.
+excepto que el bloque es, automáticamente, detenido, por un C<when> con éxito o un explícito C<break>.  Debido a que era sólo una copia, y porque sólo estaba léxicamente contextualizada, no puede realizar las mismas cosas que podría hacer en un bucle C<foreach>.  En particular, no funciona para llamadas arbitrarias a funciones si estas funciones intentan acceder a $_.  Para eso, es mejor que apueste por C<foreach>.
 
 La mayor parte del poder viene de la coincidencia inteligente implícita que puede aplicar en algunas situaciones.  En la mayor parte de los casos, C<when(EXPR)> se trata como una coincidencia inteligente implícita de C<$_>, es decir, C<$_ ~~ EXPR>.  (Vea L<perlop/"Operador coincidencia inteligente"> para más información sobre coincidencia inteligente).
 Pero cuando I<EXPR> es una de los 10 casos excepcionales (o cosas como éstas) que se enumeran a continuación, se utiliza directamente como valor booleano.
 
 =over 4
 
-=item 1.
+=item Z<>1.
 
 Una llamada a una subrutina definida por el usuario o una invocación de método.
 
-=item 2.
+=item Z<>2.
 
 Una expresión regular en la forma de C</REGEX/>, C<$foo =~ /REGEX/> o C<$foo =~ EXPR>.  También, una expresión regular negada en la forma de C<!/REGEX/>, C<$foo !~ /REGEX/> o C<$foo !~ EXPR>.
 
-=item 3.
+=item Z<>3.
 
 Una coincidencia inteligente que utilice un operador explícito C<~~>, como por ejemplo C<EXPR ~~ EXPR>.
 
-=item 4.
+=item Z<>4.
 
-Un operador booleano de comparación, como C<$_ E<lt> 10> o C<$x eq "abc">. Los operadores relacionales que se aplican aquí son los seis comparadores numéricos (C<< < >>, C<< > >>, C<< <= >>, C<< >= >>, C<< == >> y C<< != >>), y los seis operadores de cadena (C<lt>, C<gt>, C<le>, C<ge>, C<eq>, y C<ne>).
+Un operador de comparación booleano como C<$_ E<lt> 10> o C<$x eq "abc">.  Los operadores relacionales que se aplican aquí son los seis comparadores numéricos (C<< < >>, C<< > >>, C<< <= >>, C<< >= >>, C<< == >> y C<< != >>) y los seis operadores de cadena (C<lt>, C<gt>, C<le>, C<ge>, C<eq> y C<ne>).
 
 B<NOTA:> A menudo se tiene que usar C<$c ~~ $_> porque la prueba por defecto es C<$_ ~~ $c>, que es frecuentemente lo opuesto a lo que desea.
 
-=item 5.
+=item Z<>5.
 
 Por lo menos, las tres funciones predefinidas C<defined(...)>, C<exists(...)> y C<eof(...)>.  Algún día podríamos agregar más de estos casos, más adelante, si pensamos en ellos.
 
-=item 6.
+=item Z<>6.
 
 una expresión negada, tanto C<!(...)> o C<not (...)>, o un exclusivo-or lógico C<(...) xor (...)>.  Las versiones a nivel de bits (C<~> y C<^>) no están incluidas.
 
-=item 7.
+=item Z<>7.
 
 Un operador de test de archivo, con exactamente 4 excepciones: C<-s>, C<-M>, C<-A> y C<-C>, que devuelven valores numéricos, no booleanos.  El operador de test de archivo C<-z> no está incluido en la lista de excepciones.
 
-=item 8.
+=item Z<>8.
 
 Los operadores biestables C<..> y C<...>.  Tenga en cuenta que el operador biestable C<...> es completamente distinto de la instrucción elipsis C<...> descrita antes.
 
@@ -697,12 +701,12 @@ Además, Perl inspecciona los operandos de los operadores lógicos para decidir 
 
 =over 4
 
-=item 9.
+=item Z<>9.
 
 Si EXPR es C<EXPR1 && EXPR2> o C<EXPR1 and EXPR2>, el test se aplica I<recursivamente> a ambas EXPR1 y EXPR2.
 Sólo si I<ambos> operandos también pasan la prueba, I<recursivamente>, la expresión será tratada como booleana.  De lo contrario, se utiliza coincidencia inteligente.
 
-=item 10.
+=item Z<>10.
 
 Si EXPR es C<EXPR1 || EXPR2>, C<EXPR1 // EXPR2> o C<EXPR1 or EXPR2>, el test se aplica I<recursivamente> a solo EXPR1 (que puede ser a la vez un operador AND de mayor precedencia, por ejemplo, y por lo tanto sujeto a la regla anterior), no a EXPR2.  Si EXPR1 va a utilizar coincidencia inteligente, entonces EXPR2 también lo hace, sin importar lo que contenga EXPR2.  Pero si EXPR2 no llega a utilizar coincidencia inteligente, entonces el segundo argumento tampoco lo hará.  Esto es muy diferente del caso C<&&> descrito antes, así que tenga cuidado.
 

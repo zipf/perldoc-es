@@ -127,7 +127,7 @@ Esto es solo un convenio, por lo que una clase puede contener en realidad tanto 
 Cada paquete contiene un array especial llamado C<@ISA>. El array C<@ISA> contiene la lista de clases primarias (si las hubiera). Perl examina este array cuando realiza la resolución de métodos, como se verá a continuación.
 
 Es posible establecer C<@ISA> manualmente; puede ver esto en código Perl antiguo. En el código realmente antiguo también se usaba el pragma L<base>. Pero en el código nuevo recomendamos usar el pragma L<parent> para declarar las clases primarias.
-Este pragma se ocupará de establecer C<@ISA>.  También cargará las clases primarias y se asegurará de que el paquete no herede de sí mismo.
+Este pragma se ocupará de establecer C<@ISA>. También cargará las clases primarias y se asegurará de que el paquete no herede de sí mismo.
 
 Independientemente de cómo se establezcan las clases primarias, la variable C<@ISA> del paquete contendrá la lista de dichas clases primarias. Se trata de una simple lista de escalares, cada uno de los cuales es una cadena que se corresponde con un nombre de paquete.
 
@@ -166,7 +166,7 @@ La parte situada a la izquierda del operador de invocación de método (flecha) 
   my $pod = Archivo->new( 'perlobj.pod', $datos );
   $pod->guardar();
 
-La sintaxis C<< -> >> también se usa para desreferenciar una referencia.  Parece el mismo operador, pero en realidad estas dos operaciones son diferentes.
+La sintaxis C<< -> >> también se usa para desreferenciar una referencia. Parece el mismo operador, pero en realidad estas dos operaciones son diferentes.
 
 Cuando se llama a un método, lo que hay a la izquierda de la flecha se pasa como primer argumento al método. Esto significa que la llamada C<< Bicho->new() >>, hace que el método C<new()> reciba la cadena C<"Bicho"> como primer argumento. En la llamada C<< $alfredo->decir() >>, la variable C<$alfredo> se pasa a C<decir()> como primer argumento.
 
@@ -205,13 +205,13 @@ En una clase derivada se puede sobrescribir un método de la clase primaria. En 
 
 El modificador C<SUPER> I<solo> se puede usar para llamar a métodos. No se puede usar para llamadas normales a subrutinas ni para métodos de clase:
 
-  SUPER::guardar($algo);     # ERROR: busca la subrutina guardar() en el paquete SUPER
+  SUPER::guardar($algo);   # ERROR: busca la subrutina guardar() en el paquete SUPER
 
-  SUPER->guardar($algo);     # ERROR: busca el método guardar() en la
-                             #       clase SUPER
+  SUPER->guardar($algo);   # ERROR: busca el método guardar() en la clase
+                           #       SUPER
 
-  $algo->SUPER::guardar();  # CORRECTO: busca el método guardar() en las
-                             #       clases primarias
+  $algo->SUPER::guardar(); # CORRECTO: busca el método guardar() en las
+                           #       clases primarias
 
 
 =head3 Forma de resolución de SUPER
@@ -228,14 +228,12 @@ La seudoclase C<SUPER> se resuelve a partir del paquete en que se hace la llamad
   sub decir {
       my $self = shift;
 
-      $self->SUPER::decir();
-
       say 'A';
   }
 
   package B;
 
-  use parent 'A';
+  use parent -norequire, 'A';
 
   sub decir {
       my $self = shift;
@@ -247,7 +245,7 @@ La seudoclase C<SUPER> se resuelve a partir del paquete en que se hace la llamad
 
   package C;
 
-  use parent 'B';
+  use parent -norequire, 'B';
 
   sub decir {
       my $self = shift;
@@ -303,9 +301,9 @@ Esto significa que se comienza buscando en la primera clase primaria del array C
 
                 BisabueloComún
             /                    \
-     AbueloPaterno          AbueloMaterno
+  AbueloPaterno             AbueloMaterno
             \                    /
-             Padre        Madre
+             Padre         Madre
                    \      /
                     Hijo
 
@@ -468,7 +466,7 @@ Perl también permite usar la desreferencia de una referencia escalar en la llam
   $archivo->${ \'guardar' };
   $archivo->${ devuelve_ref_a_escalar() };
   $archivo->${ \( devuelve_escalar() ) };
-  $archivo->${ devuelve_ref_a_sub() };
+  $archivo->${ devuelve_ref_a_subrutina() };
 
 Esto funciona si la desreferencia produce una cadena I<o> una referencia a una subrutina.
 
@@ -621,7 +619,7 @@ El nombre completo del método llamado está disponible para su clase en la vari
       my $llamado =  $AUTOLOAD =~ s/.*:://r;
 
       # ¿Existe un atributo con este nombre?
-      die "No existe el atributo $llamado"
+      die "No existe ese atributo: $llamado"
           unless exists $self->{$llamado};
 
       # si es así, devolverlo...
@@ -632,7 +630,7 @@ El nombre completo del método llamado está disponible para su clase en la vari
 
 Si se usa el pragma L<strict> sin la declaración C<our $AUTOLOAD>, este código no se compilará.
 
-Como se indica en el comentario, esta no es una forma adecuada de implementar los métodos de acceso. 
+Como se indica en el comentario, esta no es una forma adecuada de implementar los métodos de acceso.
 Es lenta y hace demasiadas suposiciones. Sin embargo, puede encontrar esta forma de proporcionar métodos de acceso en código Perl antiguo. L<perlootut> incluye recomendaciones para la programación orientada a objetos en Perl.
 
 Si su clase dispone de un método C<AUTOLOAD>, le recomendamos que sobrescriba el método C<can> en su clase también. Su versión sobrescrita de C<can> debe devolver una referencia a la subrutina para cualquier método al que responda C<AUTOLOAD>.

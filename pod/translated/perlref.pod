@@ -11,7 +11,7 @@ Para una guía de introducción más corta, a sólo las características esencia
 
 =head1 DESCRIPCIÓN
 
-Antes de la publicación de Perl 5, era difícil representar estructuras complejas de datos, porque todas las referencias tenían que ser simbólicas - e incluso entonces era difícil referirse a una variable en lugar de a una entrada de la tabla de símbolos.
+Antes de la publicación de Perl 5, era difícil representar estructuras complejas de datos, porque todas las referencias tenían que ser simbólicas -e incluso entonces era difícil referirse a una variable en lugar de a una entrada de la tabla de símbolos-.
 Perl ahora no sólo hace que sea más fácil usar referencias simbólicas a variables, sino que también le permite tener referencias "duras" a cualquier trozo de datos o código.
 Cualquier escalar puede contener una referencia dura.  Dado que los arrays y los hashes contienen escalares, ahora puede fácilmente construir arrays de arrays, arrays de hashes, arrays de hashes de funciones, y así sucesivamente.
 
@@ -25,12 +25,10 @@ X<symbolic reference> X<soft reference>
 X<referencia, simbólica> X<referencia, soft>
 X<referencia simbólica> X<referencia soft>
 
-Por el contrario, las referencias duras son como los vínculos duros de un sistema de archivos de Unix: se utilizan para acceder a un objeto subyacente, sin preocuparse por lo que su (otro) nombre sea.  Cuando la palabra "referencia" es utilizada sin adjetivo, como en el párrafo siguiente, por lo general se trata de una referencia dura.
+Por el contrario, las referencias duras son como los vínculos duros de un sistema de archivos de Unix: se utilizan para acceder a un objeto subyacente, sin preocuparse por lo que su (otro) nombre sea.  Cuando la palabra "referencia" se utiliza sin adjetivo, como en el párrafo siguiente, por lo general se trata de una referencia dura.
 X<reference, hard> X<hard reference>
 X<referencia, dura> X<referencia dura>
 
-
-Las referencias son fáciles de usar en Perl.  Sólo hay un principio fundamental: Perl no hace referencia o desreferencia de forma implícita.  Cuando un escalar almacena una referencia, siempre se comporta como un simple escalar.  Perl no lo convierte en un array o hash o subrutina; tiene que decirle explícitamente que lo haga, desreferenciandolo.
 
 Las referencias son fáciles de usar en Perl.  Sólo hay un principio fundamental: De forma general, Perl referencia o desreferencia de forma implícita.
 Cuando un escalar almacena una referencia, siempre se comporta como un simple escalar.
@@ -61,7 +59,7 @@ Esto normalmente crea I<otra> referencia a una variable, porque ya hay una refer
     $globref   = \*foo;
 
 No es posible crear una verdadera referencia a un identificador de E/S (identificador de archivo o identificador de directorio) utilizando el operador barra diagonal inversa.  Lo más que puede conseguir es una referencia a un I<typeglob>, que en realidad es una entrada en la tabla de símbolos.
-Sin embargo, vea la explicación de la sintaxis C<*foo{COSA}> más abajo.  Sin embargo, aún puede utilizar I<globs> y I<globrefs> como si fueran identificadores de E/S.
+Pero vea la explicación de la sintaxis C<*foo{COSA}> más abajo.  Sin embargo, aún puede utilizar I<globs> y I<globrefs> como si fueran identificadores de E/S.
 
 =item 2.
 X<array, anonymous> X<[> X<[]> X<square bracket>
@@ -94,7 +92,7 @@ Una referencia a un hash anónimo se puede crear utilizando llaves:
 	'Clyde' => 'Bonnie',
     };
 
-Hash y array anónimos creados así pueden ser mezclados libremente para producir una estructura tan complicada como se desee.  La sintaxis multidimensional descrita a continuación funciona también para todos ellos.  Los valores anteriores son literales, pero las variables y expresiones funcionan igual de bien, porque los operadores de asignación en Perl (incluso dentro de local() o my()) son instrucciones ejecutables, y no declaraciones en tiempo de compilación.
+Hash y array anónimos creados así se pueden mezclar libremente para producir una estructura tan complicada como se desee.  La sintaxis multidimensional descrita a continuación funciona también para todos ellos.  Los valores anteriores son literales, pero las variables y expresiones funcionan igual de bien, porque los operadores de asignación en Perl (incluso dentro de local() o my()) son instrucciones ejecutables, y no declaraciones en tiempo de compilación.
 
 Debido a que las llaves se utilizan para muchas otras cosas incluyendo los BLOQUEs, de vez en cuando puede tener que eliminar la ambigüedad de llaves en el comienzo de una declaración poniendo un C<+> o C<return> en frente, para que Perl se dé cuenta de que la llave de apertura no inicia un bloque.  Se considera que merece la pena el uso de las llaves, por la economía y el valor mnemotécnico que ofrecen, a pesar de una ocasional molestia extra.
 
@@ -106,7 +104,8 @@ Por ejemplo, si desea una función que cree un nuevo hash y devuelva una referen
 
 Por otro lado, si desea el otro significado, puede hacer esto:
 
-    sub showem {        { @_ } }   # ambiguo (actualmente válido, pero puede cambiar)
+    sub showem {        { @_ } }   # ambiguo (actualmente válido,
+                                   # pero puede cambiar)
     sub showem {       {; @_ } }   # bien
     sub showem { { return @_ } }   # bien
 
@@ -118,15 +117,15 @@ X<scope, lexical> X<closure> X<lexical> X<lexical scope>
 X<subrutina, anónima> X<subrutina, referencia> X<referencia, subrutina>
 X<ámbito, léxico> X<clausura> X<léxico> X<ámbito léxico>
 
-Una referencia a una subrutina anónima puede ser creada mediante el uso de C<sub> sin nombre:
+Una referencia a una subrutina anónima se puede crear mediante el uso de un C<sub> sin nombre:
 
     $coderef = sub { print "Boink!\n" };
 
-Preste atención al punto y coma.  Salvo porque el código en el interior no es ejecutado inmediatamente, una C<sub {}> no es tanto una declaración como un operador, al igual que C<do{}> o C<eval{}>.  (Sin embargo, no importa cuántas veces ejecute esa línea (a menos que esté en un C<eval("...")>), $coderef seguirá siendo una referencia a la I<misma> subrutina anónima).
+Preste atención al punto y coma.  Salvo porque el código en el interior no se ejecuta inmediatamente, una C<sub {}> no es tanto una declaración como un operador, al igual que C<do{}> o C<eval{}>.  (Sin embargo, no importa cuántas veces ejecute esa línea (a menos que esté en un C<eval("...")>), $coderef seguirá siendo una referencia a la I<misma> subrutina anónima).
 
-Las subrutinas anónimas actúan como clausuras con respecto a las variables my(), es decir, variables léxicas visibles dentro del ámbito actual.  La clausura es una noción del mundo Lisp, que dice que si se define una función anónima en un particular contexto léxico, se pretende que se ejecute en ese contexto, incluso cuando es llamada fuera de ese contexto.
+Las subrutinas anónimas actúan como clausuras con respecto a las variables my(), es decir, variables léxicas visibles dentro del ámbito actual.  La clausura es una noción del mundo Lisp, que dice que si se define una función anónima en un particular contexto léxico, se pretende que se ejecute en ese contexto, incluso cuando se llama fuera de ese contexto.
 
-En términos humanos, es una manera divertida de pasar argumentos a una subrutina cuando la define, así como cuando se le llama.  Es útil para la creación de pequeños trozos de código para ejecutarlos más tarde, como las retrollamadas.  Puede incluso hacer cosas orientado a objetos con ello, a pesar de que Perl ya proporciona un mecanismo diferente para hacer eso - vea L<perlobj>.
+En términos humanos, es una manera divertida de pasar argumentos a una subrutina cuando la define, así como cuando se le llama.  Es útil para la creación de pequeños trozos de código para ejecutarlos más tarde, como las retrollamadas.  Puede incluso hacer cosas orientadas a objetos con ello, a pesar de que Perl ya proporciona un mecanismo diferente para hacer eso -vea L<perlobj>-.
 
 También podría pensar en las clausuras como una manera de escribir una plantilla de subrutina sin necesidad de utilizar eval().  Aquí hay un pequeño ejemplo de cómo funciona las clausuras:
 
@@ -149,7 +148,7 @@ Esto imprime
 
 Note, en particular, que $x continúa haciendo referencia al valor pasado a newprint() I<a pesar> de que "my $x" haya salido del ámbito en el momento en que la subrutina anónima se ejecuta.  Eso es todo lo que tiene que ver con una clausura.
 
-Por cierto, esto sólo se aplica a las variables léxicas.  Las variables dinámicas siguen funcionando como siempre lo han hecho.  La clausura no es algo que la mayoría de los programadores de Perl tengan que empezar a entrometerse.
+Por cierto, esto sólo se aplica a las variables léxicas.  Las variables dinámicas siguen funcionando como siempre lo han hecho.  La clausura no es algo en que la mayoría de los programadores de Perl tengan que empezar a entrometerse.
 
 =item 5.
 X<constructor> X<new>
@@ -173,12 +172,12 @@ Pero puede producir sintaxis ambigua en algunos casos, por lo que a menudo es me
 =item 6.
 X<autovivificación>
 
-Las referencias del tipo apropiado puede crearse de la nada si los desreferencia en un contexto en el que asume que existen.  Como no hemos hablado sobre la desreferenciación, todavía no podemos mostrarle ningún ejemplo.
+Las referencias del tipo apropiado pueden crearse de la nada si los desreferencia en un contexto en el que asume que existen.  Como no hemos hablado sobre la desreferenciación, todavía no podemos mostrarle ningún ejemplo.
 
 =item 7.
 X<*foo{COSA}> X<*>
 
-Una referencia puede ser creada mediante el uso de una sintaxis especial, cariñosamente conocida como la sintaxis *foo{COSA}.  *foo{COSA} devuelve una referencia a la entrada COSA en *foo (que es la entrada en la tabla de símbolos que contiene todo lo que se conoce como I<foo>).
+Una referencia se puede crear mediante el uso de una sintaxis especial, cariñosamente conocida como la sintaxis *foo{COSA}.  *foo{COSA} devuelve una referencia a la entrada COSA en *foo (que es la entrada en la tabla de símbolos que contiene todo lo que se conoce como I<foo>).
 
     $scalarref = *foo{SCALAR};
     $arrayref  = *ARGV{ARRAY};
@@ -187,12 +186,16 @@ Una referencia puede ser creada mediante el uso de una sintaxis especial, cariñ
     $ioref     = *STDIN{IO};
     $globref   = *foo{GLOB};
     $formatref = *foo{FORMAT};
+    $globname  = *foo{NAME};    # "foo"
+    $pkgname   = *foo{PACKAGE}; # "main"
 
-Todos ellos se explican por sí mismos, excepto para C<*foo{IO}>.  Devuelve el identificador de E/S, utilizado para los identificadores de archivo (L<perlfunc/open>), sockets (L<perlfunc/socket> and L<perlfunc/socketpair>), e identificadores de directorio (L<perlfunc/opendir>).  Por razones de compatibilidad con versiones anteriores de Perl, C<*foo{IDENTIFICADOR_ARCHIVO}> es un sinónimo de C<*foo{IO}>, a pesar de que es obsoleta a partir de 5.8.0.  Si los avisos de obsolescencia están activados, se le avisará de su uso.
+Todos ellos se explican por sí mismos, excepto para C<*foo{IO}>, que requiere una atención especial.  Devuelve el identificador de E/S, utilizado para los identificadores de archivo (L<perlfunc/open>), sockets (L<perlfunc/socket> and L<perlfunc/socketpair>), e identificadores de directorio (L<perlfunc/opendir>).  Por razones de compatibilidad con versiones anteriores de Perl, C<*foo{IDENTIFICADOR_ARCHIVO}> es un sinónimo de C<*foo{IO}>, a pesar de que es obsoleta a partir de 5.8.0.  Si los avisos de obsolescencia están activados, se le avisará de su uso.
 
-C<*foo{COSA}> devuelve undef si esta particular COSA todavía no ha sido usada, excepto en el caso de los escalares.  C<*foo{SCALAR}> devuelve una referencia a un escalar anónimo si $foo todavía no ha sido usado.  Esto podría cambiar en una futura versión.
+C<*foo{COSA}> devuelve undef si esta COSA particular todavía no se ha usado, excepto en el caso de los escalares.  C<*foo{SCALAR}> devuelve una referencia a un escalar anónimo si $foo todavía no se ha usado.  Esto podría cambiar en una futura versión.
 
-C<*foo{IO}> es una alternativa al mecanismo C<*IDENTIFICADOR> indicado en L<perldata/"Typeglobs and Filehandles"> para pasar identificadores de archivo en o fuera de las subrutinas, o almacenar en grandes estructuras de datos.
+C<*foo{NAME}> y C<*foo{PACKAGE}> son la excepción, en que devuelven cadenas de caracteres, en lugar de referencias.  Devuelven el paquete y el nombre del propio typeglob, en lugar del que le fue asignado.  Así que, después de C<*foo=*Foo::bar>, C<*foo> devolverá "*Foo::bar" cuando se usa como cadena, pero C<*foo{PACKAGE}> y C<*foo{NAME}> seguirán generando "main" y "foo", respectivamente.
+
+C<*foo{IO}> es una alternativa al mecanismo C<*IDENTIFICADOR> indicado en L<perldata/"Typeglobs e identificadores de archivo"> para pasar identificadores de archivo en o fuera de las subrutinas, o almacenarse en grandes estructuras de datos.
 Su desventaja es que no va a crear un identificador de archivo nuevo para usted.
 Su ventaja es que tiene menos riesgo de embrollarse más de lo que pasaría con una asignación typeglob.  (Todavía confunde identificadores de directorio y archivo).  Sin embargo, si se asigna el valor de entrada a un escalar en lugar de a un typeglob como hacemos en los ejemplos siguientes, no hay riesgo de que esto suceda.
 
@@ -218,7 +221,7 @@ Su ventaja es que tiene menos riesgo de embrollarse más de lo que pasaría con 
 X<reference, use> X<dereferencing> X<dereference>
 X<referencia, uso> X<desreferenciando> X<desreferencia>
 
-Eso es todo para la creación de referencias.  Por ahora se estará muriendo por saber cómo utilizar las referencias para obtener sus datos perdidos hace tiempo.  Hay varios métodos básicos.
+Eso era todo lo que tenía que saber para la creación de referencias.  Por ahora se estará muriendo por saber cómo utilizar las referencias para obtener sus datos perdidos hace tiempo.  Hay varios métodos básicos.
 
 =over 4
 
@@ -266,7 +269,7 @@ El caso 2 es también engañoso, porque se está accediendo a una variable llama
 
 =item 3.
 
-Las llamadas a subrutinas y las búsquedas de elementos individuales en un array surgen con tanta frecuencia que se hace engorroso utilizar el método 2.  Como una forma sintácticamente edulcorada, los ejemplos para el método 2 se puede escribir:
+Las llamadas a subrutinas y las búsquedas de elementos individuales en un array surgen con tanta frecuencia que se hace engorroso utilizar el método 2.  Como una forma sintácticamente edulcorada, los ejemplos para el método 2 se pueden escribir así:
 
     $arrayref->[0] = "enero";       # Elemento de array
     $hashref->{"CLAVE"} = "VALOR";  # Elemento hash
@@ -276,8 +279,8 @@ El lado izquierdo de la flecha puede ser cualquier expresión que devuelva una r
 
     $array[$x]->{"foo"}->[0] = "enero";
 
-Este es uno de los casos que hemos mencionado antes en el que las referencias podrían aparecer a la existencia cuando está en un contexto valor-izquierda.  Antes de esta declaración, C<$array[$x]> podría estar indefinida.  Si es así, es automáticamente definida con una referencia a un hash, para que podamos buscar C<{"foo"}> dentro de ella.  Asimismo C<< $array[$x]->{"foo"} >> será automáticamente definido con una referencia a un array para que podamos buscar C<[0]> dentro de él.
-Este proceso es llamado I<autovivificación>.
+Este es uno de los casos que hemos mencionado antes en el que las referencias podrían aparecer a la existencia cuando está en un contexto valor-izquierda.  Antes de esta declaración, C<$array[$x]> podría estar indefinida.  Si es así, es automáticamente definida con una referencia a un hash, para que podamos buscar C<{"foo"}> dentro de ella.  Asimismo C<< $array[$x]->{"foo"} >> quedará automáticamente definido con una referencia a un array para que podamos buscar C<[0]> dentro de él.
+Este proceso se llama I<autovivificación>.
 
 Una cosa más.  La flecha es opcional I<entre> los subíndices, por lo que puede reducir el tamaño de lo anterior a
 
@@ -307,14 +310,14 @@ X<reference, string context> X<referencia, contexto cadena>
 
 El operador bless() se puede utilizar para asociar el objeto a la que la referencia apunta, con un paquete que funcione como clase de objeto.  Vea L<perlobj>.
 
-Un typeglob puede ser desreferenciado de la misma manera que puede hacerlo una referencia, porque la sintaxis de desreferenciar siempre indica el tipo de referencia deseada.
+Un typeglob se puede desreferenciar de la misma manera que puede hacerlo una referencia, porque la sintaxis de desreferenciar siempre indica el tipo de referencia deseada.
 Por lo tanto, C<${*foo}> y C<${\$foo}> apuntan a la misma variable escalar.
 
 Aquí hay un truco para la interpolación de una llamada a subrutina en una cadena:
 
-    print "Mi sub retornó esta vez @{[mysub(1,2,3)]}.\n";
+    print "Mi sub retornó esta vez @{[misub(1,2,3)]}.\n";
 
-Esto funciona así: cuando se ve un C<@{...}> en la cadena entre comillas dobles, es evaluada como un bloque.  El bloque crea una referencia a un array anónimo que contiene el resultado de la llamada a C<mysub(1,2,3)>.  Así que todo el bloque devuelve una referencia a un array, que luego es desreferenciado por C<@{...}> y pegado en la cadena de comillas dobles. Esta argucia también es útil para expresiones arbitrarias:
+Esto funciona así: cuando se ve un C<@{...}> en la cadena entre comillas dobles, se evalúa como un bloque.  El bloque crea una referencia a un array anónimo que contiene el resultado de la llamada a C<mysub(1,2,3)>.  Así que todo el bloque devuelve una referencia a un array, que luego es desreferenciado por C<@{...}> y pegado en la cadena de comillas dobles. Esta argucia también es útil para expresiones arbitrarias:
 
     print "Esto produce @{[$n + 5]} widgets\n";
 
@@ -370,12 +373,12 @@ A menudo la gente espera que funcione de esta manera.  Y así lo hace.
     $nombre = "foo";
     $$nombre = 1;		# Establece $foo
     ${$nombre} = 2;		# Establece $foo
-    ${$nombre x 2} = 3;	# Establece $foofoo
+    ${$nombre x 2} = 3;		# Establece $foofoo
     $nombre->[0] = 4;		# Establece $foo[0]
     @$nombre = ();		# Vacía @foo
-    &$nombre();		# Llama &foo() (como en Perl 4)
-    $pack = "QUE";
-    ${"${pack}::$nombre"} = 5;	# Establece $QUE::foo, sin usar eval
+    &$nombre();			# Llama &foo()
+    $pack = "ESE";
+    ${"${pack}::$nombre"} = 5;	# Establece $ESE::foo, sin usar eval
 
 Esto es de gran potencia, y ligeramente peligroso, ya que es posible que la intención sea (con la mayor sinceridad) utilizar una referencia dura y, sin querer, utilizar en su lugar una referencia simbólica.  Para protegerse contra esto, se puede decir
 
@@ -398,12 +401,12 @@ Esto seguirá imprimiendo 10, no 20.  Recuerde que el local() afecta a las varia
 
 =head2 Referencias No-tan-simbólicas
 
-Desde la versión Perl 5.001, llaves alrededor de una referencia simbólica solo sirve para aislar un identificador o nombre de variable del resto de una expresión, tal como siempre lo han hecho dentro de una cadena.  Por ejemplo,
+Las llaves alrededor de una referencia simbólica solo sirve para aislar un identificador o nombre de variable del resto de una expresión, tal como siempre lo ha hecho dentro de una cadena.  Por ejemplo,
 
     $push = "pop on ";
     print "${push}over";
 
-siempre ha significado imprimir "pop on over", incluso aunque push sea una palabra reservada.  En 5.001, esto se generalizó para funcionar de la misma forma sin las comillas dobles que lo engloban, de modo que
+siempre ha significado imprimir "pop on over", incluso aunque push sea una palabra reservada.  Esto se generalizó para funcionar de la misma forma sin las comillas dobles que lo engloban, de modo que
 
     print ${push} . "over";
 
@@ -411,13 +414,13 @@ e incluso
 
     print ${ push } . "over";
 
-tendrán el mismo efecto.  (Esto habría sido un error de sintaxis en Perl 5.000, aunque Perl 4 lo permitió en el formato sin espacios).  Esta construcción I<no> es considerada una referencia simbólica cuando se está utilizando C<strict refs>:
+tendrán el mismo efecto.  Esta construcción I<no> se considera una referencia simbólica cuando se está utilizando C<strict refs>:
 
     use strict 'refs';
     ${ bareword };	# Muy bien, significa $bareword.
     ${ "bareword" };	# Error, referencia simbólica.
 
-Del mismo modo, debido a que todo subíndice se ha construido usando palabras sueltas, se aplica la misma regla a cualquier palabra suelta que sea utilizada como subíndice de un hash.
+Del mismo modo, debido a que todo subíndice se ha construido usando palabras sueltas, se aplica la misma regla a cualquier palabra suelta que se utilice como subíndice de un hash.
 Así que ahora, en lugar de escribir
 
     $array{ "aaa" }{ "bbb" }{ "ccc" }
@@ -450,7 +453,7 @@ X<subroutine, nested> X<sub, nested> X<subroutine, local> X<sub, local>
 X<ámbito, léxico> X<clausura> X<léxico> X<ámbito léxico>
 X<subrutina, anidada> X<sub, anidada> X<subrutina, local> X<sub, local>
 
-Como se explicó anteriormente, una función anónima con acceso a las variables léxicas visibles cuando esa función fue compilada, crea una clausura.  Conserva el acceso a dichas variables, incluso aunque no se ejecuten hasta más tarde, como en un controlador de señal o una devolución de llamada Tk.
+Como se explicó anteriormente, una función anónima con acceso a las variables léxicas visibles cuando esa función se compiló, crea una clausura.  Conserva el acceso a dichas variables, incluso aunque no se ejecuten hasta más tarde, como en un controlador de señal o una devolución de llamada Tk.
 
 Utilizando una clausura como plantilla de función nos permite generar muchas funciones que actúan de manera similar.  Suponga que desea funciones con nombres de los colores que los cambios de tipo de fuentes en HTML generan, para los distintos colores:
 
@@ -494,7 +497,7 @@ Una mejor solución consiste en lo siguiente:
         return $x + interior();
     }
 
-Ahora interior() sólo se puede llamar desde el dentro de exterior(), debido a las asignaciones temporales de la subrutina anónima. Pero cuando lo hace, tiene acceso normal a la variable léxica $x del ámbito exterior() en el momento en que exterior() es invocado.
+Ahora interior() sólo se puede llamar desde dentro de exterior(), debido a las asignaciones temporales de la subrutina anónima. Pero cuando lo hace, tiene acceso normal a la variable léxica $x del ámbito exterior() en el momento en que exterior() es invocado.
 
 Esto tiene el interesante efecto de crear una función local a otra función, algo que normalmente no se soporta en Perl.
 
@@ -514,6 +517,52 @@ Si intenta desreferenciar la clave, no será una desreferencia dura, y no lograr
 Y entonces, al menos, puede utilizar values(), que serán referencias reales, en lugar de las keys(), que no.
 
 El módulo estándar Tie::RefHash proporciona una solución conveniente para esto.
+
+=head1 Sintaxis de desreferencia posfija
+
+A partir de v5.20.0, está disponible una sintaxis posfija para usar referencias.  Se comporta tal como se describe en L</Usando referencias>, pero en vez de usar un sigilo prefijado, se usa un sigilo-y-asterisco posfijo.
+
+Por ejemplo:
+
+    $r = \@a;
+    @b = $r->@*; # equivale a @$r o @{ $r }
+
+    $r = [ 1, [ 2, 3 ], 4 ];
+    $r->[1]->@*;  # equivale a @{ $r->[1] }
+
+La sintaxis se debe activar con C<use feature 'postderef'>.  Es experimental, y por defecto lanzará un aviso, a menos que se active C<no warnings
+'experimental::postderef'>.
+
+La desreferencia posfija debería funcionar en todas las circunstancias donde funcione un bloque de desreferencia (infijo), y debería ser completamente equivalente.  Esta sintaxis permite escribir y leer desreferencias izquierda a derecha de forma completa.  Se definen las siguientes equivalencias:
+
+  $sref->$*;  # lo mismo que  ${ $sref }
+  $aref->@*;  # lo mismo que  @{ $aref }
+  $aref->$#*; # lo mismo que  $#{ $aref }
+  $href->%*;  # lo mismo que  %{ $href }
+  $cref->&*;  # lo mismo que  &{ $cref }
+  $gref->**;  # lo mismo que  *{ $gref }
+
+Preste atención a que C<< $cref->&* >> I<no> es equivalente a C<< $cref->() >>, y puede servir para propósitos diferentes.
+
+Los elementos Glob se pueden extraer por medio de la característica de la desreferencia posfija:
+
+  $gref->*{SCALAR}; # lo mismo que *{ $gref }{SCALAR}
+
+La desreferencia de array y escalar posfija se I<puede> usar en la interpolación de cadenas (comillas dobles o con el operador C<qq>), pero sólo si se activa la característica adicional C<postderef_qq>.
+
+=head2 Partición posfija de referencias
+
+También se pueden tomar porciones de valores de arrays y hashes con la notación de desrefencia posfija, con las siguientes equivalencias:
+
+  $aref->@[ ... ];  # lo mismo que @$aref[ ... ]
+  $href->@{ ... };  # lo mismo que @$href{ ... }
+
+La partición de pares clave/valor, añadido en 5.20.0 y documentado en L<la sección de particiones hash claveE<sol>valor de perldata|perldata/"Porciones hash clave/valor">, también se comporta como se espera:
+
+  $aref->%[ ... ];  # lo mismo que %$aref[ ... ]
+  $href->%{ ... };  # lo mismo que %$href{ ... }
+
+Igual que con la desreferencia posfija de array, la desreferencia posfija de porciones de valores se I<puede> usar en la interpolación de cadenas (comillas dobles o con el operador C<qq>), pero sólo si se activa la L<feature> (característica) adicional C<postderef_qq>.
 
 =head1 VEA TAMBIÉN
 

@@ -21,10 +21,9 @@ Cualquier función en la lista de abajo se puede usar tanto con paréntesis como
 
 Si ejecuta Perl con la opción B<-w> le avisará sobre todo esto.  Por ejemplo, la tercera línea de arriba produce:
 
-    print (...) interpreted as function at - line 1.
-(print (...) interpretado como función en - línea 1)
+    print (...) interpretado como función en la línea 1.
     Useless use of integer addition in void context at - line 1.
-(Inútil uso de suma de enteros en contexto void en - línea 1)
+(Inútil uso de suma de enteros en contexto void en línea 1)
 
 Unas pocas funciones no toman ningún argumento, por lo que funcionan tanto como operadores unarios como operadores de lista.  Estas incluyen funciones como C<time> y C<endpwent>.  Por ejemplo, C<time+86_400> siempre significa C<time() + 86_400>.
 
@@ -36,9 +35,9 @@ X<contexto>
 
 Un array con nombre, en contexto escalar, es muy diferente de lo que en un primer vistazo pudiera ser una lista en contexto escalar.  No puede conseguir que una lista como C<(1,2,3)> se convierta en contexto escalar porque el compilador conoce el contexto en tiempo de compilación.  Se generará aquí el operador coma, no la versión de construcción de listas.  Esto significa que nunca será una lista.
 
-En general, funciones en Perl que sirven como envoltorios para llamadas al sistema ("syscalls") del mismo nombre (como  chown(2), fork(2), closedir(2), etc.) devuelven verdadero cuando tienen éxito y C<undef> en otro caso, como se menciona en las descripciones de más abajo.  Esto es diferente de las interfaces en C, que devuelven C<-1> en caso de error.  Excepciones a esta regla incluyen a C<wait>, C<waitpid> y C<syscall>.  Llamadas al sistema también actualizan la variable especial C<$!> en caso de error.  Otras funciones no, excepto accidentalmente.
+En general, funciones en Perl que sirven como envoltorios para llamadas al sistema ("syscalls") del mismo nombre (como chown(2), fork(2), closedir(2), etc.) devuelven verdadero cuando tienen éxito y C<undef> en otro caso, como se menciona en las descripciones de más abajo.  Esto es diferente de las interfaces en C, que devuelven C<-1> en caso de error.  Excepciones a esta regla incluyen a C<wait>, C<waitpid> y C<syscall>.  Llamadas al sistema también actualizan la variable especial C<$!> en caso de error.  Otras funciones no, excepto accidentalmente.
 
-Hay módulos con expansiones que también pueden engancharse en el intérprete Perl para definir nuevas clases de expresiones basadas en palabras clave.  Pueden parecerse a funciones, pero también pueden ser complementamente diferentes.  La sintasix que sigue al identificador se define enteramente por la expansión.  Si es usted un implantador, mire L<perlapi/PL_keyword_plugin> para informarse sobre este mecanismo.  Si está usando un módulo así, mire la documentación del módulo para ver los detalles de la sintaxis que define.
+Hay módulos con expansiones que también pueden engancharse en el intérprete Perl para definir nuevas clases de expresiones basadas en palabras clave.  Pueden parecerse a funciones, pero también pueden ser complementamente diferentes.  La sintaxis que sigue al identificador se define enteramente por la expansión.  Si es usted un implantador, mire L<perlapi/PL_keyword_plugin> para informarse sobre este mecanismo.  Si está usando un módulo así, mire la documentación del módulo para ver los detalles de la sintaxis que define.
 
 =head2 Funciones Perl por categoría
 X<function> X<función>
@@ -59,7 +58,7 @@ C<rindex>, C<sprintf>, C<substr>, C<tr///>, C<uc>, C<ucfirst>, C<y///>
 C<fc> sólo está disponible si la característica C<"fc"> está habilitada o si está prefijada con C<CORE::>.  La característica C<"fc"> se activa automáticamente con una declaración C<use v5.16> (o superior) en el ámbito actual.
 
 
-=item Expresiones regulares y coincidencia de patroner
+=item Expresiones regulares y coincidencia de patrones
 X<regular expression> X<regex> X<regexp> X<expresión regular>
 
 =for Pod::Functions =Regexp
@@ -132,9 +131,9 @@ C<dump>, C<eval>, C<evalbytes> C<exit>,
 C<__FILE__>, C<goto>, C<last>, C<__LINE__>, C<next>, C<__PACKAGE__>,
 C<redo>, C<return>, C<sub>, C<__SUB__>, C<wantarray>
 
-C<break> sólo está disponible si se activa la característica experimental C<"switch"> o usando el prefijo C<CORE::>. La característica C<"switch"> también habilita las sentencias C<default>, C<given> y C<when>, que están documentadas en L<perlsyn/"Sentencias Switch">. La característica C<"switch"> se activa automáticamente con una declaración C<use v5.10> (o superior) en el ámbito actual. En Perl v5.14 y anteriores, C<continue> requería la característica C<"switch">, al igual que las otras palabras clave.
+C<break> sólo está disponible si se activa la característica experimental C<"switch"> o usando el prefijo C<CORE::>.  La característica C<"switch"> también habilita las sentencias C<default>, C<given> y C<when>, que están documentadas en L<perlsyn/"Sentencias Switch">.  La característica C<"switch"> se activa automáticamente con una declaración C<use v5.10> (o superior) en el ámbito actual.  En Perl v5.14 y anteriores, C<continue> requería la característica C<"switch">, al igual que las otras palabras clave.
 
-C<evalbytes> sólo está disponible con la característica C<"evalbytes"> (vea L<feature>) o si es prefijada con C<CORE::>.  C<__SUB__> sólo está disponible con la característica C<"current_sub"> o si está prefijada con C<CORE::>. Tanto la característica C<"evalbytes"> como la C<"current_sub"> son activadas de forma automática con una declaración C<use v5.16> (o superior) en el ámbito actual.
+C<evalbytes> sólo está disponible con la característica C<"evalbytes"> (vea L<feature>) o si está prefijada con C<CORE::>.  C<__SUB__> sólo está disponible con la característica C<"current_sub"> o si está prefijada con C<CORE::>.  Tanto la característica C<"evalbytes"> como la C<"current_sub"> son activadas de forma automática con una declaración C<use v5.16> (o superior) en el ámbito actual.
 
 =item Palabras clave relacionadas con el ámbito
 
@@ -273,7 +272,8 @@ X<-S>X<-b>X<-c>X<-t>X<-u>X<-g>X<-k>X<-T>X<-B>X<-M>X<-A>X<-C>
 =for Pod::Functions a file test (-r, -x, etc)
 
 Un test de archivo, donde X es una de las letras listadas abajo.  Este operador unario toma un argumento, bien sea un nombre de archivo o un identificador de archivo o de directorio, y comprueba si el archivo asociado para ver si algo sobre él es cierto.  Si el argumento se omite, se prueba C<$_>, excepto para C<-t>, que prueba STDIN.
-Mientras no se diga lo contrario, se devuelve C<1> para verdadero y C<''> para falso, o el valor indefinido si el archivo no existe.  A pesar de los nombres graciosos, la precedencia es la misma que cualquier otro operador unario con nombre.  El operador puede ser cualquiera de:
+Mientras no se diga lo contrario, se devuelve C<1> para verdadero y C<''> para falso.
+Si el archivo no existe o no puede examinarse, devuelve C<undef> y actualiza C<$!> (errno).  A pesar de los nombres graciosos, la precedencia es la misma que cualquier otro operador unario con nombre.  El operador puede ser cualquiera de estos:
 
     -r  Archivo es legible por el uid/gid en vigor.
     -w  Archivo es escribible por el uid/gid en vigor.
@@ -307,13 +307,14 @@ Mientras no se diga lo contrario, se devuelve C<1> para verdadero y C<''> para f
 
     -M  Tiempo de arranque del script menos el tiempo de modificación del archivo, en días.
     -A  Lo mismo, para el tiempo de acceso.
-    -C  Lo mismo, para el cambio de la fecha del inodo (en Unix, puede diferir en otras plataformas)
+    -C  Lo mismo, para el cambio de la fecha del inodo (en Unix, puede diferir en otras
+	plataformas)
 
 Ejemplo:
 
     while (<>) {
         chomp;
-        next unless -f $_;	# ignora especiales
+        next unless -f $_;  # ignora especiales
         #...
     }
 
@@ -324,7 +325,7 @@ Estos operadores están exentos de la regla "se parece a una función" descrita 
     -s($archivo) + 1024   # probablemente mal; lo mismo que -s($archivo + 1024)
     (-s $archivo) + 1024  # correcto
 
-La interpretación de los operadores de permisos de archivo C<-r>, C<-R>, C<-w>, C<-W>, C<-x> y C<-X> es por defecto basado sólamente en el modo del archivo y en los uid y gid del usuario.  Puede haber otras razones por las que realmente no pueda leer, escribir o ejecutar un archivo: por ejemplo, controles de acceso a sistemas de archivos en red, ACL (listas de control de acceso), sistemas de archivos de solo lectura, y formatos irreconocibles de ejecutables.  Note que el uso de seis operadores específicos para verificar si cierta operación es posible, es usualmente una equivocación, porque puede ser el inicio de bloqueos de carrera.
+La interpretación de los operadores de permisos de archivo C<-r>, C<-R>, C<-w>, C<-W>, C<-x> y C<-X> es por defecto basado solamente en el modo del archivo y en los uid y gid del usuario.  Puede haber otras razones por las que realmente no pueda leer, escribir o ejecutar un archivo: por ejemplo, controles de acceso a sistemas de archivos en red, ACL (listas de control de acceso), sistemas de archivos de solo lectura, y formatos irreconocibles de ejecutables.  Note que el uso de seis operadores específicos para verificar si cierta operación es posible, es usualmente una equivocación, porque puede ser el inicio de bloqueos de carrera.
 
 También note que, para el superusuario en el sistema de archivos local, los test C<-r>, C<-R>, C<-w> y C<-W> siempre devuelven 1, y C<-x> y C<-X> devuelven 1 si cualquier bit de ejecución está puesto en el modo del archivo.  Scripts ejecutados por el superusuario pueden necesitar hacer un stat() para determinar el modo real del archivo, o temporalmente poner su uid efectivo a otro valor.
 
@@ -348,7 +349,7 @@ Ejemplo:
     print "Texto\n" if -T _;
     print "Binario\n" if -B _;
 
-Como en Perl 5.9.1, una dulce forma, puramente sintáctica, puede apilar operadores de test de archivo, de forma que C<-f -w -x $archivo> es equivalente a C<-x $archivo && -w _ && -f _>.  (Esto solo es fascinantemente elegante: si usa el valor devuelto de C<-f $archivo> como un argumento para otro operador de test de archivo, no ocurrirá ninguna magia especial)
+Como en Perl 5.10.0, una dulce forma, puramente sintáctica, puede apilar operadores de test de archivo, de forma que C<-f -w -x $archivo> es equivalente a C<-x $archivo && -w _ && -f _>.  (Esto solo es fascinantemente elegante: si usa el valor devuelto de C<-f $archivo> como un argumento para otro operador de test de archivo, no ocurrirá ninguna magia especial)
 
 Cuestiones de portabilidad: L<perlport/-X>.
 
@@ -495,7 +496,7 @@ Ver L<perlmod/"Módulos Perl">.
 
 Sale de un bloque C<given()>.
 
-Esta palabra clave se activa con la característica C<"switch">: vea L<feature> para más información  También puede acceder a ella anteponiendo C<CORE::>.  O de otra forma, incluya un C<use v5.10> o posterior en el contexto actual.
+Esta palabra clave se activa con la característica C<"switch">: vea L<feature> para más información sobre C<"switch">.  También puede acceder a ella anteponiendo C<CORE::>.  O de otra forma, incluya un C<use v5.10> o posterior en el contexto actual.
 
 =item caller EXPR
 X<caller> X<call stack> X<stack> X<stack trace> X<llamador> X<pila de llamdas> X<pila> X<traza de pila>
@@ -504,7 +505,7 @@ X<caller> X<call stack> X<stack> X<stack trace> X<llamador> X<pila de llamdas> X
 
 =for Pod::Functions get context of the current subroutine call
 
-Devuelve el contexto de la llamada a la subrutina actual.  En contexto escalar, devuelve el nombre del paquete del llamante si aquel I<es> un llamante, es decir, si estamos en una subrutina, C<eval> o C<require>, y el valor indefinido en otro caso.  En contexto lista, devuelve
+Devuelve el contexto de la llamada a la subrutina actual.  En contexto escalar, devuelve el nombre del paquete del llamante si aquel I<es> un llamante, es decir, si estamos en una subrutina, C<eval> o C<require>, y el valor indefinido en otro caso.  caller nunca devuelve subrutinas XS, y son obviadas.  La próxima sub escrita en perl aparecerá en lugar de la sub XS en los valores devueltos por caller. En contexto lista, devuelve
 
     # 0         1         2
     ($paquete, $nombre_archivo, $linea) = caller;
@@ -512,15 +513,15 @@ Devuelve el contexto de la llamada a la subrutina actual.  En contexto escalar, 
 Con EXPR, devuelve alguna información extra que el depurador usa para imprimir un rastreo de la pila.  El valor de EXPR indica cuántos marcos de llamada se ha de retroceder antes del actual.
 
     # 0         1         2       3           4
-    ($paquete, $archivo, $linea, $subritina, $hasargs,
+    ($paquete, $archivo, $linea, $subrutina, $hasargs,
 
     #  5          6          7            8       9         10
     $wantarray, $evaltext, $is_require, $hints, $bitmask, $hinthash)
      = caller($i);
 
-Aquí, $subrutina puede ser C<(eval)> si el marco de llamada no es una llamada a una subrutina, sino un C<eval>.  En tal caso, se añaden los nuevos elementos $evaltext y C<$is_require>: C<$is_require> es verdadero si el marco es creado por una instrucción C<require> o C<use>, $evaltext contiene el texto de la instrucción C<eval EXPR>.  En particular, para una instrucción C<eval BLOQUE>, $subrutina es C<(eval)>, pero $evaltext es indefinido.  (Note también que cada instrucción C<use> crea un marco C<require> dentro de un marco C<eval EXPR>).  $subrutina puede ser también C<(unknown)> (desconocida) si esta subrutina en particular parece haber sido borrada de la tabla de símbolos.
+Aquí, $subrutina es la función que caller llamó (en lugar de la función que contiene a caller). Note que la $subrutina puede ser C<(eval)> si el marco de llamada no es una llamada a una subrutina, sino un C<eval>.  En tal caso, se añaden los nuevos elementos $evaltext y C<$is_require>: C<$is_require> es verdadero si el marco es creado por una instrucción C<require> o C<use>; $evaltext contiene el texto de la sentencia C<eval EXPR>.  En particular, para una instrucción C<eval BLOQUE>, $subrutina es C<(eval)>, pero $evaltext es indefinido.  (Note también que cada instrucción C<use> crea un marco C<require> dentro de un marco C<eval EXPR>).  $subrutina puede ser también C<(unknown)> (desconocida) si esta subrutina en particular parece haber sido borrada de la tabla de símbolos.
 C<$hasargs> es verdadero si una nueva instancia de C<@_> fue creada para este marco.
-C<$hints> y C<$bitmask> contienen detalles para los cuales caller fue compilado.  Los valores C<$hints> y C<$bitmask> están sujetos a cambios entre versiones de Perl y no se espera que sean utilizados para uso externo.
+C<$hints> y C<$bitmask> contienen detalles para los cuales caller fue compilado.  C<$hints> corresponde a C<$^H> y C<$bitmask> corresponde a C<${^WARNING_BITS}>.  Los valores C<$hints> y C<$bitmask> están sujetos a cambios entre versiones de Perl y no se espera que sean utilizados para uso externo.
 
 C<$hinthash> es una referencia a un hash conteniendo el valor de C<%^H> cuando el llamante ha sido compilado, o C<undef> si C<%^H> estaba vacío.  No modifique los valores de este hash, ya que son los valores reales almacenados en el árbol de operaciones internas.
 
@@ -554,7 +555,7 @@ Cambia los permisos de una lista de archivos.  El primer elemento de la lista de
 
     $cnt = chmod 0755, "foo", "bar";
     chmod 0755, @ejecutables;
-    $modo = "0644"; chmod $modo, "foo";      # !!! pone el modo a
+    $modo = "0644"; chmod $modo, "foo";      # !!! establece modo a
                                              # --w----r-T
     $modo = "0644"; chmod oct($modo), "foo"; # este es mejor
     $modo = 0644;   chmod $modo, "foo";      # este es el mejor
@@ -592,7 +593,7 @@ Si VARIABLE se omite, usa C<$_>.  Ejemplo:
         # ...
     }
 
-Si VARIABLE es un hash, recorta los valores del hash, pero no sus claves.
+Si VARIABLE es un hash, recorta los valores del hash, pero no sus claves, reiniciando el iterador C<each> durante el proceso.
 
 Puede realmente recortar cualquier cosa que sea un valor-izquierda, incluyendo una asignación:
 
@@ -613,7 +614,7 @@ X<chop>
 =for Pod::Functions remove the last character from a string
 
 Recorta el último carácter de un string y devuelve el carácter recortado.  Es más eficiente que C<s/.$//s> porque ni escanea ni copia el string.  Si VARIABLE se omite, recorta C<$_>.
-Si VARIABLE es un hash, recorta los valores del hash, pero no sus claves.
+Si VARIABLE es un hash, recorta los valores del hash, pero no sus claves, reiniciando el iterador C<each> durante el proceso.
 
 Puede realmente recortar cualquier cosa que sea un valor-izquierda, incluyendo una asignación.
 
@@ -654,7 +655,7 @@ En sistemas POSIX, puede detectar esta condición de esta manera:
     use POSIX qw(sysconf _PC_CHOWN_RESTRICTED);
     $can_chown_giveaway = not sysconf(_PC_CHOWN_RESTRICTED);
 
-Cuestiones de portabilidad: L<perlport/chmod>.
+Cuestiones de portabilidad: L<perlport/chown>.
 
 =item chr NÚMERO
 X<chr> X<character> X<ASCII> X<Unicode> X<carácter>
@@ -685,6 +686,8 @@ X<chroot> X<root>
 
 Esta funcion trabaja como la llamada del sistema del mismo nombre: hace que el directorio indicado sea el directorio raíz de los siguientes caminos que comiencen por un C</> en su proceso y todos sus hijos.  (No cambia su actual directorio de trabajo actual, que no queda afectado).  Por razones de seguridad, esta llamada está reservada al superusuario.  Si ARCHIVO se omite, hace un C<chroot> a C<$_>.
 
+B<NOTA:> Es una buena práctica de seguridad hacer C<chdir("/")> (a la raíz del directorio) inmediatamente después de un C<chroot()>.
+
 Cuestiones de portabilidad: L<perlport/chroot>.
 
 =item close IDENTIFICADOR_ARCHIVO
@@ -710,7 +713,7 @@ Ejemplo:
         or die "No puedo iniciar sort: $!";
     #...                        # imprimir a la salida
     close OUTPUT                # esperar que sort termine
-        or warn $! ? "Error cerrando la tubería con sort: $!"
+        or warn $! ? "Error cerrando la tubería sort: $!"
                    : "Estado de salida $? desde sort";
     open(INPUT, 'foo')          # obtener los resultado de sort
         or die "No puedo abrir 'foo' para entrada: $!";
@@ -810,7 +813,7 @@ Naturalmente es muy imprudente dar la propia contraseña a cualquiera que lo pre
 
 La función L<crypt|/crypt> no es apropiada para calcular el hash de grandes volúmenes de información, teniendo en cuenta que no es posible luego volver a obtener la misma información.  Mire en el módulo L<Digest> por algoritmos más robustos.
 
-Si usa crypt() en una cadena Unicode (que I<potencialmente> tiene caracteres con puntos de código superiores al 255), Perl intenta darle sentido a la situación intentando hacer una degradación (una copia) de la cadena a una cadena de bytes antes de llamar a crypt() (sobre esa copia).  Si esto funciona, bien.  Si no, crypt() muere con C<Wide character in crypt>.
+Si usa crypt() en una cadena Unicode (que I<potencialmente> tiene caracteres con códigos de carácter superiores al 255), Perl intenta darle sentido a la situación intentando hacer una degradación (una copia) de la cadena a una cadena de bytes antes de llamar a crypt() (sobre esa copia).  Si esto funciona, bien.  Si no, crypt() muere con C<Wide character in crypt>.
 
 Cuestiones de portabilidad: L<perlport/crypt>.
 
@@ -902,7 +905,7 @@ Dada una expresión que especifica un elemento o una porción de un hash, C<dele
 
 En contexto de lista, devuelve el valor o los valores borrados, o el último elemento de este tipo en contexto escalar.  La longitud de la lista devuelta siempre coincide con el de la lista de argumentos: eliminar elementos no existentes devuelve el valor indefinido en sus posiciones correspondientes.
 
-delete() puede usarse también en lo arrays y porciones de array, pero su comportamiento es menos claro.  Aunque exists() devolverá falso para entradas eliminadas, eliminar elementos del array nunca cambia los índices de los valores existentes; use en su lugar shift() o splice().  Sin embargo, si todos los elementos eliminados están al final del array, el tamaño del array se reduce al de la posición del elemento más alto que aún devuelve verdadero para exists(), o 0 si no hay ninguno.
+delete() puede usarse también en lo arrays y porciones de array, pero su comportamiento es menos claro.  Aunque exists() devolverá falso para entradas eliminadas, eliminar elementos del array nunca cambia los índices de los valores existentes; use en su lugar shift() o splice().  Sin embargo, si cualquiera de los elementos eliminados están al final de un array, el tamaño del array se reduce al de la posición del elemento más alto que aún devuelva verdadero para exists(), o 0 si no hay ninguno. En otras palabras, un array no tendrá elementos inexistentes al final, después de un delete.
 
 B<AVISO:> Usar delete en elementos de un array es una funcionalidad obsoleta y es probable que sea eliminada en una futura versión de Perl.
 
@@ -911,9 +914,9 @@ Borrando de C<%ENV> modifica el entorno.  Borrando de un hash atado a un archivo
 La construcción C<delete local EXPR> localiza la eliminación al actual bloque en tiempo de ejecución.  Hasta que un bloque termine, los elementos locales suprimidos, temporalmente, ya no existen.  Ver L<perlsub/"Eliminación local de elementos de tipos compuestos">.
 
     %hash = (foo => 11, bar => 22, baz => 33);
-    $scalar = delete $hash{foo};             # $scalar es 11
-    $scalar = delete @hash{qw(foo bar)};     # $scalar es 22
-    @array  = delete @hash{qw(foo bar baz)}; # @array es (undef,undef,33)
+    $escalar = delete $hash{foo};             # $escalar es 11
+    $escalar = delete @hash{qw(foo bar)};     # $escalar es 22
+    @array  = delete @hash{qw(foo baz)}; # @array es (undef,33)
 
 Lo siguiente borra (ineficientemente) todos los valores de %HASH y @ARRAY:
 
@@ -997,11 +1000,12 @@ También puede llamar a C<die> con una referencia como argumento, y si éste que
 
     eval { ... ; die Some::Module::Exception->new( FOO => "bar" ) };
     if (my $ev_err = $@) {
-        if (blessed($ev_err) && $ev_err->isa("Some::Module::Exception")) {
-            # controlador Some::Module::Exception
+        if (blessed($ev_err)
+            && $ev_err->isa("Algún::Módulo::Excepción")) {
+            # gestionar Algún::Módulo::Excepción
         }
         else {
-            # controla todas las otras posibles excepciones
+            # gestionar todas las otras posibles excepciones
         }
     }
 
@@ -1025,11 +1029,6 @@ No es realmente una función.  Devuelve el valor del último comando en la secue
 C<do BLOQUE> I<no> cuenta como un bucle, así que las instrucciones de control de bucle C<next>, C<last>, o C<redo> no pueden ser usadas para dejar o reiniciar el bloque.
 Ver L<perlsyn> para estrategias alternativas.
 
-=item do SUBRUTINA(LISTA)
-X<do>
-
-Esta forma de llamada de subrutina ha sido depreciada.  SUBRUTINA puede ser una palabra simple, una variable escalar o una subrutina comenzando por C<&>.
-
 =item do EXPR
 X<do>
 
@@ -1037,11 +1036,11 @@ Usa el valor de EXPR como el nombre de un archivo y ejecuta los contenidos del a
 
     do 'stat.pl';
 
-es igual que
+es mayormente como
 
     eval `cat stat.pl`;
 
-excepto que es más eficiente y conciso, mantiene el nombre del archivo en los mensajes de error, busca en los directorios C<@INC> y actualiza C<%INC> si el archivo es encontrado.  Ver L<perlvar/@INC> y L<perlvar/%INC> por estas variables.  También difiere en que el código evaluado con C<do NOMBREARCHIVO> no puede ver a las variables léxicas en el ámbito en que se ejecuta; C<eval STRING> sí.  Es lo mismo, sin embargo, en que vuelve a interpretar el archivo cada vez que lo llama, así que, probablemente, no querrá hacer esto dentro de un bucle.
+excepto que es más conciso, no ejecuta procesos externos, mantiene el seguimiento del nombre del archivo actual en los mensajes de error, busca en los directorios C<@INC> y actualiza C<%INC> si se encuentra al archivo.  Ver L<perlvar/@INC> y L<perlvar/%INC> por estas variables.  También difiere en que el código evaluado con C<do NOMBREARCHIVO> no puede ver a las variables léxicas en el ámbito en que se ejecuta; C<eval STRING> sí.  Es lo mismo, sin embargo, en que vuelve a interpretar el archivo cada vez que lo llama, así que, probablemente, no querrá hacer esto dentro de un bucle.
 
 Si C<do> puede leer el archivo pero no puede compilarlo, devuelve C<undef> y pone un mensaje de error en C<$@>.  Si C<do> no puede leer el archivo, devuelve undef y pone C<$!> al valor del error.  Siempre revise C<$@> en primer lugar, la compilación puede fallar de una manera que también actualice C<$!>.  Si el archivo se compila bien, C<do> devuelve el valor de la última expresión evaluada.
 
@@ -1050,18 +1049,20 @@ La inclusión de bibliotecas de módulos es mejor hacerla con los operadores C<u
 Puede usar C<do> para leer en un programa un archivo de configuración.  Comprobación manual de errores se puede hacer así:
 
     # leer en archivos de configuración: primero el sistema, luego el usuario
-    for $file ("/share/prog/defaults.rc",
-               "$ENV{HOME}/.someprogrc")
+    for $archivo ("/share/prog/defaults.rc",
+               "$ENV{HOME}/.algunprogramarc")
     {
-        unless ($return = do $file) {
-            warn "no puedo analizar $file: $@" if $@;
-            warn "no puedo hacer $file: $!"    unless defined $return;
-            warn "no puedo ejecutar $file"     unless $return;
+        unless ($devuelve = do $archivo) {
+            warn "no puedo interpretar $archivo: $@" if $@;
+            warn "no puedo ejecutar $archivo: $!"    unless defined $devuelve;
+            warn "no puedo ejecutar $archivo"        unless $devuelve;
         }
     }
 
 =item dump ETIQUETA
 X<dump> X<core> X<undump> X<volcado> X<núcleo>
+
+=item dump EXPR
 
 =item dump
 
@@ -1070,11 +1071,14 @@ X<dump> X<core> X<undump> X<volcado> X<núcleo>
 Esta función provoca un volcado inmediato del núcleo de ejecución.  Ver también la opción de línea de comando B<-u> en L<perlrun>, que hace lo mismo.
 Principalmente esto se utiliza en conjunción con el programa B<undump> (no suministrado) para convertir tu volcado del núcleo en un binario ejecutable después de haber inicializado todas las variables al comienzo del programa.  Cuando se ejecuta el nuevo binario, comenzará ejecutando un C<goto ETIQUETA> (con todas las restricciones que C<goto> padece).
 Piense en él como un goto entre un volcado del núcleo y una reencarnación.
-Si se omite C<ETIQUETA>, reinicia el programa desde el principio.
+Si se omite C<ETIQUETA>, reinicia el programa desde el principio.  La forma C<dump EXPR>, disponible a partir de Perl 5.18.0, permite que un nombre sea computado en tiempo de ejecución o, de lo contrario, es idéntico a C<dump LABEL>.
 
 B<ATENCIÓN>: Cualquier archivo abierto en el momento del volcado I<no> será abierto mas que cuando el programa sea reencarnado, con una muy posible confusión por parte de Perl.
 
 Esta función es obsoleta desde hace mucho tiempo, en parte porque es muy difícil convertir un volcado del núcleo en un ejecutable.  Y es por esto que debe invocarlo como C<CORE::dump()>, si no quiere recibir un aviso de que posiblemente ha cometido una falta ortográfica.
+
+A diferencia de otros operadores con nombre, tiene la misma precedencia que una asignación.
+También está exenta de la regla se-parece-a-una-función, así que C<dump ("foo")."bar"> hará que "bar" sea parte del argumento a C<dump>.
 
 Cuestiones de portabilidad: L<perlport/dump>.
 
@@ -1090,14 +1094,14 @@ X<array, iterator> X<array, iterador>
 
 Cuando se llama en un hash en contexto de lista, devuelve una lista de dos elementos consistentes en la clave y el valor del siguiente elementos del hash.  En Perl 5.12 y superiores, también devolverá el índice y el valor del siguiente elemento de un array, de modo que puede iterar sobre él; Perl más antiguos consideran esto como un error de sintaxis.  Cuando se le llama en contexto escalar, sólo devuelve la clave (no el valor) del hash, o el índice del array.
 
-Las entradas de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real está sujeto a cambio en futuras versiones de Perl, pero se garantiza que sea el mismo orden que las funciones C<keys> o C<values> producirían (mientras que el hash no haya sido modificado).  Desde Perl 5.8.2 la ordenación puede ser diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (ver L<perlsec/"Ataques por Complejidad Algorítmica">).
+Las entradas de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real es específico a un hash dado; las mismas series de operaciones en dos hashes pueden resultar en diferentes órdenes para cada hash.  Cualquier inserción en el hash puede cambiar el orden, así como cualquier eliminación, con la excepción de que la clave más reciente devuelta por C<each> o C<keys> puede ser borrada sin que cambie el orden.  Siempre y cuando no se modifique un determinado hash puede confiar en que C<keys>, C<values> y C<each> devuelvan repetidamente lo mismo en el mismo orden.  Vea L<perlsec/"Ataques de complejidad algorítmica"> para los detalles de por qué el orden en un hash se aleatoriza.  Aparte de las garantías proporcionadas aquí los detalles exactos de algoritmo que usa Perl para recorrer un hash está sujeto a cambio en cualquier lanzamiento de Perl.
 
 Después de que C<each> haya devuelto todas las entradas del hash o del array, la siguiente llamada a C<each> devuelve la lista vacía, en contexto lista, y C<undef> en contexto escalar; la siguiente llamada a I<ésa> reiniciará la iteración.
-Cada hash o array tiene su propio iterador interno, accedido por C<each>, C<keys>, y C<values>.  El iterador es implícitamente restablecido cuando C<each> ha llegado al final como se acaba de describir; puede ser explícitamente restablecido llamando a C<keys> o C<values> sobre el hash o array.  Si añade o borra un elemento de un hash mientras está iterando sobre él, puede encontrarse con entradas desaparecidas o duplicadas, así que, es mejor que no lo haga.  Excepción: en la implementación actual, siempre es seguro borrar el último ítem devuelto por C<each()>, por lo que entonces el siguiente código funcionará correctamente:
+Cada hash o array tiene su propio iterador interno, accedido por C<each>, C<keys>, y C<values>.  El iterador es implícitamente restablecido cuando C<each> ha llegado al final como se acaba de describir; puede ser explícitamente restablecido llamando a C<keys> o C<values> sobre el hash o array.  Si añade o borra un elemento de un hash mientras está iterando sobre él, el efecto sobre el iterador no está especificado; por ejemplo, puede encontrarse con entradas desaparecidas o duplicadas, así que, es mejor que no lo haga.  Excepción: siempre es seguro borrar el último elemento devuelto por C<each()>, por lo que entonces el siguiente código funcionará correctamente:
 
         while (($clave, $valor) = each %hash) {
           print $clave, "\n";
-          delete $hash{$clave};   # Esto es seguro
+          delete $hash{$clave};   # Esto es seguro hacerlo
         }
 
 Esto imprime su entorno como el programa printenv(1), sólo que en un orden diferente:
@@ -1111,10 +1115,17 @@ El comportamiento exacto puede cambiar en una futura versión de Perl.
 
     while (($clave,$valor) = each $hashref) { ... }
 
+A partir de Perl 5.18 puede usar un simple C<each> en un bucle C<while>, que actualizará C<$_> en cada iteración.
+
+    while(each %ENV) {
+	print "$_=$ENV{$_}\n";
+    }
+
 Para no confundir a los posibles usuarios de su código, que ejecuten versiones anteriores de Perl, con errores de sintaxis misteriosos, ponga este tipo de cosas en la parte superior de su archivo para indicar que el código funciona I<sólo> en versiones Perl de cosechas recientes:
 
     use 5.012;	# así keys/values/each trabajan sobre arrays
     use 5.014;	# así keys/values/each trabajan sobre escalares (experimental)
+    use 5.018; # para que each actualice $_ en un test de un while
 
 Vea también C<keys>, C<values> y C<sort>.
 
@@ -1143,11 +1154,11 @@ En un bucle C<< while (<>) >>, C<eof> o C<eof(ARGV)> pueden usarse para detectar
 
     # inserta guiones justo antes de la última línea del último archivo
     while (<>) {
-        if (eof()) {  # chequea por el final del último archivo
+        if (eof()) {  # check for end of last file
             print "--------------\n";
         }
         print;
-        last if eof();          # necesario si estamos leyendo de una terminal
+        last if eof();     # necesario si estamos leyendo de una terminal
     }
 
 Truco práctico: casi nunca necesita usar C<eof> en Perl, porque los operadores de entrada normalmente devuelven C<undef> cuando no hay más datos, o si se produce un error.
@@ -1161,14 +1172,18 @@ X<eval> X<try> X<catch> X<evaluate> X<parse> X<execute> X<error, handling> X<exc
 
 =for Pod::Functions catch exceptions or compile and run code
 
-En la primera forma, el valor devuelto por EXPR es interpretado y ejecutado como si fuera un pequeño programa Perl.  El valor de la expresión (que es en sí mismo determinada en contexto escalar) es primero interpretada, y si no hay ningún error, ejecutada como un bloque dentro del contexto léxico del actual programa Perl.  Esto significa que, en particular, cualquier otra variable léxica externa es visible dentro de ella, y la configuración de variable de paquete o de subrutinas y las definiciones de formato siguen permaneciendo.
+En la primera forma, a menudo referido como una "evaluación de cadena de caracteres", el valor devuelto por EXPR es interpretado y ejecutado como si fuera un pequeño programa Perl.  El valor de la expresión (que es en sí mismo determinada en contexto escalar) es primero interpretada, y si no hay ningún error, ejecutada como un bloque dentro del contexto léxico del actual programa Perl.  Esto significa que, en particular, cualquier otra variable léxica externa es visible dentro de ella, y la configuración de variable de paquete o de subrutinas y las definiciones de formato siguen permaneciendo.
 
 Note que el valor se interpreta cada vez que se ejecuta C<eval>.
 Si EXPR se omite, se evalúa C<$_>.  Esta forma es típicamente usada para retrasar el interpretado subsecuente ejecución del texto de EXPR hasta el momento de la ejecución.
 
-Si la característica C<unicode_eval> está habilitada (que lo es por defecto con una declaración C<use 5.16> o superior), EXPR o C<$_> se tratan como una cadena de caracteres, así que las declaraciones C<use utf8> no tienen efecto, y los filtros de código fuente quedan prohibidos.  En ausencia de la característica C<unicode_eval>, la cadena a veces será tratada como caracteres y, otras veces como bytes, dependiendo de la codificación interna, y los filtros de código fuente activados dentro de C<eval> muestran el comportamiento errático, pero histórico, comportamiento de afectar a algún archivo externo que todavía se está compilando.  Vea también la palabra clave L</evalbytes>, que siempre trata su entrada como un flujo de bytes y funciona correctamente con filtros de código fuente, y el pragma L<feature>.
+Si la característica C<unicode_eval> está habilitada (que lo es por defecto con una declaración C<use 5.16> o superior), EXPR o C<$_> se tratan como una cadena de caracteres, así que las declaraciones C<use utf8> no tienen efecto, y los filtros de código fuente quedan prohibidos.  En ausencia de la característica C<unicode_eval>, la cadena a veces será tratada como caracteres y, otras veces como bytes, dependiendo de la codificación interna, y los filtros de código fuente activados dentro de C<eval> muestran el comportamiento errático, pero histórico, de afectar a algún archivo externo que todavía se está compilando.  Vea también la palabra clave L</evalbytes>, que siempre trata su entrada como un flujo de bytes y funciona correctamente con filtros de código fuente, y el pragma L<feature>.
 
-En la segunda forma, el código dentro del BLOQUE se interpreta sólo una vez -al mismo tiempo que el código que rodea al mismo C<eval> es interpretado- y ejecutado dentro del contexto del actual programa Perl.  Esta forma es típicamente usada para atrapar excepciones más eficientemente que la primera forma (ver arriba), mientras que también provee del beneficio de comprobar el código dentro del BLOQUE en tiempo de compilación.
+Los problemas pueden surgir si la cadena de caracteres expande a un escalar conteniendo un número
+en punto flotante.  El escalar se puede expandir a letras, como en C<"NaN"> o C<"Infinity">; o, dentro del ámbito de un C<use locale>, el punto decimal puede ser otra cosa cualquiera aparte de un punto (como una coma).
+Es muy posible que ninguno de estos sean interpretados como se espera.
+
+En la segunda forma, el código en el interior de BLOQUE se interpreta sólo una vez, -al mismo tiempo que el código que rodea al propio C<eval> es interpretado-, y se ejecuta dentro del contexto del actual programa Perl.  Esta forma es típicamente usada para atrapar excepciones más eficientemente que la primera forma (ver arriba), mientras que también provee del beneficio de comprobar el código dentro del BLOQUE en tiempo de compilación.
 
 El último punto y coma, si lo hay, puede ser omitido del valor de EXPR o dentro de BLOQUE.
 
@@ -1177,7 +1192,7 @@ En ambas formas, el valor devuelto es el valor de la última expresión evaluada
 Si hay algún error de sintaxis o en tiempo de ejecución, o se ejecuta una instrucción C<die>, C<eval> devuelve C<undef> en contexto escalar o una lista vacía en contexto lista, y C<$@> se inicializa al mensaje de error.  (Antes de 5,16, un error causaba que C<undef> era devuelto en contexto de lista para errores de sintaxis, pero no para errores en tiempo de ejecución).
 Si no hay errores, se garantiza que C<$@> será una cadena vacía.  Un operador de control de flujo como C<last> o C<goto> puede pasar por alto el valor de C<$@>.  Tenga cuidado porque usar C<eval> ni silencia a Perl a la hora de imprimir avisos al STDERR, ni rellena el texto de los mensajes de aviso dentro de C<$@>.
 Para hacer cualquiera de estas dos cosas debe usar C<$SIG{__WARN__}>, o desactivar los avisos dentro del BLOQUE o EXPR usando S<C<no warnings 'all'>>.
-Ver L</warn>, L<perlvar>, L<warnings> y L<perllexwarn>.
+Vea L</warn>, L<perlvar>, y L<warnings>.
 
 Note que, como C<eval> atrapa errores considerados fatales, es útil para determinar cuando una característica en particular (como C<socket> o C<symlink>) está implementada.  También es el mecanismo de captura de excepciones, donde el operador die se usa para levantar excepciones.
 
@@ -1236,17 +1251,17 @@ Antes de Perl 5.14, la asignación a C<$@> ocurría antes de la restauración de
     {
        my $e;
        {
-          local $@; # protege el actual $@
-          eval { test_repugnancia() };
-          # $@ =~ /infame/ and die $@; # solo en Perl 5.14 y superiores
-          $@ =~ /infame/ and $e = $@;
+         local $@; # proteger el actual $@
+         eval { test_repugnancia() };
+         # $@ =~ /infame/ and die $@; # sólo en Perl 5.14 y superiores
+         $@ =~ /infame/ and $e = $@;
        }
        die $e if defined $e
     }
 
 C<eval BLOQUE> I<no> cuenta como un bucle, así que las instrucciones de control de bucle C<next>, C<last>, o C<redo> no pueden ser usadas para dejar o reiniciar el bloque.
 
-Un C<eval ''> ejecutado dentro del paquete C<DB> no ve el usual ámbito léxico circundante, sino más bien el ámbito de la primera parte del código no-DB que le llamó.  No necesita preocuparse de esto a menos que esté escribiendo un depurador Perl.
+Un C<eval ''> ejecutado dentro de una subrutina definida en el paquete C<DB> no ve el usual ámbito léxico circundante, sino más bien el ámbito de la primera parte del código no-DB que le llamó.  No necesita preocuparse de esto a menos que esté escribiendo un depurador Perl.
 
 =item evalbytes EXPR
 X<evalbytes>
@@ -1273,10 +1288,7 @@ Como es un error normal usar C<exec> en lugar de C<system>, Perl le avisará si 
     exec ('foo')   or print STDERR "no puedo exec foo: $!";
     { exec ('foo') }; print STDERR "no puedo exec foo: $!";
 
-Si hay más de un argumento en LISTA, o si LISTA es un array con más de un valor, se llama a execvp(3) con los argumentos de LISTA.
-Si sólo hay un argumento escalar o un array con un elemento dentro de él, se comprueba si el argumento tiene metacaracteres, y si hay alguno, el argumento entero es pasado al shell de comandos para que sea interpretado (suele ser C</bin/sh -c> en plataformas Unix, pero varía en otras plataformas).
-Si no hay metacaracteres shell en el argumento, es dividido en palabras y pasadas directamente a C<execvp>, que es más eficiente.
-Ejemplos:
+Si hay más de un argumento en LISTA, se llama a execvp(3) con los argumentos de LISTA.  Si sólo hay un elemento en la LISTA, se comprueba si el argumento tiene metacaracteres shell, y si lo hay, el argumento entero es pasado al shell de comandos para que sea interpretado (suele ser C</bin/sh -c> en plataformas Unix, pero varía en otras).  Si no hay metacaracteres shell en el argumento, se divide en palabras y pasadas directamente a C<execvp>, que es más eficiente.  Ejemplos:
 
     exec '/bin/echo', 'Tus argumentos son: ', @ARGV;
     exec "sort $salida | uniq";
@@ -1296,13 +1308,14 @@ Usar un objeto indirecto con C<exec> o C<system> es también más seguro.  Este 
 
     @args = ( "echo sorpresa" );
 
-    exec @args;               # sujeto a los escapados del shell
-                                # if @args == 1
+    exec @args;               # sujeto al escapado shell
+                                # si @args == 1
     exec { $args[0] } @args;  # seguro incluso con una lista de un argumento
 
 La primera versión, sin el objeto indirecto, ejecuta el programa I<echo>, pasándole C<"sorpresa"> como argumento.  La segunda versión no; intentó ejecutar un programa llamado literalmente I<"echo sorpresa">, no lo encontró, y puso C<$?> a un valor distinto de cero para indicar un error.
 
-A partir de la versión v5.6.0, Perl intenta vaciar todos los archivos abiertos para salida antes de ejecutar exec, pero esto puede no estar soportado en algunas plataformas (ver L<perlport>).  Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en el módulo English) o llamar el método C<autoflush()> de C<IO::Handle> en cualquiera de los identificadores de archivo abiertos para evitar la pérdida de datos en la salida.
+Perl intenta vaciar todos los archivos abiertos para salida antes de ejecutar exec, pero esto puede no estar soportado en algunas plataformas (vea L<perlport>).
+Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en el módulo English) o llamar al método C<autoflush()> de C<IO::Handle> en cualquiera de los gestores de archivo abiertos para evitar la pérdida de datos en la salida.
 
 Note que C<exec> no llamará a sus bloques C<END>, ni llamará a ningún método C<DESTROY> de sus objetos.
 
@@ -1406,7 +1419,7 @@ A grandes rasgos, si ha encontrado alguna vez escribiendo algo como esto
         # o
     uc($esto) eq uc($eso)   # ¡También incorrecto!
         # o
-    $esto =~ /\Q$eso/i      # ¡Correcto!
+    $esto =~ /^\Q$eso\E\z/i  # ¡Correcto!
 
 Ahora puede escribirlo como
 
@@ -1414,16 +1427,17 @@ Ahora puede escribirlo como
 
 Y obtener los resultados correctos.
 
-Perl sólo implementa la forma completa de plegado de caja.
+Perl sólo implementa la forma completa de plegado de caja, pero puede realizar plegados sencillas usando L<Unicode::UCD/casefold()> y L<Unicode::UCD/prop_invmap()>.
 Para más información sobre plegado de caja, consulte el Estándar Unicode, específicamente las secciones 3.13 C<Default Case Operations>, 4.2 C<Case-Normative>, y 5.18 C<Case Mappings>, disponible en L<http://www.unicode.org/versions/latest/>, así como los C<Case Charts> disponibles en L<http://www.unicode.org/charts/case/>.
 
 Si se omite EXPR, se usa C<$_>.
 
-Esta función se comporta de la misma manera bajo varios pragma, como por ejemplo en una configuración regional, como lo hace L</lc>.
+Esta función se comporta de la misma manera bajo varios pragma, como en S<C<"use feature 'unicode_strings">>, como lo hace L</lc>, con la única excepción de C<fc> de LATIN CAPITAL LETTER SHARP S (U+1E9E) dentro del ámbito de S<C<use locale>>.  El plegado de caja de este carácter normalmente sería C<"ss">, pero como se ha explicado en la sección de L</lc>, los cambios de caja que cruzan la frontera 255/256 son problemáticos bajo los locales, y es por ello que se prohibió.  Por tanto, esta función bajo locale devuelve en su lugar la cadena de caracteres C<"\x{17F}\x{17F}">, la cual es la LATIN SMALL LETTER LONG S. Ya que este carácter se pliega a si mismo a una C<"s">, la cadena de caracteres de dos
+de ellas juntas tendría que ser equivalente a un solo U+1E9E cuándo se plegase.
 
 Mientras que el Estándar Unicode define dos formas adicionales de plegado de caja, una para las lenguas turcas y otra que nunca asigna un carácter en múltiples caracteres, éstas no son proporcionadas por el núcleo de Perl; sin embargo, el módulo CPAN C<Unicode::Casing> se puede utilizar para proporcionar una implementación.
 
-Esta palabra clave sólo está disponible cuando la característica C<"fc"> está habilitada, o cuando está prefijada con C<CORE::>. Vea L<feature>. O de otra forma, incluya un C<use v5.16> o posterior en el ámbito actual.
+Esta palabra clave sólo está disponible cuando la característica C<"fc"> está habilitada, o cuando está prefijada con C<CORE::>. Vea L<feature>.  O de otra forma, incluya un C<use v5.16> o posterior en el ámbito actual.
 
 =item fcntl IDENTIFICADOR_ARCHIVO,FUNCIÓN,ESCALAR
 X<fcntl>
@@ -1477,8 +1491,14 @@ Si el IDENTIFICADOR_ARCHIVO es una expresión, el valor se toma como un identifi
 
 Puede usar esto para encontrar cuándo dos identificadores de archivos se refieren al mismo descriptor subyacente:
 
-    if (fileno(THIS) == fileno(THAT)) {
-        print "THIS Y THAT son duplicados\n";
+    if (fileno(THIS) != -1 && fileno(THIS) == fileno(THAT)) {
+        print "THIS y THAT son duplicados\n";
+    } elsif (fileno(THIS) != -1 && fileno(THAT) != -1) {
+        print "THIS y THAT son diferentes " .
+            "descriptores de archivo subyacentes\n";
+    } else {
+        print "Al menos uno de THIS o THAT " .
+            "no tienen un descriptor a un archivo real\n";
     }
 
 =item flock IDENTIFICADOR_ARCHIVO,OPERACIÓN
@@ -1503,7 +1523,8 @@ Note también que algunas versiones de C<flock> no pueden bloquear cosas sobre l
 
 Esto es un agregador de correo para sistemas BSD.
 
-    use Fcntl qw(:flock SEEK_END); # importa constantes LOCK_* y SEEK_END
+    # importa constantes LOCK_* y SEEK_END
+    use Fcntl qw(:flock SEEK_END);
 
     sub lock {
         my ($fh) = @_;
@@ -1538,7 +1559,7 @@ X<fork> X<child> X<parent> X<hijo> X<padre>
 
 Hace una llamada del sistema fork(2) para crear un nuevo proceso ejecutando el mismo programa en el mismo punto.  Devuelve el pid del hijo al proceso padre, C<0> al proceso hijo, o C<undef> si no se consiguió el fork.  Descriptores de archivo (y algunas veces bloqueos en estos descriptores) son compartidos, mientras que todo lo demás es copiado.  En la mayoría de los sistemas que soportan fork(), se ha tenido gran cuidado en hacerlo extremadamente eficiente (por ejemplo, usando la tecnología copy-on-write en páginas de datos), haciendo de él el paradigma dominante de la multitarea en las últimas décadas.
 
-A partir de la versión v5.6.0, Perl intentará vaciar todos los archivos abiertos para salida antes de crear un proceso hijo, pero esto puede no estar soportado en algunas plataformas (ver L<perlport>).  Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en English) o llamar el método C<autoflush()> de C<IO::Handle> en cualquiera de los identificadores de archivo abiertos para evitar duplicación de salida.
+Perl intenta vaciar todos los archivos abiertos para salida antes de crear un proceso hijo, pero esto puede no estar soportado en algunas plataformas (vea L<perlport>).  Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en English) o llamar el método C<autoflush()> de C<IO::Handle> en cualquiera de los identificadores de archivo abiertos para evitar duplicación de salida.
 
 Si usted hace un C<fork> sin luego esperar a sus hijos, irá acumulando zombies.  En algunos sistemas, puede evitar esto poniendo C<$SIG{CHLD}> a C<"IGNORE">.  Ver también L<perlipc> para más ejemplos de fork y borrado de hijos moribundos.
 
@@ -1561,11 +1582,11 @@ Declara una imagen de formato para usar con la función C<write>.  Por ejemplo:
 
     format Algo =
         Test: @<<<<<<<< @||||| @>>>>>
-              $str,     $%,    '$' . int($num)
+              $str,     $%,    '$' . int($numero)
     .
 
     $str = "widget";
-    $num = $cost/$quantity;
+    $numero = $coste/$cantidad;
     $~ = 'Algo';
     write;
 
@@ -1613,7 +1634,7 @@ Devuelve el siguiente carácter desde el archivo de entrada asociado a IDENTIFIC
 
 La determinación de cómo poner $BSD_STYLE se deja como ejercicio al lector.
 
-La función C<POSIX::getattr> puede hacer esto de forma más portable en sistemas compatibles con POSIX.  Ver también el módulo C<Term::ReadKey> en su sitio CPAN más cercano; detalles sobre CPAN se pueden encontrar en L<perlmodlib/CPAN>.
+La función C<POSIX::getattr> puede hacer esto de forma más portable en sistemas compatibles con POSIX.  Vea también el módulo C<Term::ReadKey> desde su sitio L<CPAN|http://www.cpan.org> más cercano.
 
 =item getlogin
 X<getlogin> X<login>
@@ -1657,7 +1678,7 @@ X<getppid> X<parent> X<pid> X<padre>
 
 Devuelve el identificador de proceso del proceso padre.
 
-Nota para los usuarios de Linux: Entre v5.8.1 y v5.16.0 Perl evitará la semántica de hilos no compatible con POSIX que usan una minoría de sistemas Linux (y sistemas Debian GNU/kFreeBSD) que utilizan LinuxThreads; esta emulación ha sido eliminada. Vea la documentación de L<$$|perlvar/$$> para más detalles.
+Nota para los usuarios de Linux: Entre v5.8.1 y v5.16.0 Perl evitará la semántica de hilos no compatible con POSIX que usan una minoría de sistemas Linux (y sistemas Debian GNU/kFreeBSD) que utilizan LinuxThreads; esta emulación ha sido eliminada.  Vea la documentación de L<$$|perlvar/$$> para más detalles.
 
 Cuestiones de portabilidad: L<perlport/getppid>.
 
@@ -1799,13 +1820,15 @@ X<endnetent> X<endprotoent> X<endservent>
 
 Estas rutinas son las mismas que sus homólogas en la biblioteca del sistema.  En contexto lista, los valores devueltos por varias de ellas son como sigue:
 
-    ($nombre,$contrasena,$uid,$gid,
-       $cuota,$comentario,$gcos,$dir,$shell,$expiracion) = getpw*
-    ($name,$passwd,$gid,$members) = getgr*
-    ($name,$aliases,$addrtype,$length,@addrs) = gethost*
-    ($name,$aliases,$addrtype,$net) = getnet*
-    ($name,$aliases,$proto) = getproto*
-    ($name,$aliases,$port,$proto) = getserv*
+ # 0        1          2           3         4
+ ( $nombre, $password, $gid,       $miembros ) = getgr*
+ ( $nombre, $alias,    $tipoadr,   $red      ) = getnet*
+ ( $nombre, $alias,    $puerto,    $protocolo) = getserv*
+ ( $nombre, $alias,    $protocolo            ) = getproto*
+ ( $nombre, $alias,    $tipoadr,   $longitud, @direc ) = gethost*
+ ( $nombre, $password, $uid,       $gid,     $cuota,
+ $comentario,$gcos,    $dir,       $shell,   $expira ) = getpw*
+ # 5        6          7           8         9
 
 (Si la entrada no existe, obtendrá una lista vacía).
 
@@ -1899,7 +1922,8 @@ Aquí hay un ejemplo para comprobar si el algoritmo de Nagle está habilitado en
     my $packed = getsockopt($socket, $tcp, TCP_NODELAY)
         or die "getsockopt TCP_NODELAY: $!";
     my $nodelay = unpack("I", $empaquetado);
-    print "El algoritmo de Nagle está puesto a ", $nodelay ? "off\n" : "on\n";
+    print "El algoritmo de Nagle está ",
+           $nodelay ? "desactivado\n" : "activado\n";
 
 Cuestiones de portabilidad: L<perlport/getsockopt>.
 
@@ -1929,7 +1953,7 @@ Si los únicos caracteres comodín en C<glob> son llaves, no se coincidirá con 
 
     @muchos =  glob "{manzana,tomate,cereza}={verde,amarilla,roja}";
 
-Comenzando con v5.6.0, este operador está implementado usando la extensión estándar C<File::Glob>.  Ver L<File::Glob> para los detalles, incluyendo C<bsd_glob> que no trata al espacio en blanco como separador de patrones.
+Este operador está implementado usando la extensión estándar C<File::Glob>.  Ver L<File::Glob> para los detalles, incluyendo C<bsd_glob> que no trata al espacio en blanco como separador de patrones.
 
 Cuestiones de portabilidad: L<perlport/glob>.
 
@@ -1955,18 +1979,21 @@ X<goto> X<jump> X<jmp>
 
 =for Pod::Functions create spaghetti code
 
-La forma C<goto-ETIQUETA> busca la instrucción etiquetada con ETIQUETA y continua la ejecución desde allí.  No se puede utilizar para salir de un bloque o una subrutina pasada a C<sort>.  Se puede utilizar para ir a casi cualquier sitio que esté dentro del ámbito dinámico, incluyendo fuera de las subrutinas, pero es usualmente mucho mejor usar otras construcciones como C<last> o C<die>.
+La forma C<goto ETIQUETA> busca la instrucción etiquetada con ETIQUETA y continua la ejecución desde allí.  No se puede utilizar para salir de un bloque o una subrutina pasada a C<sort>.  Se puede utilizar para ir a casi cualquier sitio que esté dentro del ámbito dinámico, incluyendo fuera de las subrutinas, pero es usualmente mucho mejor usar otras construcciones como C<last> o C<die>.
 El autor de Perl nunca ha sentido la necesidad de usar esta forma de C<goto> (en Perl, desde luego. C es otra historia).  (La diferencia con C es que no ofrece bucles nominales combinados con control de bucles.  Perl sí, y esto reemplaza a la mayor parte de los usos estructurados de C<goto> en otros lenguajes).
 
-La forma C<goto>-EXPR espera un nombre de etiqueta, cuyo ámbito será resuelto dinámicamente.  Esto permite crear C<goto> calculados como en FORTRAN, pero no está necesariamente recomendado si usted está optimizando, durante el mantenimiento:
+La forma C<goto EXPR> evalúa C<EXPR> a una referencia de código o nombre de etiqueta.  Si evalúa a una referencia de código, será gestionada como el C<goto &NAME> visto antes.  Esto es especialmente útil para implementar colas de recursión con C<goto __SUB__>.
+
+Si la expresión evalúa a un nombre de etiqueta, su ámbito se resolverá dinámicamente.  Esto permite crear C<goto> calculados como en FORTRAN, pero no está necesariamente recomendado si usted está optimizando, durante el mantenimiento:
 
     goto ("FOO", "BAR", "GLARCH")[$i];
 
-Como se muestra en este ejemplo, C<goto-EXPR> está exento de la regla "se parece a una función".  Un par de paréntesis puestos a continuación no (necesariamente) delimitan su argumento.  C<goto("NE")."XT"> es equivalente a C<goto NEXT>.
+Como se muestra en este ejemplo, C<goto EXPR> está exento de la regla "se parece a una función".  Un par de paréntesis puestos a continuación no (necesariamente) delimitan su argumento.  C<goto("NE")."XT"> es equivalente a C<goto NEXT>.
+También, a diferencia de otros operadores con nombre, este tiene la misma precedencia que una asignación.
 
-El uso de C<goto-LABEL> o C<goto-EXPR> para saltar en una construcción es obsoleto y emitirá una advertencia.  Incluso entonces, no se puede usar para ir a cualquier construcción que requiere inicialización, como una subrutina o un bucle C<foreach>.  Tampoco se puede usar para ir a una construcción que ha sido optimizada.
+El uso de C<goto LABEL> o C<goto EXPR> para saltar en una construcción es obsoleto y emitirá una advertencia.  Incluso entonces, no se puede usar para ir a cualquier construcción que requiere inicialización, como una subrutina o un bucle C<foreach>.  Tampoco se puede usar para ir a una construcción que ha sido optimizada.
 
-La forma C<goto-&NOMBRE> es muy diferente de las otras formas de C<goto>.  De hecho, no es un goto en el sentido normal y no tiene el estigma asociado con los otros gotos.  En cambio, sale de la subrutina actual (perdiendo cualquier cambio hecho por local()) e inmediatamente llama a la subrutina indicada pasándole el valor actual de @_.  Esto se usa por subrutinas C<AUTOLOAD()> que desean cargar otra subrutina y fingen que ésta otra subrutina ha sido llamada en primer lugar (excepto que cualquier modificación a C<@_> en la subrutina actual se propaga a la otra).
+La forma C<goto &NOMBRE> es muy diferente de las otras formas de C<goto>.  De hecho, no es un goto en el sentido normal y no tiene el estigma asociado con los otros gotos.  En cambio, sale de la subrutina actual (perdiendo cualquier cambio hecho por local()) e inmediatamente llama a la subrutina indicada pasándole el valor actual de @_.  Esto se usa por subrutinas C<AUTOLOAD()> que desean cargar otra subrutina y fingen que ésta otra subrutina ha sido llamada en primer lugar (excepto que cualquier modificación a C<@_> en la subrutina actual se propaga a la otra).
 Después del C<goto>, ni siquiera C<caller()> será capaz de decir qué rutina fue llamada en primer lugar.
 
 NOMBRE no necesita ser el nombre de una subrutina; puede ser una variable escalar que contenga una referencia a un código o un bloque que evalúa a una referencia de código.
@@ -1992,7 +2019,7 @@ Note que C<$_> es un alias al valor de la lista, por lo que se puede usar para m
 De forma semejante, grep devuelve alias de la lista original, como los alias de los elementos de la lista de las variables de los bucles for.  Es decir, modificar un elemento de la lista devuelto por grep (por ejemplo, en un C<foreach>, C<map> u otro C<grep>) modifica realmente el elemento en la lista original.
 Esto es algo usualmente a ser evitado cuando se está escribiendo código claro.
 
-Si C<$_> es léxica en el ámbito de aplicación donde C<grep> aparece (porque se ha declarado con C<my $_>) entonces, además de ser un alias local a los elementos de la lista, C<$_> se mantiene léxica dentro del bloque; es decir, no puede ser vista desde el exterior, evitando cualquier potencial efecto colateral.
+Si C<$_> es léxica en el ámbito de aplicación donde C<grep> aparece (porque se ha declarado con la forma obsoleta C<my $_>) entonces, además de ser un alias local a los elementos de la lista, C<$_> se mantiene léxica dentro del bloque; es decir, no puede ser vista desde el exterior, evitando cualquier potencial efecto colateral.
 
 Ver también L</map> para una lista compuesta de los resultados del BLOQUE o EXPR.
 
@@ -2046,7 +2073,8 @@ X<ioctl>
 
 Implementa la función ioctl(2).  Probablemente primero querrá escribir
 
-    require "sys/ioctl.ph";  # probablemente en $Config{archlib}/sys/ioctl.ph
+    require "sys/ioctl.ph";  # probablemente en
+                             # $Config{archlib}/sys/ioctl.ph
 
 para obtener las correctas definiciones de la función.  Si F<sys/ioctl.ph> no existe o no tiene las definiciones correctas, tendrá que incorporar las suyas propias, basadas en sus archivos de cabecera C como las de F<< <sys/ioctl.h> >>.
 (Existe un script Perl llamado B<h2ph> que viene con el kit Perl que puede ayudarle en esto, pero no es nada trivial).  ESCALAR será leído o escrito dependiendo de la FUNCIÓN; un puntero C al valor de la cadena ESCALAR será pasado como tercer argumento de la llamada real a C<ioctl>.  (Si ESCALAR no tiene un valor de cadena sino que tiene un valor numérico, ese valor será el que se pase, en lugar de un puntero al valor de la cadena.  Para garantizar que esto sea cierto, sume un C<0> al escalar antes de usarlo).  Las funciones C<pack> y C<unpack> pueden ser necesarias para manipular los valores de las estructuras utilizadas por C<ioctl>.
@@ -2089,7 +2117,7 @@ X<keys> X<key> X<clave>
 
 Llamado en contexto de lista, devuelve una lista consistente en todas las claves del hash indicado, o en Perl 5.12 o posteriores, los índices de un array.  Versiones de Perl anteriores a 5.12 producirán un error de sintaxis si intenta utilizar un array como argumento.  En contexto escalar, devuelve el número de claves o índices.
 
-Las claves de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real está sujeto a cambio en futuras versiones de Perl, pero se garantiza que sea el mismo orden que las funciones C<values> o C<each> producirían (mientras que el hash no haya sido modificado).  Desde Perl 5.8.1 la ordenación puede ser diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (ver L<perlsec/"Ataques por Complejidad Algorítmica">).
+Las entradas de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real es específico a un hash dado; las mismas series de operaciones en dos hashes pueden resultar en diferentes órdenes para cada hash.  Cualquier inserción en el hash puede cambiar el orden, así como cualquier eliminación, con la excepción de que la clave más reciente devuelta por C<each> o C<keys> puede ser borrada sin que cambie el orden.  Siempre y cuando no se modifique un determinado hash puede confiar en que C<keys>, C<values> y C<each> devuelvan repetidamente lo mismo en el mismo orden.  Vea L<perlsec/"Ataques de complejidad algorítmica"> para los detalles de por qué el orden en un hash se aleatoriza.  Aparte de las garantías proporcionadas aquí los detalles exactos de algoritmo que usa Perl para recorrer un hash está sujeto a cambio en cualquier lanzamiento de Perl.
 
 Como efecto colateral, llamando a keys() reinicia el iterador interno del HASH o del ARRAY (vea L</each>).  De forma particular, llamando a keys() en contexto nulo (void) resetea el iterador sin otro efecto.
 
@@ -2142,22 +2170,27 @@ X<kill> X<signal> X<señal>
 
 =for Pod::Functions send a signal to a process or process group
 
-Manda una señal a una lista de procesos.  Devuelve el número de procesos señalados exitosamente (que no es necesariamente el mismo número de los realmente asesinados).
+Manda una señal a una lista de procesos.  Devuelve el número de argumentos exitosos que fueron utilizados para señalar (que no es necesariamente el mismo número de procesos realmente asesinados, p. ej., cuando se mata a un grupo de procesos).
 
-    $cnt = kill 1, $child1, $child2;
-    kill 9, @finalizadores;
+    $cnt = kill 'HUP', $child1, $child2;
+    kill 'KILL', @goners;
 
-Si la SEÑAL es cero, no se envía señal al proceso, pero C<kill> comprueba si I<posible> enviar una señal a la misma (lo que significa, para ser breve, que el proceso es propiedad del mismo usuario, o somos el super-usuario).  Esto es útil para comprobar que un proceso hijo aún está vivo (aunque sólo sea como un zombie) y no ha cambiado su UID.  Ver L<perlport> para notas sobre la portabilidad de esta construcción.
+SEÑAL puede ser tanto un nombre de señal (una cadena) o un número.  Un nombre de señal puede empezar con un prefijo C<SIG>, así que C<FOO> y C<SIGFOO> refieren a la misma señal.  La forma en cadena de caracteres de SEÑAL es la recomendada para mantener la portabilidad porque la misma señal puede tener números diferentes en diferentes sistemas operativos.
 
-A diferencia del shell, si SEÑAL es negativo, mata el grupo de procesos en lugar de a los procesos.  Eso significa que deseara utilizar, generalmente, señales positivas, y no negativas.
-Puede usar también nombres de señales entrecomilladas.
+Se puede encontrar una lista de nombres de señales soportadas por la plataforma actual en C<$Config{sig_name}>, incluido en el módulo C<Config>.  Vea L<Config> para más detalles.
 
-El comportamiento de kill cuando el I<PROCESO> es el número cero o negativo depende del sistema operativo.  Por ejemplo, en los sistemas conformes a POSIX, un cero señalará al grupo del proceso actual y -1 señalará todos los procesos.
+Un nombre de señal negativo es igual a un número de señal negativa, en donde se mata grupos de procesos en vez de procesos.  Por ejemplo, C<kill '-KILL', $pgrp> y C<kill -9, $pgrp> enviará C<SIGKILL> al grupo de procesos especificado entero.  Eso significa que, de forma general, deseará utilizar señales positivas, y no negativas.
+
+Si la SEÑAL es cero o la cadena C<ZERO> (o C<SIGZERO>), no se envía ninguna señal al proceso, pero C<kill> comprueba si es I<posible> enviar una señal a la misma (lo que significa, para ser breve, que el proceso es propiedad del mismo usuario, o somos el super-usuario).  Esto es útil para comprobar que un proceso hijo aún está vivo (aunque sólo sea como un zombie) y no ha cambiado su UID.  Ver L<perlport> para notas sobre la portabilidad de esta construcción.
+
+El comportamiento de kill cuando el I<PROCESO> es el número cero o negativo depende del sistema operativo.  Por ejemplo, en los sistemas conformes a POSIX, un cero señalará al grupo del proceso actual y -1 señalará todos los procesos, y cualquier otro número de PROCESO negativo actuará como un número de señal y matará el grupo entero del proceso especificado.
+
+Si tanto la SEÑAL y el PROCESO son negativos, los resultados son indefinidos.
+Se puede producir un aviso en una futura versión.
 
 Ver L<perlipc/"Señales"> para más detalles.
 
-En algunas plataformas como Windows, donde la llamada del sistema fork() no está disponible.
-Perl se puede compilar para emular fork() a nivel del intérprete.
+En algunas plataformas, como Windows, en donde la llamada del sistema fork() no está disponible, Perl se puede compilar para emular fork() a nivel del intérprete de Perl.
 Esta emulación tiene limitaciones relacionadas con la muerte que tienen que ser consideradas, para código que se ejecute en Windows y código que tenga la intención de ser portable.
 
 Vea L<perlfork> para más detalles.
@@ -2169,11 +2202,13 @@ Cuestiones de portabilidad: L<perlport/kill>.
 =item last ETIQUETA
 X<last> X<break>
 
+=item last EXPR
+
 =item last
 
 =for Pod::Functions exit a block prematurely
 
-El comando C<last> es como la instrucción C<break> del C (usada en bucles); inmediatamente sale del bucle en cuestión.  Si la ETIQUETA se omite, el comando se refiere al bucle más interior en que se encuentre.  El bloque C<continue>, si está, no es ejecutado:
+El comando C<last> es como la instrucción C<break> del C (usada en bucles); inmediatamente sale del bucle en cuestión.  Si la ETIQUETA se omite, el comando se refiere al bucle más interior en que se encuentre.  La forma C<last EXPR>, disponible a partir de Perl 5.18.0, permite que se compute un nombre de etiqueta en tiempo de ejecución; de lo contrario es idéntico a C<last ETIQUETA>.  El bloque C<continue>, si está, no se ejecuta:
 
     LINEA: while (<STDIN>) {
         last LINE if /^$/;  # salir cuando se termine la cabecera
@@ -2185,6 +2220,9 @@ C<last> no puede usarse para salir de un bloque que devuelve un valor como en C<
 Note que un bloque por sí mismo es semánticamente idéntico a un bucle que se ejecuta una vez.  Así, C<last> se puede usar para salir prematuramente de este bloque.
 
 Ver también L</continue> para una ilustración de cómo funcionan C<last>, C<next> y C<redo>.
+
+A diferencia de otros operadores con nombre, tiene la misma precedencia que una asignación.
+También está exenta de la regla se-parece-a-una-función, así que C<last ("foo")."bar"> hará que "bar" sea parte del argumento a C<last>.
 
 =item lc EXPR
 X<lc> X<lowercase> X<minúscula>
@@ -2203,45 +2241,25 @@ Lo que se devuelve depende de varios factores:
 
 =item Si C<use bytes> está activo:
 
-=over
-
-=item En plataformas EBCDIC
-
-Los resultados son los que devuelve la llamada del sistema en lenguaje C C<tolower()>.
-
-=item En plataformas ASCII
-
-Los resultados siguen la semántica ASCII.  Sólo los caracteres C<A-Z> cambian, a C<a-z>, respectivamente.
-
-=back
+Los resultados siguen las reglas ASCII.  Sólo los caracteres C<A-Z> cambian, a C<a-z>, respectivamente.
 
 =item De lo contrario, si C<use locale> (pero no C<use locale ':not_characters'>) está habilitado
 
-Respeta la configuración regional LC_CTYPE actual de puntos de código < 256, y utiliza la semántica Unicode para los puntos de código restantes (esto último sólo puede ocurrir si la bandera UTF8 también es establecida).  Vea L<perllocale>.
+Respeta la configuración regional LC_CTYPE actual de los códigos de carácter < 256; y utiliza las reglas Unicode para los códigos de carácter restantes (esto último sólo puede ocurrir si la bandera UTF8 también está establecida).  Vea L<perllocale>.
 
-Una deficiencia en este caso es que los cambios que cruzan el límite 255/256 no están bien definidos.  Por ejemplo, la minúscula de LATIN CAPITAL LETTER SHARP S (U+1E9E) en la semántica Unicode es U+00DF (en las plataformas ASCII).   Pero bajo C<use locale>, la minúscula de U+1E9E es ella misma, porque 0xDF quizás no sea LATIN SMALL LETTER SHARP S en la configuración regional actual, y Perl no tiene forma de saber si incluso existe el carácter en la configuración regional, mucho menos qué punto de código es.  Perl devuelve el carácter de entrada sin cambios, para todas las instancias (y no hay muchas) donde el límite 255/256, de otro modo, sería traspasado.
+A partir de v5.20, Perl usará todas las reglas Unicode si la localización es UTF-8.  Por contra, hay una deficiencia en este esquema, y es que los cambios de tamaños de caja que cruzan el límite 255/256 no están bien definidos.  Por ejemplo, la minúscula de LATIN CAPITAL LETTER SHARP S (U+1E9E) en las reglas Unicode es U+00DF (en las plataformas ASCII).   Pero bajo C<use locale> (antes de v5.20 o no está activa la localización UTF-8), la minúscula de U+1E9E es ella misma, porque 0xDF quizás no sea LATIN SMALL LETTER SHARP S en la configuración regional actual, y Perl no tiene forma de saber incluso si existe el carácter en la configuración regional, y aún menos qué código de carácter es.  Perl devuelve el carácter de entrada sin cambios, para todas las instancias (y no hay muchas) donde el límite 255/256, de otro modo, sería traspasado.
 
 =item De otra forma, si EXPR tiene la bandera UTF8 puesta:
 
-Semántica Unicode es utilizada para el cambio de tamaño de caja.
+Se utilizan las reglas Unicode para el cambio de tamaño de caja.
 
-=item De otra forma, si C<use feature 'unicode_strings'> o C<use locale ':not_characters'>) están habilitados
+=item De otra forma, si C<use feature 'unicode_strings'> o C<use locale ':not_characters'> están habilitados:
 
-Semántica Unicode es utilizada para el cambio de tamaño de caja.
+Se utilizan las reglas Unicode para el cambio de tamaño de caja.
 
 =item De lo contrario:
 
-=over
-
-=item En plataformas EBCDIC
-
-Los resultados son los que devuelve la llamada del sistema en lenguaje C C<tolower()>.
-
-=item En plataformas ASCII
-
-Semántica ASCII es utilizada para el cambio de tamaño de caja.  La minúscula de cualquier carácter fuera del rango ASCII es el propio carácter.
-
-=back
+Se utilizan las reglas ASCII para el cambio de tamaño de caja.  La minúscula de cualquier carácter fuera del rango ASCII es el propio carácter.
 
 =back
 
@@ -2263,7 +2281,7 @@ X<length> X<size> X<longitud> X<tamaño>
 
 =item length
 
-=for Pod::Functions return the number of bytes in a string
+=for Pod::Functions return the number of characters in a string
 
 Devuelve la longitud en I<caracteres> del valor de EXPR.  Si EXPR se omite, devuelve la longitud de C<$_>.  Si EXPR es indefinido, devuelve C<undef>.
 
@@ -2317,14 +2335,14 @@ Convierte un tiempo devuelto por la función time() en una lista de 9 elementos 
 
     #  0    1    2     3     4    5     6     7     8
     ($seg,$min,$hora,$mdia,$mes,$anno,$sdia,$ydia,$esdst) =
-					    localtime(time);
+                                                localtime(time);
 
 Todos los elementos de la lista son numéricos y derivan de la 'struct tm' de C.  $seg, $min y $hora son los segundos, minutos y horas del tiempo especificado.
 
 C<$mdia> es el día del mes, y C<$mes> es el mes en el rango C<0..11>, con 0 indicando enero, y 11, diciembre.
 Esto hace que sea fácil obtener un nombre de mes desde una lista:
 
-    my @abbr = qw( Ene Feb Mar Abr May Jun Jul Ago Sep Oct Nov Dic );
+    my @abbr = qw(Ene Feb Mar Abr May Jun Jul Ago Sep Oct Nov Dic);
     print "$abbr[$mes] $mdia";
     # $mes=9, $mdia=18 da "Oct 18"
 
@@ -2454,21 +2472,22 @@ es sólo una manera divertida de escribir
 Note que C<$_> es un alias al valor de la lista, por lo que se puede usar para modificar los elementos de la LISTA.  Mientras que esto suele ser útil, puede causar resultados extraños si los elementos de la LISTA no son variables.
 El uso de un bucle C<foreach> normal para este propósito sería más claro en la mayoría de los casos.  Vea también L</grep> para un array compuesto por los elementos de la lista original en que el BLOQUE o EXPR se evalúa como verdadero.
 
-Si C<$_> es léxico en el ámbito cuando el C<map> aparece (porque se ha declarado con C<my $_>), entonces, además de ser un alias local a los elementos de la lista, C<$_> sigue siendo léxico dentro del bloque, es decir, no puede ser visto desde el exterior, evitando cualquier potencial efecto secundario.
+Si C<$_> es léxica en el ámbito de aplicación donde C<map> aparece (porque se ha declarado con la forma obsoleta C<my $_>) entonces, además de ser un alias local a los elementos de la lista, C<$_> se mantiene léxica dentro del bloque; es decir, no puede ser vista desde el exterior, evitando cualquier potencial efecto colateral.
 
 C<{> comienza tanto una referencia a hash como bloques, por lo que C<map { ...> podría ser tanto el comienzo de map BLOQUE LISTA o map EXPR, LISTA.  Debido a que Perl no mira, por adelantado, por el cierre C<}>, tiene que hacer una conjetura basándose en lo que encuentra justo después de <C{>.  Por lo general, lo hace bien, pero si no, no se dará cuenta de que algo anda mal hasta que llega a la C<}> y se encuentra con la omisión de (o inesperada) coma.  El error de sintaxis será reportado cerca de C<}>, pero tendrá que cambiar algo cerca de C<{>, como en el uso de un unario C<+>, para darle un poco de ayuda a Perl:
 
-    %hash = map {  "\L$_" => 1  } @array  # perl lee mal la EXPR.  mal
-    %hash = map { +"\L$_" => 1  } @array  # perl lee bien el BLOQUE. bien
-    %hash = map { ("\L$_" => 1) } @array  # esto también funciona
-    %hash = map {  lc($_) => 1  } @array  # y como esto.
-    %hash = map +( lc($_) => 1 ), @array  # esto es EXPR ¡y funciona!
+    %hash = map {  "\L$_" => 1  } @array # perl supone EXPR. mal
+    %hash = map { +"\L$_" => 1  } @array # perl supone BLOQUE. bien
+    %hash = map { ("\L$_" => 1) } @array # esto también funciona
+    %hash = map {  lc($_) => 1  } @array # y como esto.
+    %hash = map +( lc($_) => 1 ), @array # esto es EXPR ¡y funciona!
 
-    %hash = map  ( lc($_), 1 ),   @array  # evalúa a (1, @array)
+    %hash = map  ( lc($_), 1 ),   @array # evalúa a (1, @array)
 
 o para forzar a un constructor de un hash anónimo use C<+{>:
 
-   @hashes = map +{ lc($_) => 1 }, @array # EXPR, por lo que necesita una coma al final
+    @hashes = map +{ lc($_) => 1 }, @array # EXPR, así que necesita
+                                           # una coma al final
 
 para obtener una lista de hashes anónimos, cada uno con sólo una entrada cada uno.
 
@@ -2489,7 +2508,7 @@ Las excepciones a esta regla son cuando el archivo o directorio debe mantenerse 
 
 Tenga en cuenta que de acuerdo con POSIX 1.003.1-1996, el nombre de archivo puede tener cualquier número de barras diagonales.  Algunos sistemas operativos y de sistemas de archivos no interpretan esto de forma correcta, por lo que Perl automáticamente elimina todas las barras diagonales finales para tener a todo el mundo feliz.
 
-Para, recursivamente, crear una estructura de directorios, mire la función C<mkpath> del módulo L<File::Path>.
+Para, recursivamente, crear una estructura de directorios, mire la función C<make_path> del módulo L<File::Path>.
 
 =item msgctl ID,CMD,ARG
 X<msgctl>
@@ -2532,23 +2551,29 @@ Llama a la función msgsnd de System V IPC para enviar el mensaje MSG a la cola 
 
 Cuestiones de portabilidad: L<perlport/msgsnd>.
 
-=item my EXPR
+=item my VARLIST
 X<my>
 
-=item my TIPO EXPR
+=item my TIPO VARLIST
 
-=item my EXPR : ATRIBUTOS
+=item my VARLIST : ATRIBUTOS
 
-=item my TYPE EXPR : ATRIBUTOS
+=item my TIPO VARLIST : ATRIBUTOS
 
 =for Pod::Functions declare and assign a local variable (lexical scoping)
 
-Un C<my> declara las variables enumeradas como locales (léxicamente) en el bloque, archivo, o C<eval>.  Si se indica más de un valor, esa lista debe ser puesta entre paréntesis.
+Un C<my> declara las variables enumeradas como locales (léxicamente) en el bloque, archivo, o C<eval>.  Si se lista más de una variable, la lista debe ser puesta entre paréntesis.
 
-La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO está vinculado al uso del pragma C<fields>, y los atributos se manejan con el pragma C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
+La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO puede ser una palabra simple, una constante declarada con C<use constant>, o C<__PACKAGE__>.  Está vinculado al uso del pragma C<fields>, y los atributos se manejan con el pragma C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
+
+Note que con una lista entre paréntesis, se puede utilizar C<undef> como un marcador de posición, por ejemplo para saltar la asignación de valores iniciales:
+
+    my ( undef, $min, $hora ) = localtime;
 
 =item next ETIQUETA
 X<next> X<continue>
+
+=item next EXPR
 
 =item next
 
@@ -2561,13 +2586,16 @@ El comando C<next> es como la instrucción C<continue> en C; comienza la siguien
         #...
     }
 
-Note que si hubiera un bloque C<continue> a continuación del anterior, se ejecutaría incluso en las líneas descartadas.  Si la ETIQUETA se omite, el comando se refiere al bucle más interior en que se encuentre.
+Note que si hubiera un bloque C<continue> a continuación del anterior, se ejecutaría incluso en las líneas descartadas.  Si la ETIQUETA se omite, el comando se refiere al bucle más interior en que se encuentre.  La forma C<next EXPR>, disponible a partir de Perl 5.18.0, permite que se compute un nombre de etiqueta en tiempo de ejecución; de lo contrario es idéntico a C<next ETIQUETA>.
 
 C<next> no se puede utilizar para salir de un bloque que devuelve un valor, como en C<eval {}>, C<sub {}> o C<do {}>, y no debe ser utilizado para salir de una operación grep() o map().
 
 Note que un bloque por sí mismo es semánticamente idéntico a un bucle que se ejecuta una vez.  Por lo tanto C<next> saldrá del primer bloque.
 
 Ver también L</continue> para una ilustración de cómo funcionan C<last>, C<next> y C<redo>.
+
+A diferencia de otros operadores con nombre, tiene la misma precedencia que una asignación.
+También está exenta de la regla se-parece-a-una-función, así que C<next ("foo")."bar"> hará que "bar" sea parte del argumento a C<next>.
 
 =item no MÓDULO VERSIÓN LISTA
 X<no declarations> X<unimporting> X<declaraciones no> X<desimportando>
@@ -2634,8 +2662,6 @@ y para escritura:
 
 Si IDENTIFICADOR_ARCHIVO es una variable escalar indefinida (o array o elemento hash), un nuevo identificador de archivo es autovivificado, significando que a la variable es asignada una referencia a un nuevo, anónimo y reservado identificador de archivo.  De lo contrario, si IDENTIFICADOR_ARCHIVO es una expresión, su valor es el identificador de archivo real.  (Esto se considera una referencia simbólica, por lo que C<use strict "refs"> I<no> debe estar activado).
 
-Si EXPR se omite, la variable escalar global (a nivel de paquete) del mismo nombre que el IDENTIFICADOR_ARCHIVO contiene el nombre del archivo.  (Tenga en cuenta que las variables léxicas -las declaradas con C<my> o C<state>- no servirán para este propósito; así que si está usando C<my> o C<state>, especifique EXPR en su llamada a open).
-
 Si se especifican tres (o más) argumentos, es tomado el modo de apertura (incluyendo un codificado opcional) del segundo argumento, a diferencia del nombre del archivo, que estará en el tercer argumento.  Si MODO es C<< < >> o nada, el archivo se abre para lectura.
 Si MODO es C<< > >>, el archivo es abierto para salida. Los archivos que ya existan serán truncados ("sobreescritos"); y los que no existan serán creados como nuevos archivos.
 Si MODO es C<<< >> >>>, el archivo es abierto en modo añadir, y de nuevo, será creado si es necesario.
@@ -2668,13 +2694,33 @@ Si está usando Perl en un sistema que distingue entre archivos de texto y archi
 
 Al abrir un archivo, es difícil que sea una buena idea seguir si la solicitud ha fallado, por lo que C<open> se utiliza con frecuencia con C<die>.  Incluso si C<die> no hace lo que usted quiere (por ejemplo, en un script CGI, en la que desea dar formato a un mensaje de error apropiado (aunque existen módulos que pueden ayudar con ese problema)) controle siempre el valor de retorno de la apertura de un archivo.  
 
+Se cerrará el gestor de archivo cuando su contador de referencias llegue a cero.
+Si es una variable declarada en un ámbito léxico con C<my>, normalmente significa el final del ámbito que la encierra.  Sin embargo, este cierre automático no comprueba errores, así que es mejor cerrar explícitamente los gestores de archivo, especialmente aquellos que se usaron para escribir:
+
+    close($handle)
+       || warn "close falló: $!";
+
+Un estilo más viejo es utilizar una palabra simple como gestor de archivo, así
+
+    open(FH, "<", "input.txt")
+       or die "cannot open < input.txt: $!";
+
+Entonces puedes usar C<FH> como gestor de archivo, en C<< close FH >> y C<< <FH> >> y demás.  Note que es una variable global, así que esta forma no es la recomendada en código nuevo.
+
+Como atajo, la llamada con un solo argumento toma el nombre del archivo de la variable escalar global del mismo nombre que el gestor de archivo:
+
+    $ARTICULO = 100;
+    open(ARTICULO) or die "No puedo encontrar el artículo $ARTICULO: $!\n";
+
+Aquí, C<$ARTICULO> debe ser una variable escalar global (paquete), no declarada con C<my> o C<state>.
+
 Como un caso especial, la forma de tres argumentos con un modo de lectura/escritura y el tercer argumento siendo C<undef>:
 
     open(my $tmp, "+>", undef) or die ...
 
 abre un identificador de archivo a un archivo anónimo temporal.  También, usando C<< +< >> trabaja de forma simétrica, pero debe considerar, escribir antes algo en el archivo temporal.  Necesitará usar seek() para hacer la lectura.
 
-Desde v5.8.0, Perl ha sido construido para que use PerlIO por defecto.  A menos que haya cambiado esto (como compilar Perl con C<Configure -Uuseperlio>), puede abrir identificadores de archivo directamente a escalares Perl de esta forma:
+Perl se compila, por defecto, con PerlIO; A menos que lo haya cambiado (como compilar Perl con C<Configure -Uuseperlio>), puede abrir identificadores de archivo directamente a escalares Perl de esta forma:
 
     open($fh, ">", \$variable) || ..
 
@@ -2685,10 +2731,6 @@ Para (re)abrir C<STDOUT> o C<STDERR> como un archivo en memoria, primero, cierre
 	or die "No puedo abrir STDOUT: $!";
 
 Ejemplos generales:
-
-    $ARTICULO = 100;
-    open(ARTICULO) or die "No puedo encontrar el artículo $ARTICULO: $!\n";
-    while (<ARTICULO>) {...
 
     open(LOG, ">>/usr/spool/news/twitlog");  # (log es palabra reservada)
     # si open falla, la salida es descartada
@@ -2711,7 +2753,7 @@ Ejemplos generales:
     # archivos en memoria
     open(MEMORIA, ">", \$var)
         or die "No puedo abrir el archivo en memoria: $!";
-    print MEMORIA "foo!\n";              # la salida aparecerá en $var
+    print MEMORIA "foo!\n";             # la salida aparecerá en $var
 
     # procesa la lista de archivos pasados como argumentos junto con cualquier archivo a incluir
 
@@ -2722,18 +2764,18 @@ Ejemplos generales:
     sub procesa {
         my($archivo, $entrada) = @_;
         $entrada++;    # esto es un incremento de cadena
-        unless (open($entrada, $archivo)) {
+        unless (open($input, "<", $archivo)) {
             print STDERR "No puedo abrir $archivo: $!\n";
             return;
         }
 
         local $_;
-        while (<$entrada>) {    # note el uso de la indirección
+        while (<$input>) {    # note el uso de la indirección>
             if (/^#include "(.*)"/) {
-                procesa($1, $input);
+                process($1, $input);
                 next;
             }
-            #...          # cualquier otra cosa
+            #...          # lo que sea
         }
     }
 
@@ -2794,9 +2836,10 @@ Use C<defined($pid)> o C<//> para determinar cuándo el open se realizó correct
 
 Por ejemplo, utilice esto
 
-    $child_pid = open(DESDE_HIJO, "|-") // die "no puedo hacer fork: $!";
+    $child_pid = open(DESDE_HIJO, "|-")      // die "no puedo hacer fork: $!";
 
 o bien
+
     $child_pid = open(AL_HIJO, "|-")	// die "no puedo hacer fork: $!";
 
 seguido por 
@@ -2805,7 +2848,7 @@ seguido por
 	# soy el padre:
 	# o escribo AL_HIJO o leo DESDE_HIJO
 	...
-	wait $child_pid;
+       waitpid $child_pid, 0;
     } else {
 	# soy el hijo; use STDIN/STDOUT de forma normal
 	...
@@ -2834,7 +2877,7 @@ Los dos últimos ejemplos de cada bloque muestra la tubería como "en forma de l
 
 Ver L<perlipc/"Aperturas seguras de tuberías"> para más ejemplos sobre esto.
 
-Empezando con v5.6.0, Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (vea L<perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier controlador abierto.
+Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (vea L<perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier controlador abierto.
 
 En sistemas que soportan la bandera B<close-on-exec> (I<cerrar en ejecución>) en archivos, esta bandera se establecerá para el descriptor de archivo abierto recientemente según lo determinado por el valor de C<$^F>.  Ver L<perlvar/$^F>.
 
@@ -2877,27 +2920,6 @@ Si busca un "auténtico" C<open> como en C (vea C<open(2)> en su sistema), enton
     seek(HANDLE, 0, 0);
     print "El archivo contiene: ", <HANDLE>;
 
-Utilizando el constructor del paquete C<IO::Handle> (o una de sus subclases, como C<IO::File> o C<IO::Socket>), puede generar identificadores de archivo anónimos que tienen el ámbito de cualquiera de las variables que contengan referencias a ellos, y entonces, automáticamente (pero silenciosamente), son cerrados cuando el contador de referencias llegue a cero, normalmente a la salida del ámbito actual:
-
-    use IO::File;
-    #...
-    sub leer_miarchivo {
-        my $TODO = shift;
-	# o simplemente dejarlo indefinido, para autovivificarlo
-        my $handle = IO::File->new;
-        open($handle, "<", "miarchivo") or die "miarchivo: $!";
-        $first = <$handle>
-            or return ();     # Cerrado aquí automáticamente.
-        mung($first) or die "mung falló";   # O aquí.
-        return (first, <$handle>) if $TODO; # O aquí.
-        return $first;                      # O aquí.
-    }
-
-B<AVISO:> El anterior ejemplo tiene un error porque el cierre automático que sucede cuando el recuento de referencias de C<handle> no lo detecta apropiadamente y da mensajes de error.  I<Siempre> cierre el C<handle> e inspeccione el valor devuelto.
-
-    close($handle) 
-	|| warn "close falló: $!";
-
 Ver L</seek> para más detalles acerca de mezclar lectura y escritura.
 
 Cuestiones de portabilidad: L<perlport/open>.
@@ -2927,29 +2949,29 @@ Si EXPR es una cadena vacía, devuelve 0.  Si se omite EXPR, se usa C<$_>.
 Para lo contrario, vea L</chr>.
 Vea L<perlunicode> para más información acerca de Unicode.
 
-=item our EXPR
+=item our VARLIST
 X<our> X<global>
 
-=item our TIPO EXPR
+=item our TIPO VARLIST
 
-=item our EXPR : ATRIBUTOS
+=item our VARLIST : ATRIBUTOS
 
-=item our TIPO EXPR : ATRIBUTOS
+=item our TIPO VARLIST : ATRIBUTOS
 
 =for Pod::Functions +5.6.0 declare and assign a package variable (lexical scoping)
 
-C<our> asocia un nombre sencillo con una variable de paquete en el paquete actual para ser usado en el ámbito actual.  Cuando C<use strict 'vars'> esté activo, C<our> le permite usar variables globales declaradas sin calificarlas con nombres de paquetes, en el ámbito léxico de la declaración C<our>.
-De esta manera, C<our> difiere de C<use vars>, en que su ámbito es el paquete.
+C<our> crea un alias léxico a una variable de paquete con el mismo nombre en el paquete actual, para usarla dentro del ámbito léxico actual.
 
-A diferencia de C<my> o C<state>, que asignan almacenamiento para una variable y asocian un nombre sencillo con este almacenamiento para su uso dentro del ámbito actual, C<our> asocia un nombre sencillo con una variable de paquete (es decir: global) en el paquete actual, para su uso dentro del ámbito léxico actual.
-En otras palabras, C<our> tiene las mismas reglas de alcance que C<my> o C<state>, pero no crea, necesariamente, una variable.
+C<our> tiene las mismas reglas de ámbito que C<my> o C<state>, pero C<our> sólo declara un alias, mientras que C<my> o C<state> declaran un nombre de variable y reservan espacio para ese nombre dentro del ámbito actual.
 
-Si se lista más de un valor, esa lista debe ser puesta entre paréntesis.
+Esto significa que cuando C<use strict 'vars'> esté activo, C<our> le permite usar una variable de paquete sin calificarla con el nombre de paquete, pero sólo en el ámbito léxico de la declaración C<our>.  De esta manera, C<our> difiere de C<use vars>, que permite usar un nombre no calificado I<sólo> dentro del paquete afectado, pero sí en diversos ámbitos.
+
+Si se lista más de una variable, la lista debe ser puesta entre paréntesis.
 
     our $foo;
     our($bar, $baz);
 
-Una declaración C<our> declara una variable global que será visible en todo su ámbito léxico, incluso a través de las fronteras del paquete.  El paquete en el que se introduce la variable se determina en el punto de la declaración, no en el momento de ser usada.  Esto significa que el siguiente comportamiento cumple que:
+Una declaración C<our> declara un alias para una variable de paquete que será visible en todo su ámbito léxico, incluso a través de las fronteras del paquete.  El paquete en el que se introduce la variable se determina en el punto de la declaración, no en el momento de ser usada.  Esto significa que el siguiente comportamiento cumple que:
 
     package Foo;
     our $bar;      # declara $Foo::bar para el resto del ámbito léxico
@@ -2975,6 +2997,10 @@ Múltiples declaraciones C<our> con el mismo nombre en el mismo ámbito léxico 
 Una declaración C<our> también puede tener una lista de atributos asociados a ella.
 
 La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO está vinculado al uso del pragma C<fields>, y los atributos se manejan con el pragma C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
+
+Note que con una lista entre paréntesis, se puede utilizar C<undef> como un marcador de posición, por ejemplo para saltar la asignación de valores iniciales:
+
+    our ( undef, $min, $hora ) = localtime;
 
 =item pack PLANTILLA,LISTA
 X<pack>
@@ -3009,13 +3035,14 @@ La PLANTILLA es una secuencia de caracteres que dan el orden y el tipo de los va
 
     q  Un valor cuádruplo con signo (64 bit).
     Q  Un valor cuádruplo sin signo.
-         (Quads están disponibles sólo si su sistema soporta valores
-          enteros de 64 bit _y_ si Perl ha sido compilado para
-          soportarlos.  En caso contrario, lanza una excepción).
+         (Quads están disponibles sólo si su sistema soporta valores de 64-bit
+          enteros _y_ si Perl se compiló para soportar
+          aquello.  En caso contrario, lanza una excepción).
 
     i  Un valor entero con signo.
     I  Un valor entero sin signo.
-         (Este 'entero' es _al_menos_, de 32 bit de ancho.  Su tamaño exacto depende de lo que un compilador C local llame 'int').
+         (Este 'entero' es _al_menos_, de 32 bit de ancho.  Su exacto
+          tamaño depende de lo que un compilador C local llame 'int').
 
     n  Un corto sin signo (16 bit) en orden "red" (big-endian).
     N  Un largo sin signo (32 bit) en orden "red" (big-endian).
@@ -3031,8 +3058,8 @@ La PLANTILLA es una secuencia de caracteres que dan el orden y el tipo de los va
     F  Un valor Perl interno de punto flotante (NV) en formato nativo
     D  Un flotante en doble-largo precisión en formato nativo.
          (Dobles largos están disponibles sólo si su sistema soporta
-          valores doble largos _y_ si Perl ha sido compilado para
-          soportarlos.  En caso contrario, lanza una excepción).
+          valores doble largos _y_ si Perl se compiló para
+          soportarlo.  En caso contrario, lanza una excepción).
 
     p  Un puntero a una cadena terminada en nulo.
     P  Un puntero a una estructura (una cadena de longitud fija).
@@ -3059,14 +3086,14 @@ La PLANTILLA es una secuencia de caracteres que dan el orden y el tipo de los va
 Uno o más de los modificadores siguientes pueden, opcionalmente, seguir a ciertas letras en la PLANTILLA (la segunda columna enumeran las letras para las cuales el modificador es válido):
 
     !   sSlLiI     Fuerza a tamaños nativos (short, long, int) en lugar
-                   de tamaños fijos (16/32 bit)
+                   de tamaños fijos (16-/32-bit).
 
-        xX         Hace x y X actuar como comandos de alineamiento.
+    !   xX         Hace x y X actuar como comandos de alineamiento.
 
-        nNvV       Trata a enteros como con signo, en lugar de sin signo.
+    !   nNvV       Trata a enteros como con signo, en lugar de sin signo.
 
-        @.         Especifica una posición como desplazamiento de byte en la
-                   representación interna de la cadena empaquetada.  Eficiente
+    !   @.         Especifica una posición como desplazamiento de byte en la interna
+                   representación de la cadena empaquetada.  Eficiente
                    pero peligroso.
 
     >   sSiIlLqQ   Fuerza un orden de bytes en big-endian.
@@ -3076,6 +3103,15 @@ Uno o más de los modificadores siguientes pueden, opcionalmente, seguir a ciert
         jJfFdDpP   (El "little end" toca la construcción).
 
 Los modificadores C<< > >> y C<< < >> también se pueden utilizar en los grupos C<()> para obligar a un particular orden de bytes en todos los componentes de ese grupo, que incluye todos sus subgrupos.
+
+=begin comment
+
+Larry recuerda que los formatos de cadena hex y bit (H, h, B, b) se añadieron para empaquetar el procesamiento de datos de la sonda Magallanes de la NASA.  Magallanes estaba en una órbita elíptica, utilizando la antena para el mapeo de radar cuándo se acercaba a Venus y para comunicarse con la Tierra en el resto de la órbita.
+Había dos unidades de transmisión, pero uno de estos falló, y luego el otro desarrolló un error por el cual, aleatoriamente cambiaba el sentido de todos los bits. Fue fácil detectar automáticamente registros completos con el sentido correcto, y completar registros con todos los bits cambiados. Aun así, esto no recuperó los registros donde el sentido cambiaba a la mitad. Un colega de Larry fue capaz de darse cuenta donde los registros cambiaban, así que escribieron un editor llamado kybble (una broma sobre la comida de perro Kibbles 'n Bits) para ayudarle corregir a mano los registros y recuperar los datos. Fue para este propósito por el que pack tiene los especificadores de formato de cadena hex y bit.
+
+git muestra que fueron añadidos a perl 3.0 en el parche #44 (enero 1991, envío 27e2fb84680b9cc1), pero la descripción del parche no hace ninguna mención de su adición, olvidando la historia que hubo detrás de ellos.
+
+=end comment
 
 Se aplica las siguientes reglas:
 
@@ -3184,14 +3220,14 @@ Para C<unpack>, se usa una pila interna de argumentos enteros desempaquetados.  
 
 Si I<secuencia-item> se refiere a un tipo de cadena de caracteres (C<"A">, C<"a">, o C<"Z">), la I<longitud-item> es la longitud de la cadena, no el número de cadenas.  Con un contador de repeticiones explícito para el empaquetado, la cadena de empaquetado se ajusta a esa longitud.  Por ejemplo:
 
- Este código:                            da este resultado:
- 
-  unpack("W/a", "\004Gurusamy")          ("Guru")
-  unpack("a3/A A*", "007 Bond  J ")      (" Bond", "J")
-  unpack("a3 x2 /A A*", "007: Bond, J.") ("Bond, J", ".")
+ Este código:                           da este resultado:
 
-  pack("n/a* w/a","hola,","mundo")      "\000\004hola,\005mundo"
-  pack("a/W2", ord("a") .. ord("z"))    "2ab"
+ unpack("W/a", "\004Gurusamy")          ("Guru")
+ unpack("a3/A A*", "007 Bond  J ")      (" Bond", "J")
+ unpack("a3 x2 /A A*", "007: Bond, J.") ("Bond, J", ".")
+
+ pack("n/a* w/a","hola,","mundo")      "\000\004hola,\005mundo"
+ pack("a/W2", ord("a") .. ord("z"))    "2ab"
 
 La I<longitud-item> no se devuelve de forma explícita desde C<unpack>.
 
@@ -3264,7 +3300,7 @@ Para enteros empaquetados de forma portátil, o bien usar los formatos C<n>, C<N
 
 =item *
 
-A partir de Perl 5.9.2, los formatos enteros y de punto flotante, junto con los formatos C<p> y C<P> y los grupos C<()>, podrán ser seguidos por los modificadores de ordenación de bytes C<< > >> o C<< < >>, para forzar, respectivamente, el orden de bytes big-endian o little-endian.  Estos modificadores son especialmente útiles dado que C<n>, C<N>, C<v> y C<V> no cubren valores enteros con signo, enteros de 64 bits, o de punto flotante.
+A partir de Perl 5.10.0, los formatos enteros y de punto flotante, junto con los formatos C<p> y C<P> y los grupos C<()>, podrán ser seguidos por los modificadores de ordenación de bytes C<< > >> o C<< < >>, para forzar, respectivamente, el orden de bytes big-endian o little-endian.  Estos modificadores son especialmente útiles dado que C<n>, C<N>, C<v> y C<V> no cubren valores enteros con signo, enteros de 64 bits, o de punto flotante.
 
 Éstas son algunas de las preocupaciones a tener en cuenta cuando se usa un modificador de ordenación:
 
@@ -3450,7 +3486,7 @@ X<paquete> X<módulo> X<espacio de nombres> X<versión>
 Declara el BLOQUE o el resto de la unidad de compilación como pertenecientes al espacio de nombres especificado.  El alcance de la declaración del paquete es, tanto el BLOQUE indicado o, en ausencia de un BLOQUE, desde la misma declaración hasta el final del ámbito actual (el bloque, archivo o C<eval> que lo engloba).  Es decir, las formas sin un BLOQUE son operativas hasta el final del ámbito actual, al igual que los operadores C<my>, C<state> y C<our>.
 Todos los identificadores dinámicos no cualificados en este ámbito pertenecerán al espacio de nombres indicado, salvo cuando sea reemplazado por otra declaración C<package> o cuando sean uno de los identificadores especiales que cualifican dentro de C<main::>, al igual que C<STDOUT>, C<ARGV>, C<ENV>, y las variables especiales de caracteres de puntuación.
 
-Una instrucción package afecta sólo a las variables dinámicas, incluyendo las que haya usado con C<local>, pero I<no> a las variables léxicas, que son creadas con C<my>, C<state> o C<our>.  Normalmente será la primera declaración en un archivo incluido por medio de un C<require> o C<use>.  Usted puede cambiar en un paquete en más de un lugar, ya que esto sólo determina qué tabla de símbolos por defecto será utilizada por el compilador para el resto de ese bloque.  Puede hacer referencia a los identificadores de otros paquetes distintos del actual anteponiendo el identificador con el nombre del paquete y un dos puntos doble, como en C<$AlgunPaquete::var> o C<EstePaquete::CONTROLADOR_ENTRADA>.  Si el nombre del paquete se omite, se asume que es C<main>.  Es decir, C<$::sail> es equivalente a C<$main::sail> (y también a C<$main'sail>, algo que se puede ver en código muy antiguo, escrito en su mayoría en Perl 4).
+Una instrucción package afecta sólo a las variables dinámicas, incluyendo las que haya usado con C<local>, pero I<no> a las variables de ámbito léxico, que se crean con C<my>, C<state> o C<our>.  Normalmente será la primera declaración en un archivo incluido por medio de un C<require> o C<use>.  Usted puede cambiar en un paquete en más de un lugar, ya que esto sólo determina qué tabla de símbolos por defecto será utilizada por el compilador para el resto de ese bloque.  Puede hacer referencia a los identificadores de otros paquetes distintos del actual anteponiendo el identificador con el nombre del paquete y un dos puntos doble, como en C<$AlgunPaquete::var> o C<EstePaquete::CONTROLADOR_ENTRADA>.  Si el nombre del paquete se omite, se asume que es C<main>.  Es decir, C<$::sail> es equivalente a C<$main::sail> (y también a C<$main'sail>, algo que se puede ver en código muy antiguo, escrito en su mayoría en Perl 4).
 
 Si se indica VERSIÓN, C<package> inicializa la variable C<$VERSION> en el espacio de nombres indicado a un objeto L<version> con la VERSIÓN indicada.  VERSIÓN debe ser un número de versión al estilo "estricto", según lo define el módulo L<version>: un número decimal positivo (entero o decimal) sin exponentes o una v-cadena con una 'v' precedente con al menos tres componentes.  Debe ajustar el valor de C<$VERSION> solo una vez por paquete.
 
@@ -3470,6 +3506,8 @@ X<pipe> X<tubería>
 
 Abre un par de tuberías conectadas como lo hace correspondiente llamada al sistema.
 Tenga en cuenta que si se establece un circuito de procesos entubados, puede producirse un bloqueo mortal a menos que sea muy cuidadoso.  Además, tenga en cuenta que las tuberías de Perl utilizan el búfer de E/S, así que puede que necesite establecer C<$|> para limpiar su CONTROLADOR_ESCRITURA después de cada comando, dependiendo de la aplicación.
+
+Devuelve verdadero en caso de éxito.
 
 Ver L<IPC::Open2>, L<IPC::Open3>, y L<perlipc/"Comunicación Bidireccional con otro proceso"> para ejemplos de estas cosas.
 
@@ -3544,7 +3582,9 @@ X<printf>
 
 =for Pod::Functions output a formatted list to a filehandle
 
-Equivalente a C<print IDENTIFICADOR_ARCHIVO sprintf(FORMATO, LISTA)>, excepto que C<$\> (el separador de registro a la salida) no es añadida.  El primer argumento de la lista será interpretado como el formato para C<printf>.  Vea L<sprintf|/sprintf FORMATO, LISTA> para una explicación del argumento de formato.  Si omite la LISTA, se usará C<$_>; para usar un IDENTIFICADOR_ARCHIVO sin una LISTA, debe usar un identificador de archivo real, como C<FH>, no uno indirecto como C<$fh>.  Si C<use locale> (incluyendo C<use locale ':not_characters'>) está activo y POSIX::setlocale() ha sido llamada, el carácter utilizado para el separador decimal en números formateados en punto flotante se ve afectado por la configuración regional de LC_NUMERIC.  Vea L<perllocale> y L<POSIX>.
+Equivalente a C<print IDENTIFICADOR_ARCHIVO sprintf(FORMATO, LISTA)>, excepto que C<$\> (el separador de registro a la salida) no es añadida.  El FORMATO y la LISTA son, de hecho, interpretados como una sola lista.  El primer argumento de la lista será interpretado como el formato para C<printf>.  Esto significa que C<printf(@_)> utilizará C<$_[0]> como el formato.  Vea L<sprintf|/sprintf FORMATO, LISTA> para una explicación del argumento de formato.  Si C<use locale> (incluyendo C<use locale ':not_characters'>) está activo y POSIX::setlocale() ha sido llamada, el carácter utilizado para el separador decimal en números formateados en punto flotante se ve afectado por la configuración regional de LC_NUMERIC.  Vea L<perllocale> y L<POSIX>.
+
+Por razones históricas, si omite la lista, se usará C<$_> como formato; para usar un IDENTIFICADOR_ARCHIVO sin una lista, debe usar un identificador de archivo real, como C<FH>, no uno indirecto como C<$fh>.  Aun así, esto raramente será lo que quiera hacer; si $_ contiene códigos de formateo, serán reemplazados con la cadena vacía y se emitirá un aviso, si los avisos están habilitados.  Use un solo C<print> si quiere imprimir los contenidos de $_.
 
 No caiga en la trampa de utilizar un C<printf> cuando un simple C<print> valdría.  El C<print> es más eficiente y menos propenso a errores.
 
@@ -3555,7 +3595,7 @@ X<prototype> X<prototipo>
 
 Devuelve el prototipo de una función como una cadena (o C<undef> si la función no tiene ningún prototipo).  FUNCIÓN es una referencia a, o el nombre de, la función cuyo prototipo se desea recuperar.
 
-Si FUNCIÓN es una cadena que comienza con C<CORE::>, el resto es tomado como un nombre para una función predefinida de Perl.  Si la función predefinida no es I<sobreescribible> (como lo es C<qw//>) o si sus argumentos no pueden ser adecuadamente expresados por un prototipo (como C<system>), prototype() devuelve C<undef>, porque la orden interna en realidad no se comporta como una función de Perl.  De lo contrario, se devuelve la cadena que describe el prototipo equivalente.
+Si FUNCIÓN es una cadena que comienza con C<CORE::>, el resto es tomado como un nombre para una función predefinida de Perl.  Si los argumentos de la función predefinida no pueden ser adecuadamente expresados por un prototipo (como en C<system>), prototype() devuelve C<undef>, porque la orden interna en realidad no se comporta como una función de Perl.  De lo contrario, se devuelve la cadena que describe el prototipo equivalente.
 
 =item push ARRAY,LISTA
 X<push> X<stack> X<pila>
@@ -3612,7 +3652,7 @@ X<quotemeta> X<metacharacter> X<metacarácter>
 
 Devuelve el valor de EXPR con todos los caracteres ASCII que no formen parte de una "palabra" escapados con una barra diagonal inversa.  (Es decir, todos los caracteres ASCII que no se ajusten a C</[A-Za-z_0-9]/> serán precedidos por una barra diagonal inversa en la cadena devuelta, con independencia de cualquier configuración regional).
 Esta es la función interna que implementa el escapado de C<\Q> en las cadenas con doble entrecomillado.
-(Vea más abajo para el comportamiento en puntos de código que no son ASCII).
+(Vea más abajo para el comportamiento en códigos de carácter que no son ASCII).
 
 Si se omite EXPR, se usa C<$_>.
 
@@ -3646,17 +3686,17 @@ A partir de Perl v5.16, Perl adopta una estrategia definida en Unicode en el esc
 
 Se sigue aplicando el escapado de cadenas no UTF-8 cuando se esté encuentre fuera del ámbito de C<use feature 'unicode_strings'>, que consiste en escapar a todos los caracteres del rango superior de Latin1.  Esto proporciona una completa compatibilidad hacia atrás para los programas antiguos que no utilizan Unicode.  (Tenga en cuenta que C<unicode_strings> se activa automáticamente en el ámbito de S<C<use v5.12>> o mayor).
 
-Dentro del ámbito de C<use locale>, todos los puntos de código que no sean ASCII Latin1 son escapados tanto si la cadena está codificada como UTF-8 como si no.  Como se mencionó anteriormente, la configuración regional no afecta al escapado de caracteres del rango ASCII.
+Dentro del ámbito de C<use locale>, todos los códigos de carácter que no sean ASCII Latin1 son escapados tanto si la cadena está codificada como UTF-8 como si no.  Como se mencionó anteriormente, la configuración regional no afecta al escapado de caracteres del rango ASCII.
 Esto protege contra configuraciones regionales con caracteres como C<"|"> que son considerados como caracteres que forman parte de las palabras.
 
 De lo contrario, Perl escapa caracteres no ASCII utilizando una adaptación de Unicode (vea L<http://www.unicode.org/reports/tr31/>).
-Los únicos puntos de código que son escapados son los que tienen alguna de las propiedades Unicode: Pattern_Syntax, Pattern_White_Space, White_Space, Default_Ignorable_Code_Point o General_Category=Control.
+Los únicos códigos de carácter que son escapados son los que tienen alguna de las propiedades Unicode: Pattern_Syntax, Pattern_White_Space, White_Space, Default_Ignorable_Code_Point o General_Category=Control.
 
-De estas propiedades, los dos más importantes son Pattern_Syntax y Pattern_White_Space.  Han sido creadas por Unicode para, exactamente, este propósito de decidir qué caracteres en un patrón de expresión regular debe ser escapado.  Ningún carácter que puede ir en un identificador tiene estas propiedades.
+	De estas propiedades, los dos más importantes son Pattern_Syntax y Pattern_White_Space.  Han sido creadas por Unicode para, exactamente, este propósito de decidir qué caracteres en un patrón de expresión regular debe ser escapado.  Ningún carácter que puede ir en un identificador tiene estas propiedades.
 
-Perl promete, que si alguna vez añadimos metacaracteres de patrones de expresión regular a la docena que ya está definida (C<\ E<verbar> ( ) [ { ^ * $ + ? .>), sólo usaremos aquellos que tengan la propiedad Pattern_Syntax.  Perl también promete, que si alguna vez añadimos caracteres que han de ser considerados como espacio en blanco en las expresiones regulares (actualmente, las más afectadas serán las que tengan el C</x>), todos ellos tendrán la propiedad Pattern_White_Space.
+Perl promete, que si alguna vez añadimos metacaracteres de patrones de expresión regular a la docena que ya está definida (C<\ E<verbar> ( ) [ { ^ * $ + ?  .>), sólo usaremos aquellos que tengan la propiedad Pattern_Syntax.  Perl también promete, que si alguna vez añadimos caracteres que han de ser considerados como espacio en blanco en las expresiones regulares (actualmente, las más afectadas serán las que tengan el C</x>), todos ellos tendrán la propiedad Pattern_White_Space.
 
-Unicode promete que el conjunto de puntos de código que tienen estas dos propiedades nunca cambiará, así que algo que no se escape en v5.16 nunca tendrá que ser escapado en cualquier futura versión de Perl.  (No todos los puntos de código que coinciden con Pattern_Syntax tienen realmente caracteres asignados a ellos; así que hay espacio para crecer, pero son desactivados tanto si están asignados como si no.  Perl, por supuesto, nunca usaría un punto de código asignado como un metacarácter real).
+Unicode promete que el conjunto de códigos de carácter que tienen estas dos propiedades nunca cambiará, así que algo que no se escape en v5.16 nunca tendrá que ser escapado en cualquier futura versión de Perl.  (No todos los códigos de carácter que coinciden con Pattern_Syntax tienen realmente caracteres asignados a ellos; así que hay espacio para crecer, pero son desactivados tanto si están asignados como si no.  Perl, por supuesto, nunca usaría un punto de código asignado como un metacarácter real).
 
 Escapar caracteres que tienen las otras 3 propiedades se hace para mejorar la legibilidad de la expresión regular y no porque realmente se necesita que estén escapados para los fines de las expresiones regulares (caracteres con la propiedad White_Space es probable que sean indistinguibles en la página o en la pantalla de los que tienen la propiedad Pattern_White_Space; y las otras dos propiedades contienen caracteres no imprimibles).
 
@@ -3709,7 +3749,7 @@ Si está planeando hacer test de archivos de los valores retornados por un C<rea
     @dots = grep { /^\./ && -f "$algun_dir/$_" } readdir($dh);
     closedir $dh;
 
-A partir de Perl 5.11.2 puede usar un simple C<readdir> en un bucle C<while>, que actualizará C<$_> en cada iteración.
+A partir de Perl 5.12 puede usar un simple C<readdir> en un bucle C<while>, que actualizará C<$_> en cada iteración.
 
     opendir(my $dh, $algun_dir) || die;
     while(readdir $dh) {
@@ -3795,11 +3835,13 @@ Note los I<caracteres>: dependiendo del estado del socket, son leídos bytes (8-
 =item redo ETIQUETA
 X<redo>
 
+=item redo EXPR
+
 =item redo
 
 =for Pod::Functions start this loop iteration over again
 
-El comando C<redo> reinicia la iteración sin evaluar de nuevo la condición.  El bloque C<continue>, si está, no es ejecutado:  Si la ETIQUETA se omite, el comando se refiere al bucle más interior en que se encuentre.  Los programas que quieren engañarse a sí mismos acerca de lo que se acaba de introducir suelen utilizar este comando:
+El comando C<redo> reinicia la iteración sin evaluar de nuevo la condición.  El bloque C<continue>, si está, no es ejecutado:  Si la ETIQUETA se omite, el comando se refiere al bucle más interior en que se encuentre.  La forma C<redo EXPR>, disponible a partir de Perl 5.18.0, permite que se compute un nombre de etiqueta en tiempo de ejecución; de lo contrario es idéntico a C<redo ETIQUETA>.  Los programas que quieren engañarse a sí mismos acerca de lo que se acaba de introducir suelen utilizar este comando:
 
     # elimina ingenuamente comentarios Pascal
     # (aviso: asumes que no hay { o } en cadenas)
@@ -3824,6 +3866,9 @@ Note que un bloque por sí mismo es semánticamente idéntico a un bucle que se 
 
 Ver también L</continue> para una ilustración de cómo funcionan C<last>, C<next> y C<redo>.
 
+A diferencia de otros operadores con nombre, tiene la misma precedencia que una asignación.
+También está exenta de la regla se-parece-a-una-función, así que C<redo ("foo")."bar"> hará que "bar" sea parte del argumento a C<redo>.
+
 =item ref EXPR
 X<ref> X<reference> X<referencia>
 
@@ -3832,6 +3877,7 @@ X<ref> X<reference> X<referencia>
 =for Pod::Functions find out the type of thing being referenced
 
 Devuelve una cadena no vacía si EXPR es una referencia; de otra manera, devuelve una cadena vacía.  Si EXPR no se especifica, se comprobará C<$_>.  El valor devuelto depende del tipo de cosa que la referencia indique como referencia.
+
 Tipos predefinidos incluyen:
 
     SCALAR
@@ -3846,7 +3892,7 @@ Tipos predefinidos incluyen:
     VSTRING
     Regexp
 
-Si el objeto referenciado ha sido bendecido en un paquete, entonces es el nombre de este paquete el que es devuelto en su lugar.  Puede pensar en C<ref> como un operador C<typeof>.
+Puede pensar en C<ref> como un operador C<typeof>.
 
     if (ref($r) eq "HASH") {
         print "r es una referencia a un hash.\n";
@@ -3858,6 +3904,10 @@ Si el objeto referenciado ha sido bendecido en un paquete, entonces es el nombre
 El valor de retorno C<LVALUE> indica una referencia a un valor-izquierda que no es una variable.  Obtiene esto de la referencia a las llamadas a funciones como C<pos()> o C<substr()>.  C<VSTRING> se devuelve si la referencia apunta a una L<version string|perldata/"Cadenas de versión">.
 
 El resultado C<Regexp> indica que el argumento es una expresión regular como resultado de C<qr//>.
+
+Si el objeto referenciado ha sido bendecido en un paquete, entonces se devuelve el nombre de ese paquete.  Pero no use esto, ya que se considera que es una "mala práctica".  Primero, porque un objeto podría usar una clase llamada C<Regexp> o C<IO>, o incluso C<HASH>.  También, porque C<ref> no tiene en cuenta a las subclases, como hace C<isa>.
+
+En lugar de eso, use C<blessed> (en el módulo L<Scalar::Util>) para comprobaciones booleanas, C<isa> para comprobaciones de una clase específica y C<reftype> (también en L<Scalar::Util>) para comprobaciones de tipo.  (Vea L<perlobj> para más detalles y un ejemplo de C<blessed/isa>).
 
 Ver también L<perlref>.
 
@@ -3892,37 +3942,54 @@ Especificando VERSIÓN como un literal de la forma v5.6.1, debe, generalmente, e
 
     require v5.6.1;     # comprobación de versión en tiempo de ejecución
     require 5.6.1;      # ídem
-    require 5.006_001;  # idem; preferido para mantener la compatibilidad
+    require 5.006_001;  # idem; preferido para mantener
+                          la compatibilidad
 
-De lo contrario, C<require> demanda que un archivo de biblioteca sea incluido si no se hubiera incluido ya.  El archivo es incluido a través del mecanismo do ARCHIVO, que es esencialmente lo mismo que una variedad de C<eval> con la advertencia de que las variables léxicas en la secuencia de comandos del programa serán invisibles para el código incluido.  Tiene una semántica similar a la subrutina siguiente:
+De lo contrario, C<require> demanda que un archivo de biblioteca sea incluido si no se hubiera incluido ya.  El archivo es incluido a través del mecanismo do ARCHIVO, que es esencialmente lo mismo que una variedad de C<eval> con la advertencia de que las variables léxicas en la secuencia de comandos del programa serán invisibles para el código incluido.  Si estuviera implementado en puro Perl, podría tener una semántica similar a lo siguiente:
+
+    use Carp 'croak';
+    use version;
 
     sub require {
-       my ($nombrearchivo) = @_;
-       if (exists $INC{$archivo}) {
-           return 1 if $INC{$archivo};
-           die "Falló la compilación en require";
-       }
-       my ($realnombrearchivo,$resultado);
-       ITER: {
-           foreach $prefix (@INC) {
-               $nombre_archivo_real = "$prefijo/$archivo";
-               if (-f $nombre_archivo_real) {
-                   $INC{$archivo} = $nombre_archivo_real;
-                   $resultado = do $nombre_archivo_real;
-                   last ITER;
-               }
-           }
-           die "No encuentro el $archivo en \@INC";
-       }
-       if ($@) {
-           $INC{$archivo} = undef;
-           die $@;
-       } elsif (!$resultado) {
-           delete $INC{$archivo};
-           die "$archivo no devolvió un valor verdadero";
-       } else {
-           return $resultado;
-       }
+        my ($nombrearchivo) = @_;
+        if ( my $version = eval { version->parse($nombrearchivo) } ) {
+            if ( $version > $^V ) {
+               my $vn = $version->normal;
+               croak "Se requiere Perl $vn; éste es sólo $^V. Programa parado";
+            }
+            return 1;
+        }
+
+        if (exists $INC{$nombrearchivo}) {
+            return 1 if $INC{$nombrearchivo};
+            croak "Falló la compilación en el require";
+        }
+
+        foreach $prefijo (@INC) {
+            if (ref($prefijo)) {
+                #... hacer otras cosas - vea texto más abajo ....
+            }
+            # (vea texto más abajo sobre la posible añadidura del sufijo .pmc
+            # al $nombrearchivo)
+            my $nombrearchivoreal = "$prefijo/$nombrearchivo";
+            next if ! -e $nombrearchivoreal || -d _ || -b _;
+            $INC{$nombrearchivo} = $nombrearchivoreal;
+            my $resultado = do($nombrearchivoreal);
+                         # pero se ejecuta en el espacio de nombres del llamante
+
+            if (!defined $resultado) {
+                $INC{$nombrearchivo} = undef;
+                croak $@ ? "$@Compilación falló en require"
+                         : "No puedo localizar $nombrearchivo: $!\n";
+            }
+            if (!$resultado) {
+                delete $INC{$nombrearchivo};
+                croak "$nombrearchivo no devuelve un valor verdadero";
+            }
+            $! = 0;
+            return $resultado;
+        }
+        croak "No puedo localizar $nombrearchivo en \@INC ...";
     }
 
 Tenga en cuenta que el archivo no será incluido dos veces con el mismo nombre especificado.
@@ -3952,20 +4019,25 @@ Ahora que sabe cómo C<require> busca archivos con un argumento simple, hay una 
 
 También puede insertar enganches en la facilidad C<import> poniendo código Perl directamente en el array @INC.  Hay tres formas de enganches: referencias a subrutinas, referencias a arrays y objetos bendecidos.
 
-Referencias a subrutinas son el caso más simple.  Cuando el sistema de inclusión recorre C<@INC> y se encuentra con una subrutina, esta subrutina es llamada con dos parámetros; el primero, una referencia a sí mismo; y el segundo, el nombre del archivo que se incluirá (por ejemplo, "F<Foo/Bar.pm>").  La subrutina debe devolver, o nada, o bien una lista de hasta tres valores en el orden siguiente:
+Referencias a subrutinas son el caso más simple.  Cuando el sistema de inclusión recorre C<@INC> y se encuentra con una subrutina, esta subrutina es llamada con dos parámetros; el primero, una referencia a sí mismo; y el segundo, el nombre del archivo que se incluirá (por ejemplo, "F<Foo/Bar.pm>").  La subrutina debe devolver, o nada, o bien una lista de hasta cuatro valores en el orden siguiente:
 
 =over
 
 =item 1
 
-Un identificador de archivo, desde el cual, el archivo será leído.  
+Una referencia a un escalar, conteniendo cualquier código de fuente inicial para ser agregado antes del
+archivo o salida del generador.
 
 =item 2
+
+Un identificador de archivo, desde el cual, el archivo será leído.  
+
+=item 3
 
 Una referencia a una subrutina.  Si no hay un identificador de archivo (punto anterior), entonces de esta subrutina se espera que genere una línea de código fuente por llamada, escribiendo la línea en C<$_> y devolviendo 1, para luego, finalmente, devolver un 0 al final del archivo.  Si hay un identificador de archivo, a continuación, la subrutina será llamada a actuar como un simple filtro de código fuente, con la línea leída en C<$_>.
 De nuevo, devuelve 1 para cada línea válida y 0 después de que todas las líneas han sido devueltas.
 
-=item 3
+=item 4
 
 Estado opcional para la subrutina.  El estado es pasado en C<$_[1]>.  Una referencia a la propia subrutina es pasada en C<$_[0]>.
 
@@ -4039,6 +4111,8 @@ Regresa de una subrutina, C<eval> o C<do ARCHIVO>, con el valor indicado en EXPR
 
 (En ausencia de un C<return> explícito, una subrutina, eval, o do ARCHIVO, automáticamente devuelve el valor de la última expresión evaluada).
 
+A diferencia de la mayor parte de operadores con nombre, esto también está exento de la regla se-parece-a-una-función, así que C<return ("foo")."bar"> hará que "bar" sea parte del argumento a C<return>.
+
 =item reverse LISTA
 X<reverse> X<rev> X<invert> X<invertir>
 
@@ -4053,10 +4127,10 @@ En contexto de lista, devuelve una lista de valores consistente en los elementos
 Si se utiliza sin argumentos en contexto escalar, reverse() invierte C<$_>.
 
     $_ = "odnum ,aloH";
-    print reverse;                              # No hay salida, contexto lista
-    print scalar reverse;                       # Hola, mundo
+    print reverse;                         # No hay salida, contexto lista
+    print scalar reverse;                  # Hola, mundo
 
-Tenga en cuenta que invertir un array en sí mismo (como en C<@a = reverse @a>) preservará elementos inexistentes cuando le sea posible, es decir, para arrays no mágicos o arrays atados con métodos C<EXISTS> y C<DELETE>.
+Tenga en cuenta que invertir un array en sí mismo (como en C<@a = reverse @a>) preservará los elementos inexistentes mientras le sea posible, es decir, para arrays no mágicos o arrays enlazados con métodos C<EXISTS> y C<DELETE>.
 
 Este operador también es útil para invertir un hash, aunque existen algunas salvedades.  Si un valor está duplicado en el hash original, sólo uno de ellos se puede representar como clave en el hash invertido.  Además, esto tiene el efecto de desmontar un hash y construir uno nuevo, algo que puede tardar algún tiempo en un hash grande, como en un archivo DBM.
 
@@ -4160,7 +4234,7 @@ Si eso no funciona (algunas implementaciones de E/S son particularmente irritabl
     for (;;) {
         for ($curpos = tell(FILE); $_ = <FILE>;
              $curpos = tell(FILE)) {
-            # buscar por algo y ponerlo en los archivos
+            # buscar por algo y ponerlo en el archivo
         }
         sleep($por_un_rato);
         seek(FILE, $curpos, 0);
@@ -4511,32 +4585,32 @@ Ejemplos:
 
     # ordenación léxica
     @articulos = sort @archivos;
-    
+
     # lo mismo, pero con una rutina de ordenación explícita
     @articulos = sort {$a cmp $b} @archivos;
-    
+
     # ahora, independiente del tamaño de caja
     @articulos = sort {fc($a) cmp fc($b)} @archivos;
-    
+
     # lo mismo, en orden inverso
     @articulos = sort {$b cmp $a} @archivos;
-    
+
     # ordenación numérica ascendente
     @articulos = sort {$a <=> $b} @archivos;
-    
+
     # ordenación numérica descendente
     @articulos = sort {$b <=> $a} @archivos;
-    
+
     # esto ordena el hash %edad por valor en lugar de por clave
     # usando una función incluida
     @eldest = sort { $edad{$b} <=> $edad{$a} } keys %edad;
-    
+
     # ordena usando un nombre de una subrutina explícita
     sub por_edad {
         $edad{$a} <=> $edad{$b};  # presumimos numéricos
     }
     @claseordenada = sort por_edad @clase;
-    
+
     sub al_reves { $b cmp $a }
     @harry  = qw(dog cat x Cain Abel);
     @george = qw(gone chased yz Punished Axed);
@@ -4567,8 +4641,8 @@ Ejemplos:
     }
 
     my @nuevo = @viejo[ sort {
-                           $numeros[$b]    <=> $numeros[$a]
-                                           ||
+                           $numeros[$b] <=> $numeros[$a]
+                                    ||
                            $mayusculas[$a] cmp $mayusculas[$b]
                          } 0..$#viejo
                   ];
@@ -4583,15 +4657,15 @@ Ejemplos:
     # usando un prototipo permite usar cualquier subrutina de comparación
     # como una subrutina para sort (incluyendo subrutinas de otros paquetes)
     package otro;
-    sub al_reves ($$) { $_[1] cmp $_[0]; }  # $a y $b no se usan aquí
-    
+    sub al_reves ($$) { $_[1] cmp $_[0]; }  # $a y $b
+                                             # no se usan aquí    
     package main;
     @nuevo = sort otro::al_reves @viejo;
-    
+
     # garantiza estabilidad, sin importar el algoritmo
     use sort 'stable';
     @nuevo = sort { substr($a, 3, 5) cmp substr($b, 3, 5) } @viejo;
-    
+
     # fuerza el uso del mergesort (no portátil fuera de Perl v5.8)
     use sort '_mergesort';  # note el desalentador _
     @nuevo = sort { substr($a, 3, 5) cmp substr($b, 3, 5) } @viejo;
@@ -4639,7 +4713,7 @@ Elimina los elementos designados por DESPLAZAMIENTO y LONGITUD de un array, y lo
 Si el DESPLAZAMIENTO es negativo, se cuenta la posición desde el final del array.
 Si se omite LONGITUD, se suprime todo desde DESPLAZAMIENTO en adelante.
 Si LONGITUD es negativa, elimina los elementos desde DESPLAZAMIENTO hacia adelante, excepto -LONGITUD elementos al final del array.
-Si ambos DESPLAZAMIENTO y LONGITUD se omiten, quita todo.  Si el DESPLAZAMIENTO es más allá del final del array, Perl lanza una advertencia, y extrae al final del array.
+Si ambos DESPLAZAMIENTO y LONGITUD se omiten, quita todo.  Si el DESPLAZAMIENTO está más allá del final del array y se indica una LONGITUD, Perl lanza una advertencia, y extrae al final del array.
 
 Las siguientes equivalencias se mantienen (suponiendo que C<< $#a >= $i >>)
 
@@ -4649,18 +4723,20 @@ Las siguientes equivalencias se mantienen (suponiendo que C<< $#a >= $i >>)
     unshift(@a,$x,$y)   splice(@a,0,0,$x,$y)
     $a[$i] = $y         splice(@a,$i,1,$y)
 
-Ejemplo, suponiendo que las longitudes de array se pasan antes que los propios arrays:
+Se puede usar C<splice>, por ejemplo, para implementar una cola de procesamiento de aridad n:
 
-    sub aeq {  # comparar dos listas de valores
-        my(@a) = splice(@_,0,shift);
-        my(@b) = splice(@_,0,shift);
-        return 0 unless @a == @b;  # ¿misma longitud?
-        while (@a) {
-            return 0 if pop(@a) ne pop(@b);
-        }
-        return 1;
+    sub print_n_ario {
+      my $n = shift;
+      while (my @siguiente_n = splice @_, 0, $n) {
+        say join q{ -- }, @siguiente_n;
+      }
     }
-    if (&aeq($len,@foo[1..$len],0+@bar,@bar)) { ... }
+
+    print_n_ario(3, qw(a b c d e f g h));
+    # imprime:
+    #   a -- b -- c
+    #   d -- e -- f
+    #   g -- h
 
 A partir de Perl 5.14, C<splice> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento se desreferencia automáticamente.  Este aspecto de C<splice> es considerado altamente experimental.
 El comportamiento exacto puede cambiar en una futura versión de Perl.
@@ -4703,7 +4779,7 @@ Como un caso especial para C<split>, el patrón vacío indicado en la sintaxis d
 
 Si PATRÓN es C</^/>, entonces se trata como si estuviera presente el L<modificador multilínea|perlreref/OPERADORES> (C</^/m>), ya que de lo contrario no serviría de mucho.
 
-Como otro caso especial, C<split> emula el comportamiento predeterminado de la herramienta de línea de comando B<awk> cuando el PATRÓN es omitido o es una I<cadena literal> compuesta de un único carácter de espacio (tal como S<C<' '>> o S<C<"\x20">>, pero no, por ejemplo, S<C</ />>).  En este caso, cualquier espacio en blanco que rodee a EXPR es eliminado antes de que ocurra la división, y el PATRÓN es tratado como si fuera C</\s+/>; en particular, esto significa que I<cualquier> espacio en blanco contiguo (no sólo un carácter de espacio) es utilizado como separador.  Sin embargo, este tratamiento especial puede ser evitado especificando el patrón S<C</ />> en lugar de la cadena S<C<" ">>, permitiendo así que sólo un único carácter de espacio sea el separador.
+Como otro caso especial, C<split> emula el comportamiento predeterminado de la herramienta de línea de comando B<awk> cuando el PATRÓN es omitido o es una I<cadena literal> compuesta de un único carácter de espacio (tal como S<C<' '>> o S<C<"\x20">>, pero no, por ejemplo, S<C</ />>).  En este caso, cualquier espacio en blanco que rodee a EXPR es eliminado antes de que ocurra la división, y el PATRÓN es tratado como si fuera C</\s+/>; en particular, esto significa que I<cualquier> espacio en blanco contiguo (no sólo un carácter de espacio) es utilizado como separador.  Sin embargo, este tratamiento especial puede ser evitado especificando el patrón S<C</ />> en lugar de la cadena S<C<" ">>, permitiendo así que sólo un único carácter de espacio sea el separador.  En versiones anteriores de Perl, este caso especial estuvo restringido al uso de un sencillo S<C<" ">> como el argumento de patrón para split. En Perl 5.18.0 y siguientes, este caso especial se activa por cualquier expresión que evalúe a la cadena de caracteres S<C<" ">>.
 
 Si se omite, el PATRÓN por defecto es un único espacio, S<C<" ">>, lo que provoca el comportamiento de la emulación I<awk> descrita anteriormente.
 
@@ -4734,9 +4810,9 @@ produce la salida 'a:b:c', pero lo siguiente:
 
 produce la salida 'a:b:c:::'.
 
-En aplicaciones críticas con el tiempo, no es conveniente dividir en más campos de los que realmente se necesita.  Por lo tanto, cuando se asigna a una lista, si LÍMITE es omitido (o cero), entonces LÍMITE es tratado como si fuera uno mayor que el número de variables en la lista; para lo siguiente, LÍMITE es implícitamente 4:
+En aplicaciones críticas con el tiempo, no es conveniente dividir en más campos de los que realmente se necesita.  Por lo tanto, cuando se asigna a una lista, si LÍMITE se omite (o es cero), entonces LÍMITE se trata como si fuera uno más que el número de variables que hay en la lista; para lo siguiente, LÍMITE es implícitamente 3:
 
-    ($login, $contraseña, $resto) = split(/:/);
+    ($login, $contraseña) = split(/:/);
 
 Tenga en cuenta que la división de una EXPR que evalúe a una cadena vacía siempre produce cero campos, sin importar qué LÍMITE se haya especificado.
 
@@ -4848,7 +4924,7 @@ uno o más de:
    +       prefija un número no negativo con un signo más
    -       justifica a la izquierda dentro del campo
    0       usa ceros, no espacios, justificados a la derecha
-   #       garantiza el "0" inicial para todos los octales,
+   #       asegura el precedente "0" para cualquier octal,
            prefija hexadecimales no ceros con "0x" o "0X",
            prefija binarios no cero con "0b" o "0B"
 
@@ -4890,19 +4966,20 @@ Pone un asterisco C<*> antes de C<v> para reemplazar la cadena a utilizar para s
 
 También puede especificar, explícitamente, el número de argumento a utilizar para la combinación de cadena usando algo como C<*2$v>; por ejemplo:
 
-  printf '%*4$vX %*4$vX %*4$vX', @addr[1..3], ":";   # 3 direcciones IPv6
+  printf '%*4$vX %*4$vX %*4$vX',       # 3 direcciones IPv6
+          @addr[1..3], ":";
 
 =item ancho (mínimo)
 
 Los argumentos son por lo general formateados para ser sólo tan amplios como para mostrar el valor dado.  Puede reemplazar el ancho al anteponer un número, u obteniendo la anchura del siguiente argumento (con C<*>) o de un argumento determinado (por ejemplo, con C<*2$>):
 
-  printf "<%s>", "a";       # imprime "<a>"
-  printf "<%6s>", "a";      # imprime "<     a>"
-  printf "<%*s>", 6, "a";   # imprime "<     a>"
-  printf "<%*2$s>", "a", 6; # imprime "<     a>"
-  printf "<%2s>", "long";   # imprie "<long>" (no lo trunca)
+ printf "<%s>", "a";       # imprime "<a>"
+ printf "<%6s>", "a";      # imprime "<     a>"
+ printf "<%*s>", 6, "a";   # imprime "<     a>"
+ printf '<%*2$s>', "a", 6; # imprime "<     a>"
+ printf "<%2s>", "long";   # imprime "<long>" (no lo trunca)
 
-Si un ancho de campo obtenidos a través de C<*> es negativo, tiene el mismo efecto que la bandera C<->: alineación a la izquierda.
+Si un ancho de campo obtenido a través de C<*> es negativo, tiene el mismo efecto que la bandera C<->: alineación a la izquierda.
 
 =item precisión, o ancho máximo
 X<precision> X<precisión>
@@ -4968,22 +5045,29 @@ Si una precisión obtenida a través de C<*> es negativa, se cuenta como no tene
 
 Actualmente, no se puede conseguir la precisión de un número determinado, pero es intención de que esto será posible en el futuro, por ejemplo, con C<.*2$>:
 
-  printf "<%.*2$x>", 1, 6;   # INVÁLIDO, pero en el futuro imprimirá "<000001>"
+  printf '<%.*2$x>', 1, 6;   # INVÁLIDO, pero en el futuro imprimirá
+                             # "<000001>"
 
 =item size
 
 Para conversiones numéricas, se puede especificar el tamaño del número a interpretar usando C<l>, C<h>, C<V>, C<q>, C<L>, o C<ll>.  Para las conversiones de entero (C<d u o x X b i D U O>), se asume que los números son, por lo general, de un tamaño, por defecto, de un entero de su plataforma (normalmente 32 or 64 bits), pero esto se puede reemplazar usando en su lugar uno de los tipos estándares de C, soportados por el compilador usado para construir Perl:
 
-   hh          interpreta un entero como un "char" o "unsigned char" del C
-	       en Perl 5.14 o superior
-   h           interpreta un entero como un "short" o "unsigned short" del C
-   j           interpreta un entero como un tipo C "intmax_t" en Perl 5.14 
-	       o superior, y solo con un compilador C99 (no portable)
-   l           interpreta un entero como un "long" o "unsigned long" del C
-   q, L, or ll interpreta un entero como un "long long", "unsigned long long",
-               o "quad" del C (típicamente enteros de 64-bit)
-   t           interpreta un entero como "ptrdiff_t" del C en Perl 5.14 o superior
-   z           interpreta un entero como "size_t" del C en Perl 5.14 o superior
+   hh          interpreta un entero como un "char" o "unsigned
+               char" en Perl 5.14 o siguientes
+   h           interpreta un entero como un "short" o
+               "unsigned short"
+   j           interpreta un entero como un tipo C "intmax_t" en Perl
+               5.14 o superior, y solo con un compilador C99
+               (no portable)
+   l           interpreta un entero como un "long" o
+               "unsigned long"
+   q, L, o ll  interpreta un entero como un tipo C "long long",
+               "unsigned long long", o "quad" (típicamente
+               enteros 64-bit)
+   t           interpreta un entero como "ptrdiff_t" del C en Perl
+               Perl 5.14 o superior
+   z           interpreta un entero como "size_t" del C en Perl 5.14
+               o superior
 
 A partir de 5.14, ninguno de estos produce una excepción si no están suportados en su plataforma.  Sin embargo, si las advertencias están habilitadas, una advertencia de la clase C<printf> es emitida cuando no esté soportada una bandera de conversión.  
 Si en vez de eso, prefiere una excepción, haga lo siguiente:
@@ -4997,7 +5081,8 @@ Si quiere saber acerca de las dependencias de la versión antes de empezar a eje
 Puede averiguar si su Perl soporta quads a través de L<Config>:
 
     use Config;
-    if ($Config{use64bitint} eq "define" || $Config{longsize} >= 8) {
+    if ($Config{use64bitint} eq "define"
+        || $Config{longsize} >= 8) {
         print "¡quads divertidos!\n";
     }
 
@@ -5010,7 +5095,7 @@ puede averiguar si Perl considera "long double" como el valor por defecto para e
 
     use Config;
     if ($Config{uselongdouble} eq "define") {
-	print "long doubles por defecto\n";
+        print "long doubles por defecto\n";
     }
 
 También puede ser que los long doubles y doubles sean la misma cosa:
@@ -5031,16 +5116,16 @@ Así:
 
 usa C<$a> para el ancho, C<$b> para la precisión, y C<$c> como el valor a formatear; mientras:
 
-  printf "<%*1$.*s>", $a, $b;
+  printf '<%*1$.*s>', $a, $b;
 
 usaría C<$a> para el ancho y precisión, y C<$b> como el valor a formatear.
 
 Éstos son algunos ejemplos más; sea consciente de que cuando se utiliza un índice explícito, el C<$> puede ser necesario escaparlo:
 
-  printf "%2\$d %d\n",    12, 34;        # imprimirá "34 12\n"
-  printf "%2\$d %d %d\n", 12, 34;        # imprimirá "34 12 34\n"
-  printf "%3\$d %d %d\n", 12, 34, 56;    # imprimirá "56 12 34\n"
-  printf "%2\$*3\$d %d\n", 12, 34, 3;    # imprimirá " 34 12\n"
+  printf "%2\$d %d\n",    12, 34;      # imprimirá "34 12\n"
+  printf "%2\$d %d %d\n", 12, 34;      # imprimirá "34 12 34\n"
+  printf "%3\$d %d %d\n", 12, 34, 56;  # imprimirá "56 12 34\n"
+  printf "%2\$*3\$d %d\n", 12, 34, 3;  # imprimirá " 34 12\n"
 
 =back
 
@@ -5071,25 +5156,12 @@ La misión de la función es "alimentar" a la función C<rand> para que C<rand> 
 
     use 5.014;	# así srand devuelve la semilla
 
-Si C<srand()> no es llamada de forma explícita, es llamada implícitamente en el primer uso del operador C<rand>.  Sin embargo, esto no fue cierto para las versiones de Perl anteriores a la 5.004, así que si su programa se va a ejecutar en versiones anteriores de Perl, debería llamar a C<srand>; de lo contrario, la mayor parte de los programas no llamarán nunca a C<srand>.
-
-Pero hay unas pocas situaciones en programas recientes de Perl donde es probable que desee llamar a C<srand>.  Uno de ellos es para la generación de resultados predecibles, generalmente para pruebas o depuraciones.  Allí, puede utilizar C<srand($semilla)>, con la misma C<$semilla> cada vez.  Otro caso es que puede llamar a C<srand()> después de un C<fork()> para evitar que los procesos hijos compartan el mismo valor de semilla que la del padre (y por lo tanto, entre sí).
+Si C<srand()> no es llamada de forma explícita, es llamada implícitamente en el primer uso del operador C<rand>.
+Hay, sin embargo, unas pocas situaciones donde es probable que desee llamar a C<srand>.  Una de ellas es para la generación de resultados predecibles, generalmente para pruebas o depuraciones.  Allí, puede utilizar C<srand($semilla)>, con la misma C<$semilla> cada vez.  Otro caso es que puede llamar a C<srand()> después de un C<fork()> para evitar que los procesos hijos compartan el mismo valor de semilla que la del padre (y por lo tanto, entre sí).
 
 B<No> llame a srand() (e.d., sin un argumento) más de una vez por proceso.  El estado interno del generador de números aleatorios debería contener más entropía que la ofrecida por cualquier semilla, así que volver a llamar a srand() realmente hace I<perder> la aleatoriedad.
 
 La mayoría de las implementaciones de C<srand> toman un número entero y silenciosamente truncará los números decimales.  Esto significa que C<srand(42)> produce los mismos resultados, generalmente, que C<srand(42.1)>.  Para estar seguros, siempre pase un entero a C<srand>.
-
-En las versiones de Perl anteriores a 5.004 la semilla por defecto era sólo el valor actual de C<time>.  Esto no es una buena semilla, por lo que demasiados viejos programas tienen sus propias semillas (a menudo C<time ^ $$> o C<time ^ ($$ + ($$ << 15))>), pero esto ya no es necesario.
-
-Programas ejecutados frecuentemente (como los scripts CGI) usan, simplemente,
-
-    time ^ $$
-
-pero la semilla puede caer presa en la propiedad matemática
-
-    a^b == (a+1)^(b+1)
-
-un tercio de las ocasiones.  Así que no lo haga.
 
 Un uso típico de la semilla devuelta es para un programa de prueba que tiene demasiadas combinaciones que probar, exhaustivamente, en el tiempo disponible para cada ejecución.  Se puede probar un subconjunto aleatorio cada vez, y si ocurre un fallo, registre las semillas utilizadas para las que se ha ejecutado a fin de que más adelante se puedan utilizar para reproducir los mismos resultados.
 
@@ -5110,7 +5182,7 @@ Devuelve una lista de 13 elementos dando la información de estado de un archivo
 
     ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
        $atime,$mtime,$ctime,$blksize,$blocks)
-           = stat($archivo);
+           = stat($nombre_de_archivo);
 
 No todos los campos están soportados por todos los sistemas de archivos.  Aquí están los significados de los campos:
 
@@ -5125,8 +5197,10 @@ No todos los campos están soportados por todos los sistemas de archivos.  Aquí
   8 atime    tiempo último acceso, en segundos, desde el epoch
   9 mtime    tiempo última modificación, en segundos desde el epoch
  10 ctime    tiempo cambio inodo, en segundos desde el (*)
- 11 blksize  tamaño preferido del bloque de E/S para el sistema de archivos
- 12 blocks   número real de bloques reservados
+ 11 blksize  tamaño preferido de E/S en bytes para interactuar con el
+             archivo (puede variar de archivo en archivo)
+ 12 blocks   número actual de bloques, específicos del sistema, reservados
+             en disco (a menudo, pero no siempre, de 512 bytes cada uno)
 
 (El epoch fue a las 00:00 GMT del 1 de enero de 1970)
 
@@ -5198,11 +5272,11 @@ Comúnmente disponibles las constantes C<S_IF*> son:
 y las funciones C<S_IF*> son
 
     S_IMODE($modo)    la parte de $modo conteniendo los bits de permiso
-            y los bits setuid/setgid/sticky
+                      y los bits setuid/setgid/sticky
 
-    S_IFMT($modo)    la parte de $modo conteniendo los bits del tipo
-            de archivo que puede ser bit-I<andeado> con (por ejemplo) S_IFREG
-                        o con las siguientes funciones
+    S_IFMT($modo)    la parte de $modo conteniendo los bits del tipo de archivo
+                      que pueden ser bit-I<andeados> con (por ejemplo)
+                      S_IFREG o con las siguientes funciones
 
     # Los operadores -f, -d, -l, -b, -c, -p, y -S.
 
@@ -5219,20 +5293,22 @@ Consulte su documentación de las nativas chmod(2) y stat(2) para obtener más d
 
 Cuestiones de portabilidad: L<perlport/stat>.
 
-=item state EXPR
+=item state VARLIST
 X<state>
 
-=item state TIPO EXPR
+=item state TIPO VARLIST
 
-=item state EXPR : ATRIBS
+=item state VARLIST : ATRIBUTOS
 
-=item state TIPO EXPR : ATRIBS
+=item state TIPO VARLIST : ATRIBUTOS
 
 =for Pod::Functions +state declare and assign a persistent lexical variable
 
 C<state> declara una variable de ámbito léxico, como lo hace C<my>.
 Sin embargo, estas variables no se reinicializan, a diferencia de las variables léxicas que se reinicializan cada vez que entran en un bloque.
 Vea L<perlsub/"Variables privadas persistentes"> para los detalles.
+
+Si se lista más de una variable, la lista debe ser puesta entre paréntesis.  Con una lista entre paréntesis, se puede utilizar C<undef> como un marcador de posición.  Sin embargo, debido a que actualmente la inicialización de las variables state en contexto de lista no es posible, esto no sirve para nada.
 
 Variables C<state> sólo se activan cuando el pragma C<use feature "state"> está en vigor, a menos que el identificador está escrito como C<CORE::state>.
 Vea también L<feature>.
@@ -5296,7 +5372,10 @@ X<__SUB__>
 
 =for Pod::Functions +current_sub the current subroutine, or C<undef> if not in a subroutine
 
-Un I<token> especial que devuelve la referencia a la subrutina actual, o C<undef> fuera de una subrutina.
+Un I<token> especial que devuelve una referencia a la subrutina actual, o C<undef> si está fuera de una subrutina.
+
+El comportamiento de C<__SUB__> dentro de un bloque de código con una expresión regular (como en C</(?{...})/>)
+está sujeto a cambio.
 
 Este I<token> sólo está disponible bajo C<use v5.16> o la característica "current_sub".  Ver L<feature>.
 
@@ -5403,7 +5482,7 @@ Los valores posibles y bits de bandera del parámetro MODO son dependientes del 
 Algunos de los valores más comunes son C<O_RDONLY> para abrir el archivo en modo de sólo lectura, C<O_WRONLY> para abrir el archivo en modo de sólo escritura, y C<O_RDWR> para abrir el archivo en modo lectura-escritura.
 X<O_RDONLY> X<O_RDWR> X<O_WRONLY>
 
-Por razones históricas, algunos valores funcionan en casi todos los sistemas soportados por Perl: 0 significa solo lectura, 1 significa sólo escritura y 2 significa lectura y escritura.  Sabemos que estos valores I<no> funcionan bajo OS/390 y VM/ESA Unix y en el Macintosh; es probable que no desea utilizarlos en nuevos programas.
+Por razones históricas, algunos valores funcionan en casi todos los sistemas soportados por Perl: 0 significa solo lectura, 1 significa sólo escritura y 2 significa lectura y escritura.  Sabemos que estos valores I<no> funcionan bajo OS/390 y el Macintosh; es probable que no desee utilizarlos en nuevos programas.
 
 Si el archivo con el nombre ARCHIVO no existe y la llamada C<open> lo crea (por lo general porque el modo incluye la bandera C<O_CREAT>), entonces el valor de PERMISOS especifica los permisos del archivo recién creado.  Si se omite el argumento PERMISOS a C<sysopen>, Perl utiliza el valor octal C<0666>.
 Estos valores de permisos tiene que estar en octal, y son modificados por el valor de C<umask> de su proceso actual.
@@ -5419,7 +5498,7 @@ Rara vez o nunca debe utilizar C<0644> como argumento a C<sysopen>, porque eso l
 Es mejor omitirlo.  Ver la entrada perlfunc(1) para C<umask> para más información sobre esto.
 
 Tenga en cuenta que C<sysopen> depende de la función de biblioteca C fdopen().
-En muchos sistemas Unix, fdopen() se conoce que falla cuando los descriptores de archivo exceden un valor determinado, por lo general 255.  Si necesita más descriptores de archivo que esa cantidad, contemple la posibilidad de reconstruir Perl para que use la biblioteca C<sfio>, o tal vez usar la función estándar POSIX::open().
+En muchos sistemas Unix, fdopen() se conoce que falla cuando los descriptores de archivo exceden un valor determinado, por lo general 255.  Si necesita más descriptores de archivo que esa cantidad, contemple la posibilidad de usar la función POSIX::open().
 
 Ver L<perlopentut> para una más amable, más suave explicación de apertura de los archivos.
 
@@ -5469,7 +5548,7 @@ X<system> X<shell>
 
 Hace exactamente lo mismo que C<exec LISTA>, excepto que se hace primero un fork y el proceso padre espera a que el proceso hijo termine.  Tenga en cuenta que el tratamiento de los argumentos varía en función del número de argumentos.  Si hay más de un argumento en LISTA, o si la lista es un array con más de un valor, se inicia el programa indicado en el primer elemento de la lista, con los argumentos indicados por el resto de la lista.  Si sólo hay un argumento escalar, se comprueba si el argumento tiene metacaracteres, y si hay alguno, el argumento entero es pasado al shell de comandos para que sea interpretado (suele ser C</bin/sh -c> en plataformas Unix, pero varía en otras plataformas).  Si no hay metacaracteres shell en el argumento, es dividido en palabras y pasadas directamente a C<execvp>, que es más eficiente.
 
-Empezando con v5.6.0, Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (vea L<perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier controlador abierto.
+Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (vea L<perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier controlador abierto.
 
 El valor devuelto es el estado de salida del programa devuelto por la llamada C<wait>.  Para obtener el valor real de la salida, se debe desplazar ocho a la derecha (ver más abajo).  Ver también L</exec>.  Esto I<no> es lo que desea utilizar para capturar la salida de un comando; para eso debería utilizar solamente las comillas invertidas o C<qx//>, como se describe en L<perlop/"`CADENA`">.  El retorno de valor de -1 indica un error en el arranque del programa o un error de la llamada al sistema wait(2) (inspeccionar $! para ver la razón).
 
@@ -5521,7 +5600,7 @@ Si ESCALAR es de longitud cero, sólo se puede utilizar un DESPLAZAMIENTO de 0.
 
 B<ADVERTENCIA>: Si el identificador de archivo está marcado como C<:utf8>, caracteres Unicode codificados en UTF-8 son escritos en lugar de bytes, y la LONGITUD, DESPLAZAMIENTO y el valor de retorno de syswrite() estarán basados en caracteres (Unicode codificados en UTF-8).
 La capa C<:encoding(...)> implícitamente introduce la capa C<:utf8>.
-De forma alternativa, si el identificador no está marcado con una codificación pero intenta escribir caracteres con puntos de código superiores a 255, se genera una excepción.
+De forma alternativa, si el identificador no está marcado con una codificación pero intenta escribir caracteres con códigos de carácter superiores a 255, se genera una excepción.
 Ver L</binmode>, L</open>, y el pragma C<open>, L<open>.
 
 =item tell IDENTIFICADOR_ARCHIVO
@@ -5556,7 +5635,7 @@ X<tie>
 
 =for Pod::Functions +5.002 bind a variable to an object class
 
-Esta función une una variable a una clase de paquete que ofrecerá la implementación para esa variable.  VARIABLE es el nombre de la variable que será enlazada.  CLASE es el nombre de la clase que implementa objetos del tipo correcto.  Cualesquiera argumentos adicionales son pasados al método C<new> de la clase (es decir, C<TIESCALAR>, C<TIEHANDLE>, C<TIEARRAY>, o C<TIEHASH>).  Por lo general estos son argumentos que pudieran ser transmitidos a la función del C C<dbm_open()>. El objeto devuelto por el método C<new> también es devuelto por la función C<tie>, que será útil si desea tener acceso a otros métodos en CLASE.
+Esta función une una variable a una clase de paquete que ofrecerá la implementación para esa variable.  VARIABLE es el nombre de la variable que será enlazada.  CLASE es el nombre de la clase que implementa objetos del tipo correcto.  Cualesquiera argumentos adicionales son pasados al método constructor apropiado de la clase (es decir, C<TIESCALAR>, C<TIEHANDLE>, C<TIEARRAY>, o C<TIEHASH>).  Por lo general estos son argumentos que pudieran ser transmitidos a la función del C C<dbm_open()>. El objeto devuelto por el constructor también es devuelto por la función C<tie>, que será útil si desea tener acceso a otros métodos en CLASE.
 
 Note que las funciones como C<keys> y C<values> pueden devolver largas listas como cuando se usan con grandes archivos DBM.  Puede preferir usar la función C<each> para iterar sobre tales listas.  Ejemplo:
 
@@ -5596,6 +5675,8 @@ Una clase implementando un array ordinario común debe tener los siguientes mét
     UNSHIFT este, LISTA
     SPLICE este, desplazamiento, longitud, LISTA
     EXTEND este, contador
+    DELETE este, clave
+    EXISTS este, clave
     DESTROY este
     UNTIE este
 
@@ -5670,7 +5751,7 @@ Cuestiones de portabilidad: L<perlport/times>.
 
 =for Pod::Functions transliterate a string
 
-El operador de transliteración.  Igual que el C<y///>.  Ver L<perlop/"Comillas y Operadores de comillas">.
+El operador de transliteración.  Igual que el C<y///>.  Vea L<perlop/"Operadores entrecomillados">.
 
 =item truncate IDENTIFICADOR_ARCHIVO,LONGITUD
 X<truncate>
@@ -5772,8 +5853,8 @@ Elimina una lista de archivos.  En caso de éxito, devuelve el número de archiv
 En caso de error, C<unlink> no indicará qué archivos no se han podido borrar.
 Si quiere saber qué archivos no pudo eliminar, trátelos de uno en uno:
 
-     foreach my $archivo ( @goners ) {
-         unlink $archivo or warn "No puedo borrar $archivo: $!";
+     foreach my $archivo ( @muertos ) {
+         unlink $archivo or warn "No puedo eliminar $archivo: $!";
      }
 
 Nota: C<unlink> no intentará eliminar directorios a menos que usted sea superusuario y la bandera B<-U> se suministre a Perl.  Incluso si se cumplen estas condiciones, se advierte que desvincular un directorio puede causar daños a su sistema de archivos.  Por último, con C<unlink> en directorios no está soportado en muchos sistemas operativos.  Utilice C<rmdir> en su lugar.
@@ -5873,7 +5954,7 @@ Importa semántica en el paquete actual desde el módulo que se indica, generalm
     BEGIN { require Módulo; Módulo->import( LISTA ); }
 
 excepto que el módulo I<debe> ser una palabra simple.
-La importación puede estar condicionado; vea L<if>.
+La importación puede estar condicionada por medio del módulo L<if>.
 
 En la forma peculiar C<use VERSION>, VERSION puede ser tanto un número fraccionario decimal positivo, como 5.006, que será comparado con C<$]>, o como una v-cadena de la forma v5.6.1, que será comparado con C<$^V> (también conocido como $PERL_VERSION).  Se genera una excepción si la VERSIÓN es mayor que la versión del intérprete actual de Perl; Perl no tratará de analizar el resto del archivo.  Compare con L</require>, que puede hacer un control similar en tiempo de ejecución.
 Simétricamente, C<no VERSIÓN> le permite especificar que desea una versión de Perl más vieja que la especificada.
@@ -5888,7 +5969,7 @@ Suele ser útil si necesita comprobar la versión actual de Perl antes de que C<
 (Tratamos de no hacer esto no más de lo necesario).
 
 C<use VERSIÓN> también activará todas las características disponibles en la versión solicitada tal como son definidas por el pragma C<feature>, desactivando cualquier característica no incluida en la versión solicitada.  Ver L<feature>.
-Del mismo modo, si la versión especificada de Perl es mayor o igual a 5.11.0, el modo de trabajo estricto quedará activado léxicamente, igual a como lo hace C<use strict>.  Cualquier uso explícito de C<use strict> o C<no strict> anula C<use VERSIÓN>, incluso si se coloca antes de él.  En ambos casos, los archivos F<feature.pm> y F<strict.pm> no son realmente cargados.
+Del mismo modo, si la versión especificada de Perl es mayor o igual a 5.12.0, el modo de trabajo estricto quedará activado léxicamente, igual a como lo hace C<use strict>.  Cualquier uso explícito de C<use strict> o C<no strict> anula C<use VERSIÓN>, incluso si se coloca antes de él.  En ambos casos, los archivos F<feature.pm> y F<strict.pm> no son realmente cargados.
 
 El C<BEGIN> fuerza a ejecutar a C<require> e C<import> en tiempo de compilación.  El C<require> se asegura que el módulo esté cargado en memoria, si todavía no lo está.  El C<import> no es una función predefinida; es sólo una llamada al método estático ordinario en el paquete C<Módulo> para indicar al módulo que importe la lista de características en el paquete actual.  El módulo puede implementar su propio método C<import> de la forma que desee, aunque la mayoría de los módulos sólo eligen derivar su método C<import> vía herencia desde la clase C<Exporter> que se define en el módulo C<Exporter>.  Ver L<Exporter>.  Si no se puede encontrar ningún método C<import> entonces la llamada se pasa por alto, incluso si hay un método AUTOLOAD.
 
@@ -5944,7 +6025,7 @@ Cambia los tiempos de acceso y modificación de cada archivo de una lista de arc
     $atime = $mtime = time;
     utime $atime, $mtime, @ARGV;
 
-Desde Perl 5.7.2, si los dos primeros elementos de la lista son C<undef>, se llama a la biblioteca del sistema C utime(2) con un segundo argumento nulo.  En la mayoría de los sistemas, esto hará que los tiempos de acceso y modificación del archivo se establezcan a la hora actual (es decir, equivalente al ejemplo anterior) y funcionará incluso en archivos de los cuales usted no tenga permisos de escritura:
+Desde Perl 5.8.0, si los dos primeros elementos de la lista son C<undef>, se llama a la biblioteca del sistema C utime(2) con un segundo argumento nulo.  En la mayoría de los sistemas, esto hará que los tiempos de acceso y modificación del archivo se establezcan a la hora actual (es decir, equivalente al ejemplo anterior) y funcionará incluso en archivos de los cuales usted no tenga permisos de escritura:
 
     for $archivo (@ARGV) {
 	utime(undef, undef, $archivo) 
@@ -5970,15 +6051,15 @@ X<values>
 
 En contexto de lista, devuelve una lista que consta de todos los valores del hash indicado.  En Perl 5.12 y superiores, también devolverá una lista de los valores de un array; Perl más antiguos considerarán esto como un error de sintaxis.  En contexto escalar, devuelve el número de valores.
 
-Cuando se llama sobre un hash, los valores son devueltos en un aparente orden aleatorio.  El orden aleatorio real está sujeto a cambio en futuras versiones de Perl, pero se garantiza que es el mismo orden que las funciones C<keys> o C<each> producirían con el mismo (no modificado) hash.  Desde Perl 5.8.1 la ordenación es diferente incluso entre diferentes ejecuciones de Perl por razones de seguridad (vea L<perlsec/"Ataques por Complejidad Algorítmica">).
+Las entradas de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real es específico a un hash dado; las mismas series de operaciones en dos hashes pueden resultar en diferentes órdenes para cada hash.  Cualquier inserción en el hash puede cambiar el orden, así como cualquier eliminación, con la excepción de que la clave más reciente devuelta por C<each> o C<keys> puede ser borrada sin que cambie el orden.  Siempre y cuando no se modifique un determinado hash puede confiar en que C<keys>, C<values> y C<each> devuelvan repetidamente lo mismo en el mismo orden.  Vea L<perlsec/"Ataques de complejidad algorítmica"> para los detalles de por qué el orden en un hash se aleatoriza.  Aparte de las garantías proporcionadas aquí los detalles exactos de algoritmo que usa Perl para recorrer un hash está sujeto a cambio en cualquier lanzamiento de Perl.
 
 Como efecto colateral, llamando a values() reinicia el iterador interno del HASH o ARRAY (vea L</each>).  (De forma particular, llamando a values() en contexto nulo (void) reinicia el iterador sin otro efecto adicional.  Además de restablecer el iterador, C<values @array> en contexto lista es lo mismo que un simple C<@array>.
 (Le recomendamos que para esto utilice el contexto vacío C<keys @array>, pero razonando que quitar C<values @array> exigirá dar más explicaciones que dejarlo tal cual).
 
-Tenga en cuenta que los valores no son copiados, lo que significa que modificarles modificará el contenido del hash:
+Tenga en cuenta que los valores no son copiados, lo que significa que al modificarles modificará el contenido del hash:
 
-    for (values %hash)      { s/foo/bar/g }   # modifica los valores de %hash
-    for (@hash{keys %hash}) { s/foo/bar/g }   # lo mismo
+    for (values %hash)      { s/foo/bar/g }  # modifica los valores de %hash
+    for (@hash{keys %hash}) { s/foo/bar/g }  # lo mismo
 
 A partir de Perl 5.14, C<values> puede tomar una EXPR escalar, que debe contener la referencia a un hash o un array no bendecido.  El argumento es desreferenciado automáticamente.  Este aspecto de C<values> es considerado altamente experimental.  El comportamiento exacto puede cambiar en una futura versión de Perl.
 
@@ -6047,167 +6128,167 @@ Si conoce la longitud exacta en bits, puede ser utilizada en lugar de la C<*>.
 
 Este es un ejemplo para ilustrar cómo los bits están realmente amparados en su lugar:
 
-    #!/usr/bin/perl -wl
+  #!/usr/bin/perl -wl
 
-    print <<'EOT';
-                                      0         1         2         3
-                       unpack("V",$_) 01234567890123456789012345678901
-    ------------------------------------------------------------------
-    EOT
+  print <<'EOT';
+                                    0         1         2         3
+                     unpack("V",$_) 01234567890123456789012345678901
+  ------------------------------------------------------------------
+  EOT
 
-    for $w (0..3) {
-        $ancho = 2**$w;
-        for ($shift=0; $shift < $width; ++$shift) {
-            for ($off=0; $off < 32/$width; ++$off) {
-                $str = pack("B*", "0"x32);
-                $bits = (1<<$shift);
-                vec($str, $off, $width) = $bits;
-                $res = unpack("b*",$str);
-                $val = unpack("V", $str);
-                write;
-            }
-        }
-    }
+  for $w (0..3) {
+      $ancho = 2**$w;
+      for ($shift=0; $shift < $ancho; ++$shift) {
+          for ($off=0; $off < 32/$ancho; ++$off) {
+              $str = pack("B*", "0"x32);
+              $bits = (1<<$shift);
+              vec($str, $off, $ancho) = $bits;
+              $res = unpack("b*",$str);
+              $val = unpack("V", $str);
+              write;
+          }
+      }
+  }
 
-    format STDOUT =
-    vec($_,@#,@#) = @<< == @######### @>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    $despl, $ancho, $bits, $val, $res
-    .
-    __END__
+  format STDOUT =
+  vec($_,@#,@#) = @<< == @######### @>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  $despl, $ancho, $bits, $val, $res
+  .
+  __END__
 
 Independientemente de la arquitectura de la máquina en la que se ejecuta, el ejemplo anterior debe imprimir el cuadro siguiente:
 
-                                      0         1         2         3
-                       unpack("V",$_) 01234567890123456789012345678901
-    ------------------------------------------------------------------
-    vec($_, 0, 1) = 1   ==          1 10000000000000000000000000000000
-    vec($_, 1, 1) = 1   ==          2 01000000000000000000000000000000
-    vec($_, 2, 1) = 1   ==          4 00100000000000000000000000000000
-    vec($_, 3, 1) = 1   ==          8 00010000000000000000000000000000
-    vec($_, 4, 1) = 1   ==         16 00001000000000000000000000000000
-    vec($_, 5, 1) = 1   ==         32 00000100000000000000000000000000
-    vec($_, 6, 1) = 1   ==         64 00000010000000000000000000000000
-    vec($_, 7, 1) = 1   ==        128 00000001000000000000000000000000
-    vec($_, 8, 1) = 1   ==        256 00000000100000000000000000000000
-    vec($_, 9, 1) = 1   ==        512 00000000010000000000000000000000
-    vec($_,10, 1) = 1   ==       1024 00000000001000000000000000000000
-    vec($_,11, 1) = 1   ==       2048 00000000000100000000000000000000
-    vec($_,12, 1) = 1   ==       4096 00000000000010000000000000000000
-    vec($_,13, 1) = 1   ==       8192 00000000000001000000000000000000
-    vec($_,14, 1) = 1   ==      16384 00000000000000100000000000000000
-    vec($_,15, 1) = 1   ==      32768 00000000000000010000000000000000
-    vec($_,16, 1) = 1   ==      65536 00000000000000001000000000000000
-    vec($_,17, 1) = 1   ==     131072 00000000000000000100000000000000
-    vec($_,18, 1) = 1   ==     262144 00000000000000000010000000000000
-    vec($_,19, 1) = 1   ==     524288 00000000000000000001000000000000
-    vec($_,20, 1) = 1   ==    1048576 00000000000000000000100000000000
-    vec($_,21, 1) = 1   ==    2097152 00000000000000000000010000000000
-    vec($_,22, 1) = 1   ==    4194304 00000000000000000000001000000000
-    vec($_,23, 1) = 1   ==    8388608 00000000000000000000000100000000
-    vec($_,24, 1) = 1   ==   16777216 00000000000000000000000010000000
-    vec($_,25, 1) = 1   ==   33554432 00000000000000000000000001000000
-    vec($_,26, 1) = 1   ==   67108864 00000000000000000000000000100000
-    vec($_,27, 1) = 1   ==  134217728 00000000000000000000000000010000
-    vec($_,28, 1) = 1   ==  268435456 00000000000000000000000000001000
-    vec($_,29, 1) = 1   ==  536870912 00000000000000000000000000000100
-    vec($_,30, 1) = 1   == 1073741824 00000000000000000000000000000010
-    vec($_,31, 1) = 1   == 2147483648 00000000000000000000000000000001
-    vec($_, 0, 2) = 1   ==          1 10000000000000000000000000000000
-    vec($_, 1, 2) = 1   ==          4 00100000000000000000000000000000
-    vec($_, 2, 2) = 1   ==         16 00001000000000000000000000000000
-    vec($_, 3, 2) = 1   ==         64 00000010000000000000000000000000
-    vec($_, 4, 2) = 1   ==        256 00000000100000000000000000000000
-    vec($_, 5, 2) = 1   ==       1024 00000000001000000000000000000000
-    vec($_, 6, 2) = 1   ==       4096 00000000000010000000000000000000
-    vec($_, 7, 2) = 1   ==      16384 00000000000000100000000000000000
-    vec($_, 8, 2) = 1   ==      65536 00000000000000001000000000000000
-    vec($_, 9, 2) = 1   ==     262144 00000000000000000010000000000000
-    vec($_,10, 2) = 1   ==    1048576 00000000000000000000100000000000
-    vec($_,11, 2) = 1   ==    4194304 00000000000000000000001000000000
-    vec($_,12, 2) = 1   ==   16777216 00000000000000000000000010000000
-    vec($_,13, 2) = 1   ==   67108864 00000000000000000000000000100000
-    vec($_,14, 2) = 1   ==  268435456 00000000000000000000000000001000
-    vec($_,15, 2) = 1   == 1073741824 00000000000000000000000000000010
-    vec($_, 0, 2) = 2   ==          2 01000000000000000000000000000000
-    vec($_, 1, 2) = 2   ==          8 00010000000000000000000000000000
-    vec($_, 2, 2) = 2   ==         32 00000100000000000000000000000000
-    vec($_, 3, 2) = 2   ==        128 00000001000000000000000000000000
-    vec($_, 4, 2) = 2   ==        512 00000000010000000000000000000000
-    vec($_, 5, 2) = 2   ==       2048 00000000000100000000000000000000
-    vec($_, 6, 2) = 2   ==       8192 00000000000001000000000000000000
-    vec($_, 7, 2) = 2   ==      32768 00000000000000010000000000000000
-    vec($_, 8, 2) = 2   ==     131072 00000000000000000100000000000000
-    vec($_, 9, 2) = 2   ==     524288 00000000000000000001000000000000
-    vec($_,10, 2) = 2   ==    2097152 00000000000000000000010000000000
-    vec($_,11, 2) = 2   ==    8388608 00000000000000000000000100000000
-    vec($_,12, 2) = 2   ==   33554432 00000000000000000000000001000000
-    vec($_,13, 2) = 2   ==  134217728 00000000000000000000000000010000
-    vec($_,14, 2) = 2   ==  536870912 00000000000000000000000000000100
-    vec($_,15, 2) = 2   == 2147483648 00000000000000000000000000000001
-    vec($_, 0, 4) = 1   ==          1 10000000000000000000000000000000
-    vec($_, 1, 4) = 1   ==         16 00001000000000000000000000000000
-    vec($_, 2, 4) = 1   ==        256 00000000100000000000000000000000
-    vec($_, 3, 4) = 1   ==       4096 00000000000010000000000000000000
-    vec($_, 4, 4) = 1   ==      65536 00000000000000001000000000000000
-    vec($_, 5, 4) = 1   ==    1048576 00000000000000000000100000000000
-    vec($_, 6, 4) = 1   ==   16777216 00000000000000000000000010000000
-    vec($_, 7, 4) = 1   ==  268435456 00000000000000000000000000001000
-    vec($_, 0, 4) = 2   ==          2 01000000000000000000000000000000
-    vec($_, 1, 4) = 2   ==         32 00000100000000000000000000000000
-    vec($_, 2, 4) = 2   ==        512 00000000010000000000000000000000
-    vec($_, 3, 4) = 2   ==       8192 00000000000001000000000000000000
-    vec($_, 4, 4) = 2   ==     131072 00000000000000000100000000000000
-    vec($_, 5, 4) = 2   ==    2097152 00000000000000000000010000000000
-    vec($_, 6, 4) = 2   ==   33554432 00000000000000000000000001000000
-    vec($_, 7, 4) = 2   ==  536870912 00000000000000000000000000000100
-    vec($_, 0, 4) = 4   ==          4 00100000000000000000000000000000
-    vec($_, 1, 4) = 4   ==         64 00000010000000000000000000000000
-    vec($_, 2, 4) = 4   ==       1024 00000000001000000000000000000000
-    vec($_, 3, 4) = 4   ==      16384 00000000000000100000000000000000
-    vec($_, 4, 4) = 4   ==     262144 00000000000000000010000000000000
-    vec($_, 5, 4) = 4   ==    4194304 00000000000000000000001000000000
-    vec($_, 6, 4) = 4   ==   67108864 00000000000000000000000000100000
-    vec($_, 7, 4) = 4   == 1073741824 00000000000000000000000000000010
-    vec($_, 0, 4) = 8   ==          8 00010000000000000000000000000000
-    vec($_, 1, 4) = 8   ==        128 00000001000000000000000000000000
-    vec($_, 2, 4) = 8   ==       2048 00000000000100000000000000000000
-    vec($_, 3, 4) = 8   ==      32768 00000000000000010000000000000000
-    vec($_, 4, 4) = 8   ==     524288 00000000000000000001000000000000
-    vec($_, 5, 4) = 8   ==    8388608 00000000000000000000000100000000
-    vec($_, 6, 4) = 8   ==  134217728 00000000000000000000000000010000
-    vec($_, 7, 4) = 8   == 2147483648 00000000000000000000000000000001
-    vec($_, 0, 8) = 1   ==          1 10000000000000000000000000000000
-    vec($_, 1, 8) = 1   ==        256 00000000100000000000000000000000
-    vec($_, 2, 8) = 1   ==      65536 00000000000000001000000000000000
-    vec($_, 3, 8) = 1   ==   16777216 00000000000000000000000010000000
-    vec($_, 0, 8) = 2   ==          2 01000000000000000000000000000000
-    vec($_, 1, 8) = 2   ==        512 00000000010000000000000000000000
-    vec($_, 2, 8) = 2   ==     131072 00000000000000000100000000000000
-    vec($_, 3, 8) = 2   ==   33554432 00000000000000000000000001000000
-    vec($_, 0, 8) = 4   ==          4 00100000000000000000000000000000
-    vec($_, 1, 8) = 4   ==       1024 00000000001000000000000000000000
-    vec($_, 2, 8) = 4   ==     262144 00000000000000000010000000000000
-    vec($_, 3, 8) = 4   ==   67108864 00000000000000000000000000100000
-    vec($_, 0, 8) = 8   ==          8 00010000000000000000000000000000
-    vec($_, 1, 8) = 8   ==       2048 00000000000100000000000000000000
-    vec($_, 2, 8) = 8   ==     524288 00000000000000000001000000000000
-    vec($_, 3, 8) = 8   ==  134217728 00000000000000000000000000010000
-    vec($_, 0, 8) = 16  ==         16 00001000000000000000000000000000
-    vec($_, 1, 8) = 16  ==       4096 00000000000010000000000000000000
-    vec($_, 2, 8) = 16  ==    1048576 00000000000000000000100000000000
-    vec($_, 3, 8) = 16  ==  268435456 00000000000000000000000000001000
-    vec($_, 0, 8) = 32  ==         32 00000100000000000000000000000000
-    vec($_, 1, 8) = 32  ==       8192 00000000000001000000000000000000
-    vec($_, 2, 8) = 32  ==    2097152 00000000000000000000010000000000
-    vec($_, 3, 8) = 32  ==  536870912 00000000000000000000000000000100
-    vec($_, 0, 8) = 64  ==         64 00000010000000000000000000000000
-    vec($_, 1, 8) = 64  ==      16384 00000000000000100000000000000000
-    vec($_, 2, 8) = 64  ==    4194304 00000000000000000000001000000000
-    vec($_, 3, 8) = 64  == 1073741824 00000000000000000000000000000010
-    vec($_, 0, 8) = 128 ==        128 00000001000000000000000000000000
-    vec($_, 1, 8) = 128 ==      32768 00000000000000010000000000000000
-    vec($_, 2, 8) = 128 ==    8388608 00000000000000000000000100000000
-    vec($_, 3, 8) = 128 == 2147483648 00000000000000000000000000000001
+                                    0         1         2         3
+                     unpack("V",$_) 01234567890123456789012345678901
+  ------------------------------------------------------------------
+  vec($_, 0, 1) = 1   ==          1 10000000000000000000000000000000
+  vec($_, 1, 1) = 1   ==          2 01000000000000000000000000000000
+  vec($_, 2, 1) = 1   ==          4 00100000000000000000000000000000
+  vec($_, 3, 1) = 1   ==          8 00010000000000000000000000000000
+  vec($_, 4, 1) = 1   ==         16 00001000000000000000000000000000
+  vec($_, 5, 1) = 1   ==         32 00000100000000000000000000000000
+  vec($_, 6, 1) = 1   ==         64 00000010000000000000000000000000
+  vec($_, 7, 1) = 1   ==        128 00000001000000000000000000000000
+  vec($_, 8, 1) = 1   ==        256 00000000100000000000000000000000
+  vec($_, 9, 1) = 1   ==        512 00000000010000000000000000000000
+  vec($_,10, 1) = 1   ==       1024 00000000001000000000000000000000
+  vec($_,11, 1) = 1   ==       2048 00000000000100000000000000000000
+  vec($_,12, 1) = 1   ==       4096 00000000000010000000000000000000
+  vec($_,13, 1) = 1   ==       8192 00000000000001000000000000000000
+  vec($_,14, 1) = 1   ==      16384 00000000000000100000000000000000
+  vec($_,15, 1) = 1   ==      32768 00000000000000010000000000000000
+  vec($_,16, 1) = 1   ==      65536 00000000000000001000000000000000
+  vec($_,17, 1) = 1   ==     131072 00000000000000000100000000000000
+  vec($_,18, 1) = 1   ==     262144 00000000000000000010000000000000
+  vec($_,19, 1) = 1   ==     524288 00000000000000000001000000000000
+  vec($_,20, 1) = 1   ==    1048576 00000000000000000000100000000000
+  vec($_,21, 1) = 1   ==    2097152 00000000000000000000010000000000
+  vec($_,22, 1) = 1   ==    4194304 00000000000000000000001000000000
+  vec($_,23, 1) = 1   ==    8388608 00000000000000000000000100000000
+  vec($_,24, 1) = 1   ==   16777216 00000000000000000000000010000000
+  vec($_,25, 1) = 1   ==   33554432 00000000000000000000000001000000
+  vec($_,26, 1) = 1   ==   67108864 00000000000000000000000000100000
+  vec($_,27, 1) = 1   ==  134217728 00000000000000000000000000010000
+  vec($_,28, 1) = 1   ==  268435456 00000000000000000000000000001000
+  vec($_,29, 1) = 1   ==  536870912 00000000000000000000000000000100
+  vec($_,30, 1) = 1   == 1073741824 00000000000000000000000000000010
+  vec($_,31, 1) = 1   == 2147483648 00000000000000000000000000000001
+  vec($_, 0, 2) = 1   ==          1 10000000000000000000000000000000
+  vec($_, 1, 2) = 1   ==          4 00100000000000000000000000000000
+  vec($_, 2, 2) = 1   ==         16 00001000000000000000000000000000
+  vec($_, 3, 2) = 1   ==         64 00000010000000000000000000000000
+  vec($_, 4, 2) = 1   ==        256 00000000100000000000000000000000
+  vec($_, 5, 2) = 1   ==       1024 00000000001000000000000000000000
+  vec($_, 6, 2) = 1   ==       4096 00000000000010000000000000000000
+  vec($_, 7, 2) = 1   ==      16384 00000000000000100000000000000000
+  vec($_, 8, 2) = 1   ==      65536 00000000000000001000000000000000
+  vec($_, 9, 2) = 1   ==     262144 00000000000000000010000000000000
+  vec($_,10, 2) = 1   ==    1048576 00000000000000000000100000000000
+  vec($_,11, 2) = 1   ==    4194304 00000000000000000000001000000000
+  vec($_,12, 2) = 1   ==   16777216 00000000000000000000000010000000
+  vec($_,13, 2) = 1   ==   67108864 00000000000000000000000000100000
+  vec($_,14, 2) = 1   ==  268435456 00000000000000000000000000001000
+  vec($_,15, 2) = 1   == 1073741824 00000000000000000000000000000010
+  vec($_, 0, 2) = 2   ==          2 01000000000000000000000000000000
+  vec($_, 1, 2) = 2   ==          8 00010000000000000000000000000000
+  vec($_, 2, 2) = 2   ==         32 00000100000000000000000000000000
+  vec($_, 3, 2) = 2   ==        128 00000001000000000000000000000000
+  vec($_, 4, 2) = 2   ==        512 00000000010000000000000000000000
+  vec($_, 5, 2) = 2   ==       2048 00000000000100000000000000000000
+  vec($_, 6, 2) = 2   ==       8192 00000000000001000000000000000000
+  vec($_, 7, 2) = 2   ==      32768 00000000000000010000000000000000
+  vec($_, 8, 2) = 2   ==     131072 00000000000000000100000000000000
+  vec($_, 9, 2) = 2   ==     524288 00000000000000000001000000000000
+  vec($_,10, 2) = 2   ==    2097152 00000000000000000000010000000000
+  vec($_,11, 2) = 2   ==    8388608 00000000000000000000000100000000
+  vec($_,12, 2) = 2   ==   33554432 00000000000000000000000001000000
+  vec($_,13, 2) = 2   ==  134217728 00000000000000000000000000010000
+  vec($_,14, 2) = 2   ==  536870912 00000000000000000000000000000100
+  vec($_,15, 2) = 2   == 2147483648 00000000000000000000000000000001
+  vec($_, 0, 4) = 1   ==          1 10000000000000000000000000000000
+  vec($_, 1, 4) = 1   ==         16 00001000000000000000000000000000
+  vec($_, 2, 4) = 1   ==        256 00000000100000000000000000000000
+  vec($_, 3, 4) = 1   ==       4096 00000000000010000000000000000000
+  vec($_, 4, 4) = 1   ==      65536 00000000000000001000000000000000
+  vec($_, 5, 4) = 1   ==    1048576 00000000000000000000100000000000
+  vec($_, 6, 4) = 1   ==   16777216 00000000000000000000000010000000
+  vec($_, 7, 4) = 1   ==  268435456 00000000000000000000000000001000
+  vec($_, 0, 4) = 2   ==          2 01000000000000000000000000000000
+  vec($_, 1, 4) = 2   ==         32 00000100000000000000000000000000
+  vec($_, 2, 4) = 2   ==        512 00000000010000000000000000000000
+  vec($_, 3, 4) = 2   ==       8192 00000000000001000000000000000000
+  vec($_, 4, 4) = 2   ==     131072 00000000000000000100000000000000
+  vec($_, 5, 4) = 2   ==    2097152 00000000000000000000010000000000
+  vec($_, 6, 4) = 2   ==   33554432 00000000000000000000000001000000
+  vec($_, 7, 4) = 2   ==  536870912 00000000000000000000000000000100
+  vec($_, 0, 4) = 4   ==          4 00100000000000000000000000000000
+  vec($_, 1, 4) = 4   ==         64 00000010000000000000000000000000
+  vec($_, 2, 4) = 4   ==       1024 00000000001000000000000000000000
+  vec($_, 3, 4) = 4   ==      16384 00000000000000100000000000000000
+  vec($_, 4, 4) = 4   ==     262144 00000000000000000010000000000000
+  vec($_, 5, 4) = 4   ==    4194304 00000000000000000000001000000000
+  vec($_, 6, 4) = 4   ==   67108864 00000000000000000000000000100000
+  vec($_, 7, 4) = 4   == 1073741824 00000000000000000000000000000010
+  vec($_, 0, 4) = 8   ==          8 00010000000000000000000000000000
+  vec($_, 1, 4) = 8   ==        128 00000001000000000000000000000000
+  vec($_, 2, 4) = 8   ==       2048 00000000000100000000000000000000
+  vec($_, 3, 4) = 8   ==      32768 00000000000000010000000000000000
+  vec($_, 4, 4) = 8   ==     524288 00000000000000000001000000000000
+  vec($_, 5, 4) = 8   ==    8388608 00000000000000000000000100000000
+  vec($_, 6, 4) = 8   ==  134217728 00000000000000000000000000010000
+  vec($_, 7, 4) = 8   == 2147483648 00000000000000000000000000000001
+  vec($_, 0, 8) = 1   ==          1 10000000000000000000000000000000
+  vec($_, 1, 8) = 1   ==        256 00000000100000000000000000000000
+  vec($_, 2, 8) = 1   ==      65536 00000000000000001000000000000000
+  vec($_, 3, 8) = 1   ==   16777216 00000000000000000000000010000000
+  vec($_, 0, 8) = 2   ==          2 01000000000000000000000000000000
+  vec($_, 1, 8) = 2   ==        512 00000000010000000000000000000000
+  vec($_, 2, 8) = 2   ==     131072 00000000000000000100000000000000
+  vec($_, 3, 8) = 2   ==   33554432 00000000000000000000000001000000
+  vec($_, 0, 8) = 4   ==          4 00100000000000000000000000000000
+  vec($_, 1, 8) = 4   ==       1024 00000000001000000000000000000000
+  vec($_, 2, 8) = 4   ==     262144 00000000000000000010000000000000
+  vec($_, 3, 8) = 4   ==   67108864 00000000000000000000000000100000
+  vec($_, 0, 8) = 8   ==          8 00010000000000000000000000000000
+  vec($_, 1, 8) = 8   ==       2048 00000000000100000000000000000000
+  vec($_, 2, 8) = 8   ==     524288 00000000000000000001000000000000
+  vec($_, 3, 8) = 8   ==  134217728 00000000000000000000000000010000
+  vec($_, 0, 8) = 16  ==         16 00001000000000000000000000000000
+  vec($_, 1, 8) = 16  ==       4096 00000000000010000000000000000000
+  vec($_, 2, 8) = 16  ==    1048576 00000000000000000000100000000000
+  vec($_, 3, 8) = 16  ==  268435456 00000000000000000000000000001000
+  vec($_, 0, 8) = 32  ==         32 00000100000000000000000000000000
+  vec($_, 1, 8) = 32  ==       8192 00000000000001000000000000000000
+  vec($_, 2, 8) = 32  ==    2097152 00000000000000000000010000000000
+  vec($_, 3, 8) = 32  ==  536870912 00000000000000000000000000000100
+  vec($_, 0, 8) = 64  ==         64 00000010000000000000000000000000
+  vec($_, 1, 8) = 64  ==      16384 00000000000000100000000000000000
+  vec($_, 2, 8) = 64  ==    4194304 00000000000000000000001000000000
+  vec($_, 3, 8) = 64  == 1073741824 00000000000000000000000000000010
+  vec($_, 0, 8) = 128 ==        128 00000001000000000000000000000000
+  vec($_, 1, 8) = 128 ==      32768 00000000000000010000000000000000
+  vec($_, 2, 8) = 128 ==    8388608 00000000000000000000000100000000
+  vec($_, 3, 8) = 128 == 2147483648 00000000000000000000000000000001
 
 =item wait
 X<wait>
@@ -6224,7 +6305,7 @@ Cuestiones de portabilidad: L<perlport/wait>.
 =item waitpid PID,BANDERAS
 X<waitpid>
 
-=for Pod::Functions wait for  a particular child process to die
+=for Pod::Functions wait for a particular child process to die
 
 Espera que termine un proceso hijo en particular y devuelve el PID del proceso que ha fallecido, o C<-1> si no existe tal proceso hijo.  En algunos sistemas, un valor de 0 indica que hay procesos en funcionamiento.
 El estado se devuelve en C<$?> y C<${^CHILD_ERROR_NATIVE}>.  Si dice
@@ -6278,7 +6359,7 @@ El uso de un controlador C<__WARN__> proporciona una poderosa manera de silencia
     BEGIN { $SIG{'__WARN__'} = sub { warn $_[0] if $DOWARN } }
     my $foo = 10;
     my $foo = 20;          # no avisa de un my $foo duplicado,
-                           # pero bueno, ¡tú lo has querido!
+                           # pero bueno, ¡tú lo has querido así!
     # no advertencias en compilación o ejecución antes de aquí
     $DOWARN = 1;
 
@@ -6298,7 +6379,7 @@ X<write>
 
 Escribe un registro formateado (posiblemente de varias líneas) al IDENTIFICADOR_ARCHIVO especificado, utilizando el formato asociado con ese archivo.  Por defecto el formato de un archivo es el que tiene el mismo nombre que el identificador de archivo, pero el formato para el canal de salida (vea la función C<select>) se puede establecer de forma explícita mediante la asignación del nombre del formato a la variable C<$~>.
 
-El procesado del comienzo del formulario se maneja de forma automática: si no hay suficiente espacio en la página actual para el registro formateado, la página se desplaza escribiendo un avance de página; un formato especial de principio de página es utilizado entonces para dar formato al encabezado de la nueva página antes de que el registro sea escrito.  De manera predeterminada, el formato de la parte superior de la página es el nombre del identificador de archivo con el sufijo "_TOP" añadido.  Esto podría ser un problema con identificadores de archivo autovivificados, pero puede ser configurado de forma dinámico con el formato de su elección mediante la asignación del nombre a la variable C<$^> mientras esté seleccionado el identificador de archivo.  El número de líneas restantes de la página actual está en la variable C<$->, que se puede fijar a C<0> para forzar una nueva página.
+El procesado del comienzo del formulario se maneja de forma automática: si no hay suficiente espacio en la página actual para el registro formateado, la página se desplaza escribiendo un avance de página y se utiliza un formato especial de principio de página para dar formato al encabezado de la nueva página antes de que el registro sea escrito.  De manera predeterminada, el formato de la parte superior de la página es el nombre del identificador de archivo con el sufijo "_TOP" añadido, o "top" en el paquete actual si lo primero no existe.  Esto podría ser un problema con identificadores de archivo autovivificados, pero puede ser configurado de forma dinámico con el formato de su elección mediante la asignación del nombre a la variable C<$^> mientras esté seleccionado el identificador de archivo.  El número de líneas restantes de la página actual está en la variable C<$->, que se puede fijar a C<0> para forzar una nueva página.
 
 Si IDENTIFICADOR_ARCHIVO no está especificado, la salida va al canal predeterminado de salida actual, que suele ser STDOUT, pero puede ser modificado por el operador C<select>.  Si el IDENTIFICADOR_ARCHIVO es una EXPR, entonces la expresión se evalúa y la cadena resultante se utiliza para buscar el nombre del IDENTIFICADOR_ARCHIVO en tiempo de ejecución.  Para más información sobre formatos, vea L<perlform>.
 
@@ -6308,7 +6389,7 @@ Tenga en cuenta que write I<no> es lo contrario de C<read>.  Por desgracia.
 
 =for Pod::Functions transliterate a string
 
-El operador de transliteración.  Igual que C<tr///>.  Ver L<perlop/"Comillas y Operadores de comillas">.
+El operador de transliteración.  Igual que C<tr///>.  Vea L<perlop/"Operadores entrecomillados">.
 
 =back
 
@@ -6368,8 +6449,6 @@ Esta palabra clave de método está documentada en L<perlobj/"Destructores">.
 
 =item gt
 
-=item if
-
 =item le
 
 =item lt
@@ -6411,6 +6490,8 @@ Esta palabra clave está documentada en L<perlsub/"Autocarga">.
 =item for
 
 =item foreach
+
+=item if
 
 =item unless
 
