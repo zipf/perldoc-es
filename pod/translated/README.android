@@ -1,0 +1,144 @@
+Puede leer este archivo en cualquier editor de texto (verá algunos caracteres extraños, pero puede ignorarlos). Está escrito en formato POD (vea pod/perlpod.pod), un formato diseñado específicamente para ser legible tal cual.
+
+=head1 NOMBRE
+
+perlandroid - Perl bajo Android
+
+=head1 SINOPSIS
+
+La primera parte de este documento contiene instrucciones para la compilación cruzada de Perl para Android 2.0 y superiores, usando los binarios ofrecidos por Google.  La última parte describe cómo construir un perl nativo usando una de las cadenas de herramientas disponibles en el Play Store.
+
+=head1 DESCRIPCIÓN
+
+Este documento describe cómo ajustar su entorno cuando intente compilar Perl para Android.
+
+=head1 Compilación cruzada
+
+Estas instrucciones asumen un entorno de construcción similar a Unix en su sistema principal; se ha probado en Linux y OS X, y puede funcionar en Cygwin y MSYS.
+Mientras que Google ofrece también un NDK para Windows, estos pasos aquí descritos no funcionarán de forma nativa, aunque puede ser posible compilarlo de forma cruzada a través de diferentes medios.
+
+Si la arquitectura de sistema principal es de 32 bits, recuerde cambiar el C<x86_64> de más abajo, a C<x86>.  De una forma similar, los ejemplos siguientes usan la cadena de herramientas 4.8; si quiere usar algo más viejo o más nuevo (por ejemplo, la cadena de herramientas 4.4.3 incluida en la octava revisión del NDK), solo cámbielos a la versión pertinente.
+
+=head2 Obtener el Kit de desarrollo nativo para Android (NDK)
+
+Puede descargar el NDK desde L<https://developer.android.com/tools/sdk/ndk/index.html>.
+Querrá la versión normal y más actual.
+
+=head2 Determine la arquitectura para la compilación cruzada
+
+Hay tres opciones posibles: arm-linux-androideabi para ARM, mipsel-linux-android para MIPS, y simplemente x86 para x86.
+En 2014, la mayor parte de los dispositivos corren sobre ARM, así que, generalmente, es una apuesta segura.
+
+Con estos dos a mano, debería añadir
+
+$ANDROID_NDK/toolchains/$TARGETARCH-4.8/prebuilt/`uname | tr '[A-Z]' '[a-z]'`-x86_64/bin
+
+a su PATH, donde $ANDROID_NDK es la posición donde va a desempaquetar el NDK, y $TARGETARCH es su arquitectura objetivo.
+
+=head2 Instalar una cadena de herramientas
+
+Esto crea un sysroot funcional que podemos alimentar a Configure más tarde.
+
+    $ export ANDROID_TOOLCHAIN=/tmp/my-toolchain-$TARGETARCH
+    $ export SYSROOT=$ANDROID_TOOLCHAIN/sysroot
+    $ $ANDROID_NDK/build/tools/make-standalone-toolchain.sh \
+            --platform=android-9 \
+            --install-dir=$ANDROID_TOOLCHAIN \
+            --system=`uname | tr '[A-Z]' '[a-z]'`-x86_64 \
+            --toolchain=$TARGETARCH-4.8
+
+=head2 ¿adb o ssh?
+
+adb es el I<Android Debug Bridge>.  Para nuestros propósitos, es básicamente una forma de establecer una conexión ssh a un dispositivo Android sin tener que instalar nada en el propio dispositivo, mientras que el dispositivo puede estar tanto en la misma red local como en el ordenador, o si está conectado al ordenador a través del USB.
+Perl puede compilarse de forma cruzada usando tanto adb como una conexión ssh normal; en general, si quiere conectar su dispositivo al ordenador usando un puerto USB, o si no tiene la confianza de instalar una app sshd en su dispositivo, puede querer usar adb, aunque se puede ver forzado a cambiar a ssh si su dispositivo no se ha rooteado y no tiene suerte. Más sobre esto más tarde.
+Alternativamente, si está compilando de forma cruzada en un emulador, tendrá que usar adb.
+
+=head3 adb
+
+Para usar adb, descargue el SDK de Android desde L<https://developer.android.com/sdk/index.html>.
+La versión "SDK Tools Only" debería ser suficiente. Si descarga el paquete ADT, puede encontrar el sdk bajo $ADT_BUNDLE/sdk/.
+
+Añada $ANDROID_SDK/platform-tools a su PATH, que debería darle acceso a adb.  Ahora tendrá que buscar el nombre de su dispositivo usando 'adb devices', y pasarlo más tarde a Configure por medio de '-Dtargethost=$DEVICE'.
+
+Sin embargo, antes de llamar a Configure, necesita comprobar si usar adb es un elección viable como primera opción.  Debido a que Android no tiene un /tmp, ni permite tener ejecutables en la tarjeta SD, necesitamos buscar un sitio dentro del dispositivo para poner en él el Configure y otros archivos, así como para ejecutar los test. Si su dispositivo está rooteada, entonces va bien.  Intente ejecutar esto:
+
+    $ export TARGETDIR=/mnt/asec/perl
+    $ adb -s $DEVICE shell "echo sh -c '\"mkdir $TARGETDIR\"' | su --"
+
+Que creará el directorio que necesitamos, y puede ir al siguiente paso.  /mnt/asec está montado como un tmpfs en Android, pero solo es accesible para el root.
+
+Si su dispositivo no está el rooteado, aún puede tener suerte. Intente ejecutar esto:
+
+    $ export TARGETDIR=/data/local/tmp/perl
+    $ adb -s $DEVICE shell "mkdir $TARGETDIR"
+
+Si el comando funciona, puede ir al siguiente paso, pero, cuidado: B<¡Tendrá que eliminar el directorio del dispositivo una vez que termine!
+A diferencia de /mnt/asec, /data/local/tmp puede no ser eliminado de forma automática por el recolector de basura una vez que apague el teléfono>.
+
+Si nada de esto funciona, entonces no puede usar adb para compilar de forma cruzada, a su dispositivo.  Intent rootearlo, o elija la ruta con el ssh.
+
+=head3 ssh
+
+Para usar ssh, necesitará instalar y ejecutar una app sshd y ajustarlo apropiadamente.  Existen muchas app gratuitas y de pago que hacen esto muy fácil, así que debería ser capaz de encontrar una en el almacén.
+Recuerde que Perl requiere una conexión sin contraseña, así que cree una clave pública.
+
+Note que diversas app escupen basura a la salida de error estándar cada vez que se conecte, que pueden filtrar a través de Configure.  Puede necesitar parchear la parte de Configure que crea 'run-ssh' para que descarte la salida de error estándar.
+
+Ya que está usando ssh, tendrá que pasar algunos argumentos extra a Configure: -Dtargetrun=ssh -Dtargethost=$TARGETHOST -Dtargetuser=$TARGETUSER -Dtargetport=$TARGETPORT
+
+=head2 Configure y más allá
+
+Con todo lo anterior ya terminado, ahora ya está preparado para llamar a Configure.
+
+Si usa adb, una línea "básica" de Configure se parecerá a esto:
+
+$ ./Configure -des -Dusedevel -Dusecrosscompile -Dtargetrun=adb \
+    -Dcc=$TARGETARCH-gcc   \
+    -Dsysroot=$SYSROOT     \
+    -Dtargetdir=$TARGETDIR \
+    -Dtargethost=$DEVICE
+
+Si usa ssh, no es demasiado diferente: solo cambiamos targetrun a ssh, e indicamos targetuser y targetport.  Termina pareciendo a esto:
+
+$ ./Configure -des -Dusedevel -Dusecrosscompile -Dtargetrun=ssh \
+    -Dcc=$TARGETARCH-gcc        \
+    -Dsysroot=$SYSROOT          \
+    -Dtargetdir=$TARGETDIR      \
+    -Dtargethost="$TARGETHOST"  \
+    -Dtargetuser=$TARGETUSER    \
+    -Dtargetport=$TARGETPORT
+
+¡Ahora ya está preparado para ejecutar make y make test!
+
+Como palabra final de aviso, si está usando adb, make test puede parecer que se cuelga; esto es porque no muestra nada hasta que termina de ejecutar todos los test.  Puede comprobar su progreso entrando en el dispositivo, yendo a $TARGETDIR, y mirar en el archivo output.stdout.
+
+=head3 Notas
+
+=over
+
+=item *
+
+Si está construyendo para Android x86, necesitará cambiar $TARGETARCH-gcc a i686-linux-android-gcc.
+
+=item *
+
+En algunos viejos dispositivos baratos -piense en los anteriores a la era 2.2- algunos test, particularmente t/re/uniprops, puede colgar el teléfono, provocando que se apague y que luego se encienda.
+
+=back
+
+=head1 Compilaciones nativas
+
+Mientras que Google no ofrece una cadena de herramientas nativa para Android, aún puede obtener uno desde Play Store; por ejemplo, está la app CCTools que puede bajarse gratuitamente.
+Tenga en cuenta que puede encontrar una cadena de herramientas completa; algunas app tienden por defecto a instalar solo una versión simple, sin algunas utilidades importantes, como ar o nm.
+
+Una vez que tenga la cadena de herramientas ajustada apropiadamente, la única limitación que queda ahora es localizar dónde instalarla dentro del dispositivo.  Por ejemplo, CCTools instala su cadena de herramientas en /data/data/com.pdaxrom.cctools/root/cctools.  Con la ruta en la mano, compilar perl es poco más que esto:
+
+    export SYSROOT=<posición de la cadena de herramientas nativa>
+    export LD_LIBRARY_PATH="$SYSROOT/lib:`pwd`:`pwd`/lib:`pwd`/lib/auto:$LD_LIBRARY_PATH"
+    sh Configure -des -Dsysroot=$SYSROOT -Alibpth="/system/lib /vendor/lib"
+
+=head1 AUTOR
+
+Brian Fraser <fraserbn@gmail.com>
+
+=cut

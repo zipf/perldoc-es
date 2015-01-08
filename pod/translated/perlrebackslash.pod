@@ -1,0 +1,465 @@
+=head1 NOMBRE
+
+perlrebackslash - Secuencias de escape en expresiones regulares en Perl
+
+=head1 DESCRIPCIÓN
+
+La documentación de alto nivel acerca de expresiones regulares de Perl se encuentra en L<perlre>.
+
+Este documento describe todas las secuencias de escape y de diagonales inversa. Después de explicar el rol de la barra diagonal invertida, se lista todas las secuencias que tengan un significado especial en las expresiones regulares Perl (en orden alfabética), y luego describe cada una de ellas.
+
+La mayor parte de las secuencias se describen en detalle en diferentes documentos; el principal propósito de este documento es tener una guía rápida que describa todas las secuencias de escape y de diagonal inversa.
+
+=head2 La barra diagonal inversa
+
+En una expresión regular, la barra diagonal inversa puede realizar una de dos posibles tareas: puede desactivar el significado especial del carácter que le sigue (por ejemplo, C<\|> coincide con una barra vertical, no una alternancia), o es el inicio de una secuencia de escape o de diagonal inversa.
+
+Las reglas que lo determinan son muy simples: si el carácter que le sigue a la barra diagonal inversa es un carácter ASCII de puntuación (no de palabra) (es decir, cualquier cosa que no sea una letra, dígito o guión bajo), entonces la barra diagonal inversa desactiva cualquier significado especial del carácter que le sigue.
+
+Si el carácter que sigue a la barra diagonal es una letra ASCII o un dígito ASCII, entonces la secuencia puede ser especial; si lo es, se lista más abajo. No se usan unas pocas letras, así que escaparlas con una barra diagonal inversa no las hace especiales.  Una futura versión de Perl puede asignarles un significado especial, así que si tiene las advertencias activadas, Perl emite un aviso si usa tal secuencia.  [1].
+
+Sin embargo, se garantiza que las secuencias de escape o de diagonal inversa nunca tendrán un carácter de puntuación siguiente a una barra diagonal inversa, ni ahora, ni en una futura versión de Perl 5. Así que es seguro poner una barra diagonal inversa delante de un carácter que no forme parte de una palabra.
+
+Note que la propia barra diagonal inversa es en sí misma especial; si quiere puede escapar la barra diagonal inversa con una barra diagonal inversa: C</\\/> coincide con una única barra diagonal inversa.
+
+=over 4
+
+=item [1]
+
+Hay una excepción. Si usa un carácter alfanumérico como delimitador de su patrón (que probablemente no debería hacer, por cuestiones de legibilidad), tendrá que escapar el delimitador si quiere buscarlo, con el patrón. En este caso, Perl no lo advertirá. Vea también L<perlop/Detalles sangrientos de las construcciones de interpretación entrecomilladas>.
+
+=back
+
+
+=head2 Todas secuencias y escapes
+
+Las que no se pueden usar dentro de una clase de caracteres entre corchetes (como C<[\da-z]>) se marcan como C<No en [].>.
+
+ \000              Secuencia de escape octal.  Ver también \o{}.
+ \1                Contrareferencia absoluta.  No en [].
+ \a                Alarma o campana.
+ \A                Comienzo de cadena.  No en [].
+ \b                Límite de palabra/no-palabra. (Retroceso en []).
+ \B                No es límite de palabra/no-palabra.  No en [].
+ \cX               Control-X.
+ \C                Un solo octeto, incluso bajo UTF-8.  No en [].
+                   (Obsoleto).
+ \d                Clase carácter para dígitos.
+ \D                Clase carácter para no-dígitos.
+ \e                Carácter de escape.
+ \E                Desactivar procesamiento \Q, \L y \U.  No en [].
+ \f                Avanza de página.
+ \F                Cambio de tamaño de caja, hasta \E.  No en [].
+ \g{}, \g1         Contrareferencia con nombre, absoluta o relativa.
+                   No en [].
+ \G                Aserción de posición.  No en [].
+ \h                Clase carácter para espacio en blanco horizontal.
+ \H                Clase carácter para no-espacio en blanco horizontal.
+ \k{}, \k<>, \k''  Contrareferencia con nombre.  No en [].
+ \K                Mantener el material que está a la izquierda de \K.  No en [].
+ \l                Poner en minúscula el siguiente carácter.  No en [].
+ \L                Poner en minúscula hasta \E.  No en [].
+ \n                Carácter (lógico) de nueva línea.
+ \N                Cualquier carácter excepto los de nueva línea.  No en [].
+ \N{}              Carácter o secuencia (Unicode) con nombre o número.
+ \o{}              Secuencia de escape octal.
+ \p{}, \pP         Carácter con la propiedad Unicode indicada.
+ \p{}, \pP         Carácter sin la propiedad Unicode indicada.
+ \Q                Entrecomilla (desactiva) los metacaracteres de patrón hasta \E  No
+                   en [].
+ \r                Carácter de retorno.
+ \R                Nueva línea genérica.  No en [].
+ \s                Clase carácter para espacio en blanco.
+ \S                Clase carácter para espacio no-blanco.
+ \t                Carácter tabulador.
+ \u                Capitaliza el siguiente carácter.  No en [].
+ \U                Pasar a mayúscula hasta \E.  No en [].
+ \v                Clase carácter para espacio en blanco vertical.
+ \V                Clase carácter para no-espacio en blanco vertical.
+ \w                Clase carácter para caracteres de palabra.
+ \W                Clase carácter para no-caracteres de palabra.
+ \x{}, \x00        Secuencia de escape hexadecimal.
+ \X                "Agrupación Unicode extendida de grafemas ".  No en [].
+ \z                Fin de cadena.  No en [].
+ \Z                Fin de cadena.  No en [].
+
+=head2 Carácter de escape
+
+=head3  Caracteres fijos
+
+Un puñado de caracteres tienen un I<carácter de escape> dedicado. Aparecen en la siguiente tabla, junto con sus códigos de carácter ASCII (en decimal y hex), su nombre ASCII, el control de escape en plataformas ASCII y una breve descripción.  (Para plataformas EBCDIC, vea L<perlebcdic/OPERATOR DIFFERENCES>).
+
+ Sec.  Cod. Car.  ASCII   Contr.  Descripción.
+       Dec    Hex
+  \a     7     07    BEL    \cG    alarma o campana
+  \b     8     08     BS    \cH    retroceso [1]
+  \e    27     1B    ESC    \c[    carácter de escape
+  \f    12     0C     FF    \cL    avance de página
+  \n    10     0A     LF    \cJ    avance de línea [2]
+  \r    13     0D     CR    \cM    retorno de carro
+  \t     9     09    TAB    \cI    tabulador
+
+=over 4
+
+=item [1]
+
+C<\b> es el carácter de retroceso solo dentro de una clase carácter. Fuera de una clase carácter, C<\b> es un límite de palabra/no-palabra.
+
+=item [2]
+
+C<\n> coincide con un avance de línea lógico. Perl convierte entre C<\n> y el carácter de nueva línea nativo de su sistema operativo cuando se lea o escriba a archivos de texto.
+
+=back
+
+=head4 Ejemplo
+
+ $str =~ /\t/;   # Coincide si $str contiene un tabulador (horizontal).
+
+=head3 Caracteres de control
+
+Se usa C<\c> para denotar a un carácter de control; el carácter siguiente C<\c> determina el valor de la construcción.  Por ejemplo, el valor de C<\cA> es C<chr(1)>, y el valor de C<\cb> es C<chr(2)>, etc.
+Los detalles sangrientos están en L<perlop/"Operadores Regexp entrecomillados">.  Una lista completa de lo que C<chr(1)>, etc. significan para plataformas ASCII y EBCDIC está en L<perlebcdic/DIFERENCIAS de OPERADORES>.
+
+Note que no es válido un solo C<\c\> al final de la expresión regular (o cadena doblemente entrecomillada).  La barra diagonal inversa debe estar seguida por otro carácter.
+Es decir, C<\c\I<X>> es igual a C< chr(28) . 'I<X>'> para todos los caracteres I<X>.
+
+Para escribir código independiente de la plataforma, debe usar en su lugar C<\N{I<NOMBRE>}>, como C<\N{ESCAPE}> o C<\N{U+001B}>; vea L<charnames>.
+
+Mnemónico: carácter de I<c>ontrol.
+
+=head4 Ejemplo
+
+ $str =~ /\cK/;  # Coincide si $str contiene un tabulador vertical (control-K).
+
+=head3 Caracteres y secuencias de carácter con nombre o número
+
+Los caracteres Unicode tienen un nombre Unicode y un valor numérico (ordinal) de código de carácter.  Use la construcción C<\N{}> para especificar un carácter por cualquiera de estos valores.
+Ciertas secuencias de caracteres tienen también nombres.
+
+Para especificar por nombre, el nombre del carácter o secuencia de caracteres va entre llaves.
+
+Para especificar un carácter por código carácter Unicode, use la forma C<\N{U+I<código de carácter>}>, donde I<código de carácter> es un número en hexadecimal que indica el código de carácter que Unicode ha asignado al carácter deseado.  Es costumbre, pero no necesario, usar ceros al principio para rellenar el número a cuatro dígitos.  Así C<\N{U+0041}> significa C<LATIN CAPITAL LETTER A>, y raramente lo verá escrito sin los dos ceros de relleno.  C<\N{U+0041}> significa "A" incluso en máquinas EBCDIC (donde el valor ordinal "A" no es 0x41).
+
+Es incluso posible indicar sus propios nombres a caracteres y secuencias de carácter.  Para más detalles, vea L<charnames>.
+
+(Existe una forma interna expandida que puede ver en la salida de depuración: C<\N{U+I<código de carácter>.I<código de carácter>...}>.
+El C<...> significa cualquier número de I<códigos de carácter> separados por puntos.
+Representa la secuencia formada por los caracteres.  Esto solo es una forma interna, sujeto a cambio, y no debería intentarlo por sí mismo).
+
+Mnemónico: Carácter con I<N>ombre.
+
+Note que un carácter o secuencia de carácter expresados como un carácter con nombre o con número se considera que es un carácter sin significado especial para el motor de exp. reg., y coincidirá "tal cual".
+
+=head4 Ejemplo
+
+ $str =~ /\N{THAI CHARACTER SO SO}/;  # Coincide con el carácter Thai SO SO
+
+ use charnames 'Cyrillic';            # Carga los nombres del Cirílico.
+ $str =~ /\N{ZHE}\N{KA}/;             # Coincide con "ZHE" seguido por "KA".
+
+=head3 Escapes octales
+
+Existen dos formas de escapes octales.  Se usa cada una de ellas para especificar un carácter por su código de carácter especificado en notación octal.
+
+Una forma, disponible a partir de Perl v5.14 es como C<\o{...}>, donde los puntos representan uno o más dígitos octales.  Se puede usar para cualquier carácter Unicode.
+
+Se introdujo para evitar los problemas potenciales con la otra forma, disponible en todos los Perl.  Esa forma consiste de una barra diagonal inversa seguida por tres dígitos octales.  Un problema con esta forma es que se parece exactamente como una contrareferencia normal (vea L</Reglas de desambiguación entre las secuencias de escape octales y las contrareferencias> más abajo).  Puede evitarlo puede hacer que el primero de los tres dígitos siempre sea cero, pero eso hace que sea \077 el mayor código de carácter que puede especificar.
+
+En algunos contextos, una barra diagonal inversa seguida por dos o incluso un dígito octal se puede interpretar como una secuencia de escape octal, algunas veces con una advertencia, y debido a algunos errores, otras veces con resultados sorprendentes.  También, si está creando una exp. reg. a partir de pequeños códigos sueltos, concatenados, y si están usando menos de tres dígitos, el comienzo de un código se puede interpretar como que está añadiendo dígitos al final del código que le precede.  Vea L</Referencia absoluta> para una mayor discusión y ejemplos del problema de los códigos pequeños.
+
+Note que un carácter expresado como un escape octal es considerado como un carácter sin significado especial por el motor de exp. reg., y coincidirá "tal cual".
+
+Para resumir, siempre es seguro usar la forma C<\o{}>, y la otra forma es segura usarla para códigos de carácter hasta \077 cuando use exactamente tres dígitos para especificarlos.
+
+Mnemónico: I<0>ctal u I<o>ctal.
+
+=head4 Ejemplos (asumimos una plataforma ASCII)
+
+ $str = "Perl";
+ $str =~ /\o{120}/;  # Coincide, "\120" es "P".
+ $str =~ /\120/;     # Lo mismo.
+ $str =~ /\o{120}+/; # Coincide, "\120" es "P",
+                     # se repite al menos una vez.
+ $str =~ /\120+/;    # Lo mismo.
+ $str =~ /P\053/;    # No coincide, "\053" es "+" y tomado literalmente.
+ /\o{23073}/         # carita sonriente, negro sobre blanco.
+ /\o{4801234567}/    # Lanza una advertencia, y genera un chr(4).
+
+=head4 Reglas de desambiguación entre las secuencias de escape octales y las contrareferencias
+
+Los escapes octales de la forma C<\000>, fuera de las clases de carácter entre corchetes, pueden, potencialmente, colisionar con las contrareferencias escritas al viejo estilo (vea L</Referencia absoluta> más abajo).  Los dos consisten en una barra diagonal inversa seguida por números.  Así que Perl tiene que usar heurística para determinar si es una contrareferencia o un escape octal.
+Perl usa las siguientes reglas para hacer la desambiguación:
+
+=over 4
+
+=item 1
+
+Si la barra diagonal inversa es seguida por un único dígito, es una contrareferencia.
+
+=item 2
+
+Si el primer dígito que sigue a la barra diagonal inversa es un 0, es un escape octal.
+
+=item 3
+
+Si el número que sigue a la barra diagonal inversa es N (en decimal), y Perl ha visto realmente N grupos de captura, Perl considera que es una contrareferencia.  De lo contrario, se considera que es un escape octal. Si N tiene más de tres dígitos, Perl toma solo los tres primeros para el escape octal; el resto se toma para coincidir tal cual.
+
+ my $pat  = "(" x 999;
+    $pat .= "a";
+    $pat .= ")" x 999;
+ /^($pat)\1000$/;   #  Coincide con 'aa'; hay 1000 grupos de captura.
+ /^$pat\1000$/;     #  Coincide con 'a@0'; hay 999 grupos de captura
+                    #  y \1000 es visto como \100 (una '@') y un '0'.
+
+=back
+
+Siempre puede forzar a que se interprete como una contrareferencia usando la forma C<\g{...}>.  Siempre puede forzar a que se interprete como octal usando la forma C<\o{...}>, o para los números hasta \077 (= 63 decimal), usando tres dígitos comenzando por "0".
+
+=head3 Escapes hexadecimales
+
+Al igual que los escapes octales, existen dos formas de escapes hexadecimales, pero ambas empiezan por lo mismo: C<\x>.  A esto le sigue, exactamente, dos dígitos hexadecimales formando un número, o un número hexadecimal de longitud arbitraria rodeado con llaves. El número hexadecimal es el código del carácter que quiere expresar.
+
+Note que un carácter expresado como uno de estos escapes se considera como un carácter sin significado especial por el motor de exp. reg., y coincidirá "tal cual".
+
+Mnemónico: heI<x>adecimal.
+
+=head4 Ejemplos (asumimos una plataforma ASCII)
+
+ $str = "Perl";
+ $str =~ /\x50/;    # Coincide, "\x50" es "P".
+ $str =~ /\x50+/;   # Coincide, "\x50" es "P", y se repite al menos una vez
+ $str =~ /P\x2B/;   # No coincide, "\x2B" es "+" y toma literalmente.
+
+ /\x{2603}\x{2602}/ # Hombre de nieve con paraguas.
+                    # El carácter Unicode 2603 es un hombre de nieve,
+                    # el carácter Unicode 2602 es un paraguas.
+ /\x{263B}/         # Carita sonriente, en negro.
+ /\x{263b}/         # Lo mismo, los dígitos hex. A - F son independientes del tamaño de caja.
+
+=head2 Modificadores
+
+Un cierto número de secuencias con barras diagonales inversas cambian el carácter o caracteres que les sigan. C<\l> pasará a minúsculas el carácter que le sigue, mientras que C<\u> lo pasará a mayúsculas (o, más precisamente, capitalizar) el carácter que le sigue. Ofrecen una funcionalidad similar a las funciones C<lcfirst> y C<ucfirst>.
+
+Para pasar a mayúsculas o minúsculas un conjunto de caracteres, uno podría querer usar C<\L> o C<\U>, que pasarán a minúsculas/mayúsculas todos los caracteres que les siguen, hasta el final del patrón o la siguiente ocurrencia de C<\E>, lo que ocurra primero. Ofrecen una funcionalidad similar a lo que ofrecen las funciones C<lc> y C<uc>.
+
+C<\Q> se usa para entrecomillar (desactivar) un patrón de metacaracteres, hasta el siguiente C<\E> o el final del patrón. C<\Q> añade una barra diagonal inversa a cualquier carácter que tuviera un significado especial a Perl.  En el rango ASCII, escapa todos los caracteres que no sean una letra, un dígito o un guión bajo.  Vea L<perlfunc/quotemeta> para más detalles de lo que queda escapado para códigos de carácter no ASCII.  Usar esto asegura que cualquier carácter entre C<\Q> y C<\E> coincidirá literalmente, no interpretado literalmente como metacarácter, por el motor de exp. reg.
+
+C<\F> se puede usar para cambiar el tamaño de caja de todos los caracteres que le siguen, hasta el siguiente C<\E> o el final del patrón. Ofrece una funcionalidad similar a la función C<fc>.
+
+Mnemónico: MinúscuI<L>as, MayúscI<U>las, I<F>old (plegar), I<Q>uotemeta, TI<E>rminar.
+
+=head4 Ejemplos
+
+ $sid     = "sid";
+ $greg    = "GrEg";
+ $miranda = "(Miranda)";
+ $str     =~ /\u$sid/;        # Coincide con 'Sid'
+ $str     =~ /\L$greg/;       # Coincide con 'greg'
+ $str     =~ /\Q$miranda\E/;  # Coincide con '(Miranda)', como si el patrón
+                              #   se hubiera escrito como /\(Miranda\)/
+
+=head2 Clases de caracteres
+
+Las expresiones regulares Perl tienen un amplio rango de clases de caracteres. Algunas de las clases de caracteres se escriben como una secuencia de barra diagonal inversa. Discutiremos brevemente algunas de ellas; todos los detalles sobre las clases de caracteres se pueden encontrar en L<perlrecharclass>.
+
+C<\w> es una clase de carácter que coincide con cualquier carácter que forme parte de una I<palabra> (letras, dígitos, marcas Unicode, caracteres de puntuación de unión (como el guión bajo)).  C<\d> es una clase de carácter que coincide con cualquier dígito decimal, mientras que la clase carácter C<\s> coincide con cualquier carácter espacio en blanco.
+Nuevo en perl 5.10.0 son las clases C<\h> y C<\v> que coinciden con los caracteres de espacio en blanco horizontal y vertical.
+
+El conjunto exacto de caracteres que coinciden con C<\d>, C<\s> y C<\w> varía dependiendo de varios pragma y modificadores de expresiones regulares.  Es posible restringir la coincidencia al rango ASCII usando el modificador de expresiones regulares C</a>.  Vea L<perlrecharclass>.
+
+Las variantes en mayúsculas (C<\W>, C<\D>, C<\S>, C<\H> y C<\V>) son clases de caracteres que coinciden, respectivamente, con cualquier carácter que no forme parte de una palabra, un dígito, espacio en blanco, espacio en blanco horizontal o espacio en blanco vertical.
+
+Mnemónicos: I<w>ord (palabra), I<d>ígito, eI<s>pacio, I<h>orizontal, I<v>ertical.
+
+=head3 Clases Unicode
+
+C<\pP> (donde C<P> es una sola letra) y C<\p{Propiedad}> se usan para coincidir con un carácter que coincida con la propiedad Unicode indicada; las propiedades incluyen cosas como "letra" o "carácter thai". La capitalización de la secuencia a C<\PP> y C<\P{Propiedad}> hace que la secuencia coincida con un carácter que no coincida con la propiedad Unicode indicada. Para más detalles, vea L<perlrecharclass/Secuencias de barras diagonales inversas> y L<perlunicode/Propiedades de caracteres Unicode>.
+
+Mnemónico: I<p>ropiedad.
+
+=head2 Referencia
+
+Si se usan paréntesis de captura en una expresión regular, podemos referirnos a la parte de la cadena fuente con la que se hace la operación de coincidencia, y coincide exactamente con el patrón. Hay tres formas de referirnos a tal I<contrareferencia>: absoluta, relativa, y por nombre.
+
+=for later add link to perlrecapture
+
+=head3 Referencia absoluta
+
+Tanto C<\gI<N>> (a partir de Perl 5.10.0), o C<\I<N>> (al viejo estilo) donde I<N> es un número decimal positivo (sin signo) de cualquier longitud es una referencia absoluta a un grupo de captura.
+
+I<N> refiere al N-esimo conjunto de paréntesis, así que C<\gI<N>> refiere a lo que coincidió con ese conjunto de paréntesis.  Así, C<\g1> refiere al primer grupo de captura en la exp. reg.
+
+La forma C<\gI<N>> se puede escribir como C<\g{I<N>}> que evita la ambigüedad cuando se construye una exp. reg. concatenando otras cadenas más cortas.  De otra forma, si tiene una exp. reg. C<qr/$a$b/>, y C<$a> contiene C<"\g1"> y C<$b> contiene C<"37">, obtendrá C<\g137/> que, probablemente, no sea lo que pretendía.
+
+En la forma C<\I<N>>, I<N> no debe comenzar con un "0", y deben existir al menos I<N> grupos de captura, o si no se considera que I<N> es un escape octal (pero algo como C<\18> es lo mismo que C<\0018>; es decir, el escape octal C<"\001"> seguido por el dígito literal C<"8">).
+
+Mnemónico: I<g>rupo.
+
+=head4 Ejemplos
+
+ /(\w+) \g1/;    # Encuentra una palabra duplicada, (ej. "gato gato").
+ /(\w+) \1/;     # Lo mismo; escrito al viejo estilo.
+ /(.)(.)\g2\g1/;  # Coincide con un palíndromo de cuatro letras (ej. "ABBA").
+
+
+=head3 Referencia relativa
+
+C<\g-I<N>> (a partir de Perl 5.10.0) se usa para direccionamiento relativo.  (Se puede escribir como C<\g{-I<N>>).  Refiere al I<N>-ésimo grupo antes de C<\g{-I<N>}>.
+
+La gran ventaja de hacerlo de esta forma es que hace mucho más fácil escribir patrones con referencias que pueden interpolarse en patrones más grandes, incluso si el patrón más grande también contiene grupos de captura.
+
+=head4 Ejemplos
+
+ /(A)        # Grupo 1
+  (          # Grupo 2
+    (B)      # Grupo 3
+    \g{-1}   # Refiere al grupo 3 (B)
+    \g{-3}   # Refiere a grupo 1 (A)
+  )
+ /x;         # Coincide con "ABBA".
+
+ my $qr = qr /(.)(.)\g{-2}\g{-1}/;  # Coincide con 'abab', 'cdcd', etc.
+ /$qr$qr/                           # Coincide con 'ababcdcd'.
+
+=head3 Referencias con nombre
+
+C<\g{I<nombre>}> (a partir de Perl 5.10.0) se puede usar para referirse a un grupo de captura anterior, con un nombre, liberándonos completamente de tener que pensar en posiciones de los búferes de captura.
+
+Para ser compatible con las expresiones regulares en .Net, C<\g{nombre}> también se puede escribir como C<\k{nombre}>, C<< \k<nombre> >> o C<\k'nombre'>.
+
+Para evitar cualquier tipo de ambigüedad, I<nombre> no debe empezar con un dígito ni contener un guión.
+
+=head4 Ejemplos
+
+ /(?<palabra>\w+) \g{palabra}/ # Encuentra palabras duplicadas, (p. ej. "gato gato")
+ /(?<palabra>\w+) \k{palabra}/ # Lo mismo.
+ /(?<palabra>\w+) \k<palabra>/ # Lo mismo.
+ /(?<letra1>.)(?<letra2>.)\g{letra2}\g{letra1}/
+                         # Coincide con un palíndromo de cuatro letras (ej. "ABBA").
+
+=head2 Aserciones
+
+Las aserciones son condiciones que tienen que ser ciertas; actualmente no coinciden con partes de la subcadena. Existen seis aserciones que se escriben como secuencias con barras diagonales inversas.
+
+=over 4
+
+=item \A
+
+C<\A> solo coincide con el comienzo de la cadena. Si no se usa el modificador C</m>, entonces C</\A/> es equivalente a C</^/>. Sin embargo, si se usa el modificar C</m>, entonces C</^/> coincide con los caracteres internos de nueva línea, pero el significado de C</\A/> no cambia por usar ese modificador. C<\A> coincide con el comienzo de la cadena sin importar si se usa o no el modificador C</m>.
+
+=item \z, \Z
+
+C<\z> y C<\Z> coinciden con el final de la cadena. Si no se usa el modificador C</m>, entonces C</\Z/> es equivalente a C</$/>; es decir, coincide con el final de la cadena, o uno antes del carácter de nueva línea al final de la cadena. Si se usa el modificar C</m>, entonces C</$/> coincide con los caracteres internos de nueva línea, pero el significado de C</\Z/> no cambia por usar ese modificador. C<\Z> coincide con el final de la cadena (o justo antes del nueva línea final) sin importar si se usa el modificador C</m>.
+
+C<\z> es igual que C<\Z>, excepto que no coincide antes de un carácter de nueva línea final. C<\z> solo coincide con el final de la cadena, sin importar los modificadores que se estén usando, y no justo antes de un carácter de nueva línea.  Así es cómo anclar la coincidencia al verdadero final de la cadena, bajo cualquier circunstancia.
+
+=item \G
+
+C<\G> normalmente solo se usa en combinación con el modificador C</g>. Si se usa el modificador C</g> y la coincidencia es en contexto escalar, Perl recuerda dónde acabó la última coincidencia en la cadena fuente, y en la próxima ocasión, iniciará la coincidencia desde donde acabó la vez anterior.
+
+C<\G> coincide con el punto donde terminó la coincidencia anterior, en esa cadena, o el comienzo de la cadena si no hubo coincidencia previa.
+
+=for añadir más tarde el enlace a perlremodifiers
+
+Mnemónico: I<G>lobal.
+
+=item \b, \B
+
+C<\b> coincide con cualquier lugar entre un carácter de palabra y otro que no lo es; C<\B> coincide con cualquier lugar entre aquellos caracteres en los que no coincidan con un C<\b>. C<\b> y C<\B> asumen que hay un carácter de no palabra antes del comienzo y final de la cadena fuente; así C<\b> coincidirá con el comienzo (o final) de la cadena fuente si la cadena comienza (o termina) con un carácter de palabra. De lo contrario, coincidirá C<\B>.   
+
+No use algo como C<\b=head\d\b> y expere que coincida con el comienzo de la línea.  No lo hará, porque hay una frontera antes del carácter de no palabra "="; debe haber un carácter de palabra inmediatamente antes.  
+Todas las determinaciones de frontera miran por caracteres de palabra sueltos, no por caracteres de no palabra, ni por finales de cadena.  Puede ayudar a entender cómo funcionan <\b> y <\B> equiparándolos a lo que sigue:
+
+    \b	significa realmente	(?:(?<=\w)(?!\w)|(?<!\w)(?=\w))
+    \B	significa realmente	(?:(?<=\w)(?=\w)|(?<!\w)(?!\w))
+
+Mnemónico: I<b>orde.
+
+=back
+
+=head4 Ejemplos
+
+  "gato"   =~ /\Agato/;     # Coincide.
+  "gato"   =~ /gato\Z/;     # Coincide.
+  "gato\n" =~ /gato\Z/;     # Coincide.
+  "gato\n" =~ /gato\z/;     # No coincide.
+
+  "gato"   =~ /\bgato\b/;   # Coincide.
+  "gatos"  =~ /\bgato\b/;   # No coincide.
+  "gato"   =~ /\bgato\B/;   # No coincide.
+  "gatos"  =~ /\bgato\B/;   # Coincide.
+
+  while ("gato perro" =~ /(\w+)/g) {
+      print $1;           # Imprime 'gatoperro'
+  }
+  while ("gato perro" =~ /\G(\w+)/g) {
+      print $1;           # Imprime 'gato'
+  }
+
+=head2 Miscelánea
+
+Aquí documentamos las secuencias de barra diagonal inversas que no caen en ninguna de las categorías anteriores. Son los siguientes:
+
+=over 4
+
+=item \C
+
+(Obsoleto). C<\C> siempre coincide con un solo octeto, incluso si la cadena fuente se codifica en formato UTF-8, y el carácter a coincidir es un carácter multiocteto.
+Esto es muy peligroso, porque viola la abstracción de carácter lógico y puede provocar que se deformen las secuencias UTF-8.
+
+Use en su lugar C<utf8::encode()>.
+
+Mnemónico: oI<C>teto.
+
+=item \K
+
+Apareció en perl 5.10.0. Cualquier cosa que coincida en la parte izquierda de C<\K> no se incluye en C<$&>, y no se reemplazará si el patrón se está usando en una sustitución. Esto le permite escribir C<s/PAT1 \K PAT2/REPL/x> en lugar de C<s/(PAT1) PAT2/${1}REPL/x> o C<s/(?<=PAT1) PAT2/REPL/x>.
+
+Mnemónico: I<K>eep (I<mantener>).
+
+=item \N
+
+Esta característica, disponible a partir de v5.12, coincide con cualquier carácter que B<no> sea un carácter de nueva línea.  Es una forma de escribir C<[^\n]>, y es idéntica al metasímbolo C<.>, excepto bajo la bandera C</s>, que cambia el significado de C<.>, pero no de C<\N>.
+
+Note que C<\N{...}> puede significar L<carácter con número o nombre|/Caracteres y secuencias de carácter con nombre o número>.
+
+Mnemónico: Complemento de I<\n>.
+
+=item \R
+X<\R>
+
+C<\R> coincide con un I<nueva línea genérico>; es decir, cualquier cosa que Unicode considere que es una secuencia de ruptura de línea. Esto incluye a todos los caracteres que coinciden con C<\v> (espacio en blanco vertical), y la secuencia multicarácter C<"\x0D\x0A"> (retorno de carro seguido por un avance de línea, algunas veces llamado el nueva línea de red; es la secuencia de fin de línea utilizada en los archivos de texto de Microsoft abiertos en modo binario). C<\R> es equivalente a C<< (?>\x0D\x0A|\v) >>.  (La razón de no usar la vuelta atrás es que la secuencia se considera inseparable.  Eso significa que
+
+ "\x0D\x0A" =~ /^\R\x0A$/   # No coincide
+
+falla, porque C<\R> coincide con la cadena entera, y no hará una vuelta atrás para coincidir solo con C<"\x0D">).  Ya que C<\R> puede coincidir con una secuencia de más de un carácter, no se puede poner dentro de una clase de caracteres entre corchetes; C</[\R]/> es un error; use en su lugar C<\v>.  C<\R> fue presentado en perl 5.10.0.
+
+Note que no respeta ninguna configuración regional que pudiera estar en efecto; coincide de acuerdo al conjunto de caracteres nativo de la plataforma.
+
+Mnemónico: ninguno actualmente. C<\R> fue elegido porque PCRE ya usa C<\R>, y lo más importante: porque Unicode recomienda ese metacarácter de expresión regular, y sugiere C<\R> como su notación.
+
+=item \X
+X<\X>
+
+Esto coincide con una I<agrupación de grafemas extendido> Unicode.
+
+C<\X> coincide muy bien con el uso normal (que un programador que no usa Unicode) consideraría como un único carácter.  Como ejemplo, considere una G con alguna especie de marca diacrítica, como una flecha.  No existe tal carácter en Unicode, pero podemos componerlo usando una G seguido por el Unicode "COMBINING UPWARDS ARROW BELOW", y podría mostrarse por algún software compatible con Unicode como un único carácter.
+
+La coincidencia es avariciosa, y sin vuelta atrás, así que la agrupación nunca se rompe en componentes más pequeños.
+
+Mnemónico: carácter Unicode eI<X>tendido.
+
+=back
+
+=head4 Ejemplos
+
+ $str =~ s/foo\Kbar/baz/g; # Cambia cualquier 'bar' que siga a un 'foo', a un 'baz'
+ $str =~ s/(.)\K\g1//g;    # Borra caracteres duplicados.
+
+ "\n"   =~ /^\R$/;         # Coincide, \n es un nueva línea genérico.
+ "\r"   =~ /^\R$/;         # Coincide, \r es un nueva línea genérico.
+ "\r\n" =~ /^\R$/;         # Coincide, \r\n es un nueva línea genérico.
+
+ "P\x{307}" =~ /^\X$/     # \X coincide con una P con un punto arriba.
+
+=cut
