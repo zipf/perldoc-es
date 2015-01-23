@@ -1,0 +1,754 @@
+=head1 NOMBRE
+X<character class> X<clase de caracteres>
+
+perlrecharclass - Clases de carácter en expresiones regulares Perl
+
+=head1 DESCRIPCIÓN
+
+La documentación de alto nivel acerca de expresiones regulares de Perl se encuentra en L<perlre>.
+
+En esta página de manual se describe la sintaxis y uso de las clases de carácter en las expresiones regulares en Perl.
+
+Una clase de caracteres es una forma de denotar un conjunto de caracteres de tal forma que se coincida con un carácter del conjunto.
+Es importante recordar que: hacer coincidir una clase de caracteres consume exactamente un carácter de la cadena fuente. (La cadena fuente es la cadena a la que se le aplica la expresión regular).
+
+Hay tres tipos de clases de caracteres en las expresiones regulares Perl: el punto, secuencias de barras diagonales inversas, y la forma encerrada entre corchetes.  Recuerde, sin embargo, que el término "clase de caracteres" se usa a menudo para referirse solo a la forma entre corchetes.  Ciertamente, la mayor parte de la documentación Perl así lo hace.
+
+=head2 El punto
+
+El punto C<.> es, probablemente, la más usada y, ciertamente, la más y mejor conocida clase de caracteres. Por defecto, un punto coincide con cualquier carácter, excepto con los de nueva línea. Ese comportamiento por defecto se puede cambiar para añadir los caracteres de nueva línea usando el modificador I<línea única>: tanto para la expresión regular entera con el modificador C</s>, o localmente con C<(?s)>.  (La secuencia de barra diagonal inversa C<L</\N>>, descrita abajo, coincide con cualquier carácter excepto el nueva línea, sin importar la presencia del modificador I<línea única>).
+
+Aquí hay algunos ejemplos:
+
+ "a"  =~  /./       # Coincide
+ "."  =~  /./       # Coincide
+ ""   =~  /./       # No coincide (el punto tiene que coincidir con un carácter)
+ "\n" =~  /./       # No coincide (el punto no coincide con un nueva línea)
+ "\n" =~  /./s      # Coincide (modificador global 'línea única')
+ "\n" =~  /(?s:.)/  # Coincide (modificador local 'línea única')
+ "ab" =~  /^.$/     # No coincide (el punto coincide con un solo carácter)
+
+=head2 Secuencias de barra diagonal inversa
+X<\w> X<\W> X<\s> X<\S> X<\d> X<\D> X<\p> X<\P>
+X<\N> X<\v> X<\V> X<\h> X<\H>
+X<word> X<whitespace> X<palabra> X<espacio en blanco>
+
+Una secuencia de barra diagonal inversa es una secuencia de caracteres, en que el primero es una barra diagonal inversa.  Perl atribuye un significado especial a tales secuencias, y algunas de ellas son clases de carácter.  Es decir, cada una de ellas coinciden con un único carácter, que pertenece al conjunto de caracteres definido por la secuencia.
+
+Aquí hay una lista de las secuencias de barra diagonal inversa que son clase de caracteres.  Más abajo se detallan con más detalle.  (Para las secuencias de barra diagonal inversa que no son clase de caracteres, vea L<perlrebackslash>).
+
+ \d             Coincide con un carácter que es un dígito decimal.
+ \D             Coincide con un carácter que no es un dígito decimal.
+ \w             Coincide con un carácter que forma parte de una "palabra".
+ \W             Coincide con un carácter que no forma parte de una "palabra".
+ \s             Coincide con un carácter que es espacio en blanco.
+ \S             Coincide con un carácter no es espacio en blanco.
+ \h             Coincide con un carácter que es un espacio en blanco horizontal.
+ \H             Coincide con un carácter que no es un espacio en blanco horizontal.
+ \v             Coincide con un carácter que es un espacio en blanco vertical.
+ \V             Coincide con un carácter que no es un espacio en blanco vertical.
+ \N             Coincide con un carácter que no es un nueva línea.
+ \pP, \p{Prop}  Coincide con un carácter que tiene la propiedad Unicode indicada.
+ \PP, \P{Prop}  Coincide con un carácter que no tiene la propiedad Unicode indicada.
+
+=head3 \N
+
+C<\N>, disponible a partir de v5.12, como el punto, coincide con cualquier carácter que no sea un nueva línea. La diferencia es que C<\N> no queda afectado por el modificador de expresión regular I<línea única> (vea L</El punto> más arriba).  Note que la forma C<\N{...}> puede significar algo completamente diferente.  Cuando el C<{...}> es un L<cuantificador|perlre/Cuantificadores>, significa que coincide tantas veces con un carácter distinto del nueva línea.  Por ejemplo, C<\N{3}> significa que coincide con tres caracteres que no son nueva línea; C<\N{5,}> significa que coincide con cinco o más caracteres que no son nueva línea.  Pero si C<{...}> no es un cuantificador legal, se presume entonces que es el nombre de un carácter.  Vea L<charnames>.  Por ejemplo, ni C<\N{COLON}>, ni C<\N{4F}>, ni C<\N{F4}> contienen cuantificadores legales, así que Perl intentará encontrar los caracteres cuyos nombres son, respectivamente C<COLON>, C<4F> y C<F4>.
+
+=head3 Dígitos
+
+C<\d> coincide con un único carácter que se considera que es un I<dígito> decimal.
+Si está activo el modificador de expresión regular C</a>, coincide con [0-9].
+Si no, coincide con cualquier cosa que coincida con C<\p{Digit}>, que incluye a [0-9].
+(Una improbable posible excepción es que bajo las reglas de coincidencia regional, la configuración regional actual podría no coincidir C<[0-9]> con C<\d>, y/o podría coincidir con otros caracteres cuyos puntos de código son menores que 256.  Las únicas definiciones de tales configuraciones regionales que son legales podrían coincidir C<[0-9]> más otro conjunto de 10 dígitos consecutivos; cualquier otra cosa podría ser una violación del estándar del lenguaje C, pero Perl actualmente no asume nada de todo esto).
+
+Eso significa que a menos que el modificador C</a> esté activo, C<\d> no solo coincide con los dígitos '0' a '9', si no también con dígitos arábigos, Devanagari y dígitos de otras lenguas.  Esto puede causar alguna confusión, y algunos problemas de seguridad.
+
+Algunos dígitos que coinciden con C<\d> se parecen a algunos de [0-9], pero tienen valores diferentes.  Por ejemplo, BENGALI DIGIT FOUR (U+09EA) se parece mucho a un ASCII DIGIT EIGHT (U+0038).  Una aplicación que esté esperando solo dígitos ASCII podría quedar confundido, o si el patrón es C<\d+>, la cadena coincidente podría contener una mezcla de dígitos de diferentes sistemas de escritura que podrían significar un número diferente a lo que se espera.  Se puede usar L<Unicode::UCD/num()> para calcular de forma segura ese valor, devolviendo C<undef> si la cadena de entrada contiene tal mezcla.
+
+Que C<\p{Digit}> signifique (y por ello C<\d> excepto bajo el modificador C</a>) C<\p{General_Category=Decimal_Number}> o de forma sinónima, C<\p{General_Category=Digit}>.  A partir de la versión 4.1 de Unicode, esto es lo mismo que el conjunto de caracteres que coincide con C<\p{Numeric_Type=Decimal}>.
+Pero Unicode también tiene una propiedad diferente con un nombre similar, C<\p{Numeric_Type=Digit}>, que coincide con un conjunto completamente diferente de caracteres.  Esos caracteres son cosas como C<CIRCLED DIGIT ONE> o subíndices, o son de sistemas de escritura que carece de los diez dígitos.
+
+La intención de este diseño es para que C<\d> coincida exactamente con el conjunto de caracteres que se pueden usar de forma segura con la sintaxis "normal" I<big-endian> posicional, donde, por ejemplo, 123 significa un 'ciento', más dos 'decenas', más tres 'unidades'.  Esta notación posicional no se aplica necesariamente a caracteres que coinciden con otro tipo de "dígito", C<\p{Numeric_Type=Digit}>, y así, C<\d> no coincide con ellos.
+
+Los dígitos Tamil (U+0BE6 - U+0BEF) se pueden usar también de forma legal en los anteriores números Tamil, en los que no aparecerían más de uno en la misma fila, separados por caracteres que significan "10 veces", "100 veces", etc. (Vea L<http://www.unicode.org/notes/tn21>).
+
+Cualquier carácter que no coincida con C<\d>, coincide con C<\D>.
+
+=head3 Caracteres de palabra
+
+Un C<\w> coincide con un solo carácter alfanumérico (un carácter alfanumérico, o un dígito decimal); o un carácter de puntuación de continuación, como el guión bajo ("_"); o un carácter de "marcado" (como lo puede ser una clase de acento) que se une a uno de aquellos.  No coincide con una palabra entera.  Para coincidir con una palabra entera, use C<\w+>.  Esto no es lo mismo que coincidir con una palabra inglesa, pero en el rango ASCII es lo mismo que con una cadena de caracteres con los que se puede escribir identificadores de Perl.
+
+=over
+
+=item Si el modificador C</a> está en activo...
+
+C<\w> coincide con los 63 caracteres [a-zA-Z0-9_].
+
+=item de lo contrario...
+
+=over
+
+=item para códigos de carácter por encima del 255...
+
+C<\w> coincide lo mismo que C<\p{Word}> coincide en ese rango.  Es decir, coincide con letras Thai, Griegas, etc. Incluye puntuación de conexión (como el guión bajo) que une dos palabras, o diacríticos, como C<COMBINING TILDE> y el modificador de letras, que se usan generalmente para añadir marcado auxiliar a las letras.
+
+=item para códigos de carácter por debajo de 256...
+
+=over
+
+=item si las reglas regionales están en activo...
+
+C<\w> coincide con el carácter guión bajo nativo de la plataforma, además de con cualquier otro que la configuración regional considere que sea alfanumérico.
+
+=item si las reglas regionales están en activo...
+
+C<\w> coincide exactamente con lo que coincide C<\p{Word}>.
+
+=item de lo contrario...
+
+C<\w> coincide con [a-zA-Z0-9_].
+
+=back
+
+=back
+
+=back
+
+Qué reglas se aplican se determina tal como se describe en L<perlre/¿Qué modificador de conjunto de caracteres está en vigor?>
+
+Hay un número de problemas de seguridad con la lista completa Unicode de caracteres de palabra.  Vea L<http://unicode.org/reports/tr36>
+
+También, para un conjunto de caracteres más afinado que puede existir en los identificadores del lenguaje de programación, más allá del rango del ASCII, puede desear, en cambio, usar la opción más personalizada de L</Unicode Properties>, C<\p{ID_Start}>, C<\p{ID_Continue}>, C<\p{XID_Start}> y C<\p{XID_Continue}>.  Vea L<http://unicode.org/reports/tr31>
+
+Cualquier carácter que no coincida con C<\w>, coincide con C<\W>.
+
+=head3 Espacio en blanco
+
+C<\s> coincide con cualquier carácter sencillo que se considere como espacio en blanco.
+
+=over
+
+=item Si el modificador C</a> está en activo...
+
+En todas las versiones de Perl, C<\s> coincide con los cinco caracteres [\t\n\f\r ]; es decir, el tabulador horizontal, el carácter de nueva línea, el avance de página, el retorno de carro, y el espacio.
+A partir de Perl v5.18, experimentalmente, también coincide con el tabulador vertical, C<\cK>.
+Vea la nota C<[1]> más abajo, sobre una explicación sobre esto.
+
+=item de lo contrario...
+
+=over
+
+=item para códigos de carácter por encima del 255...
+
+C<\s> coincide exactamente con los puntos de código por encima de 255 que se muestra con una columna "s" en la tabla de más abajo.
+
+=item para códigos de carácter por debajo de 256...
+
+=over
+
+=item si las reglas regionales están en activo...
+
+C<\s> coincide con cualquier cosa que la configuración regional considere que es un espacio en blanco.
+
+=item si las reglas regionales están en activo...
+
+C<\s> coincide exactamente con los caracteres que se muestran con una columna "s" en la tabla de más abajo.
+
+=item de lo contrario...
+
+C<\s> coincide con [\t\n\f\r ] y, experimentalmente, a partir de Perl v5.18, el tabulador vertical, C<\cK>.
+(Vea la nota C<[1]> más abajo, sobre una explicación sobre esto).
+Note que esta lista no incluye el espacio irrompible.
+
+=back
+
+=back
+
+=back
+
+Qué reglas se aplican se determina tal como se describe en L<perlre/¿Qué modificador de conjunto de caracteres está en vigor?>
+
+Cualquier carácter que no coincide con C<\s>, coincide con C<\S>.
+
+C<\h> coincide con cualquier carácter que se considere espacio en blanco horizontal; esto incluye el espacio de la plataforma y los caracteres de tabulador y muchos otros listados en la tabla de más abajo.  C<\H> coincide con cualquier carácter que no se considere espacio en blanco horizontal.  Usan el conjunto de caracteres nativo de la plataforma, y no considera ninguna configuración regional que podría estar en uso.
+
+C<\v> coincide con cualquier carácter que se considere espacio en blanco vertical; esto incluye los caracteres de retorno de carro de la plataforma y el avance de línea (nueva línea), más otros caracteres, listados todos ellos en la tabla de más abajo.
+C<\V> coincide con cualquier carácter que no se considere espacio en blanco vertical.
+Usan el conjunto de caracteres nativo de la plataforma, y no considera ninguna configuración regional que podría estar en uso.
+
+C<\R> coincide con cualquiera cosa que se considere una nueva línea bajo las reglas Unicode. No es una clase carácter, ya que puede coincidir con una secuencia de varios bytes. Por lo tanto, no puede utilizarse dentro de una clase de caracteres entre corchetes; use en su lugar C<\v> (espacio en blanco vertical).  Usa el conjunto de caracteres nativo de la plataforma, y no considera ninguna configuración regional que podría estar en uso.
+Los detalles se discuten en L<perlrebackslash>.
+
+Note que a diferencia de C<\s> (y C<\d> y C<\w>), C<\h> y C<\v> siempre coincide con los mismos caracteres, sin considerar otros factores, como la configuración regional activa o si la cadena fuente está en formato UTF-8.
+
+Uno podría pensar que C<\s> es equivalente a C<[\h\v]>. Esto es, de hecho, cierto a partir de Perl v5.18, pero antes de eso, la única diferencia era que el tabulador vertical (C<"\cK">) no coincidía con C<\s>.
+
+La siguiente tabla es un listado completo de caracteres coincidentes con C<\s>, C<\h> y C<\v>, en Unicode 6.3.
+
+La primera columna da el punto de código Unicode del carácter (en formato hexadecimal), la segunda columna da el nombre (Unicode). La tercera columna indica con qué clase(s) coincide (asumiendo que no está activa ninguna configuración regional, que cambia la coincidencia de C<\s>).
+
+ 0x0009        CHARACTER TABULATION   h s
+ 0x000a              LINE FEED (LF)    vs
+ 0x000b             LINE TABULATION    vs  [1]
+ 0x000c              FORM FEED (FF)    vs
+ 0x000d        CARRIAGE RETURN (CR)    vs
+ 0x0020                       SPACE   h s
+ 0x0085             NEXT LINE (NEL)    vs  [2]
+ 0x00a0              NO-BREAK SPACE   h s  [2]
+ 0x1680            OGHAM SPACE MARK   h s
+ 0x2000                     EN QUAD   h s
+ 0x2001                     EM QUAD   h s
+ 0x2002                    EN SPACE   h s
+ 0x2003                    EM SPACE   h s
+ 0x2004          THREE-PER-EM SPACE   h s
+ 0x2005           FOUR-PER-EM SPACE   h s
+ 0x2006            SIX-PER-EM SPACE   h s
+ 0x2007                FIGURE SPACE   h s
+ 0x2008           PUNCTUATION SPACE   h s
+ 0x2009                  THIN SPACE   h s
+ 0x200a                  HAIR SPACE   h s
+ 0x2028              LINE SEPARATOR    vs
+ 0x2029         PARAGRAPH SEPARATOR    vs
+ 0x202f       NARROW NO-BREAK SPACE   h s
+ 0x205f   MEDIUM MATHEMATICAL SPACE   h s
+ 0x3000           IDEOGRAPHIC SPACE   h s
+
+=over 4
+
+=item [1]
+
+Antes de Perl v5.18, C<\s> no coincidía con el tabulador vertical.  El cambio en v5.18 se considera un experimento, que significa que podría volverse atrás en v5.22 si la experiencia indica que rompe demasiado código existente.  Si este cambio le afecta negativamente, mande un correo electrónico a C<perlbug@perl.org>; si le afecta positivamente, envíelo a C<perlthanks@perl.org>.  Mientras tanto, C<[^\S\cK]> coincide (oscuramente) con lo que tradicionalmente coincidía C<\s>.
+
+=item [2]
+
+NEXT LINE y NO-BREAK SPACE pueden o no coincidir con C<\s> dependiendo de las reglas que estén en activo.  Vea L<el comienzo de esta sección|/Espacio en blanco>.
+
+=back
+
+=head3 Propiedades Unicode
+
+C<\pP> y C<\p{Prop}> son clases de caracteres para coincidir con caracteres que encajan con las propiedades Unicode indicadas.  Se pueden usar nombres de propiedades con una letra en la forma C<\pP>, o con el nombre de la propiedad a continuación de C<\p> siendo, en este caso, necesarias las llaves.
+Cuando se usan llaves, hay un única forma, que es justo el nombre de la propiedad encerrada entre llaves, y una forma compuesta que se parece a C<\p{nombre=valor}>, que significa que coincide si la propiedad "nombre" para el carácter tiene ese "valor" particular.
+Por ejemplo, una coincidencia para un número se puede escribir como C</\pN/> o como C</\p{Number}/>, o como C</\p{Number=True}/>.
+Las letras minúsculas coinciden con la propiedad I<Lowercase_Letter> que se abrevia con la forma I<Ll>. Necesitan las llaves, así que se escriben como C</\p{Ll}/> o C</\p{Lowercase_Letter}/>, o C</\p{General_Category=Lowercase_Letter}/> (los guiones bajos son opcionales).
+C</\pLl/> es válido, pero significa algo diferente.
+Coincide con una cadena de dos caracteres: una letra (propiedad Unicode C<\pL>), seguido por la letra en minúscula C<l>.
+
+Si no están en activo las reglas de la configuración regional, el uso de la propiedad Unicode forzará a la expresión regular en seguir las reglas Unicode, si no lo está realmente.
+
+Note que casi todas las propiedades son insensibles a la coincidencia independiente del tamaño de caja.
+Es decir, añadir el modificador de expresiones regulares C</i> no cambia con lo que coinciden.  Hay dos conjuntos que quedan afectados.  El primer conjunto es C<Uppercase_Letter>, C<Lowercase_Letter>, y C<Titlecase_Letter>, todos aquellos cuales coinciden con C<Cased_Letter> bajo una coincidencia C</i>.
+El segundo conjunto es C<Uppercase>, C<Lowercase>, y C<Titlecase>, todos aquellos cuales coinciden con C<Cased> bajo una coincidencia C</i>.
+(La diferencia entre estos conjuntos, es que algunas cosas, como los numerales Romanos, vienen tanto en mayúsculas o minúsculas, así que son C<Cased> (tienen tamaño de caja), pero no se consideran letras, así que no son C<Cased_Letter>. Realmente son C<Letter_Number>).
+Este conjunto también incluye sus subconjuntos C<PosixUpper> y C<PosixLower>, los dos bajo la coincidencia C</i> C<PosixAlpha>.
+
+Para más detalles sobre las propiedades Unicode, vea L<perlunicode/Propiedades de los caracteres Unicode>; para una lista completa de las propiedades posibles, vea L<perluniprops/Propiedades accesibles a través de \p{} y \P{}>, que anota todas las formas que tienen diferencias con C</i>.
+También es posible definir sus propias propiedades. Esto se discute en L<perlunicode/Propiedades de los caracteres definidos por el usuario>.
+
+Las propiedades Unicode se definen (¡oh, sorpresa!) solo como puntos de código Unicode.
+A partir de v5.20, cuando se busca C<\p> y C<\P>, Perl trata los puntos de código no Unicodes (los que están por encima del máximo legal Unicode de 0x10FFFF) como si fueran códigos de punto Unicode no asignados.
+
+Antes de v5.20, Perl levanta una advertencia y hace que todas las coincidencias fallen en los puntos de código no-Unicode.  Esto podría ser algo sorprendente:
+
+ chr(0x110000) =~ \p{ASCII_Hex_Digit=True}     # Falla en Perl < v5.20.
+ chr(0x110000) =~ \p{ASCII_Hex_Digit=False}    # También falla en los Perl
+                                               # < v5.20
+
+Incluso aunque estas dos coincidencias podrían ser vistas como complementarias, hasta v5.20 solo eran puntos de código Unicode.
+
+=head4 Ejemplos
+
+ "a"  =~  /\w/      # Coincide, "a" es un carácter de 'palabra'.
+ "7"  =~  /\w/      # Coincide, "7" es un carácter de 'palabra', también.
+ "a"  =~  /\d/      # No coincide, "a" no es un dígito.
+ "7"  =~  /\d/      # Coincide, "7" es un dígito.
+ " "  =~  /\s/      # Coincide, un espacio es un espacio en blanco.
+ "a"  =~  /\D/      # Coincide, "a" es un no-dígito.
+ "7"  =~  /\D/      # No coincide, "7" no es un no-dígito.
+ " "  =~  /\S/      # No coincide, un espacio no es un no-espacio en blanco.
+
+ " "  =~  /\h/      # Coincide, un espacio es un espacio en blanco horizontal.
+ " "  =~  /\v/      # No coincide, un espacio no es un espacio en blanco vertical.
+ "\r" =~  /\v/      # Coincide, un retorno es un espacio en blanco vertical.
+
+ "a"  =~  /\pL/     # Coincide, "a" es una letra.
+ "a"  =~  /\p{Lu}/  # No coincide, /\p{Lu}/ coincide con letras mayúsculas.
+
+ "\x{0e0b}" =~ /\p{Thai}/  # Coincide, \x{0e0b} es el carácter
+                           # 'THAI CHARACTER SO SO', y está en
+                           # la clase Unicode Thai.
+ "a"  =~  /\P{Lao}/ # Coincide, ya que "a" no es un carácter laosiano.
+
+Vale enfatizar que C<\d>, C<\w>, etc., coincide con caracteres sueltos, no con números o palabras completas. Para coincidir con un número (que consiste en dígitos), use C<\d+>; para coincidir con una palabra, use C<\w+>.  Pero sea consciente de las consideraciones de seguridad al hacerlo así, como se mencionó antes.
+
+=head2 Clases de caracteres entre corchetes
+
+La tercera forma de clase de caracteres que puede usar en las expresiones regulares Perl es la clase de caracteres entre corchetes.  En su forma más simple, lista los caracteres con los que puede coincidir, rodeada de corchetes, como esto: C<[aeiou]>.
+Coincide con uno de los caracteres C<a>, C<e>, C<i>, C<o> o C<u>.  Como las otras clases de caracteres, se coincide exactamente con un carácter(*). Para coincidir con una cadena más larga, consistente en caracteres mencionados en la clase de caracteres, siga a la clase con un L<cuantificador|perlre/Cuantificadores>.  Por ejemplo, C<[aeiou]+> coincide con uno o más vocales minúsculas inglesas.
+
+No tiene efecto que un carácter se repita dentro de la clase de caracteres; se considera que solo aparece en el conjunto una sola vez.
+
+Ejemplos:
+
+ "e"  =~  /[aeiou]/        # Coincide, ya que "e" se lista en la clase.
+ "p"  =~  /[aeiou]/        # No coincide, "p" no se lista en la clase.
+ "ae" =~  /^[aeiou]$/      # No coincide, una clase de caracteres solo coincide con
+                           # un único carácter.
+ "ae" =~  /^[aeiou]+$/     # Coincide, gracias al cuantificador.
+
+ -------
+
+* Hay una excepción a la clase de caracteres entre corchetes coincidiendo con solo un único carácter.  Cuando a la clase se le indica que coincida independientemente del tamaño de caja, bajo las reglas de coincidencia de C</i>, y un carácter que se menciona explícitamente dentro de la clase coincide con una secuencia multi-carácter independiente del tamaño de caja bajo las reglas Unicode, la clase (cuando no se L<niega|/Negación>) también coincidirá con la secuencia.  Por ejemplo, Unicode dice que la letra C<LATIN SMALL LETTER SHARP S> debe coincidir con la secuencia C<ss> bajo las reglas C</i>.  Por lo tanto,
+
+ 'ss' =~ /\A\N{LATIN SMALL LETTER SHARP S}\z/i             # Coincide
+ 'ss' =~ /\A[aeioust\N{LATIN SMALL LETTER SHARP S}]\z/i    # Coincide
+
+Para que esto suceda, el carácter debe especificarse explícitamente, y no ser parte de un rango multi-carácter (incluso como uno de sus puntos de código finales).
+(L</Rangos de carácter> serán explicados dentro de poco).  Por tanto,
+
+ 'ss' =~ /\A[\0-\x{ff}]\z/i        # No coincide
+ 'ss' =~ /\A[\0-\N{LATIN SMALL LETTER SHARP S}]\z/i    # No coincide
+ 'ss' =~ /\A[\xDF-\xDF]\z/i    # Coincide en plataformas ASCII, desde \XDF
+                               # es LATIN SMALL LETTER SHARP S, y el
+                               # rango es un único elemento
+
+Note que, de todas maneras, no es una buena idea especificar este tipo de rangos.
+
+=head3 Caracteres especiales dentro de una clase de caracteres entre corchetes
+
+La mayor parte de los caracteres que son meta caracteres en expresiones regulares (es decir, caracteres que acarrean un significado especial como C<.>, C<*>, o C<(>) pierde su significado especial y se puede usar dentro de una clase de caracteres sin la necesidad de escaparles. Por ejemplo, C<[()]> coincide tanto con un paréntesis de apertura como de cierre, y los paréntesis dentro de la clase de caracteres ni agrupan ni capturan.
+
+Los caracteres que acarrean un significado especial dentro de la clase de caracteres son: C<\>, C<^>, C<->, C<[> y C<]>, y se explican más abajo. Se pueden escapar con una barra diagonal inversa, aunque algunas veces no sean necesarios, en cuyo caso la barra diagonal inversa puede omitirse.
+
+La secuencia C<\b> es especial dentro de una clase de caracteres entre corchetes. Mientras que, fuera de la clase de caracteres, C<\b> es una aserción indicando un punto que está en medio, tanto al lado de dos caracteres como de dos no-caracteres, dentro de una clase de caracteres entre corchetes, C<\b> coincide con un carácter retroceso.
+
+Las secuencias C<\a>, C<\c>, C<\e>, C<\f>, C<\n>, C<\N{I<NAME>}>, C<\N{U+I<hex char>}>, C<\r>, C<\t> y C<\x> son también especiales y tienen los mismos significados que tienen fuera de la clase de caracteres entre corchetes.  (Sin embargo, dentro de una clase de caracteres entre corchetes, si C<\N{I<NOMBRE>}> se expande a una secuencia de caracteres, solo se usa el primero de la secuencia, con una advertencia).
+
+También, una barra diagonal inversa seguida por dos o tres dígitos octales se considera un número octal.
+
+Un C<[> no es especial dentro una clase de caracteres, a menos que sea el inicio de una clase de caracteres POSIX (vea L</Clases de caracteres POSIX> más abajo). Normalmente no necesita escaparse.
+
+Un C<]> es, normalmente, tanto el final de una clase de caracteres POSIX (vea L</Clases de caracteres POSIX> más abajo), o señala el final de la clase de caracteres entre corchetes.  Si quiere incluir un C<]> en el conjunto de caracteres, debe, generalmente, escaparlo.
+
+Sin embargo, si el C<]> es el I<primer> (o el segundo si el primer carácter es un circunflejo) carácter de una clase de caracteres entre corchetes, no denota el final de la clase (ya que no puede tener una clase vacía) y entonces se considera parte del conjunto de caracteres con los que se puede emparejar sin tener que escapar.
+
+Ejemplos:
+
+ "+"   =~ /[+?*]/     #  Coincide, "+" en una clase de caracteres no es especial.
+ "\cH" =~ /[\b]/      #  Coincide, \b dentro de una clase de caracteres.
+                      #  es equivalente a un retroceso.
+ "]"   =~ /[][]/      #  Coincide, ya que la clase de caracteres contiene
+                      #  tanto [ como ].
+ "[]"  =~ /[[]]/      #  Coincide, el patrón contiene una clase de caracteres
+                      #  conteniendo solo ], y la clase de caracteres se
+                      #  sigue con un ].
+
+=head3 Rangos de carácter
+
+No es extraño buscar coincidencia con un rango de caracteres. Afortunadamente, en vez de listar todos los caracteres en el rango, se puede utilizar el guión (C<->).
+Si en el interior de una clase de caracteres entre corchetes hay dos caracteres separados por un guión, se trata como si estuvieran todos los caracteres entre esos dos. Por ejemplo, C<[0-9]> coincide con cualquier dígito ASCII, y C<[a-m]> coincide con cualquier letra minúscula de la primera mitad del alfabeto ASCII.
+
+Note que los dos caracteres a cada lado del guión no tienen que ser necesariamente, a la vez, letras o dígitos. Es posible usar cualquier carácter, aunque no aconsejable.  C<['-?]> contiene un rango de caracteres, pero la mayor parte de la gente no sabe qué caracteres son.  Además, tales rangos pueden llevar a problemas de portabilidad si el código tiene que ejecutarse en una plataforma que usa un conjunto de caracteres diferente, como EBCDIC.
+
+Si un guión, en una clase de caracteres no puede, sintácticamente, ser parte de un rango, por ejemplo porque sea el primer o el último carácter de la clase de caracteres, o si sigue inmediatamente a un rango, el guión no es especial, y así que se
+considera como un carácter con el que se coincidirá literalmente.  Si quiere un guión en su conjunto de caracteres para que sea emparejado, y su posición en la clase es tal que podría ser considerado parte de un rango, debe escaparlo con una barra diagonal inversa.
+
+Ejemplos:
+
+ [a-z]       #  Coincide con un carácter que es una letra ASCII minúscula.
+ [a-fz]      #  Coincide con cualquier letra entre 'a' y 'f' (inclusive), o
+             #  la letra 'z'.
+ [-z]        #  Coincide con un guión ('-') o la letra 'z'.
+ [a-f-m]     #  Coincide con cualquier letra entre la 'a' y la 'f' (inclusive), el
+             #  guión ('-'), o la letra 'm'.
+ ['-?]       #  Coincide con cualquiera de los caracteres '()*+,-./0123456789:;<=>?
+             #  (Pero no en una plataforma EBCDIC).
+
+
+=head3 Negación
+
+Por el contrario, también es posible listar los caracteres por los que no se quiere buscar. Puede hacerlo usando un circunflejo (C<^>) como primer carácter en la clase de caracteres. Por ejemplo, C<[^a-z]> coincide con cualquier carácter que no sea una letra ASCII minúscula, por lo que incluye a más de un millón de puntos de código Unicode.  Se dice que la clase está "negada" o "invertida".
+
+Esta sintaxis hace que el circunflejo sea un carácter especial dentro de una clase de caracteres entre corchetes, pero solo si es el primer carácter de la clase. Así que si quiere que el circunflejo sea uno de los caracteres que está buscando, puede escaparlo o no listarlo en la primera posición.
+
+En clases de carácter entre corchetes, invertidas, Perl ignora las reglas Unicode que, normalmente dice que ciertos caracteres deben coincidir con una secuencia de caracteres múltiples bajo una coincidencia independiente del tamaño de caja C</i>.  Seguir esas reglas podría llevar a situaciones altamente confusas:
+
+ "ss" =~ /^[^\xDF]+$/ui;   # ¡Coincide!
+
+Esto debería coincidir con cualquier secuencia de caracteres que no sea C<\xDF> ni que C<\xDF> coincida bajo C</i>.  C<"s"> no es C<\xDF>, pero Unicode dice que C<"ss"> coincide con C<\xDF> bajo C</i>.  Así que, ¿quién "gana"? ¿Se falla la coincidencia porque la cadena tiene C<ss> o lo acepta porque tiene una C<s> seguida por otra C<s>?  Perl ha escogido la última.
+
+Ejemplos:
+
+ "e"  =~  /[^aeiou]/   #  No coincide, la 'e' está en la lista.
+ "x"  =~  /[^aeiou]/   #  Coincide, ya que 'x' no es una vocal minúscula.
+ "^"  =~  /[^^]/       #  No coincide. Coincide con cualquier cosa que no sea un circunflejo.
+ "^"  =~  /[x^]/       #  Coincide, aquí el circunflejo no es especial.
+
+=head3 Secuencias con barras diagonales inversas
+
+Puede poner cualquier secuencia de clase de caracteres de barra diagonal inversa (con la excepción de C<\N> y C<\R>) dentro de una clase de caracteres entre corchetes, y actuará como si hubiera puesto todos los caracteres coincidentes por la secuencia de la barra diagonal inversa dentro de la clase de caracteres. Por ejemplo, C<[a-f\d]> coincide con cualquier dígito decimal, o cualquiera de las letras minúsculas entre 'a' y 'f' inclusives.
+
+C<\N> dentro de una clase de caracteres entre corchetes debe ser de la forma C<\N{I<nombre>}> o C<\N{U+I<car. hex.>}>, y NO de la forma en la que coincide con los caracteres que no sean nuevas líneas, por la misma razón que un punto C<.> dentro de una clase de caracteres entre corchetes pierde su significado especial: coincide con casi cualquier cosa, que generalmente no es lo que querrá que ocurra.
+
+
+Ejemplos:
+
+ /[\p{Thai}\d]/     # Coincide con un carácter que sea tanto un Thai
+                    # carácter, o un dígito.
+ /[^\p{Arabic}()]/  # Coincide un carácter que no sea tanto un Arábigo
+                    # carácter, ni un paréntesis.
+
+Las clases de carácter con barras diagonales inversas no pueden formar uno de los puntos finales de un rango.  Así, no se puede decir:
+
+ /[\p{Thai}-\d]/     # ¡Error!
+
+=head3 Clases de carácter POSIX
+X<character class> X<\p> X<\p{}>
+X<alpha> X<alnum> X<ascii> X<blank> X<cntrl> X<digit> X<graph>
+X<lower> X<print> X<punct> X<space> X<upper> X<word> X<xdigit>
+
+Las clases de carácter POSIX tiene la forma C<[:clase:]>, donde I<clase> es el nombre, y el C<[:> y C<:]> delimitadores. Las clases de carácter POSIX solo aparecen I<dentro> de las clases de carácter entre corchetes, y son una forma conveniente y descriptiva de listar un grupo de caracteres.
+
+Sea prudente sobre la sintaxis,
+
+ # Correcto:
+ $cadena =~ /[[:alpha:]]/
+
+ # Incorrecto (lo advertirá):
+ $cadena =~ /[:alpha:]/
+
+El último patrón podría ser una clase de caracteres consistente de un carácter de dos puntos, y las letras C<a>, C<l>, C<p> y C<h>.
+
+Las clases de caracteres POSIX pueden ser parte de una clase de caracteres entre corchetes más grande.
+Por ejemplo,
+
+ [01[:alpha:]%]
+
+es válido y coincide con '0', '1', cualquier carácter alfabético y el signo de porcentaje.
+
+Perl reconoce las siguientes clases de carácter POSIX:
+
+ alpha  Cualquier carácter alfabético ("[A-Za-z]").
+ alnum  Cualquier carácter alfanumérico ("[A-Za-z0-9]").
+ ascii  Cualquier carácter en el conjunto de caracteres ASCII.
+ blank  Una extensión GNU, igual a un espacio o a un tabulador horizontal ("\t").
+ cntrl  Cualquier carácter de control.  Vea nota [2] más abajo.
+ digit  Cualquier dígito decimal ("[0-9]"), equivalente a "\d".
+ graph  Cualquier carácter imprimible, excluyendo un espacio.  Vea nota [3] más abajo.
+ lower  Cualquier carácter minúscula ("[a-z]").
+ print  Cualquier carácter imprimible, incluyendo un espacio.  Vea nota [4] más abajo.
+ punct  Cualquier carácter gráfico excluyendo los caracteres que formen parte de una "palabra".  Nota [5].
+ space  Cualquier carácter que sea un espacio en blanco. "\s" incluyendo el tabulador vertical
+        ("\cK").
+ upper  Cualquier carácter en mayúscula ("[A-Z]").
+ word   Una extensión Perl ("[A-Za-z0-9_]"), equivalente a "\w".
+ xdigit Cualquier dígito hexadecimal ("[0-9a-fA-F]").
+
+La mayor parte de las clases de carácter POSIX tienen dos estilos de propiedades C<\p> Unicode homólogas.  (No son propiedades Unicode oficiales, sino extensiones Perl derivadas de propiedades Unicode oficiales).  La tabla más abajo muestra la relación entre las clases de carácter POSIX y sus homólogas.
+
+Una homóloga, en la columna etiquetada "Rango ASCII en Unicode" en la tabla, coincide solo con caracteres en el conjunto de caracteres ASCII.
+
+La otra homóloga, en la columna etiquetada "Rango completo Unicode", coincide con cualquier carácter apropiado en el conjunto de caracteres completo de Unicode.  Por ejemplo, C<\p{Alpha}> coincide, no solo con caracteres ASCII alfabéticos, sino con cualquier carácter en el conjunto de caracteres Unicode que se considere alfabético.
+Una entrada en la columna etiquetada "secuencia de barra diagonal inversa" es una equivalente (más corta).
+
+ [[:...:]]      Rango ASCII          Rango completo  inversa  Nota
+                 Unicode              Unicode     secuencia
+ -----------------------------------------------------
+   alpha      \p{PosixAlpha}       \p{XPosixAlpha}
+   alnum      \p{PosixAlnum}       \p{XPosixAlnum}
+   ascii      \p{ASCII}
+   blank      \p{PosixBlank}       \p{XPosixBlank}  \h      [1]
+                                   o \p{HorizSpace}        [1]
+   cntrl      \p{PosixCntrl}       \p{XPosixCntrl}          [2]
+   digit      \p{PosixDigit}       \p{XPosixDigit}  \d
+   graph      \p{PosixGraph}       \p{XPosixGraph}          [3]
+   lower      \p{PosixLower}       \p{XPosixLower}
+   print      \p{PosixPrint}       \p{XPosixPrint}          [4]
+   punct      \p{PosixPunct}       \p{XPosixPunct}          [5]
+              \p{PerlSpace}        \p{XPerlSpace}   \s      [6]
+   space      \p{PosixSpace}       \p{XPosixSpace}          [6]
+   upper      \p{PosixUpper}       \p{XPosixUpper}
+   word       \p{PosixWord}        \p{XPosixWord}   \w
+   xdigit     \p{PosixXDigit}      \p{XPosixXDigit}
+
+=over 4
+
+=item [1]
+
+C<\p{Blank}> y C<\p{HorizSpace}> son sinónimos.
+
+=item [2]
+
+Caracteres de control no producen salida como tal, sino que controlan la terminal de alguna manera: por ejemplo, los caracteres de nueva línea y el retroceso son caracteres de control.
+En el rango ASCII, los caracteres cuyos puntos de código están entre 0 y 31, inclusive, más el 127 (C<DEL>), son caracteres de control.
+
+=item [3]
+
+Cualquier carácter que sea I<gráfico>, es decir, visible. Esta clase consiste en todos los caracteres alfanuméricos y todos los caracteres de puntuación.
+
+=item [4]
+
+Todos los caracteres imprimibles, que es el conjunto de todos los caracteres gráficos más los caracteres que sean espacio en blanco que no sean además caracteres de control.
+
+=item [5]
+
+C<\p{PosixPunct}> y C<[[:punct:]]> en el rango ASCII coinciden con todos los caracteres que no sean de control, alfanuméricos o espacio: C<[-!"#$%&'()*+,./:;<=E<gt>?@[\\\]^_`{|}~]> (aunque si una configuración regional está activa, podría alterar el comportamiento de C<[[:punct:]]>).
+
+La propiedad con un nombre similar, C<\p{Punct}>, coincide con un conjunto, un poco distinto, en el rango ASCII; a saber: C<[-!"#%&'()*,./:;?@[\\\]_{}]>.  Es decir, le faltan los nueve caracteres C<[$+E<lt>=E<gt>^`|~]>.
+Esto es así porque Unicode divide lo que POSIX considera lo que es puntuación en dos categorías: Puntuación y Símbolos.
+
+C<\p{XPosixPunct}> y (bajo las reglas Unicode) C<[[:punct:]]>, coinciden con lo que coincide C<\p{PosixPunct}> en el rango ASCII, más con lo que coincide C<\p{Punct}>.  Esto es diferente que coincidir estrictamente con C<\p{Punct}>.  Otra manera de decirlo es que si las reglas Unicode están activas, C<[[:punct:]]> coincide con todos los caracteres con los que Unicode considera que son puntuación, más todos los caracteres del rango ASCII que Unicode considere que son símbolos.
+
+=item [6]
+
+C<\p{SpacePerl}> y C<\p{Space}> coinciden con lo mismo, a partir de Perl v5.18.  En versiones anteriores, diferían solo en la coincidencia no-regional, C<\p{SpacePerl}> no coincide con el tabulador vertical, C<\cK>.
+Lo mismo para las dos en el rango del ASCII.
+
+=back
+
+Hay otros sinónimos que pueden usarse además de los nombres listados en la tabla.  Por ejemplo, C<\p{PosixAlpha}> se puede escribir como C<\p{Alpha}>.  Todos se listan en L<perluniprops/Propiedades accesibles a través de \p{} y \P{}>.
+
+Las dos formas de C<\p> siempre asumen que están activas las reglas Unicode.
+En plataformas ASCII, significan que asumen que los puntos de código de desde 128 a 255 son Latin-1, y eso significa que usarlos bajo las reglas de la configuración regional es imprudente, a menos que la configuración regional se garantice que sea Latin-1 o UTF-8.  En contraste, las clases de carácter POSIX son útiles bajo las reglas de la configuración regional.  Están afectados por las reglas que estén activas, como sigue:
+
+=over
+
+=item Si el modificador C</a> está en activo...
+
+Cada una de las clases POSIX coincide exactamente con sus homólogas del rango ASCII.
+
+=item de lo contrario...
+
+=over
+
+=item para códigos de carácter por encima del 255...
+
+La clase POSIX coincide con su homóloga del rango completo.
+
+=item para códigos de carácter por debajo de 256...
+
+=over
+
+=item si las reglas regionales están en activo...
+
+La clase POSIX coincide de acuerdo a la configuración regional, excepto:
+
+=over
+
+=item C<palabra>
+
+también incluye el carácter guión bajo nativa de la plataforma, sin importar qué configuración regional esté activa.
+
+=item C<ascii>
+
+en plataformas que no tienen la extensión POSIX C<ascii>, este coincide solo con los caracteres del rango ASCII nativo de la plataforma.
+
+=item C<blanco>
+
+en plataformas que no tienen la extensión POSIX C<blanco>, coincide solo con los caracteres nativos, tabulador y espacio.
+
+=back
+
+=item si las reglas regionales están en activo...
+
+La clase POSIX coincide con su homóloga del rango completo.
+
+=item de lo contrario...
+
+La clase POSIX coincide con su homóloga del rango ASCII completo.
+
+=back
+
+=back
+
+=back
+
+Qué reglas se aplican es determinado tal como se describe en L<perlre/¿Qué modificador de conjunto de caracteres está en vigor?>.
+
+Se ha propuesto cambiar este comportamiento en una futura publicación de Perl de modo que tanto si las reglas Unicode están activas o no, no cambiará el comportamiento: Más allá de la configuración regional, las clases POSIX se comportarán como las homólogas del rango ASCII.  Si desea comentar esta proposición, mande un correo electrónico C<perl5-porters@perl.org>
+
+=head4 Negación de clases de carácter POSIX
+X<character class, negation>
+
+Una extensión Perl a la clase de caracteres POSIX es la habilidad de negarla. Eso se hace prefijando el nombre de la clase con un circunflejo (C<^>).
+Algunos ejemplos:
+
+     POSIX         rango ASCII     Completo   barra diag. inv.
+                    Unicode         Unicode    secuencia
+ -----------------------------------------------------
+ [[:^digit:]]   \P{PosixDigit}  \P{XPosixDigit}   \D
+ [[:^space:]]   \P{PosixSpace}  \P{XPosixSpace}
+                \P{PerlSpace}   \P{XPerlSpace}    \S
+ [[:^word:]]    \P{PerlWord}    \P{XPosixWord}    \W
+
+La secuencia de barra diagonal inversa puede significar que tanto un rango ASCII o uno Unicode completo, dependiendo de varios factores tal como se describe en L<perlre/¿Qué modificador de conjunto de caracteres está en vigor?>.
+
+=head4 [= =] y [. .]
+
+Perl reconoce las clases de carácter POSIX C<[=clase=]> y C<[.class.]>, pero (¿aún?) no las soporta.  Cualquier intento de usar esta construcción levantará una excepción.
+
+=head4 Ejemplos
+
+ /[[:digit:]]/            # Coincide con un carácter que es un dígito.
+ /[01[:lower:]]/          # Coincide con un carácter que sea tanto una
+                          # minúscula, '0' o '1'.
+ /[[:digit:][:^xdigit:]]/ # Coincide con un carácter que puede ser cualquier cosa
+                          # excepto las letras 'a' a 'f' y 'A' a
+                          # 'F'.  Esto es porque la clase de caracteres principal
+                          # se compone de dos clases de caracteres POSIX
+                          # que son I<OReadas> juntas, una que
+                          # coincide con cualquier dígito, y la otra que
+                          # coincide con cualquier cosa que no sea un dígito hexadecimal.
+                          # El OR añade los dígitos, dejando solo las
+                          # letras 'a' a 'f' y 'A' a 'F' excluidas.
+
+=head3 Clases de carácter entre corchetes extendidas
+X<character class>
+X<set operations>
+
+Esta es una elegante clase de caracteres entre corchetes que puede usarse para clases más legibles y menos propensas a errores, y realizar operaciones de conjunto, como la intersección. Un ejemplo es
+
+ /(?[ \p{Thai} & \p{Digit} ])/
+
+Esto coincidirá con todos los caracteres que sean dígitos que estén en el rango Thai.
+
+Esta es una característica experimental disponible a partir de v5.18, y está sujeta a cambio mientras ganamos experiencia con ella.  Cualquier intento de usarla levantará una advertencia, a menos que se desactive con
+
+ no warnings "experimental::regex_sets";
+
+Serán bienvenidos los comentarios sobre esta característica; mande correo electrónico a C<perl5-porters@perl.org>.
+
+Podemos extender el ejemplo anterior:
+
+ /(?[ ( \p{Thai} + \p{Lao} ) & \p{Digit} ])/
+
+Esto coincide con dígitos que sean tanto con rangos Thai o Laosiano.
+
+Fíjese en el espacio en blanco en estos ejemplos.  Esta construcción siempre activa el modificador C<E<sol>x> dentro de ella.
+
+Los operadores binarios que están disponibles son:
+
+ &    intersección
+ +    unión
+ |    otro nombre para '+', así que también es unión
+ -    subtracción (el resultado coincide con el conjunto consistente de los
+      puntos de código coincidentes por el primer operando, excluyendo cualquier otro que
+      también coincida con el segundo operando)
+ ^    diferencia simétrica (la unión menos la intersección).  Esto
+      es como un or exclusivo, en que el resultado es el conjunto de los puntos de código
+      que coinciden con cualquiera de los dos, pero no con ambos, de los
+      operandos.
+
+Hay un operador unario:
+
+ !    complemento
+
+Todos los operadores binarios se asocian por la izquierda, y tienen la misma precedencia.
+El operador unario se asocia por la derecha, y tiene la mayor precedencia.  Use los paréntesis para sobrepasar el orden de las asociaciones.  Algunos comentarios que hemos recibido indican un deseo de que la intersección tenga una precedencia mayor que la unión.  Esto es algo que los comentarios desde la trinchera puede hacernos cambiar en futuros lanzamientos; quizás quiera poner paréntesis de forma copiosa para evitar que los futuros cambios afecten a su código, hasta que esta característica ya no se considere experimental.
+
+La principal restricción es que todo es un metacarácter.  Así, no puede referirse a caracteres únicos haciendo algo como esto:
+
+ /(?[ a + b ])/ # ¡Error de sintaxis!
+
+El camino más sencillo de especificar un carácter imprimible es el de encerrarlo entre corchetes:
+
+ /(?[ [a] + [b] ])/
+
+(Esta es lo misma cosa que C<[ab]>).  Podría también haber dicho lo equivalente:
+
+ /(?[[ a b ]])/
+
+(Puede, naturalmente, especificar caracteres únicos usando, C<\x{...}>, C<\N{...}>, etc.).
+
+Este último ejemplo muestra el uso de esta construcción para especificar una clase de caracteres entre corchetes ordinaria sin el adicional conjunto de operaciones.  Fíjese en el espacio en blanco dentro de ella; C<E<sol>x> se activa incluso dentro de las clases de carácter entre corchetes, excepto si no tiene comentarios dentro de ellas.  Por ello,
+
+ (?[ [#] ])
+
+Coincide con el carácter literal "#".  Para especificar un carácter espacio en blanco literal, puede escaparlo con una barra diagonal inversa, como:
+
+ /(?[ [ a e i o u \  ] ])/
+
+Coincide con las vocales españolas más el carácter ESPACIO.
+Todos los otros escapes aceptados por las clases de carácter normales entre corchetes también se aceptan aquí; pero los escapes no reconocidos que en las clases de carácter normales generan advertencias, aquí son errores fatales.
+
+Todas las advertencias de estos elementos de clase son fatales, así como algunas prácticas que ahora no generan advertencias.  Por ejemplo, no puede decir
+
+ /(?[ [ \xF ] ])/     # ¡Error de sintaxis!
+
+Tiene que tener dos dígitos hexadecimales después de un C<\x> sin corchetes (use un cero precedente para tener dos).  Estas restricciones son para bajar la incidencia de errores en la escritura que haga que la clase no coincida con lo que esperaba.
+
+Si una clase de caracteres regular entre corchetes contiene un C<\p{}> o C<\P{}> y se le hace coincidir contra un punto de código que no sea Unicode, se puede levantar una advertencia, ya que el resultado no está definido como Unicode.  La advertencia no aparecerá cuando se use la forma extendida.
+
+La diferencia final entre clases de carácter regulares entre corchetes y éstas, es que no es posible que éstas coincidan con un plegado multicarácter.  Por lo tanto,
+
+ /(?[ [\xDF] ])/iu
+
+no coincide con la cadena C<ss>.
+
+No tiene por qué encerrar los nombres de las clases POSIX dentro de los dobles corchetes, por lo que funcionará cualquiera de lo siguiente:
+
+ /(?[ [:word:] - [:lower:] ])/
+ /(?[ [[:word:]] - [[:lower:]] ])/
+
+Cualesquiera clases de carácter POSIX incluidas, incluyendo cosas como C<\w> y C<\D> respetan los modificadores C<E<sol>a> (y C<E<sol>aa>).
+
+C<< (?[ ]) >> es una construcción de una exp. reg. en tiempo de compilación.  Cualquier intento de usar algo que no sea reconocible en el momento de que la expresión regular incluida se compile, es un error fatal.  En la práctica, eso significa que existen tres limitaciones:
+
+=over 4
+
+=item 1
+
+Esta construcción no se puede usar dentro del ámbito de C<use locale> (o el modificador de exp. reg. C<E<sol>l>).
+
+=item 2
+
+Cualquier L<propiedad definida por el usuario|perlunicode/"Propiedades de carácter definidas por el usuario"> que se use debe estar ya definida en el momento en que la expresión regular se compila (pero note que esta construcción se puede usar en lugar de las propiedades).
+
+=item 3
+
+Una expresión regular que, de otra forma, se compilaría usando las reglas C<E<sol>d>, y que use esta construcción, usará en su lugar las reglas de C<E<sol>u>.  Por ello esta construcción le dice a Perl que usted no quiere usar las reglas C<E<sol>d> para la expresión regular que lo contiene.
+
+=back
+
+El procesado de C<E<sol>x> dentro de esta clase, es un formato extendido.
+Además de los caracteres que se consideran espacio blanco en el procesamiento normal de C</x>, hay otros cinco, recomendados por el estándar Unicode:
+
+ U+0085 NEXT LINE
+ U+200E LEFT-TO-RIGHT MARK
+ U+200F RIGHT-TO-LEFT MARK
+ U+2028 LINE SEPARATOR
+ U+2029 PARAGRAPH SEPARATOR
+
+Note que el saltar el espacio en blanco se aplica solo al interior de esta construcción.  No tiene que haber ningún espacio entre cualquiera de los caracteres que forman el inicial C<(?[>.  Ni tampoco puede haber ningún espacio entre los caracteres finales C<])>.
+
+Como en todas las expresiones regulares, el patrón se puede construir incluyendo variables que se interpolan en tiempo de compilación de la exp. reg.
+Se deben tomar precauciones para asegurar que obtiene lo que espera.  Por ejemplo:
+
+ my $thai_or_lao = '\p{Thai} + \p{Lao}';
+ ...
+ qr/(?[ \p{Digit} & $thai_or_lao ])/;
+
+se compila a
+
+ qr/(?[ \p{Digit} & \p{Thai} + \p{Lao} ])/;
+
+Pero esto no tiene el efecto que, cualquiera, leyendo el código podría esperar, ya que la intersección se aplica solo a C<\p{Thai}>, excluyendo el laosiano.  Se pueden evitar trampas como esta poniendo las piezas de los componentes entre paréntesis:
+
+ my $thai_or_lao = '( \p{Thai} + \p{Lao} )';
+
+Todos los modificadores seguirán aplicándose a todos los componentes:
+
+ my $minuscula = '\p{Lower} + \p{Digit}';
+ qr/(?[ \p{Greek} & $minuscula ])/i;
+
+coincide con cosas en mayúscula.  Puede evitar sorpresas poniendo los componentes en instancias de esta construcción, compilándolos:
+
+ my $thai_or_lao = qr/(?[ \p{Thai} + \p{Lao} ])/;
+ my $minuscula = qr/(?[ \p{Lower} + \p{Digit} ])/;
+
+Cuando éstas se incrustan en otro patrón, no cambia con lo que coinciden, sin importar los paréntesis o qué modificadores están en activo en el patrón exterior.
+
+Debido a la manera en que Perl interpreta las cosas, sus paréntesis y corchetes pueden necesitar estar balanceados, incluso los que estén en los comentarios.  Si encuentra un buen ejemplo, por favor, mándelo a C<perlbug@perl.org>, para que podamos tener un ejemplo concreto para esta página de manual.
+
+Podemos cambiarlo de modo que cosas que siguen siendo legales en clases de carácter normales entre corchetes podrían volverse ilegales dentro de esta construcción experimental.  Una propuesta, por ejemplo, es el de prohibir usos adyacentes del mismo carácter, como en C<(?[ [aa] ])>.  La motivación para tal cambio es que su uso es como el de una errata, ya que la segunda "a" no añade nada.
