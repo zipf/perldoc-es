@@ -366,8 +366,8 @@ El modificador de evaluación C<s///e> envuelve un C<eval{...}> alrededor de la 
     $x =~ s/(\w+)/reverse $1/ge;   # $x contiene "le otag ne le orerbmos"
 
     # convierte porcentaje a decimal
-    $x = "Un 39% de éxito";
-    $x =~ s!(\d+)%!$1/100!e;       # $x contiene "Un 0.39 de éxito"
+    $x = "Un 39 % de éxito";
+    $x =~ s!(\d+) %!$1/100!e;       # $x contiene "Un 0.39 de éxito"
 
 El último ejemplo muestra que C<s///> puede utilizar otros delimitadores, como C<s!!!> y C<s{}{}>, e incluso C<s{}//>.  Si se utilizan comillas simples C<s'''>, entonces la I<regex> y el reemplazo se tratan como cadenas entre comillas simples.
 
