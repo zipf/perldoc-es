@@ -733,7 +733,7 @@ Para obtener las 25 letras minúsculas griegas, incluyendo ambos sigmas, puede u
                                      ord("\N{omega}") 
                                    );
 
-Sin embargo, debido a existen I<muchos> otros caracteres griegos en minúscula aparte de estos, para buscar por caracteres griegos en minúscula en una expresión regular, podría utilizar el patrón C</(?:(?=\p{Greek})\p{Lower})+/> (o la L<característica experimental|perlrecharclass/Clases de carácter entre corchetes extendidas> C<S</(?[ \p{Greek} & \p{Lower} ])+/>>).
+Sin embargo, debido a que existen I<muchos> otros caracteres griegos en minúscula aparte de estos, para buscar por caracteres griegos en minúscula en una expresión regular, podría utilizar el patrón C</(?:(?=\p{Greek})\p{Lower})+/> (o la L<característica experimental|perlrecharclass/Clases de caracteres entre corchetes extendidas> C<S</(?[ \p{Greek} & \p{Lower} ])+/>>).
 
 Debido a que cada operando es evaluado en forma de número entero, C<2,18 .. 3,14> devolverá dos elementos en el contexto lista.
 

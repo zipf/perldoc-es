@@ -187,7 +187,7 @@ Mnemónico: I<0>ctal u I<o>ctal.
 
 =head4 Reglas de desambiguación entre las secuencias de escape octales y las contrareferencias
 
-Los escapes octales de la forma C<\000>, fuera de las clases de carácter entre corchetes, pueden, potencialmente, colisionar con las contrareferencias escritas al viejo estilo (vea L</Referencia absoluta> más abajo).  Los dos consisten en una barra diagonal inversa seguida por números.  Así que Perl tiene que usar heurística para determinar si es una contrareferencia o un escape octal.
+Los escapes octales de la forma C<\000>, fuera de las clases de caracteres entre corchetes, pueden, potencialmente, colisionar con las contrareferencias escritas al viejo estilo (vea L</Referencia absoluta> más abajo).  Los dos consisten en una barra diagonal inversa seguida por números.  Así que Perl tiene que usar heurística para determinar si es una contrareferencia o un escape octal.
 Perl usa las siguientes reglas para hacer la desambiguación:
 
 =over 4
@@ -262,7 +262,7 @@ Mnemónico: MinúscuI<L>as, MayúscI<U>las, I<F>old (plegar), I<Q>uotemeta, TI<E
 
 Las expresiones regulares Perl tienen un amplio rango de clases de caracteres. Algunas de las clases de caracteres se escriben como una secuencia de barra diagonal inversa. Discutiremos brevemente algunas de ellas; todos los detalles sobre las clases de caracteres se pueden encontrar en L<perlrecharclass>.
 
-C<\w> es una clase de carácter que coincide con cualquier carácter que forme parte de una I<palabra> (letras, dígitos, marcas Unicode, caracteres de puntuación de unión (como el guión bajo)).  C<\d> es una clase de carácter que coincide con cualquier dígito decimal, mientras que la clase carácter C<\s> coincide con cualquier carácter espacio en blanco.
+C<\w> es una clase de caracteres que coincide con cualquier carácter que forme parte de una I<palabra> (letras, dígitos, marcas Unicode, caracteres de puntuación de unión (como el guión bajo)).  C<\d> es una clase de caracteres que coincide con cualquier dígito decimal, mientras que la clase de caracteres C<\s> coincide con cualquier carácter espacio en blanco.
 Nuevo en perl 5.10.0 son las clases C<\h> y C<\v> que coinciden con los caracteres de espacio en blanco horizontal y vertical.
 
 El conjunto exacto de caracteres que coinciden con C<\d>, C<\s> y C<\w> varía dependiendo de varios pragma y modificadores de expresiones regulares.  Es posible restringir la coincidencia al rango ASCII usando el modificador de expresiones regulares C</a>.  Vea L<perlrecharclass>.
