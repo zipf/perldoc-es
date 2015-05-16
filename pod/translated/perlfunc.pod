@@ -291,7 +291,8 @@ Si el archivo no existe o no puede examinarse, devuelve C<undef> y actualiza C<$
 
     -f  Archivo es un archivo normal.
     -d  Archivo es un directorio.
-    -l  Archivo es un enlace simbólico.
+    -l  Archivo es un enlace simbólico (falso si los enlaces simbólicos no están
+        soportados por el sistema de archivos).
     -p  Archivo es una tubería con nombre (FIFO), o el identificador de archivo es una tubería.
     -S  Archivo es un socket.
     -b  Archivo es un archivo especial por bloques.
@@ -302,7 +303,7 @@ Si el archivo no existe o no puede examinarse, devuelve C<undef> y actualiza C<$
     -g  Archivo tiene puesto el bit setgid.
     -k  Archivo tiene puesto el bit sticky.
 
-    -T  Archivo es un archivo de texto ASCII (por una suposición heurística).
+    -T  Archivo es un archivo de texto ASCII o UTF-8 (por una suposición heurística).
     -B  archivo es un archivo "binario" (opuesto de -T).
 
     -M  Tiempo de arranque del script menos el tiempo de modificación del archivo, en días.
@@ -332,7 +333,8 @@ También note que, para el superusuario en el sistema de archivos local, los tes
 Si está usando ACL, hay un pragma llamado C<filetest> que puede producir resultados más precisos que los simples bits de modo de stat().
 Cuando esté bajo C<use filetest 'access'>, las comprobaciones de archivo mencionadas antes comprobarán cuándo los permisos pueden (o no) ser concedidos usando la familia de llamadas del sistema access(2).  Note también que C<-x> y C<-X> pueden, bajo este pragma, devolver valores verdaderos incluso si los bits de permiso de ejecución no están puestos (ni cualquier permiso ACL extra de ejecución).  Este comportamiento tan extraño es debido a las definiciones subyacentes de las llamadas del sistema.  Note también que, debido a la implementación de C<use filetest 'access'>, el identificador de archivo especial C<_> no almacenará los resultados de los test de archivo mientras este pragma esté activo.  Para más información, lea la documentación del pragma C<filetest>.
 
-Las opciones C<-T> y C<-B> funcionan como sigue.  El primer bloque (aprox.) del archivo, es examinado para buscar caracteres extraños como códigos de control o caracteres con el bit alto puesto.  Si se encuentran demasiados caracteres extraños (E<gt>30 %), es un archivo C<-B>; de lo contrario es un archivo C<-T>.  También, cualquier archivo conteniendo bytes cero en el primer bloque, se le considera como un archivo binario.  Si C<-T> o C<-B> se usan con un identificador de archivo, la memoria intermedia actual de IO es examinada en vez del primer bloque.  Ambos, C<-T> y C<-B>, devuelven verdadero en un archivo vacío o en un archivo en el EOF (marca de fin de archivo) cuando se analiza un identificador de archivo.  Debido a que tiene que leer el archivo para hacer el test C<-T>, en la mayoría de las ocasiones querrá usar primero C<-f>, como en C<next unless -f $archivo && -T $archivo>.
+Las opciones C<-T> y C<-B> funcionan como sigue.  El primer bloque o así del archivo, se examina para ver si es UTF-8 válido, por lo que incluye caracteres no ASCII.  Si lo es, es un archivo C<-T>.  Se examina el primer bloque (aprox.) del archivo, para buscar caracteres extraños como códigos de control o caracteres con el bit alto activo.  Si más de un tercio de los caracteres son extraños, es un archivo C<-B>; de lo contrario es un archivo C<-T>.
+También, cualquier archivo que contenga un byte cero en la porción examinada se considera que es un archivo binario.  (Si se ejecuta dentro del ámbito de un L<S<use locale>|perllocale>, que incluye C<LC_CTYPE>, caracteres extraños son cualquiera que no sean imprimibles ni espacios en la configuración regional actual).  Si C<-T> o C<-B> se usan con un identificador de archivo, la memoria intermedia actual de IO es examinada en vez del primer bloque.  Ambos, C<-T> y C<-B>, devuelven verdadero en un archivo vacío o en un archivo en el EOF (marca de fin de archivo) cuando se analiza un gestor de archivo.  Debido a que tiene que leer el archivo para hacer el test C<-T>, en la mayoría de las ocasiones querrá usar primero C<-f>, como en C<next unless -f $archivo && -T $archivo>.
 
 Si a cualquiera de los test de archivo (o los operadores C<stat> o C<lstat>) se les da el identificador de archivo especial consistente en un solitario guión bajo, entonces se usa la estructura stat del archivo del test anterior (u operador stat), ahorrando una llamada del sistema.  (Esto no funciona con C<-t>, y necesita recordar que lstat() y C<-l> dejarán valores en la estructura stat para el enlace simbólico, no el archivo real).  (También, si la memoria intermedia de stat se rellenó con una llamada C<lstat>, C<-T> y C<-B> serán reinicializados con los resultados de C<stat _>).
 Ejemplo:
@@ -505,7 +507,7 @@ X<caller> X<call stack> X<stack> X<stack trace> X<llamador> X<pila de llamdas> X
 
 =for Pod::Functions get context of the current subroutine call
 
-Devuelve el contexto de la llamada a la subrutina actual.  En contexto escalar, devuelve el nombre del paquete del llamante si aquel I<es> un llamante, es decir, si estamos en una subrutina, C<eval> o C<require>, y el valor indefinido en otro caso.  caller nunca devuelve subrutinas XS, y son obviadas.  La próxima sub escrita en perl aparecerá en lugar de la sub XS en los valores devueltos por caller. En contexto lista, devuelve
+Devuelve el contexto de la llamada a la subrutina actual.  En contexto escalar, devuelve el nombre del paquete del llamante si aquel I<es> un llamante, es decir, si estamos en una subrutina, C<eval> o C<require>, y el valor indefinido en otro caso.  caller nunca devuelve subrutinas XS, y son obviadas.  La próxima sub escrita en perl aparecerá en lugar de la sub XS en los valores devueltos por caller.  En contexto lista, devuelve
 
     # 0         1         2
     ($paquete, $nombre_archivo, $linea) = caller;
@@ -519,7 +521,7 @@ Con EXPR, devuelve alguna información extra que el depurador usa para imprimir 
     $wantarray, $evaltext, $is_require, $hints, $bitmask, $hinthash)
      = caller($i);
 
-Aquí, $subrutina es la función que caller llamó (en lugar de la función que contiene a caller). Note que la $subrutina puede ser C<(eval)> si el marco de llamada no es una llamada a una subrutina, sino un C<eval>.  En tal caso, se añaden los nuevos elementos $evaltext y C<$is_require>: C<$is_require> es verdadero si el marco es creado por una instrucción C<require> o C<use>; $evaltext contiene el texto de la sentencia C<eval EXPR>.  En particular, para una instrucción C<eval BLOQUE>, $subrutina es C<(eval)>, pero $evaltext es indefinido.  (Note también que cada instrucción C<use> crea un marco C<require> dentro de un marco C<eval EXPR>).  $subrutina puede ser también C<(unknown)> (desconocida) si esta subrutina en particular parece haber sido borrada de la tabla de símbolos.
+Aquí, $subrutina es la función que caller llamó (en lugar de la función que contiene a caller).  Note que la $subrutina puede ser C<(eval)> si el marco de llamada no es una llamada a una subrutina, sino un C<eval>.  En tal caso, se añaden los nuevos elementos $evaltext y C<$is_require>: C<$is_require> es verdadero si el marco es creado por una instrucción C<require> o C<use>; $evaltext contiene el texto de la sentencia C<eval EXPR>.  En particular, para una instrucción C<eval BLOQUE>, $subrutina es C<(eval)>, pero $evaltext es indefinido.  (Note también que cada instrucción C<use> crea un marco C<require> dentro de un marco C<eval EXPR>).  $subrutina puede ser también C<(unknown)> (desconocida) si esta subrutina en particular parece haber sido borrada de la tabla de símbolos.
 C<$hasargs> es verdadero si una nueva instancia de C<@_> fue creada para este marco.
 C<$hints> y C<$bitmask> contienen detalles para los cuales caller fue compilado.  C<$hints> corresponde a C<$^H> y C<$bitmask> corresponde a C<${^WARNING_BITS}>.  Los valores C<$hints> y C<$bitmask> están sujetos a cambios entre versiones de Perl y no se espera que sean utilizados para uso externo.
 
@@ -905,9 +907,9 @@ Dada una expresión que especifica un elemento o una porción de un hash, C<dele
 
 En contexto de lista, devuelve el valor o los valores borrados, o el último elemento de este tipo en contexto escalar.  La longitud de la lista devuelta siempre coincide con el de la lista de argumentos: eliminar elementos no existentes devuelve el valor indefinido en sus posiciones correspondientes.
 
-delete() puede usarse también en lo arrays y porciones de array, pero su comportamiento es menos claro.  Aunque exists() devolverá falso para entradas eliminadas, eliminar elementos del array nunca cambia los índices de los valores existentes; use en su lugar shift() o splice().  Sin embargo, si cualquiera de los elementos eliminados están al final de un array, el tamaño del array se reduce al de la posición del elemento más alto que aún devuelva verdadero para exists(), o 0 si no hay ninguno. En otras palabras, un array no tendrá elementos inexistentes al final, después de un delete.
+delete() puede usarse también en lo arrays y porciones de array, pero su comportamiento es menos claro.  Aunque exists() devolverá falso para entradas eliminadas, eliminar elementos del array nunca cambia los índices de los valores existentes; use en su lugar shift() o splice().  Sin embargo, si cualquiera de los elementos eliminados están al final de un array, el tamaño del array se reduce al de la posición del elemento más alto que aún devuelva verdadero para exists(), o 0 si no hay ninguno.  En otras palabras, un array no tendrá elementos inexistentes al final, después de un delete.
 
-B<AVISO:> Usar delete en elementos de un array es una funcionalidad obsoleta y es probable que sea eliminada en una futura versión de Perl.
+B<AVISO:> Se desaconseja fuertemente llamar a C<delete> en valores de array.  La noción de borrar o comprobar la existencia de elementos de arrays de Perl no es conceptualmente coherente, y puede llevar a un comportamiento sorprendente.
 
 Borrando de C<%ENV> modifica el entorno.  Borrando de un hash atado a un archivo DBM, borra esa entrada del archivo DBM.  Borrando de un hash o array C<atado> no necesariamente devolverá algo; depende de la implementación del método DELETE en el paquete C<atado>, que puede hacer lo que quiera.
 
@@ -1104,6 +1106,8 @@ Cada hash o array tiene su propio iterador interno, accedido por C<each>, C<keys
           delete $hash{$clave};   # Esto es seguro hacerlo
         }
 
+Hash enlazados pueden tener un comportamiento de ordenación diferente a la implementación de los hashes de perl.
+
 Esto imprime su entorno como el programa printenv(1), sólo que en un orden diferente:
 
     while (($clave,$valor) = each %ENV) {
@@ -1293,7 +1297,7 @@ Si hay más de un argumento en LISTA, se llama a execvp(3) con los argumentos de
     exec '/bin/echo', 'Tus argumentos son: ', @ARGV;
     exec "sort $salida | uniq";
 
-Si verdaderamente no quiere ejecutar el primer argumento, pero quiere engañar al programa que está ejecutando sobre su propio nombre, puede especificar el programa que realmente quiere ejecutar como un "objeto indirecto" (sin la coma) enfrente de la LISTA.  (Esto siempre fuerza la interpretación de la LISTA como una lista multievaluada, incluso si sólo hay un único escalar en la lista).  Ejemplo:
+Si de verdad no quiere ejecutar el primer argumento, pero quiere engañar al programa que está ejecutando sobre su propio nombre, puede especificar el programa que realmente quiere ejecutar como un "objeto indirecto" (sin la coma) enfrente de la LISTA, como en C<exec PROGRAMA LISTA>.  (Esto siempre fuerza la interpretación de la LISTA como una lista multievaluada, incluso si sólo hay un único escalar en la lista).  Ejemplo:
 
     $shell = '/bin/csh';
     exec $shell '-sh';    # finge que es un shell de login
@@ -1314,6 +1318,8 @@ Usar un objeto indirecto con C<exec> o C<system> es también más seguro.  Este 
 
 La primera versión, sin el objeto indirecto, ejecuta el programa I<echo>, pasándole C<"sorpresa"> como argumento.  La segunda versión no; intentó ejecutar un programa llamado literalmente I<"echo sorpresa">, no lo encontró, y puso C<$?> a un valor distinto de cero para indicar un error.
 
+En Windows, solo la sintaxis de objetos indirecto en C<exec PROGRAMA LISTA> evitará, de forma efectiva, evitar usar la shell; C<exec LISTA>, incluso con más de un elemento, volverá a usar la shell si falla el primer intento de lanzamiento.
+
 Perl intenta vaciar todos los archivos abiertos para salida antes de ejecutar exec, pero esto puede no estar soportado en algunas plataformas (vea L<perlport>).
 Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en el módulo English) o llamar al método C<autoflush()> de C<IO::Handle> en cualquiera de los gestores de archivo abiertos para evitar la pérdida de datos en la salida.
 
@@ -1332,7 +1338,9 @@ Dada una expresión que especifica un elemento de un hash, devuelve verdadero si
     print "Definido\n"  if defined $hash{$clave};
     print "Verdadero\n"   if $hash{$clave};
 
-exists también pueden ser llamado sobre elementos de array, pero su comportamiento es mucho menos evidente, y está fuertemente atado a la utilización de L</delete> en arrays.  B<Queda avisado> que borrar elementos de un array mediante delete() es una funcionalidad obsoleta y es probable que sea eliminada en una futura versión de Perl.
+exists también pueden ser llamado sobre elementos de array, pero su comportamiento es mucho menos evidente, y está fuertemente atado a la utilización de L</delete> en arrays.
+
+B<AVISO:> Se desaconseja fuertemente llamar a C<exists> en valores de array.  La noción de borrar o comprobar la existencia de elementos de arrays de Perl no es conceptualmente coherente, y puede llevar a un comportamiento sorprendente.
 
     print "Existe\n"    if exists  $array[$indice];
     print "Definido\n"  if defined $array[$indice];
@@ -2117,7 +2125,7 @@ X<keys> X<key> X<clave>
 
 Llamado en contexto de lista, devuelve una lista consistente en todas las claves del hash indicado, o en Perl 5.12 o posteriores, los índices de un array.  Versiones de Perl anteriores a 5.12 producirán un error de sintaxis si intenta utilizar un array como argumento.  En contexto escalar, devuelve el número de claves o índices.
 
-Las entradas de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real es específico a un hash dado; las mismas series de operaciones en dos hashes pueden resultar en diferentes órdenes para cada hash.  Cualquier inserción en el hash puede cambiar el orden, así como cualquier eliminación, con la excepción de que la clave más reciente devuelta por C<each> o C<keys> puede ser borrada sin que cambie el orden.  Siempre y cuando no se modifique un determinado hash puede confiar en que C<keys>, C<values> y C<each> devuelvan repetidamente lo mismo en el mismo orden.  Vea L<perlsec/"Ataques de complejidad algorítmica"> para los detalles de por qué el orden en un hash se aleatoriza.  Aparte de las garantías proporcionadas aquí los detalles exactos de algoritmo que usa Perl para recorrer un hash está sujeto a cambio en cualquier lanzamiento de Perl.
+Las entradas de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real es específico a un hash dado; las mismas series de operaciones en dos hashes pueden resultar en diferentes órdenes para cada hash.  Cualquier inserción en el hash puede cambiar el orden, así como cualquier eliminación, con la excepción de que la clave más reciente devuelta por C<each> o C<keys> puede ser borrada sin que cambie el orden.  Siempre y cuando no se modifique un determinado hash puede confiar en que C<keys>, C<values> y C<each> devuelvan repetidamente lo mismo en el mismo orden.  Vea L<perlsec/"Ataques de complejidad algorítmica"> para los detalles de por qué el orden en un hash se aleatoriza.  Aparte de las garantías proporcionadas aquí los detalles exactos de algoritmo que usa Perl para recorrer un hash está sujeto a cambio en cualquier lanzamiento de Perl.  Hashes enlazados pueden comportarse diferentemente a los hashes de Perl con respecto a los cambios en el orden, en la inserción y borrado de los elementos.
 
 Como efecto colateral, llamando a keys() reinicia el iterador interno del HASH o del ARRAY (vea L</each>).  De forma particular, llamando a keys() en contexto nulo (void) resetea el iterador sin otro efecto.
 
@@ -2247,7 +2255,7 @@ Los resultados siguen las reglas ASCII.  Sólo los caracteres C<A-Z> cambian, a 
 
 Respeta la configuración regional LC_CTYPE actual de los códigos de carácter < 256; y utiliza las reglas Unicode para los códigos de carácter restantes (esto último sólo puede ocurrir si la bandera UTF8 también está establecida).  Vea L<perllocale>.
 
-A partir de v5.20, Perl usará todas las reglas Unicode si la localización es UTF-8.  Por contra, hay una deficiencia en este esquema, y es que los cambios de tamaños de caja que cruzan el límite 255/256 no están bien definidos.  Por ejemplo, la minúscula de LATIN CAPITAL LETTER SHARP S (U+1E9E) en las reglas Unicode es U+00DF (en las plataformas ASCII).   Pero bajo C<use locale> (antes de v5.20 o no está activa la localización UTF-8), la minúscula de U+1E9E es ella misma, porque 0xDF quizás no sea LATIN SMALL LETTER SHARP S en la configuración regional actual, y Perl no tiene forma de saber incluso si existe el carácter en la configuración regional, y aún menos qué código de carácter es.  Perl devuelve el carácter de entrada sin cambios, para todas las instancias (y no hay muchas) donde el límite 255/256, de otro modo, sería traspasado.
+A partir de v5.20, Perl usa todas las reglas Unicode si la configuración regional es UTF-8.  Por contra, hay una deficiencia en este esquema, y es que los cambios de tamaños de caja que cruzan el límite 255/256 no están bien definidos.  Por ejemplo, la minúscula de LATIN CAPITAL LETTER SHARP S (U+1E9E) en las reglas Unicode es U+00DF (en las plataformas ASCII).   Pero bajo C<use locale> (antes de v5.20 o no está activa la localización UTF-8), la minúscula de U+1E9E es ella misma, porque 0xDF quizás no sea LATIN SMALL LETTER SHARP S en la configuración regional actual, y Perl no tiene forma de saber incluso si existe el carácter en la configuración regional, y aún menos qué código de carácter es.  Perl devuelve el carácter de entrada sin cambios, para todas las instancias (y no hay muchas) donde el límite 255/256, de otro modo, sería traspasado.
 
 =item De otra forma, si EXPR tiene la bandera UTF8 puesta:
 
@@ -2474,12 +2482,13 @@ El uso de un bucle C<foreach> normal para este propósito sería más claro en l
 
 Si C<$_> es léxica en el ámbito de aplicación donde C<map> aparece (porque se ha declarado con la forma obsoleta C<my $_>) entonces, además de ser un alias local a los elementos de la lista, C<$_> se mantiene léxica dentro del bloque; es decir, no puede ser vista desde el exterior, evitando cualquier potencial efecto colateral.
 
-C<{> comienza tanto una referencia a hash como bloques, por lo que C<map { ...> podría ser tanto el comienzo de map BLOQUE LISTA o map EXPR, LISTA.  Debido a que Perl no mira, por adelantado, por el cierre C<}>, tiene que hacer una conjetura basándose en lo que encuentra justo después de <C{>.  Por lo general, lo hace bien, pero si no, no se dará cuenta de que algo anda mal hasta que llega a la C<}> y se encuentra con la omisión de (o inesperada) coma.  El error de sintaxis será reportado cerca de C<}>, pero tendrá que cambiar algo cerca de C<{>, como en el uso de un unario C<+>, para darle un poco de ayuda a Perl:
+C<{> comienza tanto una referencia a hash como bloques, por lo que C<map { ...> podría ser tanto el comienzo de map BLOQUE LISTA o map EXPR, LISTA.  Debido a que Perl no mira, por adelantado, por el cierre C<}>, tiene que hacer una conjetura basándose en lo que encuentra justo después de <C{>.  Por lo general, lo hace bien, pero si no, no se dará cuenta de que algo anda mal hasta que llega a la C<}> y se encuentra con la omisión de (o inesperada) coma.  El error de sintaxis estará indicado cerca de C<}>, pero tendrá que cambiar algo cerca de C<{>, como en el uso de un C<+> unario o un punto y coma, para darle un poco de ayuda a Perl:
 
     %hash = map {  "\L$_" => 1  } @array # perl supone EXPR. mal
     %hash = map { +"\L$_" => 1  } @array # perl supone BLOQUE. bien
-    %hash = map { ("\L$_" => 1) } @array # esto también funciona
-    %hash = map {  lc($_) => 1  } @array # y como esto.
+    %hash = map {; "\L$_" => 1  } @array # esto también funciona
+    %hash = map { ("\L$_" => 1) } @array # como esto también
+    %hash = map {  lc($_) => 1  } @array # y esto.
     %hash = map +( lc($_) => 1 ), @array # esto es EXPR ¡y funciona!
 
     %hash = map  ( lc($_), 1 ),   @array # evalúa a (1, @array)
@@ -2960,15 +2969,45 @@ X<our> X<global>
 
 =for Pod::Functions +5.6.0 declare and assign a package variable (lexical scoping)
 
-C<our> crea un alias léxico a una variable de paquete con el mismo nombre en el paquete actual, para usarla dentro del ámbito léxico actual.
+C<our> crea un alias léxico a una variable de paquete (es decir, global) con el mismo nombre en el paquete actual, para usarla dentro del ámbito léxico actual.
 
-C<our> tiene las mismas reglas de ámbito que C<my> o C<state>, pero C<our> sólo declara un alias, mientras que C<my> o C<state> declaran un nombre de variable y reservan espacio para ese nombre dentro del ámbito actual.
+C<our> tiene las mismas reglas de ámbito que C<my> o C<state>, significando que solo es válido dentro de un ámbito léxico.  A diferencia de C<my> o C<state>, que declaran nuevas variables (léxicas), solo C<our> crea un alias a una variable existente: una variable de paquete del mismo nombre.
 
-Esto significa que cuando C<use strict 'vars'> esté activo, C<our> le permite usar una variable de paquete sin calificarla con el nombre de paquete, pero sólo en el ámbito léxico de la declaración C<our>.  De esta manera, C<our> difiere de C<use vars>, que permite usar un nombre no calificado I<sólo> dentro del paquete afectado, pero sí en diversos ámbitos.
+Esto significa que cuando C<use strict 'vars'> está activo, C<our> le permite usar una variable de paquete sin calificarla con el nombre de paquete, pero sólo en el ámbito léxico de la declaración C<our>. Esto se aplica inmediatamente, incluso en la misma sentencia.
+
+    package Foo;
+    use strict;
+
+    $Foo::foo = 23;
+
+    {
+        our $foo;   # alias de $Foo::foo
+        print $foo; # imprime 23
+    }
+
+    print $Foo::foo; # imprime 23
+
+    print $foo; # ERROR: requiere un nombre explícito de paquete
+
+Esto funciona incluso si la variable de paquete no se haya usado antes, como si las variables de paquete aparecieran a la existencia la primera vez que se usen.
+
+    package Foo;
+    use strict;
+
+    our $foo = 23;   # igual que $Foo::foo = 23
+
+    print $Foo::foo; # imprime 23
+
+Ya que la variable se vuelve legal inmediatamente bajo C<use strict 'vars'>, así que mientras no exista una variable con ese nombre en ese ámbito, puede entonces referirse a la variable de paquete dentro de la misma sentencia.
+
+    package Foo;
+    use strict;
+
+    my  $foo = $foo; # error, el $foo de la parte derecha no está declarado
+    our $foo = $foo; # sin errores
 
 Si se lista más de una variable, la lista debe ser puesta entre paréntesis.
 
-    our $foo;
     our($bar, $baz);
 
 Una declaración C<our> declara un alias para una variable de paquete que será visible en todo su ámbito léxico, incluso a través de las fronteras del paquete.  El paquete en el que se introduce la variable se determina en el punto de la declaración, no en el momento de ser usada.  Esto significa que el siguiente comportamiento cumple que:
@@ -3001,6 +3040,8 @@ La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  
 Note que con una lista entre paréntesis, se puede utilizar C<undef> como un marcador de posición, por ejemplo para saltar la asignación de valores iniciales:
 
     our ( undef, $min, $hora ) = localtime;
+
+C<our> difiere de C<use vars>, que permite usar un nombre no calificado I<sólo> dentro del paquete afectado, pero sí en diversos ámbitos.
 
 =item pack PLANTILLA,LISTA
 X<pack>
@@ -5311,7 +5352,7 @@ Vea L<perlsub/"Variables privadas persistentes"> para los detalles.
 Si se lista más de una variable, la lista debe ser puesta entre paréntesis.  Con una lista entre paréntesis, se puede utilizar C<undef> como un marcador de posición.  Sin embargo, debido a que actualmente la inicialización de las variables state en contexto de lista no es posible, esto no sirve para nada.
 
 Variables C<state> sólo se activan cuando el pragma C<use feature "state"> está en vigor, a menos que el identificador está escrito como C<CORE::state>.
-Vea también L<feature>.
+Vea también L<feature>. O de otra forma, incluya un C<use v5.10> o posterior en el contexto actual.
 
 =item study ESCALAR
 X<study>
@@ -5546,7 +5587,7 @@ X<system> X<shell>
 
 =for Pod::Functions run a separate program
 
-Hace exactamente lo mismo que C<exec LISTA>, excepto que se hace primero un fork y el proceso padre espera a que el proceso hijo termine.  Tenga en cuenta que el tratamiento de los argumentos varía en función del número de argumentos.  Si hay más de un argumento en LISTA, o si la lista es un array con más de un valor, se inicia el programa indicado en el primer elemento de la lista, con los argumentos indicados por el resto de la lista.  Si sólo hay un argumento escalar, se comprueba si el argumento tiene metacaracteres, y si hay alguno, el argumento entero es pasado al shell de comandos para que sea interpretado (suele ser C</bin/sh -c> en plataformas Unix, pero varía en otras plataformas).  Si no hay metacaracteres shell en el argumento, es dividido en palabras y pasadas directamente a C<execvp>, que es más eficiente.
+Hace exactamente lo mismo que C<exec LISTA>, excepto que se hace primero un fork y el proceso padre espera a que el proceso hijo termine.  Tenga en cuenta que el tratamiento de los argumentos varía en función del número de argumentos.  Si hay más de un argumento en LISTA, o si la lista es un array con más de un valor, se inicia el programa indicado en el primer elemento de la lista, con los argumentos indicados por el resto de la lista.  Si sólo hay un argumento escalar, se comprueba si el argumento tiene metacaracteres, y si hay alguno, el argumento entero es pasado al shell de comandos para que sea interpretado (suele ser C</bin/sh -c> en plataformas Unix, pero varía en otras plataformas).  Si no hay metacaracteres shell en el argumento, es dividido en palabras y pasadas directamente a C<execvp>, que es más eficiente.  En Windows, solo la sintaxis de objetos indirecto en C<system PROGRAMA LISTA> evitará, de forma efectiva, evitar usar la shell; C<system LISTA>, incluso con más de un elemento, volverá a usar la shell si falla el primer intento de lanzamiento.
 
 Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (vea L<perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier controlador abierto.
 
@@ -5968,8 +6009,8 @@ Especificando VERSIÓN como un literal de la forma v5.6.1, debe, generalmente, e
 Suele ser útil si necesita comprobar la versión actual de Perl antes de que C<use> módulos que no funcionarán con versiones anteriores de Perl.
 (Tratamos de no hacer esto no más de lo necesario).
 
-C<use VERSIÓN> también activará todas las características disponibles en la versión solicitada tal como son definidas por el pragma C<feature>, desactivando cualquier característica no incluida en la versión solicitada.  Ver L<feature>.
-Del mismo modo, si la versión especificada de Perl es mayor o igual a 5.12.0, el modo de trabajo estricto quedará activado léxicamente, igual a como lo hace C<use strict>.  Cualquier uso explícito de C<use strict> o C<no strict> anula C<use VERSIÓN>, incluso si se coloca antes de él.  En ambos casos, los archivos F<feature.pm> y F<strict.pm> no son realmente cargados.
+C<use VERSIÓN> también activa léxicamente todas las características disponibles en la versión solicitada tal como son definidas por el pragma C<feature>, desactivando cualquier característica no incluida en la versión solicitada.  Ver L<feature>.
+Del mismo modo, si la versión especificada de Perl es mayor o igual a 5.12.0, el modo de trabajo estricto quedará activado léxicamente, igual a como lo hace C<use strict>.  Cualquier uso explícito de C<use strict> o C<no strict> anula C<use VERSIÓN>, incluso si se coloca antes de él.  Uso posterior de C<use VERSION> sobrecargará todos los comportamientos de un anterior C<use VERSION>, posiblemente eliminando el C<strict> y C<feature> añadidos por C<use VERSION>.  C<use VERSION> no carga los archivos F<feature.pm> o F<strict.pm>.
 
 El C<BEGIN> fuerza a ejecutar a C<require> e C<import> en tiempo de compilación.  El C<require> se asegura que el módulo esté cargado en memoria, si todavía no lo está.  El C<import> no es una función predefinida; es sólo una llamada al método estático ordinario en el paquete C<Módulo> para indicar al módulo que importe la lista de características en el paquete actual.  El módulo puede implementar su propio método C<import> de la forma que desee, aunque la mayoría de los módulos sólo eligen derivar su método C<import> vía herencia desde la clase C<Exporter> que se define en el módulo C<Exporter>.  Ver L<Exporter>.  Si no se puede encontrar ningún método C<import> entonces la llamada se pasa por alto, incluso si hay un método AUTOLOAD.
 
@@ -6051,7 +6092,7 @@ X<values>
 
 En contexto de lista, devuelve una lista que consta de todos los valores del hash indicado.  En Perl 5.12 y superiores, también devolverá una lista de los valores de un array; Perl más antiguos considerarán esto como un error de sintaxis.  En contexto escalar, devuelve el número de valores.
 
-Las entradas de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real es específico a un hash dado; las mismas series de operaciones en dos hashes pueden resultar en diferentes órdenes para cada hash.  Cualquier inserción en el hash puede cambiar el orden, así como cualquier eliminación, con la excepción de que la clave más reciente devuelta por C<each> o C<keys> puede ser borrada sin que cambie el orden.  Siempre y cuando no se modifique un determinado hash puede confiar en que C<keys>, C<values> y C<each> devuelvan repetidamente lo mismo en el mismo orden.  Vea L<perlsec/"Ataques de complejidad algorítmica"> para los detalles de por qué el orden en un hash se aleatoriza.  Aparte de las garantías proporcionadas aquí los detalles exactos de algoritmo que usa Perl para recorrer un hash está sujeto a cambio en cualquier lanzamiento de Perl.
+Las entradas de un hash son devueltas en un aparente orden aleatorio.  El orden aleatorio real es específico a un hash dado; las mismas series de operaciones en dos hashes pueden resultar en diferentes órdenes para cada hash.  Cualquier inserción en el hash puede cambiar el orden, así como cualquier eliminación, con la excepción de que la clave más reciente devuelta por C<each> o C<keys> puede ser borrada sin que cambie el orden.  Siempre y cuando no se modifique un determinado hash puede confiar en que C<keys>, C<values> y C<each> devuelvan repetidamente lo mismo en el mismo orden.  Vea L<perlsec/"Ataques de complejidad algorítmica"> para los detalles de por qué el orden en un hash se aleatoriza.  Aparte de las garantías proporcionadas aquí los detalles exactos de algoritmo que usa Perl para recorrer un hash está sujeto a cambio en cualquier lanzamiento de Perl.  Hashes enlazados pueden comportarse diferentemente a los hashes de Perl con respecto a los cambios en el orden, en la inserción y borrado de los elementos.
 
 Como efecto colateral, llamando a values() reinicia el iterador interno del HASH o ARRAY (vea L</each>).  (De forma particular, llamando a values() en contexto nulo (void) reinicia el iterador sin otro efecto adicional.  Además de restablecer el iterador, C<values @array> en contexto lista es lo mismo que un simple C<@array>.
 (Le recomendamos que para esto utilice el contexto vacío C<keys @array>, pero razonando que quitar C<values @array> exigirá dar más explicaciones que dejarlo tal cual).
@@ -6298,7 +6339,7 @@ X<wait>
 Se comporta como wait(2) de su sistema: espera a que un proceso hijo termine y devuelve el PID del proceso que ha fallecido, o C<-1> si no hay procesos hijos.  El estado se devuelve en C<$?> y C<${^CHILD_ERROR_NATIVE}>.
 Tenga en cuenta que un valor devuelto de C<-1> podría significar que los procesos hijos se están automáticamente desechando, como se describe en L<perlipc>.
 
-Si utiliza wait en su controlador de $SIG{CHLD} puede, accidentalmente, hacer esperar por el hijo creado por qx() o system().  Vea L<perlipc> para más detalles.
+Si utiliza C<wait> en su controlador de $SIG{CHLD}, puede esperar, accidentalmente, por el hijo creado por qx() o system().  Vea L<perlipc> para más detalles.
 
 Cuestiones de portabilidad: L<perlport/wait>.
 
@@ -6483,8 +6524,6 @@ Esta palabra clave está documentada en L<perlsub/"Autocarga">.
 
 =item else
 
-=item elseif
-
 =item elsif
 
 =item for
@@ -6500,6 +6539,12 @@ Esta palabra clave está documentada en L<perlsub/"Autocarga">.
 =item while
 
 Estas palabras clave de control de flujo están documentadas en L<perlsyn/"Instrucciones complejas">.
+
+=item elseif
+
+La palabra "else if" se escribe como C<elsif> en Perl.  No existe ni C<elif> ni C<else if>.  Interpreta C<elseif>, pero solo para avisarle de que no debe usarlo.
+
+Vea la documentación sobre las palabras clave de control de flujo en L<perlsyn/"Instrucciones complejas">.
 
 =back
 

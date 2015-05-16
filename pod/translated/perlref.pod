@@ -49,7 +49,7 @@ Las referencias se pueden crear de varias maneras.
 X<\> X<backslash> X<barra diagonal inversa>
 
 Al utilizar el operador barra diagonal inversa en una variable, subrutina, o un valor.
-(Esto funciona como el operador & (dirección-de) en C).  
+(Esto funciona como el operador & (dirección-de) en C).
 Esto normalmente crea I<otra> referencia a una variable, porque ya hay una referencia a la variable en la tabla de símbolos.  Sin embargo, la referencia de la tabla de símbolos podría desaparecer, y usted todavía tendría la referencia que la barra diagonal inversa devolvió.  Aquí hay algunos ejemplos:
 
     $scalarref = \$foo;
@@ -76,7 +76,7 @@ Aquí hemos creado una referencia a un array anónimo de tres elementos cuyo ele
 Tomar una referencia a una lista enumerada no es lo mismo que usar corchetes, sino que es lo mismo que ¡crear una lista de referencias!
 
     @lista = (\$a, \@b, \%c);
-    @lista = \($a, @b, %c);	# ¡Lo mismo!
+    @lista = \($a, @b, %c);     # ¡Lo mismo!
 
 Como caso especial, C<\(@foo)> devuelve una lista de referencias a los contenidos de C<@foo>, no una referencia al propio C<@foo>.  Lo mismo para C<%foo>, salvo que las referencias a las claves son copias (ya que las claves son cadenas, en lugar de escalares de pleno derecho).
 
@@ -88,8 +88,8 @@ X<hash, anónimo> X<llave> X<hashref> X<referencia a hash> X<referencia, hash>
 Una referencia a un hash anónimo se puede crear utilizando llaves:
 
     $hashref = {
-	'Adán'  => 'Eva',
-	'Clyde' => 'Bonnie',
+        'Adán'  => 'Eva',
+        'Clyde' => 'Bonnie',
     };
 
 Hash y array anónimos creados así se pueden mezclar libremente para producir una estructura tan complicada como se desee.  La sintaxis multidimensional descrita a continuación funciona también para todos ellos.  Los valores anteriores son literales, pero las variables y expresiones funcionan igual de bien, porque los operadores de asignación en Perl (incluso dentro de local() o my()) son instrucciones ejecutables, y no declaraciones en tiempo de compilación.
@@ -130,8 +130,8 @@ En términos humanos, es una manera divertida de pasar argumentos a una subrutin
 También podría pensar en las clausuras como una manera de escribir una plantilla de subrutina sin necesidad de utilizar eval().  Aquí hay un pequeño ejemplo de cómo funciona las clausuras:
 
     sub newprint {
-	my $x = shift;
-	return sub { my $y = shift; print "¡$x, $y!\n"; };
+        my $x = shift;
+        return sub { my $y = shift; print "¡$x, $y!\n"; };
     }
     $h = newprint("Hola");
     $g = newprint("Saludos");
@@ -199,20 +199,20 @@ C<*foo{IO}> es una alternativa al mecanismo C<*IDENTIFICADOR> indicado en L<perl
 Su desventaja es que no va a crear un identificador de archivo nuevo para usted.
 Su ventaja es que tiene menos riesgo de embrollarse más de lo que pasaría con una asignación typeglob.  (Todavía confunde identificadores de directorio y archivo).  Sin embargo, si se asigna el valor de entrada a un escalar en lugar de a un typeglob como hacemos en los ejemplos siguientes, no hay riesgo de que esto suceda.
 
-    splutter(*STDOUT);		# pasa todo el glob
-    splutter(*STDOUT{IO});	# pasa tanto los identificadores de archivo como los de directorio
+    splutter(*STDOUT);          # pasa todo el glob
+    splutter(*STDOUT{IO});      # pasa tanto los identificadores de archivo como los de directorio
 
     sub splutter {
-	my $fh = shift;
-	print $fh "her um well a hmmm\n";
+        my $fh = shift;
+        print $fh "her um well a hmmm\n";
     }
 
-    $rec = get_rec(*STDIN);	# pasa todo el glob
+    $rec = get_rec(*STDIN);     # pasa todo el glob
     $rec = get_rec(*STDIN{IO}); # pasa tanto el identificador de archivo como el de directorio
 
     sub get_rec {
-	my $fh = shift;
-	return scalar <$fh>;
+        my $fh = shift;
+        return scalar <$fh>;
     }
 
 =back
@@ -255,15 +255,15 @@ En cualquier lugar donde había puesto un identificador (o cadena de identificad
 
 Es cierto: es un poco tonto utilizar las llaves en este caso, pero el bloque puede contener cualquier expresión arbitraria; en particular, expresiones subíndices:
 
-    &{ $dispatch{$indice} }(1,2,3);	# llama a la rutina correcta
+    &{ $dispatch{$indice} }(1,2,3);     # llama a la rutina correcta
 
 Debido a la posibilidad de omitir las llaves para el caso simple de C<$$x>, la gente suele cometer el error de ver los símbolos de desreferencia como operadores normales, y se preguntan acerca de su precedencia.  Sin embargo, si lo fueran, se podrían utilizar los paréntesis en lugar de las llaves.  Ese no es el caso.
 Considere la diferencia siguiente; caso 0 es una versión abreviada del caso 1, I<no> del caso 2:
 
-    $$hashref{"CLAVE"}   = "VALOR";	# CASO 0
-    ${$hashref}{"CLAVE"} = "VALOR";	# CASO 1
-    ${$hashref{"CLAVE"}} = "VALOR";	# CASO 2
-    ${$hashref->{"CLAVE"}} = "VALOR";	# CASO 3
+    $$hashref{"CLAVE"}   = "VALOR";     # CASO 0
+    ${$hashref}{"CLAVE"} = "VALOR";     # CASO 1
+    ${$hashref{"CLAVE"}} = "VALOR";     # CASO 2
+    ${$hashref->{"CLAVE"}} = "VALOR";   # CASO 3
 
 El caso 2 es también engañoso, porque se está accediendo a una variable llamada %hashref, no desreferenciando a través de $hashref al hash que está presumiblemente referenciando.  Ese sería el caso 3.
 
@@ -302,7 +302,7 @@ Utilizando una cadena o un número como una referencia produce una referencia si
 X<reference, numeric context> X<referencia, contexto numérico>
 
     if ($ref1 == $ref2) {  # barata comparación numérica de referencias
-	print "refs 1 y 2 refieren a la misma cosa\n";
+        print "refs 1 y 2 refieren a la misma cosa\n";
     }
 
 Usando una referencia como una cadena produce, tanto el tipo de su referente (incluyendo cualquier paquete bendecido como se describe en L<perlobj>), como la dirección numérica expresada en hexadecimal.  El operador ref() devuelve sólo el tipo de cosa a la que la referencia apunta, sin la dirección.  Vea L<perlfunc/ref> para más detalles y ejemplos de su uso.
@@ -371,14 +371,14 @@ Hemos dicho que las referencias aparecen a la existencia cuando es necesario si 
 A menudo la gente espera que funcione de esta manera.  Y así lo hace.
 
     $nombre = "foo";
-    $$nombre = 1;		# Establece $foo
-    ${$nombre} = 2;		# Establece $foo
-    ${$nombre x 2} = 3;		# Establece $foofoo
-    $nombre->[0] = 4;		# Establece $foo[0]
-    @$nombre = ();		# Vacía @foo
-    &$nombre();			# Llama &foo()
+    $$nombre = 1;               # Establece $foo
+    ${$nombre} = 2;             # Establece $foo
+    ${$nombre x 2} = 3;         # Establece $foofoo
+    $nombre->[0] = 4;           # Establece $foo[0]
+    @$nombre = ();              # Vacía @foo
+    &$nombre();                 # Llama a &foo()
     $pack = "ESE";
-    ${"${pack}::$nombre"} = 5;	# Establece $ESE::foo, sin usar eval
+    ${"${pack}::$nombre"} = 5;  # Establece $ESE::foo, sin usar eval
 
 Esto es de gran potencia, y ligeramente peligroso, ya que es posible que la intención sea (con la mayor sinceridad) utilizar una referencia dura y, sin querer, utilizar en su lugar una referencia simbólica.  Para protegerse contra esto, se puede decir
 
@@ -393,8 +393,8 @@ Sólo las variables globales de paquetes (las globales, incluso si están locali
     local $valor = 10;
     $ref = "valor";
     {
-	my $valor = 20;
-	print $$ref;
+        my $valor = 20;
+        print $$ref;
     }
 
 Esto seguirá imprimiendo 10, no 20.  Recuerde que el local() afecta a las variables del paquete, que son todas "global" para el paquete.
@@ -417,8 +417,8 @@ e incluso
 tendrán el mismo efecto.  Esta construcción I<no> se considera una referencia simbólica cuando se está utilizando C<strict refs>:
 
     use strict 'refs';
-    ${ bareword };	# Muy bien, significa $bareword.
-    ${ "bareword" };	# Error, referencia simbólica.
+    ${ bareword };      # Muy bien, significa $bareword.
+    ${ "bareword" };    # Error, referencia simbólica.
 
 Del mismo modo, debido a que todo subíndice se ha construido usando palabras sueltas, se aplica la misma regla a cualquier palabra suelta que se utilice como subíndice de un hash.
 Así que ahora, en lugar de escribir
@@ -459,13 +459,13 @@ Utilizando una clausura como plantilla de función nos permite generar muchas fu
 
     print "Sé ", rojo("cuidadoso"), "con eso ", verde("light");
 
-Las funciones roja y verde serían similares.  Para crearlas, vamos a asignar una clausura a un typeglob del nombre de la función que estamos tratando de construir.  
+Las funciones roja y verde serían similares.  Para crearlas, vamos a asignar una clausura a un typeglob del nombre de la función que estamos tratando de construir.
 
     @colores = qw(rojo azul verde amarillo naranja púrpura violeta);
     for my $nombre (@colores) {
-        no strict 'refs';	# permite manipulación de la tabla de símbolos
+        no strict 'refs';       # permite manipulación de la tabla de símbolos
         *$nombre = *{uc $nombre} = sub { "<FONT COLOR='$nombre'>@_</FONT>" };
-    } 
+    }
 
 Ahora todas aquellas funciones diferentes parecen existir de forma independiente.  Puede llamar a rojo(), ROJO(), azul(), AZUL(), verde(), etc. Esta técnica ahorra tanto en tiempo de compilación como en uso de memoria, y así es menos propensa a errores, ya que los controles de sintaxis suceden en tiempo de compilación.  Es fundamental que las variables de la subrutina anónima sean léxicas con el fin de crear una clausura adecuada.
 Esa es la razón para el uso del C<my> con la variable de iteración del bucle.
@@ -480,7 +480,7 @@ El acceso a léxicas que cambian con el tiempo -como la del bucle C<for> anterio
 
 Esto se debe a que las subrutinas con nombre son creadas en tiempo de compilación para que sus variables léxicas sean asignadas a las léxicas padres desde la primera ejecución del bloque primario. Si se entra en un ámbito primario por segunda vez, sus léxicas son creadas de nuevo, mientras que las subrutinas anidadas siguen haciendo referencia a los antiguas.
 
-Las subrutinas anónimas capturan cada vez que ejecuta el operador C<sub>, ya que se crean sobre la marcha. Si está acostumbrado a usar subrutinas anidadas en otros lenguajes de programación con sus propias variables privadas, tendrá que trabajar en ello un poco más, en Perl.  La codificación intuitiva de este tipo de cosas misteriosas incurre en advertencias del tipo "I<will not stay shared>" (no se quedará compartida), debido a las razones antes expuestas. 
+Las subrutinas anónimas capturan cada vez que ejecuta el operador C<sub>, ya que se crean sobre la marcha. Si está acostumbrado a usar subrutinas anidadas en otros lenguajes de programación con sus propias variables privadas, tendrá que trabajar en ello un poco más, en Perl.  La codificación intuitiva de este tipo de cosas misteriosas incurre en advertencias del tipo "I<will not stay shared>" (no se quedará compartida), debido a las razones antes expuestas.
 Por ejemplo, esto no funciona:
 
     sub exterior {

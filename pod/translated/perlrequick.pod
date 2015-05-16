@@ -194,7 +194,7 @@ El S<B<ancla de palabra> > C<\b> coincide con una frontera entre un carácter de
 
 En el último ejemplo, el final de la cadena se considera un límite de palabra.
 
-=head2 Coincidiendo con esto o eso
+=head2 Coincidiendo con esto o aquello
 
 Podemos hacer coincidir diferentes cadenas de caracteres con el metacarácter de B<alternancia> C<'|'>.  Para que coincida con C<perro> o C<gato>, formamos la I<regex> C<perro|gato>.  Al igual que antes, Perl tratará de hacer coincidir la I<regex> en el primer punto de coincidencia en la cadena.  En cada posición de carácter, Perl intentará hacer coincidir en primer lugar con la primera alternativa, C<perro>.  Si C<perro> no coincide, Perl entonces intentará la siguiente alternativa, C<gato>.
 Si C<gato> tampoco corresponde, entonces la búsqueda falla y Perl se mueve a la siguiente posición en la cadena.  Algunos ejemplos:

@@ -9,7 +9,7 @@ perlvar - Variables predefinidas de Perl
 En Perl, los nombres de variable pueden tener varios formatos.  Generalmente empiezan por una letra o un guión bajo, en cuyo caso pueden tener una longitud arbitraria (hasta un límite interno de 251), y muchos contienen letras, dígitos, guiones bajos o la secuencia especial C<::> o C<'>.  En este caso, se usa la parte que hay antes del último C<::> o
 C<'> como I<calificador del paquete>; vea L<perlmod>.
 
-Los nombres de variables Perl también pueden estar formados por una secuencia de dígitos o un solo singno de puntuación o carácter de control.  Todos estos nombres están reservados para usos especiales en Perl; por ejemplo, los nombres formados exclusivamente por dígitos se usan para almacenar datos capturados por ///backreferences detectadas por una expresión regular.  Perl tiene una sintaxis especial para los nombres de un solo carácter de control: entiende que C<^X> (acento circunflejo-C<X>) representa al carácter de control-C<X>.  Por ejemplo, la notación C<$^W> (signo de dólar, acento circunflejo, C<W>) es la variable escalar cuyo nombre es el carácter de control-C<W>.  Esto es mejor que escribir control-C<W> de forma literal, en su programa.
+Los nombres de variables Perl también pueden estar formados por una secuencia de dígitos o un solo signo de puntuación o carácter de control (siendo obsoleta la forma del carácter de control literal).  Todos estos nombres están reservados para usos especiales en Perl; por ejemplo, los nombres formados exclusivamente por dígitos se usan para almacenar datos capturados por ///backreferences detectadas por una expresión regular.  Perl tiene una sintaxis especial para los nombres de un solo carácter de control: entiende que C<^X> (acento circunflejo-C<X>) representa al carácter de control-C<X>.  Por ejemplo, la notación C<$^W> (signo de dólar, acento circunflejo, C<W>) es la variable escalar cuyo nombre es el carácter de control-C<W>.  Esto es mejor que escribir control-C<W> de forma literal, en su programa.
 
 Desde la versión Perl 5.6.0, los nombres de variables en Perl pueden ser cadenas alfanuméricas que empiecen por caracteres de control (o mejor aún, por un acento circunflejo).
 Estas variables deben escribirse con la sintaxis C<${^Foo}>; las llaves no son opcionales.  C<${^Foo}> denota la variable escalar cuyo nombre es un control-C<F> seguido por dos C<o>.  Estas variables están reservadas para futuros usos especiales de Perl, a excepción de los que comienzan con C<^_> (control-guión bajo o acento circunflejo-guión bajo).  Ningún nombre de carácter de control que comience con C<^_> adquirirá un significado especial en cualquier futura versión de Perl; por lo tanto, estos nombres se pueden usar con seguridad en los programas actuales.  C<$^_>, sin embargo, I<está> reservada.
@@ -238,19 +238,19 @@ X<$;> X<$SUBSEP> X<SUBSCRIPT_SEPARATOR>
 
 El separador de subíndice para la emulación de array multidimensionales.  Si se refiere a un elemento hash como
 
-    $foo{$a,$b,$c}
+    $foo{$x,$y,$z}
 
 realmente significa
 
-    $foo{join($;, $a, $b, $c)}
+    $foo{join($;, $x, $y, $z)}
 
 Pero no ponga
 
-    @foo{$a,$b,$c}	# una porción -fíjese en el @-
+    @foo{$x,$y,$z}	# una porción -fíjese en el @-
 
 que significa
 
-    ($foo{$a},$foo{$b},$foo{$c})
+    ($foo{$x},$foo{$y},$foo{$z})
 
 El valor predeterminado es "\034", el mismo que SUBSEP en B<awk>.  Si sus claves contienen datos binarios quizás no exista un valor seguro para C<$;>.
 

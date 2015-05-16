@@ -1,13 +1,13 @@
 =head1 NOMBRE
 X<character class> X<clase de caracteres>
 
-perlrecharclass - Clases de carácter en expresiones regulares Perl
+perlrecharclass - Clases de caracteres en expresiones regulares Perl
 
 =head1 DESCRIPCIÓN
 
 La documentación de alto nivel acerca de expresiones regulares de Perl se encuentra en L<perlre>.
 
-En esta página de manual se describe la sintaxis y uso de las clases de carácter en las expresiones regulares en Perl.
+En esta página de manual se describe la sintaxis y uso de las clases de caracteres en las expresiones regulares en Perl.
 
 Una clase de caracteres es una forma de denotar un conjunto de caracteres de tal forma que se coincida con un carácter del conjunto.
 Es importante recordar que: hacer coincidir una clase de caracteres consume exactamente un carácter de la cadena fuente. (La cadena fuente es la cadena a la que se le aplica la expresión regular).
@@ -33,7 +33,7 @@ X<\w> X<\W> X<\s> X<\S> X<\d> X<\D> X<\p> X<\P>
 X<\N> X<\v> X<\V> X<\h> X<\H>
 X<word> X<whitespace> X<palabra> X<espacio en blanco>
 
-Una secuencia de barra diagonal inversa es una secuencia de caracteres, en que el primero es una barra diagonal inversa.  Perl atribuye un significado especial a tales secuencias, y algunas de ellas son clases de carácter.  Es decir, cada una de ellas coinciden con un único carácter, que pertenece al conjunto de caracteres definido por la secuencia.
+Una secuencia de barra diagonal inversa es una secuencia de caracteres, en que el primero es una barra diagonal inversa.  Perl atribuye un significado especial a tales secuencias, y algunas de ellas son clases de caracteres.  Es decir, cada una de ellas coinciden con un único carácter, que pertenece al conjunto de caracteres definido por la secuencia.
 
 Aquí hay una lista de las secuencias de barra diagonal inversa que son clase de caracteres.  Más abajo se detallan con más detalle.  (Para las secuencias de barra diagonal inversa que no son clase de caracteres, vea L<perlrebackslash>).
 
@@ -372,7 +372,7 @@ Por el contrario, también es posible listar los caracteres por los que no se qu
 
 Esta sintaxis hace que el circunflejo sea un carácter especial dentro de una clase de caracteres entre corchetes, pero solo si es el primer carácter de la clase. Así que si quiere que el circunflejo sea uno de los caracteres que está buscando, puede escaparlo o no listarlo en la primera posición.
 
-En clases de carácter entre corchetes, invertidas, Perl ignora las reglas Unicode que, normalmente dice que ciertos caracteres deben coincidir con una secuencia de caracteres múltiples bajo una coincidencia independiente del tamaño de caja C</i>.  Seguir esas reglas podría llevar a situaciones altamente confusas:
+En clases de caracteres entre corchetes, invertidas, Perl ignora las reglas Unicode que, normalmente dice que ciertos caracteres deben coincidir con una secuencia de caracteres múltiples bajo una coincidencia independiente del tamaño de caja C</i>.  Seguir esas reglas podría llevar a situaciones altamente confusas:
 
  "ss" =~ /^[^\xDF]+$/ui;   # ¡Coincide!
 
@@ -399,16 +399,16 @@ Ejemplos:
  /[^\p{Arabic}()]/  # Coincide un carácter que no sea tanto un Arábigo
                     # carácter, ni un paréntesis.
 
-Las clases de carácter con barras diagonales inversas no pueden formar uno de los puntos finales de un rango.  Así, no se puede decir:
+Las clases de caracteres con barras diagonales inversas no pueden formar uno de los puntos finales de un rango.  Así, no se puede decir:
 
  /[\p{Thai}-\d]/     # ¡Error!
 
-=head3 Clases de carácter POSIX
+=head3 Clases de caracteres POSIX
 X<character class> X<\p> X<\p{}>
 X<alpha> X<alnum> X<ascii> X<blank> X<cntrl> X<digit> X<graph>
 X<lower> X<print> X<punct> X<space> X<upper> X<word> X<xdigit>
 
-Las clases de carácter POSIX tiene la forma C<[:clase:]>, donde I<clase> es el nombre, y el C<[:> y C<:]> delimitadores. Las clases de carácter POSIX solo aparecen I<dentro> de las clases de carácter entre corchetes, y son una forma conveniente y descriptiva de listar un grupo de caracteres.
+Las clases de caracteres POSIX tiene la forma C<[:clase:]>, donde I<clase> es el nombre, y el C<[:> y C<:]> delimitadores. Las clases de caracteres POSIX solo aparecen I<dentro> de las clases de caracteres entre corchetes, y son una forma conveniente y descriptiva de listar un grupo de caracteres.
 
 Sea prudente sobre la sintaxis,
 
@@ -427,7 +427,7 @@ Por ejemplo,
 
 es válido y coincide con '0', '1', cualquier carácter alfabético y el signo de porcentaje.
 
-Perl reconoce las siguientes clases de carácter POSIX:
+Perl reconoce las siguientes clases de caracteres POSIX:
 
  alpha  Cualquier carácter alfabético ("[A-Za-z]").
  alnum  Cualquier carácter alfanumérico ("[A-Za-z0-9]").
@@ -445,7 +445,7 @@ Perl reconoce las siguientes clases de carácter POSIX:
  word   Una extensión Perl ("[A-Za-z0-9_]"), equivalente a "\w".
  xdigit Cualquier dígito hexadecimal ("[0-9a-fA-F]").
 
-La mayor parte de las clases de carácter POSIX tienen dos estilos de propiedades C<\p> Unicode homólogas.  (No son propiedades Unicode oficiales, sino extensiones Perl derivadas de propiedades Unicode oficiales).  La tabla más abajo muestra la relación entre las clases de carácter POSIX y sus homólogas.
+La mayor parte de las clases de caracteres POSIX tienen dos estilos de propiedades C<\p> Unicode homólogas.  (No son propiedades Unicode oficiales, sino extensiones Perl derivadas de propiedades Unicode oficiales).  La tabla más abajo muestra la relación entre las clases de caracteres POSIX y sus homólogas.
 
 Una homóloga, en la columna etiquetada "Rango ASCII en Unicode" en la tabla, coincide solo con caracteres en el conjunto de caracteres ASCII.
 
@@ -502,7 +502,7 @@ C<\p{XPosixPunct}> y (bajo las reglas Unicode) C<[[:punct:]]>, coinciden con lo 
 
 =item [6]
 
-C<\p{SpacePerl}> y C<\p{Space}> coinciden con lo mismo, a partir de Perl v5.18.  En versiones anteriores, diferían solo en la coincidencia no-regional, C<\p{SpacePerl}> no coincide con el tabulador vertical, C<\cK>.
+C<\p{XPerlSpace}> y C<\p{Space}> coinciden con lo mismo, a partir de Perl v5.18.  En versiones anteriores, diferían solo en la coincidencia no-regional, C<\p{XPerlSpace}> no coincide con el tabulador vertical, C<\cK>.
 Lo mismo para las dos en el rango del ASCII.
 
 =back
@@ -510,7 +510,7 @@ Lo mismo para las dos en el rango del ASCII.
 Hay otros sinónimos que pueden usarse además de los nombres listados en la tabla.  Por ejemplo, C<\p{PosixAlpha}> se puede escribir como C<\p{Alpha}>.  Todos se listan en L<perluniprops/Propiedades accesibles a través de \p{} y \P{}>.
 
 Las dos formas de C<\p> siempre asumen que están activas las reglas Unicode.
-En plataformas ASCII, significan que asumen que los puntos de código de desde 128 a 255 son Latin-1, y eso significa que usarlos bajo las reglas de la configuración regional es imprudente, a menos que la configuración regional se garantice que sea Latin-1 o UTF-8.  En contraste, las clases de carácter POSIX son útiles bajo las reglas de la configuración regional.  Están afectados por las reglas que estén activas, como sigue:
+En plataformas ASCII, significan que asumen que los puntos de código de desde 128 a 255 son Latin-1, y eso significa que usarlos bajo las reglas de la configuración regional es imprudente, a menos que la configuración regional se garantice que sea Latin-1 o UTF-8.  En contraste, las clases de caracteres POSIX son útiles bajo las reglas de la configuración regional.  Están afectados por las reglas que estén activas, como sigue:
 
 =over
 
@@ -568,7 +568,7 @@ Qué reglas se aplican es determinado tal como se describe en L<perlre/¿Qué mo
 
 Se ha propuesto cambiar este comportamiento en una futura publicación de Perl de modo que tanto si las reglas Unicode están activas o no, no cambiará el comportamiento: Más allá de la configuración regional, las clases POSIX se comportarán como las homólogas del rango ASCII.  Si desea comentar esta proposición, mande un correo electrónico C<perl5-porters@perl.org>
 
-=head4 Negación de clases de carácter POSIX
+=head4 Negación de clases de caracteres POSIX
 X<character class, negation>
 
 Una extensión Perl a la clase de caracteres POSIX es la habilidad de negarla. Eso se hace prefijando el nombre de la clase con un circunflejo (C<^>).
@@ -586,7 +586,7 @@ La secuencia de barra diagonal inversa puede significar que tanto un rango ASCII
 
 =head4 [= =] y [. .]
 
-Perl reconoce las clases de carácter POSIX C<[=clase=]> y C<[.class.]>, pero (¿aún?) no las soporta.  Cualquier intento de usar esta construcción levantará una excepción.
+Perl reconoce las clases de caracteres POSIX C<[=clase=]> y C<[.class.]>, pero (¿aún?) no las soporta.  Cualquier intento de usar esta construcción levantará una excepción.
 
 =head4 Ejemplos
 
@@ -603,7 +603,7 @@ Perl reconoce las clases de carácter POSIX C<[=clase=]> y C<[.class.]>, pero (�
                           # El OR añade los dígitos, dejando solo las
                           # letras 'a' a 'f' y 'A' a 'F' excluidas.
 
-=head3 Clases de carácter entre corchetes extendidas
+=head3 Clases de caracteres entre corchetes extendidas
 X<character class>
 X<set operations>
 
@@ -661,7 +661,7 @@ El camino más sencillo de especificar un carácter imprimible es el de encerrar
 
 (Puede, naturalmente, especificar caracteres únicos usando, C<\x{...}>, C<\N{...}>, etc.).
 
-Este último ejemplo muestra el uso de esta construcción para especificar una clase de caracteres entre corchetes ordinaria sin el adicional conjunto de operaciones.  Fíjese en el espacio en blanco dentro de ella; C<E<sol>x> se activa incluso dentro de las clases de carácter entre corchetes, excepto si no tiene comentarios dentro de ellas.  Por ello,
+Este último ejemplo muestra el uso de esta construcción para especificar una clase de caracteres entre corchetes ordinaria sin el adicional conjunto de operaciones.  Fíjese en el espacio en blanco dentro de ella; C<E<sol>x> se activa incluso dentro de las clases de caracteres entre corchetes, excepto si no tiene comentarios dentro de ellas.  Por ello,
 
  (?[ [#] ])
 
@@ -670,7 +670,7 @@ Coincide con el carácter literal "#".  Para especificar un carácter espacio en
  /(?[ [ a e i o u \  ] ])/
 
 Coincide con las vocales españolas más el carácter ESPACIO.
-Todos los otros escapes aceptados por las clases de carácter normales entre corchetes también se aceptan aquí; pero los escapes no reconocidos que en las clases de carácter normales generan advertencias, aquí son errores fatales.
+Todos los otros escapes aceptados por las clases de caracteres normales entre corchetes también se aceptan aquí; pero los escapes no reconocidos que en las clases de caracteres normales generan advertencias, aquí son errores fatales.
 
 Todas las advertencias de estos elementos de clase son fatales, así como algunas prácticas que ahora no generan advertencias.  Por ejemplo, no puede decir
 
@@ -680,7 +680,7 @@ Tiene que tener dos dígitos hexadecimales después de un C<\x> sin corchetes (u
 
 Si una clase de caracteres regular entre corchetes contiene un C<\p{}> o C<\P{}> y se le hace coincidir contra un punto de código que no sea Unicode, se puede levantar una advertencia, ya que el resultado no está definido como Unicode.  La advertencia no aparecerá cuando se use la forma extendida.
 
-La diferencia final entre clases de carácter regulares entre corchetes y éstas, es que no es posible que éstas coincidan con un plegado multicarácter.  Por lo tanto,
+La diferencia final entre clases de caracteres regulares entre corchetes y éstas, es que no es posible que éstas coincidan con un plegado multicarácter.  Por lo tanto,
 
  /(?[ [\xDF] ])/iu
 
@@ -691,7 +691,7 @@ No tiene por qué encerrar los nombres de las clases POSIX dentro de los dobles 
  /(?[ [:word:] - [:lower:] ])/
  /(?[ [[:word:]] - [[:lower:]] ])/
 
-Cualesquiera clases de carácter POSIX incluidas, incluyendo cosas como C<\w> y C<\D> respetan los modificadores C<E<sol>a> (y C<E<sol>aa>).
+Cualesquiera clases de caracteres POSIX incluidas, incluyendo cosas como C<\w> y C<\D> respetan los modificadores C<E<sol>a> (y C<E<sol>aa>).
 
 C<< (?[ ]) >> es una construcción de una exp. reg. en tiempo de compilación.  Cualquier intento de usar algo que no sea reconocible en el momento de que la expresión regular incluida se compile, es un error fatal.  En la práctica, eso significa que existen tres limitaciones:
 
@@ -751,4 +751,4 @@ Cuando éstas se incrustan en otro patrón, no cambia con lo que coinciden, sin 
 
 Debido a la manera en que Perl interpreta las cosas, sus paréntesis y corchetes pueden necesitar estar balanceados, incluso los que estén en los comentarios.  Si encuentra un buen ejemplo, por favor, mándelo a C<perlbug@perl.org>, para que podamos tener un ejemplo concreto para esta página de manual.
 
-Podemos cambiarlo de modo que cosas que siguen siendo legales en clases de carácter normales entre corchetes podrían volverse ilegales dentro de esta construcción experimental.  Una propuesta, por ejemplo, es el de prohibir usos adyacentes del mismo carácter, como en C<(?[ [aa] ])>.  La motivación para tal cambio es que su uso es como el de una errata, ya que la segunda "a" no añade nada.
+Podemos cambiarlo de modo que cosas que siguen siendo legales en clases de caracteres normales entre corchetes podrían volverse ilegales dentro de esta construcción experimental.  Una propuesta, por ejemplo, es el de prohibir usos adyacentes del mismo carácter, como en C<(?[ [aa] ])>.  La motivación para tal cambio es que su uso es como el de una errata, ya que la segunda "a" no añade nada.

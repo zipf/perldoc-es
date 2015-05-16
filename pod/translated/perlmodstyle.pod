@@ -154,7 +154,7 @@ Trate de no poner en marcha, de memoria, el desarrollo de su módulo, sin pasar 
 
 Puede que ni siquiera tenga que escribir el módulo.  Compruebe si ya se ha hecho en Perl, y evitará tener que volver a inventar la rueda, a menos que tenga una buena razón.
 
-Un buen lugar para buscar módulos pre-existentes incluye http://search.cpan.org/ y preguntar en modules@perl.org
+Buenos lugares para mirar por módulos existentes, incluye a L<http://search.cpan.org/> y L<https://metacpan.org>, y preguntando en C<module-authors@perl.org> (L<http://lists.perl.org/list/module-authors.html>).
 
 Si un ya existente módulo B<casi> hace lo que quiere, considere escribir un parche, escribir una subclase o, de otra manera, extienda el módulo actual en lugar de reescribirlo.
 
@@ -302,7 +302,7 @@ Esto se aplica igualmente a los nombres de los métodos, los nombres de los par�
 
 =item Paso de parámetros
 
-Use parámetros con nombre. Es más fácil utilizar un hash de esta manera:
+Use parámetros con nombre.  Es más fácil utilizar un hash de esta manera:
 
     $obj->hacer_algo(
 	    nombre => "wibble",
@@ -449,7 +449,7 @@ Mantenga la documentación cerca del código que documenta (documentación "en l
 
 El módulo también debe incluir un archivo README que describa el módulo y dé consejos para obtener más información (página web, correo electrónico del autor).  
 
-Un archivo INSTALL debe ser incluido, y debe contener las más sencillas instrucciones de instalación. Cuando se utiliza ExtUtils::MakeMaker serán algo así:
+Un archivo INSTALL debe ser incluido, y debe contener las más sencillas instrucciones de instalación.  Cuando se utiliza ExtUtils::MakeMaker serán algo así:
 
 =over 4
 
@@ -491,19 +491,23 @@ El esquema de numeración de versiones más común en CPAN es el siguiente:
 
     1.00, 1.10, 1.11, 1.20, 1.30, 1.31, 1.32
 
-Un número correcto de versión en CPAN es un número de punto flotante con al menos dos dígitos después del decimal. Se puede comprobar si se ajusta a CPAN utilizando
+Un número correcto de versión en CPAN es un número de punto flotante con al menos dos dígitos después del decimal.  Se puede comprobar si se ajusta a CPAN utilizando
 
     perl -MExtUtils::MakeMaker -le 'print MM->parse_version(shift)' 'Foo.pm'
 
-Si desea liberar una versión 'beta' o 'alfa' de un módulo, pero no quiere que CPAN.pm lo liste, use un '_' después del número de versión normal seguido por al menos dos dígitos, por ejemplo. 1.20_01. Si hace esto, se recomienda usar el siguiente modismo:
+Si desea liberar una versión 'beta' o 'alfa' de un módulo, pero no quiere que CPAN.pm lo liste, use un '_' después del número de versión normal seguido por al menos dos dígitos, por ejemplo. 1.20_01.  Si hace esto, se recomienda usar el siguiente modismo:
 
-  $VERSION = "1.12_01";
-  $XS_VERSION = $VERSION; # solo necesario si tiene código XS
-  $VERSION = eval $VERSION;
+  our $VERSION = "1.12_01"; # así la distribución CPAN tendrá
+                            # el nombre de archivo correcto
+  our $XS_VERSION = $VERSION; # solo necesario si tiene código XS
+  $VERSION = eval $VERSION; # así, "use Module 0.002" no saltará
+                            # bajo guión
 
-Con este truco MakeMaker sólo leerá la primera línea y, por tanto, leerá el guión bajo, mientras que el intérprete de perl evaluará la $VERSION y convertirá la cadena en un número. Operaciones ulteriores que traten con $VERSION como un número, podrán hacerlo sin provocar una advertencia sobre si $VERSION no es un número.
+Con este truco MakeMaker sólo leerá la primera línea y, por tanto, leerá el guión bajo, mientras que el intérprete de perl evaluará la $VERSION y convertirá la cadena en un número.  Operaciones ulteriores que traten con $VERSION como un número, podrán hacerlo sin provocar una advertencia sobre si $VERSION no es un número.
 
 Nunca lance nada (ni siquiera un parche de documentación de una sola palabra) sin incrementar el número.  Incluso un parche de la documentación de una sola palabra debe dar lugar a un cambio en la versión de nivel más bajo.
+
+Una vez elegido, es importante aferrarse a su esquema de versionado, sin reducir el número de dígitos.  Esto es porque empaquetadores "de terceros", como las distintas versiones del sistema FreeBSD, interpretan los números de versión de formas diferentes.  Si cambia el número de dígitos en su esquema de versionado, puede confundir a estos sistemas, así que ellos obtendrán las versiones de su módulo fuera de orden, que es algo, obviamente, malo.
 
 =head2 Pre-requisitos
 
@@ -533,14 +537,14 @@ Módulos no disponibles en CPAN
 
 Especifique los requisitos de versión para otros módulos Perl en los pre-requisitos de su Makefile.PL o Build.PL.
 
-Asegúrese de especificar los requisitos de la versión de Perl, tanto en Makefile.PL o Build.PL y con C<require 5.6.1> o similar. Vea la sección C<use VERSION> de L<perlfunc/require> para más detalles.
+Asegúrese de especificar los requisitos de la versión de Perl, tanto en Makefile.PL o Build.PL y con C<require 5.6.1> o similar.  Vea la sección C<use VERSION> de L<perlfunc/require> para más detalles.
 
 =head2 Pruebas
 
 Todos los módulos deben ser probados antes de su distribución (con "make disttest"), y las pruebas también deben estar disponibles para la gente que instala los módulos (con "make test").  
 Para Module::Build debe utilizar el equivalente de C<make test>: C<perl Build test>.
 
-La importancia de estas pruebas es proporcional a la supuesta estabilidad de un módulo. Un módulo que pretende ser estable o que se espera lograr un uso amplio debe cumplir con un régimen estricto de pruebas tanto como sea posible.
+La importancia de estas pruebas es proporcional a la supuesta estabilidad de un módulo.  Un módulo que pretende ser estable o que se espera lograr un uso amplio debe cumplir con un régimen estricto de pruebas tanto como sea posible.
 
 Módulos útiles que le ayudarán a escribir las pruebas (con un impacto mínimo en el proceso de desarrollo o de su tiempo) son Test::Simple, Carp::Assert y Test::Inline.
 Para obtener más bancos de pruebas sofisticadas use Test::More y Test::MockObject.
@@ -549,7 +553,8 @@ Para obtener más bancos de pruebas sofisticadas use Test::More y Test::MockObje
 
 Los módulos deben estar empaquetados con una de las herramientas de empaquetado estándar.
 Actualmente tiene la posibilidad de elegir entre ExtUtils::MakeMaker y la más independiente de la plataforma, Module::Build, permitiendo módulos que se instalen de una forma coherente.
-Cuando se utiliza ExtUtils::MakeMaker, puede usar "make dist" para crear el paquete. Existen herramientas para ayudarle a construir su módulo en un estilo MakeMaker. Estos incluyen ExtUtils::ModuleMaker y h2xs.  Vea también L<perlnewmod>.
+Cuando se utiliza ExtUtils::MakeMaker, puede usar "make dist" para crear el paquete.  Existen herramientas para ayudarle a construir su módulo en un estilo amigable, como MakeMaker.  Estos incluyen ExtUtils::ModuleMaker y h2xs.
+Vea también L<perlnewmod>.
 
 =head2 Licencias
 

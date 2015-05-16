@@ -95,6 +95,7 @@ C</x> indica al analizador de expresiones regulares que ignore el espacio en bla
 También, el carácter C<#> se trata como un metacarácter que introduce un comentario, que sigue hasta el delimitador de cierre del patrón, o hasta el final de la línea actual si el patrón sigue en la siguiente línea.  Por tanto, es como si fuera un comentario normal de Perl.  (Puede incluir el delimitador de cierre dentro del comentario sólo si lo procede con una barra diagonal inversa, así que ¡tenga cuidado!)
 
 El uso de C</x> significa que si desea usar espacio en blanco real o caracteres C<#> en el patrón (excepto en una clase de caracteres entre corchetes, donde no le afecta C</x>), tendrá que escaparlos (con barras diagonales inversas o C<\Q...\E>), o codificarlos en octal, hexadecimal o secuencias de escape C<\N{}>.
+No tiene efecto intentar continuar un comentario en la siguiente línea escapando el C<\n> con una barra diagonal inversa o <\Q>.
 
 Puede usar L</(?#texto)> para crear un comentario que termina antes del final de la línea actual, pero también C<texto> no puede contener el delimitador de cierre a menos que esté escapado con una barra diagonal inversa.
 
@@ -769,7 +770,7 @@ X<(?<=)> X<look-behind, positive> X<lookbehind, positive> X<inspección hacia at
 Una aserción de inspección hacia atrás positiva de ancho cero.  Por ejemplo, C</(?<=\t)\w+/> detecta una palabra que sigue a una tabulación, sin incluir la tabulación en C<$&>.
 Solo funciona para inspecciones hacia atrás de ancho fijo.
 
-Esta construcción tiene una forma especial, llamada C<\K>, que hace que el motor de expresiones regulares "omita" todo lo que haya antes de C<\K> y no lo incluya en C<$&>. Esto ofrece la posibilidad efectiva de realizar inspecciones hacia atrás de longitud variable. El uso de C<\K> dentro de otra aserción de inspección está permitido, pero su comportamiento aún no está bien definido.
+Esta construcción tiene una forma especial, llamada C<\K> (disponible desde Perl v5.10.0), que hace que el motor de expresiones regulares "omita" todo lo que haya antes de C<\K> y no lo incluya en C<$&>. Esto ofrece la posibilidad efectiva de realizar inspecciones hacia atrás de longitud variable. El uso de C<\K> dentro de otra aserción de inspección está permitido, pero su comportamiento aún no está bien definido.
 
 Por varias razones, C<\K> puede ser significativamente más eficiente que su construcción equivalente C<< (?<=...) >>, y es especialmente útil en situaciones donde quiera eliminar eficientemente algo que sigue a algo, en una cadena. Por ejemplo
 
