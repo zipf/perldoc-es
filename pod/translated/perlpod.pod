@@ -203,7 +203,9 @@ Algunos I<nombres de formato> requerirán un carácter de dos puntos por delante
 =item C<=encoding I<nombre de codificación>>
 X<=encoding> X<encoding> X<codificación>
 
-Este comando se utiliza para declarar la codificación de un documento.  La mayoría de usuarios no necesitarán esto; pero si su codificación no es US-ASCII o Latin-1, entonces ponga un comando C<=encoding I<nombre de codificación>> lo más cerca de la parte superior del documento, para que los formateadores sepan cómo decodificar el documento.  Para el I<nombre de codificación>, use un nombre reconocido por el módulo L<Encode::Supported>.  Ejemplos:
+Este comando se utiliza para declarar la codificación de un documento.  La mayoría de usuarios no necesitarán esto; pero si su codificación no es US-ASCII o Latin-1, entonces ponga un comando C<=encoding I<nombre de codificación>> lo más cerca de la parte superior del documento, para que los formateadores sepan cómo decodificar el documento.  Para el I<nombre de codificación>, use un nombre reconocido por el módulo L<Encode::Supported>.  Algunos formateadores pod pueden intentar adivinar entre las codificaciones Latin-1 o CP-1252 contra UTF-8, pero pueden equivocarse.  Es mejor ser explícito si usa cualquier cosa que no sea un ASCII estricto.  Ejemplos:
+
+  =encoding latin1
 
   =encoding utf8
 
@@ -377,7 +379,7 @@ C<EE<lt>númeroE<gt>>
 
 El carácter ASCII/Latin-1/Unicode con ese número.  Si lo precede un "0x" significa que I<número> está en hexadecimal, como en C<EE<lt>0x201EE<gt>>.  Si lo precede un "0x" significa que I<número> está en hexadecimal, como en C<EE<lt>0x201EE<gt>>.  Cualquier otro I<número> es interpretado que está en decimal, como en C<EE<lt>181E<gt>>.
 
-Tenga en cuenta que los formateadores Pod más antiguos quizás no reconozcan las secuencias de escapado numérico octal o hexadecimal, y que muchos formateadores no pueden mostrar caracteres por encima del 255 de forma correcta.  (Algunos formateadores pueden incluso tener que usar soluciones de compromiso para mostrar caracteres Latin-1, como en el caso de mostrar C<EE<lt>eacuteE<gt>> con una sencilla "e").
+Tenga en cuenta que los formateadores Pod más antiguos quizás no reconozcan las secuencias de escapado numérico octal o hexadecimal, y que muchos formateadores no pueden mostrar caracteres por encima del 255 de forma correcta.  (Algunos formateadores pueden incluso tener que usar soluciones de compromiso para mostrar caracteres Latin-1/CP-1252, como en el caso de mostrar C<EE<lt>eacuteE<gt>> con una sencilla "e").
 
 =back
 

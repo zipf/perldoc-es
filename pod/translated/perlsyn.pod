@@ -324,7 +324,7 @@ X<readline> X<< <> >>
 =head2 Bucles foreach
 X<for> X<foreach>
 
-El bucle C<foreach> itera sobre los valores de una lista normal y pone la variable VAR a cada uno de los elementos de la lista.  Si la variable es precedida por la palabra clave C<my>, entonces su ámbito es léxicamente local y por eso es visible sólo dentro del bucle.  Dicho de otra forma, la variable es implícitamente local al bucle y recupera su valor anterior al salir del bucle.  Si la variable fue previamente declarada con C<my>, usará esta variable en vez de la global, pero sigue siendo local en el bucle.  Esta implícita localización ocurre I<solamente> en un bucle C<foreach>.
+El bucle C<foreach> itera sobre los valores de una lista normal y pone la variable escalar VAR a cada uno de los elementos de la lista.  Si la variable es precedida por la palabra clave C<my>, entonces su ámbito es léxicamente local y por eso es visible sólo dentro del bucle.  Dicho de otra forma, la variable es implícitamente local al bucle y recupera su valor anterior al salir del bucle.  Si la variable fue previamente declarada con C<my>, usará esta variable en vez de la global, pero sigue siendo local en el bucle.  Esta implícita localización ocurre I<solamente> en un bucle C<foreach>.
 X<my> X<local>
 
 En realidad, la palabra clave C<foreach> es un sinónimo de la palabra clave C<for>, por lo que puede usar cualquiera de las dos.  Si se omite VAR, se le asigna cada valor a C<$_>.
@@ -337,6 +337,9 @@ Si cualquier parte de la LISTA es un array, C<foreach> quedará confundido si a�
 X<splice>
 
 C<foreach> probablemente no hará lo esperado si VAR está atada a otra variable especial.   Tampoco haga esto.
+
+A partir de Perl 5.22, hay un variante experimental de este bucle que acepta a una variable precedida por una barra diagonal inversa para VAR, en cuyo caso los elementos en la LISTA deben ser referencias.  La variable escapada con la barra diagonal inversa se convertirá en un alias de cada elemento referenciado en la LISTA, que deberán ser del tipo correcto.
+La variable no necesita ser un escalar en este caso, y la barra diagonal inversa puede preceder a C<my>.  Para usar esta forma, debe activar la característica C<refaliasing> a través de C<use feature>.  (Vea L<feature>.  Vea también L<perlref/Asignación a referencias>).
 
 Ejemplos:
 
@@ -355,6 +358,12 @@ Ejemplos:
 
     foreach $item (split(/:[\\\n:]*/, $ENV{TERMCAP})) {
         print "Item: $item\n";
+    }
+
+    use feature "refaliasing";
+    no warnings "experimental::refaliasing";
+    foreach \my %hash (@array_de_referencias_a_hash) {
+        # hacer algo con cada %hash
     }
 
 Aquí hay un ejemplo de cómo un programador de C codificaría un determinado algoritmo en Perl:
@@ -683,11 +692,11 @@ Una expresión regular en la forma de C</REGEX/>, C<$foo =~ /REGEX/> o C<$foo =~
 
 Una coincidencia inteligente que utilice un operador explícito C<~~>, como por ejemplo C<EXPR ~~ EXPR>.
 
+B<NOTA:> A menudo se tiene que usar C<$c ~~ $_> porque la prueba por defecto es C<$_ ~~ $c>, que es frecuentemente lo opuesto a lo que se desea.
+
 =item Z<>4.
 
 Un operador de comparación booleano como C<$_ E<lt> 10> o C<$x eq "abc">.  Los operadores relacionales que se aplican aquí son los seis comparadores numéricos (C<< < >>, C<< > >>, C<< <= >>, C<< >= >>, C<< == >> y C<< != >>) y los seis operadores de cadena (C<lt>, C<gt>, C<le>, C<ge>, C<eq> y C<ne>).
-
-B<NOTA:> A menudo se tiene que usar C<$c ~~ $_> porque la prueba por defecto es C<$_ ~~ $c>, que es frecuentemente lo opuesto a lo que desea.
 
 =item Z<>5.
 

@@ -109,18 +109,27 @@ Entretanto, los identificadores especiales no siguen las reglas anteriores; la m
 
 =over
 
-=item Un sigilo, seguido únicamente por dígitos, coincidiendo con \p{POSIX_Digit}, como C<$0>, C<$1>, o C<$10000>.
+=item *
 
-=item Un sigilo, seguido tanto por un circunflejo y una única letra mayúscula POSIX, como C<$^V> o C<$^W>, o un sigilo seguido por un carácter de control literal coincidiendo con la propiedad C<\p{POSIX_Cntrl}>.
-Debido a una rareza histórica, si no se está bajo C<use utf8>, los 128 controles extras en el rango C<[0x80-0xff]> también se pueden utilizar en variables de un solo carácter.  Es obsoleto el uso de un carácter de control literal.  El soporte de esto se eliminará en una futura versión de perl.
+Un sigilo, seguido únicamente por dígitos, coincidiendo con \p{POSIX_Digit}, como C<$0>, C<$1>, o C<$10000>.
 
-=item De forma similar a lo anterior, un sigilo, seguido por un texto simple, entre llaves, donde el primer carácter es tanto un circunflejo seguido por letra mayúscula, o un carácter de control literal, como C<${^GLOBAL_PHASE}> o C<${\7LOBAL_PHASE}>.  Es obsoleto el uso de un carácter de control literal.  El soporte de esto se eliminará en una futura versión de perl.
+=item *
 
-=item Un sigilo seguido de un único carácter coincidente con la propiedad C<\p{POSIX_Punct}>, como C<$!> o C<%+>.
+Un sigilo, seguido tanto por un circunflejo y una única letra mayúscula POSIX, como C<$^V> o C<$^W>, o un sigilo seguido por un carácter de control literal que no sea un espacio en blanco ni un C<NUL>, coincidiendo con la propiedad C<\p{POSIX_Cntrl}>.
+Debido a una rareza histórica, si no se está bajo C<use utf8>, los 128 caracteres en el rango C<[0x80-0xff]> se consideran que son controles, y puede también usarse en variables de un solo carácter.  Sin embargo, el uso de caracteres no gráficos es obsoleto a partir de v5.22, y el soporte para ellos se eliminará en una futura versión de perl.  Los caracteres espacio ASCII y C<NUL> ya no están permitidos, así que eso significa que un nombre de variable de un solo carácter con ese nombre siendo un control que no sea C0 C<[0x01-0x1F]>, o C<DEL> generarán una advertencia de obsolescencia.  Realmente, bajo C<"use utf8">, los caracteres no-ASCII debe coincidir con C<Perl_XIDS>.  A parir de v5.22, cuando no se esté bajo C<"use utf8"> los controles C1 C<[0x80-0x9F]>, NO BREAK SPACE, y SOFT HYPHEN (C<SHY>)) genera una advertencia de obsolescencia.
+
+=item *
+
+Similar a lo anterior, un sigilo, seguido por un texto simple en llaves, donde el primer carácter es tanto un circunflejo seguido de una letra mayúscula, como C<${^GLOBAL_PHASE}> o un no-C<NUL>, un control literal no-espacio como C<${\7LOBAL_PHASE}>.  Igual que antes, cuando no se esté bajo C<"use utf8">, los caracteres en C<[0x80-0xFF]> se consideran que son caracteres de control, pero a partir de v5.22, el uso de cualquier carácter no-gráfico es obsoleto, y a partir de v5.20 el uso de cualquier carácter de control literal en el rango ASCII es obsoleto.
+El soporte para estos se eliminará en una futura versión de perl.
+
+=item *
+
+Un sigilo seguido por un único carácter coincidente con la propiedad C<\p{POSIX_Punct}>, como C<$!> o C<%+>, excepto el carácter C<"{">, no funciona.
 
 =back
 
-Note que a partir de Perl 5.20, es obsoleto usar caracteres de control literales en nombres de variables.
+Note que a partir de Perl 5.20, los caracteres de control literales en nombres de variables son obsoletos; y a partir de Perl 5.22, cualquier otro carácter no gráfico también es obsoleto.
 
 =head2 Contexto
 X<context> X<scalar context> X<list context> X<contexto> X<contexto de escalar> X<contexto de lista>
@@ -209,15 +218,16 @@ X<scalar, literal> X<scalar, constant> X<escalar, literal> X<escalar, constante>
 
 Los literales numéricos se especifican en cualquiera de los siguientes formatos de punto flotante o entero:
 
-    12345
-    12345.67
-    .23E-10             # un número muy pequeño
-    3.14_15_92          # un número muy importante
-    4_294_967_296       # guión bajo para mejor legibilidad
-    0xff                # hex
-    0xdead_beef         # más hex   
-    0377                # octal (solo números, comienza con 0)
-    0b011011            # binario
+ 12345
+ 12345.67
+ .23E-10             # un número muy pequeño
+ 3.14_15_92          # un número muy importante
+ 4_294_967_296       # guión bajo para mejor legibilidad
+ 0xff                # hex
+ 0xdead_beef         # más hex
+ 0377                # octal (solo números, comienza con 0)
+ 0b011011            # binario
+ 0x1.999ap-4         # punto flotante hexadecimal (la 'p' es necesaria)
 
 Está permitido el uso de guiones bajos (caracteres de subrayado) entre dígitos en literales numéricos para mejorar la legibilidad (pero no se permite usar varios guiones bajos seguidos: C<23__500> no es válido; C<23_500>, sí).
 Por ejemplo, puede agrupar los dígitos binarios en grupos de tres (como para un argumento de modo estilo Unix, p. ej., 0b110_100_100) o de cuatro (para representar nibbles, como en 0b1010_0110), o bien en grupos de otros tamaños.
@@ -227,6 +237,9 @@ Los literales de cadena se suelen delimitar con comillas simples o dobles.  Esta
 X<string, literal> X<cadena, literal>
 
 Las representaciones hexadecimales, octales o binarias en cadenas literales (por ejemplo, '0xff') no se convierten automáticamente en su representación en enteros.  Las funciones hex() y oct() hacen estas conversiones.  Vea "hex" y "oct" en L<perlfunc> para obtener más información.
+
+El punto flotante hexadecimal puede empezar justo como un literal hexadecimal, y puede seguirse por una parte fraccionaria hexadecimal opcional, pero debe seguirse por una C<p>, un signo opcional, y una potencia de dos.
+El formato es útil para presentar de forma precisa valores de punto flotante, evitando conversiones a o desde un punto flotante decimal, y por lo tanto evitando posibles pérdidas de precisión.  Note que mientras la mayor parte de las plataformas usan punto flotante de 64 bit IEEE 754, no todas lo hacen.  Otra potencial fuente de diferencias de bajo nivel son los modos de redondeo de punto flotante, que pueden diferir entre CPU, sistemas operativos, y compiladores, que Perl no controla.
 
 También puede incrustar directamente caracteres de nueva línea en las cadenas; es decir, las cadenas pueden terminar en una línea distinta.  Esto está bien, pero si se le olvida cerrar el entrecomillado, no se notificará el error hasta que Perl encuentre otra línea que contenga el carácter de comilla, que puede estar mucho más abajo en el programa.  La sustitución de variables dentro de cadenas se limita a variables escalares, arrays y porciones de array o hash  (es decir, los nombres que empiezan por $ o @, seguidos de una expresión opcional de subíndice entre corchetes).  El segmento de código siguiente imprime en pantalla "El precio es $100".
 X<interpolation> X<interpolación>
@@ -250,6 +263,19 @@ X<interpolation> X<interpolación>
 Sin las llaves, Perl buscaría las variables $usuarionés, C<$usuario::0> y C<$usuario's>.  Las dos últimas serían las variables $0 y $s del paquete C<usuario>, que probablemente no exista.
 
 De hecho, cuando se escribe un único identificador entre llaves, se le fuerza a ser una cadena, como cualquier identificador en un subíndice de hash.  En ninguno de estos casos hay que usar comillas.  En un ejemplo anterior, C<$jornadas{'Feb'}> puede escribirse como C<$jornadas{Feb}> y las comillas se agregarán automáticamente.  Pero cualquier otra cosa más complicada en el subíndice se interpretará como una expresión.  Esto significa, por ejemplo, que C<$version{2.0}++> es equivalente a C<$version{2}++>, no a C<$version{'2.0'}++>.
+
+=head3 Punto flotante especial: infinito (Inf) y no-es-un-número (I<not-a-number>) (NaN)
+
+Los valores de punto flotante incluyen a los valores especiales C<Inf> y C<NaN>, para infinito y no-es-un-número.  Infinito también puede ser negativo.
+
+Infinito es el resultado de ciertas operaciones matemáticas que desbordan el rango de punto flotante, como 9**9**9.  El no-es-un-número es el resultado cuando el resultado es indefinido o no representable.  Aunque debe notar que no puede obtener un C<NaN> de algunas operaciones "indefinidas" o "fuera-de-rango", comunes, como división por cero, o la raíz cuadrada de un número negativo, ya que Perl genera un error fatal para estas.
+
+Infinito y no-es-un-número tienen sus propias reglas aritméticas especiales.
+La regla general es que son "contagiosas": C<Inf> más uno es C<Inf>, y C<NaN> más uno es C<NaN>.  Donde las cosas se vuelven interesantes es cuando combinamos infinitos y no-es-un-número: C<Inf> menos C<Inf>; e C<Inf> dividido por C<INf> es C<NaN> (mientras C<Inf> más C<Inf> es C<Inf>; e C<Inf> multiplicado por C<Inf> es C<Inf>).  C<NaN> es también curioso, en el sentido de que no es igual a ningún número, I<incluido> él mismo: C<NaN> != C<NaN>.
+
+Perl no entiende C<Inf> y C<NaN> como literales numéricos, pero puede tratarlos como cadenas, y Perl los convertirá si es necesario: "Inf" + 1.  (Puede, sin embargo, importarlos desde la extensión POSIX; C<use POSIX qw(Inf NaN);> y usarlos como literales).
+
+Note que en la entrada (cadena a número) Perl acepta C<Inf> y C<NaN> de varias formas.   El tamaño de caja se ignora, y las formas específicas de Win32 como C<1.#INF> son aceptadas, pero a la salida los valores se normalizan a C<Inf> y C<NaN>.
 
 =head3 Cadenas de versión
 X<version string> X<vstring> X<v-string> X<cadena de versión>
@@ -378,6 +404,9 @@ Una excepción a esto es que se puede asignar a C<undef> en una lista.
 Esto es útil para descartar algunos de los valores devueltos por una función:
 
     ($dev, $ino, undef, undef, $uid, $gid) = stat($archivo);
+
+A partir de Perl 5.22, puede usar también C<(undef)x2> en lugar de C<undef, undef>.
+(Puede también hacer C<($x) x 2>, que es menos útil, porque asigna a la misma variable dos veces, sobreescribiendo el primer valor asignado).
 
 La asignación de una lista en contexto de escalar devuelve el número de elementos producidos por la expresión en el lado derecho de la asignación:
 
@@ -532,24 +561,18 @@ Como al modificar una porción se modifica el array o hash original, una constru
         s/(\w+)/\u\L$1/g;   # escribir letras iniciales en mayúsculas
     }
 
-Una porción de una lista vacía es también una lista vacía.  Por lo tanto:
+Como excepción especial, cuando se parte una lista (pero no un array o un hash), si la lista se evalúa a vacía, entonces tomar una parte de una lista vacía siempre devolverá una lista vacía.  Por lo tanto:
 
-    @a = ()[1,0];           # @a no tiene elementos
-    @b = (@a)[0,1];         # @b no tiene elementos
-
-Sin embargo:
-
-    @a = (1)[1,0];          # @a tiene dos elementos
-    @b = (1,undef)[1,0,2];  # @b tiene tres elementos
-
-De forma más general, una porción produce una lista vacía sólo si se indexa más allá del final de la lista.
-
-    @a = (1)[  1,2];        # @a no tiene elementos
-    @b = (1)[0,1,2];        # @b tiene tres elementos
+    @a = ()[0,1];          # @a no tiene elementos
+    @b = (@a)[0,1];        # @b no tiene elementos
+    @c = (sub{}->())[0,1]; # @c no tiene elementos
+    @d = ('a','b')[0,1];   # @d tiene dos elementos
+    @e = (@d)[0,1,8,9];    # @e tiene cuatro elementos
+    @f = (@d)[8,9];        # @f tiene dos elementos
 
 Esto facilita la escritura de bucles que terminan cuando se devuelve una lista vacía:
 
-    while ( ($inicio, $usuario) = (getpwent)[7,0]) {
+    while ( ($inicio, $usuario) = (getpwent)[7,0] ) {
         printf "%-8s %s\n", $usuario, $inicio;
     }
 

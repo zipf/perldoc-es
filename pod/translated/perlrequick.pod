@@ -194,6 +194,10 @@ El S<B<ancla de palabra> > C<\b> coincide con una frontera entre un carácter de
 
 En el último ejemplo, el final de la cadena se considera un límite de palabra.
 
+Para el procesado de lenguaje natural (para que, por ejemplo, los apóstrofes se incluyan en las palabras), use en su lugar C<\b{wb}>
+
+    "don't" =~ / .+? \b{wb} /x;  # coincide con toda la cadena
+
 =head2 Coincidiendo con esto o aquello
 
 Podemos hacer coincidir diferentes cadenas de caracteres con el metacarácter de B<alternancia> C<'|'>.  Para que coincida con C<perro> o C<gato>, formamos la I<regex> C<perro|gato>.  Al igual que antes, Perl tratará de hacer coincidir la I<regex> en el primer punto de coincidencia en la cadena.  En cada posición de carácter, Perl intentará hacer coincidir en primer lugar con la primera alternativa, C<perro>.  Si C<perro> no coincide, Perl entonces intentará la siguiente alternativa, C<gato>.
@@ -397,6 +401,12 @@ Si se utiliza la I<regex> vacía C<//>, la cadena se divide en caracteres indivi
                                 # $partes[4] = 'bin'
 
 Debido a que el primer carácter de $x coincidía con la I<regex>, C<split> antepuso al principio de la lista un elemento vacío.
+
+=head2 C<use re 'strict'>
+
+Nuevo en v5.22, aplica reglas más estrictas de lo normal cuando se compilan patrones de expresiones regulares.  Puede encontrar cosas que, aún siendo legales, puede que no sean lo que se pretende.
+
+Vea L<'strict' en re|modo re/'strict'>.
 
 =head1 ERRORES
 

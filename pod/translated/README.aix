@@ -105,6 +105,14 @@ Si necesita más memoria (segmentos de datos más grandes) para sus programas Pe
 Con la configuración por defecto el tamaño está limitado a 128 MB.
 El -1 elimina este límite. Si el "make test" falla, por favor cambie el archivo /etc/security/limits como se ha indicado antes.
 
+=head2 Dobles largos (punto flotante)
+
+IBM llama a su implementación de dobles largos, 128 bit, pero no son los 128 bit del IEEE ("cuádruple precisión") que daría 116 bit de mantisa (ni está implementado en hardware), en cambio es una implementación de software especial llamada "doble-doble", que ofrece 106 bits de mantisa.
+
+Parece que existen varios problemas con esta implementación de dobles largos.
+Si Configure detecta estos problemas, desactivará el soporte para dobles largos.
+Esto puede forzarse con un explícito C<-Duselongdouble> (o C<-Dusemorebits>, que activan tanto los dobles largos y los enteros de 64 bits).  Si decide activar los dobles largos, para la mayor parte de las cosas rotas Perl implementa unos ajustes, pero el manejo de los valores especiales infinito y NaN quedan peor: por ejemplo, para infinito más cero, el resultado es NaN.
+
 =head2 Opciones recomendadas para AIX 5.1/5.2/5.3/6.1 y 7.1 (multihebra/32-bit)
 
 Con las siguientes opciones obtendrá una versión de Perl multihebra que pasará todas las pruebas en el modo 32 bits multihebra, que es la configuración por defecto para el Perl compilado que AIX trae.

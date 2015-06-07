@@ -201,7 +201,7 @@ A partir de 5.8.1, el B<-C> puede ser seguido tanto por un número como una list
               en UTF-8
     L    64   normalmente, "IOEioA" es incondicional, pero L les hace
               condicionales a las variables de entorno de la configuración regional
-              (los LC_ALL, LC_TYPE y LANG, en orden de
+              (los LC_ALL, LC_CTYPE y LANG, en orden de
               precedencia decreciente) -- si las variables indican
               UTF-8, entonces queda activo el seleccionado "IOEioA"
     a   256   Pone ${^UTF8CACHE} a -1, para ejecutar en modo depuración
@@ -290,6 +290,8 @@ Como alternativa, especifique un número en lugar de una lista de letras (ej., B
  16777216  M  traza la resolución de la coincidencia inteligente
  33554432  B  vuelca las definiciones de suBrutinas, incluyendo los Bloques especiales
               como BEGIN
+ 67108864  L  traza de información relacionada con Locale; lo que se consigue es muy
+              sujeto a cambio
 
 Todas estas banderas requieren B<-DDEBUGGING> cuando compile el ejecutable Perl (pero vea C<:opd> en L<Devel::Peek> o L<re/modo 'debug'> que puede cambiar esto).
 Vea el archivo F<INSTALL> en la distribución del código fuente para saber cómo hacerlo.  Esta bandera es automáticamente puesta si incluye la opción B<-g> cuando C<Configure> pregunte sobre banderas para el optimizador/depurador.
