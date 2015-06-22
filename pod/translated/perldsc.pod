@@ -55,10 +55,10 @@ No puede utilizar una referencia a un array o a un hash de la misma forma que lo
 Usted puede (y debe) leer más acerca de las referencias en L<perlref>.
 En pocas palabras, las referencias son como punteros que saben a lo que apunta.  (Los objetos son también un tipo de referencia, pero no vamos a necesitarles de inmediato -si acaso-).  Esto significa que cuando usted tiene algo que se parece a un acceso a un array y/o hash de dos o más dimensiones, lo que realmente está sucediendo es que el tipo básico no es más que una entidad de una dimensión que contiene referencias al siguiente nivel.  Es sólo que puede I<usarlo> como si se tratara de una entidad bidimensional.  Esto es, en realidad, casi de la misma forma en que funcionan casi todas las matrices multidimensionales en C.
 
-    $array[7][12]                       # array of arrays
-    $array[7]{string}                   # array of hashes
-    $hash{string}[7]                    # hash of arrays
-    $hash{string}{'another string'}     # hash of hashes
+    $array[7][12]                       # array de arrays
+    $array[7]{cadena}                   # array de hashes
+    $hash{cadena}[7]                    # hash de arrays
+    $hash{cadena}{'otra cadena'}        # hash de hashes
 
 Ahora, debido a que el nivel superior sólo contiene referencias, si trata de imprimir su array con una simple función print(), obtendrá algo que no se ve muy bien, algo como esto:
 
@@ -78,7 +78,7 @@ Los dos errores más comunes en la construcción de algo así como un array de a
 
     for my $i (1..10) {
         my @array = somefunc($i);
-        $AoA[$i] = @array;      # WRONG!
+        $AoA[$i] = @array;      # ¡ERROR!
     }
 
 Eso no es más que la sencilla asignación de un array a un escalar, obteniendo su número de elementos.  Si eso es lo que real y verdaderamente desea hacer, entonces haría bien en considerar ser un poco más explícito al respecto, así:
@@ -90,12 +90,12 @@ Eso no es más que la sencilla asignación de un array a un escalar, obteniendo 
 
 Aquí está el caso de tomar una referencia a la misma ubicación de memoria, una y otra vez:
 
-    # Either without strict or having an outer-scope my @array;
-    # declaration.
+    # Sin usar strict o teniendo fuera del ámbito, una my @array;
+    # declaración.
 
     for my $i (1..10) {
         @array = algunafuncion($i);
-        $AoA[$i] = \@array;     # WRONG!
+        $AoA[$i] = \@array;     # ¡ERROR!
     }
 
 Entonces, ¿dónde está el problema?  Se ve bien, ¿no?
@@ -121,8 +121,8 @@ que imprimirá
 El problema es que tanto C<rp> como C<dp> son punteros ¡a la misma posición de memoria!  En C, tiene que recordar que debe hacer un malloc() para reservar un poco de memoria.  En Perl querrá usar, en su lugar, el constructor de array C<[]> o el constructor de hash C<{}>.   Aquí está la forma correcta de proceder con el fragmento de código erróneo anterior:
 X<[]> X<{}>
 
-    # Either without strict or having an outer-scope my @array;
-    # declaration.
+    # Sin usar strict o teniendo fuera del ámbito, una my @array;
+    # declaración.
 
     for my $i (1..10) {
         @array = algunafuncion($i);
@@ -133,8 +133,8 @@ Los corchetes hacen referencia a un nuevo array con una I<copia> de lo que está
 
 Tenga en cuenta que esto produce algo similar, pero es mucho más difícil de leer:
 
-    # Either without strict or having an outer-scope my @array;
-    # declaration.
+    # Sin usar strict o teniendo fuera del ámbito, una my @array;
+    # declaración.
     for my $i (1..10) {
         @array = 0 .. $i;
         @{$AoA[$i]} = @array;
@@ -164,9 +164,9 @@ Esto es así porque my() es más una sentencia en tiempo de ejecución que una d
 
 En resumen:
 
-    $AoA[$i] = [ @array ];     # usually best
-    $AoA[$i] = \@array;        # perilous; just how my() was that array?
-    @{ $AoA[$i] } = @array;    # way too tricky for most programmers
+    $AoA[$i] = [ @array ];     # generalmente, lo mejor
+    $AoA[$i] = \@array;        # peligroso; ¿cómo era el my() de este array?
+    @{ $AoA[$i] } = @array;    # demasiado complicado para la mayoría de los programadores
 
 
 =head1 ADVERTENCIA SOBRE LA PRECEDENCIA
@@ -176,8 +176,8 @@ X<desreferencia, precedencia> X<desreferenciando, precedencia>
 Hablando de cosas como C<@{$AoA[$i]}>, los siguientes ejemplos son, realmente, lo mismo:
 X<< -> >>
 
-    $aref->[2][2]       # clear
-    $$aref[2][2]        # confusing
+    $aref->[2][2]       # claro
+    $$aref[2][2]        # confuso
 
 ¡Eso es porque las reglas de precedencia de Perl, con sus cinco prefijos de desreferencia (que se parecen a alguien jurando: C<$ @ * % &>) tienen más prioridad que los subíndices con llaves o corchetes post-fijos!  Esto, sin duda, será una gran sorpresa para el programador de C o C++, que está bastante acostumbrado a usar C<*a[i]> para referirse al I<i>-ésimo elemento de C<a>.  Es decir, primero toman el subíndice, y sólo entonces, desreferencian el elemento apuntado por ese subíndice.  Eso está bien en C, pero esto no es C.
 
@@ -563,7 +563,7 @@ X<hash of hashes> X<HoH> X<hash de hashes>
 
 
  # imprime todo ordenado por el número de miembros
- foreach $family ( sort { keys %{$HoH{$b}} <=> keys %{$HoH{$a}} }
+ foreach $familia ( sort { keys %{$HoH{$b}} <=> keys %{$HoH{$a}} }
                                                              keys %HoH )
  {
      print "$familia: { ";
@@ -578,13 +578,13 @@ X<hash of hashes> X<HoH> X<hash de hashes>
  for ( qw(lider esposa hijo hija amigo mascota) ) { $rango{$_} = ++$i }
 
  # ahora imprime todo ordenado por el número de miembros
- foreach $family ( sort { keys %{ $HoH{$b} } <=> keys %{ $HoH{$a} } }
+ foreach $familia ( sort { keys %{ $HoH{$b} } <=> keys %{ $HoH{$a} } }
                                                              keys %HoH )
  {
      print "$familia: { ";
      # e imprime estos de acuerdo al orden del rango
-     for $role ( sort { $rank{$a} <=> $rank{$b} }
-                                               keys %{ $HoH{$family} } )
+     for $rol ( sort { $rank{$a} <=> $rank{$b} }
+                                               keys %{ $HoH{$familia} } )
      {
          print "$rol=$HoH{$familia}{$rol} ";
      }

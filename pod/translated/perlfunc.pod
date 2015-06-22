@@ -876,8 +876,8 @@ Puede usar también C<defined(&func)> para comprobar si la subrutina C<&func> ha
 El uso de C<defined> sobre datos agregados (hashes y arrays) está desaconsejado.  Se usó para informar si la memoria para los datos agregados había sido reservada.  Este comportamiento puede desaparecer en futuras versiones de Perl.
 Utilize en su lugar una comprobación de tamaño:
 
-    if (@un_array) { print "tiene elementos array\n" }
-    if (%a_hash)   { print "el hash tiene miembros\n"   }
+    if (@un_array) { print "tiene elementos array\n"  }
+    if (%a_hash)   { print "el hash tiene miembros\n" }
 
 Cuando se usa con un elemento de un hash, le indica si el valor está definido, no si la clave existe en el hash.  Use L</exists> para este propósito.
 
@@ -918,7 +918,7 @@ La construcción C<delete local EXPR> localiza la eliminación al actual bloque 
     %hash = (foo => 11, bar => 22, baz => 33);
     $escalar = delete $hash{foo};             # $escalar es 11
     $escalar = delete @hash{qw(foo bar)};     # $escalar es 22
-    @array  = delete @hash{qw(foo baz)}; # @array es (undef,33)
+    @array   = delete @hash{qw(foo baz)};     # @array es (undef,33)
 
 Lo siguiente borra (ineficientemente) todos los valores de %HASH y @ARRAY:
 
@@ -1127,9 +1127,9 @@ A partir de Perl 5.18 puede usar un simple C<each> en un bucle C<while>, que act
 
 Para no confundir a los posibles usuarios de su código, que ejecuten versiones anteriores de Perl, con errores de sintaxis misteriosos, ponga este tipo de cosas en la parte superior de su archivo para indicar que el código funciona I<sólo> en versiones Perl de cosechas recientes:
 
-    use 5.012;	# así keys/values/each trabajan sobre arrays
-    use 5.014;	# así keys/values/each trabajan sobre escalares (experimental)
-    use 5.018; # para que each actualice $_ en un test de un while
+    use 5.012;  # así keys/values/each trabajan sobre arrays
+    use 5.014;  # así keys/values/each trabajan sobre escalares (experimental)
+    use 5.018;  # para que each actualice $_ en un test de un while
 
 Vea también C<keys>, C<values> y C<sort>.
 
@@ -1312,9 +1312,9 @@ Usar un objeto indirecto con C<exec> o C<system> es también más seguro.  Este 
 
     @args = ( "echo sorpresa" );
 
-    exec @args;               # sujeto al escapado shell
+    exec @args;                 # sujeto al escapado shell
                                 # si @args == 1
-    exec { $args[0] } @args;  # seguro incluso con una lista de un argumento
+    exec { $args[0] } @args;    # seguro incluso con una lista de un argumento
 
 La primera versión, sin el objeto indirecto, ejecuta el programa I<echo>, pasándole C<"sorpresa"> como argumento.  La segunda versión no; intentó ejecutar un programa llamado literalmente I<"echo sorpresa">, no lo encontró, y puso C<$?> a un valor distinto de cero para indicar un error.
 
@@ -1336,7 +1336,7 @@ Dada una expresión que especifica un elemento de un hash, devuelve verdadero si
 
     print "Existe\n"    if exists  $hash{$clave};
     print "Definido\n"  if defined $hash{$clave};
-    print "Verdadero\n"   if $hash{$clave};
+    print "Verdadero\n" if $hash{$clave};
 
 exists también pueden ser llamado sobre elementos de array, pero su comportamiento es mucho menos evidente, y está fuertemente atado a la utilización de L</delete> en arrays.
 
@@ -1344,7 +1344,7 @@ B<AVISO:> Se desaconseja fuertemente llamar a C<exists> en valores de array.  La
 
     print "Existe\n"    if exists  $array[$indice];
     print "Definido\n"  if defined $array[$indice];
-    print "Verdadero\n"   if $array[$index];
+    print "Verdadero\n" if $array[$index];
 
 Un elemento de un hash o de un array puede ser verdadero sólo si está definido, y está definido solo si ya existe, pero lo inverso no es necesariamente cierto.
 
@@ -1423,9 +1423,9 @@ El plegado de caja es el proceso de trasladar cadenas de una forma donde las dif
 
 A grandes rasgos, si ha encontrado alguna vez escribiendo algo como esto
 
-    lc($esto) eq lc($eso)   # ¡Incorrecto!
+    lc($esto) eq lc($eso)    # ¡Incorrecto!
         # o
-    uc($esto) eq uc($eso)   # ¡También incorrecto!
+    uc($esto) eq uc($eso)    # ¡También incorrecto!
         # o
     $esto =~ /^\Q$eso\E\z/i  # ¡Correcto!
 
@@ -2092,9 +2092,9 @@ para obtener las correctas definiciones de la función.  Si F<sys/ioctl.ph> no e
 El valor devuelto de C<ioctl> (y C<fcntl>) es como sigue:
 
     si OS devuelve:    entonces Perl devuelve:
-        -1               valor indefinido
-         0              cadena "0 but true"
-    otra cosa          ese número
+        -1                 valor indefinido
+         0                 cadena "0 but true"
+    otra cosa              ese número
 
 Así, Perl devuelve verdadero en éxito y falso en caso de error, por lo que aún podemos determinar el valor real devuelto por el sistema operativo:
 
@@ -2168,8 +2168,8 @@ A partir de Perl 5.14, C<keys> puede tomar una EXPR escalar, que debe contener l
 
 Para no confundir a los posibles usuarios de su código, que ejecuten versiones anteriores de Perl, con errores de sintaxis misteriosos, ponga este tipo de cosas en la parte superior de su archivo para indicar que el código funciona I<sólo> en versiones Perl de cosechas recientes:
 
-    use 5.012;	# así keys/values/each trabajan sobre arrays
-    use 5.014;	# así keys/values/each trabajan sobre escalares (experimental)
+    use 5.012;  # así keys/values/each trabajan sobre arrays
+    use 5.014;  # así keys/values/each trabajan sobre escalares (experimental)
 
 Vea también C<each>, C<values> y C<sort>.
 
@@ -2781,7 +2781,7 @@ Ejemplos generales:
         }
 
         local $_;
-        while (<$input>) {    # note el uso de la indirección>
+        while (<$input>) {    # note el uso de la indirección
             if (/^#include "(.*)"/) {
                 process($1, $input);
                 next;
@@ -2851,7 +2851,7 @@ Por ejemplo, utilice esto
 
 o bien
 
-    $child_pid = open(AL_HIJO, "|-")	// die "no puedo hacer fork: $!";
+    $child_pid = open(AL_HIJO, "|-")         // die "no puedo hacer fork: $!";
 
 seguido por 
 
@@ -4715,7 +4715,7 @@ Ejemplos:
     # usando un prototipo permite usar cualquier subrutina de comparación
     # como una subrutina para sort (incluyendo subrutinas de otros paquetes)
     package otro;
-    sub al_reves ($$) { $_[1] cmp $_[0]; }  # $a y $b
+    sub al_reves ($$) { $_[1] cmp $_[0]; }   # $a y $b
                                              # no se usan aquí    
     package main;
     @nuevo = sort otro::al_reves @viejo;
@@ -5393,7 +5393,7 @@ Esto puede o no ahorrar tiempo, dependiendo de la naturaleza y el número de pat
 
 Note que desde la versión Perl 5.16 esta función es una no-operación, pero puede cambiar en una futura versión.
 
-(La forma en que C<study> funciona es la siguiente: se crea una lista enlazada de todos los caracteres en la cadena que se deben buscar, así sabremos, por ejemplo, donde están todos los caracteres C<'k'>.  De cada cadena de búsqueda, se selecciona el carácter más raro, en función de algunas tablas de frecuencia estática construidas a partir de algunos programas en C y texto en Inglés.  Sólo estos lugares que contienen este "carácter" más raro son examinados).
+(La forma en que C<study> funciona es la siguiente: se crea una lista enlazada de todos los caracteres en la cadena que se deben buscar, y así sabremos, por ejemplo, donde están todos los caracteres C<'k'>.  De cada cadena de búsqueda, se selecciona el carácter más raro, en función de algunas tablas de frecuencia estática construidas a partir de algunos programas en C y texto en inglés.  Sólo son examinados estos lugares que contienen este "carácter" más raro).
 
 Por ejemplo, aquí hay un bucle que inserta índices de entradas antes de cualquier línea que contenga un cierto patrón:
 
@@ -6139,8 +6139,8 @@ A partir de Perl 5.14, C<values> puede tomar una EXPR escalar, que debe contener
 
 Para no confundir a los posibles usuarios de su código, que ejecuten versiones anteriores de Perl, con errores de sintaxis misteriosos, ponga este tipo de cosas en la parte superior de su archivo para indicar que el código funciona I<sólo> en versiones Perl de cosechas recientes:
 
-    use 5.012;	# así keys/values/each trabajan sobre arrays
-    use 5.014;	# así keys/values/each trabajan sobre escalares (experimental)
+    use 5.012;  # así keys/values/each trabajan sobre arrays
+    use 5.014;  # así keys/values/each trabajan sobre escalares (experimental)
 
 Ver también C<keys>, C<each> y C<sort>.
 
@@ -6178,16 +6178,16 @@ Los comentarios ponen de manifiesto la cadena después de cada etapa.  Tenga en 
     # $foo eq "Perl" eq "\x50\x65\x72\x6C", 32 bits
     print vec($foo, 0, 8);  # imprime 80 == 0x50 == ord('P')
 
-    vec($foo,  2, 16) = 0x5065; # 'PerlPe'
-    vec($foo,  3, 16) = 0x726C; # 'PerlPerl'
-    vec($foo,  8,  8) = 0x50;   # 'PerlPerlP'
-    vec($foo,  9,  8) = 0x65;   # 'PerlPerlPe'
-    vec($foo, 20,  4) = 2;      # 'PerlPerlPe'   . "\x02"
-    vec($foo, 21,  4) = 7;      # 'PerlPerlPer'
+    vec($foo,  2, 16) = 0x5065;    # 'PerlPe'
+    vec($foo,  3, 16) = 0x726C;    # 'PerlPerl'
+    vec($foo,  8,  8) = 0x50;      # 'PerlPerlP'
+    vec($foo,  9,  8) = 0x65;      # 'PerlPerlPe'
+    vec($foo, 20,  4) = 2;         # 'PerlPerlPe'   . "\x02"
+    vec($foo, 21,  4) = 7;         # 'PerlPerlPer'
                                    # 'r' es "\x72"
-    vec($foo, 45,  2) = 3;      # 'PerlPerlPer'  . "\x0c"
-    vec($foo, 93,  1) = 1;      # 'PerlPerlPer'  . "\x2c"
-    vec($foo, 94,  1) = 1;      # 'PerlPerlPerl'
+    vec($foo, 45,  2) = 3;         # 'PerlPerlPer'  . "\x0c"
+    vec($foo, 93,  1) = 1;         # 'PerlPerlPer'  . "\x2c"
+    vec($foo, 94,  1) = 1;         # 'PerlPerlPerl'
                                    # 'l' es "\x6c"
 
 Para transformar un vector de bits en una cadena o una lista de 0 y 1, utilice los siguientes:
