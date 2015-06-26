@@ -1,0 +1,177 @@
+=head1 NOMBRE
+
+perlpodstyle - Guía de estilo para POD
+
+=head1 DESCRIPCIÓN
+
+Este documento contiene directrices generales de escritura de documentación en formato POD para scripts y módulos Perl, basadas en directrices generales para escribir páginas de documentación de manual en UNIX.  Por supuesto, todas estas directrices son opcionales, pero le ayudarán a crear una documentación coherente con otros documentos del sistema.
+
+El nombre del programa que se está documentando, se escribe por convención en negrita (mediante BE<lt>E<gt>) siempre que aparezca, así como todas las opciones del programa.
+Los argumentos deberían escribirse en itálica (IE<lt>E<gt>).  Los nombres de función se suelen escribir en cursiva; si escribe el nombre de una función como nombre(), Pod::Man se encargará de escribirlo en cursiva.  El código literal o los comandos deberían escribirse dentro de CE<lt>E<gt>.  Las referencias a otras páginas de manual tendrían que ser de la forma C<manpage(sección)> o
+C<LE<lt>manpage(sección)E<gt>>>, y Pod::Man los formateará automáticamente.  La segunda forma, con LE<lt>E<gt>, se usa para solicitar que un formateador POD cree un vínculo a la página de manual, si es posible.  Como excepción, normalmente se omite la sección cuando se hace referencia a la documentación de un módulo, ya que no está claro en qué sección de la documentación del módulo estará; use en su lugar C<LE<lt>Módulo::Nombre<gt>> para referencias al módulo.
+
+Las referencias a otros programas o funciones son, normalmente, en forma de referencias a las páginas man para que las herramientas de referencias cruzadas puedan proporcionar al usuario enlaces y vínculos similares.  Sin embargo, es posible obviar todo esto, así que tenga cuidado de no saturar su documentación con demasiadas marcas.  Las referencias a otros programas que no se dan como referencias a páginas de manual tendrían que ir encerradas entre BE<lt>E<gt>.
+
+Los encabezamientos importantes tendrían que tener una directiva C<=head1>, e históricamente se escriben en MAYÚSCULAS; no es obligatorio, pero muy recomendado para que las secciones tengan un formato consistente a lo largo de diferentes paquetes de software.  Los encabezamientos menores se pueden incluir utilizando C<=head2>, normalmente escritos en minúsculas y mayúsculas.
+
+Las secciones estándar de una página de manual son:
+
+=over 4
+
+=item NOMBRE (en inglés, I<NAME>)
+
+Sección obligatoria; tendría que sea una lista separada por comas de programas o funciones documentadas en esta página POD, como por ejemplo:
+
+    foo, bar - programas para hacer algo
+
+Los indexadores de páginas de manual son, a menudo, extremadamente picajosos sobre el formato de esta sección, así que no ponga nada en ella, salvo esa línea.  Cada programa y función documentados en esta página POD se deben listar, separados por comas y espacios.  Para un módulo Perl, indique solo el nombre del módulo.  Uno y solo un único guión debe separar la lista de programas o funciones de su descripción.  No use ningún marcado como CE<lt>E<gt> o BE<lt>E<gt> en ninguna parte de esta línea.  Las funciones no se deben cualificar con C<()> o algo parecido.  La descripción debe, idealmente, caber en una única línea, incluso si un programa man reemplaza el guión con unos pocos tabuladores.
+
+=item SINOPSIS (en inglés, I<SYNOPSIS>)
+
+Un resumen breve de uso de los programas y funciones.  Esta sección es obligatoria para páginas de sección 3.  Para la documentación de un módulo Perl, es normalmente conveniente tener los contenidos de esta sección en un bloque que muestre, literalmente, algunos ejemplos (breves) de formas típicas de usar el módulo.
+
+=item DESCRIPCIÓN (en inglés, I<DESCRIPTION>)
+
+Discusión y descripción extendida del programa o funciones, o el cuerpo de la documentación para las páginas de manual.  Si es particularmente larga, es una buena idea dividirla en subsecciones con directivas C<=head2>, como:
+
+    =head2 Uso normal
+
+    =head2 Características avanzadas
+
+    =head2 Escribir archivos de configuración
+
+o cualquier cosa apropiada para su documentación.
+
+Para un módulo, aquí es donde reside, generalmente, la documentación de los interfaces proporcionados por el módulo, normalmente en la forma de una lista con un C<=item> para cada interfaz.  Dependiendo de cuántos interfaces existan, podría, en su lugar, poner la documentación en secciones separadas I<METHODS> (MÉTODOS), I<FUNCTIONS> (FUNCIONES), I<CLASS METHODS> (MÉTODOS DE CLASE) o I<INSTANCE METHODS> (MÉTODOS DE INSTANCIA), y dejar la sección I<DESCRIPTION> (DESCRIPCIÓN) para el resumen.
+
+=item OPCIONES (en inglés, OPTIONS)
+
+Descripción detallada de cada opción de línea de comando que se puede pasar al programa.  Debería separarse de la descripción para que pueda usarse por parte de interpretadores como L<Pod::Usage>.  Esto se presenta, normalmente, como una lista, con cada opción marcada con un C<=item>.  El texto específico de la opción tendría que estar dentro de un BE<lt>E<gt>.  Cualquier valor que tome la opción tendría que estar dentro de un IE<lt>E<gt>.  Por ejemplo, la sección para la opción B<--sección>=I<extensión> aparecerá como:
+
+    =item B<--sección>=I<extensión>
+
+Opciones sinónimas (tanto las formas cortas como largas) se separan por una coma y un espacio en la misma línea del C<=item> u opcionalmente listados en su propio C<=item> con una referencia al nombre canónico.  Por ejemplo, desde B<--sección> también se puede escribir como B<-s>, lo anterior sería:
+
+    =item B<-s> I<extensión>, B<--sección>=I<extensión>
+
+Se recomienda escribir primero la opción corta porque es más fácil de leer.
+La opción larga puede ser demasiado larga para mantener la atención del ojo, y la opción corta puede, por lo contrario, perderse en mitad del ruido visual.
+
+=item VALOR DE RETORNO (en inglés, I<RETURN VALUE>)
+
+Lo que un programa o función devuelve, si tiene éxito.  Esta sección se puede omitir para programas cuyos códigos de salida no sean precisos, y entonces se supone que devuelven los valores estándar 0, en caso de éxito, y valor distinto de cero en caso de fallo.  Debería estar siembre presente, para el caso de funciones.  Para módulos, sería útil resumir aquí los valores devueltos por el interfaz del módulo, o sería más útil explicar los valores devueltos separadamente en la documentación de cada función o método que el módulo ofrezca.
+
+=item ERRORES (en inglés, I<ERRORS>)
+
+Excepciones, códigos de retorno de errores, estados de salida, y configuraciones de errno.
+Se usa típicamente para la documentación de funciones o módulos; la documentación de programas usa, en cambio, I<DIAGNOSTICS> (DIAGNÓSTICOS).  La regla general es que los errores que salen por C<STDOUT> o C<STDERR> dirigidos hacia el usuario se documentan en I<DIAGNOSTICS> DIAGNÓSTICOS mientras que los errores pasados de forma interna al programa llamante y dirigido hacia otros programadores se documentan en I<ERRORS> (ERRORES).  Cuando se documenta una función que establece errno, se debería indicar aquí una lista completa de los posibles valores de errno.
+
+=item DIAGNÓSTICOS (en inglés, I<DIAGNOSTICS>)
+
+TODOS los mensajes posibles que el programa puede sacar, y lo que significan.  Podría desear seguir el mismo estilo de documentación que la documentación Perl; vea perldiag(1) para más detalles (y mire también el código fuente POD).
+
+Si es aplicable, por favor, incluya detalles de lo que el usuario debería hacer para corregir el error; no es muy útil documentar un error indicando "el búfer de entrada es demasiado pequeño" sin decirle al usuario cómo aumentar el tamaño del búfer de entrada (o, al menos decirle que no es posible hacerlo).
+
+=item EJEMPLOS (en inglés, I<EXAMPLES>)
+
+Da algunos ejemplos de usos del programa o funciones.  No se lo salte; a menudo, los usuarios encuentran que esta es la parte más útil de la documentación.  Los ejemplos se dan, generalmente, como párrafos literales.
+
+No presente solo un ejemplo sin explicar qué es lo que hace.  Añadir un breve párrafo diciendo qué es lo que hará el ejemplo incrementa inmensamente su valor.
+
+=item ENTORNO (en inglés, I<ENVIRONMENT>)
+
+Las variables de entorno que el programa tiene en cuenta, presentadas normalmente como una lista usando C<=over>, C<=item> y C<=back>.  Por ejemplo:
+
+    =over 6
+
+    =item DIRECTORIO INICIAL (en inglés, I<HOME>)
+
+    Utilizado para determinar el directorio inicial del usuario.  F<.foorc> en este
+    directorio se lee los detalles de la configuración, si existe.
+
+    =back
+
+Ya que las variables de entorno se escriben normalmente en mayúsculas, no se necesita generalmente un formateo especial; destacan por sí solas.
+
+=item ARCHIVOS (en inglés, I<FILES>)
+
+Todos los archivos utilizados por el programa o función, presentados normalmente como una lista, y para qué se usan.  Los nombres de archivos tendrían que estar encerrados en un FE<lt>E<gt>.
+Es particularmente importante documentar los archivos que, potencialmente, serán modificados.
+
+=item PROBLEMAS (en inglés, I<CAVEATS>)
+
+Cosas con las que hay que tener cuidado, llamadas algunas veces I<WARNINGS> (ADVERTENCIAS).
+
+=item ERRORES (en inglés, I<BUGS>)
+
+Cosas que están rotas o que no funcionan de forma correcta.
+
+=item RESTRICCIONES (en inglés, I<RESTRICTIONS>)
+
+Errores que no planea arreglar.  :-) 
+
+=item NOTAS (en inglés, I<NOTES>)
+
+Comentarios varios.
+
+=item AUTOR (en inglés, I<AUTHOR>)
+
+Quien escribe esto (use I<AUTHORS> (AUTORES) para varias personas).  Es una buena idea incluir su actual dirección de correo electrónico (o algunas direcciones de correo a donde enviar los informes de errores) o alguna otra información de contacto para que los usuarios tengan una forma de contactar con usted.  Recuerde que la documentación del programa tiende a irse por las ramas más allá de lo esperado, y elegir un método de contacto que probablemente será la último en hacer.
+
+=item HISTORIA (en inglés, I<HISTORY>)
+
+Programas derivados de otras fuentes algunas veces tienen esta sección.  Algunas personas mantienen aquí un registro de modificación, pero normalmente es mejor mantenerlo en un archivo aparte.
+
+=item DERECHOS DE COPIA Y LICENCIA (en inglés, I<COPYRIGHT AND LICENSE>)
+
+Para I<copyright>
+
+    Copyright AÑO(s) SU NOMBRE(s)
+
+(No, (C) no es necesaria.  No, "todos los derechos reservados" no es necesaria).
+
+La forma más fácil de licenciarlo es usar la misma licencia que la del propio Perl:
+
+    Esta biblioteca es software libre; puede redistribuirlo y/o
+    modificarlo bajo los mismos términos que el propio Perl.
+
+Esto hace más fácil a los demás usar su módulo con Perl.  Note que este ejemplo de licenciamiento no es ni una aprobación ni un requerimiento naturalmente es libre de elegir cualquier licenciamiento.
+
+=item VEA TAMBIÉN (en inglés, I<SEE ALSO>)
+
+Otras páginas de manual para comprobar, como man(1), man(7), makewhatis(8), o catman(8).  Normalmente una lista sencilla de páginas de manual separadas por comas, o un párrafo que da el nombre de un trabajo relativo a la documentación.  Las referencias a las páginas de manual, si usan la forma estándar C<nombre(sección)>, no debe estar encerrado en LE<lt>E<gt> (aunque se recomiende), pero otras cosas en esta sección probablemente sí que deberían, cuando resulte apropiado.
+
+Si el paquete tiene una lista de correo, incluya aquí la URL o las instrucciones para la subscripción.
+
+Si el paquete tiene un sitio web, incluya aquí un URL.
+
+=back
+
+La documentación de bibliotecas o módulos orientados a objetos podrían usar secciones I<CONSTRUCTORS> (CONSTRUCTORES) y I<METHODS> (MÉTODOS), o secciones I<CLASS METHODS> (MÉTODOS DE CLASE) y I<INSTANCE METHODS> (MÉTODOS DE INSTANCIA), para una documentación detallada de las partes de la biblioteca y reservar la sección I<DESCRIPTION> (DESCRIPCIÓN) para el resumen.  Módulos mayores, con una interfaz de funciones podría necesitar usar I<FUNCTIONS> (FUNCIONES) por razones similares.  Algunas personas usan I<OVERVIEW> (VISIÓN GENERAL o RESUMEN) para resumir la descripción si es demasiado larga.
+
+La ordenación de secciones varía, aunque I<NAME> (NOMBRE) siempre debe ser la primera sección (romperás algunos sistemas de páginas de manual si no lo haces), y I<NAME>, I<SYNOPSIS> (SINOPSIS), I<DESCRIPTION> (DESCRIPCIÓN) y I<OPTIONS> (OPCIONES), generalmente, siempre aparecen primero y en ese orden, en caso de estar presentes.  En general, I<SEE ALSO> (VEA TAMBIÉN), I<AUTHOR> (AUTOR), y material similar, debería quedar para el final.  Algunos sistemas también mueven I<WARNINGS> y I<NOTES> al final.  El orden indicado antes debería ser el razonable para los casos más frecuentes.
+
+Algunos sistemas usan I<CONFORMING TO> (CONFORME A) para destacar la conformidad con estándares relevantes y MT-LEVEL para destacar la seguridad en programas multihilo o gestores de señales.  Estas cabeceras son útiles principalmente cuando se documentan partes de una biblioteca C.
+
+Finalmente, como nota general, intente no usar una excesiva cantidad de marcado.
+Como se ha documentado aquí y en L<Pod::Man>, puede dejar, y de forma segura, sin adornar con marcado a las variables Perl, nombres de funciones, referencias a páginas de manual, y cosas así, y los traductores POD lo harán por usted.  Esto hace más fácil editar la documentación más adelante.  Note que muchos traductores actuales no harán lo apropiado con las direcciones de correo electrónico cuando estén envueltas en LE<lt>E<gt>, así que no lo haga.
+
+=head1 VEA TAMBIÉN
+
+Para información adicional que puede ser más preciso para su sistema específico, vea tanto L<man(5)> como L<man(7)> dependiendo de las convenciones de numeración de secciones de su sistema de páginas de manual.
+
+Esta documentación se mantiene como parte de la distribución de los I<podlators>.
+La versión actual siempre está disponible desde su sitio web en <http://www.eyrie.org/~eagle/software/podlators/>.
+
+=head1 AUTOR
+
+Russ Allbery <rra@stanford.edu>, con buena parte de esta documentación tomada de la documentación original de la implementación de B<pod2man> por Larry Wall y Tom Christiansen.
+
+=head1 COPYRIGHT y LICENCIA
+
+Copyright 1999, 2000, 2001, 2004, 2006, 2008, 2010 Russ Allbery
+<rra@stanford.edu>.
+
+Esta documentación es software libre; puede redistribuirla o modificarla en los mismos términos que el propio Perl.
+
+=cut
