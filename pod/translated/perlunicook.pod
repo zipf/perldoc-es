@@ -1,0 +1,775 @@
+
+=encoding utf8
+
+=head1 NOMBRE
+
+perlunicook - recetario de ejemplos del manejo de Unicode en Perl
+
+=head1 DESCRIPCIÓN
+
+Esta página de manual contiene unas pequeñas recetas que demuestran cómo manejar las operaciones Unicode más comunes en Perl, más un programa completo, al final. Cualquier variable no declarada en cada receta, se le asume que tiene el apropiado valor anterior.
+
+=head1 EJEMPLOS
+
+=head2 ℞ 0: Preámbulo estándar
+
+A menos que se indique lo contrario, todos los ejemplos siguientes requieren este preámbulo estándar para funcionar correctamente, con el C<#!> ajustado a su sistema:
+
+ #!/usr/bin/env perl
+
+ use utf8;      # los literales e identificadores pueden estar en UTF-8
+ use v5.12;     # o siguientes, para activar la característica "unicode_strings"
+ use strict;    # entrecomille las cadenas de caracteres, declare las variables
+ use warnings;  # activado por defecto
+ use warnings  qw(FATAL utf8);    # advertencia fatal en caso de fallos de codificación
+ use open      qw(:std :utf8);    # los flujos no declarados, en UTF-8
+ use charnames qw(:full :short);  # ya no es necesario en v5.16
+
+Esto I<obligará>, incluso a los programadores en Unix, a hacer C<binmode> sobre los flujos binarios, o abrirlos con C<:raw>, pero es la única forma de acceder a ellos de una forma portátil.
+
+B<ATENCIÓN>: C<use autodie> (pre 2.26) y C<use open> no se llevan bien, el uno con el otro.
+
+=head2 ℞ 1: Filtro genérico Unicode
+
+Siempre descomponga a la entrada, y luego recomponga a la salida.
+
+ use Unicode::Normalize;
+
+ while (<>) {
+     $_ = NFD($_);   # descomponer + reordenar canónicamente
+     ...
+ } continue {
+     print NFC($_);  # recomponer (donde sea posible) + reordenar canónicamente
+ }
+
+=head2 ℞ 2: Ajuste fino de las advertencias Unicode
+
+A partir de v5.14, Perl distingue tres subclases de advertencias UTF-8.
+
+ use v5.14;                  # subadvertencias no disponibles en versiones anteriores
+ no warnings "nonchar";      # los 66 no-caracteres prohibidos
+ no warnings "surrogate";    # el sin sentido UTF-16/CESU-8
+ no warnings "non_unicode";  # para códigos de carácter superiores a 0x10_FFFF
+
+=head2 ℞ 3: Declare el código fuente en UTF-8 para los identificadores y literales
+
+Sin poner la -siempre- criticada declaración C<use utf8>, poner UTF-8 en sus literales e identificadores no funcionará correctamente.  Si está usando el preámbulo estándar indicado antes, sí que funcionará bien.  Si lo hace, puede hacer cosas como esta:
+
+ use utf8;
+
+ my $medida    = "Ångström";
+ my @μsoft     = qw( cp852 cp1251 cp1252 );
+ my @ὑπέρμεγας = qw( ὑπέρ  μεγας );
+ my @鯉        = qw( koi8-f koi8-u koi8-r );
+ my $lema      = "        "; # FAMILY, GROWING HEART, DROMEDARY CAMEL
+
+Si olvida C<use utf8>, los bytes superiores serán malinterpretados como caracteres individuales, y nada funcionará bien.
+
+=head2 ℞ 4: Caracteres y sus números
+
+Las funciones C<ord> y C<chr> trabajan transparentemente con todos los códigos de carácter, no solo con ASCII, ni siquiera solo con Unicode.
+
+ # caracteres ASCII
+ ord("A")
+ chr(65)
+
+ # caracteres del Plano Multilenguaje Básico (BMP)
+ ord("Σ")
+ chr(0x3A3)
+
+ # más allá de BMP
+ ord("  ")               # MATHEMATICAL ITALIC SMALL N
+ chr(0x1D45B)
+
+ # ¡más allá de Unicode! (hasta el MAXINT)
+ ord("\x{20_0000}")
+ chr(0x20_0000)
+
+=head2 ℞ 5: Literales Unicode por número de carácter
+
+En un literal interpolado, bien sea una cadena de caracteres con comillas dobles, o una expresión regular, puede especificar un carácter por su número usando el escape C<\x{I<HHHHHH>}>.
+
+ Cadena: "\x{3a3}"
+ Regex:  /\x{3a3}/
+
+ Cadena: "\x{1d45b}"
+ Regex:  /\x{1d45b}/
+
+ # funciona bien incluso en rangos que no son del BMP
+ /[\x{1D434}-\x{1D467}]/
+
+=head2 ℞ 6: Obtener el nombre de un carácter a partir de su número
+
+ use charnames ();
+ my $nombre = charnames::viacode(0x03A3);
+
+=head2 ℞ 7: Obtener el número de un carácter a partir de su nombre
+
+ use charnames ();
+ my $número = charnames::vianame("GREEK CAPITAL LETTER SIGMA");
+
+=head2 ℞ 8: Nombres de caracteres Unicode
+
+Use la notación C<< \N{I<charname>} >> para obtener el carácter correspondiente a ese nombre para usarse en la interpolación de literales (cadenas doblemente entrecomilladas y expresiones regulares).  En v5.16, existe un implícito
+
+ use charnames qw(:full :short);
+
+Pero antes de v5.16, debe explicitar qué conjunto de caracteres quiere.  Los nombres C<:full> son los nombres, alias o secuencias de caracteres Unicode oficiales, compartiendo todos el mismo espacio de nombres.
+
+ use charnames qw(:full :short latin greek);
+
+ "\N{MATHEMATICAL ITALIC SMALL N}"      # :full
+ "\N{GREEK CAPITAL LETTER SIGMA}"       # :full
+
+Cualquier otra cosa es una abreviatura por conveniencia específica de Perl.  Especifique una o más etiquetas si quiere usar nombres abreviados.
+
+ "\N{Greek:Sigma}"                      # :short
+ "\N{ae}"                               #  latin
+ "\N{epsilon}"                          #  greek
+
+La v5.16 de Perl también soporta la importación de una etiqueta C<:loose> para poder especificar nombres de caracteres de forma difusa, que funciona como la coincidencia difusa de los nombres de propiedades, es decir, no tiene en cuanta las mayúsculas/minúsculas, espacios en blanco y guiones bajos:
+
+ "\N{euro sign}"                        # :loose (a partir de v5.16)
+
+=head2 ℞ 9: Nombres de secuencias Unicode
+
+Estas se parecen como nombres de caracteres pero devuelven múltiples códigos de carácter.
+Fíjese en el comportamiento de la impresión de vectores C<%vx> de C<printf>.
+
+ use charnames qw(:full);
+ my $seq = "\N{LATIN CAPITAL LETTER A WITH MACRON AND GRAVE}";
+ printf "U+%v04X\n", $seq;
+ U+0100.0300
+
+=head2 ℞ 10: Nombres de caracteres personalizados
+
+Usar C<:alias> le permite crear sus propios nombres con ámbito léxico, a caracteres actuales, o incluso dar nombres útiles a caracteres de uso privado que no lo tengan.
+
+ use charnames ":full", ":alias" => {
+     ecute => "LATIN SMALL LETTER E WITH ACUTE",
+     "APPLE LOGO" => 0xF8FF, # carácter de uso privado
+ };
+
+ "\N{ecute}"
+ "\N{APPLE LOGO}"
+
+=head2 ℞ 11: Nombres de códigos de carácter CJK
+
+Sinogramas como "東京" devuelven nombres de caracteres C<CJK UNIFIED IDEOGRAPH-6771> y C<CJK UNIFIED IDEOGRAPH-4EAC>, porque sus “nombres” varían.  El módulo de CPAN C<Unicode::Unihan> tiene una gran base de datos para decodificarles (a estos y a muchos más), siempre que sea capaz de entender su salida.
+
+ # cpan -i Unicode::Unihan
+ use Unicode::Unihan;
+ my $str = "東京";
+ my $unhan = new Unicode::Unihan;
+ for my $lang (qw(Mandarin Cantonese Korean JapaneseOn JapaneseKun)) {
+     printf "CJK $str in %-12s is ", $lang;
+     say $unhan->$lang($str);
+ }
+
+imprime:
+
+ CJK 東京 in Mandarin     is DONG1JING1
+ CJK 東京 in Cantonese    is dung1ging1
+ CJK 東京 in Korean       is TONGKYENG
+ CJK 東京 in JapaneseOn   is TOUKYOU KEI KIN
+ CJK 東京 in JapaneseKun  is HIGASHI AZUMAMIYAKO
+
+Si tiene en mente un esquema específico de romanización, use el módulo específico:
+
+ # cpan -i Lingua::JA::Romanize::Japanese
+ use Lingua::JA::Romanize::Japanese;
+ my $k2r = new Lingua::JA::Romanize::Japanese;
+ my $str = "東京";
+ say "Japanese for $str is ", $k2r->chars($str);
+
+imprime
+
+ Japanese for 東京 is toukyou
+
+=head2 ℞ 12: De/codificación explícita
+
+En ciertas ocasiones, como al leer de una base de datos, puede recibir texto codificado que necesitará decodificar.
+
+  use Encode qw(encode decode);
+
+  my $cars = decode("shiftjis", $bytes, 1);
+ # o
+  my $bytes = encode("MIME-Header-ISO_2022_JP", $cars, 1);
+
+Para flujos que tengan la misma codificación, no use encode/decode; en su lugar active la codiﬁcación cuando abra el archivo o, inmediatamente después con C<binmode>, tal y como se describe en una receta posterior.
+
+=head2 ℞ 13: Decodificar los argumentos del programa en utf8
+
+     $ perl -CA ...
+ o bien
+     $ export PERL_UNICODE=A
+ o bien
+    use Encode qw(decode_utf8);
+    @ARGV = map { decode_utf8($_, 1) } @ARGV;
+
+=head2 ℞ 14: Decodificar los argumentos del programa según la codificación de la configuración regional
+
+    # cpan -i Encode::Locale
+    use Encode qw(locale);
+    use Encode::Locale;
+
+    # use "locale" como un arg. a encode/decode
+    @ARGV = map { decode(locale => $_, 1) } @ARGV;
+
+=head2 ℞ 15: Declarar STD{IN,OUT,ERR} para que sean UTF-8
+
+Use una opción de línea de comandos, una variable de entorno, o llame explícitamente a C<binmode>:
+
+     $ perl -CS ...
+ o bien
+     $ export PERL_UNICODE=S
+ o bien
+     use open qw(:std :utf8);
+ o bien
+     binmode(STDIN,  ":utf8");
+     binmode(STDOUT, ":utf8");
+     binmode(STDERR, ":utf8");
+
+=head2 ℞ 16: Declarar STD{IN,OUT,ERR} para que estén codificados según la configuración regional
+
+    # cpan -i Encode::Locale
+    use Encode;
+    use Encode::Locale;
+
+    # o como un flujo para binmode u open
+    binmode STDIN,  ":encoding(console_in)"  if -t STDIN;
+    binmode STDOUT, ":encoding(console_out)" if -t STDOUT;
+    binmode STDERR, ":encoding(console_out)" if -t STDERR;
+
+=head2 ℞ 17: Hacer la E/S de archivos, por defecto, a utf8
+
+Archivos abiertos sin un argumento de codificación, serán en UTF-8:
+
+     $ perl -CD ...
+ o bien
+     $ export PERL_UNICODE=D
+ o bien
+     use open qw(:utf8);
+
+=head2 ℞ 18: Hacer que toda la E/S y argumentos estén, por defecto, en utf8
+
+     $ perl -CSDA ...
+ o bien
+     $ export PERL_UNICODE=SDA
+ o bien
+     use open qw(:std :utf8);
+     use Encode qw(decode_utf8);
+     @ARGV = map { decode_utf8($_, 1) } @ARGV;
+
+=head2 ℞ 19: Abrir archivo con una codificación específica
+
+Especifique la codificación del flujo.  Esta es la forma normal de gestionar texto codificado, no llamar a funciones de bajo nivel.
+
+ # archivo de entrada
+     open(my $in_file, "< :encoding(UTF-16)", "wintext");
+ o bien
+     open(my $in_file, "<", "wintext");
+     binmode($in_file, ":encoding(UTF-16)");
+ Y LUEGO
+     my $linea = <$in_file>;
+
+ # archivo de salida
+     open($out_file, "> :encoding(cp1252)", "wintext");
+ o bien
+     open(my $out_file, ">", "wintext");
+     binmode($out_file, ":encoding(cp1252)");
+ Y LUEGO
+     print $out_file "algún texto\n";
+
+Aquí se pueden especificar más capas aparte de la de codificación. Por ejemplo, el conjuro C<":raw :encoding(UTF-16LE) :crlf"> incluye una gestión CRLF implícita.
+
+=head2 ℞ 20: Tamaño de caja en Unicode
+
+La gestión del tamaño de caja en Unicode es muy diferente del de ASCII.
+
+ uc("henry ⅷ")  # "HENRY Ⅷ"
+ uc("tschüß")   # "TSCHÜSS"  notice ß => SS
+
+ # las dos son verdad:
+ "tschüß"  =~ /TSCHÜSS/i   # notice ß => SS
+ "Σίσυφος" =~ /ΣΊΣΥΦΟΣ/i   # note la igualdad de Σ,σ,ς
+
+=head2 ℞ 21: Comparaciones Unicode insensibles al tamaño de caja
+
+Además del módulo L<Unicode::CaseFold> disponible en CPAN, la nueva función C<fc> "I<foldcase>" (plegado de caja) a partir de v5.16 permite acceder al mismo plegado de caja Unicode que el modificador de patrón C</i> ha usado:
+
+ use feature "fc"; # fc() es función desde v5.16
+
+ # ordenación insensible al tamaño de caja
+ my @ordenado = sort { fc($a) cmp fc($b) } @lista;
+
+ # las dos son verdad:
+ fc("tschüß")  eq fc("TSCHÜSS")
+ fc("Σίσυφος") eq fc("ΣΊΣΥΦΟΣ")
+
+=head2 ℞ 22: Buscando secuencias de ruptura de línea Unicode con expresiones regulares
+
+Una ruptura de línea Unicode coincide con el grafema de dos caracteres CRLF o con cualquiera de los siete caracteres verticales de espacio en blanco.
+Esto es útil para manejarse con ficheros de texto que viene de diferentes sistemas operativos.
+
+ \R
+
+ s/\R/\n/g;  # normalizar todas las rupturas de línea a \n
+
+=head2 ℞ 23: Obtener la categoría de un carácter
+
+Para encontrar la categoría general de un código de carácter numérico.
+
+ use Unicode::UCD qw(charinfo);
+ my $cat = charinfo(0x3A3)->{category};  # "Lu"
+
+=head2 ℞ 24: Desactivar la consideración Unicode de las clases de caracteres incorporadas
+
+Desactive el funcionamiento Unicode en C<\w>, C<\b>, C<\s>, C<\d>, y en las clases POSIX, tanto en este ámbito como en una exp. reg.
+
+ use v5.14;
+ use re "/a";
+
+ # o
+
+ my($num) = $str =~ /(\d+)/a;
+
+O use propiedades específicas para desactivar Unicode, como C<\p{ahex}> y C<\p{POSIX_Digit>}.  Las propiedades siguen trabajando normalmente sin importar qué conjunto de modificadores (C</d /u /l /a /aa>) estén en activo.
+
+=head2 ℞ 25: Usar propiedades Unicode en expr. reg. con \p, \P
+
+Todas estas coinciden con un código de carácter con la propiedad indicada.  Use C<\P> en lugar de C<\p> para coincidir con un código de carácter que no tengo esa propiedad.
+
+ \pL, \pN, \pS, \pP, \pM, \pZ, \pC
+ \p{Sk}, \p{Ps}, \p{Lt}
+ \p{alpha}, \p{upper}, \p{lower}
+ \p{Latin}, \p{Greek}
+ \p{script=Latin}, \p{script=Greek}
+ \p{East_Asian_Width=Wide}, \p{EA=W}
+ \p{Line_Break=Hyphen}, \p{LB=HY}
+ \p{Numeric_Value=4}, \p{NV=4}
+
+=head2 ℞ 26: Propiedades de caracteres personalizadas
+
+Para definir en tiempo de compilación sus propias propiedades de caracteres personalizadas para usar en exp. reg.
+
+ # usando caracteres de uso privado
+ sub In_Tengwar { "E000\tE07F\n" }
+
+ if (/\p{In_Tengwar}/) { ... }
+
+ # mezclando con las propiedades existentes
+ sub Is_GraecoRoman_Title {<<'END_OF_SET'}
+ +utf8::IsLatin
+ +utf8::IsGreek
+ &utf8::IsTitle
+ END_OF_SET
+
+ if (/\p{Is_GraecoRoman_Title}/ { ... }
+
+=head2 ℞ 27: Normalización Unicode
+
+Típicamente, debería mostrar sus datos en NFD (la forma de descomposición canónica) en la entrada y en NFC (descomposición canónica seguido por una composición canónica) en la salida. Usar las funciones NFKC o NFKD mejora las prestaciones en las búsquedas, asumiendo que haya hecho la misma normalización al texto a ser localizado. Note que esta normalización es más que solo dividir y unir precombinados glifos compatibles; también reordena marcas de acuerdo a las clases de combinación canónica y poda a los que queden sueltos.
+
+ use Unicode::Normalize;
+ my $nfd  = NFD($orig);
+ my $nfc  = NFC($orig);
+ my $nfkd = NFKD($orig);
+ my $nfkc = NFKC($orig);
+
+=head2 ℞ 28: Convertir valores numéricos Unicode no-ASCII
+
+A menos que haya usado C</a> o C</aa>, C<\d> coincide con muchos más caracteres que solo los dígitos ASCII, pero la conversión de Perl implícita de cadena a número, actualmente, no los reconoce.  Aquí indicaremos cómo convertir estas cadenas de forma manual.
+
+ use v5.14;  # necesario para la función num()
+ use Unicode::UCD qw(num);
+ my $str = "tengo Ⅻ y ४५६७ y ⅞ y así";
+ my @nums = ();
+ while ($str =~ /(\d+|\N)/g) {  # ¡No solo ASCII!
+    push @numeros, num($1);
+ }
+ say "@numeros";   #     12      4567      0.875
+
+ use charnames qw(:full);
+ my $nv = num("\N{RUMI DIGIT ONE}\N{RUMI DIGIT TWO}");
+
+=head2 ℞ 29: Coincidir con agrupaciones de grafemas Unicode en exp. reg.
+
+Los "caracteres" visibles para el programador son códigos de carácter que coinciden con C</./s>, pero los "caracteres" visibles para el usuario son los grafemas que coinciden con C</\X/>.
+
+ # Busca vocal *más* cualquier combinación con diacrítico, subrayado, etc.
+ my $nfd = NFD($original);
+ $nfd =~ / (?=[aeiou]) \X /xi
+
+=head2 ℞ 30: Extraer por grafema en lugar de por código de carácter (exp.reg.)
+
+ # coincide y captura los cinco primeros grafemas
+ my($cinco_primeros) = $cadena =~ /^ ( \X{5} ) /x;
+
+=head2 ℞ 31: Extraer por grafema en lugar de por código de carácter (substr)
+
+ # cpan -i Unicode::GCString
+ use Unicode::GCString;
+ my $gcs = Unicode::GCString->new($str);
+ my $cinco_primeros = $gcs->substr(0, 5);
+
+=head2 ℞ 32: Invertir una cadena por sus grafemas
+
+Invertir una cadena por códigos de carácter mezcla los diacríticos, convirtiendo erróneamente C<crème brûlée> en C<éel̂urb em̀erc> en lugar de C<eélûrb emèrc>.  Estas dos aproximaciones funcionan correctamente sin importar en qué normalización se encuentre la cadena:
+
+ $str = join("", reverse $str =~ /\X/g);
+
+ # o cpan -i Unicode::GCString
+ use Unicode::GCString;
+ $str = reverse Unicode::GCString->new($str);
+
+=head2 ℞ 33: Longitud de la cadena en grafemas
+
+La cadena C<brûlée> tiene seis grafemas pero también hasta ocho códigos de carácter.
+Esto cuenta por grafemos, no por códigos de carácter:
+
+ my $str = "brûlée";
+ my $cuenta = 0;
+ while ($str =~ /\X/g) { $cuenta++ }
+
+  # o cpan -i Unicode::GCString
+ use Unicode::GCString;
+ my $gcs = Unicode::GCString->new($str);
+ my $cuenta = $gcs->length;
+
+=head2 ℞ 34: Impresión de columnas de ancho fijo en Unicode
+
+Las funciones integradas de Perl C<printf>, C<sprintf> y C<format>, creen que todos los códigos de carácter ocupan una columna de impresión, pero muchos de ellos toman 0 o 2.
+Para mostrar que la normalización no produce ninguna diferencia, imprimiremos de ambas formas:
+
+ use Unicode::GCString;
+ use Unicode::Normalize;
+
+ my @words = qw/crème brûlée/;
+ @words = map { NFC($_), NFD($_) } @words;
+
+ for my $str (@words) {
+     my $gcs = Unicode::GCString->new($str);
+     my $cols = $gcs->columns;
+     my $pad = " " x (10 - $cols);
+     say str, $pad, " |";
+ }
+
+... genera esto, para mostrar que rellena correctamente sin importar de qué normalización sea:
+
+ crème      |
+ crème      |
+ brûlée     |
+ brûlée     |
+
+=head2 ℞ 35: Cotejo Unicode
+
+Un texto ordenado por la numeración de los códigos de carácter no sigue un orden alfabético razonable; use la UCA (I<Unicode Collation Algorithm>) para la ordenación de texto.
+
+ use Unicode::Collate;
+ my $col = Unicode::Collate->new();
+ my @list = $col->sort(@old_list);
+
+Vea el programa I<ucsort> del módulo CPAN L<Unicode::Tussle> para ver un interfaz apropiado para la línea de comandos para este módulo.
+
+=head2 ℞ 36: Ordenación Unicode independiente del tamaño de caja y de las tildes
+
+Especifique una fuerza de cotejo de nivel 1 para ignorar el tamaño de caja y los diacríticos, para examinar solo los caracteres básicos.
+
+ use Unicode::Collate;
+ my $col = Unicode::Collate->new(level => 1);
+ my @list = $col->sort(@old_list);
+
+=head2 ℞ 37: Cotejo Regional Unicode
+
+Algunas configuraciones regionales tienen reglas especiales de ordenación.
+
+ # o bien use v5.12, o bien: cpan -i Unicode::Collate::Locale
+ use Unicode::Collate::Locale;
+ my $col = Unicode::Collate::Locale->new(locale => "de__phonebook");
+ my @list = $col->sort(@old_list);
+
+El programa I<ucsort> mencionado antes acepta un parámetro C<--locale>.
+
+=head2 ℞ 38: Haciendo que C<cmp> trabaje con texto en lugar de con códigos de carácter
+
+Así que en vez de esto:
+
+ @srecs = sort {
+     $b->{AGE}   <=>  $a->{AGE}
+                 ||
+     $a->{NAME}  cmp  $b->{NAME}
+ } @recs;
+
+Use esto:
+
+ my $coll = Unicode::Collate->new();
+ for my $rec (@recs) {
+     $rec->{NAME_key} = $coll->getSortKey( $rec->{NAME} );
+ }
+ @srecs = sort {
+     $b->{AGE}       <=>  $a->{AGE}
+                     ||
+     $a->{NAME_key}  cmp  $b->{NAME_key}
+ } @recs;
+
+=head2 ℞ 39: Comparación insensible al tamaño de caja y a los diacríticos
+
+Use un objeto cotejador para comparar texto Unicode de carácter en carácter en lugar de por código de carácter.
+
+ use Unicode::Collate;
+ my $es = Unicode::Collate->new(
+     level => 1,
+     normalization => undef
+ );
+
+  # ahora estas dos son verdaderas:
+ $es->eq("García",  "GARCIA" );
+ $es->eq("Márquez", "MARQUEZ");
+
+=head2 ℞ 40: Comparación regional insensible al tamaño de caja y a los diacríticos
+
+Lo mismo, pero en una configuración regional específica.
+
+ my $de = Unicode::Collate::Locale->new(
+            locale => "de__phonebook",
+          );
+
+ # ahora esto es verdadero:
+ $de->eq("tschüß", "TSCHUESS");  # note que ü => UE, ß => SS
+
+=head2 ℞ 41: Ruptura de líneas en Unicode
+
+Divide el texto en líneas de acuerdo a las reglas Unicode.
+
+ # cpan -i Unicode::LineBreak
+ use Unicode::LineBreak;
+ use charnames qw(:full);
+
+ my $para = "This is a super\N{HYPHEN}long string. " x 20;
+ my $fmt = new Unicode::LineBreak;
+ print $fmt->break($para), "\n";
+
+=head2 ℞ 42: Texto Unicode en hash DBM, forma tediosa
+
+Usar una cadena normal Perl como una clave o un valor para un hash DBM lanzará una excepción sobre que se ha encontrado un carácter ancho, si algún código de carácter no entra en un byte.  Aquí está la manera de cómo gestionar manualmente la traslación:
+
+    use DB_File;
+    use Encode qw(encode decode);
+    tie %dbhash, "DB_File", "ruta_al_archivo";
+
+ # STORE
+
+    # asumimos que $uni_clave y $uni_valor son cadenas Unicode abstractas
+    my $enc_clave = encode("UTF-8", $uni_clave, 1);
+    my $enc_valor = encode("UTF-8", $uni_valor, 1);
+    $dbhash{$enc_clave} = $enc_valor;
+
+ # FETCH
+
+    # asumimos que $uni_clave contiene una cadena normal Perl (Unicode abstracta)
+    my $enc_clave = encode("UTF-8", $uni_clave, 1);
+    my $enc_valor = $dbhash{$enc_clave};
+    my $uni_valor = decode("UTF-8", $enc_valor, 1);
+
+=head2 ℞ 43: Texto Unicode en hash DBM, forma fácil
+
+Aquí se muestra cómo gestionar implícitamente la traducción; todo el codificado y decodificado se hace automáticamente, igual que si fueran flujos configurados con una codificación particular:
+
+    use DB_File;
+    use DBM_Filter;
+
+    my $dbobj = tie %dbhash, "DB_File", "ruta_al_archivo";
+    $dbobj->Filter_Value("utf8");  # este es el punto mágico
+
+ # STORE
+
+    # asumimos que $uni_clave y $uni_valor son cadenas Unicode abstractas
+    $dbhash{$uni_clave} = $uni_valor;
+
+  # FETCH
+
+    # $uni_clave contiene una cadena Perl normal (Unicode abstracta)
+    my $uni_valor = $dbhash{$uni_clave};
+
+=head2 ℞ 44: PROGRAMA: Demo de cotejo Unicode e impresión
+
+Aquí hay un programa completo que muestra cómo hacer uso de la ordenación sensible a la configuración regional, tamaño de caja según Unicode, y gestión de la impresión de distintos anchos cuando alguno de los caracteres toman cero o dos columnas, no solo una columna cada vez.
+Cuando lo ejecute, el programa produce una bonita salida alineada:
+
+    Crème Brûlée....... €2.00
+    Éclair............. €1.60
+    Fideuà............. €4.20
+    Hamburger.......... €6.00
+    Jamón Serrano...... €4.45
+    Linguiça........... €7.00
+    Pâté............... €4.15
+    Pears.............. €2.00
+    Pêches............. €2.25
+    Smørbrød........... €5.75
+    Spätzle............ €5.50
+    Xoriço............. €3.00
+    Γύρος.............. €6.50
+    막걸리............. €4.00
+    おもち............. €2.65
+    お好み焼き......... €8.00
+    シュークリーム..... €1.85
+    寿司............... €9.99
+    包子............... €7.50
+
+Aquí está el programa, testado en v5.14.
+
+ #!/usr/bin/env perl
+ # umenu - demo de ordenación e impresión de comida Unicode
+ #
+ # (obligatorio y, cada vez más largo, preámbulo)
+ #
+ use utf8;
+ use v5.14;                       # para la ordenación según la configuración regional
+ use strict;
+ use warnings;
+ use warnings  qw(FATAL utf8);    # hace fatales los fallos de codificación
+ use open      qw(:std :utf8);    # los flujos no declarados, en UTF-8
+ use charnames qw(:full :short);  # ya no es necesario en v5.16
+
+ # módulos estándar
+ use Unicode::Normalize;          # estándar en la distribución perl v5.8
+ use List::Util qw(max);          # estándar en la distribución perl v5.10
+ use Unicode::Collate::Locale;    # estándar en la distribución perl v5.14
+
+ # módulos cpan
+ use Unicode::GCString;           # desde CPAN
+
+ # declaraciones previas
+ sub pad($$$);
+ sub colwidth(_);
+ sub entitle(_);
+
+ my %price = (
+     "γύρος"             => 6.50, # gyros, Griego
+     "pears"             => 2.00, # algo así como, peras
+     "linguiça"          => 7.00, # salchicha picante, Portuguese
+     "xoriço"            => 3.00, # chorizo, Catalán
+     "hamburger"         => 6.00, # burgermeister meisterburger
+     "éclair"            => 1.60, # postre, French
+     "smørbrød"          => 5.75, # sandwiches, Norwegian
+     "spätzle"           => 5.50, # Bayerisch noodles, little sparrows
+     "包子"              => 7.50, # bao1 zi5, steamed pork buns, Mandarin
+     "jamón serrano"     => 4.45, # jamón serrano, Spanish
+     "pêches"            => 2.25, # peaches, French
+     "シュークリーム"    => 1.85, # cream-filled pastry like eclair
+     "막걸리"            => 4.00, # makgeolli, Korean rice wine
+     "寿司"              => 9.99, # sushi, Japanese
+     "おもち"            => 2.65, # omochi, rice cakes, Japanese
+     "crème brûlée"      => 2.00, # crema catalana
+     "fideuà"            => 4.20, # more noodles, Valencian
+                                  # (Catalan=fideuada)
+     "pâté"              => 4.15, # gooseliver paste, French
+     "お好み焼き"        => 8.00, # okonomiyaki, Japanese
+ );
+
+ my $width = 5 + max map { colwidth } keys %price;
+
+ # El material asiático sale en un orden que alguien
+ # que lea esta salida no se asuste; el
+ # CJK estará entonces en orden JIS X 0208.
+ my $coll  = new Unicode::Collate::Locale locale => "ja";
+
+ for my $item ($coll->sort(keys %price)) {
+     print pad(entitle($item), $width, ".");
+     printf " €%.2f\n", $price{$item};
+ }
+
+ sub pad($$$) {
+     my($str, $width, $padchar) = @_;
+     return $str . ($padchar x ($width - colwidth($str)));
+ }
+
+ sub colwidth(_) {
+     my($str) = @_;
+     return Unicode::GCString->new($str)->columns;
+ }
+
+ sub entitle(_) {
+     my($str) = @_;
+     $str =~ s{ (?=\pL)(\S)     (\S*) }
+              { ucfirst($1) . lc($2)  }xge;
+     return $str;
+ }
+
+=head1 VEA TAMBIÉN
+
+Vea estas páginas de manual, algunas de ellas son de módulos CPAN:
+L<perlunicode>, L<perluniprops>,
+L<perlre>, L<perlrecharclass>,
+L<perluniintro>, L<perlunitut>, L<perlunifaq>,
+L<PerlIO>, L<DB_File>, L<DBM_Filter>, L<DBM_Filter::utf8>,
+L<Encode>, L<Encode::Locale>,
+L<Unicode::UCD>,
+L<Unicode::Normalize>,
+L<Unicode::GCString>, L<Unicode::LineBreak>,
+L<Unicode::Collate>, L<Unicode::Collate::Locale>,
+L<Unicode::Unihan>,
+L<Unicode::CaseFold>,
+L<Unicode::Tussle>,
+L<Lingua::JA::Romanize::Japanese>,
+L<Lingua::ZH::Romanize::Pinyin>,
+L<Lingua::KO::Romanize::Hangul>.
+
+El módulo CPAN L<Unicode::Tussle> incluye muchos programas para ayudar en el trabajo con Unicode, incluyendo estos programas que reemplazan parcial o totalmente de utilidades estándar:
+I<tcgrep> en lugar de I<egrep>,
+I<uniquote> en lugar de I<cat -v> o I<hexdump>,
+I<uniwc> en lugar de I<wc>,
+I<unilook> en lugar de I<look>,
+I<unifmt> en lugar de I<fmt>,
+y
+I<ucsort> en lugar de I<sort>.
+Para explorar nombres de caracteres Unicode y propiedades de caracteres, vea los programas I<uniprops>, I<unichars> y I<uninames>.
+También ofrece programas que son filtros generales pero con soporte Unicode:
+I<unititle> y I<unicaps>;
+I<uniwide> y I<uninarrow>;
+I<unisupers> y I<unisubs>;
+I<nfd>, I<nfc>, I<nfkd> y I<nfkc>;
+y I<uc>, I<lc> y I<tc>.
+
+Finalmente, vea la última publicación del Estándar Unicode (los números de página son desde la versión 6.0.0), incluyendo los anexos específicos e informes técnicos:
+
+=over
+
+=item §3.13 Default Case Algorithms, página 113;
+§4.2  Case, páginas 120–122;
+Case Mappings, página 166–172, especialmente Caseless Matching comenzando en la página 170.
+
+=item UAX #44: Unicode Character Database
+
+=item UTS #18: Unicode Regular Expressions
+
+=item UAX #15: Unicode Normalization Forms
+
+=item UTS #10: Unicode Collation Algorithm
+
+=item UAX #29: Unicode Text Segmentation
+
+=item UAX #14: Unicode Line Breaking Algorithm
+
+=item UAX #11: East Asian Width
+
+=back
+
+=head1 AUTOR
+
+Tom Christiansen E<lt>tchrist@perl.comE<gt> escribió esto, con alguna pizca asistencial de Larry Wall y Jeffrey Friedl por detrás.
+
+=head1 COPYRIGHT Y LICENCIA
+
+Copyright © 2012 Tom Christiansen.
+
+Este programa es software libre; puede redistribuirlo o modificarlo en los mismos términos que el propio Perl.
+
+La mayor parte de estos ejemplos vienen de la actual edición del "Libro del Camello", es decir, de la 4ª edición de I<Programming Perl>, Copyright © 2012 Tom Christiansen y otros, 2012-02-13 de O'Reilly Media.  El código es libremente redistribuible, y se recomienda trasplantar, doblar, dividir y mutilar cualquiera de los ejemplos de esta página de manual, como quiera que sea, para ser incluidos en sus propios programas sin ningún tipo de gravamen alguno.
+Un reconocimiento a través de un comentario en el código es algo cortés, pero no requerido.
+
+=head1 HISTORIA DE REVISIONES
+
+v1.0.0 – primera publicación pública, 2012-02-27
+
