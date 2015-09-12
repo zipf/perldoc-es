@@ -3,14 +3,18 @@
 # Copy files from Perl distribution to source/ directory in OmegaT project.
 # Update pod.lst file (files and descriptions).
 #
+# THIS CODE IS OBSOLETE. USE init_source_dir.pl INSTEAD
+#
+
 use v5.12;
 use autodie;
 use File::Copy;
 
 
 ### Configuration -------------------------------------------------------------
-my $SOURCE_DIR = '/home/explorer/perl5/perlbrew/build/perl-5.20.0';	# Distribution directory
-my $TARGET_DIR = '/home/explorer/Proyectos/perlspanish/source';		# source/ OmegaT directory
+my $user = 'explorer';
+my $SOURCE_DIR = "/home/$user/perl5/perlbrew/build/perl-5.22.0";	# Distribution directory
+my $TARGET_DIR = "/home/$user/Proyectos/perlspanish/source";		# source/ OmegaT directory
 my @EXCEPTIONS = qw(
     README.cn
     README.ko
