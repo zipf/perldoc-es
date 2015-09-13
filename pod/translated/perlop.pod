@@ -168,7 +168,7 @@ X<binding> X<operator, binding> X<=~> X<!~> X<vinculación>
 
 El binario C<"=~"> une una expresión escalar a un patrón de coincidencia.  Ciertas operaciones buscan o modifican la cadena C<$_>, por defecto.  Este operador hace que este tipo de operación trabaje en alguna otra cadena.  El argumento de la derecha es un patrón de búsqueda, sustitución o transliteración.  El argumento de la izquierda es lo que se supone que debe ser registrado, sustituido o transcrito en lugar del predeterminado C<$_>.  Cuando se usa en contexto escalar, el valor devuelto, por lo general, indica el éxito de la operación.  Las excepciones son las sustituciones (C<s///>) y la transliteración (C<y///>) con la opción C</r> (no destructiva), que hace B<r>egresar como valor, el resultado de la sustitución.
 El comportamiento en contexto de lista depende del propio operador.
-Vea L</"Operadores Regexp entrecomillados"> para más detalles y L<perlretut> para ejemplos usando estos operadores.
+Vea L</"Operadores I<regex> entrecomillados"> para más detalles y L<perlretut> para ejemplos usando estos operadores.
 
 Si el argumento derecho es una expresión en lugar de un patrón de búsqueda, sustitución o transliteración, se interpreta como un patrón de búsqueda en tiempo de ejecución.  Tenga en cuenta que esto significa que su contenido será interpolado dos veces.
 
@@ -364,8 +364,8 @@ El comportamiento del operador coincidencia inteligente depende del tipo de sus 
                         && (ARRAY1[1] ~~ ARRAY2[1]) && ...
  HASH          ARRAY       cualquier elemento de ARRAY que exista como clave de HASH             
                 igual que: grep { exists HASH->{$_} } ARRAY
- Regexp        ARRAY       cualquier elemento de ARRAY que coincida con el patrón Regexp
-                igual que: grep { /Regexp/ } ARRAY
+ I<Regex>         ARRAY       cualquier elemento de ARRAY que coincida con el patrón I<Regex>
+                igual que: grep { /Regex/ } ARRAY
  undef         ARRAY       undef en el ARRAY                                    
                 igual que: grep { !defined } ARRAY
  Cualquier     ARRAY       coincidencia inteligente en cada elemento de ARRAY[3]                   
@@ -380,8 +380,8 @@ El comportamiento del operador coincidencia inteligente depende del tipo de sus 
                          grep { exists HASH2->{$_} } keys HASH1
  HASH          ARRAY       cualquier elemento de ARRAY que exista como clave de HASH             
                 igual que: grep { exists HASH->{$_} } ARRAY
- Regexp        HASH        cualquier clave del HASH que coincida con el patrón Regexp                
-                igual que: grep { /Regexp/ } keys HASH
+ I<Regexp>        HASH        cualquier clave del HASH que coincida con el patrón I<Regexp>                
+                igual que: grep { /Regex/ } keys HASH
  undef         HASH        siempre falso (undef no puede ser una clave)               
                 igual que: 0 == 1
  Cualquiera    HASH        existencia de una clave HASH                                
@@ -398,16 +398,16 @@ El comportamiento del operador coincidencia inteligente depende del tipo de sus 
  Cualquiera    CÓDIGO      a sub se le pasa Cualquiera y devuelve verdadero              
                 igual que: CÓDIGO->(Cualquiera)
 
-Operando derecho es una Regexp:
+Operando derecho es una I<Regex>:
 
  Izquierdo     Derecho     Descripción y pseudocódigo                               
  ===============================================================
- ARRAY         Regexp      cualquier elemento de ARRAY que coincida con Regexp                   
-                igual que: grep { /Regexp/ } ARRAY
- HASH          Regexp      cualquier clave de HASH que coincida con Regexp                        
-                igual que: grep { /Regexp/ } keys HASH
- Cualquiera    Regexp      coincidencia                                     
-                igual que: Cualquiera =~ /Regexp/
+ ARRAY         I<Regex>       cualquier elemento de ARRAY que coincida con I<Regex>                   
+                igual que: grep { /Regex/ } ARRAY
+ HASH          I<Regex>       cualquier clave de HASH que coincida con I<Regex>                        
+                igual que: grep { /Regex/ } keys HASH
+ Cualquiera    I<Regex>    coincidencia                                     
+                igual que: Cualquiera =~ /Regex/
 
  Otro:
 
@@ -1144,7 +1144,7 @@ es equivalente a
 
     "abc" . quotemeta("foo\tbar$s") . "xyz"
 
-Para el patrón de los operadores regex (C<qr//>, C<m//> y C<s///>), el efecto de C<\Q> es aplicado después de que se haya procesado la interpolación, pero antes de que sean procesados los escapados.  Esto permite que el patrón coincida literalmente (a excepción de C<$> y C<@>).  Por ejemplo, lo siguiente coincide:
+Para el patrón de los operadores I<regex> (C<qr//>, C<m//> y C<s///>), el efecto de C<\Q> es aplicado después de que se haya procesado la interpolación, pero antes de que sean procesados los escapados.  Esto permite que el patrón coincida literalmente (a excepción de C<$> y C<@>).  Por ejemplo, lo siguiente coincide:
 
     '\s\t' =~ /\Q\s\t/
 
@@ -1154,8 +1154,8 @@ Los patrones están sujetos a un nivel adicional de interpretación como una exp
 
 Además de los comportamientos descritos anteriormente, Perl no expande múltiples niveles de interpolación.  En particular, contrariamente a las expectativas de los programadores de shell, las comillas invertidas I<NO> interpolan entre comillas dobles, ni las comillas simples impiden la evaluación de las variables cuando se usan dentro de comillas dobles.
 
-=head2 Operadores Regexp entrecomillados
-X<operator, regexp> X<operador, regexp>
+=head2 Operadores I<Regex> entrecomillados
+X<operator, regexp> X<operador, regex>
 
 Aquí están los operadores, parecidos a los de entrecomillado, que se aplican a las actividades relacionadas con la coincidencia.
 
@@ -1228,7 +1228,7 @@ Vea L<perlre> para obtener información adicional sobre la sintaxis válida para
 
 =item C<m/I<PATRÓN>/msixpodualngc>
 X<m> X<operator, match>
-X<regexp, options> X<regexp> X<regex, options> X<regex>
+X<regexp, options> X<regex> X<regex, options> X<regex>
 X</m> X</s> X</i> X</x> X</p> X</o> X</g> X</c>
 X<operador, coincidencia> X<opciones, regex> X<opciones, regexp>
 
@@ -1381,7 +1381,7 @@ El último ejemplo debería imprimir:
 
 Observe que el último emparejamiento es C<q> en vez de C<p>, que una coincidencia sin el anclaje C<\G> habría hecho.  También tenga en cuenta que la última coincidencia no actualizó C<pos>.  C<pos> sólo es actualizado en una coincidencia C</g>.  En cambio, si la última coincidencia fue C<p>, hay buenas posibilidades de que está ejecutando una versión anterior de Perl (pre-5.6.0).
 
-Un modismo útil para escáneres tipo C<lex> es C</\G.../gc>.  Puede combinar varias expresiones regulares como ésta para procesar una cadena parte por parte, haciendo diferentes acciones dependiendo de la expresión regular coincidente.  Cada regexp intenta coincidir donde la anterior lo dejó.
+Un modismo útil para escáneres tipo C<lex> es C</\G.../gc>.  Puede combinar varias expresiones regulares como ésta para procesar una cadena parte por parte, haciendo diferentes acciones dependiendo de la expresión regular coincidente.  Cada I<regex> intenta coincidir donde la anterior lo dejó.
 
  $_ = <<'EOL';
     $url = URI::URL->new( "http://example.com/" );
@@ -1436,7 +1436,7 @@ En el pasado, la C<m> precedente en C<m?I<PATRÓN>?> era opcional, pero omitirlo
 =item C<s/I<PATRÓN>/I<REEMPLAZO>/msixpodualngcer>
 X<substitute> X<substitution> X<replace> X<regexp, replace>
 X<regexp, substitute> X</m> X</s> X</i> X</x> X</p> X</o> X</g> X</c> X</e> X</r>
-X<sustitución> X<reemplazo> X<regexp, reemplazo> X<reemplazo, sustitución>
+X<sustitución> X<reemplazo> X<regex, reemplazo> X<reemplazo, sustitución>
 
 Busca un patrón en una cadena, y si se encuentra, sustituye este patrón con el texto de reemplazo y devuelve el número de sustituciones.  De lo contrario, devuelve falso (en concreto, la cadena vacía).
 
@@ -1976,7 +1976,7 @@ En la RE anterior, que está intencionalmente ofuscada para su ilustración, el 
 Este paso es el último para todas las construcciones, salvo las expresiones regulares, que son procesadas más adelante.
 
 =item analizando expresiones regulares
-X<regexp, parse> X<regexp, análisis>
+X<regexp, parse> X<regex, análisis>
 
 Se realizaron algunos pasos previos durante la compilación del código Perl, pero éste sucede en tiempo de ejecución, aunque puede ser optimizado para ser valorado en tiempo de compilación, si procede.  Después del proceso previo descrito anteriormente, y posiblemente después de la evaluación, por si la concatenación, unión, traducción de tamaño de caja, o metaentrecomillado estuvieran involucradas, la cadena resultante es pasada al motor de RE para su compilación.
 
@@ -1994,7 +1994,7 @@ El finalizador en tiempo de ejecución de C<(?{...})> se encuentra cambiando tem
 Es posible inspeccionar tanto la cadena dada al motor RE y el autómata finito que resulta.  Ver los argumentos C<debug>/C<debugcolor> en el I<pragma> S<C<use L<re>>>, así como la opción en línea de comandos de Perl B<-Dr> documentado en L<perlrun/"Opciones de comando">.
 
 =item Optimización de expresiones regulares
-X<regexp, optimization> X<regexp, optimización>
+X<regexp, optimization> X<regex, optimización>
 
 Este paso se describe aquí solo para completar la documentación.  Ya que no cambia la semántica, los detalles de este paso no están documentados y están sujetas a cambios sin previo aviso.  Este paso se realiza en el autómata finito que se generó durante la pasada anterior.
 

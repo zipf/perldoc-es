@@ -42,7 +42,7 @@ Finalmente, los delimitadores por defecto C<//> para una coincidencia se pueden 
     "/usr/bin/perl" =~ m"/perl"; # coincide después de '/usr/bin',
                                  # '/' se convierte en un carácter ordinario
 
-Las I<regexes> deben coincidir con una parte de la cadena I<exactamente> en el mismo orden o tamaño de caja, para que la sentencia sea verdadera:
+Las I<regex> deben coincidir con una parte de la cadena I<exactamente> en el mismo orden o tamaño de caja, para que la sentencia sea verdadera:
 
     "Hola Mundo" =~ /mundo/;   # no coincide, es sensible al tamaño de caja
     "Hola Mundo" =~ /a M/;     # coincide, ' ' es un carácter ordinario
@@ -75,13 +75,13 @@ para un retorno de carro.  Bytes arbitrarios se representan por secuencias de es
     "cat" =~ /\143\x61\x74/  # coincide en ASCII, pero 
                              # es una forma extraña de deletrear cat
 
-Las I<regexes> se tratan como si fueran cadenas doblemente entrecomilladas, así que la sustitución de variables funciona:
+Las I<regex> se tratan como si fueran cadenas doblemente entrecomilladas, así que la sustitución de variables funciona:
 
     $foo = 'casa';
     'casa del gato' =~ /$foo del gato/;   # coincide
     'gato casado' =~ /gato ${foo}do/;     # coincide
 
-Con todas estas I<regexes> que hemos visto, si la I<regex> coincide en alguna parte de la cadena, se considera que ha ocurrido una coincidencia.  Para especificar I<dónde> debería coincidir, usaríamos los metacaracteres B<ancla> C<^> y C<$>.  El ancla C<^> significa que coincide con el comienzo de la cadena y el ancla C<$> significa que coincide con el final de la cadena, o antes de un carácter de nueva línea al final de la cadena.  Algunos ejemplos:
+Con todas estas I<regex> que hemos visto, si la I<regex> coincide en alguna parte de la cadena, se considera que ha ocurrido una coincidencia.  Para especificar I<dónde> debería coincidir, usaríamos los metacaracteres B<ancla> C<^> y C<$>.  El ancla C<^> significa que coincide con el comienzo de la cadena y el ancla C<$> significa que coincide con el final de la cadena, o antes de un carácter de nueva línea al final de la cadena.  Algunos ejemplos:
 
     "ama de casa" =~ /casa/;           # coincide
     "ama de casa" =~ /^casa/;          # no coincide
@@ -215,7 +215,7 @@ En una determinada posición de carácter, la primera alternancia que permite qu
 
 =head2 Agrupando cosas y jerarquía de coincidencia
 
-Los metacaracteres de B<agrupación> C<()> permite a una parte de una I<regex> que se trate como una unidad.  Partes de una I<regex> se agrupan encerrándolas entre paréntesis.  La regex C<gat(o|era)> significa que coincide con C<gat> seguido tanto por C<o> o C<era>.  Algunos ejemplos más
+Los metacaracteres de B<agrupación> C<()> permite a una parte de una I<regex> que se trate como una unidad.  Partes de una I<regex> se agrupan encerrándolas entre paréntesis.  La I<regex> C<gat(o|era)> significa que coincide con C<gat> seguido tanto por C<o> o C<era>.  Algunos ejemplos más
 
     /(a|b)b/;    # coincide con 'ab' o 'bb'
     /(^a|b)c/;   # coincide con 'ac' al comienzo de la cadena o 'bc' en cualquier parte
