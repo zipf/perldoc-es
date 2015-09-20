@@ -1,0 +1,376 @@
+=head1 NOMBRE
+
+perlreref - Referencia de expresiones regulares en Perl
+
+=head1 DESCRIPCIÓN
+
+Esto es una referencia rápida para las expresiones regulares de Perl.
+Para una información completa, vea L<perlre> y L<perlop>, así como la sección L</"VEA TAMBIÉN"> en este documento.
+
+=head2 OPERADORES
+
+C<=~> determina a qué variable se aplica la expresión regular.
+En su ausencia, se usa $_.
+
+    $var =~ /foo/;
+
+C<!~> determina a qué variable se le aplica la I<regex>, y niega el resultado de la coincidencia; devuelve falso si la coincidencia tiene éxito, y verdadero si falla.
+
+    $var !~ /foo/;
+
+C<m/patrón/msixpogcdualn> buscar en una cadena una coincidencia con un patrón, aplicando las opciones indicadas.
+
+    m  Modo Multilínea - ^ y $ coinciden con líneas internas
+    s  coincide con una Sola línea - . coincide con \n
+    i  Insensible al tamaño de caja
+    x  legibilidad eXtendida - uso libre de espacio en blanco y comentarios
+    p  Preserva una copia de la cadena coincidente -
+       ${^PREMATCH}, ${^MATCH}, ${^POSTMATCH} quedarán definidos.
+    o  compila el patrón una sOla vez
+    g  Global - todas las ocurrencias
+    c  Conserva el valor de pos en coincidencias fallidas cuando se usa /g
+    a  restringir \d, \s, \w y [:posix:] para coincidir solo con ASCII
+    aa (dos aes) la coincidencia /i también excluye lo ASCII de lo no-ASCII
+    l  coincide de acuerdo a la configuración regional actual (Localización)
+    u  coincide de acuerdo a las reglas Unicode
+    d  coincide de acuerdo a las reglas nativas (por Defecto) a menos que otra cosa indique
+       Unicode
+    n  modo de No captura. Impide que () establezca $1, $2, etc...
+
+Si 'patrón' es una cadena vacía, se usa la última I<regex> I<exitosa> que se haya usado. Se pueden usar delimitadores distintos de '/' para estos dos operadores y los siguientes. El C<m> precedente se puede omitir si el delimitador es '/'.
+
+C<qr/patrón/msixpodualn> le permite almacenar una I<regex> en una variable, o pasarla más a otro sitio. Los modificadores son como los de C<m//> y se almacenan en la I<regex>.
+
+C<s/patrón/reemplazo/msixpogcedual> sustituye coincidencias del 'patrón' con 'reemplazo'. Los modificadores son como los de C<m//>, pero con dos adiciones:
+
+    e  Evalúa 'reemplazo' como una expresión
+    r  Regresa la sustitución y deja la cadena original intacta.
+
+'e' se puede especificar múltiples veces. 'reemplazo' se interpreta como una cadena doblemente entrecomillada a menos que el delimitador sea (C<'>).
+
+C<?patrón?> es como C<m/patrón/> pero coincide una sola vez. No se pueden alternar los delimitadores.  Se debe reinicializar con reset().
+
+=head1 SINTAXIS
+
+ \       Escapa el carácter que le sigue a continuación
+ .       Coincide con cualquier carácter único excepto el de nueva línea (a menos que /s esté
+           activo)
+ ^       Coincide con el comienzo de la cadena (o línea, si se usa /m)
+ $       Coincide con el final de la cadena (o línea, si se usa /m)
+ *       Coincide con el elemento precedente, 0 o más veces
+ +       Coincide con el elemento precedente 1 o más veces
+ ?       Coincide con el elemento precedente 0 o 1 veces
+ {...}   Especifica un rango de ocurrencias para el elemento precedente
+ [...]   Coincide con cualquiera de los caracteres contenidos dentro de los corchetes
+ (...)   Agrupa subexpresiones para capturar en $1, $2...
+ (?:...) Agrupa subexpresiones sin capturar (racimos)
+ |       Coincide con la subexpresión precedente o con la consecuente
+ \g1 o \g{1}, \g2 ...     Coincide con el texto del n-ésimo grupo
+ \1, \2, \3 ...           Coincide con el texto del n-ésimo grupo
+ \g-1 or \g{-1}, \g-2 ... Coincide con el texto del n-ésimo grupo anterior
+ \g{nombre}   Retrorreferencia con nombre
+ \k<nombre>   Retrorreferencia con nombre
+ \k'nombre'   Retrorreferencia con nombre
+ (?P=nombre)  Retrorreferencia con nombre (sintaxis python)
+
+=head2 SECUENCIAS DE ESCAPE
+
+Funcionan como cadenas de caracteres normales.
+
+   \a       Alarma (beep)
+   \e       Escape
+   \f       Avance de página
+   \n       Nueva línea
+   \r       Retorno de carro
+   \t       Tabulador
+   \037     Carácter cuyo valor ordinal son tres dígitos octales, máximo \777
+   \o{2307} Carácter cuyo valor ordinal es el número octal, sin restricción
+   \x7f     Carácter cuyo valor ordinal son dos dígitos hexadecimales, máximo \xFF
+   \x{263a} Carácter cuyo valor ordinal es el número hexadecimal, sin restricción
+   \cx      Control-x
+   \N{nomb} Un carácter o secuencia de caracteres Unicode, nombrado
+   \N{U+263D} Un carácter Unicode a partir de un ordinal hexadecimal
+
+   \l  Poner en minúscula el siguiente carácter
+   \u  Pasa a mayúscula el siguiente carácter
+   \L  Pasa a minúsculas hasta llegar a \E
+   \U  Pasa a mayúsculas hasta llegar a \E
+   \F  Plegado del tamaño de caja hasta llegar a \E
+   \Q  Deshabilitar los metacaracteres hasta llegar a \E
+   \E  Fin de modificación
+
+Para tamaño de caja titular, vea L</Tamaño de caja titular>.
+
+Esto funciona de forma diferente para cadenas de caracteres normales:
+
+   \b  Una aserción, no un retroceso, excepto en una clase de carácter
+
+=head2 CLASES DE CARÁCTER
+
+   [amy]    Coincide con 'a', 'm' o 'y'
+   [f-j]    El guión especifica un "rango"
+   [f-j-]   El guión colocado al inicio o final significa 'guión'
+   [^f-j]   Circunflejo indica "coincide con cualquier carácter excepto estos"
+
+Las secuencias siguientes (excepto C<\N>) funcionan con o sin una clase de carácter.
+Las primeras seis son compatibles con la configuración regional, todas son compatibles con Unicode. Vea L<perllocale> y L<perlunicode> para más detalles.
+
+   \d      Un dígito (0-9)
+   \D      Un no-dígito
+   \w      Coincide con un carácter que forma parte de una "palabra"
+   \W      Un carácter que no forma parte de una "palabra"
+   \s      Un carácter que es espacio en blanco
+   \S      Un carácter que no es espacio en blanco
+   \h      Un espacio en blanco horizontal
+   \H      Un espacio en blanco que no es horizontal
+   \N      Un carácter que no es nueva línea (cuando no le sigue '{NOMBRE}';;
+           no es válido en una clase de carácter; equivalente a [^\n]; es
+           como '.' sin el modificador /s)
+   \v      Un espacio en blanco vertical
+   \V      Un no-espacio en blanco vertical
+   \R      Una nueva línea genérica    (?>\v|\x0D\x0A)
+
+   \C      Coincide con un byte (con Unicode, '.' coincide con un carácter)
+           (Obsoleto).
+   \pP     Coincide con el nombre de una propiedad P (Unicode)
+   \p{...} Coincide con la propiedad Unicode cuyo nombre es mayor que un carácter
+   \PP     Coincide con algo que no sea una propiedad
+   \P{...} Coincide con la falta de una propiedad Unicode cuyo nombre es mayor que un carácter
+   \X      Coincide con una "agrupación de grafemas eXtendida" de Unicode
+
+Las clases de carácter POSIX y sus equivalentes Perl:
+
+            ASCII          Todo el
+   POSIX    rango          rango    escape
+ [[:...:]]  \p{...}        \p{...}   secuencia   Descripción
+
+ -----------------------------------------------------------------------
+ alnum   PosixAlnum       XPosixAlnum            Alfanumérico más dígitos
+ alpha   PosixAlpha       XPosixAlpha            Caracteres alfabéticos
+ ascii   ASCII                                   Cualquier carácter ASCII
+ blank   PosixBlank       XPosixBlank   \h       Espacio en blanco horizontal;
+                                                   el rango completo también
+                                                   se escribe como
+                                                   \p{HorizSpace} (GNU
+                                                   extension)
+ cntrl   PosixCntrl       XPosixCntrl            Caracteres de Control
+ digit   PosixDigit       XPosixDigit   \d       Dígitos decimales
+ graph   PosixGraph       XPosixGraph            Alfanumérico más puntuación
+ lower   PosixLower       XPosixLower            Caracteres en minúscula
+ print   PosixPrint       XPosixPrint            Gráficos más imprimibles, pero
+                                                   no cualquier carácter de control
+ punct   PosixPunct       XPosixPunct            Puntuación y símbolos
+                                                   en el rango del ASCII; con la
+                                                   puntuación excluida
+ space   PosixSpace       XPosixSpace            [\s\cK]
+         PerlSpace        XPerlSpace    \s       Espacio en blanco según Perl
+ upper   PosixUpper       XPosixUpper            Caracteres en mayúscula
+ word    PosixWord        XPosixWord    \w       Alfanumérico más marcas Unicode +
+                                                   conectores, como '_'
+                                                   (extensión Perl)
+ xdigit  ASCII_Hex_Digit  XPosixDigit            Dígito hexadecimal,
+                                                    El rango ASCII es
+                                                    [0-9A-Fa-f]
+
+También, algunos sinónimos como C<\p{Alpha}> para C<\p{XPosixAlpha}>; todos están listados en L<perluniprops/Propiedades disponibles con \p{} y \P{}>
+
+Dentro de una clase de carácter:
+
+    POSIX      tradicional   Unicode
+  [:digit:]       \d        \p{Digit}
+  [:^digit:]      \D        \P{Digit}
+
+=head2 ANCLAJES
+
+Todas son aserciones de ancho cero.
+
+   ^  Coincide con el comienzo de una cadena (o línea, si se usa /m)
+   $  Coincide con el final de una cadena (o línea, si es usa /m) o antes de una nueva línea
+   \b{} Coincide con el límite del tipo especificado dentro de los corchetes
+   \B{} Coincide donde \b{} no coincide
+   \b Coincide con límite de palabra (entre \w y \W)
+   \B Coincide excepto en límite de palabra (entre \w y \w o \W y \W)
+   \A Coincide con el comienzo de cadena (independientemente de /m)
+   \Z Coincide con el final de cadena (antes del carácter de nueva línea opcional)
+   \z Coincide con el final absoluto de la cadena
+   \G Coincide donde acabó el anterior m//g
+   \K Mantiene lo que haya a la izquierda de \K, y no lo incluye en $&
+
+=head3 CUANTIFICADORES
+
+Los cuantificadores son avariciosos por defecto y coinciden con B<todo lo restante>.
+
+   Máximo  Mínimo  Posesivo   Rango permitido
+   ------- ------- ---------- -------------
+   {n,m}   {n,m}?  {n,m}+     Debe ocurrir al menos n veces
+                              pero no más de m veces
+   {n,}    {n,}?   {n,}+      Debe ocurrir al menos n veces
+   {n}     {n}?    {n}+       Debe ocurrir exactamente n veces
+   *       *?      *+         0 o más veces (lo mismo que {0,})
+   +       +?      ++         1 o más veces (lo mismo que {1,})
+   ?       ??      ?+         0 o 1 veces (lo mismo que {0,1})
+
+Las formas posesivas (nuevas en Perl 5.10) impiden hacer vuelta atrás: lo que un patrón encuentra con un cuantificador posesivo no será devuelto a la búsqueda, incluso si eso causa que toda la búsqueda falle.
+
+No existe el cuantificador C<{,n}>. Esto se interpreta como una cadena literal.
+
+=head2 CONSTRUCCIONES EXTENDIDAS
+
+   (?#text)          Un comentario
+   (?:...)           Agrupa subexpresiones sin capturar (racimos)
+   (?pimsx-imsx:...) Activa/desactiva opciones (como los modificadores en m//)
+   (?=...)           Aserción positiva de inspección hacia adelante de ancho cero
+   (?!...)           Aserción negativa de inspección hacia adelante de ancho cero
+   (?<=...)          Aserción positiva de inspección hacia atrás de ancho cero
+   (?<!...)          Aserción negativa de inspección hacia atrás de ancho cero
+   (?>...)           Quédate con lo que tenemos, prohibido volver hacia atrás
+   (?|...)           Reinicio de ramas
+   (?<nombre>...)      Captura con nombre
+   (?'nombre'...)      Captura con nombre
+   (?P<nombre>...)     Captura con nombre (sintaxis python)
+   (?[...])          Clase de carácter entre corchetes extendida
+   (?{ código })     Código incrustado, el valor devuelto se almacena en $^R
+   (??{ código })    Regex dinámica, el valor devuelto se usa como una regex
+   (?N)              Búsqueda recursiva en el subpatrón número N
+   (?-N), (?+N)      Búsqueda recursiva en el siguiente/anterior subpatrón N-ésimo
+   (?R), (?0)        Búsqueda recursiva al comienzo de todo el patrón
+   (?&nombre)        Búsqueda recursiva en un subpatrón con nombre
+   (?P>nombre)       Búsqueda recursiva en un subpatrón con nombre (sintaxis python)
+   (?(cond)sí|no)
+   (?(cond)sí)       Expresión condicional, donde "cond" puede ser:
+                     (?=pat)     inspección hacia adelante
+                     (?!pat)     inspección hacia adelante negativa
+                     (?<=pat)    inspección hacia atrás
+                     (?<!pat)    inspección hacia atrás negativa
+                     (N)         subpatrón N-ésimo que haya encontrado algo
+                     (<nombre>)  subpatrón con nombre que haya encontrado algo
+                     ('nombre')  subpatrón con nombre que haya encontrado algo
+                     (?{código}) condición a partir de un código
+                     (R)         verdadero si es recursivo
+                     (RN)        verdadero si es recursivo en el subpatrón N-ésimo
+                     (R&nombre)  verdadero si es recursivo en un subpatrón con nombre
+                     (DEFINE)    siempre falso, no se permite un patrón en la parte del "no"
+
+=head2 VARIABLES
+
+   $_    Variable que por defecto usarán los operadores
+
+   $`    Todo lo anterior a lo que se haya encontrado en la cadena
+   $&    Toda la cadena coincidente
+   $'    Todo lo que sigue a lo que se haya encontrado en la cadena
+
+   ${^PREMATCH}   Todo lo anterior a lo que se haya encontrado en la cadena
+   ${^MATCH}      Toda la cadena coincidente
+   ${^POSTMATCH}  Todo lo que sigue a lo que se haya encontrado en la cadena
+
+Nota para los que siguen usando Perl 5.18 o anteriores: el uso de C<$`>, C<$&> o C<$'> enlentecerá B<todas> las I<regex> que se usen dentro del programa. Consulte C<@-> en L<perlvar> para ver expresiones equivalentes que no provocan ese enlentecimiento.
+Vea también L<Devel::SawAmpersand>. A partir de Perl 5.10, también puede usar las variables equivalentes C<${^PREMATCH}>, C<${^MATCH}> y C<${^POSTMATCH}>, pero para que queden definidos tiene que especificar el modificador C</p> (preservar) en su expresión regular.
+En Perl 5.20, el uso de C<$`>, C<$&> y C<$'> no provoca diferencias de velocidad.
+
+   $1, $2 ...  almacenan la n-ésima expresión capturada
+   $+    Último patrón entre paréntesis que haya coincidido
+   $^N   Almacena la captura cerrada más reciente
+   $^R   Almacena el resultado de la última expresión (?{...})
+   @-    Desplazamientos a los inicios de los grupos $-[0] almacena el comienzo de toda la coincidencia
+   @+    Desplazamientos a los finales de los grupos $+[0] almacena el final de toda la coincidencia
+   %+    Grupos de captura con nombres
+   %-    Grupos de captura con nombres, como referencias a array
+
+Los grupos de captura se numeran de acuerdo a su paréntesis de I<apertura>.
+
+=head2 FUNCIONES
+
+   lc          Pasar una cadena a minúsculas
+   lcfirst     Pasar a minúscula el primer carácter de una cadena
+   uc          Pasar una cadena a mayúsculas
+   ucfirst     Pasar a mayúscula el primer carácter de una cadena 
+   fc          Plegado de una cadena
+
+   pos         Devuelve o actualiza la posición actual de una coincidencia
+   quotemeta   Escapa los metacaracteres
+   reset       Reinicia ?patrón? el estado
+   study       Analiza la cadena para optimizar la búsqueda
+
+   split       Usa una regex para dividir una cadena en partes
+
+Las primeras de estas cinco son como las secuencias de escape C<\L>, C<\l>, C<\U>, C<\u> y C<\F>.  Para titulación, vea L</Titulación>; Para plegamiento, vea L</Plegamiento>.
+
+=head2 TERMINOLOGÍA
+
+=head3 Titulación
+
+Concepto Unicode que casi siempre es igual a poner en mayúsculas, pero para ciertos caracteres como el alemán "sharp s", hay una diferencia.
+
+=head3 Plegamiento
+
+Forma Unicode que es útil cuando se comparan cadenas sin importar el tamaño de caja, ya que ciertos caracteres tienen complejos casos de mapeos uno-a-muchos. Es, principalmente, una variante de la operación de pasar a minúsculas.
+
+=head1 AUTOR
+
+Iain Truskett. Actualizado por los I<Perl 5 Porters>.
+
+Puede distribuir este documento en los mismos términos que Perl.
+
+=head1 VEA TAMBIÉN
+
+=over 4
+
+=item *
+
+L<perlretut> para un tutorial sobre expresiones regulares.
+
+=item *
+
+L<perlrequick> para un tutorial rápido.
+
+=item *
+
+L<perlre> para más detalles.
+
+=item *
+
+L<perlvar> para detalles sobre las variables.
+
+=item *
+
+L<perlop> para detalles sobre los operadores.
+
+=item *
+
+L<perlfunc> para detalles sobre las funciones.
+
+=item *
+
+L<perlfaq6> para las P+F sobre expresiones regulares.
+
+=item *
+
+L<perlrebackslash> para una referencia sobre secuencias de escape.
+
+=item *
+
+L<perlrecharclass> para una referencia sobre las clases de caracteres.
+
+=item *
+
+El módulo L<re> para alterar el comportamiento y ayudar en la depuración.
+
+=item *
+
+L<perldebug/"Depurando expresiones regulares">
+
+=item *
+
+L<perluniintro>, L<perlunicode>, L<charnames> y L<perllocale> para detalles sobre I<regex> e internacionalización.
+
+=item *
+
+I<Mastering Regular Expressions> de Jeffrey Friedl (F<http://oreilly.com/catalog/9780596528126/>) para un análisis y referencia minuciosos sobre el tema.
+
+=back
+
+=head1 AGRADECIMIENTOS
+
+David P.C. Wollmann, Richard Soderberg, Sean M. Burke, Tom Christiansen, Jim Cromie, y Jeffrey Goff por sus útiles consejos.
+
+=cut
