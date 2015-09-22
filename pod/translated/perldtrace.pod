@@ -1,0 +1,204 @@
+=head1 NOMBRE
+
+perldtrace - Compatibilidad con DTrace
+
+=head1 SINOPSIS
+
+    # dtrace -Zn 'perl::sub-entry, perl::sub-return { trace(copyinstr(arg0)) }'
+    dtrace: description 'perl::sub-entry, perl::sub-return ' matched 10 probes
+
+    # perl -E 'sub outer { inner(@_) } sub inner { say shift } outer("hola")'
+    hola
+
+    (salida de dtrace)
+    CPU     ID                    FUNCIÓN:NOMBRE
+      0  75915       Perl_pp_entersub:sub-entry   BEGIN
+      0  75915       Perl_pp_entersub:sub-entry   import
+      0  75922      Perl_pp_leavesub:sub-return   import
+      0  75922      Perl_pp_leavesub:sub-return   BEGIN
+      0  75915       Perl_pp_entersub:sub-entry   outer
+      0  75915       Perl_pp_entersub:sub-entry   inner
+      0  75922      Perl_pp_leavesub:sub-return   inner
+      0  75922      Perl_pp_leavesub:sub-return   outer
+
+=head1 DESCRIPCIÓN
+
+DTrace es un entorno comprensible de trabajo para el trazado de aplicaciones. Perl es un I<proveedor> de DTrace, significando que ofrece varias I<sondas> para la instrumentación. Puede usarlas en conjunción con sondas a nivel del núcleo, así como sondas de otros proveedores como MySQL, para diagnosticas defectos del software, o incluso cuellos de botella en sus aplicaciones.
+
+Se debe compilar Perl con la opción C<-Dusedtrace> para hacer uso de las sondas. Mientras que DTrace tiene como objetivo no sobrecargar cuando la instrumentación no esté activa, el propio soporte de Perl no puede garantizarlo, por lo que se suele compilar sin las sondas DTrace en la mayor parte de los sistemas. Una notable excepción es el Mac OS X, que trae un F</usr/bin/perl> con el soporte DTrace activado.
+
+=head1 HISTORIA
+
+=over 4
+
+=item 5.10.1
+
+Se añadió el soporte inicial de DTrace en Perl, ofreciendo las sondas C<sub-entry> y C<sub-return>.
+
+=item 5.14.0
+
+Las sondas C<sub-entry> y C<sub-return> ganan un cuarto argumento: el nombre de paquete de la función.
+
+=item 5.16.0
+
+Se añadió la sonda C<phase-change>.
+
+=item 5.18.0
+
+Se añadieron las sondas C<op-entry>, C<loading-file> y C<loaded-file>.
+
+=back
+
+=head1 SONDAS
+
+=over 4
+
+=item sub-entry(NOMBRE_SUBRUTINA, ARCHIVO, LÍNEA, PAQUETE)
+
+Traza la entrada de cualquier subrutina. Note que todas las variables se refieren a la subrutina invocada; no hay actualmente ninguna forma de obtener ninguna información sobre el I<llamador> a esa función desde una acción Dtrace.
+
+    :*perl*::sub-entry {
+        printf("%s::%s entró en %s línea %d\n",
+               copyinstr(arg3), copyinstr(arg0), copyinstr(arg1), arg2);
+    }
+
+=item sub-return(NOMBRE_SUBRUTINA, ARCHIVO, LÍNEA, PAQUETE)
+
+Traza la salida de cualquier subrutina. Note que todas las variables se refieren a la subrutina que está regresando; no hay actualmente ninguna forma de obtener ninguna información sobre el I<llamador> a esa función desde una acción Dtrace.
+
+    :*perl*::sub-return {
+        printf("%s::%s regresó en %s línea %d\n",
+               copyinstr(arg3), copyinstr(arg0), copyinstr(arg1), arg2);
+    }
+
+=item phase-change(NEWPHASE, OLDPHASE)
+
+Traza los cambios en el estado del intérprete de Perl. Puede interiorizar esto como el trazar los cambios en la variable C<${^GLOBAL_PHASE}> de Perl, ya que lo que reporta C<${^GLOBAL_PHASE}> son las cadenas de caracteres C<NEWPHASE> y C<OLDPHASE>.
+
+    :*perl*::phase-change {
+        printf("La fase cambió de %s a %s\n",
+            copyinstr(arg1), copyinstr(arg0));
+    }
+
+=item op-entry(NOMBRE_OPERACIÓN)
+
+Traza la ejecución de cada código de operación en el bucle de ejecución de Perl. Esta sonda se dispara antes de que se ejecute el código de operación. Cuando se activa el depurador de Perl, se dispara la sonda DTrace I<después> del gancho del depurador (pero antes de que se ejecute el propio código de operación).
+
+    :*perl*::op-entry {
+        printf("A punto de ejecutar la operación %s\n", copyinstr(arg0));
+    }
+
+=item loading-file(NOMBRE_ARCHIVO)
+
+Se dispara cuando Perl está a punto de cargar un archivo individual, bien sea con C<use>, C<require> o C<do>. Esta sonda se dispara antes de que se lea el archivo desde el disco. El argumento del nombre de archivo se convierte al sistema local de rutas en lugar de usar el estilo de nombres C<Módule::Nombre>.
+
+    :*perl*:loading-file {
+        printf("A punto de cargar %s\n", copyinstr(arg0));
+    }
+
+=item loaded-file(NOMBRE_ARCHIVO)
+
+Se dispara cuando Perl ha cargado exitosamente un archivo individual, bien sea con C<use>, C<require> o C<do>. Esta sonda se dispara después de que el archivo se ha leído desde el disco, y sus contenidos, evaluados. El argumento del nombre de archivo se convierte al sistema local de rutas en lugar de usar el estilo de nombres C<Módule::Nombre>.
+
+    :*perl*:loaded-file {
+        printf("Cargado exitosamente %s\n", copyinstr(arg0));
+    }
+
+=back
+
+=head1 EJEMPLOS
+
+=over 4
+
+=item Funciones llamadas con más frecuencia
+
+    # dtrace -qZn 'sub-entry { @[strjoin(strjoin(copyinstr(arg3),"::"),copyinstr(arg0))] = count() } END {trunc(@, 10)}'
+
+    Class::MOP::Attribute::slots                                    400
+    Try::Tiny::catch                                                411
+    Try::Tiny::try                                                  411
+    Class::MOP::Instance::inline_slot_access                        451
+    Class::MOP::Class::Immutable::Trait:::around                    472
+    Class::MOP::Mixin::AttributeCore::has_initializer               496
+    Class::MOP::Method::Wrapped::__ANON__                           544
+    Class::MOP::Package::_package_stash                             737
+    Class::MOP::Class::initialize                                  1128
+    Class::MOP::get_metaclass_by_name                              1204
+
+=item Traza de las llamadas a funciones
+
+    # dtrace -qFZn 'sub-entry, sub-return { trace(copyinstr(arg0)) }'
+
+    0  -> Perl_pp_entersub                        BEGIN
+    0  <- Perl_pp_leavesub                        BEGIN
+    0  -> Perl_pp_entersub                        BEGIN
+    0    -> Perl_pp_entersub                      import
+    0    <- Perl_pp_leavesub                      import
+    0  <- Perl_pp_leavesub                        BEGIN
+    0  -> Perl_pp_entersub                        BEGIN
+    0    -> Perl_pp_entersub                      dress
+    0    <- Perl_pp_leavesub                      dress
+    0    -> Perl_pp_entersub                      dirty
+    0    <- Perl_pp_leavesub                      dirty
+    0    -> Perl_pp_entersub                      whiten
+    0    <- Perl_pp_leavesub                      whiten
+    0  <- Perl_dounwind                           BEGIN
+
+=item Llamadas de función durante la fase de limpieza del intérprete
+
+    # dtrace -Zn 'phase-change /copyinstr(arg0) == "END"/ { self->ending = 1 } sub-entry /self->ending/ { trace(copyinstr(arg0)) }'
+
+    CPU     ID                    FUNCIÓN:NOMBRE
+      1  77214       Perl_pp_entersub:sub-entry   END
+      1  77214       Perl_pp_entersub:sub-entry   END
+      1  77214       Perl_pp_entersub:sub-entry   cleanup
+      1  77214       Perl_pp_entersub:sub-entry   _force_writable
+      1  77214       Perl_pp_entersub:sub-entry   _force_writable
+
+=item Llamadas al sistema en tiempo de compilación
+
+    # dtrace -qZn 'phase-change /copyinstr(arg0) == "START"/ { self->interesting = 1 } phase-change /copyinstr(arg0) == "RUN"/ { self->interesting = 0 } syscall::: /self->interesting/ { @[probefunc] = count() } END { trunc(@, 3) }'
+
+    lseek                                                           310
+    read                                                            374
+    stat64                                                         1056
+
+=item Funciones Perl que ejecuta la mayor parte de los códigos de operación
+
+    # dtrace -qZn 'sub-entry { self->fqn = strjoin(copyinstr(arg3), strjoin("::", copyinstr(arg0))) } op-entry /self->fqn != ""/ { @[self->fqn] = count() } END { trunc(@, 3) }'
+
+    warnings::unimport                                             4589
+    Exporter::Heavy::_rebuild_cache                                5039
+    Exporter::import                                              14578
+
+=back
+
+=head1 REFERENCIAS
+
+=over 4
+
+=item Guía para la traza dinámica con DTrace
+
+L<http://dtrace.org/guide/preface.html>
+
+=item DTrace: Trazado dinámico en Oracle Solaris, Mac OS X y FreeBSD
+
+L<http://www.amazon.com/DTrace-Dynamic-Tracing-Solaris-FreeBSD/dp/0132091518/>
+
+=back
+
+=head1 VEA TAMBIÉN
+
+=over 4
+
+=item L<Devel::DTrace::Provider>
+
+Este módulo CPAN le permite crear sondas DTrace a nivel de aplicación escritos en Perl.
+
+=back
+
+=head1 AUTORES
+
+Shawn M Moore C<sartak@gmail.com>
+
+=cut
