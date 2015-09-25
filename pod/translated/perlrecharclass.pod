@@ -330,7 +330,7 @@ Algunos nombres indicados en C<\N{...}> se refieren a una secuencia de caractere
   "\N{TAMIL LETTER KA}\N{TAMIL VOWEL SIGN AU}"
                               =~ / ^ [\N{TAMIL SYLLABLE KAU}]  $ /x;
 
-coincide, ya que C<\N{TAMIL SYLLABLE KAU}> es el nombre de una secuencia que contiene los dos caracteres que se busca.  Igual que con la otra instancia, donde una clase entre corchetes puede coincidir con múltiples caracteres, y por razones similares, la clase no debe invertirse, y el nombre de la secuencia no puede aparecer en un rango, ni incluso en uno de sus puntos finales.  Si esto sucede, es un error fatal si la clase de carácter está dentro de una clase extendida L<C<(?[...])>|/Clases de carácter entre corchetes extendidas>; o, de otra forma, solo se usa el primer código de carácter (levantando una excepción de tipo C<regexp>).
+coincide, ya que C<\N{TAMIL SYLLABLE KAU}> es el nombre de una secuencia que contiene los dos caracteres que se busca.  Igual que con la otra instancia, donde una clase entre corchetes puede coincidir con múltiples caracteres, y por razones similares, la clase no debe invertirse, y el nombre de la secuencia no puede aparecer en un rango, ni incluso en uno de sus puntos finales.  Si esto sucede, es un error fatal si la clase de carácter está dentro de una clase extendida L<C<(?[...])>|/Clases de carácter entre corchetes extendidas>; o, de otra forma, solo se usa el primer código de carácter (levantando una excepción de tipo C<regex>).
 
 =back
 
@@ -388,7 +388,7 @@ Ejemplos:
  [\N{U+27}-\N{U+3F}] # Lo mismo. (U+27 es "'", y U+3F es "?")
 
 Como muestran los dos últimos ejemplos mostrados antes, puede obtener una portabilidad en plataformas no-ASCII usando la forma C<\N{...}> para los puntos finales del rango.  Estos indican que el rango indicado se debe interpretar como valores Unicode, así que C<[\N{U+27}-\N{U+3F}]> significa que coincide C<\N{U+27}>, C<\N{U+28}>, C<\N{U+29}>, ..., C<\N{U+3D}>, C<\N{U+3E}> y C<\N{U+3F}>, cualesquiera que fueran las versiones nativas de los códigos de carácter.
-A estos rangos se les llama "Unicode".  Si cualquiera de los finales es de la forma C<\N{...}>, el rango se considera que es Unicode.  Una advertencia C<regexp> se levanta con C<S<"use re 'strict'">> si el otro punto final se especifica de forma no portable:
+A estos rangos se les llama "Unicode".  Si cualquiera de los finales es de la forma C<\N{...}>, el rango se considera que es Unicode.  Una advertencia C<regex> se levanta con C<S<"use re 'strict'">> si el otro punto final se especifica de forma no portable:
 
  [\N{U+00}-\x09]    # Advertencia bajo re 'strict'; \x09 no es portable
  [\N{U+00}-\t]      # No advertencia;

@@ -118,7 +118,7 @@ C<\n> coincide con un avance de línea lógico. Perl convierte entre C<\n> y el 
 =head3 Caracteres de control
 
 Se usa C<\c> para denotar a un carácter de control; el carácter siguiente C<\c> determina el valor de la construcción.  Por ejemplo, el valor de C<\cA> es C<chr(1)>, y el valor de C<\cb> es C<chr(2)>, etc.
-Los detalles sangrientos están en L<perlop/"Operadores Regexp entrecomillados">.  Una lista completa de lo que C<chr(1)>, etc. significan para plataformas ASCII y EBCDIC está en L<perlebcdic/DIFERENCIAS de OPERADORES>.
+Los detalles sangrientos están en L<perlop/"Operadores I<regex> entrecomillados">.  Una lista completa de lo que C<chr(1)>, etc. significan para plataformas ASCII y EBCDIC está en L<perlebcdic/DIFERENCIAS de OPERADORES>.
 
 Note que no es válido un solo C<\c\> al final de la expresión regular (o cadena doblemente entrecomillada).  La barra diagonal inversa debe estar seguida por otro carácter.
 Es decir, C<\c\I<X>> es igual a C< chr(28) . 'I<X>'> para todos los caracteres I<X>.

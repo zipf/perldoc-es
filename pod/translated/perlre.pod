@@ -20,19 +20,19 @@ En las operaciones de detección de coincidencias se pueden usar varios modifica
 =over 4
 
 =item m
-X</m> X<regex, multiline> X<regexp, multiline> X<regular expression, multiline> X<regex, multilínea> X<regexp, multilínea> X<expresión regular, multilínea>
+X</m> X<regex, multiline> X<regexp, multiline> X<regular expression, multiline> X<regex, multilínea> X<expresión regular, multilínea>
 
 Trata la cadena como si fuera un conjunto de líneas.  Es decir, cambia el significado de "^" y "$", de coincidir, respectivamente, con el principio de la primera línea y el final de la última línea, a coincidir con el principio y el final de cada línea, dentro de la cadena.
 
 =item s
-X</s> X<regex, single-line> X<regexp, single-line> X<regular expression, single-line> X<regex, una línea> X<regexp, una línea> X<expresión regular, una línea>
+X</s> X<regex, single-line> X<regexp, single-line> X<regular expression, single-line> X<regex, una línea> X<expresión regular, una línea>
 
 Trata la cadena como una sola línea.  Es decir, cambia el significado de "." para que detecte cualquier carácter, incluso el de nueva línea, que normalmente no detectaría.
 
 Si se usan juntos, como C</ms>, permiten que "." detecte cualquier carácter y, a la vez, que "^" y "$" detecten, respectivamente, las posiciones justo a continuación e inmediatamente antes de los caracteres de nueva línea en la cadena.
 
 =item i
-X</i> X<regex, case-insensitive> X<regexp, case-insensitive> X<regular expression, case-insensitive> X<regex, no distinguir mayúsculas de minúsculas> X<regexp, no distinguir mayúsculas de minúsculas> X<expresión regular, no distinguir mayúsculas de minúsculas>
+X</i> X<regex, case-insensitive> X<regexp, case-insensitive> X<regular expression, case-insensitive> X<regex, no distinguir mayúsculas de minúsculas> X<regex, no distinguir mayúsculas de minúsculas> X<expresión regular, no distinguir mayúsculas de minúsculas>
 
 Busca coincidencias de patrones sin distinguir mayúsculas de minúsculas.
 
@@ -57,7 +57,7 @@ Mejora la legibilidad del patrón, al permitir espacios en blanco y comentarios.
 Para obtener más información, vea L</"/x">
 
 =item p
-X</p> X<regex, preserve> X<regexp, preserve> X<regex, conservar> X<regexp, conservar>
+X</p> X<regex, preserve> X<regexp, preserve> X<regex, conservar>
 
 Conserva la cadena coincidente, de manera que ${^PREMATCH}, ${^MATCH} y ${^POSTMATCH} estén disponibles tras la detección.
 
@@ -69,7 +69,7 @@ X</a> X</d> X</l> X</u>
 Estos modificadores, incorporados en la versión 5.14, afectan a la semántica de juego de caracteres (Unicode, etc.) usada, como se explica más abajo, en L</Modificadores de juego de caracteres>.
 
 =item n
-X</n> X<regex, non-capture> X<regexp, non-capture> X<regexp, no captura>
+X</n> X<regex, non-capture> X<regexp, non-capture> X<regex, no captura>
 X<regular expression, non-capture> X<expresión regular, no captura>
 
 Impide que capturen los metacaracteres de agrupación C<()>. Este modificador, nuevo en 5.22, impedirá que se actualicen C<$1>, C<$2>, etc.
@@ -495,7 +495,7 @@ X<regexp, zero-width assertion>
 X<regular expression, zero-width assertion>
 X<\b> X<\B> X<\A> X<\Z> X<\z> X<\G>
 X<aserción ancho cero> X<aserción> X<regex, aserción ancho cero>
-X<regexp, aserción ancho cero>
+X<regex, aserción ancho cero>
 X<expresión regular, aserción ancho cero>
 
     \b{} Coincide con el límite Unicode del tipo especificado
@@ -540,8 +540,7 @@ Note también que C<s///> rechazará sobreescribir parte de la sustitución que 
 
 Los paréntesis C<( ... )> crean grupos de captura (también denominados búferes de captura). Para hacer referencia posteriormente, dentro del mismo patrón, al contenido actual de un grupo de captura, use C<\g1> (o C<\g{1}>) para el primero, C<\g2> (o C<\g{2}>) para el segundo, y así sucesivamente.
 Esto se denomina I<retrorreferencia>.
-X<regex, búfer de captura> X<regexp, búfer de captura>
-X<regex, grupo de captura> X<regexp, grupo de captura>
+X<regex, búfer de captura> X<regex, grupo de captura>
 X<expresión regular, búfer de captura> X<retrorreferencia>
 X<expresión regular, grupo de captura>
 X<\g{1}> X<\g{-1}> X<\g{nombre}> X<retrorreferencia relativa> X<retrorreferencia con nombre>
@@ -861,7 +860,7 @@ Ambas formas son equivalentes.
 B<NOTA:> para facilitar las cosas a los programadores con experiencia de uso de los motores de expresiones regulares de Python o PCRE, se puede usar el patrón C<< (?P=NOMBRE) >> en lugar de C<< \k<NOMBRE> >>.
 
 =item C<(?{ código })>
-X<(?{})> X<regex, code in> X<regexp, code in> X<regular expression, code in> X<regex, código interior> X<regexp, código interior> X<expresión regular, código interior>
+X<(?{})> X<regex, code in> X<regexp, code in> X<regular expression, code in> X<regex, código interior> X<expresión regular, código interior>
 
 B<ADVERTENCIA:> Usar esta característica de forma segura requiere que entienda sus limitaciones.  El código ejecutado que tenga efectos secundarios puede no funcionar de forma idéntica de una versión a otra debido al efecto de futuras optimizaciones del motor de expresiones regulares.  Para más información sobre esto, vea L</Frecuencia de ejecución de código incrustado>.
 
@@ -948,7 +947,7 @@ Note que la variable especial C<$^N> es particularmente útil con bloques de có
 
 
 =item C<(??{ código })>
-X<(??{})> X<regex, postponed> X<regexp, postponed> X<regular expression, postponed> X<regex, pospuesta> X<regexp, pospuesta> X<expresión regular, pospuesta>
+X<(??{})> X<regex, postponed> X<regexp, postponed> X<regular expression, postponed> X<regex, pospuesta> X<expresión regular, pospuesta>
 
 B<ADVERTENCIA:> Usar esta característica de forma segura requiere que entienda sus limitaciones.  El código que se ejecuta que tenga efectos secundarios puede no funcionar de forma idéntica de una versión a otra debido al efecto de futuras optimizaciones del motor de expresiones regulares.  Para más información sobre esto, vea L</Frecuencia de ejecución de código incrustado>.
 
@@ -984,7 +983,7 @@ Ejecutar 50 veces una expresión regular pospuesta sin consumir ninguna cadena d
 
 =item C<(?I<PARNO>)> C<(?-I<PARNO>)> C<(?+I<PARNO>)> C<(?R)> C<(?0)>
 X<(?PARNO)> X<(?1)> X<(?R)> X<(?0)> X<(?-1)> X<(?+1)> X<(?-PARNO)> X<(?+PARNO)> X<regex, recursive> X<regexp, recursive> X<regular expression, recursive>
-X<regex, relative recursion> X<regex, recursiva> X<regexp, recursiva> X<expresión regular, recursiva> X<regex, recursión relativa> X<GOSUB> X<GOSTART>
+X<regex, relative recursion> X<regex, recursiva> X<expresión regular, recursiva> X<regex, recursión relativa> X<GOSUB> X<GOSTART>
 
 Subpatrón recursivo. Trata los contenidos de un búfer de captura dado en el patrón actual como un subpatrón independiente e intenta hacerlo coincidir en la posición actual de la cadena. La información sobre el estado de la captura por parte del llamador por cosas como las retroreferencias está disponible al subpatrón, pero los búferes de captura ajustados por el subpatrón no son visibles al llamador.
 
@@ -1501,7 +1500,7 @@ Y si utiliza algún C<*> en los grupos internos en lugar de limitarlos a un núm
 Una herramienta eficaz para optimizar estos engendros es lo que se conoce como un "grupo independiente", que no vuelve atrás (vea L</C<< (?>patrón) >>>).  Tenga en cuenta también que las aserciones de inspección hacia adelante/hacia atrás de longitud cero no darán marcha atrás para que la parte final coincida, ya que están en un contexto "lógico": lo único que importa es si coinciden o no.  En la descripción de L</C<< (?>patrón) >>> encontrará un ejemplo en el que los efectos secundarios de la inspección hacia adelante I<pueden> haber influido en la coincidencia siguiente.
 
 =head2 Expresiones regulares versión 8
-X<regular expression, version 8> X<regex, version 8> X<regexp, version 8> X<expresión regular, versión 8> X<regex, versión 8> X<regexp, versión 8>
+X<regular expression, version 8> X<regex, version 8> X<regexp, version 8> X<expresión regular, versión 8> X<regex, versión 8>
 
 En caso de que no esté familiarizado con la versión 8 "normal" de las rutinas de expresiones regulares, se indican aquí las reglas de coincidencia de patrones no descritas anteriormente.
 
