@@ -6,15 +6,15 @@ perlandroid - Perl bajo Android
 
 =head1 SINOPSIS
 
-La primera parte de este documento contiene instrucciones para la compilación cruzada de Perl para Android 2.0 y superiores, usando los binarios ofrecidos por Google.  La última parte describe cómo construir un perl nativo usando una de las cadenas de herramientas disponibles en el Play Store.
+La primera parte de este documento contiene instrucciones para la compilación cruzada de Perl para Android 2.0 y superiores, usando los binarios ofrecidos por Google.  La última parte describe cómo generar un perl nativo usando una de las cadenas de herramientas disponibles en el Play Store.
 
 =head1 DESCRIPCIÓN
 
-Este documento describe cómo ajustar su entorno cuando intente compilar Perl para Android.
+Este documento describe cómo ajustar su entorno cuando intente generar Perl para Android.
 
 =head1 Compilación cruzada
 
-Estas instrucciones asumen un entorno de construcción similar a Unix en su sistema principal; se ha probado en Linux y OS X, y puede funcionar en Cygwin y MSYS.
+Estas instrucciones asumen un entorno de generación similar a Unix en su sistema principal; se ha probado en Linux y OS X, y puede funcionar en Cygwin y MSYS.
 Mientras que Google ofrece también un NDK para Windows, estos pasos aquí descritos no funcionarán de forma nativa, aunque puede ser posible compilarlo de forma cruzada a través de diferentes medios.
 
 Si la arquitectura de sistema principal es de 32 bits, recuerde cambiar el C<x86_64> de más abajo, a C<x86>.  De una forma similar, los ejemplos siguientes usan la cadena de herramientas 4.8; si quiere usar algo más viejo o más nuevo (por ejemplo, la cadena de herramientas 4.4.3 incluida en la octava revisión del NDK), solo cámbielos a la versión pertinente.
@@ -126,7 +126,7 @@ En algunos viejos dispositivos baratos -piense en los anteriores a la era 2.2- a
 
 =back
 
-=head1 Compilaciones nativas
+=head1 Generaciones nativas
 
 Mientras que Google no ofrece una cadena de herramientas nativa para Android, aún puede obtener uno desde Play Store; por ejemplo, está la app CCTools que puede bajarse gratuitamente.
 Tenga en cuenta que puede encontrar una cadena de herramientas completa; algunas app tienden por defecto a instalar solo una versión simple, sin algunas utilidades importantes, como ar o nm.

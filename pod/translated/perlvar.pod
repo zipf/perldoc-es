@@ -498,7 +498,7 @@ Pero recuerde que no todos los sistemas operativos son compatibles con fork() o 
 
 No es seguro usar el valor de C<$^X> como un nombre de ruta de un archivo, ya que algunos sistemas operativos que tienen un sufijo obligatorio en los archivos ejecutables no requieren el uso del sufijo al invocar un comando.  Para convertir el valor de C<$^X> a un nombre de ruta, utilice las siguientes instrucciones:
 
-    # Construir un conjunto de nombres de archivo (no de nombres de comandos).
+    # Generar un conjunto de nombres de archivo (no de nombres de comandos).
     use Config;
     my $este_perl = $^X;
     if ($^O ne 'VMS') {

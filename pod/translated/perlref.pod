@@ -13,7 +13,7 @@ Para una guía de introducción más corta, a sólo las características esencia
 
 Antes de la publicación de Perl 5, era difícil representar estructuras complejas de datos, porque todas las referencias tenían que ser simbólicas -e incluso entonces era difícil referirse a una variable en lugar de a una entrada de la tabla de símbolos-.
 Perl ahora no sólo hace que sea más fácil usar referencias simbólicas a variables, sino que también le permite tener referencias "duras" a cualquier trozo de datos o código.
-Cualquier escalar puede contener una referencia dura.  Dado que los arrays y los hashes contienen escalares, ahora puede fácilmente construir arrays de arrays, arrays de hashes, arrays de hashes de funciones, y así sucesivamente.
+Cualquier escalar puede contener una referencia dura.  Dado que los arrays y los hashes contienen escalares, ahora puede fácilmente generar arrays de arrays, arrays de hashes, arrays de hashes de funciones, y así sucesivamente.
 
 Las referencias duras son inteligentes: hacen por usted un seguimiento de los recuentos de referencias, liberando automáticamente lo que es referido en cuanto su recuento de referencias llega a cero.  (Los recuentos de referencia para valores en estructuras de datos auto referenciadas o cíclicas quizás no puedan llegar a cero sin un poco de ayuda. Vea L<perlobj/"Recolección de basura en dos fases"> para una explicación detallada).
 Si eso le pasa a un objeto, el objeto es destruido.  Vea L<perlobj> para más información sobre los objetos.  (En cierto sentido, todo en Perl es un objeto, pero por lo general se reserva la palabra para las referencias a objetos que han sido oficialmente "bendecidos" en una clase I<package>).
@@ -459,7 +459,7 @@ Utilizando una clausura como plantilla de función nos permite generar muchas fu
 
     print "Sé ", rojo("cuidadoso"), "con eso ", verde("light");
 
-Las funciones roja y verde serían similares.  Para crearlas, vamos a asignar una clausura a un typeglob del nombre de la función que estamos tratando de construir.
+Las funciones roja y verde serían similares.  Para crearlas, vamos a asignar una clausura a un typeglob del nombre de la función que estamos tratando de generar.
 
     @colores = qw(rojo azul verde amarillo naranja púrpura violeta);
     for my $nombre (@colores) {

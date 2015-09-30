@@ -89,7 +89,7 @@ Cree un archivo batch para ejecutar su programa, y codifique en él un C<ALTERNA
 
 =item Win95/NT
 
-La instalación Win95/NT, cuando se usa el instalador de ActiveState para Perl, modificará el Registro para asociar la extensión F<.pl> con el intérprete perl.  Si instala Perl por otros medios (incluyendo la compilación del código fuente), puede modificar usted mismo el Registro de Windows.  Tenga en cuenta que esto significa que ya no podrá diferenciar a un programa Perl ejecutable de un archivo de biblioteca Perl.
+La instalación Win95/NT, cuando se usa el instalador de ActiveState para Perl, modificará el Registro para asociar la extensión F<.pl> con el intérprete perl.  Si instala Perl por otros medios (incluyendo la generación del código fuente), puede modificar usted mismo el Registro de Windows.  Tenga en cuenta que esto significa que ya no podrá diferenciar a un programa Perl ejecutable de un archivo de biblioteca Perl.
 
 =item VMS
 
@@ -312,7 +312,7 @@ Vea L<perldebug> para más detalles y variaciones.
 =item B<-e> I<línea de comando>
 X<-e>
 
-puede ser usado para entrar un programa de una línea.  Si se indica B<-e>, Perl no mirará por un nombre de archivo en la lista de argumentos.  Se pueden indicar múltiples comandos B<-e> para construir un script multi-línea.  Asegúrese de usar caracteres de punto y coma tal y como haría con un programa normal.
+puede ser usado para entrar un programa de una línea.  Si se indica B<-e>, Perl no mirará por un nombre de archivo en la lista de argumentos.  Se pueden indicar múltiples comandos B<-e> para generar un script multilínea.  Asegúrese de usar caracteres de punto y coma tal y como haría con un programa normal.
 
 =item B<-E> I<línea de comandos>
 X<-E>
@@ -620,8 +620,8 @@ Un carácter dos puntos precedente elimina la parte "name =" de la respuesta, pe
 
 Caracteres dos puntos precedentes y finales puedes ser usados conjuntamente si necesita valores de parámetros posicionales sin los nombres.  Note que, en el caso siguiente, los parámetros C<PERL_API> se devuelven en orden alfabético.
 
-    $ echo compilado_en `perl -V::osname: -V::PERL_API_.*:`
-    compilado_en 'linux' '5' '1' '9'
+    $ echo generado_ahora_en `perl -V::osname: -V::PERL_API_.*:`
+    generado_ahora_en 'linux' '5' '1' '9'
 
 =item B<-w>
 X<-w>

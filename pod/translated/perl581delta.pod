@@ -356,7 +356,7 @@ Vea F<INSTALL>.
 
 versiones 3.x de gcc introdujeron una nueva advertencia que causaba mucho ruido en la compilación Perl: C<gcc -Ialreadyknowndirectory (advertencia: cambiando el órden de búsqueda)>.  Esta advertencia ha sido eliminada para no confundir a Configure de esos directorios antes de la compilación.
 
-Ahora se pueden crear subconjuntos de módulos básicos de Perl usando las banderas de Configure C<-Dnoextensions=...> y C<-Donlyextensions=...>, vea F<INSTALL>.
+Ahora se pueden generar subconjuntos de módulos básicos de Perl usando las banderas de Configure C<-Dnoextensions=...> y C<-Donlyextensions=...>, vea F<INSTALL>.
 
 =head2 Mejoras específicas por plataforma
 
@@ -365,24 +365,24 @@ Esto funciona tanto con Cygwin 1.3.22 y Cygwin 1.5.3.
 
 En las versiones más recientes de FreeBSD Perl 5.8.0 la compilación falló debido a que trata de utilizar F<malloc.h>, que en FreeBSD es solo un archivo ficticio, y es un error fatal incluso el tratar de usarlo.  Ahora ya no se utiliza F<malloc.h>.
 
-Se sabe que Perl se compila también ahora en Hitachi HI-UXMPP.
+Se sabe que Perl se genera también ahora en Hitachi HI-UXMPP.
 
-Se sabe que Perl se compila también ahora en LynxOS.
+Se sabe que Perl se genera también ahora en LynxOS.
 
 Mac OS X ahora se instala con el número de versión de Perl incrustado en los nombres de directorio de la instalación para facilitar la actualización por parte del usuario que compiló Perl, y los directorios de instalación, en general, son más estándar.
 En otras palabras, la instalación por defecto ya no rompe el Perl proporcionado por Apple.  Por otro lado, con C<Configure -Dprefix=/usr> ahora puede, realmente, cambiar el Perl suministrado por Apple (B<por favor, tenga cuidado>).
 
-Mac OS X ahora por defecto compila Perl de forma estática.  Este cambio se llevó a cabo principalmente por obtener tiempos de arranque más rápidos.  El Perl proporcionado por Apple sigue siendo enlazado de forma dinámica y compartida, y se puede habilitar el nivel de compartición de su propia compilación de Perl por medio de C<Configure -Duseshrplib>.
+Mac OS X ahora por defecto genera Perl de forma estática.  Este cambio se llevó a cabo principalmente por obtener tiempos de arranque más rápidos.  El Perl proporcionado por Apple sigue siendo enlazado de forma dinámica y compartida, y se puede habilitar el nivel de compartición de su propia generación de Perl por medio de C<Configure -Duseshrplib>.
 
-Perl ha sido adaptada al entorno de IBM OS/400 PASE.  La mejor manera de construir un Perl para PASE es utilizar un host AIX como entorno de compilación cruzado.  Vea README.os400.
+Perl ha sido adaptada al entorno de IBM OS/400 PASE.  La mejor manera de generar un Perl para PASE es utilizar un host AIX como entorno de compilación cruzado.  Vea README.os400.
 
-Se ha agregado otra opción de compilación cruzada: ahora Perl se compila en OpenZaurus, una distribución Linux basada en Mandrake + Embedix para la PDA Sharp Zaurus.  Vea el archivo Cross/README.
+Se ha agregado otra opción de generación cruzada: ahora Perl se genera en OpenZaurus, una distribución Linux basada en Mandrake + Embedix para la PDA Sharp Zaurus.  Vea el archivo Cross/README.
 
 En Tru64, cuando se utiliza gcc 3 baja la optimización de F<toke.c> a C<-O2> debido al enorme uso de memoria con el valor por defecto C<-O3>.
 
-Tru64 ahora compila Perl con las nuevas base de datos Berkeley.
+Tru64 ahora genera Perl con las nuevas base de datos Berkeley.
 
-La construcción de Perl en WinCE se ha mejorado mucho, vea F<README.ce> y F<README.perlce>.
+La generación de Perl en WinCE se ha mejorado mucho, vea F<README.ce> y F<README.perlce>.
 
 =head1 Arreglo de determinados errores
 
@@ -632,7 +632,7 @@ IBM z/OS y otras plataformas EBCDIC siguen siendo problemáticas en relación co
 
 En Cygwin 1.5 las pruebas F<io/tell> y F<op/sysio> tienen fallas por alguna razón aún desconocida.  En 1.5.5 las pruebas de threads stress_cv, stress_re y stress_string siguen fallando a menos que la variable de entorno PerlIO se ajuste a "perlio" (que hace también desaparecer el fallo de io/tell).
 
-Perl 5.8.1 se compila y funciona bien con Cygwin 1.3: con (uname-a) C<CYGWIN_NT-5.0 ... 1.3.22(0.78/3/2) 2003-03-18 09:20 i686 ...> se consiguió un 100 % de un "make test" con C<Configure -des -Duseithreads>.
+Perl 5.8.1 se genera y funciona bien con Cygwin 1.3: con (uname-a) C<CYGWIN_NT-5.0 ... 1.3.22(0.78/3/2) 2003-03-18 09:20 i686 ...> se consiguió un 100 % de un "make test" con C<Configure -des -Duseithreads>.
 
 =head2 HP-UX: advertencias de HP cc sobre sendfile y sendpath
 
@@ -645,7 +645,7 @@ Con ciertas versiones del compilador de C de HP (por ejemplo, B.11.11.02) obtend
     Redeclaración de "sendpath" con un especificador de clase de almacenamiento especifico:
       "sendpath" tendrá un enlazado interno.
 
-Estas advertencias aparecen durante la compilación de Perl y durante ciertas pruebas de lib/ExtUtils que invocan al compilador de C.  La advertencia, sin embargo, no es grave y se puede ignorar.
+Estas advertencias aparecen durante la generación de Perl y durante ciertas pruebas de lib/ExtUtils que invocan al compilador de C.  La advertencia, sin embargo, no es grave y se puede ignorar.
 
 =head2 IRIX: t/uni/tr_7jis.t falla falsamente
 
@@ -655,7 +655,7 @@ La prueba t/uni/tr_7jis.t se sabe que da un informe de fallo bajo 'make test' o 
 
 El malloc Perl (C<-Dusemymalloc>) no funciona en absoluto en Mac OS X. Sin embargo, esto no es tan grave, debido a que el malloc nativo funciona muy bien.
 
-=head2 Tru64: No compilación con threaded con el GNU cc (gcc)
+=head2 Tru64: No generación con threaded con el GNU cc (gcc)
 
 En las últimas versiones de Tru64 (por ejemplo, v5.1B o posterior) gcc no se puede utilizar para compilar un Perl con soporte de hilos de ejecución (-Duseithreads) debido a que el archivo del sistema C<< <pthread.h> >> no sabe nada sobre gcc.
 

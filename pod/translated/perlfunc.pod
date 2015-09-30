@@ -1529,7 +1529,7 @@ Note que la emulación integrada con lockf(3) no provee de bloqueos compartidos 
 
 Note que la emulación de fcntl(2) de flock(3) requiere que IDENTIFICADOR_ARCHIVO sea abierto con intención de leer para usar LOCK_SH y requiere ser abierto con intención de escribir para usar LOCK_EX.
 
-Note también que algunas versiones de C<flock> no pueden bloquear cosas sobre la red; necesitará usar un C<fcntl> más específico del sistema para hacer esto.  Si le gusta, puede forzar a Perl a que ignore la función de su sistema flock(2) y proveer de su propia emulación basada en fcntl(2), pasando la opción C<-Ud_flock> al programa F<Configure> cuando configure y compile un nuevo Perl.
+Note también que algunas versiones de C<flock> no pueden bloquear cosas sobre la red; necesitará usar un C<fcntl> más específico del sistema para hacer esto.  Si le gusta, puede forzar a Perl a que ignore la función de su sistema flock(2) y proveer de su propia emulación basada en fcntl(2), pasando la opción C<-Ud_flock> al programa F<Configure> cuando configure y genere un nuevo Perl.
 
 Esto es un agregador de correo para sistemas BSD.
 
@@ -2731,7 +2731,7 @@ Como un caso especial, la forma de tres argumentos con un modo de lectura/escrit
 
 abre un identificador de archivo a un archivo anónimo temporal.  También, usando C<< +< >> trabaja de forma simétrica, pero debe considerar, escribir antes algo en el archivo temporal.  Necesitará usar seek() para hacer la lectura.
 
-Perl se compila, por defecto, con PerlIO; A menos que lo haya cambiado (como compilar Perl con C<Configure -Uuseperlio>), puede abrir identificadores de archivo directamente a escalares Perl de esta forma:
+Perl se compila, por defecto, con PerlIO; A menos que lo haya cambiado (como generar Perl con C<Configure -Uuseperlio>), puede abrir identificadores de archivo directamente a escalares Perl de esta forma:
 
     open($fh, ">", \$variable) || ..
 

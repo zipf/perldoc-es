@@ -146,14 +146,14 @@ Las expresiones regulares reconocen ahora los escapes C<\v> y C<\h>, que coincid
 
 C<\R> coincide con un salto de línea genérica, es decir, espacio en blanco vertical, además de la secuencia de caracteres C<"\x0D\x0A">.
 
-=item Capturas opcionales pre-correspondencia y post-correspondencia con la bandera /p
+=item Capturas opcionales pre-correspondencia y post-correspondencia con la opción /p
 
-Existe una nueva bandera C</p> para expresiones regulares.  Al usarla, el motor preserva una copia de la parte de la cadena a emparejar anterior a la subcadena coincidente en la nueva variable especial C<${^PREMATCH}>; la parte posterior a la subcadena coincidente en C<${^POSTMATCH}>, y la propia subcadena
+Existe una nueva opción C</p> para expresiones regulares.  Al usarla, el motor preserva una copia de la parte de la cadena a emparejar anterior a la subcadena coincidente en la nueva variable especial C<${^PREMATCH}>; la parte posterior a la subcadena coincidente en C<${^POSTMATCH}>, y la propia subcadena
 coincidente en C<${^MATCH}>.
 
-Perl sigue siendo capaz de almacenar estas subcadenas en las variables especiales C<$`>, C<$'>, C<$&>, pero utilizando estas variables en cualquier parte del programa añade una penalización a todas las expresiones regulares, mientras que si en cambio utiliza la bandera C</p> y las nuevas variables especiales, sólo paga por la expresión regular donde la bandera se use.
+Perl sigue siendo capaz de almacenar estas subcadenas en las variables especiales C<$`>, C<$'>, C<$&>, pero utilizando estas variables en cualquier parte del programa añade una penalización a todas las expresiones regulares, mientras que si en cambio utiliza la opción C</p> y las nuevas variables especiales, sólo paga por la expresión regular donde se use la opción.
 
-Para más detalles sobre las nuevas variables, vea L<perlvar>; para el uso de la bandera de expresión regular, vea L<perlop> y L<perlre>.
+Para más detalles sobre las nuevas variables, vea L<perlvar>; para el uso de la opción de expresión regular, vea L<perlop> y L<perlre>.
 
 =back
 
@@ -273,7 +273,7 @@ Es posible mejorar el mecanismo de enganche de subrutinas en @INC añadiendo un 
 
 =item C<${^RE_DEBUG_FLAGS}>
 
-Esta variable controla que banderas de depuración están en vigor para el motor de expresiones regulares cuando se ejecuta en C<use re "debug">. Vea L<re> para más detalles.
+Esta variable controla qué opciones de depuración están en vigor para el motor de expresiones regulares cuando se ejecuta en C<use re "debug">. Vea L<re> para más detalles.
 
 =item C<${^CHILD_ERROR_NATIVE}>
 
@@ -544,7 +544,7 @@ Tales hash son útiles para implementar los objetos I<inside-out>.
 
 =item *
 
-C<Module::Build>, de Ken Williams, ha sido añadido. Es una alternativa a C<ExtUtils::MakeMaker> para construir e instalar módulos de perl.
+C<Module::Build>, de Ken Williams, ha sido añadido. Es una alternativa a C<ExtUtils::MakeMaker> para generar e instalar módulos de perl.
 
 =item *
 
@@ -839,24 +839,24 @@ C<Configure -h> ha sido extendido con las opciones más usadas.
 
 =over 4
 
-=item Compilación paralela
+=item Generación en paralelo
 
 Hacer make en paralelo debería funcionar ahora correctamente, aunque todavía puede haber problemas si se indica a C<make test> que se ejecute en paralelo.
 
 =item Soporte para los compiladores de Borland
 
-Compilando con compiladores Borland en Win32 debería funcionar con más facilidad. En particular, Hay Steve trabajó para quitar muchas advertencias emitidas por estos compiladores y al menos un error interno del compilador de C.
+La generación con compiladores Borland en Win32 debería funcionar con más facilidad. En particular, Hay Steve trabajó para quitar muchas advertencias emitidas por estos compiladores y al menos un error interno del compilador de C.
 
-=item Compilación estática en Windows
+=item Generación estática en Windows
 
 Extensiones Perl en Windows pueden ahora ser compiladas de forma estática en la DLL de Perl.
 
-Además, ahora es posible compilar un C<perl-static.exe> que no dependa de la DLL Perl en Win32. Vea los makefiles de Win32 para más detalles.
+Además, ahora es posible generar un C<perl-static.exe> que no dependa de la DLL Perl en Win32. Vea los makefiles de Win32 para más detalles.
 (Vadim Konovalov)
 
 =item archivos ppport.h
 
-Todas los archivos F<ppport.h> en los módulos XS incluidos con perl ahora son autogenerados en tiempo de compilación. (Marcus Holland-Moritz)
+Todas los archivos F<ppport.h> en los módulos XS incluidos con perl ahora son autogenerados en tiempo de generación. (Marcus Holland-Moritz)
 
 =item Compatibilidad C++
 
@@ -864,15 +864,15 @@ Se han hecho esfuerzos para hacer perl y los módulos principales XS compilables
 
 =item Soporte para el compilador de Microsoft de 64 bits
 
-Se ha mejorado el soporte para la compilación de perl con el compilador de 64 bits de Microsoft. (ActiveState)
+Se ha mejorado el soporte para la generación de perl con el compilador de 64 bits de Microsoft. (ActiveState)
 
 =item Visual C++
 
 Ahora Perl se puede compilar con Microsoft Visual C++ 2005 (y 2008 Beta 2).
 
-=item Compilaciones Win32
+=item Generaciones en Win32
 
-Todas las compilaciones en Win32 (MS-Windows, WinCE) se han fusionado y limpiado.
+Todas las generaciones en Win32 (MS-Windows, WinCE) se han fusionado y limpiado.
 
 =back
 
@@ -953,7 +953,7 @@ Los test de archivos C<stat()> y C<-X> ahora trata a los identificadores de arch
 =item Sobrecargando y re-bendiciendo
 
 La sobrecarga ahora funciona cuando las referencias son re-bendecidas en otra clase.
-Internamente, esto se ha llevado a cabo moviendo la bandera de la "sobrecarga" de la referencia al referente, que, lógicamente, es donde siempre debería haber estado. (Nicholas Clark)
+Internamente, esto se ha llevado a cabo moviendo la indicación de la "sobrecarga" de la referencia al referente, que, lógicamente, es donde siempre debería haber estado. (Nicholas Clark)
 
 =item Sobrecargando y UTF-8
 
@@ -1075,7 +1075,7 @@ C<perl -V> tiene varias mejoras, por lo que es más utilizable desde scripts de 
 
 En general, el código fuente de perl ha sido refactorizado, enlazado, y optimizado en muchos lugares. Además, la gestión de memoria y la asignación ha sido mejorados en varios puntos.
 
-Al compilar el núcleo de perl con gcc, se activan todas las banderas de advertencias de gcc como sea posible para esa plataforma.  (Esta búsqueda de la limpieza no se extiende al código XS, porque no podemos garantizar la pulcritud de código que no escribimos).  Banderas similares que activan codificación estricta han sido añadidas o reforzadas para otros compiladores de C.
+Al compilar el núcleo de perl con gcc, se activan todas las indicaciones de advertencias de gcc como sea posible para esa plataforma.  (Esta búsqueda de la limpieza no se extiende al código XS, porque no podemos garantizar la pulcritud de código que no escribimos).  Se han sido añadido o reforzado indicadores similares que activan codificación estricta para otros compiladores de C.
 
 =head2 Reordenando constantes de SVt_*
 

@@ -289,7 +289,7 @@ Tanto C<\gI<N>> (a partir de Perl 5.10.0), o C<\I<N>> (al viejo estilo) donde I<
 
 I<N> refiere al N-esimo conjunto de paréntesis, así que C<\gI<N>> refiere a lo que coincidió con ese conjunto de paréntesis.  Así, C<\g1> refiere al primer grupo de captura en la exp. reg.
 
-La forma C<\gI<N>> se puede escribir como C<\g{I<N>}> que evita la ambigüedad cuando se construye una exp. reg. concatenando otras cadenas más cortas.  De otra forma, si tiene una exp. reg. C<qr/$a$b/>, y C<$a> contiene C<"\g1"> y C<$b> contiene C<"37">, obtendrá C<\g137/> que, probablemente, no sea lo que pretendía.
+La forma C<\gI<N>> se puede escribir como C<\g{I<N>}> que evita la ambigüedad cuando se genera una exp. reg. concatenando otras cadenas más cortas.  De otra forma, si tiene una exp. reg. C<qr/$a$b/>, y C<$a> contiene C<"\g1"> y C<$b> contiene C<"37">, obtendrá C<\g137/> que, probablemente, no sea lo que pretendía.
 
 En la forma C<\I<N>>, I<N> no debe comenzar con un "0", y deben existir al menos I<N> grupos de captura, o si no se considera que I<N> es un escape octal (pero algo como C<\18> es lo mismo que C<\0018>; es decir, el escape octal C<"\001"> seguido por el dígito literal C<"8">).
 

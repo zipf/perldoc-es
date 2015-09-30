@@ -979,7 +979,7 @@ El siguiente patrón detecta un grupo entre paréntesis:
 
 Consulte L<C<(?I<PARNO>)>|/(?PARNO) (?-PARNO) (?+PARNO) (?R) (?0)> para ver una diferente y más eficiente forma de cumplir la misma tarea.
 
-Ejecutar 50 veces una expresión regular pospuesta sin consumir ninguna cadena de entrada resultará en un error fatal.  La profundidad máxima está compilada en perl, por lo que su modificación requiere una compilación personalizada.
+Ejecutar 50 veces una expresión regular pospuesta sin consumir ninguna cadena de entrada resultará en un error fatal.  La profundidad máxima está compilada en perl, por lo que su modificación requiere una generación personalizada.
 
 =item C<(?I<PARNO>)> C<(?-I<PARNO>)> C<(?+I<PARNO>)> C<(?R)> C<(?0)>
 X<(?PARNO)> X<(?1)> X<(?R)> X<(?0)> X<(?-1)> X<(?+1)> X<(?-PARNO)> X<(?+PARNO)> X<regex, recursive> X<regexp, recursive> X<regular expression, recursive>
@@ -1023,7 +1023,7 @@ debe generar la siguiente salida:
     $2 = (bar(baz)+baz(bop))
     $3 = bar(baz)+baz(bop)
 
-Si no hay ningún grupo de captura correspondiente definido, se producirá un error irrecuperable.  Realizar un proceso recursivo más de 50 veces sin consumir ninguna cadena de entrada generará un error irrecuperable.  La profundidad máxima está compilada en perl, por lo que su modificación requiere una compilación personalizada.
+Si no hay ningún grupo de captura correspondiente definido, se producirá un error irrecuperable.  Realizar un proceso recursivo más de 50 veces sin consumir ninguna cadena de entrada generará un error irrecuperable.  La profundidad máxima está compilada en perl, por lo que su modificación requiere una generación personalizada.
 
 A continuación se muestra cómo el uso de la indexación negativa puede facilitar la incrustación de patrones recursivos dentro de una construcción C<qr//> para su uso posterior:
 

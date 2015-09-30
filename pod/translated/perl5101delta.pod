@@ -94,7 +94,7 @@ El sistema de control de versiones usado para el desarrollo del intérprete perl
 
 =item *
 
-La estructura interna del directorio C<ext/> en el código fuente de perl, se ha reorganizado. En general, un módulo C<Foo::Bar> cuyo código fuente se almacenaba en F<ext/Foo/Bar/>, ahora se encuentra en F<ext/Foo-Bar/>. Además, algunos módulos se han movido de F<lib/> a F<ext/>. Esto es puramente un cambio de código fuente, y no debe notar ninguna diferencia en la compilación o instalación de Perl, a menos que tenga un proceso de construcción muy personalizado que, explícitamente, se base en esta estructura, o que haya codificado en el propio código el parámetro C<nonxs_ext> en F<Configure>. En concreto, este cambio no altera de manera predeterminada la ubicación de los archivos de la instalación final.
+La estructura interna del directorio C<ext/> en el código fuente de perl, se ha reorganizado. En general, un módulo C<Foo::Bar> cuyo código fuente se almacenaba en F<ext/Foo/Bar/>, ahora se encuentra en F<ext/Foo-Bar/>. Además, algunos módulos se han movido de F<lib/> a F<ext/>. Esto es puramente un cambio de código fuente, y no debe notar ninguna diferencia en la compilación o instalación de Perl, a menos que tenga un proceso de generación muy personalizado que, explícitamente, se base en esta estructura, o que haya codificado en el propio código el parámetro C<nonxs_ext> en F<Configure>. En concreto, este cambio no altera de manera predeterminada la ubicación de los archivos de la instalación final.
 
 =item *
 
@@ -813,7 +813,7 @@ Perl 5.10.1 ha añadido una nueva utilidad F<perlthanks>, que es una variante de
 
 =item L<perlhaiku>
 
-Contiene instrucciones para compilar perl para la plataforma Haiku.
+Contiene instrucciones para generar perl para la plataforma Haiku.
 
 =item L<perlmroapi>
 
@@ -840,7 +840,7 @@ Los grandes archivos C<Changes*> (que listaban todos los cambios realizados a pe
 El archivo F<Porting/patching.pod> ha sido eliminado, ya que principalmente describe la interacción con el antiguo repositorio basado en Perforce, que ya está obsoleto.
 La información que sigue siendo relevante ha sido movida a L<perlrepository>.
 
-L<perlapi>, L<perlintern>, L<perlmodlib> y L<perltoc> son ahora generados en tiempo de compilación, en lugar de ser empaquetados como parte de la distribución.
+L<perlapi>, L<perlintern>, L<perlmodlib> y L<perltoc> se crean ahora en tiempo de generación, en lugar de empaquetarse como parte de la distribución.
 
 =head1 Mejoras en el rendimiento
 
@@ -864,9 +864,9 @@ Ya no se llaman los métodos C<DESTROY> vacíos.
 
 =head2 Reorganización de F<ext/>
 
-La disposición de los directorios en F<ext> ha sido revisada. En concreto, todas las extensiones ahora son planas, y en el nivel superior, con la C</> en las rutas reemplazada por C<->, de modo que F<ext/Data/Dumper/> ahora es F<ext/Data-Dumper/>, etc. Los nombres de las extensiones, como se especifica en F<Configure>, y según lo informado por C<%Config::Config>, bajo las claves C<dynamic_ext>, C<known_extensions>, C<nonxs_ext> y C<static_ext> no han cambiado, y siguen utilizando C</>. Por lo tanto, este cambio no tendrá ningún efecto una vez se haya instalado perl. Sin embargo, C<Attribute::Handlers>, C<Safe> y C<mro> se han convertido en extensiones por derecho propio, por lo que si se ejecuta F<Configure> con opciones para especificar una lista exacta de las extensiones a ser compiladas, tendrá que cambiarla para tenerlo en cuenta.
+La disposición de los directorios en F<ext> ha sido revisada. En concreto, todas las extensiones ahora son planas, y en el nivel superior, con la C</> en las rutas reemplazada por C<->, de modo que F<ext/Data/Dumper/> ahora es F<ext/Data-Dumper/>, etc. Los nombres de las extensiones, como se especifica en F<Configure>, y según lo informado por C<%Config::Config>, bajo las claves C<dynamic_ext>, C<known_extensions>, C<nonxs_ext> y C<static_ext> no han cambiado, y siguen utilizando C</>. Por lo tanto, este cambio no tendrá ningún efecto una vez se haya instalado perl. Sin embargo, C<Attribute::Handlers>, C<Safe> y C<mro> se han convertido en extensiones por derecho propio, por lo que si se ejecuta F<Configure> con opciones para especificar una lista exacta de las extensiones a ser generadas, tendrá que cambiarla para tenerlo en cuenta.
 
-Por 5.10.2, se prevé que muchos módulos con una doble vida se muevan desde F<lib> a F<ext>; de nuevo, esto no tendrá ningún efecto en un perl ya instalado, pero importará si llama a F<Configure> con una lista de extensiones pre-enlatadas para ser compiladas.
+Por 5.10.2, se prevé que muchos módulos con una doble vida se muevan desde F<lib> a F<ext>; de nuevo, esto no tendrá ningún efecto en un perl ya instalado, pero importará si llama a F<Configure> con una lista de extensiones pre-enlatadas para ser generadas.
 
 =head2 Mejoras en la configuración
 
@@ -878,7 +878,7 @@ F<Configure> permitirá el uso de C<-fstack-protector>, para proporcionar protec
 
 F<Configure> ahora determinará el correcto prototipado para las funciones reentrantes, y para C<gconvert>, si está usando un compilador de C++ en lugar de un compilador de C.
 
-En Unix, si se compila a partir de un árbol conteniendo un repositorio git, el proceso de configuración anotará el hash de confirmación que haya obtenido, para mostrarlo en la salida de C<perl -v> y C<perl -V>. Confirmaciones no almacenadas son automáticamente agregadas a la lista de parches locales mostrada por C<perl -V>.
+En Unix, si se genera a partir de un árbol conteniendo un repositorio git, el proceso de configuración anotará el hash de confirmación que haya obtenido, para mostrarlo en la salida de C<perl -v> y C<perl -V>. Confirmaciones no almacenadas son automáticamente agregadas a la lista de parches locales mostrada por C<perl -V>.
 
 =head2 Mejoras en la compilación
 
@@ -898,7 +898,7 @@ Cambios adecuados significa que AIX 4.2 debería funcionar de nuevo.
 
 =item Cygwin
 
-En Cygwin ahora quitamos el último número de la DLL. Este ha sido el comportamiento en la compilación de cygwin.com desde hace años. Los archivos de pistas han sido actualizados.
+En Cygwin ahora quitamos el último número de la DLL. Este ha sido el comportamiento en la generación de cygwin.com, desde hace años. Los archivos de pistas han sido actualizados.
 
 =item FreeBSD
 
@@ -910,11 +910,11 @@ Ahora trabajamos en torno a un fallo extraño del preprocesador en el compilador
 
 =item Haiku
 
-Los parches de los responsables de Haiku han sido fusionados. Perl ahora debe compilarse en Haiku.
+Los parches de los responsables de Haiku han sido fusionados. Perl ahora debería generarse en Haiku.
 
 =item MirOS BSD
 
-Perl ahora debe compilarse en MirOS BSD.
+Perl ahora debería generarse en MirOS BSD.
 
 =item NetBSD
 

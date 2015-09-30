@@ -12,11 +12,11 @@ Por favor, envíe sus comentarios por correo a L<perlbug@perl.org|mailto:perlbug
 
 Este documentos describe varias características del sistema operativo OS/400 de IBM que afectarán a cómo Perl versión 5 (de ahora en adelante sólo Perl) es compilado y/o ejecutado.
 
-Con mucho, la forma más fácil de compilar Perl para OS/400 es utilizar el PASE (I<Portable Application Solutions Environment>), para obtener más información, vea L<http://www.iseries.ibm.com/developer/factory/pase/index.html> Este entorno permite la utilización de las API de AIX en la programación, y proporciona un tiempo de ejecución que permite a los binarios AIX ejecutarse directamente en los PowerPC iSeries.
+Con mucho, la forma más fácil de generar Perl para OS/400 es utilizar el PASE (I<Portable Application Solutions Environment>), para obtener más información, vea L<http://www.iseries.ibm.com/developer/factory/pase/index.html> Este entorno permite la utilización de las API de AIX en la programación, y proporciona un tiempo de ejecución que permite a los binarios AIX ejecutarse directamente en los PowerPC iSeries.
 
 =head2 Compilando Perl para OS/400 PASE
 
-La forma recomendada de compilar Perl para PASE OS/400 es compilar el código fuente de Perl 5 (versión 5.8.1 o posterior) en AIX.
+La forma recomendada de generar Perl para PASE OS/400 es generar el código fuente de Perl 5 (versión 5.8.1 o posterior) en AIX.
 
 El truco es dar un parámetro especial al script shell Configure cuando se ejecuta en AIX:
 
@@ -25,12 +25,12 @@ El truco es dar un parámetro especial al script shell Configure cuando se ejecu
 El directorio de instalación por defecto de Perl bajo PASE es /QOpenSys/perl.
 Esto se puede modificar, si es necesario, con el parámetro de Configure -Dprefix=/some/dir.
 
-A partir de OS/400 V5R2, el compilador de IBM Visual Age está soportado en OS/400 PASE, por lo que es posible la compilación de Perl de forma nativa en OS/400.  
+A partir de OS/400 V5R2, el compilador de IBM Visual Age está soportado en OS/400 PASE, por lo que es posible la generación de Perl de forma nativa en OS/400.  
 La manera más fácil, sin embargo, es la compilación en AIX, tal como acabamos de describir.
 
 Si no desea instalar el Perl compilado en AIX en /QOpenSys (para ser empaquetado antes de copiarlo a PASE), puede utilizar un parámetro de Configure: -Dinstallprefix=/tmp/QOpenSys/perl.  Esto hará que el "make install" instale todo en ese directorio, mientras que los archivos instalados seguirán pensando que están (estarán) en /QOpenSys/perl.
 
-Si compila de forma nativa en PASE, por favor, hágalo en el directorio /QOpenSys, ya que Perl es más feliz cuando se compila en un sistema de archivos que es sensible a las mayúsculas y minúsculas.
+Si se genera de forma nativa en PASE, por favor, hágalo en el directorio /QOpenSys, ya que Perl es más feliz cuando se genera en un sistema de archivos que es sensible a las mayúsculas y minúsculas.
 
 =head2 Instalando Perl en OS/400 PASE
 

@@ -608,7 +608,7 @@ Primero, cree una rama local y cámbiese a ella:
 
   % git checkout -b win32stat
 
-Haga algunos cambios, compile perl y compruebe sus cambios, entonces confírmelos en su rama local. Entonces ponga su rama local en una rama remota I<smoke-me>:
+Haga algunos cambios, genere perl y compruebe sus cambios, entonces confírmelos en su rama local. Entonces ponga su rama local en una rama remota I<smoke-me>:
 
   % git push origin win32stat:smoke-me/tonyc/win32stat
 
@@ -635,7 +635,7 @@ Como se ha descrito antes, si hay muchos cambios en su rama I<smoke-me> debería
 
   % git merge win32stat --no-ff --no-commit
 
-Ahora debería compilar perl y comprobar sus cambios (mezclados) una última vez (idealmente correrá todo el paquete de pruebas, fallando al menos en las pruebas F<t/porting/*.t>) antes de agregar sus cambios de la forma usual:
+Ahora debería generar perl y comprobar sus cambios (mezclados) una última vez (idealmente correrá todo el paquete de pruebas, fallando al menos en las pruebas F<t/porting/*.t>) antes de agregar sus cambios de la forma usual:
 
   % git push origin blead
 

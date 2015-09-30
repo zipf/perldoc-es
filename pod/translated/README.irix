@@ -8,7 +8,7 @@ perlirix - Perl versión 5 en sistemas Irix
 
 Este documentos describe varias características de Irix que afectarán a cómo Perl versión 5 (de ahora en adelante sólo Perl) es compilado y/o ejecutado.
 
-=head2 Compilando Perl de 32 bit en Irix
+=head2 Generando Perl de 32 bit en Irix
 
 Use
 
@@ -16,9 +16,9 @@ Use
 
 para compilar Perl de 32 bit.  No se moleste en poner -n32 a menos que tenga un compilador 7.1 o superior (use cc -version para comprobarlo)
 
-(Compilar 'cc -n32' está por defecto)
+(Generar 'cc -n32' está por defecto)
 
-=head2 Compilando Perl de 64 bit en Irix
+=head2 Generando Perl de 64 bit en Irix
 
 Use
 
@@ -57,7 +57,7 @@ Si recibe problemas sobre so_locations entonces busque en el archivo hints/irix_
 
 No intente usar el malloc de Perl, esto le conducirá a errores muy misteriosos (especialmente con -Duse64bitall)
 
-=head2 Compilando con hilos en Irix
+=head2 Generando con hilos en Irix
 
 Ejecute Configure con -Duseithreads que configurará Perl con hilos de ejecución Perl 5.8.0 a nivel de intérprete; vea L<threads>.
 
@@ -76,7 +76,7 @@ B<IMPORTANTE>: Sin el parche 2401, un error del kernel en Irix 6.2 causará que 
 
 =head2 Irix 5.3
 
-Mientras ejecuta Configure y cuando compile, es probable que obtenga un buen número de estas advertencias:
+Mientras ejecuta Configure y cuando está generando, es probable que obtenga un buen número de estas advertencias:
 
   ld:
   El objeto compartido /usr/lib/libm.so no resuelve a ningún símbolo.

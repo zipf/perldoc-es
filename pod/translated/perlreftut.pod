@@ -213,7 +213,7 @@ Aquí está la respuesta al problema que hemos mostrado antes, de reformatear un
    13	}
 
 
-Este programa tiene dos partes: las líneas 2 a 7 leen la entrada y construyen una estructura de datos, y las líneas 8 a 13 analizan los datos e imprimen el informe.
+Este programa tiene dos partes: las líneas 2 a 7 leen la entrada y generan una estructura de datos, y las líneas 8 a 13 analizan los datos e imprimen el informe.
 Vamos a tener un hash, C<%tabla>, cuyas claves son nombre de países, y cuyos valores son referencias a arrays de nombres de ciudades.  La estructura de datos se parecerá a esto:
 
 
@@ -250,7 +250,7 @@ B<Regla de uso 1> dice que podemos recuperar el array diciendo C<@{$tabla{$pais}
 excepto que el nombre C<array> se reemplaza por la referencia C<{$tabla{$pais}}>.  El C<@> le indica a Perl que obtenga el array entero.
 Habiendo obtenido la lista de ciudades, la ordenamos, la unimos, y la imprimimos de la forma usual.
 
-Líneas 2 a 7 son responsables para la construcción de la estructura, al principio del programa.  Aquí están de nuevo:
+Líneas 2 a 7 son responsables para la generación de la estructura, al principio del programa.  Aquí están de nuevo:
 
     2   while (<>) {
     3    chomp;
