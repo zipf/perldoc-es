@@ -248,14 +248,14 @@ X<-d> X<-dt>
 
 =item B<-dt:>I<MOD[=bar,baz]>
 
-ejecuta el programa bajo el control de una depuración, perfilado, o trazado de un módulo instalado como C<Devel::I<MOD>>. Ej., B<-d:DProf> ejecuta el programa usando el perfilador C<Devel::DProf>.  Igual que con la bandera B<-M>, las opciones son pasadas al paquete C<Devel::I<MOD>> donde serán recibidas e interpretadas por la rutina C<Devel::I<MOD>::import>.  De nuevo, como en B<-M>, use -B<-d:-I<MOD>> para llamar a C<Devel::I<MOD>::unimport> en lugar de import.  La lista de opciones separada por comas debe seguir al carácter C<=>.  Si se ha especificado B<t>, indica al depurador que se depurarán los hilos de ejecución usados en el código.  Vea L<perldebug>.
+ejecuta el programa bajo el control de una depuración, perfilado, o trazado de un módulo instalado como C<Devel::I<MOD>>. Ej., B<-d:DProf> ejecuta el programa usando el perfilador C<Devel::DProf>.  Igual que con la opción B<-M>, las opciones se pasan al paquete C<Devel::I<MOD>> donde serán recibidas e interpretadas por la rutina C<Devel::I<MOD>::import>.  De nuevo, como en B<-M>, use -B<-d:-I<MOD>> para llamar a C<Devel::I<MOD>::unimport> en lugar de import.  La lista de opciones separada por comas debe seguir al carácter C<=>.  Si se ha especificado B<t>, indica al depurador que se depurarán los hilos de ejecución usados en el código.  Vea L<perldebug>.
 
 =item B<-D>I<letras>
 X<-D> X<DEBUGGING> X<-DDEBUGGING>
 
 =item B<-D>I<número>
 
-activa banderas de depuración.  Para mirar cómo se ejecuta su programa, use B<-Dtls>.  (Esto funciona solo si el soporte para depuración fue compilado en su Perl).  Otro valor interesante es B<-Dx>, que lista el árbol de sintaxis compilado.  Y B<-Dr> muestra las expresiones regulares compiladas; el formato de salida es explicado en L<perldebguts>.
+activa opciones de depuración.  Para mirar cómo se ejecuta su programa, use B<-Dtls>.  (Esto funciona solo si el soporte para depuración fue compilado en su Perl).  Otro valor interesante es B<-Dx>, que lista el árbol de sintaxis compilado.  Y B<-Dr> muestra las expresiones regulares compiladas; el formato de salida es explicado en L<perldebguts>.
 
 Como alternativa, especifique un número en lugar de una lista de letras (ej., B<-D14> es equivalente a B<-Dtls>):
 
@@ -282,7 +282,7 @@ Como alternativa, especifique un número en lugar de una lista de letras (ej., B
               se usa -Ds)
    524288  J  muestra s,t,P-debug (no salta afuera) en códigos de operación dentro del
               package DB
-  1048576  v  Verboso: usar junto con otras banderas
+  1048576  v  Verboso: usar junto con otros indicadores
   2097152  C  Copiar En Escritura
   4194304  A  Comprueba la consistencia en las estructuras internas
   8388608  q  silencio - actualmente sólo suprime el "EXECUTING"
@@ -293,8 +293,8 @@ Como alternativa, especifique un número en lugar de una lista de letras (ej., B
  67108864  L  traza de información relacionada con Locale; lo que se consigue es muy
               sujeto a cambio
 
-Todas estas banderas requieren B<-DDEBUGGING> cuando compile el ejecutable Perl (pero vea C<:opd> en L<Devel::Peek> o L<re/modo 'debug'> que puede cambiar esto).
-Vea el archivo F<INSTALL> en la distribución del código fuente para saber cómo hacerlo.  Esta bandera es automáticamente puesta si incluye la opción B<-g> cuando C<Configure> pregunte sobre banderas para el optimizador/depurador.
+Todas estos indicadores requieren B<-DDEBUGGING> cuando compile el ejecutable Perl (pero vea C<:opd> en L<Devel::Peek> o L<re/modo 'debug'> que puede cambiar esto).
+Vea el archivo F<INSTALL> en la distribución del código fuente para saber cómo hacerlo.  Este indicador se activa automáticamente si incluye la opción B<-g> cuando C<Configure> pregunte sobre indicadores para el optimizador/depurador.
 
 Si solo está intentando imprimir cada línea del código Perl que está ejecutando, de la misma forma que C<sh -x> se ofrece para los script del shell, no puede usar la opción B<-D> con Perl.  En lugar de eso
 
@@ -717,7 +717,7 @@ Capas que tiene sentido incluir en la variable de entorno PERLIO se resumen a co
 =item :bytes
 X<:bytes>
 
-Una pseudocapa que pone la bandera C<:utf8> a I<off> para la capa inferior; poco probable que sea útil por sí sola en la variable de entorno global PERLIO.
+Una pseudocapa que pone el indicador C<:utf8> a I<off> para la capa inferior; poco probable que sea útil por sí sola en la variable de entorno global PERLIO.
 Quizás estaba pensando en C<:crlf:bytes> o C<:perlio:bytes>.
 
 =item :crlf
@@ -763,7 +763,7 @@ Capa de bajo nivel que llama a C<read>, C<write>, C<lseek>, etc.
 =item :utf8
 X<:utf8>
 
-Una pseudocapa que activa una bandera en la capa de abajo para avisar a Perl que la salida debe ser en utf8 y que la entrada debe ser considerada como que ya está en una forma válida de utf8. B<AVISO: no comprueba la validez y debe ser manejada con extrema cautela para la entrada, debido a que pueden ocurrir violaciones de seguridad, con codificaciones UTF-8 no acortadas, etc.> Por lo general, C<:encoding(utf8)> es la mejor opción al leer datos codificados en UTF-8.
+Una pseudocapa que activa un indicador en la capa inferior para avisar a Perl que la salida debe ser en utf8 y que la entrada debe ser considerada como que ya está en una forma válida de utf8. B<AVISO: no comprueba la validez y debe ser manejada con extrema cautela para la entrada, debido a que pueden ocurrir violaciones de seguridad, con codificaciones UTF-8 no acortadas, etc.> Por lo general, C<:encoding(utf8)> es la mejor opción al leer datos codificados en UTF-8.
 
 =item :win32
 X<:win32>

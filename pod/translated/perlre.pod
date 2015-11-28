@@ -89,9 +89,9 @@ C</n> se puede negar en cada grupo, por separado. De forma alternativa, las capt
 
 =item Otros modificadores
 
-Hay un número de banderas que pueden encontrarse al final de las construcciones de las expresiones regulares, que I<no> son banderas genéricas de las expresiones regulares, si no que se aplican a la operación a realizarse, como coincidencia o sustitución (C<m//> o C<s///>, respectivamente).
+Hay un número de indicadores que pueden encontrarse al final de las construcciones de las expresiones regulares, que I<no> son indicadores genéricos de las expresiones regulares, si no que se aplican a la operación a realizarse, como coincidencia o sustitución (C<m//> o C<s///>, respectivamente).
 
-Las banderas descritas más adelante en L<perlretut/"Usando expresiones regulares en Perl">, son:
+Indicadores descritos más adelante en L<perlretut/"Usando expresiones regulares en Perl">, son:
 
   c  - mantener la posición actual durante coincidencias que se repiten
   g  - globalmente, coincide el patrón repetidamente en la cadena
@@ -557,8 +557,8 @@ También puede hacer referencia a los grupos de captura de forma relativa, con u
          (Y)            # grupo 1
          (              # grupo 2
             (X)         # grupo 3
-            \g{-1}      # contrareferencia al grupo 3
-            \g{-3}      # contrareferencia al grupo 1
+            \g{-1}      # retrorreferencia al grupo 3
+            \g{-3}      # retrorreferencia al grupo 1
          )
         /x
 

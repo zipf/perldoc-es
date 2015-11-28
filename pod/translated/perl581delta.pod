@@ -356,7 +356,7 @@ Vea F<INSTALL>.
 
 versiones 3.x de gcc introdujeron una nueva advertencia que causaba mucho ruido en la compilación Perl: C<gcc -Ialreadyknowndirectory (advertencia: cambiando el órden de búsqueda)>.  Esta advertencia ha sido eliminada para no confundir a Configure de esos directorios antes de la compilación.
 
-Ahora se pueden generar subconjuntos de módulos básicos de Perl usando las banderas de Configure C<-Dnoextensions=...> y C<-Donlyextensions=...>, vea F<INSTALL>.
+Ahora se pueden generar subconjuntos de módulos básicos de Perl usando los indicadores de Configure C<-Dnoextensions=...> y C<-Donlyextensions=...>, vea F<INSTALL>.
 
 =head2 Mejoras específicas por plataforma
 
@@ -662,7 +662,7 @@ En las últimas versiones de Tru64 (por ejemplo, v5.1B o posterior) gcc no se pu
 =head2 Win32: sysopen, sysread, syswrite
 
 A partir de la versión 5.8.0, sysopen()/sysread()/syswrite() no se comportan como lo hacían antes en 5.6.1 y anteriores, con respecto al modo "texto".
-Estos funciones predefinidas, ahora, funcionan siempre en modo "binario" (incluso si se pasó a sysopen() la bandera O_TEXT, o si se utilizó binmode() con el identificador de archivo).  Tenga en cuenta que este problema sólo afecta a los archivos de disco, ya que los I<sockets> y tuberías siempre han estado en modo "binario" en la versión para Windows.  Ya que este comportamiento se considera actualmente un error, un comportamiento compatible puede ser re-introducido en una futura versión.  Hasta entonces, el uso de sysopen(), sysread() y syswrite() no está soportado para las operaciones en modo "texto".
+Estos funciones predefinidas, ahora, funcionan siempre en modo "binario" (incluso si se pasó a sysopen() el indicador O_TEXT, o si se utilizó binmode() con el identificador de archivo).  Tenga en cuenta que este problema sólo afecta a los archivos de disco, ya que los I<sockets> y tuberías siempre han estado en modo "binario" en la versión para Windows.  Ya que este comportamiento se considera actualmente un error, un comportamiento compatible puede ser re-introducido en una futura versión.  Hasta entonces, el uso de sysopen(), sysread() y syswrite() no está soportado para las operaciones en modo "texto".
 
 =head1 Direcciones futuras
 

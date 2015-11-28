@@ -36,7 +36,7 @@ Hay una excepción. Si usa un carácter alfanumérico como delimitador de su pat
 Las que no se pueden usar dentro de una clase de caracteres entre corchetes (como C<[\da-z]>) se marcan como C<No en [].>.
 
  \000              Secuencia de escape octal.  Ver también \o{}.
- \1                Contrareferencia absoluta.  No en [].
+ \1                Retrorreferencia absoluta.  No en [].
  \a                Alarma o campana.
  \A                Comienzo de cadena.  No en [].
  \b{}, \b          Límite. (\b es un retroceso en []).
@@ -50,12 +50,12 @@ Las que no se pueden usar dentro de una clase de caracteres entre corchetes (com
  \E                Desactivar procesamiento \Q, \L y \U.  No en [].
  \f                Avanza de página.
  \F                Cambio de tamaño de caja, hasta \E.  No en [].
- \g{}, \g1         Contrareferencia con nombre, absoluta o relativa.
+ \g{}, \g1         Retrorreferencia con nombre, absoluta o relativa.
                    No en [].
  \G                Aserción de posición.  No en [].
  \h                Clase carácter para espacio en blanco horizontal.
  \H                Clase carácter para no-espacio en blanco horizontal.
- \k{}, \k<>, \k''  Contrareferencia con nombre.  No en [].
+ \k{}, \k<>, \k''  Retrorreferencia con nombre.  No en [].
  \K                Mantener el material que está a la izquierda de \K.  No en [].
  \l                Poner en minúscula el siguiente carácter.  No en [].
  \L                Poner en minúscula hasta \E.  No en [].
@@ -163,7 +163,7 @@ Existen dos formas de escapes octales.  Se usa cada una de ellas para especifica
 
 Una forma, disponible a partir de Perl v5.14 es como C<\o{...}>, donde los puntos representan uno o más dígitos octales.  Se puede usar para cualquier carácter Unicode.
 
-Se introdujo para evitar los problemas potenciales con la otra forma, disponible en todos los Perl.  Esa forma consiste de una barra diagonal inversa seguida por tres dígitos octales.  Un problema con esta forma es que se parece exactamente como una contrareferencia normal (vea L</Reglas de desambiguación entre las secuencias de escape octales y las contrareferencias> más abajo).  Puede evitarlo puede hacer que el primero de los tres dígitos siempre sea cero, pero eso hace que sea \077 el mayor código de carácter que puede especificar.
+Se introdujo para evitar los problemas potenciales con la otra forma, disponible en todos los Perl.  Esa forma consiste de una barra diagonal inversa seguida por tres dígitos octales.  Un problema con esta forma es que se parece exactamente como una retrorreferencia normal (vea L</Reglas de desambiguación entre las secuencias de escape octales y las retrorreferencias> más abajo).  Puede evitarlo puede hacer que el primero de los tres dígitos siempre sea cero, pero eso hace que sea \077 el mayor código de carácter que puede especificar.
 
 En algunos contextos, una barra diagonal inversa seguida por dos o incluso un dígito octal se puede interpretar como una secuencia de escape octal, algunas veces con una advertencia, y debido a algunos errores, otras veces con resultados sorprendentes.  También, si está creando una exp. reg. a partir de pequeños códigos sueltos, concatenados, y si están usando menos de tres dígitos, el comienzo de un código se puede interpretar como que está añadiendo dígitos al final del código que le precede.  Vea L</Referencia absoluta> para una mayor discusión y ejemplos del problema de los códigos pequeños.
 
@@ -185,16 +185,16 @@ Mnemónico: I<0>ctal u I<o>ctal.
  /\o{23073}/         # carita sonriente, negro sobre blanco.
  /\o{4801234567}/    # Lanza una advertencia, y genera un chr(4).
 
-=head4 Reglas de desambiguación entre las secuencias de escape octales y las contrareferencias
+=head4 Reglas de desambiguación entre las secuencias de escape octales y las retrorreferencias
 
-Los escapes octales de la forma C<\000>, fuera de las clases de caracteres entre corchetes, pueden, potencialmente, colisionar con las contrareferencias escritas al viejo estilo (vea L</Referencia absoluta> más abajo).  Los dos consisten en una barra diagonal inversa seguida por números.  Así que Perl tiene que usar heurística para determinar si es una contrareferencia o un escape octal.
+Los escapes octales de la forma C<\000>, fuera de las clases de caracteres entre corchetes, pueden, potencialmente, colisionar con las retrorreferencias escritas al viejo estilo (vea L</Referencia absoluta> más abajo).  Los dos consisten en una barra diagonal inversa seguida por números.  Así que Perl tiene que usar heurística para determinar si es una retrorreferencia o un escape octal.
 Perl usa las siguientes reglas para hacer la desambiguación:
 
 =over 4
 
 =item 1
 
-Si la barra diagonal inversa es seguida por un único dígito, es una contrareferencia.
+Si la barra diagonal inversa es seguida por un único dígito, es una retrorreferencia.
 
 =item 2
 
@@ -202,7 +202,7 @@ Si el primer dígito que sigue a la barra diagonal inversa es un 0, es un escape
 
 =item 3
 
-Si el número que sigue a la barra diagonal inversa es N (en decimal), y Perl ha visto realmente N grupos de captura, Perl considera que es una contrareferencia.  De lo contrario, se considera que es un escape octal. Si N tiene más de tres dígitos, Perl toma solo los tres primeros para el escape octal; el resto se toma para coincidir tal cual.
+Si el número que sigue a la barra diagonal inversa es N (en decimal), y Perl ha visto realmente N grupos de captura, Perl considera que es una retrorreferencia.  De lo contrario, se considera que es un escape octal. Si N tiene más de tres dígitos, Perl toma solo los tres primeros para el escape octal; el resto se toma para coincidir tal cual.
 
  my $pat  = "(" x 999;
     $pat .= "a";
@@ -213,7 +213,7 @@ Si el número que sigue a la barra diagonal inversa es N (en decimal), y Perl ha
 
 =back
 
-Siempre puede forzar a que se interprete como una contrareferencia usando la forma C<\g{...}>.  Siempre puede forzar a que se interprete como octal usando la forma C<\o{...}>, o para los números hasta \077 (= 63 decimal), usando tres dígitos comenzando por "0".
+Siempre puede forzar a que se interprete como una retrorreferencia usando la forma C<\g{...}>.  Siempre puede forzar a que se interprete como octal usando la forma C<\o{...}>, o para los números hasta \077 (= 63 decimal), usando tres dígitos comenzando por "0".
 
 =head3 Escapes hexadecimales
 
@@ -279,7 +279,7 @@ Mnemónico: I<p>ropiedad.
 
 =head2 Referencia
 
-Si se usan paréntesis de captura en una expresión regular, podemos referirnos a la parte de la cadena fuente con la que se hace la operación de coincidencia, y coincide exactamente con el patrón. Hay tres formas de referirnos a tal I<contrareferencia>: absoluta, relativa, y por nombre.
+Si se usan paréntesis de captura en una expresión regular, podemos referirnos a la parte de la cadena fuente con la que se hace la operación de coincidencia, y coincide exactamente con el patrón. Hay tres formas de referirnos a tal I<retrorreferencia>: absoluta, relativa, y por nombre.
 
 =for later add link to perlrecapture
 
@@ -456,7 +456,7 @@ Mnemónico: I<K>eep (I<mantener>).
 
 =item \N
 
-Esta característica, disponible a partir de v5.12, coincide con cualquier carácter que B<no> sea un carácter de nueva línea.  Es una forma de escribir C<[^\n]>, y es idéntica al metasímbolo C<.>, excepto bajo la bandera C</s>, que cambia el significado de C<.>, pero no de C<\N>.
+Esta característica, disponible a partir de v5.12, coincide con cualquier carácter que B<no> sea un carácter de nueva línea.  Es una forma de escribir C<[^\n]>, y es idéntica al metasímbolo C<.>, excepto bajo el indicador C</s>, que cambia el significado de C<.>, pero no de C<\N>.
 
 Note que C<\N{...}> puede significar L<carácter con número o nombre|/Caracteres y secuencias de carácter con nombre o número>.
 

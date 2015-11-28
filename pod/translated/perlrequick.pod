@@ -290,8 +290,8 @@ Aquí hay algunos ejemplos:
     /[a-z]+\s+\d*/;  # coincide con una palabra en minúsculas, algún espacio, y
                      # cualquier número de dígitos
     /(\w+)\s+\g1/;   # coincide con palabras duplicadas de cualquier longitud
-    $year =~ /^\d{2,4}$/;  # se asegura que year sea al menos 2 pero no más
-                           # de 4 dígitos
+    $year =~ /^\d{2,4}$/;  # se asegura que year tenga al menos dos, pero no más
+                           # de cuatro dígitos
     $year =~ /^\d{4}$|^\d{2}$/;  # mejor coincidencia, descartando fechas de 3 dígitos
 
 Estos cuantificadores tratarán de satisfacer la mayor cantidad de la cadena como sea posible, al tiempo que permita a la I<regex> coincidir.  Por lo que tenemos

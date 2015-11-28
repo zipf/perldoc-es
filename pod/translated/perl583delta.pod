@@ -87,7 +87,7 @@ Perl ahora se compila en OpenVMS I64
 
 Usando substr() en una cadena UTF8 podría causar que los subsecuentes accesos a dicha cadena devuelvan basura. Esto se debió a que se almacenaban desplazamientos UTF8 incorrectos, y ahora ya está arreglado.
 
-join() podría devolver basura cuando la misma instrucción join() fue anteriormente usada para procesar datos de 8 bits habiendo procesado anteriormente datos UTF8, debido a que las banderas en ese área de trabajo temporal no eran correctamente reinicializadas. Esto ha sido arreglado.
+join() podría devolver basura cuando la misma instrucción join() fue anteriormente usada para procesar datos de 8 bits habiendo procesado anteriormente datos UTF8, debido a que los indicadores en esa área de trabajo temporal no eran correctamente reinicializadas. Esto ha sido arreglado.
 
 C<$a .. $b> ahora funcionará como se espera cuando $a o $b sean C<undef>
 

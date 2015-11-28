@@ -1,0 +1,1900 @@
+=head1 NOMBRE
+
+perlretut - Tutorial de expresiones regulares
+
+=head1 DESCRIPCIÓN
+
+Esta página proporciona un tutorial básico sobre la comprensión, creación y uso de las expresiones regulares en Perl.  Sirve como complemento a la página de referencia en expresiones regulares L<perlre>.  Las expresiones regulares son una parte integral de los operadores C<m//>, C<s///>, C<qr//> y C<split>, y así, este tutorial también se complementa con L<perlop/"Operadores Regexp Entrecomillados"> y L<perlfunc/split>.
+
+Perl es ampliamente renombrado como excelencia en el procesamiento de texto, y las expresiones regulares son uno de los factores más importantes detrás de esta fama.  Las expresiones regulares en Perl muestran una eficacia y flexibilidad desconocida en la mayor parte de otros lenguajes de ordenador.  Aprender incluso lo más sencillo de las expresiones regulares le permitirán manipular texto con sorprendente facilidad.
+
+¿Qué es una expresión regular?  Una expresión regular es sencillamente una cadena de caracteres que describe un patrón.  Los patrones son de uso común, en estos días; ejemplos son los patrones escritos en un motor de búsqueda para encontrar páginas web y patrones usados para listar archivos en un directorio. Por ejemplo: C<ls *.txt> o C<dir *.*>.  En Perl, los patrones descritos por las expresiones regulares se usan para buscar cadenas de caracteres, extraer partes deseadas de cadenas, y para hacer operaciones de búsqueda y reemplazo.
+
+Las expresiones regulares tienen la inmerecida reputación de ser abstractas y difíciles de entender.  Las expresiones regulares están construidas utilizando conceptos sencillos como condicionales y bucles, y no son más difíciles de entender que las correspondientes condicionales C<if> y bucles C<while> del propio lenguaje Perl.  De hecho, el reto principal de aprender las expresiones regulares está en conseguir comprender la variada notación que se utiliza para expresar estos conceptos.
+
+Este tutorial aplana la curva de aprendizaje explicando los conceptos de las expresiones regulares, junto con su notación, uno cada vez y con muchos ejemplos.  La primera parte del tutorial progresará de las búsquedas más sencillas de palabras a los conceptos básicos de expresiones regulares.  Si aprende la primera parte, tendrá todas las herramientas necesarias para solucionar aproximadamente el 98 % de sus necesidades.  La segunda parte del tutorial es para aquellos que se sientan cómodos con lo básico y tienen hambre de más herramientas poderosas.  Ahí se habla de operadores más avanzados de expresiones regulares y presenta las últimas innovaciones.
+
+Una aviso: para ahorrar tiempo, 'expresión regular' se abrevia a menudo como I<regexp>, I<regex> y exp. reg.  I<Regexp> es una abreviatura más natural que I<regex>, pero es más difícil de pronunciar.  La documentación pod de Perl incluso se divide equitativamente entre I<regexp> vs. I<regex>; en Perl, hay más de una manera de abreviarlo.
+En este tutorial utilizaremos I<regex>.
+
+Nuevo en v5.22, L<C<use re 'strict'>|re/modo 'strict'> aplica reglas más estrictas al compilar patrones de expresiones regulares.  Puede encontrar cosas que, aún siendo legales, puede que no sean lo que se pretende.
+
+=head1 Parte 1: Conceptos básicos
+
+=head2 Correspondencia de una sola palabra
+
+La forma más simple de I<regex> es una sola palabra, o de forma más general, una cadena de caracteres.  Una I<regex> que conste de una palabra coincide con cualquier cadena que contenga esa palabra:
+
+    "Hola Mundo" =~ /Mundo/;  # coincide
+
+¿Qué expresa esta sentencia Perl? C<"Hola Mundo"> es una sencilla cadena entre comillas dobles.  C<Mundo> es una expresión regular y C<//> que rodea a C</Mundo/> le indica a Perl que debe buscar esa cadena para conseguir la coincidencia.
+El operador C<=~> asocia la cadena con la coincidencia de la I<regex>, y produce un valor de verdad si la I<regex> coincide, o falso si la I<regex> no coincide.  En nuestro caso, C<Mundo> coincide con la segunda palabra de C<"Hola Mundo">, así que la expresión es verdadera.  Expresiones como esta son útiles en condicionales:
+
+    if ("Hola Mundo" =~ /Mundo/) {
+        print "Coincide\n";
+    }
+    else {
+        print "No coincide\n";
+    }
+
+Existen variaciones muy útiles sobre este tema.  El sentido de la coincidencia se puede invertir mediante el uso del operador C<!~>:
+
+    if ("Hola Mundo" !~ /Mundo/) {
+        print "No coincide\n";
+    }
+    else {
+        print "Coincide\n";
+    }
+
+La cadena literal en la I<regex> se puede reemplazar por una variable:
+
+    $saludo = "Mundo";
+    if ("Hola Mundo" =~ /$saludo/) {
+        print "Coincide\n";
+    }
+    else {
+        print "No coincide\n";
+    }
+
+Si está haciendo la búsqueda en la variable especial por defecto C<$_>, se puede omitir la parte C<$_ =~>:
+
+    $_ = "Hola Mundo";
+    if (/Mundo/) {
+        print "Coincide\n";
+    }
+    else {
+        print "No coincide\n";
+    }
+
+Y, finalmente, los delimitadores por defecto C<//>, para una coincidencia, se pueden cambiar por cualesquiera otros delimitadores arbitrarios poniendo delante C<'m'>:
+
+    "Hola Mundo" =~ m!Mundo!;    # coincide, delimitado con '!'
+    "Hola Mundo" =~ m{Mundo};    # coincide, note la correspondencia de las '{}'
+    "/usr/bin/perl" =~ m"/perl"; # coincide después de '/usr/bin',
+                                 # '/' se convierte en un carácter ordinario
+
+C</Mundo/>, C<m!Mundo!>, y C<m{Mundo}> representan lo mismo.  Cuando, p. ej., se usa la comilla doble (C<">) como delimitador, la barra inclinada C<'/'> que sigue, se convierte en un carácter ordinario, y se puede usar en la I<regex> sin problemas.
+
+Considere las diferentes I<regex> que podrían coincidir con C<"Hola Mundo">:
+
+    "Hola Mundo" =~ /mundo /;  # no coincide
+    "Hola Mundo" =~ /a M/;     # coincide
+    "Hola Mundo" =~ /aM/;      # no coincide
+    "Hola Mundo" =~ /Mundo /;  # no coincide
+
+La primera I<regex> C<mundo> no coincide porque las I<regex> son sensibles al tamaño de caja.  La segunda I<regex> coincide porque la subcadena S<C<'a M'>> ocurre en la cadena S<C<"Hola Mundo">>.  El carácter de espacio ' ' se trata como cualquier otro carácter en una I<regex> y es necesario para que coincida, en este caso.  La carencia de un carácter de espacio es la razón para que no coincida la tercera I<regex> C<'aM'>.  La cuarta I<regex> C<'Mundo '> no coincide porque hay un espacio al final de la I<regex>, pero no al final de la cadena.  La lección aquí es que las I<regex> deben coincidir con una parte de la cadena I<exactamente> en el mismo orden o tamaño de caja, para que la sentencia sea verdadera:
+
+Si una I<regex> coincide en más de un lugar en la cadena, Perl siempre coincidirá en el punto más cercano al comienzo de la cadena:
+
+    "Hola Mundo" =~ /o/;            # coincide con la 'o' en 'Hola'
+    "ese sombrero es rojo" =~ /es/; # coincide con 'es' en 'ese'
+
+Con respecto a la coincidencia entre caracteres, hay una serie de puntos que necesita saber.   Primero de todo, no todos los caracteres se pueden usar 'tal cual', en una coincidencia.  Algunos caracteres, llamados I<metacaracteres>, se reservan para usarse en la notación de I<regexp>.  Los metacaracteres son
+
+    {}[]()^$.|*+?\
+
+El significado de cada uno de estos se explicará en el resto del tutorial, pero por ahora, es importante saber solamente que se puede hacer coincidir un metacarácter poniéndole delante una barra diagonal inversa:
+
+    "2+2=4" =~ /2+2/;                       # no coincide, + es un metacarácter
+    "2+2=4" =~ /2\+2/;                      # coincide, \+ se trata como un + cualquiera
+    "El intervalo es [0,1)." =~ /[0,1)./    # ¡es un error sintáctico!
+    "El intervalo es [0,1)." =~ /\[0,1\)\./ # coincide
+    "#!/usr/bin/perl" =~ /#!\/usr\/bin\/perl/;  # coincide
+
+En la última I<regex>, la barra diagonal C<'/'> también se escapa con una barra diagonal inversa, porque se usa como delimitador en la I<regex>.  Esto puede provocar el síndrome a la propensión a los palillos de dientes (LTS, I<leaning toothpick syndrome>). Por contra, a menudo es más legible cambiar los delimitadores.
+
+    "#!/usr/bin/perl" =~ m!#\!/usr/bin/perl!;  # más fácil de leer
+
+El carácter de barra diagonal inversa C<'\'> es un metacarácter en sí mismo y necesita escaparse:
+
+    'C:\WIN32' =~ /C:\\WIN/;   # coincide
+
+Además de los metacaracteres, hay algunos caracteres ASCII que no tienen caracteres imprimibles equivalentes y en su lugar se representan por I<secuencias de escape>.  Ejemplos comunes son C<\t> para un tabulador, C<\n> para una nueva línea, C<\r> para un retorno de carro y C<\a> para una campana (o alerta).  Si su cadena se ve mejor como una secuencia de bytes arbitrarios, una secuencia de escapes octales, p. ej., C<\033>, o una secuencia de escapes hexadecimales, p. ej., C<\x1B> puede ser una representación más natural para sus bytes.  Aquí hay algunos ejemplos de escapes:
+
+    "1000\t2000" =~ m(0\t2)   # coincide
+    "1000\n2000" =~ /0\n20/   # coincide
+    "1000\t2000" =~ /\000\t2/ # no coincide, "0" no es igual a "\000"
+    "cat"   =~ /\o{143}\x61\x74/ # coincide en ASCII, pero de una manera extraña
+                                 # para deletrear cat
+
+Si ya conoce Perl, toda esta charla sobre las secuencias de escape puede resultarle familiar.  Secuencias de escape similares se usan en cadenas doblemente entrecomilladas y, de hecho, las I<regex> en Perl se tratan como si fueran cadenas doblemente entrecomilladas.  Esto significa que las variables también se pueden usar en I<regex>.  Igual que en las cadenas entrecomilladas dobles, los valores de las variables en la I<regex> serán sustituidos antes de que se evalúe la I<regex> en la búsqueda de coincidencias.  Así que tenemos:
+
+    $foo = 'casa';
+    'casa del gato' =~ /$foo/;            # coincide
+    'casa del gato' =~ /$foo del gato/;   # coincide
+    'gato casado' =~ /gato ${foo}do/;     # coincide
+
+Tan lejos, tan bueno.  Con lo contado hasta ahora, ya puede realizar búsquedas con cualquier I<regex>, en forma de cadena literal, que pueda imaginar.
+Aquí hay una I<muy simple> emulación de un programa grep de Unix:
+
+    % cat > simple_grep
+    #!/usr/bin/perl
+    $regex = shift;
+    while (<>) {
+        print if /$regex/;
+    }
+    ^D
+
+    % chmod +x simple_grep
+
+    % simple_grep abba /usr/dict/words
+    Babbage
+    cabbage
+    cabbages
+    sabbath
+    Sabbathize
+    Sabbathizes
+    sabbatical
+    scabbard
+    scabbards
+
+Este programa es fácil de entender.  C<#!/usr/bin/perl> es la forma estándar de invocar un programa Perl desde el I<shell>.
+S<C<$regex = shift;>> almacena el primer argumento de la línea de comandos como la I<regex> que se va a usar, dejando el resto de argumentos para que sean tratados como archivos.  S<C<< while (<>) >>> bucle por todas las líneas en todos los archivos.  Por cada línea, S<C<print if /$regex/;>> imprime la línea si coincide con la I<regex>.  En esa línea, tanto C<print> como C</$regex/> usan implícitamente la variable por defecto C<$_>.
+
+Con todas estas I<regex> que hemos visto, si la I<regex> coincide en alguna parte de la cadena, se considera que ha ocurrido una coincidencia.  Algunas veces, sin embargo, queremos especificar I<dónde> debería coincidir la I<regex> en la cadena.  Para esto, podríamos usar los metacaracteres I<ancla> C<^> y C<$>.  El ancla C<^> significa que coincide con el comienzo de la cadena y el ancla C<$> significa que coincide con el final de la cadena, o antes de un carácter de nueva línea al final de la cadena.  Aquí se muestra cómo se usan:
+
+    "ama de casa" =~ /casa/;      # coincide
+    "ama de casa" =~ /^casa/;     # no coincide
+    "ama de casa" =~ /casa$/;     # coincide
+    "ama de casa\n" =~ /casa$/;   # coincide
+
+La segunda I<regex> no coincide porque C<^> constriñe a que C<casa> coincida solo con el comienzo de la cadena, pero C<"ama de casa"> tiene C<"casa"> en medio.  La tercera I<regex> coincide, ya que C<$> constriñe a que C<casa> coincida con el final de la cadena.
+
+Cuando, se usen al mismo tiempo C<^> y C<$>, la I<regex> ha de coincidir tanto al comienzo como al final de la cadena, es decir, la I<regex> coincide con toda la cadena.  Considere
+
+    "amar" =~ /^ama$/;       # no coincide
+    "amar" =~ /^amar$/;      # coincide
+    ""     =~ /^$/;          # ^$ coincide con una cadena vacía
+
+La primera I<regex> no coincide porque la cadena es más larga que C<ama>.  Ya que la segunda I<regex> es exactamente la cadena, coincide.  Usando los dos C<^> y C<$> en una I<regex> fuerza a que coincida con la cadena completa, así que le da control completo sobre cuáles cadenas coincide y cuáles no.  Suponga que está buscando por un socio llamado I<bert>, extrayéndolo de una cadena:
+
+    "dogbert" =~ /bert/;   # coincide, pero no es lo que queremos
+
+    "dilbert" =~ /^bert/;  # no coincide, pero...
+    "bertram" =~ /^bert/;  # coincide, pero sigue sin ser suficiente
+
+    "bertram" =~ /^bert$/; # no coincide, bien
+    "dilbert" =~ /^bert$/; # no coincide, bien
+    "bert"    =~ /^bert$/; # coincide, perfecto
+
+Naturalmente, en el caso de una cadena literal, uno podría usar, simplemente, la comparación de cadenas S<C<$cadena eq 'bert'>> y sería más eficiente.   La I<regex> C<^...$> se convierte en algo verdaderamente útil cuando le añadimos más herramientas poderosas, como veremos a continuación.
+
+=head2 Usando clases de caracteres
+
+Aunque se puede hacer un montón de cosas con expr. reg. y cadenas literales, solo hemos rascado la superficie de la tecnología de expresiones regulares.  En esta y las siguientes secciones introduciremos conceptos de I<regex> (y notaciones de los metacaracteres asociados) que permitirá a una I<regex> no solo representar secuencias de más de un carácter, sino una I<clase entera> de ellos.
+
+Uno de tales conceptos es lo que es una I<clase de caracteres>.  Una clase de caracteres permite a un conjunto de caracteres posibles, en lugar de uno solo, que coincidan en un punto particular de una I<regex>.  Puede definir sus propias clases de caracteres personalizadas.  Se denotan con corchetes C<[...]>, con el conjunto de caracteres posiblemente a buscar, en su interior.  Aquí hay algunos ejemplos:
+
+    /gato/;           # coincide con 'gato'
+    /[gr]at[oa]/;     # coincide con 'gato', 'gata', 'rato' o 'rata'
+    /item[0-9]/;      # coincide con 'item0' ... 'item9'
+    "abc" =~ /[cab]/; # coincide con 'a'
+
+En la última sentencia, aunque C<'c'> es el primer carácter de la clase, C<'a'> coincide porque la posición del primer carácter en la cadena es el punto más temprano en que la I<regex> puede coincidir.
+
+    /[sS][iI]/;       # coincide con 'si' con independencia del tamaño de caja
+                         # 'si', 'Si', 'SI', etc.
+
+Esta I<regex> muestra una tarea muy común: realizar una coincidencia independiente del tamaña de caja.  Perl ofrece una forma de evitar todos esos corchetes simplemente añadiendo un C<'i'> al final del patrón.  Entonces C</[sS][sI]/;> se puede escribir como C</si/i;>.  La C<'i'> significa independiente del tamaño de caja y es un ejemplo de un I<modificador> de una operación de coincidencia.  Conoceremos otros modificadores más tarde, en este tutorial.
+
+Vimos en la sección anterior que existen caracteres normales, que se representan por sí mismos, y caracteres especiales, que necesitan una barra diagonal inversa C<\> para representarlos.  La mismo es verdad en una clase de caracteres, pero el conjunto de caracteres ordinarios y especiales dentro de una clase de caracteres son diferentes de los que están fuera.  Los caracteres especiales de una clase de caracteres son C<-]\^$> (y el patrón delimitador, sea el que sea).
+C<]> es especial porque denota el final de la clase de caracteres.  C<$> es especial porque denota una variable escalar.  C<\> es especial porque se usa en las secuencias de escape, como la de más arriba.  Aquí se muestra cómo se manejan los caracteres especiales C<]$\>:
+
+   /[\]c]def/; # coincide con ']def' o 'cdef'
+   $x = 'bcr';
+   /[$x]at/;   # coincide con 'bat, 'cat' o 'rat'
+   /[\$x]at/;  # coincide con '$at' o 'xat'
+   /[\\$x]at/; # coincide con '\at', 'bat, 'cat' o 'rat'
+
+Las dos últimas son un poco más difíciles.  En C<[\$x]>, la barra diagonal inversa protege al signo del dólar, así que la clase de caracteres tiene dos miembros: C<$> y C<x>.
+En C<[\\$x]>, la barra diagonal inversa es la protegida, así que C<$x> se trata como una variable y sustituida de la misma forma que en el entrecomillado doble.
+
+El carácter especial C<'-'> actúa como un operador de rango dentro de las clases de caracteres, así que un conjunto contiguo de caracteres se puede escribir como un rango.  Con rangos, los pesados C<[0123456789]> y C<[abc...xyz]> se convierten en los esbeltos C<[0-9]> y C<[a-z]>.  Algunos ejemplos son
+
+    /item[0-9]/;    # coincide con 'item0' o ... o 'item9'
+    /[0-9bx-z]aa/;  # coincide con '0aa', ..., '9aa',
+                    # 'baa', 'xaa', 'yaa' o 'zaa'
+    /[0-9a-fA-F]/;  # coincide con un dígito hexadecimal
+    /[0-9a-zA-Z_]/; # coincide con un carácter de "palabra",
+                    # como los que hay en el nombre de una variable Perl
+
+Si C<'-'> es primer o último carácter en una clase de caracteres, se trata como un carácter ordinario; C<[-ab]>, C<[ab-]> y C<[a\-b]> son equivalentes.
+
+El carácter especial C<^> en la primera posición de una clase de caracteres denota una I<clase de caracteres negada>, que coincide con cualquier carácter, excepto los indicados dentro de los corchetes.  Tanto C<[...]> como C<[^...]> deben coincidir con un carácter, o la coincidencia falla.  Entonces
+
+    /[^a]at/;  # no coincide con 'aat' o 'at', pero coincide
+               # con los demás 'bat', 'cat, '0at', '%at', etc.
+    /[^0-9]/;  # coincide con un carácter no numérico
+    /[a^]at/;  # coincide con 'aat' o '^at'; aquí, '^' es un carácter normal
+
+Ahora, incluso C<[0-9]> puede resultar aburrido el tener que escribirlo muchas veces, así que en el interés de ahorrar pulsaciones y hacer las I<regex> más legibles, Perl tiene varias abreviaciones de las clases de caracteres más comunes, como se indica más abajo.
+Desde la introducción de Unicode, a menos que esté activo el modificador C<//a>, estas clases de caracteres coinciden con más caracteres que los indicados en el rango ASCII.
+
+=over 4
+
+=item *
+
+\d coincide con un dígito, pero no solo [0-9], sino también dígitos de conjuntos de caracteres no románicos
+
+=item *
+
+\s coincide con un carácter de espacio en blanco, el conjunto [\ \t\r\n\f] y otros
+
+=item *
+
+\w coincide con un carácter de palabra (alfanumérico o _), no solo [0-9a-zA-Z_] pero también dígitos y caracteres de conjunto de caracteres no románicos
+
+=item *
+
+\D es el negado de \d; representa cualquier otro carácter excepto un dígito, o [^\d]
+
+=item *
+
+\S es el negado de \s; representa cualquier carácter que no sea un espacio en blanco, como [^\s]
+
+=item *
+
+\W es el negado de \w; representa cualquier carácter que no forme parte de una palabra, como [^\w]
+
+=item *
+
+El punto '.' coincide con cualquier carácter excepto "\n" (a menos que el modificador C<//s> está en activo, como se explica más abajo).
+
+=item *
+
+\N, como el punto, coincide con cualquier carácter excepto "\n", pero lo hace independientemente del estado del modificador C<//s>.
+
+=back
+
+El modificador C<//a>, disponible a partir de Perl 5.14, se usa para restringir las coincidencias de \d, \s y \w para ajustarlos al rango ASCII.
+Es útil para evitar que su programa esté innecesariamente expuesto al rango completo de Unicode (y sus consideraciones de seguridad adyacentes) cuando todo lo que quiere es procesar texto en inglés.  (La "a" se puede doblar, C<//aa>, para ofrecer incluso más restricciones, impidiendo coincidencias ASCII independientes del tamaño de caja con caracteres no-ASCII; si no, un "signo Kelvin" Unicode podría coincidir con una "k" o "K").
+
+Las abreviaturas C<\d\s\w\D\S\W> se pueden utilizar tanto dentro como fuera de las clases de caracteres encorchetadas.  Aquí hay algunos en uso:
+
+    /\d\d:\d\d:\d\d/; # coincide con un formato de hora hh:mm:ss
+    /[\d\s]/;         # coincide con cualquier dígito o espacio en blanco
+    /\w\W\w/;         # coincide con un car. de palabra, seguido por
+                      # car. de no-palabra, seguido por un car. de palabra
+    /..rt/;           # coincide con cualesquiera dos car., seguidos por 'rt'
+    /end\./;          # coincide con 'end.'
+    /end[.]/;         # lo mismo, coincide con 'end.'
+
+Debido a que un punto es un metacarácter, necesita escaparse para coincidir con un punto ordinario. Ya que, por ejemplo, C<\d> y C<\w> son conjuntos de caracteres, es incorrecto pensar en C<[^\d\w]> como C<[\D\W]>; de hecho, C<[^\d\w]> es lo mismo que C<[^\w]>, que es lo mismo que C<[\W]>. Piense en las leyes de DeMorgan.
+
+Actualmente, el punto y las abreviaciones C<\d\s\w\D\S\W> son en sí mismos tipos de clases de caracteres, así que los primeros rodeados por corchetes son solo un tipo de clase de caracteres.  Cuando necesitamos hacer una distinción, nos referimos a ellos como "clases de caracteres entre corchetes".
+
+Un ancla útil en I<regex> básicas es I<ancla de palabra> C<\b>.  Esto coincide con un margen entre un carácter de palabra y un carácter de no-palabra: C<\w\W> o C<\W\w>:
+
+    $x = "Housecat catenates house and cat";
+    $x =~ /cat/;      # coincide con cat in 'housecat'
+    $x =~ /\bcat/;    # coincide con cat en 'catenates'
+    $x =~ /cat\b/;    # coincide con cat in 'housecat'
+    $x =~ /\bcat\b/;  # coincide con 'cat' al final de la cadena
+
+Note que en el último ejemplo, el final de la cadena se considera un límite de palabra.
+
+Para el procesado de lenguaje natural (para que, por ejemplo, los apóstrofes se incluyan en las palabras), use en su lugar C<\b{wb}>
+
+    "don't" =~ / .+? \b{wb} /x;  # coincide con toda la cadena
+
+Se podría preguntar por qué C<'.'> coincide con todo excepto con C<"\n">. ¿Por qué no con todos los caracteres? La razón es que a menudo hacemos las búsquedas en líneas y querremos ignorar los caracteres de nueva línea.  Por ejemplo, mientras que la cadena C<"\n"> representa una línea, nos gustaría pensar en ella como que es una línea vacía.  Entonces
+
+    ""   =~ /^$/;    # coincide
+    "\n" =~ /^$/;    # coincide, $ se ancla antes del "\n"
+
+    ""   =~ /./;      # no coincide; necesita un carácter
+    ""   =~ /^.$/;    # no coincide; necesita un carácter
+    "\n" =~ /^.$/;    # no coincide; necesita un carácter distinto de "\n"
+    "a"  =~ /^.$/;    # coincide
+    "a\n"  =~ /^.$/;  # coincide, $ se ancla antes del "\n"
+
+Este comportamiento es lo conveniente, porque normalmente queremos ignorar los caracteres de nueva línea cuando contamos y buscamos caracteres en una línea.  Algunas veces, queremos mantener un seguimiento de esos caracteres.  Podríamos incluso querer que C<^> y C<$> se anclen al comienzo y final de las líneas dentro de la cadena, en lugar de solo el comienzo y el final de la cadena.  Perl nos permite elegir entre ignorar y prestar atención a los caracteres de nueva línea usando los modificadores C<//s> y C<//m>.  C<//s> y C<//m> significan "una sola línea" y "múltiples líneas" y determinan cuándo una cadena se trata como una cadena continua, o un conjunto de líneas.  Los dos modificadores afectan los dos aspectos de cómo se interpreta la I<regex>: 1) cómo se define la clase de caracteres C<'.'>, y 2) dónde coinciden las anclas C<^> y C<$>.  Aquí están las cuatro posibles combinaciones:
+
+=over 4
+
+=item *
+
+sin modificadores (//): Comportamiento por defecto.  C<'.'> coincide con cualquier carácter excepto C<"\n">.  C<^> coincide solo al comienzo de la cadena y C<$> coincide solo al final o antes de un nueva línea al final.
+
+=item *
+
+modificador s (//s): Trata a la cadena como una única y larga línea.  C<'.'> coincide con cualquier carácter, incluso C<"\n">.  C<^> coincide solo al comienzo de la cadena y C<$> coincide solo al final o antes de un nueva línea al final.
+
+=item *
+
+modificar m (//m): Trata la cadena como un conjunto de múltiples líneas.  C<'.'> coincide con cualquier carácter excepto C<"\n">.  C<^> y C<$> son capaces de coincidir al comienzo o al final de I<cualquier> línea dentro de la cadena.
+
+=item *
+
+ambos modificadores s y m (//sm): Trata la cadena como una única y larga línea, pero detectando múltiples líneas.  C<'.'> coincide con cualquier carácter, incluso C<"\n">.  C<^> y C<$>, sin embargo, son capaces de coincidir al comienzo o al final de I<cualquier> línea dentro de la cadena.
+
+=back
+
+Aquí hay ejemplos de C<//s> y C<//m> en acción:
+
+    $x = "Había una vez una chica\nQue programaba en Perl\n";
+
+    $x =~ /^Que/;     # no coincide, "Que" no está al comienzo de la cadena
+    $x =~ /^Que/s;    # no coincide, "Que" no está al comienzo de la cadena
+    $x =~ /^Que/m;    # coincide, "Que" está al comienzo de la segunda línea
+    $x =~ /^Que/sm;   # coincide, "Que" está al comienzo de la segunda línea
+
+    $x =~ /chica.Que/;   # no coincide, "." no coincide con "\n"
+    $x =~ /chica.Que/s;  # coincide, "." coincide con "\n"
+    $x =~ /chica.Que/m;  # no coincide, "." no coincide con "\n"
+    $x =~ /chica.Que/sm; # coincide, "." coincide con "\n"
+
+La mayor parte del tiempo, el comportamiento por defecto es lo que se espera, pero C<//s> y C<//m> son, en ocasiones, muy útiles.  Si se usa C<//m>, el comienzo de la cadena sigue coincidiendo con C<\A> y el final de la cadena sigue coincidiendo con las anclas C<\Z> (coincide tanto con el final como con la posición anterior a nueva línea, igual que C<$>), y C<\z> (coincide solo con el final):
+
+    $x =~ /^Que/m;    # coincide, "Que" está al comienzo de la segunda línea
+    $x =~ /\AQue/m;   # no coincide, "Que" no está al comienzo de la cadena
+
+    $x =~ /chica$/m;  # coincide, "chica" está al final de la primera línea
+    $x =~ /chica\Z/m; # no coincide, "chica" no está al final de la cadena
+
+    $x =~ /Perl\Z/m;  # coincide, "Perl" está delante del nueva línea antes del final
+    $x =~ /Perl\z/m;  # no coincide, "Perl" no está al final de la cadena
+
+Ahora sabemos cómo crear elecciones entre clases de caracteres en una I<regex>.  ¿Qué hay sobre elegir entre palabras o cadenas de caracteres? Esas elecciones se describen en la sección siguiente.
+
+=head2 Coincidiendo con esto o aquello
+
+Algunas veces nos gustaría que nuestra I<regex> fuera capaz de encontrar diferentes palabras o cadenas de caracteres.  Esto se puede cumplir usando el metacarácter de I<alternancia> C<|>.  Para que coincida con C<perro> o C<gato>, formamos la I<regex> C<perro|gato>.  Al igual que antes, Perl tratará de hacer coincidir la I<regex> en el primer punto de coincidencia en la cadena.  En cada posición de carácter, Perl intentará hacer coincidir en primer lugar con la primera alternativa, C<perro>.  Si C<perro> no coincide, Perl entonces intentará la siguiente alternativa, C<gato>.  Si C<gato> tampoco corresponde, entonces la búsqueda falla y Perl se mueve a la siguiente posición en la cadena.  Algunos ejemplos:
+
+    "gatos y perro"  =~ /gato|perro|pajaro/;  # coincide con "gato"
+    "gatos y perros" =~ /perro|gato|pajaro/;  # coincide con "gato"
+
+Aunque C<perro> es la primera alternativa en la segunda I<regex>, C<gato> coincide en primer lugar, en la cadena.
+
+    "gato"          =~ /g|ga|gat|gato/; # coincide con "g"
+    "gato"          =~ /gato|gat|ga|g/; # coincide con "gato"
+
+Aquí, todas las alternancias coinciden con la primera posición de la cadena, así que los primeros caracteres serán la coincidencia.  Si algunas de las alternativas son versiones trucadas de otras, ponga primera las más largas, para que tengan la oportunidad de que coincidan primero.
+
+    "cab" =~ /a|b|c/ # coincide con "c"
+                     # /a|b|c/ == /[abc]/
+
+El último ejemplo muestra cómo las clases de caracteres son como alternativas de caracteres.  En una determinada posición de carácter, la primera alternativa que permita que la I<regex> tenga éxito será la primera con la que coincida.
+
+=head2 Agrupando cosas y jerarquía de coincidencia
+
+La alternancia permite a una I<regex> elegir entre varias alternativas, pero no es suficiente, por sí misma.  La razón es que cada alternativa es una I<regex>, pero algunas veces queremos alternativas para solo una parte de una I<regex>.  Por ejemplo, suponga que queremos buscar casero o casetas.  La I<regex> C<casero|casetas> funciona sin problemas, pero es ineficiente porque tenemos que escribir C<case> dos veces.  Sería mejor que algunas partes de la I<regex> sea constante, como C<case>, y otras partes como alternativas, como C<ro|tas>.
+
+Los metacaracteres de I<agrupación> C<()> resuelven el problema.  La agrupación permite que partes de una I<regex> se traten como una única unidad.  Partes de una I<regex> se agrupan encerrándolas entre paréntesis.  Por ello podríamos solucionar C<casero|casetas> formando la I<regex> como C<case(ro|tas)>.  La I<regex> C<case(ro|tas)> significa que coincide con C<case>, seguido por C<ro> o por C<tas>.  Algunos ejemplos más
+
+    /(a|b)b/;    # coincide con 'ab' o 'bb'
+    /(ac|b)b/;   # coincide con 'acb' o 'bb'
+    /(^a|b)c/;   # coincide con 'ac' al comienzo de la cadena o 'bc' en cualquier parte
+    /(a|[bc])d/; # coincide con 'ad', 'bd' o 'cd'
+
+    /espanta(pajaros|)/;     # coincide con 'espantapajaros' o 'espanta'
+    /espanta(pajaro(s|)|)/;  # coincide tanto con 'espantapajaros', 'espantapajaro' o
+                        # 'espanta'.  Note que los grupos pueden estar anidados.
+
+    /(19|20|)\d\d/;  # coincide con los años 19xx, 20xx o el problema del año 2000: xx
+    "20" =~ /(19|20|)\d\d/;  # coincide con la alternancia nula '()\d\d',
+                             # porque '20\d\d' no coincide
+
+Las alternancias se comportan dentro de grupos de la misma manera que fuera de ellos: en una determinada posición de la cadena, se toma la alternativa más a la izquierda que permita hacer coincidir a la I<regex>.  Así, en el último ejemplo, en la primera posición de la cadena, C<"20"> coincide con la segunda alternativa, pero no queda nada a la izquierda para que coincida con los dos próximos dígitos C<\d\d>.  Así que Perl se mueve a la siguiente alternativa, que es la alternativa nula, y esa ya coincide, ya que C<"20"> son dos dígitos.
+
+Al proceso de intentar una alternativa, mirando a ver si coincide, y moviendo a la siguiente alternativa, mientras que retrocede en la cadena desde donde se intentaron las alternativas anteriores, si no lo consiguieron, se llama I<backtracking> (vuelta atrás).  El término I<backtracking> viene de la idea de que hacer coincidir una I<regex> es como caminar en un bosque.  Una I<regex> exitosa es como llegar a un destino.  Existen muchas bifurcaciones posibles, una por cada posición de la cadena, y cada una se prueba, en orden, de izquierda a derecha.  De cada bifurcación pueden existir muchos caminos, algunos de los cuales serán salidas, otros son callejones.  Cuando camina a lo largo de un trayecto y llega a un callejón, tienes que volver hacia atrás a lo largo del trayecto a un punto anterior para intentar otro trayecto.  Si llegas al destino, paras inmediatamente y te olvidas completamente de intentar otros trayectos.  Si es persistente, y solo si ha intentado todos los trayectos desde todas las bifurcaciones, y no ha llegado a su destino, declarará que ha ocurrido un fallo.  Para ser concreto, aquí hay un análisis paso a paso de lo que Perl hace cuando intenta hacer coincidir la I<regex>.
+
+    "abcde" =~ /(abd|abc)(df|d|de)/;
+
+=over 4
+
+=item Z<>0
+
+Empieza con la primera letra de la cadena, 'a'.
+
+=item Z<>1
+
+Prueba la primera alternativa, con el primer grupo 'abd'.
+
+=item Z<>2
+
+Coincide la 'a' seguida de una 'b'. Hasta aquí todo bien.
+
+=item Z<>3
+
+'d', en la I<regex>, no coincide con 'c', en la cadena: un callejón sin salida.  Así que volvemos atrás dos caracteres, y escogemos la segunda alternativa en el primer grupo, 'abc'.
+
+=item Z<>4
+
+Coincide 'a' seguido de 'b' seguido de 'c'.  Estamos en racha, y ha satisfecho el primer grupo. Se establece $1 a 'abc'.
+
+=item Z<>5
+
+Se mueve al segundo grupo y escoge la primera alternativa 'df'.
+
+=item Z<>6
+
+Coincide la 'd'.
+
+=item Z<>7
+
+'f', en la I<regex>, no coincide con 'e', en la cadena: un callejón sin salida.  Volvemos atrás un carácter, y escoge la segunda alternativa en el primer grupo, 'd'.
+
+=item Z<>8
+
+'d' coincide. El segundo grupo se satisface, así que se establece $2 a 'd'.
+
+=item Z<>9
+
+Estamos al final de la I<regex>, así que ¡hemos terminado! Hemos extraído 'abcd' de la cadena "abcde".
+
+=back
+
+Hay un par de cosas que hay que notar sobre este análisis.  Primero, la tercera alternativa en el segundo grupo 'de' también permite una coincidencia, pero paramos antes de tenerlo en cuenta: dada una posición de carácter, la que está más a la izquierda gana.  Segundo, fuimos capaces de obtener una coincidencia en la primera posición de la cadena, 'a'.  Si no hubiese coincidencias en la primera posición, Perl se movería a la segunda posición, 'b', y prueba el patrón completo, de nuevo.  Solo cuando se han agotado todos los posibles caminos en todas las posibles posiciones de carácter, Perl desiste, y declara que S<C<"abcde" =~ /(abd|abc)(df|d|de)/;>> es falso.
+
+Incluso con todo este trabajo, la coincidencia I<regex> sucede extraordinariamente rápido.  Para acelerar las cosas, Perl compila la I<regex> en una secuencia compacta de códigos de operación que pueden, a menudo, caber dentro de la caché de un procesador.  Cuando el código se ejecuta, esos códigos de operación pueden entonces correr a toda velocidad y buscar la coincidencia muy deprisa.
+
+=head2 Extrayendo coincidencias
+
+Los metacaracteres de agrupación C<()> también sirve para otra función completamente diferente: permite la extracción de las partes de la cadena que coincidan.  Esto es muy útil para encontrar lo que coincide y para el procesamiento de texto en general.  Para cada grupo, la parte que coincide dentro se almacena en las variables especiales C<$1>, C<$2>, etc. Se pueden usar como variables ordinarias:
+
+    # extraer horas, minutos, segundos
+    if ($hora =~ /(\d\d):(\d\d):(\d\d)/) {    # coincide con el formato hh:mm:ss
+	$horas = $1;
+	$minutos = $2;
+	$segundos = $3;
+    }
+
+Ahora, sabemos que en contexto escalar, S<C<$hora =~ /(\d\d):(\d\d):(\d\d)/>> devuelve un valor verdadero o falso.  En contexto de lista, sin embargo, devuelve la lista de valores coincidentes C<($1,$2,$3)>.  Así que podríamos escribir el código de forma más compacta como
+
+    # extraer horas, minutos, segundos
+    ($horas, $minutos, $segundos) = ($hora =~ /(\d\d):(\d\d):(\d\d)/);
+
+Si la agrupación en una I<regex> está anidada, C<$1> obtiene el valor del grupo con el paréntesis de apertura más a la izquierda, C<$2> el siguiente paréntesis de apertura, etc. Aquí hay un I<regex> con grupos anidados:
+
+    /(ab(cd|ef)((gi)|j))/;
+     1  2      34
+
+Si esta I<regex> coincide, C<$1> contiene una cadena comenzando con C<'ab'>, C<$2> puede ser tanto C<'cd'> como C<'ef'>, C<$3> es igual a C<'gi'> o C<'j'>, y C<$4> se puede establecer a C<'gi'>, igual que C<$3>, o queda indefinido.
+
+Por conveniencia, Perl actualiza C<$+> a la cadena almacenada por la variable C<$1>, C<$2>... con numeración más alta que fuera asignada (y, relacionado con esto, C<$^N> al valor de C<$1>, C<$2>... asignado más recientemente, es decir, al C<$1>, C<$2>... asociado al paréntesis de cierre que esté más a la derecha dentro de la coincidencia).
+
+
+=head2 Retrorreferencias
+
+Estrechamente asociado con las variables de emparejamiento C<$1> C<$2>... son las I<retrorreferencias> C<\g1> C<\g2>... Las retrorreferencias son simplemente variables de emparejamiento que pueden utilizarse I<dentro> una I<regex>:  Esto es una característica realmente buena; lo que coincide más tarde en una I<regex> se hace depender de lo que coincide antes en la I<regex>.  Suponga que queremos buscar por palabras repetidas en un texto, como 'con con'.  La siguiente I<regex> encuentra todas las palabras de tres letras repetidas, con un espacio entre ellas:
+
+    /\b(\w\w\w)\s\g1\b/;
+
+La agrupación asigna el valor a \g1, así que la misma secuencia de tres letras se usa en ambas partes.
+
+Una tarea similar es la de encontrar palabras consistentes en dos partes idénticas:
+
+    % simple_grep '^(\w\w\w\w|\w\w\w|\w\w|\w)\g1$' /usr/dict/words
+    beriberi
+    booboo
+    coco
+    mama
+    murmur
+    papa
+
+La I<regex> tiene una sola agrupación que considera combinaciones de cuatro letras, luego combinaciones de tres letras, etc., y usa C<\g1> para encontrar una repetición.  A pesar de que C<$1> y C<\g1> representa la misma cosa, se debe tener cuidado para usar las variables de coincidencia C<$1>, C<$2>... solo I<fuera> de la I<regex>, y las retrorreferencias C<\g1>, C<\g2>... solo I<dentro> de la I<regex>; no hacerlo puede llevar a resultados sorprendentes y nada satisfactorios.
+
+
+=head2 Retrorreferencias relativas
+
+Contar los paréntesis de apertura para saber el número de correcto de una retrorreferencia es propenso a cometer errores, tanto más si hay más de un grupo de captura.  Una técnica más conveniente llegó con Perl 5.10: retrorreferencias relativas. Para referirse al grupo de captura inmediatamente anterior, ahora podemos escribirlo como C<\g{-1}>, y para el anterior, C<\g{-2}>, y así.
+
+Otra buena razón para usar retrorreferencias relativas, además de la de añadir legibilidad y facilidad mantenimiento, se ilustra con el siguiente ejemplo, donde se usa un sencillo patrón para coincidir con cadenas peculiares:
+
+    $a99a = '([a-z])(\d)\g2\g1';   # coincide con a11a, g22g, x33x, etc.
+
+Ahora que tenemos este patrón almacenado como una cadena manejable, podríamos sentirnos tentados de usarlas como parte de otro patrón:
+
+    $linea = "code=e99e";
+    if ($linea =~ /^(\w+)=$a99a$/) {   # ¡comportamiento inesperado!
+        print "$1 es válido\n";
+    } else {
+        print "línea errónea: '$linea'\n";
+    }
+
+Pero esto no coincide, al menos no de la forma que uno podría esperar. Solo después de insertar la interpolada C<$a99a> y mirando en el texto completo resultante de la I<regex>, es obvio que las retrorreferencias fallan. La subexpresión C<(\w+)> se apropia del número 1 y degrada la numeración de los grupos de C<$a99a> por uno. Esto se puede evitar usando retrorreferencias relativas:
+
+    $a99a = '([a-z])(\d)\g{-1}\g{-2}';  # se puede interpolar con seguridad
+
+
+=head2 Retrorreferencias con nombres
+
+Perl 5.10 también introdujo grupos de captura con nombres y retrorreferencias con nombres.
+Para adjuntar un nombre a un grupo de captura, puede escribirlo así: C<< (?<nombre>...) >> o así C<< (?'nombre'...) >>.  Las retrorreferencias se pueden escribir entonces como C<\g{nombre}>.  Está permitido adjuntar el mismo nombre a más de un grupo, pero entonces solo podrá referirse al que se encuentra más a la izquierda del conjunto epónimo.  Fuera de un patrón, un grupo de captura con nombre es accesible a través del hash C<%+>.
+
+Asumiendo que tenemos que hacer coincidir fechas del calendario que nos pueden dar en una de tres formas distintas (yyyy-mm-dd, mm/dd/yyyy y dd.mm.yyyy), podemos escribir tres patrones adecuados donde usemos 'd', 'm' y 'y' respectivamente, como los nombres de los grupos que capturan los componentes pertenecientes a una fecha. La operación de coincidencia combina los tres patrones como alternativas:
+
+    $fmt1 = '(?<y>\d\d\d\d)-(?<m>\d\d)-(?<d>\d\d)';
+    $fmt2 = '(?<m>\d\d)/(?<d>\d\d)/(?<y>\d\d\d\d)';
+    $fmt3 = '(?<d>\d\d)\.(?<m>\d\d)\.(?<y>\d\d\d\d)';
+    for my $d qw( 2006-10-21 15.01.2007 10/31/2005 ){
+        if ( $d =~ m{$fmt1|$fmt2|$fmt3} ){
+            print "día=$+{d} mes=$+{m} año=$+{y}\n";
+        }
+    }
+
+Si coincide alguna de las alternativas, se actualiza el hash C<%+> para que contenga los tres pares clave-valor.
+
+
+=head2 Numeración alternativa de los grupos de captura
+
+Otra técnica más de numeración de grupos de captura (también a partir de Perl 5.10) trata sobre el problema de referirse a grupos dentro de un conjunto de alternativas.
+Considerar un patrón para coincidir con una hora del día, al estilo civil o militar:
+
+    if ( $hora =~ /(\d\d|\d):(\d\d)|(\d\d)(\d\d)/ ){
+        # procesar la hora y el minuto
+    }
+
+Procesar los resultados requiere una sentencia if adicional para determinar si C<$1> y C<$2> o C<$3> y C<$4> contienen lo que queremos. Sería más fácil si pudiéramos usar los números de grupo 1 y 2 también en la segunda alternativa, y esto es lo que consigue exactamente la construcción con paréntesis C<(?|...)>, puesta alrededor de una alternativa. Aquí hay una versión extendida del patrón anterior:
+
+  if($hora =~ /(?|(\d\d|\d):(\d\d)|(\d\d)(\d\d))\s+([A-Z][A-Z][A-Z])/){
+      print "hora=$1 minuto=$2 zona=$3\n";
+  }
+
+Dentro de la numeración de grupos en la alternativa, los números de grupo comienzan en la misma posición por cada alternativa. Después del grupo, la numeración continúa con uno más que el máximo alcanzado a lo largo de todas las alternativas.
+
+=head2 Información de posición
+
+Además de lo que se encuentra, Perl ofrece también las posiciones de lo encontrado como contenidos de los arrays C<@-> y C<@+>. C<$-[0]> es la posición del inicio de toda la coincidencia y C<$+[0]> es la posición del final. De modo parecido, C<$-[n]> es la posición del inicio de la coincidencia C<$n> y C<$+[n]> es la posición del final. Si C<$n> es indefinido, también lo son C<$-[n]> y C<$+[n]>. Entonces este código
+
+    $x = "Mmm... donut, pensó Homer";
+    $x =~ /^(Mmm|Yech)\.\.\. (donut|guisantes)/; # coincide
+    foreach $exp (1..$#-) {
+        print "Coincide $exp: '${$exp}' en la posición ($-[$exp],$+[$exp])\n";
+    }
+
+imprime
+
+    Coincide 1: 'Mmm' en la posición (0,3)
+    Coincide 2: 'donut' en la posición (7,12)
+
+Incluso si no hay ninguna agrupación en la I<regex>, sigue siendo posible encontrar qué es lo que se encontró en una cadena.  Si los utiliza, Perl establecerá C<$`> a la parte de la cadena anterior a la coincidencia, establecerá C<$&> a la parte de la cadena que coincidió, y establecerá C<$'> a la parte de la cadena que está a continuación de la coincidencia.  Un ejemplo:
+
+    $x = "el gato fue hacia el ratón";
+    $x =~ /gato/; # $` = 'el ', $& = 'gato', $' = ' fue hacia el ratón'
+    $x =~ /el/;  # $` = '', $& = 'el', $' = ' gato fue hacia el ratón'
+
+En la segunda coincidencia, C<$`> es igual a C<''> porque la I<regex> coincidió con la primera posición en la cadena y se paró; nunca vio el segundo 'el'.
+
+Si su código ejecuta una versión de Perl anterior al 5.20, vale la pena notar que usar C<$`> y C<$'> enlentece un poco las expresiones regulares, mientras que C<$&> las enlentece bastante más, por que si, en un programa, se usa al menos una I<regex>, se utilizará para I<todas> las I<regex> que contenga ese programa.  Así que si el rendimiento es un objetivo de su aplicación, debería evitar usarlas.
+Si necesita extraer las subcadenas correspondientes, use en su lugar C<@-> y C<@+>:
+
+    $` es lo mismo que substr( $x, 0, $-[0] )
+    $& es lo mismo que substr( $x, $-[0], $+[0]-$-[0] )
+    $' es lo mismo que substr( $x, $+[0] )
+
+A partir de Perl 5.10, se pueden usar las variables C<${^PREMATCH}>, C<${^MATCH}> y C<${^POSTMATCH}>.  Solo se establecen si está presente el modificador C</p>.  Consiguientemente no penalizan el resto del programa.  En Perl 5.20, C<${^PREMATCH}>, C<${^MATCH}> y C<${^POSTMATCH}> están disponibles tanto si se usa C</p> o no (el modificador se ignora); y C<$`>, C<$'> y C<$&> no provocan ninguna diferencia de velocidad.
+
+=head2 Agrupación sin captura
+
+Un grupo al que se requiere que acoja un conjunto de alternancias, puede ser útil o no que sea una agrupación de captura.  Si no lo es, solo crea una adición superflua al conjunto de valores de grupos de captura, tanto dentro como fuera de la I<regex>.  Las agrupaciones sin captura, denotadas por C<(?:regexp)>, siguen permitiendo a la I<regex> tratarlas como una unidad, pero al mismo tiempo no las establece como grupo de captura.  Se permite coexistir tanto a las agrupaciones de captura como a las que no, en la misma I<regex>.  Debido a que no hay extracción, las agrupaciones sin captura son más rápidas que las agrupaciones con captura.  Las agrupaciones sin captura también son útiles para elegir exactamente qué partes de una I<regex> tienen que llevarse a las variables de coincidencia:
+
+    # coincide con un número, se establecen $1-$4, pero nosotros solo queremos $1
+    /([+-]?\ *(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)/;
+
+    # coincide con un número, más rápido, solo establecemos $1
+    /([+-]?\ *(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)/;
+
+    # coincide con un número, establece $1 = todo el número, $2 = exponente
+    /([+-]?\ *(?:\d+(?:\.\d*)?|\.\d+)(?:[eE]([+-]?\d+))?)/;
+
+Las agrupaciones sin captura también son útiles para eliminar elementos molestos recolectados en una operación de división donde, por alguna razón, se requieren paréntesis:
+
+    $x = '12aba34ba5';
+    @num = split /(a|b)+/, $x;    # @num = ('12','a','34','a','5')
+    @num = split /(?:a|b)+/, $x;  # @num = ('12','34','5')
+
+En Perl 5.22 y siguientes, todos los grupos dentro de una I<regex> pueden establecerse como de no captura, usando el nuevo indicador C</n>:
+
+    "hola" =~ /(hi|hola)/n; # ¡no se establece $1!
+
+Vea L<perlre/"n"> para más información.
+
+=head2 Coincidiendo con repeticiones
+
+Los ejemplos de la sección anterior muestran una molesta debilidad.  Solo estamos buscando palabras de tres letras, o trozos de palabras de cuatro letras o menos.  Queremos ser capaces de buscar palabras, o de forma más general, cadenas de cualquier longitud, sin tener que escribir tediosas alternancias como C<\w\w\w\w|\w\w\w|\w\w|\w>.
+
+Este es exactamente el problema por el que se crearon los metacaracteres I<cuantificadores> C<?>, C<*>, C<+> y C<{}>.  Nos permiten delimitar el número de repeticiones de una parte de una I<regex> que consideramos buscar.  Los cuantificadores se colocan inmediatamente después del carácter, clase de caracteres, o agrupación que desee especificar.  Tienen los siguientes significados:
+
+=over 4
+
+=item *
+
+C<a?> significa: coincide con 'a' una o cero veces
+
+=item *
+
+C<a*> significa: coincide con 'a' cero o más veces, es decir, cualquier número de veces
+
+=item *
+
+C<a+> significa: coincide con 'a' una o más veces, es decir, al menos una vez
+
+=item *
+
+C<a{n,m}> significa: coincide al menos C<n> veces, pero no más que C<m> veces.
+
+=item *
+
+C<a{n,}> significa: coincide con al menos C<n> o más veces
+
+=item *
+
+C<a{n}> significa: coincide exactamente C<n> veces
+
+=back
+
+Aquí hay algunos ejemplos:
+
+    /[a-z]+\s+\d*/;  # coincide con una palabra en minúsculas, al menos un espacio, y
+                     # cualquier número de dígitos
+    /(\w+)\s+\g1/;   # coincide con palabras duplicadas de cualquier longitud
+    /y(es)?/i;       # coincide con 'y', 'Y', o un 'yes', insensible al tamaño de caja
+    $year =~ /^\d{2,4}$/;  # se asegura que year tenga al menos dos, pero no más
+                           # de cuatro dígitos
+    $year =~ /^\d{4}$|^\d{2}$/; # una mejor coincidencia; descartando fechas con tres dígitos
+    $year =~ /^\d{2}(\d{2})?$/; # lo mismo, escrito de forma diferente
+                                # Sin embargo, esto captura los últimos dos
+                                # dígitos en $1, y las otras no.
+
+    % simple_grep '^(\w+)\g1$' /usr/dict/words   # ¿no es más sencillo?
+    beriberi
+    booboo
+    coco
+    mama
+    murmur
+    papa
+
+Para todos estos cuantificadores, Perl intentará satisfacer la mayor cantidad de cadena como sea posible, mientras permita coincidir a la I<regex>.  Así, con C</a?.../>, Perl intentará primero coincidir la I<regex> con la C<a> presente; si eso falla, Perl intentará coincidir la I<regex> sin la C<a>.  Para el cuantificador C<*>, obtenemos lo siguiente:
+
+    $x = 'el gato en el sombrero';
+    $x =~ /^(.*)(gato)(.*)$/; # coincide,
+                             # $1 = 'el '
+                             # $2 = 'gato'
+                             # $3 = ' en el sombrero'
+
+Lo que nosotros esperamos, es que la coincidencia encuentre al único C<gato> en la cadena y se fije a él.  Considere, sin embargo, esta I<regex>:
+
+    $x =~ /^(.*)(at)(.*)$/; # coincide,
+                            # $1 = 'the cat in the h'
+                            # $2 = 'at'
+                            # $3 = ''   (coincide con 0 caracteres)
+
+Uno podría, inicialmente adivinar que Perl podría encontrar el C<at> en C<cat> y pararse ahí, pero eso no daría la cadena más larga posible al cuantificador C<.*>.  En lugar de eso, el primer cuantificador C<.*> reserva de la cadena tanto como sea posible mientras la I<regex> funcione.  En este ejemplo, eso significa tener la secuencia C<at> con el último C<at> de la cadena.  El otro principio importante ilustrado aquí es que, cuando hay dos o más elementos en una I<regex>, el cuantificador I<más a la izquierda>, si hay alguno, se queda tanto como sea posible de la cadena, dejando al resto de la I<regex> que se pegue con los restos.  Así, en nuestro ejemplo, el primer cuantificador C<.*> se queda con la mayor parte de la cadena, mientras que el segundo cuantificador C<.*> se queda con la cadena vacía.   Los cuantificadores que se quedan con la mayor parte de la cadena posible se llaman de I<coincidencia máxima> o cuantificadores I<codiciosos>.
+
+Cuando una I<regex> puede coincidir con una cadena de formas diferentes, podemos usar los principios anteriores para predecir de qué forma la I<regex> coincidirá:
+
+=over 4
+
+=item *
+
+Principio 0: Tomada como un todo, cualquier I<regex> coincidirá con la primera posición posible de la cadena.
+
+=item *
+
+Principio 1: En una alternancia C<a|b|c...>, la alternativa más a la izquierda que permita una coincidencia sera la única que se use.
+
+=item *
+
+Principio 2: La máxima coincidencia de los cuantificadores C<?>, C<*>, C<+> y C<{n,m}> coincidirá, en general, con la mayor cadena posible mientras permite coincidir a toda la I<regex>.
+
+=item *
+
+Principio 3: Si hay dos o más elementos en una I<regex>, el cuantificador codicioso que esté más a la izquierda, si hay alguno, coincidirá con la mayor parte de la cadena mientras permita coincidir a toda la I<regex>.  El siguiente cuantificador codicioso que esté a la izquierda, si hay alguno, intentará hacer coincidir tanto como sea posible con el resto de la cadena, mientras siga permitiendo coincidir a toda la I<regexp>.  Y así, hasta que queden satisfechos todos los elementos de la I<regex>.
+
+=back
+
+Como hemos visto antes, el Principio 0 sobrepasa a los demás. La I<regex> coincidirá tan pronto como sea posible, mientras los otros principios determinen cómo debe coincidir la I<regex> en esa primera posición de carácter.
+
+Aquí hay un ejemplo de estos principios, en acción:
+
+    $x = "The programming republic of Perl";
+    $x =~ /^(.+)(e|r)(.*)$/;  # coincide,
+                              # $1 = 'The programming republic of Pe'
+                              # $2 = 'r'
+                              # $3 = 'l'
+
+Esta I<regex> coincide en la primera posición de la cadena , C<'T'>.  Uno podría pensar que la C<e>, estando más a la izquierda en la alternancia, podría coincidir, pero C<r> produce la cadena más larga con el primer cuantificador.
+
+    $x =~ /(m{1,2})(.*)$/;  # coincide,
+                            # $1 = 'mm'
+                            # $2 = 'ing republic of Perl'
+
+Aquí, la primera coincidencia posible es en la primera C<'m'> en C<programming>. C<m{1,2}> es el primer cuantificador, así que consigue emparejar un máximo de C<mm>.
+
+    $x =~ /.*(m{1,2})(.*)$/;  # coincide,
+                              # $1 = 'm'
+                              # $2 = 'ing republic of Perl'
+
+Aquí, la I<regex> coincide al comienzo de la cadena. El primer cuantificador C<.*> obtiene tanto como sea posible, dejando solo una C<'m'> para el segundo cuantificador C<m{1,2}>.
+
+    $x =~ /(.?)(m{1,2})(.*)$/;  # coincide,
+                                # $1 = 'a'
+                                # $2 = 'mm'
+                                # $3 = 'ing republic of Perl'
+
+Aquí, C<.?> se come un máximo de un carácter en la primera posición posible de la cadena, C<'a'> en C<programming>, dejando C<m{1,2}> la oportunidad de coincidir con las dos C<m>. Finalmente,
+
+    "aXXXb" =~ /(X*)/; # coincide con $1 = ''
+
+porque puede coincidir con cero copias de C<'X'> al comienzo de la cadena.  Si lo que quiere realmente es buscar al menos una C<'X'>, use C<X+>, no C<X*>.
+
+Algunas veces, ser codicioso es bueno.  Algunas veces, nos gustaría que los cuantificadores coincidan con una I<mínima> parte de la cadena, en lugar de una parte máxima.  Para este propósito, Larry Wall creó los cuantificadores de I<coincidencia mínima> o I<no codiciosos> C<??>, C<*?>, C<+?> y C<{}?>.  Estos son los cuantificadores habituales con un C<?> añadido a ellos.  Tienen los siguientes significados:
+
+=over 4
+
+=item *
+
+C<a??> significa: coincide con 'a' cero o una veces. Primero intenta 0, y luego 1.
+
+=item *
+
+C<a*?> significa: coincide con 'a' cero o más veces, es decir, cualquier número de veces, pero el mínimo posible
+
+=item *
+
+C<a+?> significa: coincide con 'a' una o más veces, es decir, al menos una vez, pero el mínimo posible
+
+=item *
+
+C<a{n,m}?> significa: coincide al menos C<n> veces, pero no más que C<m> veces, pero el mínimo posible
+
+=item *
+
+C<a{n,}?> significa: coincide con al menos C<n> veces, pero el mínimo posible
+
+=item *
+
+C<a{n}?> significa: coincide exactamente C<n> veces.  Ya que buscamos exactamente C<n> veces, C<a{n}?> es equivalente a C<a{n}> y solo está aquí para que haya consistencia en la notación.
+
+=back
+
+Repasemos el ejemplo anterior, pero con los cuantificadores mínimos:
+
+    $x = "The programming republic of Perl";
+    $x =~ /^(.+?)(e|r)(.*)$/; # coincide,
+                              # $1 = 'Th'
+                              # $2 = 'e'
+                              # $3 = ' programming republic of Perl'
+
+La cadena mínima que permita coincidir tanto al comienzo de la cadena C<^> y la alternancia es C<Th>, con la alternancia C<e|r> coincidiendo con C<e>.  El segundo cuantificador C<.*> es libre para absorber el resto de la cadena.
+
+    $x =~ /(m{1,2}?)(.*?)$/;  # coincide,
+                              # $1 = 'm'
+                              # $2 = 'ming republic of Perl'
+
+La primera posición de la cadena, es aquella en la que esta I<regex> puede coincidir con la primera C<'m'> en C<programming>. En esta posición, el mínimo de C<m{1,2}?> coincide solo con una C<'m'>.  A pesar de que el segundo cuantificador C<.*?> podría preferir coincidir con ningún carácter, está obligado por el ancla de fin-de-cadena C<$> para coincidir con el resto de la cadena.
+
+    $x =~ /(.*?)(m{1,2}?)(.*)$/;  # coincide,
+                                  # $1 = 'The progra'
+                                  # $2 = 'm'
+                                  # $3 = 'ming republic of Perl'
+
+En esta I<regex>, podría esperar que el primer cuantificador mínimo C<.*?> coincida con la cadena vacía, porque no está obligada por el ancla C<^> para coincidir con el comienzo de la palabra.  Sin embargo, aquí se aplica el Principio 0.  Ya que es posible, para toda la I<regex> coincidir al comienzo de la cadena, I<coincidirá> al comienzo de la cadena.  Por ello, el primer cuantificador tiene que coincidir con todo, hasta la primera C<m>.  El segundo cuantificador mínimo coincide con solo una C<m> y el tercer cuantificador coincide con el resto de la cadena.
+
+    $x =~ /(.??)(m{1,2})(.*)$/;  # coincide,
+                                 # $1 = 'a'
+                                 # $2 = 'mm'
+                                 # $3 = 'ing republic of Perl'
+
+Igual que en la anterior I<regex>, el primer cuantificador C<.??> puede coincidir inicialmente en la posición C<'a'>, así que eso hace.  El segundo cuantificador es codicioso, así que coincide con C<mm>, y el tercero coincide con el resto de la cadena.
+
+Podemos modificar el principio 3 anterior para tener en cuenta a los cuantificadores no codiciosos:
+
+=over 4
+
+=item *
+
+Principio 3: Si hay dos o más elementos en una I<regex>, el cuantificador codicioso que esté más a la izquierda (no codicioso), si hay alguno, coincidirá con la mayor (menor) parte de la cadena mientras permita coincidir a toda la I<regex>.  El siguiente cuantificador codicioso (no codicioso) que esté a la izquierda, si hay alguno, intentará hacer coincidir tanto como sea (lo menos) posible con el resto de la cadena, mientras siga permitiendo coincidir a toda la I<regexp>.  Y así, hasta que queden satisfechos todos los elementos de la I<regex>.
+
+=back
+
+Igual que la alternancia, los cuantificadores son susceptibles de hacer vuelta atrás.  Aquí hay un análisis paso a paso de un ejemplo
+
+    $x = 'el gato en el sombrero';
+    $x =~ /^(.*)(at)(.*)$/; # coincide,
+                            # $1 = 'the cat in the h'
+                            # $2 = 'at'
+                            # $3 = ''   (0 coincidencias)
+
+=over 4
+
+=item Z<>0
+
+Empieza con la primera letra de la cadena, 't'.
+
+=item Z<>1
+
+El primer cuantificador '.*' comienza a coincidir con toda la cadena 'the cat in the hat'.
+
+=item Z<>2
+
+'a' en el elemento I<regex> 'at' no coincide al final de la cadena.  Vuelve atrás un carácter.
+
+=item Z<>3
+
+'a' en el elemento I<regex> 'at' sigue sin coincidir con la última letra de la cadena 't', así que retrocede un carácter más.
+
+=item Z<>4
+
+Ahora puede coincidir la 'a' y la 't'.
+
+=item Z<>5
+
+Se mueve al tercer elemento '.*'.  Ya que estamos al final de la cadena y '.*' puede coincidir 0 veces, le asignamos la cadena vacía.
+
+=item Z<>6
+
+¡Hemos terminado!
+
+=back
+
+La mayor parte del tiempo, todo este movimiento de adelante y atrás sucede muy rápido y la búsqueda es inmediata. Existen, sin embargo, algunas I<regex> patológicas, cuyo tiempo de ejecución crece exponencialmente con el tamaño de la cadena.  Una estructura típica que te estalla en tu cara es de la forma
+
+    /(a|b+)*/;
+
+El problema son los cuantificadores indeterminados anidados.  Existen muchas formas diferentes de partir una cadena de longitud n entre el C<+> y el C<*>: una repetición con C<b+> de longitud n, dos repeticiones con el primer C<b+> de longitud k y el segundo con longitud n-k, m repeticiones cuyas partes suman hasta la longitud n, etc. De hecho, existen un número exponencial de formas de partir una cadena en función de su longitud.  Una I<regex> puede tener suerte y coincidir rápidamente durante el proceso, pero si no hay coincidencia, Perl intentará I<cada> posibilidad antes de dejarlo.  Así que sea prudente con C<*>, C<{n,m}> y C<+> anidados.  El libro I<Mastering Regular Expressions> de Jeffrey Friedl da una maravillosa explicación de este y otras cuestiones de eficiencia.
+
+
+=head2 Cuantificadores posesivos
+
+La vuelta atrás durante la implacable búsqueda de una coincidencia quizás sea una pérdida de tiempo, particularmente cuando la coincidencia va a fallar.  Considere este sencillo patrón
+
+    /^\w+\s+\w+$/; # una palabra, espacios, una palabra
+
+Siempre que esto se aplique a una cadena que no concuerde con las expectativas del patrón, como S<C<"abc  ">> o S<C<"abc  def ">>, el motor de expresiones regulares retrocederá, aproximadamente, una vez por cada carácter.  Pero nosotros sabemos que no hay forma de evitar el tomar I<todos> los caracteres de la palabra inicial para coincidir con la primera repetición, y luego I<todos> los espacios deben comerse en la parte media, y lo mismo para la segunda palabra.
+
+Con la introducción de los I<cuantificadores posesivos> en Perl 5.10, tenemos una manera de instruir al motor de expresiones regulares que no haga vuelta atrás, con los cuantificadores habituales añadiéndoles un C<+>.  Esto les hace tanto codiciosos como tacaños; una vez que han tenido éxito, no devolverán nada, para permitir otra solución. Tienen los siguientes significados:
+
+=over 4
+
+=item *
+
+C<a{n,m}+> significa: coincide al menos C<n> veces, pero no más que C<m> veces, tanto como sea posible, y no devuelvas nada. C<a?+> es la forma corta de C<a{0,1}+>
+
+=item *
+
+C<a{n,}+> significa: coincide al menos C<n> veces, tanto como sea posible, y no devuelvas nada. C<a*+> es la forma corta de C<a{0,}+> y C<a++> es la forma corta de C<a{1,}+>.
+
+=item *
+
+C<a{n}+> significa: coincide exactamente C<n> veces.  Solo existe para mantener una notación consistente.
+
+=back
+
+Estos cuantificadores posesivos representan un caso especial de un concepto más general, la I<subexpresión independiente>; vea a continuación.
+
+Como ejemplo donde es adecuado usar un cuantificador posesivo consideremos buscar una cadena entrecomillada, como aparece en varios lenguajes de programación.
+La barra diagonal inversa se usa como carácter de escapado, e indica que el siguiente carácter se debe tomar literalmente, igual que cualquier otro carácter de la cadena.  Por lo tanto, después de la comilla inicial, esperamos un (posiblemente vacía) secuencia de alternativas: o bien algunos caracteres excepto una comilla no escapada, o una barra diagonal inversa o un carácter escapado.
+
+    /"(?:[^"\\]++|\\.)*+"/;
+
+
+=head2 Construir una I<regex>
+
+En este punto, tenemos todos los conceptos básicos cubiertos, así que déjenos darle un ejemplo más que implique una expresión regular.  Construiremos una I<regex> que busque números.
+
+La primera tarea en la construcción de una I<regex> es decidir qué queremos buscar y qué queremos excluir.  En nuestro caso, queremos buscar tanto enteros como números en punto flotante, y queremos rechazar cualquier cadena que no sea un número.
+
+La siguiente tarea es dividir el problema en problemas más pequeños que sean convertidos fácilmente en una I<regex>.
+
+El caso más simple son los enteros.  Estos consisten de una secuencia de dígitos, con un signo opcional delante.  Los dígitos los podemos representar con C<\d+> y el signo se puede buscar con C<[+-]>.  Entonces la I<regex> para enteros es
+
+    /[+-]?\d+/;  # coincide con enteros
+
+Un número en punto flotante, potencialmente, tiene un signo, una parte entera, un punto decimal, una parte fraccionaria y un exponente.  Una o más de estas partes son opcionales, así que necesitamos comprobar las diferentes posibilidades.  Los números en punto flotante escritos de la forma apropiada incluyen a 123., 0.345, .34, -1e6 y 25.4E-72.  Igual que con los enteros, el signo que hay delante es completamente opcional y se puede hacer coincidir con C<[+-]?>.  Podemos ver que si no hay un exponente, los números en punto flotante deben tener un punto decimal, o si no serán números enteros.  Podríamos estar tentados de modelarlos como C<\d*\.\d*>, pero esto podría encontrar un solitario punto decimal, que no es un número.  Así que los tres casos de un número en punto flotante sin exponente, son
+
+   /[+-]?\d+\./;  # 1., 321., etc.
+   /[+-]?\.\d+/;  # .1, .234, etc.
+   /[+-]?\d+\.\d+/;  # 1.0, 30.56, etc.
+
+Se pueden combinar en una única I<regex> con una alternancia con tres opciones:
+
+   /[+-]?(\d+\.\d+|\d+\.|\.\d+)/;  # punto flotante, sin exponente
+
+En esta alternativa, es importante poner C<'\d+\.\d+'> antes de C<'\d+\.'>.  Si C<'\d+\.'> estuviera antes, la I<regex> podría coincidir e ignorar la parte fraccionaria del número.
+
+Ahora considere los números en punto flotante con exponentes.  El punto clave a observar aquí es que se permite I<tanto> a los números enteros como a los números con punto decimal estar delante de un exponente.  Y luego los exponentes, igual que lo anterior, son independientes de si estamos buscando números con o sin puntos decimales, y pueden 'desacoplarse' de la mantisa.  La forma completa de la I<regex> deviene ahora en algo más claro:
+
+    /^(signo opcional)(entero | p.f. mantisa)(exponente opcional)$/;
+
+El exponente es una C<e> o C<E>, seguida por un entero.  Así que la I<regex> para el exponente es
+
+   /[eE][+-]?\d+/;  # exponente
+
+Reuniendo todas las partes, obtenemos una I<regex> que coincide con números:
+
+   /^[+-]?(\d+\.\d+|\d+\.|\.\d+|\d+)([eE][+-]?\d+)?$/;  # ¡Ta da!
+
+Largas I<regex> como esta puede impresionar a sus amigos, pero puede ser difícil de descifrar.  En situaciones complejas como esta, es inestimable el uso del modificador C<//x> en nuestra coincidencia.  Nos permite poner un número arbitrario de espacio en blanco, y comentarios, en una I<regex> sin afectar a su significado.  Usándolo, podemos reescribir nuestra I<regex> 'extendida' de una forma más agradable
+
+   /^
+      [+-]?         # primero, busca por un signo opcional
+      (             # y luego busca por enteros o p.f. mantisas:
+          \d+\.\d+  # mantisa de la forma a.b
+         |\d+\.     # mantisa de la forma a.
+         |\.\d+     # mantisa de la forma .b
+         |\d+       # entero de la forma a
+      )
+      ([eE][+-]?\d+)?  # para terminar, coincidir opcionalmente con un exponente
+   $/x;
+
+Si el espacio en blanco es en su mayor parte irrelevante, ¿cómo incluimos espacios en blanco en una I<regex> extendida? La respuesta es poniendo una barra diagonal inversa S<C<'\ '>> o poniéndolos en una clase de carácter S<C<[ ]>>.  Lo mismo sirve para los signos de hash: use C<\#> o C<[#]>.  Por ejemplo, Perl permite un espacio entre el signo y la mantisa o entero, y podríamos añadir esto a nuestra I<regex> de la forma siguiente:
+
+   /^
+      [+-]?\ *      # primero, coincide con un signo opcional *y un espacio*
+      (             # y luego busca por enteros o p.f. mantisas:
+          \d+\.\d+  # mantisa de la forma a.b
+         |\d+\.     # mantisa de la forma a.
+         |\.\d+     # mantisa de la forma .b
+         |\d+       # entero de la forma a
+      )
+      ([eE][+-]?\d+)?  # para terminar, coincidir opcionalmente con un exponente
+   $/x;
+
+De esta forma, es más fácil ver la forma de simplificar la alternancia.  Las alternativas 1, 2 y 4 comienzan con C<\d+>, así que podrían factorizarse en:
+
+   /^
+      [+-]?\ *      # primero, coincide con un signo opcional
+      (             # y luego busca por enteros o p.f. mantisas:
+          \d+       # que empieza con una ...
+          (
+              \.\d* # mantisa de la forma a.b o a.
+          )?        # ? tiene en cuenta a los enteros de la forma a
+         |\.\d+     # mantisa de la forma .b
+      )
+      ([eE][+-]?\d+)?  # para terminar, coincidir opcionalmente con un exponente
+   $/x;
+
+o escritos en la forma compacta,
+
+    /^[+-]?\ *(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/;
+
+Esta es una I<regex> final.  Recapitulando, construimos una I<regex>
+
+=over 4
+
+=item *
+
+especificando la tarea en detalle,
+
+=item *
+
+dividiendo el problema en partes más pequeñas,
+
+=item *
+
+traduciendo las partes más pequeñas en I<regex>,
+
+=item *
+
+combinando las I<regex>,
+
+=item *
+
+y optimizando la última I<regex> combinada.
+
+=back
+
+Estos también son los pasos típicos que intervienen en la escritura de programas de ordenador.  Esto tiene sentido, porque las expresiones regulares son, esencialmente, programas escritos en un pequeño lenguaje de ordenador que especifica patrones.
+
+=head2 Usando expresiones regulares en Perl
+
+El último tema de la Parte 1 cubre brevemente cómo se usan las I<regex> en los programas Perl.  ¿Dónde encajan en la sintaxis Perl?
+
+Ya presentamos el operador de coincidencia, tanto en su forma por defecto C</regexp/> como con delimitadores arbitrarios C<m!regexp!>.  Hemos utilizado el operador de relación C<=~> y su negación C<!~> para comprobar coincidencias con cadenas.  Asociado con el operador de coincidencia, ya hemos hablado de los modificadores de una sola línea C<//s>, multi-línea C<//m>, insensible al tamaño de caja C<//i> y escritura extendida C<//x>.  Hay unas cuantas cosas más que podría querer saber sobre los operadores de coincidencia.
+
+=head3 Prohibiendo sustituciones
+
+Si cambia el C<$patrón> después de que ocurra la primera sustitución, Perl lo ignorará.  Si no quiere que ocurra ninguna sustitución de forma absoluta, use el delimitador especial C<m''>:
+
+    @patrón = ('Seuss');
+    while (<>) {
+        print if m'@patrón';  # coincide con el literal '@patrón', no con 'Seuss'
+    }
+
+De forma similar que con las cadenas, C<m''> actúa como los apóstrofes en una I<regex>; el resto de delimitadores para C<m> actúan como las comillas dobles.  Si la I<regex> evalúa a la cadena vacía, se usa en su lugar la I<regex> de la I<última coincidencia exitosa>.  Por lo que tenemos
+
+    "dog" =~ /d/;  # 'd' coincide
+    "dogbert =~ //;  # esto coincide con la 'd' de la regex utilizada antes
+
+
+=head3 Coincidencia global
+
+Los últimos dos modificadores de los que hablaremos aquí, C<//g> y C<//c>, se refieren a las coincidencias múltiples.
+El modificador C<//g> es para la coincidencia global, y permite al operador de coincidencia buscar dentro de la cadena tantas veces como sea posible.
+En contexto escalar, invocaciones consecutivas contra una cadena hará que C<//g> salte de una coincidencia a otra, recordando la posición en la cadena a medida que avanza.  Puede obtener o establecer la posición con la función C<pos()>.
+
+El uso de C<//g> se muestra en el ejemplo siguiente.  Suponga que tenemos una cadena que consiste en palabras separadas con espacios.  Si sabemos por adelantado cuántas palabras hay, podríamos extraer las palabras usando agrupaciones:
+
+    $x = "gato perro casa"; # 3 palabras
+    $x =~ /^\s*(\w+)\s+(\w+)\s+(\w+)\s*$/; # coincide,
+                                           # $1 = 'gato'
+                                           # $2 = 'perro'
+                                           # $3 = 'casa'
+
+Pero, ¿qué pasa si tenemos un número indeterminado de palabras? Esta es la suerte de tareas para las que está hecho C<//g>.  Para extraer todas las palabras, forme la sencilla I<regex> C<(\w+)> y encuentre todas las coincidencias con C</(\w+)/g>:
+
+    while ($x =~ /(\w+)/g) {
+        print "Palabra es $1, que acaba en la posición ", pos $x, "\n";
+    }
+
+imprime
+
+    Palabra es gato, que acaba en la posición 4
+    Palabra es perro, que acaba en la posición 10
+    Palabra es casa, que acaba en la posición 15
+
+Una coincidencia fallida o cambiar la cadena objetivo reinicializa la posición.  Si no desea el restablecimiento de la posición después de un fallo de coincidencia, agregue el C<//c>, como en C</regex/gc>.  La posición actual en la cadena se asocia con la cadena, no con la I<regex>.  Esto significa que diferentes cadenas tienen diferentes posiciones y sus respectivas posiciones se pueden establecer y leer de forma independiente.
+
+En contexto de lista, C<//g> devuelve una lista de las agrupaciones coincidentes, o si no hay agrupaciones, una lista de coincidencias con toda la I<regex>.  Así que si solo quiere obtener palabras, podríamos usar
+
+    @palabras = ($x =~ /(\w+)/g);  # coincide,
+                                # $palabras[0] = 'gato'
+                                # $palabras[1] = 'perro'
+                                # $palabras[2] = 'casa'
+
+Estrechamente asociado con el modificador C<//g> es el ancla C<\G>.  El ancla C<\G> coincide con el punto donde terminó la coincidencia C<//g> anterior.  C<\G> nos permite fácilmente hacer coincidencia sensible al contexto:
+
+    $metrica = 1;  # usar unidades métricas
+    ...
+    $x = <FILE>;  # leer la medición
+    $x =~ /^([+-]?\d+)\s*/g;  # obtener la magnitud
+    $peso = $1;
+    if ($metrica) { # comprobación de errores
+        print "¡Error de unidades!" unless $x =~ /\Gkg\./g;
+    }
+    else {
+        print "¡Error de unidades!" unless $x =~ /\Glbs\./g;
+    }
+    $x =~ /\G\s+(widget|sprocket)/g;  # continúa el procesamiento
+
+La combinación de C<//g> y C<\G> nos permite procesar la cadena un trozo cada vez, y usar lógica Perl para decidir qué hacer a continuación.
+Actualmente, el ancla C<\G> está soportada de forma completa solo cuando se usa para anclarse al inicio del patrón.
+
+C<\G> es también inestimable en el procesamiento de registros de tamaño fijo con I<regex>.  Suponga que tenemos un trozo de código ADN, codificado como las letras de las bases C<ATCGTTGAAT...> y queremos encontrar todos los codones de parada C<TGA>.  En una región codificada, los codones son secuencias de tres letras, así que podemos pensar que un trozo de ADN es como una secuencia de registros de tres letras.  La primera I<regex>
+
+    # expandida, es "ATC GTT GAA TGC AAA TGA CAT GAC"
+    $dna = "ATCGTTGAATGCAAATGACATGAC";
+    $dna =~ /TGA/;
+
+no funciona; puede encontrar un C<TGA>, pero no hay garantía de que la coincidencia esté alineada con los límites de los codones; por ejemplo, la subcadena S<C<GTT GAA>> da una coincidencia.  Una solución mejor es
+
+    while ($dna =~ /(\w\w\w)*?TGA/g) {  # note el mínimo *?
+        print "Tengo un codón de parada TGA en la posición ", pos $dna, "\n";
+    }
+
+que imprime
+
+    Tengo un codón de parada TGA en la posición 18
+    Tengo un codón de parada TGA en la posición 23
+
+La posición 18 está bien, pero la posición 23 es errónea.  ¿Qué pasó?
+
+La respuesta es que nuestra I<regex> funciona bien hasta que dejamos atrás la última coincidencia.  Entonces la I<regex> fallará para sincronizar la coincidencia con un C<TGA> y retrocede una posición de un carácter, en cada intento, que no es lo que queremos.  La solución es usar C<\G> para anclar la coincidencia al alineamiento del codón:
+
+    while ($dna =~ /\G(\w\w\w)*?TGA/g) {
+        print "Tengo un codón de parada TGA en la posición ", pos $dna, "\n";
+    }
+
+Esto imprime
+
+    Tengo un codón de parada TGA en la posición 18
+
+que es la respuesta correcta.  Este ejemplo ilustra que es importante no solo coincidir con lo que se desea, sino rechazar lo que no se desea.
+
+(Hay disponibles otros modificadores de I<regex>, como por ejemplo C<//o>, pero sus usos especializados quedan fuera de esta introducción.  )
+
+=head3 Buscar y reemplazar
+
+Las expresiones regulares también juegan un papel importante en las operaciones de I<buscar y reemplazar>, en Perl.  Buscar y reemplazar se lleva a cabo con el operador C<s///>.  El formato general es C<s/regex/reemplazo/modificadores>, aplicándose aquí también todo lo que sabemos sobre I<regex> y modificadores.  El C<reemplazo> es una cadena Perl entre comillas dobles que reemplaza en la cadena lo que haya coincidido con la C<regex>.  El operador C<=~> también se utiliza aquí para asociar una cadena con C<s///>.  Si está haciendo la búsqueda en C<$_>, el S<C<$_ =~>> se puede omitir.  Si hay alguna coincidencia, C<s///> devuelve el número de sustituciones realizadas; de lo contrario devuelve falso.  Aquí hay algunos pocos ejemplos:
+
+    $x = "¡Es hora de alimentar al gato!";
+    $x =~ s/gato/hacker/;  # $x contiene "¡Es hora de alimentar al hacker!"
+    if ($x =~ s/^(hora.*hacker)!$/$1 ahora/) {
+        $mas_insistente = 1;
+    }
+    $y = "'palabras entrecomilladas'";
+    $y =~ s/^'(.*)'$/$1/;  # quita comillas simples,
+                           # $y contiene "palabras entrecomilladas"
+
+En el último ejemplo, coincide toda la cadena, pero solo agrupamos la parte que está con comillas simples.  Con el operador C<s///>, las variables de coincidencia C<$1>, C<$2>, etc. están disponibles inmediatamente para usarse en la expresión de reemplazo, así que usamos C<$1> para reemplazar la cadena entrecomillada con solo lo que está entrecomillado.  Con el modificador global, C<s///g> se buscará y reemplazará todas las apariciones de la I<regex> en la cadena:
+
+    $x = "He bateado 4 de 4";
+    $x =~ s/4/cuatro/; # no hace todas:
+                       # $x contiene "He bateado cuatro de 4"
+    $x = "He bateado 4 de 4";
+    $x =~ s/4/cuatro/g;# las hace todas:
+                       # $x contiene "He bateado cuatro de cuatro"
+
+Si prefiere 'regexp' sobre 'regex' en este tutorial, podría usar el siguiente programa para reemplazarlo:
+
+    % cat > reemplazo_simple
+    #!/usr/bin/perl
+    $regex = shift;
+    $reemplazo = shift;
+    while (<>) {
+        s/$regex/$reemplazo/g;
+        print;
+    }
+    ^D
+
+    % reemplazo_simple regex regexp perlretut.pod
+
+En C<reemplazo_simple> usamos el modificador C<s///g> para reemplazar todas las ocurrencias de la I<regex> en todas las líneas.  (Incluso aunque la expresión regular aparezca en un bucle, Perl es lo suficientemente listo para compilarla una sola vez).  Igual que con C<grep_simple>, tanto el C<print> como C<s/$regexp/$reemplazo/g> usan C<$_> implícitamente.
+
+Si no quiere usar C<s///> para cambiar su variable original puede usar el modificador de sustitución no destructiva, C<s///r>.  Esto cambia el comportamiento, por lo que C<s///r> devuelve la cadena resultado de la sustitución (en lugar del número de sustituciones):
+
+    $x = "Me gustan los perros.";
+    $y = $x =~ s/perros/gatos/r;
+    print "$x $y\n";
+
+Este ejemplo imprimirá "Me gustan los perros. Me gustan los gatos.". Observe que no ha cambiado la variable original C<$x>. En lugar de eso, el resultado global de la sustitución queda almacenado en C<$y>. Si la sustitución no hace ningún cambio, entonces se devuelve la cadena original:
+
+    $x = "Me gustan los perros.";
+    $y = $x =~ s/elefantes/pumas/r;
+    print "$x $y\n"; # imprime "Me gustan los perros. Me gustan los gatos."
+
+Otra cosa interesante es que el indicador C<s///r> permite el encadenamiento de sustituciones:
+
+    $x = "Los gatos son lo más.";
+    print $x =~ s/gatos/perros/r =~ s/perros/ranas/r =~
+        s/ranas/puercoespines/r, "\n";
+    # imprime "Los puercoespines son lo más."
+
+Un modificador disponible específicamente para buscar y reemplazar es el modificador de evaluación C<s///e>.  C<s///e> trata al texto de reemplazo como código Perl, en lugar de una cadena doblemente entrecomillada.  El valor que el código retorna sustituye a la subcadena que coincidió con el patrón de búsqueda.  C<s///e> es útil si necesita hacer un poco de computación en el proceso de reemplazo de texto.  Este ejemplo cuenta las frecuencias de caracteres en una línea:
+
+    $x = "Bill the cat";
+    $x =~ s/(.)/$chars{$1}++;$1/eg; # el final $1 reemplaza el carácter por él mismo
+    print "frecuencia de '$_' es $chars{$_}\n"
+        foreach (sort {$chars{$b} <=> $chars{$a}} keys %chars);
+
+Esto imprime
+
+    frecuencia de ' ' es 2
+    frecuencia de 't' es 2
+    frecuencia de 'l' es 2
+    frecuencia de 'B' es 1
+    frecuencia de 'c' es 1
+    frecuencia de 'e' es 1
+    frecuencia de 'h' es 1
+    frecuencia de 'i' es 1
+    frecuencia de 'a' es 1
+
+Igual que con el operador de coincidencia C<m//>, C<s///> puede usar otros delimitadores, tales como C<s!!!> y C<s{}{}>, o incluso C<s{}//>.  Si se usan las comillas simples C<s'''>, entonces la I<regex> y el reemplazo se tratan como cadenas entrecomilladas simples, y no se hace la sustitución de variables.  C<s///> en contexto de lista devuelve la misma cosa que en contexto escalar, es decir, el número de coincidencias.
+
+=head3 La función split
+
+La función C<split()> es otro lugar donde se usar una I<regex>.
+C<split /regexp/, cadena, límite> separa el operando C<cadena> en una lista de subcadenas y devuelve esa lista.  La I<regex> debe designarse para coincidir con todo aquello que constituya los separadores de las subcadenas deseadas.
+El C<límite>, si está presente, ajusta la partición en no más de C<límite> número de cadenas.  Por ejemplo, para dividir una cadena en palabras, utilice
+
+    $x = "Calvin y Hobbes";
+    @palabra = split /\s+/, $x;  # $palabra[0] = 'Calvin'
+                               # $palabra[1] = 'y'
+                               # $palabra[2] = 'Hobbes'
+
+Si se usa la I<regex> vacía C<//>, la I<regex> siempre coincide y la cadena se divide en sus caracteres individuales.  Si la I<regex> tiene agrupaciones, entonces la lista resultante también contiene las subcadenas encontradas por las agrupaciones.  Por ejemplo,
+
+    $x = "/usr/bin/perl";
+    @dirs = split m!/!, $x;  # $dirs[0] = ''
+                             # $dirs[1] = 'usr'
+                             # $dirs[2] = 'bin'
+                             # $dirs[3] = 'perl'
+    @partes = split m!(/)!, $x; # $partes[0] = ''
+                                # $partes[1] = '/'
+                                # $partes[2] = 'usr'
+                                # $partes[3] = '/'
+                                # $partes[4] = 'bin'
+                                # $partes[5] = '/'
+                                # $partes[6] = 'perl'
+
+Debido a que el primer carácter de $x coincidía con la I<regex>, C<split> antepuso al principio de la lista un elemento vacío.
+
+Si has llegado hasta aquí, ¡felicitaciones! Ahora tiene las herramientas básicas necesarias para usar expresiones regulares para solucionar un amplio rango de problemas de procesamiento de texto.  Si esta es su primera visita en este tutorial, ¿por qué no parar aquí y jugar un rato con las I<regex>...?  S<Parte 2> concierne a los aspectos más esotéricos de las expresiones regulares y estos conceptos no son en realidad necesarios para el que comienza.
+
+=head1 Part 2: Herramientas poderosas
+
+Vale, ya sabe las bases de las I<regex> y quieres saber más.  Si la coincidencia de expresiones regulares es análogo a un paseo por el bosque, entonces las herramientas explicadas en la Parte 1 son análogas a mapas topográficos y una brújula, herramientas básicas que usamos todo el tiempo.  La mayor parte de las herramientas de la Parte 2 son análogas a pistolas de bengala y teléfonos vía satélite.  No se usan muy a menudo en una excursión, pero cuando estamos en aprietos, son inestimables.
+
+Lo que sigue es más avanzado, menos utilizado, y en algunos casos, capacidades esotéricas de las I<regexp> Perl.  En Part 2, asumiremos que se siente cómodo con las bases y se concentrará en las características avanzadas.
+
+=head2 Más sobre caracteres, cadenas y clases de carácter
+
+Existen un número de secuencias de escape y clases de carácter que aún no hemos cubierto.
+
+Existen varias secuencias de escape que convierten caracteres o cadenas en mayúsculas o minúsculas, y también están disponibles dentro de los patrones.  C<\l> y C<\u> convierten el siguiente carácter a minúscula o mayúscula, respectivamente:
+
+    $x = "perl";
+    $cadena =~ /\u$x/;  # coincide con 'Perl' en $cadena
+    $x = "M(rs?|s)\\."; # note la doble barra diagonal inversa
+    $cadena =~ /\l$x/;  # coincide con 'mr.', 'mrs.' y 'ms.',
+
+Un C<\L> o C<\U> indica una conversión duradera, hasta que se termine con C<\E> o se modifique con otro C<\U> o C<\L>:
+
+    $x = "Esta palabra está en minúsculas:\L GRITO\E";
+    $x =~ /grito/;       # coincide
+    $x = "SIGO PICANDO TARJETAS PARA MI 360"
+    $x =~ /\Upicando/;   # coincide con la cadena de picar tarjetas
+
+Si no existe un C<\E>, el tamaño de caja se produce hasta el final de la cadena. Los patrones C<\L\u$palabra> o C<\u\L$palabra> convierten el primer carácter de C<$palabra> a mayúsculas y el resto de los caracteres a minúsculas.
+
+Se pueden escapar los caracteres de control con C<\c>, así que se puede buscar un carácter control-Z con C<\cZ>.  La secuencia C<\Q>...C<\E> escapa o encubre a la mayor parte de los caracteres no alfabéticos.   Por ejemplo,
+
+    $x = "\Q¡Ese ^*&%~& gato!";
+    $x =~ /\Q^*&%~&\E/;   # busca lenguaje soez
+
+No escapa a C<$> o C<@>, así que las variables siguen sustituyéndose.
+
+C<\Q>, C<\L>, C<\l>, C<\U>, C<\u> y C<\E> son, de hecho, parte de una sintaxis de doble entrecomillamiento, y no parte de la propia sintaxis I<regex>.  Funcionarán si aparecen en una expresión regular incrustadas directamente en un programa, pero no cuando están contenidas en una cadena que se interpola en un patrón.
+
+Las I<regex> Perl pueden manejar más que el conjunto de caracteres ASCII.  Perl soporta I<Unicode>, un estándar para representar alfabetos de, virtualmente, todos los lenguajes del mundo, y un almacén de símbolos.
+for representing the alphabets from virtually all of the world's written
+languages, and a host of symbols.  Las cadenas de texto de Perl son cadenas Unicode, así que pueden contener caracteres con un valor (punto de código o número de carácter) superior a 255.
+
+¿Qué significa esto para las I<regex>? Bien, los usuarios de I<regex> no necesitan saber mucho sobre la representación interna de cadenas en Perl.  Pero necesitan sabe que 1) cómo representar caracteres Unicode en una I<regex> y 2) en una operación de coincidencia tratará la cadena en la que se busca como una secuencia de caracteres, no bytes.  La respuesta a 1) es los caracteres Unicode superiores a C<chr(255)> se representan usando la notación C<\x{hex}>, porque \x hex (sin las llaves) no va más allá de 255.  (A partir de Perl 5.14, si es fan de los octales, puede usar también C<\o{oct}>).
+
+    /\x{263a}/;  # coincide con una carita sonriente Unicode :)
+
+B<NOTA>: En Perl 5.6.0 se necesitaba decir C<use utf8> para usar cualquier característica Unicode.  Ya no es el caso: el I<pragma> explícito C<utf8> ya no se necesita para la casi mayor parte del procesamiento de Unicode.  (El único caso donde importa es si su guion Perl está en Unicode y codificado en UTF-8, por lo que se necesita un C<use utf8> explícito).
+
+Adivinar la secuencia hexadecimal del carácter Unicode que está buscando o descifrar la I<regex> hexadecimal Unicode de otra persona, es casi tan divertido como programar en código máquina.  Así que otra forma de especificar caracteres Unicode es usar la secuencia de escape de I<carácter nombrado> C<\N{I<nombre>}>.  I<nombre> es un nombre para el carácter Unicode, tal como lo especifica el estándar Unicode.  Por ejemplo, si queremos representar o buscar por el signo astrológico del planeta Mercurio, podríamos usar
+
+    $x = "abc\N{MERCURY}def";
+    $x =~ /\N{MERCURY}/;   # coincide
+
+También puede usar nombres "cortos":
+
+    print "Se llama sigma a \N{GREEK SMALL LETTER SIGMA}.\n";
+    print "\N{greek:Sigma} es una sigma en mayúscula.\n";
+
+También puede restringir los nombres a un cierto alfabeto especificando el I<pragma> L<charnames>:
+
+    use charnames qw(greek);
+    print "\N{sigma} es la sigma griega\n";
+
+Está disponible en línea un índice de los nombres de los caracteres en el Consorcio Unicode, L<http://www.unicode.org/charts/charindex.html>; material explicativo y enlaces a otros recursos en L<http://www.unicode.org/standard/where>.
+
+La respuesta al requerimiento 2) es que una I<regex> (principalmente) usa caracteres Unicode.  Lo de "principalmente" es por complicadas razones de compatibilidad, pero a partir de 5.14, cualquier I<regex> compilada en el ámbito de un C<use feature 'unicode_strings'> (que se activa automáticamente dentro del ámbito de un C<use 5.012> o superior) cambiará el "principalmente" en un "siempre".  Si quiere manejar Unicode de forma apropiada, debe asegurarse que está activada la opción C<'unicode_strings'>.
+Internamente, se codifica en bytes usando tanto UTF-8 o una codificación nativa de 8 bit, dependiendo de la historia de la cadena, pero conceptualmente es una secuencia de caracteres, no bytes. Vea L<perlunitut> por un tutorial sobre esto.
+
+Permítanos hablar de las clases de carácter Unicode, más normalmente llamadas "propiedades de carácter".  Se representan por la secuencia de escape C<\p{nombre}>.  Estrechamente asociada con la propiedad C<\P{nombre}>, que es la negación de C<\p{nombre}>.  Por ejemplo, para buscar caracteres en minúscula y mayúscula,
+
+    $x = "BOB";
+    $x =~ /^\p{IsUpper}/;   # coincide, clase de carácter en mayúscula
+    $x =~ /^\P{IsUpper}/;   # no coincide, clase de carácter sin mayúscula
+    $x =~ /^\p{IsLower}/;   # no coincide, clase de carácter en minúscula
+    $x =~ /^\P{IsLower}/;   # coincide, clase de carácter sin minúscula
+
+(Este "Is" es opcional).
+
+Existen muchas, muchas propiedades caracteres Unicode.  Para una lista completa vea L<perluniprops>.  La mayor parte de ellos tienen sinónimos con nombres abreviados, que también se listan allí.  Algunos sinónimos son un simple carácter.  En estos casos, puede obviar las llaves.  Por ejemplo, C<\pM> es lo mismo que C<\p{Mark}>, que significa algo como marcas de acento.
+
+La propiedad Unicode C<\p{Script}> se usa para categorizar cada carácter Unicode en la grafía del lenguaje en que se escribió.  Por ejemplo, el Inglés, el Francés, y una parte de otros lenguajes europeos se escriben con la grafía del Latín.  Pero también existen la grafía del Griego, el Thai, el Katakana, etc. Puede comprobar a en qué grafía está un carácter en particular con, por ejemplo, C<\p{Latin}>, C<\p{Greek}>,
+o C<\p{Katakana}>.  Para comprobar si no está en la grafía Balinesa, podría usar C<\P{Balinese}>.
+
+Lo que hemos descrito hasta ahora es lo forma simple de las clases de carácter C<\p{...}>.  Hay una forma compuesta que también puede usarse.  Tienen el aspecto de C<\p{nombre=valor}> o C<\p{nombre:valor}> (los signos igual y doble punto se pueden usar de forma indistinta).  Estas son más generales que la forma simple, y de hecho la mayor parte de las formas simples son solo abreviaturas definidas por Perl para las formas complejas más comunes.  Por ejemplo, los ejemplos de grafías del párrafo anterior podrían escribirse de forma equivalente como C<\p{Script=Latin}>, C<\p{Script:Greek}>, C<\p{script=katakana}>, y C<\P{script=balinese}> (el tamaño de caja es irrelevante entre las llaves C<{}>).  Puede que nunca tenga que usar formas complejas, pero algunas veces es necesario, y su uso puede hacer que su código sea más fácil de entender.
+
+C<\X> es una abreviatura para una clase de carácter que comprende una I<agrupación extendida de grafemas> Unicode.  Esto representa un "carácter lógico": parece un único carácter, pero puede representar internamente a más de uno.  Como ejemplo, usando los nombres completos Unicode, como S<C<A + COMBINING
+RING>> es una agrupación de grafemas con el carácter de base C<A> y la combinación de carácter S<C<COMBINING RING>>, que se convierte a la A danesa con un círculo en la parte superior, como en la palabra E<Aring>ngstrom.
+
+Para la completa y última información sobre Unicode vea el último estándar, o el sitio web de Consorcio Unicode L<http://www.unicode.org>
+
+Como si todas estas clases no fueran suficientes, Perl también define clases de carácter al estilo POSIX.  Estas tiene la forma C<[:nombre:]>, con C<nombre> el nombre de la clase POSIX.  Las clases POSIX son C<alpha>, C<alnum>, C<ascii>, C<cntrl>, C<digit>, C<graph>, C<lower>, C<print>, C<punct>, C<space>, C<upper> y C<xdigit>; y dos extensiones: C<word> (una extensión Perl para coincidir con C<\w>) y C<blank> (una extensión GNU).  El modificador C<//a> las restringe a coincidir solo con el rango ASCII; de otra manera pueden coincidir con lo mismo que con sus correspondientes clases Unicode Perl: C<[:upper:]> es lo mismo que C<\p{IsUpper}>, etc. (Existen algunas excepciones y pilladas con esto; vea L<perlrecharclass> para una explicación completa). C<[:digit:]>, C<[:word:]> y C<[:space:]> corresponden a las familiares clases de carácter C<\d>, C<\w> y C<\s>.  Para negar una clase POSIX, ponga un C<^> delante del nombre, así que, p.e., C<[:^digit:]> corresponde a C<\D> y, bajo Unicode, C<\P{IsDigit}>.  Las clases de carácter Unicode y POSIX se pueden usar igual que C<\d>, con la excepción de que las clases de carácter POSIX solo pueden usarse dentro de una clase de carácter:
+
+    /\s+[abc[:digit:]xyz]\s*/;  # coincide con a,b,c,x,y,z, o un dígito
+    /^=item\s[[:digit:]]/;      # coincide con '=item',
+                                # seguido por un espacio y un dígito
+    /\s+[abc\p{IsDigit}xyz]\s+/;  # coincide con a,b,c,x,y,z, o un dígito
+    /^=item\s\p{IsDigit}/;        # coincide con '=item',
+                                  # seguido por un espacio y un dígito
+
+¡Menos mal! Esto es todo lo que quedaba de los caracteres y las clases de carácter.
+
+=head2 Compilando y guardando expresiones regulares
+
+En Parte 1 mencionamos que Perl compila una I<regex> en una secuencia compacta de I<opcodes> (códigos de operación).  Así, una I<regex> compilada es una estructura de datos que puede almacenarse y usarse una y otra vez.  El entrecomillado de I<regex> C<qr//> hace exactamente eso: C<qr/cadena/> compila la C<cadena> como una I<regex> y transforma el resultado en una forma que se puede asignar a una variable:
+
+    $reg = qr/foo+bar?/;  # reg contiene una regex compilada
+
+Más tarde, C<$reg> se puede usar como una I<regex>:
+
+    $x = "fooooba";
+    $x =~ $reg;     # coincide, igual que /foo+bar?/
+    $x =~ /$reg/;   # lo mismo, forma alternativa
+
+C<$reg> también puede interpolarse en una I<regex> mayor:
+
+    $x =~ /(abc)?$reg/;  # sigue coincidiendo
+
+Igual que con el operador de coincidencia, la I<regex> entrecomillada puede usar diferentes delimitadores, p.e., C<qr!!>, C<qr{}> o C<qr~~>.  Los apóstrofes como delimitadores (C<qr''>) inhibe cualquier interpolación.
+
+Las I<regex> precompiladas son útiles para crear coincidencias dinámicas que no necesitan recompilarse cada vez que nos encontramos con ellas.  Usando I<regex> precompiladas podemos escribir un programa C<grep_step> que filtra una secuencia de patrones, avanzando al siguiente patrón tan pronto como se satisfaga uno de ellos.
+
+    % cat > grep_step
+    #!/usr/bin/perl
+    # grep_step - busca un <número> de regex, una después de otra
+    # uso: multi_grep <número> regex1 regex2 ... archivo1 archivo2 ...
+
+    $numero = shift;
+    $regex[$_] = shift foreach (0..$numero-1);
+    @compilada = map qr/$_/, @regex;
+    while ($linea = <>) {
+        if ($linea =~ /$compilada[0]/) {
+            print $linea;
+            shift @compilada;
+            last unless @compilada;
+        }
+    }
+    ^D
+
+    % grep_step 3 shift print last grep_step
+    $numero = shift;
+            print $linea;
+            last unless @compilada;
+
+Almacenar I<regex> precompiladas en un array C<@compilada> nos permite, simplemente usar todas las I<regex> sin ninguna recompilación, ganando flexibilidad sin sacrificar velocidad.
+
+
+=head2 Componiendo expresiones regulares en tiempo de ejecución
+
+Volver hacia atrás es más eficiente que intentos repetidos con diferentes expresiones regulares.  Si existen varias expresiones regulares y es aceptable la coincidencia con cualquiera de ellas, entonces es posible combinarlas en un conjunto de alternativas.  Si las expresiones individuales son datos de entrada, esto se puede hacer programando una operación de unión.  Explotaremos esta idea en una versión mejorada del programa C<simple_grep>: un programa que busca en múltiples patrones:
+
+    % cat > multi_grep
+    #!/usr/bin/perl
+    # multi_grep - coincide con cualquier <número> de regex
+    # uso: multi_grep <número> regex1 regex2 ... archivo1 archivo2 ...
+
+    $numero = shift;
+    $regex[$_] = shift foreach (0..$numero-1);
+    $patron  = join '|', @regex;
+
+    while ($linea = <>) {
+        print $linea if $linea =~ /$patron/;
+    }
+    ^D
+
+    % multi_grep 2 shift for multi_grep
+    $numero = shift;
+    $regex[$_] = shift foreach (0..$numero-1);
+
+Algunas veces es más ventajoso construir un patrón desde la I<entrada> que analizar y usar los valores permitidos en el lado izquierdo de las operaciones de coincidencia.  Como un ejemplo de esto para una situación paradójica, asumamos que nuestra entrada contiene un verbo de comando que debe coincidir con un conjunto de verbos de comando disponibles, con el giro adicional que los comandos pueden abreviarse mientras que la cadena ofrecida sea única. El programa que sigue más abajo demuestra este algoritmo básico.
+
+    % cat > keymatch
+    #!/usr/bin/perl
+    $kwds = 'copy compare list print';
+    while( $cmd = <> ){
+        $cmd =~ s/^\s+|\s+$//g;  # recortar espacios antecedentes y consecuentes
+        if( ( @coincidencias = $kwds =~ /\b$cmd\w*/g ) == 1 ){
+            print "comando: '@coincidencias'\n";
+        } elsif( @coincidencias == 0 ){
+            print "no hay comando: '$cmd'\n";
+        } else {
+            print "no hay uno solo: '$cmd' (podría ser uno de: @coincidencias)\n";
+        }
+    }
+    ^D
+
+    % keymatch
+    li
+    comando: 'list'
+    co
+    no hay uno solo: 'co' (podría ser uno de: copy compare)
+    printer
+    no hay comando: 'printer'
+
+En vez de intentar hacer coincidir la entrada contra las palabras clave, hacemos coincidir el conjunto combinado de palabras clave contra la entrada.  El patrón de coincidencia en la operación S<C<$kwds =~ /\b($cmd\w*)/g>> hace varias cosas al mismo tiempo. Se asegura que el comando indicado comienza donde comienza una palabra clave (C<\b>). Tolera abreviaciones debido el añadido C<\w*>. Nos dice el número de coincidencias (C<scalar @coincidencias>) y todas las palabras clave que fueron encontradas.  Difícilmente podrías pedir más.
+
+=head2 Incrustar comentarios y modificadores en una expresión regular
+
+Comenzando con esta sección, discutiremos el conjunto de I<patrones extendidos> de Perl.  Son extensiones a la sintaxis tradicional de expresiones regulares que ofrece nuevas y poderosas herramientas para la coincidencia de patrones.  Ya hemos visto extensiones en la forma de construcciones mínimas de coincidencia C<??>, C<*?>, C<+?>, C<{n,m}?> y C<{n,}?>.  La mayor parte de las extensiones que hay a continuación tienen la forma C<(?car...)>, donde C<car> es un carácter que determina el tipo de la extensión.
+
+La primera extensión es un comentario incrustado C<(?#texto)>.  Esto incrusta un comentario en la expresión regular sin afectar a su significado.  El comentario no debería tener ningún paréntesis de cierre, en el texto.  Un ejemplo es
+
+    /(?# Coincide con un entero:)[+-]?\d+/;
+
+Este estilo de comentar se ha superado de largo por el sistema de comentarios de forma libre ofrecido por el modificador C<//x>.
+
+La mayor parte de los modificadores, como C<//i>, C<//m>, C<//s> y C<//x> (o cualquier otra combinación de los mismos) pueden incrustarse en una I<regex> usando C<(?i)>, C<(?m)>, C<(?s)> y C<(?x)>.  Por ejemplo,
+
+    /(?i)yes/;  # coincide con 'yes' sin importar el tamaño de caja
+    /yes/i;     # lo mismo
+    /(?x)(          # versión de formato libre de un regex para buscar enteros
+             [+-]?  # busca por un signo opcional
+             \d+    # busca por una secuencia de dígitos
+         )
+    /x;
+
+Los modificadores incrustados pueden tener dos importantes ventajas sobre los modificadores usuales.  Los modificadores incrustados permiten aplicar un conjunto personalizado de modificadores a I<cada> patrón de la I<regex>.  Esto está muy bien para hacer coincidir un array de I<regex> que tengan diferentes modificadores:
+
+    $patron[0] = '(?i)doctor';
+    $patron[1] = 'Johnson';
+    ...
+    while (<>) {
+        foreach $pat (@patron) {
+            print if /$pat/;
+        }
+    }
+
+La segunda ventaja es que los modificadores incrustados (excepto C<//p>, que modifica la I<regex> entera) solo afectan a la I<regex> dentro del grupo en que el modificador incrustado está contenido.  Así que el agrupar se puede usar para localizar los efectos de los modificadores:
+
+    /Respuesta: ((?i)yes)/;  # coincide con 'Respuesta: yes', 'Respuesta: YES', etc.
+
+Los modificadores incrustados también pueden desactivar cualquier otro modificador activo, usando p.e., C<(?-i)>.  Los modificadores también pueden combinarse en una sola expresión, p.e., C<(?s-i)> activa el modo de solo una línea y desactiva la coincidencia de insensibilidad al tamaño de caja.
+
+Los modificadores incrustados también pueden añadirse a grupos de no captura.
+C<(?i-m:regex)> es una agrupación de no captura que coincide la C<regex> independientemente al tamaño de caja y desactiva el modo multilínea.
+
+
+=head2 Inspección hacia adelante y hacia atrás
+
+Esta sección se preocupa de las aserciones de las inspecciones hacia adelante y hacia atrás.  Primero, un poco de introducción.
+
+En las expresiones regulares Perl, la mayor parte de los elementos I<regex> 'se comen' una cierta cantidad de la cadena, cuando se produce la coincidencia.  Por ejemplo, el elemento de I<regex> C<[abc}]> se comen un carácter de la cadena cuando coincide, en el sentido que Perl se mueve a la siguiente posición de carácter en la cadena, después de la coincidencia.  Hay algunos elementos, sin embargo, que no se comen caracteres (pero sí avanzan la posición de carácter) si hay coincidencia.  Los ejemplos que hemos visto hace tiempo son los de las anclas.  El ancla C<^> coincide con el comienzo de la línea, pero no se come ningún carácter.  De forma similar, el ancla de límite de palabra C<\b> coincide dondequiera que un carácter que coincida con C<\w> está al lado de un carácter que no, pero por si mismo no se come ningún carácter.  Las anclas son ejemplos de I<aserciones de ancho cero>: ancho cero, porque no consumen caracteres, y aserciones porque comprueban alguna propiedad de la cadena.  En el contexto de nuestra analogía del paseo por el bosque de las coincidencias de I<regex>, la mayor parte de los elementos I<regex> nos desplazan a lo largo de un sendero, pero las anclas nos hacen parar un momento y comprobar lo que nos rodea.  Si lo que nos rodea es lo que esperamos, podemos seguir adelante.  Pero si lo que nos rodea no nos satisface, debemos volver hacia atrás.
+
+Comprobar el entorno vincula a inspeccionar lo que tenemos delante en el sendero, o inspeccionar lo que tenemos detrás, o ambos.  C<^> inspecciona hacia atrás, para ver que no hay caracteres antes.  C<$> inspecciona hacia adelante, para ver que no hay caracteres después.  C<\b> mira tanto adelante como atrás, para ver si los caracteres a ambos lados difieren en su definición de lo que es una palabra.
+
+Las aserciones de inspección hacia atrás y hacia adelante son generalizaciones del concepto de ancla.  Las inspecciones hacia adelante y hacia atrás son aserciones de ancho cero que nos permite especificar por qué caracteres queremos hacer la comprobación.  La aserción de inspección hacia adelante se denota por C<(?=regex)> y la aserción de inspección hacia atrás se denota por C<< (?<=regex-fija) >>.  Algunos ejemplos son
+
+    $x = "I catch the housecat 'Tom-cat' with catnip";
+    $x =~ /cat(?=\s)/;   # coincide con 'cat' en 'housecat'
+    @catwords = ($x =~ /(?<=\s)cat\w+/g);  # coincide,
+                                           # $catwords[0] = 'catch'
+                                           # $catwords[1] = 'catnip'
+    $x =~ /\bcat\b/;  # coincide con 'cat' en 'Tom-cat'
+    $x =~ /(?<=\s)cat(?=\s)/; # no coincide; no hay un 'cat' aislado en
+                              # medio de $x
+
+Note que los paréntesis en C<(?=regex)> y C<< (?<=regex) >> no son de captura, ya que son aserciones de ancho cero.  Así, en la segunda I<regex>, las subcadenas capturadas son aquellas que corresponden a toda la propia I<regex>.  La inspección hacia adelante C<(?=regex)> puede coincidir con I<regex> arbitrarias, pero la inspección hacia atrás C<< (?<=regex-fija) >> solo funciona para I<regex> de ancho fijo, es decir, un número fijo de caracteres.  Así C<< (?<=(ab|bc)) >> está bien, pero C<< (?<=(ab)*) >>, no.  Las versiones negadas de las aserciones de inspección hacia adelante y atrás se denotan por C<(?!regex)> y C<< (?<!regex-fija) >>, respectivamente.
+Evalúan a verdadero si las I<regex> I<no> coinciden:
+
+    $x = "foobar";
+    $x =~ /foo(?!bar)/;  # no coincide, 'bar' sí que sigue a 'foo'
+    $x =~ /foo(?!baz)/;  # coincide, 'baz' no sigue a 'foo'
+    $x =~ /(?<!\s)foo/;  # coincide, no hay un \s antes de 'foo'
+
+El C<\C> no está soportado en las inspecciones hacia atrás porque la traidora definición de C<\C> podría volverse aún más si va hacia atrás.
+
+Aquí hay un ejemplo donde una cadena que contiene unas palabras separadas con blancos, números y guiones normales se divide en sus componentes.
+Usando solo C</\s+/> no funcionará, porque no es obligatoria la presencia de espacios entre los guiones, o una palabra o un guión. Los lugares adiciones para una división se establecen con inspecciones hacia adelante y atrás:
+
+    $str = "uno dos - --6-8";
+    @toks = split / \s+              # una ristra de espacios
+                  | (?<=\S) (?=-)    # cualquier no-espacio seguido por un '-'
+                  | (?<=-)  (?=\S)   # un '-' seguido por un no-espacio
+                  /x, $str;          # @toks = qw(uno dos - - - 6 - 8)
+
+
+=head2 Usar subexpresiones independientes para impedir la vuelta atrás
+
+I<Subexpresiones independientes> son expresiones regulares, en el contexto de una expresión regular más grande, que funcionan independientemente de la expresión regular más grande.  Es decir, consumen mucho o poco de la cadena tanto como deseen sin considerar si la I<regex> mayor pueda coincidir o no.  Las subexpresiones independientes se representan por C<< (?>regex) >>.  Podemos ilustrar este comportamiento considerando primero una I<regex> normal:
+
+    $x = "ab";
+    $x =~ /a*ab/;  # coincide
+
+Esto, obviamente, coincide, pero en el proceso de búsqueda, la subexpresión C<a*> se queda con la primera C<a>.  Hacer esto, sin embargo, no permitirá hacer coincidir a toda la I<regex>, por lo que después de hacer vuelta atrás, C<a*> devolverá finalmente la C<a> y coincidirá con la cadena vacía.  Aquí, lo que C<a*> buscaba era I<dependiente> con lo que coincidiera el resto de la I<regex>.
+
+Contraste esto con una subexpresión independiente:
+
+    $x =~ /(?>a*)ab/;  # ¡no coincide!
+
+A la subexpresión independiente C<< (?>a*) >> no le preocupa el resto de la I<regex>, por lo que ve una C<a> y se la queda.  Entonces el resto de la I<regex> C<ab> ya no puede coincidir.  Debido a que C<< (?>a*) >> es independiente, no hay vuelta atrás y la subexpresión independiente no devuelve su C<a>.  Por ello, la coincidencia de la I<regex>, como un todo, falla.  Un comportamiento similar con I<regex> completamente independientes:
+
+    $x = "ab";
+    $x =~ /a*/g;   # coincide, se come una 'a'
+    $x =~ /\Gab/g; # no coincide, no hay una 'a' disponible
+
+Aquí, C<//g> y C<\G> crean un 'equipo de marcado' de la cadena, pasándose el trabajo de una I<regex> a la otra.  Las I<regex> con una subexpresión independiente son mucho más como estas, con un traspaso de la gestión de la cadena a la subexpresión independiente, y un traspaso de regreso de la cadena a la I<regex> mayor.
+
+La habilidad de una subexpresión independiente de impedir la vuelta atrás puede ser bastante útil.  Suponga que queremos coincidir una cadena no vacía encerrada entre paréntesis hasta dos niveles de profundidad.  Entonces la siguiente I<regex> coincide:
+
+    $x = "abc(de(fg)h";  # paréntesis no balanceados
+    $x =~ /\( ( [^()]+ | \([^()]*\) )+ \)/x;
+
+La I<regex> busca un paréntesis de apertura, una o más copias de una alternancia, y un paréntesis de cierre.  La alternancia tiene dos caminos, con la primera alternativa C<[^()]+> coincidiendo con una subcadena sin paréntesis y la segunda alternativa C<\([^()]*\)> coincidiendo con una subcadena delimitada por paréntesis.  El problema con esta I<regex> es que es patológica: tiene cuantificadores indeterminados anidados, de la forma C<(a+|b)+>.  Discutimos en la Parte 1 cómo los cuantificadores anidados como éste podrían tomar un tiempo exponencialmente largo para ejecutarse si no es posible realizar la coincidencia.  Para impedir la explosión exponencial, necesitamos impedir la vuelta atrás innecesaria, en algún punto.  Esto se puede hacer encerrando el cuantificador más interno como una subexpresión independiente:
+
+    $x =~ /\( ( (?>[^()]+) | \([^()]*\) )+ \)/x;
+
+Aquí, C<< (?>[^()]+) >> rompe la degeneración de la partición de la cadena absorbiendo tanto como se pueda de la cadena, y manteniéndola.   Entonces la coincidencia fallará mucho más rápido.
+
+
+=head2 Expresiones condicionales
+
+Una I<expresión condicional> es una forma de sentencia if-then-else que permite elegir qué patrones van a coincidir, basado en alguna condición.  Existen dos tipos de expresiones condicionales: C<(?(condición)sí-regex)> y C<(?(condición)sí-regex|no-regex)>.  C<(?(condición)sí-regex)> es como una sentencia S<C<'if () {}'>> en Perl.  Si la C<condición> es verdadera, la C<sí-regex> se usará para coincidir.  Si la C<condición> es falsa, la C<sí-regex> se saltará y Perl se moverá al siguiente elemento de la I<regex>.  La segunda forma es como una sentencia S<C<'if () {} else {}'>> en Perl.  Si la C<condición> es verdadera, la C<sí-regex> se usará para coincidir, sino, se usará la C<no-regex>.
+
+La C<condición> puede tener varias formas.  La primera forma es simplemente un entero en paréntesis C<(entero)>.  Es verdadera si la correspondiente contrarreferencia C<\entero> coincidió anteriormente en la I<regex>.  Lo mismo se puede hacer con un nombre asociado con un grupo de captura, escrito como C<< (<nombre>) >> o C<< ('nombre') >>.  La segunda forma es una simple aserción de ancho cero C<(?...)>, o una inspección hacia adelante o hacia atrás, o una aserción basado en código (explicado en la sección siguiente).  El tercer conjunto de formatos ofrecen comprobaciones que devuelven verdadero si la expresión se ejecuta dentro de una recursión (C<(R)>) o si se le llama desde algún grupo de captura, referenciado tanto por su número (C<(R1)>, C<(R2)>,...) como por su nombre (C<(R&nombre)>).
+
+El formato de entero o nombre de la C<condición> nos permite elegir, con más flexibilidad, qué coincidir basado en lo que coincidió antes en la I<regex>. Lo siguiente busca por palabras de la forma C<"$x$x"> o C<"$x$y$y$x">:
+
+    % simple_grep '^(\w+)(\w+)?(?(2)\g2\g1|\g1)$' /usr/dict/words
+    beriberi
+    coco
+    couscous
+    deed
+    ...
+    toot
+    toto
+    tutu
+
+La C<condición> de la inspección hacia atrás nos permite, junto con las retrorreferencias, que una parte anterior de la coincidencia influya en una parte posterior.  Por ejemplo,
+
+    /[ATGC]+(?(?<=AA)G|C)$/;
+
+coincide con una secuencia de ADN tal que acaba tanto en C<AAG> como en algun otra combinación de pares de bases y C<C>.  Note que la forma es C<< (?(?<=AA)G|C) >> y no C<< (?((?<=AA))G|C) >>; no son necesarios los paréntesis alrededor de la condición para las inspecciones hacia adelante, hacia atrás, o aserciones de código.
+
+
+=head2 Patrones definidos por nombre
+
+Algunas expresiones regulares usan subpatrones idénticos en varios lugares.
+A partir de Perl 5.10, es posible definir subpatrones con nombres en una sección del patrón, por lo que se les puede llamar por ese nombre, más tarde, en el patrón.  Este patrón sintáctico para esta definición de grupo es así: C<< (?(DEFINE)(?<nombre>patrón)...) >>.  Una inserción de un patrón con nombre se escribe como C<(?&nombre)>.
+
+El ejemplo anterior ilustra esta característica usando el patrón para números en punto flotante que se presentaron antes.  Los tres subpatrones que se usan más de una vez son el signo opcional, la secuencia de dígitos para buscar un entero y la fracción decimal.  El grupo DEFINE al final del patrón contiene su definición.  Note que el patrón de la fracción decimal es el primer lugar donde podemos reusar el patrón del entero.
+
+   /^ (?&osg)\ * ( (?&int)(?&dec)? | (?&dec) )
+      (?: [eE](?&osg)(?&int) )?
+    $
+    (?(DEFINE)
+      (?<osg>[-+]?)         # signo opcional
+      (?<int>\d++)          # entero
+      (?<dec>\.(?&int))     # fracción decimal
+    )/x
+
+
+=head2 Patrones recursivos
+
+Esta característica (presentada en Perl 5.10) extiende significativamente el poder de la coincidencia de patrones de Perl.  Refiriéndonos a algún otro grupo de captura en cualquier lugar del patrón con la construcción C<(?grupo-ref)>, el I<patrón> dentro del grupo referenciado se usa como un subpatrón independiente en lugar de la propia referencia del grupo.
+Debido a que la referencia del grupo puede estar I<dentro> del grupo al que se refiere, ahora es posible aplicar coincidencia de patrones a tareas que hasta aquí requerían un intérprete recursivo.
+
+Para ilustrar esta característica, diseñaremos un patrón que coincide si una cadena contiene un palíndromo. (Es decir, una palabra o una frase que, mientras ignoramos espacios, caracteres de puntuación y tamaño de caja, se lee lo mismo desde adelante que desde atrás. Comenzamos observando que la cadena vacía o una cadena conteniendo solo un carácter ya son un palíndromo. De otra forma, debe tener un carácter al frente que sea el mismo del final, con un palíndromo entre los dos.
+
+    /(?: (\w) (?...Aquí debe ir un palíndromo...) \g{-1} | \w? )/x
+
+Añadiendo C<\W*> en los dos finales para eliminar lo que queremos ignorar, entonces ya tenemos todo el patrón:
+
+    my $pp = qr/^(\W* (?: (\w) (?1) \g{-1} | \w? ) \W*)$/ix;
+    for $s ( "saippuakauppias", "A man, a plan, a canal: Panama!" ){
+        print "'$s' es un palíndromo\n" if $s =~ /$pp/;
+    }
+
+En C<(?...)> se pueden usar las dos retrorreferencias, tanto la absoluta como la relativa.
+El patrón entero se puede reinsertar con C<(?R)> o C<(?0)>.
+Si prefiere dar un nombre a sus grupos, puede usar C<(?&nombre)> para reusar ese grupo.
+
+
+=head2 Un poco de magia: ejecutar código Perl en una expresión regular
+
+Normalmente, las I<regex> son una parte de las expresiones Perl.
+Las expresiones de I<evaluación de código> cambian eso permitiendo que código arbitrario de Perl sea parte de una I<regex>.  Una expresión de evaluación de código denotado por C<(?{código})>, siendo I<código> una cadena de sentencias Perl.
+
+Tenga en cuenta que esta característica se considera experimental, y puede cambiar sn previo aviso.
+
+Las expresiones de código son aserciones de ancho cero, y el valor que devuelven depende de su entorno.  Existen dos posibilidades: que tanto la expresión de código se use como una condición en una expresión condicional C<(?(condición)...)>, como que no.  Si la expresión de código es una condición, el código se evalúa y el resultado (es decir, el resultado de la última sentencia) se usa para determinar la verdad o falsedad.  Si la expresión de código no se usa como una condición, la aserción siempre evalúa a verdadero y el resultado se pone en la variable especial C<$^R>.  La variable C<$^R> puede usarse entonces en sucesivas expresiones de código, en la I<regex>.  Aquí hay algunos ejemplos simplones:
+
+    $x = "abcdef";
+    $x =~ /abc(?{print "¡Hola, mamá!";})def/; # coincide,
+                                         # imprime '¡Hola, mamá!'
+    $x =~ /aaa(?{print "¡Hola, mamá!";})def/; # no coincide,
+                                         # no hay '¡Hola, mamá!'
+
+Ponga especial atención al siguiente ejemplo:
+
+    $x =~ /abc(?{print "¡Hola, mamá!";})ddd/; # no coincide,
+                                         # no hay '¡Hola, mamá!'
+                                         # ¿por qué no?
+
+En un primer momento, pensaría que no debería imprimir, porque, obviamente, el C<ddd> impide que coincida con la cadena objetivo. Pero mire este ejemplo:
+
+    $x =~ /abc(?{print "¡Hola, mamá!";})[dD]dd/; # no coincide,
+                                            # _sí_ que imprime
+
+Hum. ¿Qué pasó aquí? Si ha seguido toda la discusión, sabe que el patrón anterior debería ser, de forma efectiva (o casi) ser lo mismo que la anterior; encerrar el C<d> en una clase de carácter no va a cambiar lo que está buscando. Entonces, ¿por qué la primera no imprime mientras que segunda sí lo hace?
+
+La respuesta reside en la optimización que hace el motor de I<regex>. En el primer caso, todo lo que ve el motor son caracteres normales (alrededor de la construcción C<?{}>). Es lo suficientemente listo como para darse cuenta de que 'ddd' no aparece en la cadena objetivo antes incluso de ejecutar el patrón. Pero en el segundo caso, le engañamos haciendo creer que nuestro patrón es más complicado. Hecha un vistazo, ve nuestra clase de carácter, y decide que debe ejecutar el patrón para determinar si coincide o no, y en el proceso se topa con la sentencia del print antes de descubrir que no existe coincidencia.
+
+Para mirar más de cerca cómo el motor hace las optimizaciones, vea la sección L<"Pragmas y depuración"> más abajo.
+
+Más diversión con C<?{}>:
+
+    $x =~ /(?{print "¡Hola, mamá!";})/;       # coincide,
+                                         # imprime '¡Hola, mamá!'
+    $x =~ /(?{$c = 1;})(?{print "$c";})/;  # coincide,
+                                           # imprime '1'
+    $x =~ /(?{$c = 1;})(?{print "$^R";})/; # coincide,
+                                           # imprime '1'
+
+El trozito de magia mencionado en el título de la sección ocurre cuando la I<regex> vuelve atrás en el proceso de búsqueda por una coincidencia.  Si la I<regex> vuelve atrás sobre una expresión de código y si las variables utilizadas en su interior están localizadas con C<local>, ¡se deshacen los cambios en las variables modificadas por la expresión de código! Así, si queremos contar cuántas veces coincide un carácter dentro de un grupo, podríamos usar, p. e.,
+
+    $x = "aaaa";
+    $cuenta = 0;  # inicializa la cuenta de 'a'
+    $c = "bob";  # para ver que $c será sobreescrito
+    $x =~ /(?{local $c = 0;})         # inicializa contador
+           ( a                        # coincide con 'a'
+             (?{local $c = $c + 1;})  # incrementa contador
+           )*                         # repítelo cualquier número de veces,
+           aa                         # pero coincide con 'aa' al final
+           (?{$cuenta = $c;})         # copia de la var. local $c en $cuenta
+          /x;
+    print "Cuenta de 'a' es $cuenta, \$c variable es '$c'\n";
+
+Esto imprime
+
+    Cuenta de 'a' es 2, $c variable es 'bob'
+
+Si reemplazamos el S<C< (?{local $c = $c + 1;})>> con S<C< (?{$c = $c + 1;})>>, I<no> se deshacen los cambios en la variable durante la vuelta atrás, y obtenemos
+
+    Cuenta de 'a' es 4, $c variable es 'bob'
+
+Note que solo permanecen los cambios en la variable localizada.  Otros efectos colaterales de la ejecución de expresión de código son permanentes.  Por lo tanto
+
+    $x = "aaaa";
+    $x =~ /(a(?{print "Yow\n";}))*aa/;
+
+produce
+
+   Yow
+   Yow
+   Yow
+   Yow
+
+Se localiza automáticamente el resulta en C<$^R>, de modo que se comporte apropiadamente en la presencia de la vuelta atrás.
+
+Este ejemplo usa una expresión de código en un condición para coincidir con un artículo determinado, tanto el 'the' del Inglés como el 'der|die|das' en Alemán:
+
+    $lang = 'DE';  # usa Alemán
+    ...
+    $text = "das";
+    print "coincide\n";
+        if $text =~ /(?(?{
+                          $lang eq 'EN'; # ¿es la lengua inglesa?
+                         })
+                       the |             # si lo es, entonces busca por 'the'
+                       (der|die|das)     # si no, busca por 'der|die|das'
+                     )
+                    /xi;
+
+Note que la sintaxis aquí es C<(?(?{...})sí-regex|no-regex)>, no C<(?((?{...}))sí-regex|no-regex)>.  En otras palabras, en el caso de una expresión de código, no necesitamos los paréntesis extra alrededor de la condición.
+
+Si intenta usar expresiones de código donde el texto del código está contenido dentro de una variable interpolada, en lugar de aparecer literalmente en el patrón, Pero podría sorprenderle:
+
+    $bar = 5;
+    $pat = '(?{ 1 })';
+    /foo(?{ $bar })bar/; # compila bien, $bar no se interpola
+    /foo(?{ 1 })$bar/;   # compila bien, $bar se interpola
+    /foo${pat}bar/;      # ¡error de compilación!
+
+    $pat = qr/(?{ $foo = 1 })/;  # precompila el código de la regex
+    /foo${pat}bar/;      # compila bien
+
+Si una I<regex> tiene una variable que interpola una expresión de código, Perl trata la I<regex> como un error. Si la expresión de código se precompila en una variable, sin embargo, la interpolación se realiza bien. La cuestión es, ¿por qué es esto un error?
+
+La razón es que esa interpolación de la variable y las expresiones de código, juntas, poseen un riesgo de seguridad.  La combinación es peligrosa porque muchos programadores que escriben motores de búsqueda, a menudo toman la entrada del usuario y la meten directamente en una I<regex>:
+
+    $regex = <>;        # lee la regex suministrada por el usuario
+    $chomp $regex;      # le quita la posible nueva línea
+    $texto =~ /$regex/; # busca $texto en la $regex
+
+Si la variable C<$regex> contiene una expresión de código, el usuario podría ejecutar código Perl arbitrario.  Por ejemplo, algún bromista podría buscar por S<C<system('rm -rf *');>> para borrar tus archivos.  En este sentido, la combinación de interpolación y expresiones de código I<mancha> tu I<regex>.  Así que, por defecto, no se permite utilizar ambas a la vez, la interpolación y las expresiones de código en la misma I<regex>.  Si no está preocupado por los usuarios maliciosos, es posible saltarse esta comprobación de seguridad invocando S<C<use re 'eval'>>:
+
+    use re 'eval';       # arroja las precauciones por la puerta
+    $bar = 5;
+    $pat = '(?{ 1 })';
+    /foo${pat}bar/;      # compila bien
+
+Otra forma de expresión de código es la I<patrón de expresión de código>.
+El patrón de expresión de código es como una expresión de código normal, excepto que el resultado de la evaluación del código se trata como una expresión regular y coincide inmediatamente.  Un ejemplo sencillo es
+
+    $longitud = 5;
+    $char = 'a';
+    $x = 'aaaaabb';
+    $x =~ /(??{$char x $longitud})/x; # coincide, hay 5 'a'
+
+
+Este ejemplo final contiene tanto expresiones ordinarias como expresiones de código.  Detecta cuándo una cadena binaria C<1101010010001...> tiene un espaciado Fibonacci 0, 1, 1, 2, 3, 5... en los C<1>:
+
+    $x = "1101010010001000001";
+    $z0 = ''; $z1 = '0';   # condiciones iniciales
+    print "Es una secuencia Fibonacci\n"
+        if $x =~ /^1         # coincide con un '1' inicial
+                    (?:
+                       ((??{ $z0 })) # coincide con algunos '0'
+                       1             # y luego un '1'
+		       (?{ $z0 = $z1; $z1 .= $^N; })
+                    )+   # repetir mientras sea necesario
+                  $      # aquí acaba todo
+                 /x;
+    printf "La mayor secuencia encontrada fue %d\n", length($z1)-length($z0);
+
+Recuerde que C<$^N> se establece a lo que se hubiese encontrado con el último grupo de captura completado. Esto imprime
+
+    Es una secuencia Fibonacci
+    La mayor secuencia encontrada fue 5
+
+¡Ja! Intente esto con su juego de jardinería de I<regex>...
+
+Note que las variables C<$z0> y C<$z1> no se sustituyen cuando la I<regex> se compila, como sucede con las variables ordinarias de fuera de la expresión de código.  Más bien, todo el bloque de código se interpreta como código perl al mismo tiempo que perl compila el código que rodea al patrón literal de la I<regex>.
+
+La I<regex> sin el modificador C<//x> es
+
+    /^1(?:((??{ $z0 }))1(?{ $z0 = $z1; $z1 .= $^N; }))+$/
+
+que muestra que los espacios siguen siendo posibles en las partes de código. No obstante, cuando se trabaja con expresiones de código y condicionales, es casi siempre necesaria la forma extendida de las I<regex> para la creación y depuración de I<regex>.
+
+
+=head2 Verbos de control de vuelta atrás
+
+Perl 5.10 presentó un número de verbos de control con la pretensión de proveer de un control detallado sobre los procesos de vuelta atrás, influyendo directamente en el motor de I<regex> y suministrando técnicas de monitorización.  Como todas estas características de este grupo son experimentales y sujetas a cambio o eliminación en futuras versiones de Perl, se aconseja al lector interesado que se refiera a L<perlre/"Verbos especiales de control de vuelta atrás"> para ver una descripción más detallada.
+
+Lo que sigue es solo un ejemplo, ilustrando el verbo de control C<(*FAIL)>, que se puede abreviar como C<(*F)>. Si se inserta en una I<regex> causará su fallo, justo como si hubiese ocurrido una falla de coincidencia entre el patrón y la cadena. El procesamiento de la I<regex> continúa después como si hubiese ocurrido un fallo "normal", por lo que, por ejemplo, se intentará la siguiente posición en la cadena u otra alternativa. Ya que fallar una coincidencia no preserva los grupos de captura o produce resultados, puede ser necesario usar esto en combinación con código incrustado.
+
+   %contador = ();
+   "supercalifragilisticoexpialidoso" =~
+       /([aeiou])(?{ $contador{$1}++; })(*FAIL)/i;
+   printf "%3d '%s'\n", $contador{$_}, $_ for (sort keys %contador);
+
+El patrón comienza con una clase coincidiendo con un subconjunto de letras.  Siempre que esto coincida, se ejecuta una sentencia como C<$contador{'a'}++;>, incrementando el contador de la letra. Entonces C<(*FAIL)> hace lo que dice, y el motor de I<regex> procede de acuerdo al libro: mientras no se llegue al final de la cadena, la posición se avanza antes de buscar otra vocal. Así, no hay diferencia entre la coincidencia o no coincidencia, y el motor de I<regex> procede hasta que se termina de inspeccionar toda la cadena.
+(Es notable que una solución alternativa usando algo como
+
+   $contador{lc($_)}++ for split('', "supercalifragilisticoexpialidoso");
+   printf "%3d '%s'\n", $contador{$_}, $_ for ( qw{ a e i o u } );
+
+es considerablemente más lenta).
+
+
+=head2 I<Pragmas> y depuración
+
+Hablando de depuración, existen varios I<pragmas> disponibles para controlar y depurar I<regex> en Perl.  Ya nos hemos encontrado con un I<pragma> en la sección anterior, S<C<use re 'eval';>>, que permite coexistir interpolación de variables y expresiones de código en una I<regex>.  Los otros I<pragmas> son
+
+    use re 'taint';
+    $manchado = <>;
+    @partes = ($manchado =~ /(\w+)\s+(\w+)/; # @partes está ahora manchado
+
+El I<pragma> C<taint> causa que cualquier subcadena de una coincidencia con una variable manchada quede también manchada.  Esto no es lo que normalmente sucede, ya que las I<regex> se usan a menudo para extraer partes seguras de variables manchadas.  Use C<taint> cuando no esté extrayendo partes seguras, sino realizar algún otro procesamiento.  Tanto los I<pragmas> C<taint> como C<eval> se aplican a ámbitos léxicos, que significa que están en efecto solo hasta el final del bloque que envuelve a esos I<pragmas>.
+
+    use re '/m';  # o cualquier otros indicadores
+    $cadena_multilinea =~ /^foo/; # /m es implícito
+
+El I<pragma> C<re '/flags'> (presentado en Perl 5.14) activa esos indicadores en las expresiones regulares hasta el final del ámbito léxico.  Vea L<re/"modo 'E<sol>indicadores'"> para más detalles.
+
+    use re 'debug';
+    /^(.*)$/s;       # saca información de depuración
+
+    use re 'debugcolor';
+    /^(.*)$/s;       # saca información de depuración en vivos colores
+
+Los I<pragmas> C<debug> y C<debugcolor> nos permite obtener información detallada sobre depuración en la compilación y ejecución de I<regex>.  C<debugcolor> es lo mismo que C<debug>, excepto que la información se muestra en color en aquellas terminales que puedan mostrar secuencias de color termcap.  Aquí hay un ejemplo de la salida:
+
+    % perl -e 'use re "debug"; "abc" =~ /a*b+c/;'
+    Compiling REx 'a*b+c'
+    size 9 first at 1
+       1: STAR(4)
+       2:   EXACT <a>(0)
+       4: PLUS(7)
+       5:   EXACT <b>(0)
+       7: EXACT <c>(9)
+       9: END(0)
+    floating 'bc' at 0..2147483647 (checking floating) minlen 2
+    Guessing start of match, REx 'a*b+c' against 'abc'...
+    Found floating substr 'bc' at offset 1...
+    Guessed: match at offset 0
+    Matching REx 'a*b+c' against 'abc'
+      Setting an EVAL scope, savestack=3
+       0 <> <abc>           |  1:  STAR
+                             EXACT <a> can match 1 times out of 32767...
+      Setting an EVAL scope, savestack=3
+       1 <a> <bc>           |  4:    PLUS
+                             EXACT <b> can match 1 times out of 32767...
+      Setting an EVAL scope, savestack=3
+       2 <ab> <c>           |  7:      EXACT <c>
+       3 <abc> <>           |  9:      END
+    ¡Coincide con éxito!
+    Freeing REx: 'a*b+c'
+
+Si ha conseguido llegar hasta esta parte del tutorial, probablemente pueda distinguir las diferentes partes que la salida de depuración le está mostrando.  La primera parte
+
+    Compiling REx 'a*b+c'
+    size 9 first at 1
+       1: STAR(4)
+       2:   EXACT <a>(0)
+       4: PLUS(7)
+       5:   EXACT <b>(0)
+       7: EXACT <c>(9)
+       9: END(0)
+
+describe la etapa de compilación.  C<STAR(4)> significa que existe un objeto precediendo a un asterisco, en este caso, C<'a'>, y si coincide, va a la línea 4, es decir, C<PLUS(7)>.  Las líneas del medio describan alguna heurística y optimizaciones que se realizan antes de una coincidencia:
+
+    floating 'bc' at 0..2147483647 (checking floating) minlen 2
+    Guessing start of match, REx 'a*b+c' against 'abc'...
+    Found floating substr 'bc' at offset 1...
+    Guessed: match at offset 0
+
+Luego se ejecuta la coincidencia y el resto de las líneas describen el proceso:
+
+    Matching REx 'a*b+c' against 'abc'
+      Setting an EVAL scope, savestack=3
+       0 <> <abc>           |  1:  STAR
+                             EXACT <a> can match 1 times out of 32767...
+      Setting an EVAL scope, savestack=3
+       1 <a> <bc>           |  4:    PLUS
+                             EXACT <b> can match 1 times out of 32767...
+      Setting an EVAL scope, savestack=3
+       2 <ab> <c>           |  7:      EXACT <c>
+       3 <abc> <>           |  9:      END
+    ¡Coincide con éxito!
+    Freeing REx: 'a*b+c'
+
+Cada paso es de la forma S<C<< n <x> <y> >>>, siendo C<< <x> >> la parte de la cadena que coincide y C<< <y> >> la parte que aún no lo ha hecho.  El S<C<< |  1:  STAR >>> le dice a Perl está en la línea número 1 de la lista compilada.  Consulte L<perldebguts/"Depurando expresiones regulares"> para verlo de forma más detallada.
+
+Un método alternativo de depuración de I<regex> es el de incrustar sentencias C<print>
+dentro de la I<regex>.  Esto ofrece un registro paso a paso de la vuelta atrás en una alternancia:
+
+    "that this" =~ m@(?{print "Comienza en la posición ", pos, "\n";})
+                     t(?{print "t1\n";})
+                     h(?{print "h1\n";})
+                     i(?{print "i1\n";})
+                     s(?{print "s1\n";})
+                         |
+                     t(?{print "t2\n";})
+                     h(?{print "h2\n";})
+                     a(?{print "a2\n";})
+                     t(?{print "t2\n";})
+                     (?{print "Termina en la posición ", pos, "\n";})
+                    @x;
+
+imprime
+
+    Comienza en la posición 0
+    t1
+    h1
+    t2
+    h2
+    a2
+    t2
+    Termina en la posición 4
+
+=head1 ERRORES
+
+Las expresiones de código, expresiones condicionales y las expresiones independientes son I<experimentales>.  No las use en código de producción.  Aún.
+
+=head1 VEA TAMBIÉN
+
+Esto solo es un tutorial.  Para ver la historia completa sobre las expresiones regulares en Perl, vea la página de referencia sobre expresiones regulares L<perlre>.
+
+Para más información sobre los operadores de coincidencia C<m//> y sustitución C<s///>, vea L<perlop/"Operadores I<regex> entrecomillados">.  Para información sobre la operación C<split>, vea L<perlfunc/split>.
+
+Para un excelente recurso todo-en-uno sobre el cuidado y alimentación de expresiones regulares, vea el libro I<Mastering Regular Expressions> de Jeffrey Friedl (publicado por O'Reilly, ISBN 1556592-257-3).
+
+=head1 AUTOR Y COPYRIGHT
+
+Copyright (c) 2000 Mark Kvale. Todos los derechos reservados.
+
+Puede distribuir este documento en los mismos términos que Perl.
+
+=head2 Agradecimientos
+
+La inspiración para el ejemplo del codón de parada de ADN viene del código de ejemplo ZIP en el capítulo 7 de I<Mastering Regular Expressions>.
+
+El autor desearía agradecer a Jeff Pinyan, Andrew Johnson, Peter Haworth, Ronald J Kimball y Joe Smith por sus comentarios tan útiles.
+
+=cut
+

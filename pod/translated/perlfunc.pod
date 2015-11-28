@@ -377,7 +377,7 @@ X<accept>
 Acepta una conexión socket entrante, como lo hace la llamada del sistema accept(2).  Devuelve la dirección empaquetada si ha tenido éxito, de lo contrario, falso.
 Ver el ejemplo en L<perlipc/"Sockets: Comunicación Cliente/Servidor">.
 
-En sistemas que soportan la bandera cerrar-en-ejecución sobre archivos, la bandera será puesta para el nuevo descriptor de archivo abierto, determinado por el valor de $^F.  Ver L<perlvar/$^F>.
+En sistemas que soportan el indicador cerrar-en-ejecución sobre archivos, el indicador será puesto para el nuevo descriptor de archivo abierto, determinado por el valor de $^F.  Ver L<perlvar/$^F>.
 
 =item alarm SEGUNDOS
 X<alarm> X<SIGALRM> X<timer> X<alarma> X<temporizador>
@@ -2255,11 +2255,11 @@ Los resultados siguen las reglas ASCII.  Sólo los caracteres C<A-Z> cambian, a 
 
 =item De lo contrario, si está activo C<use locale> para C<LC_CTYPE>:
 
-Respeta la configuración regional C<LC_CTYPE> actual de los códigos de carácter < 256; y utiliza las reglas Unicode para los códigos de carácter restantes (esto último sólo puede ocurrir si también está establecida la bandera UTF8).  Vea L<perllocale>.
+Respeta la configuración regional C<LC_CTYPE> actual de los códigos de carácter < 256; y utiliza las reglas Unicode para los códigos de carácter restantes (esto último sólo puede ocurrir si también está establecido el indicador UTF8).  Vea L<perllocale>.
 
 A partir de v5.20, Perl usa todas las reglas Unicode si la configuración regional es UTF-8.  Por contra, hay una deficiencia en este esquema, y es que los cambios de tamaños de caja que cruzan el límite 255/256 no están bien definidos.  Por ejemplo, la minúscula de LATIN CAPITAL LETTER SHARP S (U+1E9E) en las reglas Unicode es U+00DF (en las plataformas ASCII).   Pero bajo C<use locale> (antes de v5.20 o no está activa la localización UTF-8), la minúscula de U+1E9E es ella misma, porque 0xDF quizás no sea LATIN SMALL LETTER SHARP S en la configuración regional actual, y Perl no tiene forma de saber incluso si existe el carácter en la configuración regional, y aún menos qué código de carácter es.  Perl devuelve un resultado que está por encima de 255 (casi siempre el carácter de entrada sin cambiar, para todas los casos (y no hay muchos) donde el límite 255/256, de otro modo, sería traspasado; y a partir de v5.22, lanza una advertencia L<locale|perldiag/Can't do %s("%s") on non-UTF-8 locale; resolved to "%s".>.
 
-=item De otra forma, si EXPR tiene la bandera UTF8 puesta:
+=item De otra forma, si EXPR tiene activado el indicador UTF8:
 
 Se utilizan las reglas Unicode para el cambio de tamaño de caja.
 
@@ -2890,7 +2890,7 @@ Ver L<perlipc/"Aperturas seguras de tuberías"> para más ejemplos sobre esto.
 
 Perl intentará vaciar todos los archivos abiertos para la salida antes de cualquier operación que pueda hacer un fork, pero esto quizás no esté soportado en algunas plataformas (vea L<perlport>).  Para estar seguro, es posible que necesite el conjunto C<|> ($AUTOFLUSH en English) o llame al método C<autoflush()> de C<IO::Handle> en cualquier controlador abierto.
 
-En sistemas que soportan la bandera B<close-on-exec> (I<cerrar en ejecución>) en archivos, esta bandera se establecerá para el descriptor de archivo abierto recientemente según lo determinado por el valor de C<$^F>.  Ver L<perlvar/$^F>.
+En sistemas que soportan el indicador B<close-on-exec> (I<cerrar en ejecución>) en archivos, este indicador se establecerá para el descriptor de archivo abierto recientemente según lo determinado por el valor de C<$^F>.  Ver L<perlvar/$^F>.
 
 Cerrando cualquier identificador de archivo entubado hace que el proceso padre espere a que el hijo termine, y devuelva el valor de estado en C<$?> y en C<${^CHILD_ERROR_NATIVE}>.
 
@@ -3567,7 +3567,7 @@ Devuelve verdadero en caso de éxito.
 
 Ver L<IPC::Open2>, L<IPC::Open3>, y L<perlipc/"Comunicación Bidireccional con otro proceso"> para ejemplos de estas cosas.
 
-En los sistemas que soportan las banderas cerrado-en-ejecución en los archivos, esas banderas se encuentran en todos los nuevos descriptores de archivos abiertos cuyo C<fileno> sean más I<altos> que el valor actual de $^F (por defecto 2 para C<STDERR>).  Ver L<perlvar/$^F>.
+En los sistemas que soportan el indicador cerrado-en-ejecución en los archivos, ese indicador se encuentra en todos los nuevos descriptores de archivos abiertos cuyo C<fileno> sean más I<altos> que el valor actual de $^F (por defecto 2 para C<STDERR>).  Ver L<perlvar/$^F>.
 
 =item pop ARRAY
 X<pop> X<stack> X<pila>
@@ -3600,7 +3600,7 @@ Devuelve el desplazamiento donde la última búsqueda C<m//g> terminó para la v
 
 C<pos> accede directamente a la ubicación utilizada por el motor de expresiones regulares para almacenar el desplazamiento, por lo que asignar a C<pos> cambiará ese desplazamiento, por lo que también influirá en la aserción de ancho cero C<\G> en las expresiones regulares.  Estos dos efectos toman lugar en la siguiente coincidencia, por lo que no puede afectar a la posición con C<pos> durante la coincidencia actual, como en C<(?{pos() = 5})> o C<s//pos() = 5/e>.
 
-Actualizando C<pos> también reinicializa la bandera I<coincide con longitud cero>, descrita en L<perlre/"Coincidiendo con patrones repetidos en una cadena de longitud cero">.
+Actualizando C<pos> también reinicializa el indicador I<coincide con longitud cero>, descrita en L<perlre/"Coincidiendo con patrones repetidos en una cadena de longitud cero">.
 
 Debido a que una coincidencia C<m//gc> fallida no reinicia el desplazamiento, el retorno de C<pos> no cambiará en ningún caso.  Ver L<perlre> y L<perlop>.
 
@@ -3878,13 +3878,13 @@ En contexto escalar, se devuelve como una sola cadena (potencialmente multi-lín
 Esto es la función interna que implementa el operador C<qx/EXPR/>, pero puede usarla directamente.  El operador C<qx/EXPR/> se discute con más detalle en L<perlop/"Operadores E/S">.
 Si se omite EXPR, se usa C<$_>.
 
-=item recv SOCKET,ESCALAR,LONGITUD,BANDERAS
+=item recv SOCKET,ESCALAR,LONGITUD,INDICADORES
 X<recv>
 
 =for Pod::Functions receive a message over a Socket
 
 Recibe un mensaje de un socket.  Intenta leer LONGITUD I<caracteres> de datos en la variable ESCALAR del identificador de archivo SOCKET especificado.
-ESCALAR crecerá o se reducirá a la longitud de la lectura real.  Toma las mismas banderas que la llamada al sistema del mismo nombre.  Devuelve la dirección del remitente si el protocolo del SOCKET lo soporta; de otra manera, devuelve una cadena vacía.  Si hay un error, devuelve el valor indefinido.
+ESCALAR crecerá o se reducirá a la longitud de la lectura real.  Toma los mismos indicadores que la llamada al sistema del mismo nombre.  Devuelve la dirección del remitente si el protocolo del SOCKET lo soporta; de otra manera, devuelve una cadena vacía.  Si hay un error, devuelve el valor indefinido.
 Esta llamada está implementada realmente en términos de la llamada del sistema recvfrom(2).
 Ver L<perlipc/"UDP: Paso de mensajes"> para ejemplos.
 
@@ -4427,7 +4427,7 @@ X<send>
 
 =for Pod::Functions send a message over a socket
 
-Envía un mensaje sobre un socket.  Intenta enviar el escalar MSG al identificador de archivo SOCKET.  Toma las mismas banderas que la llamada al sistema del mismo nombre.  En sockets desconectados, debe especificar un destino I<adonde> enviarlo, en cuyo caso hace una llamada del sistema sendto(2).  Devuelve el número de caracteres enviados, o el valor indefinido en caso de error.  La llamada del sistema sendmsg(2) no está, actualmente, implementada.  Ver L<perlipc/"UDP: Paso de mensajes"> para ejemplos.
+Envía un mensaje sobre un socket.  Intenta enviar el escalar MSG al identificador de archivo SOCKET.  Toma los mismos indicadores que la llamada al sistema del mismo nombre.  En sockets desconectados, debe especificar un destino I<adonde> enviarlo, en cuyo caso hace una llamada del sistema sendto(2).  Devuelve el número de caracteres enviados, o el valor indefinido en caso de error.  La llamada del sistema sendmsg(2) no está, actualmente, implementada.  Ver L<perlipc/"UDP: Paso de mensajes"> para ejemplos.
 
 Note los I<caracteres>: dependiendo del estado del socket, son enviados bytes (8-bit) o caracteres.  Por defecto todos los sockets operan en bytes, pero por ejemplo, si el socket ha sido cambiado usando binmode() para operar con la capa de E/S C<:encoding(utf8)> (ver el pragma C<open>, L<open>), la E/S operará en caracteres codificados en UTF-8, no bytes.  Del mismo modo, para el pragma C<:encoding>: en este caso casi todos los caracteres se pueden enviar.
 
@@ -4500,7 +4500,7 @@ Vea también la documentación de L<perlipc/"SysV IPC"> y C<IPC::SysV>.
 
 Cuestiones de portabilidad: L<perlport/shmctl>.
 
-=item shmget CLAVE,TAMAÑO,BANDERAS
+=item shmget CLAVE,TAMAÑO,INDICADORES
 X<shmget>
 
 =for Pod::Functions get SysV shared memory segment identifier
@@ -4585,7 +4585,7 @@ X<socket>
 
 Abre un socket de la clase especificada y lo adhiere al identificador de archivo SOCKET.  DOMINIO, TIPO, y PROTOCOLO son especificados de la misma manera que la llamada del sistema del mismo nombre.  Debe usar C<use Socket> primero para obtener las apropiadas definiciones.  Ver los ejemplos en L<perlipc/"Sockets: Comunicación Cliente/Servidor">.
 
-En sistemas que soportan la bandera cerrar-en-ejecución sobre archivos, la bandera será puesta para el nuevo descriptor de archivo abierto, determinado por el valor de $^F.  Ver L<perlvar/$^F>.
+En sistemas que soportan el indicador cerrar-en-ejecución sobre archivos, el indicador será puesto para el nuevo descriptor de archivo abierto, determinado por el valor de $^F.  Ver L<perlvar/$^F>.
 
 =item socketpair SOCKET1,SOCKET2,DOMINIO,TIPO,PROTOCOLO
 X<socketpair>
@@ -4595,7 +4595,7 @@ X<socketpair>
 Crea un par de sockets anónimos en el dominio especificado, del tipo especificado.  DOMINIO, TIPO, y PROTOCOLO son especificados de la misma manera que la llamada del sistema del mismo nombre.  Si no está implementada, lanza una excepción.
 Devuelve verdadero si tuvo éxito.
 
-En sistemas que apoyan la bandera close-on-exec en archivos, esta bandera se establecerá para los nuevos descriptores de archivo abiertos, según lo determinado por el valor de $^F.  Ver L<perlvar/$^F>.
+En sistemas que apoyan el indicador cerrar-en-ejecución en archivos, este indicador se establecerá para los nuevos descriptores de archivo abiertos, según lo determinado por el valor de $^F.  Ver L<perlvar/$^F>.
 
 Algunos sistemas definen C<pipe> en términos de C<socketpair>, en el que una llamada a C<pipe(Rdr, Wtr)> es esencialmente:
 
@@ -4955,7 +4955,7 @@ Además, Perl permite las siguientes conversiones ampliamente soportadas:
    %E    como %e, pero usando una letra "E" mayúscula
    %G    como %g, pero con una letra letra "E" mayúscula (si es aplicable)
    %b    un entero sin signo, en binario
-   %B    como %b, pero usando una letra "B" mayúscula con la bandera #
+   %B    como %b, pero usando una letra "B" mayúscula con el indicador #
    %p    un puntero (sale la dirección del valor Perl en hexadecimal)
    %n    especial: *almacena* el número de caracteres de la salida hasta el momento
          en el siguiente argumento en la lista de parámetros
@@ -4984,7 +4984,7 @@ Un explícito índice de parámetros de formato, tales como C<2$>.  Por defecto 
   printf '%2$d %1$d', 12, 34;      # imprime "34 12"
   printf '%3$d %d %1$d', 1, 2, 3;  # imprime "3 1 1"
 
-=item banderas
+=item indicadores
 
 uno o más de:
 
@@ -5009,20 +5009,20 @@ Por ejemplo:
   printf '<%#b>',  12;   # imprime "<0b1100>"
   printf '<%#B>',  12;   # imprime "<0B1100>"
 
-Cuando un espacio y un signo más se dan como banderas de forma simultánea, un signo más es usado para prefijar un número positivo.
+Cuando un espacio y un signo más se dan como indicadores, de forma simultánea, se usa un signo más para prefijar un número positivo.
 
   printf '<%+ d>', 12;   # imprime "<+12>"
   printf '<% +d>', 12;   # imprime "<+12>"
 
-Cuando la bandera # y una precisión se dan en la conversión %o, la precisión es incrementada si es necesario para el "0" inicial.
+Cuando el indicador # y una precisión se dan en la conversión %o, la precisión es incrementada si es necesario para el "0" inicial.
 
   printf '<%#.5o>', 012;      # imprime "<00012>"
   printf '<%#.5o>', 012345;   # imprime "<012345>"
   printf '<%#.0o>', 0;        # imprime "<0>"
 
-=item vector de banderas
+=item vector de indicadores
 
-Esta bandera le dice a Perl que interprete la cadena indicada como un vector de enteros, uno para cada carácter en la cadena.  Perl aplica el formato a cada entero por turno, luego une las cadenas resultantes con un separador (un punto C<.> por defecto).  Esto puede ser útil para mostrar los valores ordinales de caracteres en cadenas arbitrarias:
+Este indicador le dice a Perl que interprete la cadena indicada como un vector de enteros, uno para cada carácter en la cadena.  Perl aplica el formato a cada entero por turno, luego une las cadenas resultantes con un separador (un punto C<.> por defecto).  Esto puede ser útil para mostrar los valores ordinales de caracteres en cadenas arbitrarias:
 
   printf "%vd", "AB\x{100}";           # imprime "65.66.256"
   printf "versión es v%vd\n", $^V;     # Versión de Perl
@@ -5047,7 +5047,7 @@ Los argumentos son por lo general formateados para ser sólo tan amplios como pa
  printf '<%*2$s>', "a", 6; # imprime "<     a>"
  printf "<%2s>", "long";   # imprime "<long>" (no lo trunca)
 
-Si un ancho de campo obtenido a través de C<*> es negativo, tiene el mismo efecto que la bandera C<->: alineación a la izquierda.
+Si un ancho de campo obtenido a través de C<*> es negativo, tiene el mismo efecto que el indicador C<->: alineación a la izquierda.
 
 =item precisión, o ancho máximo
 X<precision> X<precisión>
@@ -5074,7 +5074,7 @@ Para "g" y "G", especifica el número máximo de dígitos a mostrar, incluyendo 
   printf '<%.5g>', 100.01; # imprime "<100.01>"
   printf '<%.4g>', 100.01; # imprime "<100>"
 
-Para las conversiones de entero, especificando una precisión implica que la salida del número en sí mismo debería ser rellenado con ceros a este ancho, donde se pasa por alto a la bandera 0:
+Para las conversiones de entero, especificando una precisión implica que la salida del número en sí mismo debería ser rellenado con ceros a este ancho, donde se pasa por alto a el indicador 0:
 
   printf '<%.6d>', 1;      # imprime "<000001>"
   printf '<%+.6d>', 1;     # imprime "<+000001>"
@@ -5137,7 +5137,7 @@ Para conversiones numéricas, se puede especificar el tamaño del número a inte
    z           interpreta un entero como "size_t" del C en Perl 5.14
                o superior
 
-A partir de 5.14, ninguno de estos produce una excepción si no están suportados en su plataforma.  Sin embargo, si las advertencias están habilitadas, una advertencia de la clase C<printf> es emitida cuando no esté soportada una bandera de conversión.  
+A partir de 5.14, ninguno de estos produce una excepción si no están suportados en su plataforma.  Sin embargo, si las advertencias están habilitadas, una advertencia de la clase C<printf> es emitida cuando no esté soportado el indicador de conversión.  
 Si en vez de eso, prefiere una excepción, haga lo siguiente:
 
     use warnings FATAL => "printf";
@@ -5548,21 +5548,21 @@ X<sysopen>
 
 Abre el archivo cuyo nombre viene dado por ARCHIVO, y lo asocia con IDENTIFICADOR_ARCHIVO.  Si IDENTIFICADOR_ARCHIVO es una expresión, el valor es tomado como el nombre real del identificador de archivo buscado; un escalar indefinido será autovivificado adecuadamente.  Esta función llama a la función subyacente del sistema operativo I<open>(2) con los parámetros ARCHIVO, MODO y PERMISOS.
 
-Los valores posibles y bits de bandera del parámetro MODO son dependientes del sistema; están disponibles en el módulo estándar C<Fcntl>.  Consulte la documentación de la llamada del sistema I<open>(2) de su sistema operativo para ver qué valores y bits de bandera están disponibles.  Puede combinar varias banderas con el operador C<|>.
+Los valores posibles y bits de indicador del parámetro MODO son dependientes del sistema; están disponibles en el módulo estándar C<Fcntl>.  Consulte la documentación de la llamada del sistema I<open>(2) de su sistema operativo para ver qué valores y bits de indicadores están disponibles.  Puede combinar varios indicadores con el operador C<|>.
 
 Algunos de los valores más comunes son C<O_RDONLY> para abrir el archivo en modo de sólo lectura, C<O_WRONLY> para abrir el archivo en modo de sólo escritura, y C<O_RDWR> para abrir el archivo en modo lectura-escritura.
 X<O_RDONLY> X<O_RDWR> X<O_WRONLY>
 
 Por razones históricas, algunos valores funcionan en casi todos los sistemas soportados por Perl: 0 significa solo lectura, 1 significa sólo escritura y 2 significa lectura y escritura.  Sabemos que estos valores I<no> funcionan bajo OS/390 y el Macintosh; es probable que no desee utilizarlos en nuevos programas.
 
-Si el archivo con el nombre ARCHIVO no existe y la llamada C<open> lo crea (por lo general porque el modo incluye la bandera C<O_CREAT>), entonces el valor de PERMISOS especifica los permisos del archivo recién creado.  Si se omite el argumento PERMISOS a C<sysopen>, Perl utiliza el valor octal C<0666>.
+Si el archivo con el nombre ARCHIVO no existe y la llamada C<open> lo crea (por lo general porque el modo incluye el indicador C<O_CREAT>), entonces el valor de PERMISOS especifica los permisos del archivo recién creado.  Si se omite el argumento PERMISOS a C<sysopen>, Perl utiliza el valor octal C<0666>.
 Estos valores de permisos tiene que estar en octal, y son modificados por el valor de C<umask> de su proceso actual.
 X<O_CREAT>
 
-En muchos sistemas la bandera C<O_EXCL> está disponible para abrir archivos en modo exclusivo.  Esto B<no> es bloquear: la exclusividad significa aquí que si el archivo ya existe, sysopen() falla.  C<O_EXCL> quizás no funcione en sistemas de archivos en red, y no tiene ningún efecto a menos que el indicador C<O_CREAT> también esté establecido.  Estableciendo C<O_CREAT|O_EXCL> impide que el archivo sea abierto si es un enlace simbólico.  No protege contra enlaces simbólicos en la ruta del archivo.
+En muchos sistemas el indicador C<O_EXCL> está disponible para abrir archivos en modo exclusivo.  Esto B<no> es bloquear: la exclusividad significa aquí que si el archivo ya existe, sysopen() falla.  C<O_EXCL> quizás no funcione en sistemas de archivos en red, y no tiene ningún efecto a menos que el indicador C<O_CREAT> también esté establecido.  Estableciendo C<O_CREAT|O_EXCL> impide que el archivo sea abierto si es un enlace simbólico.  No protege contra enlaces simbólicos en la ruta del archivo.
 X<O_EXCL>
 
-A veces puede querer truncar un archivo ya existente.  Esto se puede hacer con el uso de la bandera C<O_TRUNC>.  El comportamiento de C<O_TRUNC> con C<O_RDONLY> no está definido.
+A veces puede querer truncar un archivo ya existente.  Esto se puede hacer con el uso del indicador C<O_TRUNC>.  El comportamiento de C<O_TRUNC> con C<O_RDONLY> no está definido.
 X<O_TRUNC>
 
 Rara vez o nunca debe utilizar C<0644> como argumento a C<sysopen>, porque eso le quita al usuario la opción de tener un umask más permisivo.
@@ -5928,7 +5928,7 @@ Si quiere saber qué archivos no pudo eliminar, trátelos de uno en uno:
          unlink $archivo or warn "No puedo eliminar $archivo: $!";
      }
 
-Nota: C<unlink> no intentará eliminar directorios a menos que usted sea superusuario y la bandera B<-U> se suministre a Perl.  Incluso si se cumplen estas condiciones, se advierte que desvincular un directorio puede causar daños a su sistema de archivos.  Por último, con C<unlink> en directorios no está soportado en muchos sistemas operativos.  Utilice C<rmdir> en su lugar.
+Nota: C<unlink> no intentará eliminar directorios a menos que usted sea superusuario y la opción B<-U> se suministre a Perl.  Incluso si se cumplen estas condiciones, se advierte que desvincular un directorio puede causar daños a su sistema de archivos.  Por último, con C<unlink> en directorios no está soportado en muchos sistemas operativos.  Utilice C<rmdir> en su lugar.
 
 Si LISTA se omite, C<unlink> utiliza C<$_>.
 
@@ -6164,7 +6164,7 @@ C<vec> también puede ser asignado, en cuyo caso los paréntesis son necesarios 
 Si el elemento seleccionado se fuera de la cadena, se devuelve el valor 0.
 Si se escribe un elemento al final de la cadena, Perl primero extenderá la cadena con una cantidad suficiente de bytes cero.   Es un error tratar de cancelar el principio de la cadena (es decir, DESPLAZAMIENTO negativo).
 
-Si la cadena pasa a ser codificado como UTF-8 de forma interna (y por tanto tiene la bandera UTF8 establecida), esto se ignora por C<vec>, y opera en la cadena de bytes interna, no la cadena de caracteres conceptuales, incluso si sólo tiene caracteres con valores inferiores a 256. 
+Si la cadena pasa a ser codificado como UTF-8 de forma interna (y por tanto tiene el indicador UTF8 establecida), esto se ignora por C<vec>, y opera en la cadena de bytes interna, no la cadena de caracteres conceptuales, incluso si sólo tiene caracteres con valores inferiores a 256. 
 
 Cadenas creadas con C<vec> también se pueden manipular con los operadores lógicos C<|>, C<&>, C<^>, y C<~>.  Estos operadores asumirán una operación de vector de bits cuando ambos operandos sean cadenas.
 Ver L<perlop/"Operadores de bit en cadenas"> .
@@ -6373,7 +6373,7 @@ Si utiliza C<wait> en su controlador de $SIG{CHLD}, puede esperar, accidentalmen
 
 Cuestiones de portabilidad: L<perlport/wait>.
 
-=item waitpid PID,BANDERAS
+=item waitpid PID,INDICADORES
 X<waitpid>
 
 =for Pod::Functions wait for a particular child process to die
@@ -6388,7 +6388,7 @@ El estado se devuelve en C<$?> y C<${^CHILD_ERROR_NATIVE}>.  Si dice
     } while $hijo > 0;
 
 entonces usted puede hacer una espera no bloqueante para todos los procesos zombie pendientes.
-Espera no bloqueanto está disponible en máquinas que soporten las llamadas del sistema, tanto waitpid(2) como wait4(2).  Sin embargo, esperar por un particular pid con BANDERAS a C<0> está implementado en todas partes.  (Perl emula la llamada al sistema, recordando los valores de estado de los procesos que han salido, pero que todavía no han sido recolectadas por el script Perl).
+Espera no bloqueanto está disponible en máquinas que soporten las llamadas del sistema, tanto waitpid(2) como wait4(2).  Sin embargo, esperar por un particular pid con INDICADORES a C<0> está implementado en todas partes.  (Perl emula la llamada al sistema, recordando los valores de estado de los procesos que han salido, pero que todavía no han sido recolectadas por el script Perl).
 
 Tenga en cuenta que en algunos sistemas, un valor devuelto de C<-1> podría significar que los procesos hijos se están automáticamente desechando.  Ver L<perlipc> para más detalles, y para otros ejemplos.
 

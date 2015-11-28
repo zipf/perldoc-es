@@ -360,7 +360,7 @@ Entonces
 
     $^M = 'a' x (1 << 16);
 
-asignaría un búfer de 64K para usarse en caso de emergencia.  Vea el archivo F<INSTALL> en la distribución Perl para obtener información sobre cómo añadir banderas de compilación C personalizadas al compilar perl.  Para desalentar el uso casual de este sistema avanzado, no existe un nombre largo en L<English|English> para esta variable.
+asignaría un búfer de 64K para usarse en caso de emergencia.  Vea el archivo F<INSTALL> en la distribución Perl para obtener información sobre cómo añadir indicadores de compilación C personalizados al compilar perl.  Para desalentar el uso casual de este sistema avanzado, no existe un nombre largo en L<English|English> para esta variable.
 
 Esta variable se incorporó en Perl 5.004.
 
@@ -569,7 +569,7 @@ En Perl 5.6.0 se introdujeron los array dinámicos C<@-> y C<@+>, que ofrecen í
 	substr($cadena, $-[0], $+[0]-$-[0]),
 	substr($cadena, $+[0]);
 
-En Perl 5.10.0, se introdujeron la bandera de operación de coincidencia C</p> y las variables C<${^PREMATCH}>, C<${^MATCH}>, y C<${^POSTMATCH}>, que le permiten sufrir las penalizaciones sólo en los patrones marcados con C</p>.
+En Perl 5.10.0, se introdujeron la opción de operación de coincidencia C</p> y las variables C<${^PREMATCH}>, C<${^MATCH}>, y C<${^POSTMATCH}>, que le permiten sufrir las penalizaciones sólo en los patrones marcados con C</p>.
 
 En Perl 5.18.0 y posteriores, perl empezó a anotar la presencia de cada una de las tres variables por separado, y sólo copia la parte de la cadena que necesita; así que
 
@@ -1319,7 +1319,7 @@ Estas variables proporcionan información sobre el estado actual del intérprete
 =item $^C
 X<$^C> X<$COMPILING>
 
-El valor actual de la bandera asociada con la opción B<-c>.
+El valor actual del indicador asociado con la opción B<-c>.
 Su uso principal es con B<-MO=...> para permitir al código alterar su comportamiento cuando se compila, tal como por ejemplo hace C<AUTOLOAD> en tiempo de compilación, en lugar de lo más normal, después de cargarse.  Haciendo C<$^C = 1> es similar a llamar a C<B::minus_c>.
 
 Esta variable se incorporó en Perl 5.6.0.
@@ -1456,7 +1456,7 @@ Entre los puntos donde su valor se salva y restaura, el código que se ejecuta d
 
 Este comportamiento proporciona la semántica del ámbito léxico, y se utiliza en, por ejemplo, el pragma C<use strict>.
 
-Los contenidos tendrían que ser un entero; bits diferentes de él se utilizan para diferentes banderas pragmáticas.  Aquí hay un ejemplo:
+Los contenidos tendrían que ser un entero; bits diferentes de él se utilizan para diferentes indicadores pragmáticos.  Aquí hay un ejemplo:
 
     sub add_100 { $^H |= 0x100 }
 

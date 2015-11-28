@@ -18,7 +18,7 @@ Ningún cambio con respecto a la versión 5.14.0.
 
 =head2 Error de memoria de C<File::Glob::bsd_glob()> con GLOB_ALTDIRFUNC (CVE-2011-2728).
 
-Llamar C<File::Glob::bsd_glob> con la bandera no soportada GLOB_ALTDIRFUNC podría causar una violación de acceso/I<segfault>.  Un programa Perl que acepta un valor de las banderas de una fuente externa podría exponerse a una denegación de servicio o ataques de ejecución de código arbitrario.  No se conocen ataques descontrolados.  El problema se ha corregido explícitamente desactivando todas las banderas no soportadas y el establecimiento de punteros a funciones sin uso, al valor nulo.  Error reportado por Clément Lecigne.
+Llamar C<File::Glob::bsd_glob> con el indicador no soportado GLOB_ALTDIRFUNC podría causar una violación de acceso/I<segfault>.  Un programa Perl que acepta un valor de los indicadores de una fuente externa podría exponerse a una denegación de servicio o ataques de ejecución de código arbitrario.  No se conocen ataques descontrolados.  El problema se ha corregido explícitamente desactivando todos los indicadores no soportados y el establecimiento de punteros a funciones sin uso, al valor nulo.  Error reportado por Clément Lecigne.
 
 =head2 Desbordamiento de pila de n bytes en decode_xs de C<Encode> (CVE-2011-2939)
 

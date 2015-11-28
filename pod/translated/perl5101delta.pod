@@ -1210,9 +1210,9 @@ La función C<Perl_newSV_type(type)> ha sido añadida, lo que equivale a C<Perl_
 
 =item *
 
-La función C<Perl_newSVpvn_flags()> ha sido añadida, lo que equivale a C<Perl_newSVpvn()> y luego realizando las acciones pertinentes en la bandera.
+Se ha añadido la función C<Perl_newSVpvn_flags()>, lo que equivale a C<Perl_newSVpvn()> y luego realizar las acciones pertinentes al indicador.
 
-Actualmente están soportados dos bit de esa bandera.
+Actualmente están soportados dos bit de ese indicador.
 
 =over 4
 
@@ -1255,7 +1255,7 @@ Esto ha sido corregido.
 
 =item *
 
-Las banderas I<públicas> IV y NV, ahora no son establecidas si el valor de la cadena tiene "basura" detrás. Este comportamiento es coherente con el no establecimiento de las banderas IV o NV si el valor está fuera del rango para ese tipo.
+Los indicadores I<públicos> IV y NV, ahora no son establecidos si el valor de la cadena tiene "basura" detrás. Este comportamiento es coherente con el no establecimiento de los indicadores IV o NV si el valor está fuera del rango para ese tipo.
 
 =item *
 

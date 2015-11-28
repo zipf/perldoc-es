@@ -72,7 +72,7 @@ Time::HiRes actualizado a la versión 1.65
 
 =head1 Cambios en utilidades
 
-Perl tiene una nueva bandera de línea de comandos llamada -dt, que activa el soporte de hebras en el depurador.
+Perl tiene una nueva opción de línea de comandos llamada -dt, que activa el soporte de hebras en el depurador.
 
 =head1 Mejoras en el rendimiento
 
@@ -100,7 +100,7 @@ C<read> en un búfer codificado en UTF8 con un desplazamiento más allá del fin
 
 Aunque Perl prometió, desde la versión 5.8, que C<sort()> sería estable, los dos casos C<sort {$b cmp $a}> y C<< sort {$b <=> $a} >> puede producir ordenaciones no estables.   Esto se ha corregido en perl5.8.6.
 
-Localización de C<$^D> ya no genera un mensaje de diagnóstico sobre banderas válidas -D.
+La localización de C<$^D> ya no genera un mensaje de diagnóstico sobre indicadores válidos de -D.
 
 =head1 Diagnósticos nuevos y cambiados
 
