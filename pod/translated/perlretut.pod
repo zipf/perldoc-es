@@ -198,7 +198,7 @@ En la última sentencia, aunque C<'c'> es el primer carácter de la clase, C<'a'
 Esta I<regex> muestra una tarea muy común: realizar una coincidencia independiente del tamaña de caja.  Perl ofrece una forma de evitar todos esos corchetes simplemente añadiendo un C<'i'> al final del patrón.  Entonces C</[sS][sI]/;> se puede escribir como C</si/i;>.  La C<'i'> significa independiente del tamaño de caja y es un ejemplo de un I<modificador> de una operación de coincidencia.  Conoceremos otros modificadores más tarde, en este tutorial.
 
 Vimos en la sección anterior que existen caracteres normales, que se representan por sí mismos, y caracteres especiales, que necesitan una barra diagonal inversa C<\> para representarlos.  La mismo es verdad en una clase de caracteres, pero el conjunto de caracteres ordinarios y especiales dentro de una clase de caracteres son diferentes de los que están fuera.  Los caracteres especiales de una clase de caracteres son C<-]\^$> (y el patrón delimitador, sea el que sea).
-C<]> es especial porque denota el final de la clase de caracteres.  C<$> es especial porque denota una variable escalar.  C<\> es especial porque se usa en las secuencias de escape, como la de más arriba.  Aquí se muestra cómo se manejan los caracteres especiales C<]$\>:
+C<]> es especial porque denota el final de la clase de caracteres.  C<$> es especial porque denota una variable escalar.  C<\> es especial porque se usa en las secuencias de escape, como la de más arriba.  Aquí se muestra cómo se gestionan los caracteres especiales C<]$\>:
 
    /[\]c]def/; # coincide con ']def' o 'cdef'
    $x = 'bcr';
@@ -1249,7 +1249,7 @@ No escapa a C<$> o C<@>, así que las variables siguen sustituyéndose.
 
 C<\Q>, C<\L>, C<\l>, C<\U>, C<\u> y C<\E> son, de hecho, parte de una sintaxis de doble entrecomillamiento, y no parte de la propia sintaxis I<regex>.  Funcionarán si aparecen en una expresión regular incrustadas directamente en un programa, pero no cuando están contenidas en una cadena que se interpola en un patrón.
 
-Las I<regex> Perl pueden manejar más que el conjunto de caracteres ASCII.  Perl soporta I<Unicode>, un estándar para representar alfabetos de, virtualmente, todos los lenguajes del mundo, y un almacén de símbolos.
+Las I<regex> Perl pueden gestionar más que el conjunto de caracteres ASCII.  Perl soporta I<Unicode>, un estándar para representar alfabetos de, virtualmente, todos los lenguajes del mundo, y un almacén de símbolos.
 for representing the alphabets from virtually all of the world's written
 languages, and a host of symbols.  Las cadenas de texto de Perl son cadenas Unicode, así que pueden contener caracteres con un valor (punto de código o número de carácter) superior a 255.
 
@@ -1257,7 +1257,7 @@ languages, and a host of symbols.  Las cadenas de texto de Perl son cadenas Unic
 
     /\x{263a}/;  # coincide con una carita sonriente Unicode :)
 
-B<NOTA>: En Perl 5.6.0 se necesitaba decir C<use utf8> para usar cualquier característica Unicode.  Ya no es el caso: el I<pragma> explícito C<utf8> ya no se necesita para la casi mayor parte del procesamiento de Unicode.  (El único caso donde importa es si su guion Perl está en Unicode y codificado en UTF-8, por lo que se necesita un C<use utf8> explícito).
+B<NOTA>: En Perl 5.6.0 se necesitaba decir C<use utf8> para usar cualquier característica Unicode.  Ya no es el caso: el pragma explícito C<utf8> ya no se necesita para la casi mayor parte del procesamiento de Unicode.  (El único caso donde importa es si su guion Perl está en Unicode y codificado en UTF-8, por lo que se necesita un C<use utf8> explícito).
 
 Adivinar la secuencia hexadecimal del carácter Unicode que está buscando o descifrar la I<regex> hexadecimal Unicode de otra persona, es casi tan divertido como programar en código máquina.  Así que otra forma de especificar caracteres Unicode es usar la secuencia de escape de I<carácter nombrado> C<\N{I<nombre>}>.  I<nombre> es un nombre para el carácter Unicode, tal como lo especifica el estándar Unicode.  Por ejemplo, si queremos representar o buscar por el signo astrológico del planeta Mercurio, podríamos usar
 
@@ -1269,14 +1269,14 @@ También puede usar nombres "cortos":
     print "Se llama sigma a \N{GREEK SMALL LETTER SIGMA}.\n";
     print "\N{greek:Sigma} es una sigma en mayúscula.\n";
 
-También puede restringir los nombres a un cierto alfabeto especificando el I<pragma> L<charnames>:
+También puede restringir los nombres a un cierto alfabeto especificando el pragma L<charnames>:
 
     use charnames qw(greek);
     print "\N{sigma} es la sigma griega\n";
 
 Está disponible en línea un índice de los nombres de los caracteres en el Consorcio Unicode, L<http://www.unicode.org/charts/charindex.html>; material explicativo y enlaces a otros recursos en L<http://www.unicode.org/standard/where>.
 
-La respuesta al requerimiento 2) es que una I<regex> (principalmente) usa caracteres Unicode.  Lo de "principalmente" es por complicadas razones de compatibilidad, pero a partir de 5.14, cualquier I<regex> compilada en el ámbito de un C<use feature 'unicode_strings'> (que se activa automáticamente dentro del ámbito de un C<use 5.012> o superior) cambiará el "principalmente" en un "siempre".  Si quiere manejar Unicode de forma apropiada, debe asegurarse que está activada la opción C<'unicode_strings'>.
+La respuesta al requerimiento 2) es que una I<regex> (principalmente) usa caracteres Unicode.  Lo de "principalmente" es por complicadas razones de compatibilidad, pero a partir de 5.14, cualquier I<regex> compilada en el ámbito de un C<use feature 'unicode_strings'> (que se activa automáticamente dentro del ámbito de un C<use 5.012> o superior) cambiará el "principalmente" en un "siempre".  Si quiere gestionar Unicode de forma apropiada, debe asegurarse que está activada la opción C<'unicode_strings'>.
 Internamente, se codifica en bytes usando tanto UTF-8 o una codificación nativa de 8 bit, dependiendo de la historia de la cadena, pero conceptualmente es una secuencia de caracteres, no bytes. Vea L<perlunitut> por un tutorial sobre esto.
 
 Permítanos hablar de las clases de carácter Unicode, más normalmente llamadas "propiedades de carácter".  Se representan por la secuencia de escape C<\p{nombre}>.  Estrechamente asociada con la propiedad C<\P{nombre}>, que es la negación de C<\p{nombre}>.  Por ejemplo, para buscar caracteres en minúscula y mayúscula,
@@ -1694,7 +1694,7 @@ La razón es que esa interpolación de la variable y las expresiones de código,
     $chomp $regex;      # le quita la posible nueva línea
     $texto =~ /$regex/; # busca $texto en la $regex
 
-Si la variable C<$regex> contiene una expresión de código, el usuario podría ejecutar código Perl arbitrario.  Por ejemplo, algún bromista podría buscar por S<C<system('rm -rf *');>> para borrar tus archivos.  En este sentido, la combinación de interpolación y expresiones de código I<mancha> tu I<regex>.  Así que, por defecto, no se permite utilizar ambas a la vez, la interpolación y las expresiones de código en la misma I<regex>.  Si no está preocupado por los usuarios maliciosos, es posible saltarse esta comprobación de seguridad invocando S<C<use re 'eval'>>:
+Si la variable C<$regex> contiene una expresión de código, el usuario podría ejecutar código Perl arbitrario.  Por ejemplo, algún bromista podría buscar por S<C<system('rm -rf *');>> para borrar tus archivos.  En este sentido, la combinación de interpolación y expresiones de código I<contamina> su I<regex>.  Así que, por defecto, no se permite utilizar ambas a la vez, la interpolación y las expresiones de código en la misma I<regex>.  Si no está preocupado por los usuarios maliciosos, es posible saltarse esta comprobación de seguridad invocando S<C<use re 'eval'>>:
 
     use re 'eval';       # arroja las precauciones por la puerta
     $bar = 5;
@@ -1761,20 +1761,20 @@ El patrón comienza con una clase coincidiendo con un subconjunto de letras.  Si
 es considerablemente más lenta).
 
 
-=head2 I<Pragmas> y depuración
+=head2 Pragmas y depuración
 
-Hablando de depuración, existen varios I<pragmas> disponibles para controlar y depurar I<regex> en Perl.  Ya nos hemos encontrado con un I<pragma> en la sección anterior, S<C<use re 'eval';>>, que permite coexistir interpolación de variables y expresiones de código en una I<regex>.  Los otros I<pragmas> son
+Hablando de depuración, existen varios pragmas disponibles para controlar y depurar I<regex> en Perl.  Ya nos hemos encontrado con un pragma en la sección anterior, S<C<use re 'eval';>>, que permite coexistir interpolación de variables y expresiones de código en una I<regex>.  Los otros pragmas son
 
     use re 'taint';
-    $manchado = <>;
-    @partes = ($manchado =~ /(\w+)\s+(\w+)/; # @partes está ahora manchado
+    $contaminado = <>;
+    @partes = ($contaminado =~ /(\w+)\s+(\w+)/; # @partes está ahora contaminado
 
-El I<pragma> C<taint> causa que cualquier subcadena de una coincidencia con una variable manchada quede también manchada.  Esto no es lo que normalmente sucede, ya que las I<regex> se usan a menudo para extraer partes seguras de variables manchadas.  Use C<taint> cuando no esté extrayendo partes seguras, sino realizar algún otro procesamiento.  Tanto los I<pragmas> C<taint> como C<eval> se aplican a ámbitos léxicos, que significa que están en efecto solo hasta el final del bloque que envuelve a esos I<pragmas>.
+El pragma C<taint> causa que cualquier subcadena de una coincidencia con una variable contaminada quede también contaminada.  Esto no es lo que normalmente sucede, ya que las I<regex> se usan a menudo para extraer partes seguras de variables contaminadas.  Use C<taint> cuando no esté extrayendo partes seguras, sino realizar algún otro procesamiento.  Tanto los pragmas C<taint> como C<eval> se aplican a ámbitos léxicos, que significa que están en efecto solo hasta el final del bloque que envuelve a esos pragmas.
 
     use re '/m';  # o cualquier otros indicadores
     $cadena_multilinea =~ /^foo/; # /m es implícito
 
-El I<pragma> C<re '/flags'> (presentado en Perl 5.14) activa esos indicadores en las expresiones regulares hasta el final del ámbito léxico.  Vea L<re/"modo 'E<sol>indicadores'"> para más detalles.
+El pragma C<re '/flags'> (presentado en Perl 5.14) activa esos indicadores en las expresiones regulares hasta el final del ámbito léxico.  Vea L<re/"modo 'E<sol>indicadores'"> para más detalles.
 
     use re 'debug';
     /^(.*)$/s;       # saca información de depuración
@@ -1782,7 +1782,7 @@ El I<pragma> C<re '/flags'> (presentado en Perl 5.14) activa esos indicadores en
     use re 'debugcolor';
     /^(.*)$/s;       # saca información de depuración en vivos colores
 
-Los I<pragmas> C<debug> y C<debugcolor> nos permite obtener información detallada sobre depuración en la compilación y ejecución de I<regex>.  C<debugcolor> es lo mismo que C<debug>, excepto que la información se muestra en color en aquellas terminales que puedan mostrar secuencias de color termcap.  Aquí hay un ejemplo de la salida:
+Los pragmas C<debug> y C<debugcolor> nos permite obtener información detallada sobre depuración en la compilación y ejecución de I<regex>.  C<debugcolor> es lo mismo que C<debug>, excepto que la información se muestra en color en aquellas terminales que puedan mostrar secuencias de color termcap.  Aquí hay un ejemplo de la salida:
 
     % perl -e 'use re "debug"; "abc" =~ /a*b+c/;'
     Compiling REx 'a*b+c'

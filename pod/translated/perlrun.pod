@@ -325,7 +325,7 @@ X<-f> X<sitecustomize> X<sitecustomize.pl>
 Desactiva la ejecución de F<$Config{sitelib}/sitecustomize.pl> en el arranque.
 
 Se puede compilar Perl para que, por defecto, intentará ejecutar F<$Config{sitelib}/sitecustomize.pl> en el arranque (en el bloque BEGIN).
-Esto es un gancho que permite al administrador del sistema personalizar el comportamiento de Perl.
+Esto es un enganche que permite al administrador del sistema personalizar el comportamiento de Perl.
 Puede, por ejemplo, ser usado para añadir entradas al array @INC para hacer que Perl busque módulos en lugares no estándares.
 
 Perl realmente inserta el siguiente código:
@@ -628,7 +628,7 @@ X<-w>
 
 imprime advertencias sobre construcciones dudosas, como nombres de variables mencionadas sólo una vez y variables escalares utilizadas antes de ser declaradas; subrutinas redefinidas; referencias a identificadores de archivo indefinidos; identificadores de archivo abiertos en sólo lectura mientras que está intentando escribir en ellos; valores utilizados como un número que no I<parecen> números; utilizando un array como si se tratara de un escalar; si sus subrutinas tienen más de 100 niveles de profundidad de recursión; y un sinnúmero de otras cosas.
 
-Esta opción, en realidad, sólo activa la variable global C<$^W>; normalmente, es preferible usar el pragma de ámbito léxico C<use warnings>. Puede desactivar o promover en errores fatales, advertencias específicas utilizando ganchos C<__WARN__>, como se describe en L<perlvar> y L<perlfunc/warn>.
+Esta opción, en realidad, sólo activa la variable global C<$^W>; normalmente, es preferible usar el pragma de ámbito léxico C<use warnings>. Puede desactivar o promover en errores fatales, advertencias específicas utilizando enganches C<__WARN__>, como se describe en L<perlvar> y L<perlfunc/warn>.
 Vea también L<perldiag> y L<perltrap>.  También está disponible una muy detallada facilidad de advertencias si quiere manipular clases enteras de advertencias; vea L<warnings>.
 
 =item B<-W>
@@ -763,7 +763,7 @@ Capa de bajo nivel que llama a C<read>, C<write>, C<lseek>, etc.
 =item :utf8
 X<:utf8>
 
-Una pseudocapa que activa un indicador en la capa inferior para avisar a Perl que la salida debe ser en utf8 y que la entrada debe ser considerada como que ya está en una forma válida de utf8. B<AVISO: no comprueba la validez y debe ser manejada con extrema cautela para la entrada, debido a que pueden ocurrir violaciones de seguridad, con codificaciones UTF-8 no acortadas, etc.> Por lo general, C<:encoding(utf8)> es la mejor opción al leer datos codificados en UTF-8.
+Una pseudocapa que activa un indicador en la capa inferior para avisar a Perl que la salida debe ser en utf8 y que la entrada debe ser considerada como que ya está en una forma válida de utf8. B<AVISO: no comprueba la validez y debe ser gestionada con extrema cautela para la entrada, debido a que pueden ocurrir violaciones de seguridad, con codificaciones UTF-8 no acortadas, etc.> Por lo general, C<:encoding(utf8)> es la mejor opción al leer datos codificados en UTF-8.
 
 =item :win32
 X<:win32>

@@ -334,7 +334,7 @@ Si está usando ACL, hay un pragma llamado C<filetest> que puede producir result
 Cuando esté bajo C<use filetest 'access'>, las comprobaciones de archivo mencionadas antes comprobarán cuándo los permisos pueden (o no) ser concedidos usando la familia de llamadas del sistema access(2).  Note también que C<-x> y C<-X> pueden, bajo este pragma, devolver valores verdaderos incluso si los bits de permiso de ejecución no están puestos (ni cualquier permiso ACL extra de ejecución).  Este comportamiento tan extraño es debido a las definiciones subyacentes de las llamadas del sistema.  Note también que, debido a la implementación de C<use filetest 'access'>, el identificador de archivo especial C<_> no almacenará los resultados de los test de archivo mientras este pragma esté activo.  Para más información, lea la documentación del pragma C<filetest>.
 
 Las opciones C<-T> y C<-B> funcionan como sigue.  El primer bloque o así del archivo, se examina para ver si es UTF-8 válido, por lo que incluye caracteres no ASCII.  Si lo es, es un archivo C<-T>.  Se examina el primer bloque (aprox.) del archivo, para buscar caracteres extraños como códigos de control o caracteres con el bit alto activo.  Si más de un tercio de los caracteres son extraños, es un archivo C<-B>; de lo contrario es un archivo C<-T>.
-También, cualquier archivo que contenga un byte cero en la porción examinada se considera que es un archivo binario.  (Si se ejecuta dentro del ámbito de un L<S<use locale>|perllocale>, que incluye C<LC_CTYPE>, caracteres extraños son cualquiera que no sean imprimibles ni espacios en la configuración regional actual).  Si C<-T> o C<-B> se usan con un identificador de archivo, la memoria intermedia actual de IO es examinada en vez del primer bloque.  Ambos, C<-T> y C<-B>, devuelven verdadero en un archivo vacío o en un archivo en el EOF (marca de fin de archivo) cuando se analiza un gestor de archivo.  Debido a que tiene que leer el archivo para hacer el test C<-T>, en la mayoría de las ocasiones querrá usar primero C<-f>, como en C<next unless -f $archivo && -T $archivo>.
+También, cualquier archivo que contenga un byte cero en la porción examinada se considera que es un archivo binario.  (Si se ejecuta dentro del ámbito de un L<S<use locale>|perllocale>, que incluye C<LC_CTYPE>, caracteres extraños son cualquiera que no sean imprimibles ni espacios en la configuración regional actual).  Si C<-T> o C<-B> se usan con un identificador de archivo, la memoria intermedia actual de IO es examinada en vez del primer bloque.  Ambos, C<-T> y C<-B>, devuelven verdadero en un archivo vacío o en un archivo en el EOF (marca de fin de archivo) cuando se analiza un identificador de archivo.  Debido a que tiene que leer el archivo para hacer el test C<-T>, en la mayoría de las ocasiones querrá usar primero C<-f>, como en C<next unless -f $archivo && -T $archivo>.
 
 Si a cualquiera de los test de archivo (o los operadores C<stat> o C<lstat>) se les da el identificador de archivo especial consistente en un solitario guión bajo, entonces se usa la estructura stat del archivo del test anterior (u operador stat), ahorrando una llamada del sistema.  (Esto no funciona con C<-t>, y necesita recordar que lstat() y C<-l> dejarán valores en la estructura stat para el enlace simbólico, no el archivo real).  (También, si la memoria intermedia de stat se rellenó con una llamada C<lstat>, C<-T> y C<-B> serán reinicializados con los resultados de C<stat _>).
 Ejemplo:
@@ -456,7 +456,7 @@ Si se omite CAPA o se especifica como C<:raw> el identificador se prepara para p
 Note que, a pesar de estar implícito en I<"Programming Perl"> (el dromedario, 3.ª edición) o en otro lugar, C<:raw> I<no> es el simplemente el inverso de C<:crlf>
 -- otras capas que pudieran afectar la naturaleza binaria del flujo son I<también> desactivadas.  Ver L<PerlIO>, L<perlrun> y la discusión sobre la variable de entorno PERLIO.
 
-C<:bytes>, C<:crlf>, C<:utf8>, y cualquier otra directiva de la forma C<:...>, se llaman I<capas> I/O.  El I<pragma> C<open> se puede usar para establecer las capas I/O por defecto.  Ver L<open>.
+C<:bytes>, C<:crlf>, C<:utf8>, y cualquier otra directiva de la forma C<:...>, se llaman I<capas> I/O.  El pragma C<open> se puede usar para establecer las capas I/O por defecto.  Ver L<open>.
 
 I<El parámetro CAPA de la función binmode() se describe como "DISCIPLINA" en "Programming Perl, 3rd Edition".  Sin embargo, desde la publicación de este libro, conocido por muchos como "Camel III", el consenso sobre el nombre de esta funcionalidad se ha movido desde "disciplina" a "capa".  Toda documentación desde esta versión de Perl se refiere a "capas" en vez de a "disciplinas".  Ahora volvamos a la documentación normal...>
 
@@ -707,7 +707,7 @@ Si el identificador de archivo proviene de una tubería abierta, C<close> adicio
 
 Si hay múltiples hilos en ejecución, hacer un C<close> en un identificador de archivo desde un open entubado, devuelve verdadero sin esperar a que el proceso hijo termine, si el identificador de archivo sigue abierto en otro hilo.
 
-Cerrar la lectura final de una tubería antes de que el proceso de escritura en el otro extremo termine resulta en que el escritor recibe un SIGPIPE.  Si en el otro extremo no puede manejar esto, asegúrese de leer todos los datos antes de cerrar la tubería.
+Cerrar la lectura final de una tubería antes de que el proceso de escritura en el otro extremo termine resulta en que el escritor recibe un SIGPIPE.  Si en el otro extremo no puede gestionar esto, asegúrese de leer todos los datos antes de cerrar la tubería.
 
 Ejemplo:
 
@@ -1013,7 +1013,7 @@ También puede llamar a C<die> con una referencia como argumento, y si éste que
 
 Como Perl convertirá en cadena de caracteres los mensajes de excepción no capturados antes de mostrarlos, quizás quiera sobrecargar las operaciones de conversión a cadena en objetos de excepción.  Ver L<overload> para los detalles sobre esto.
 
-Puede disponer que una retrollamada se ejecute antes de que C<die> haga sus funciones, actualizando el gancho C<$SIG{__DIE__}>.  El identificador de archivo asociado es llamado con el texto del error y puede cambiar el mensaje de error, si le parece, llamando de nuevo a C<die>.  Ver L<perlvar/%SIG> para los detalles sobre cómo colocar entradas C<%SIG> y L<"eval BLOQUE"> para algunos ejemplos.  Aunque esta característica está preparada para ser ejecutada sólo antes de que el programa termine, así no es como se hace ahora: el gancho C<$SIG{__DIE__}>, ¡es llamado incluso dentro de cadenas y bloques eval()uados!  Si uno quiere que el gancho no haga nada en estas situaciones, ponga
+Puede disponer que una retrollamada se ejecute antes de que C<die> haga sus funciones, actualizando el enganche C<$SIG{__DIE__}>.  El identificador de archivo asociado es llamado con el texto del error y puede cambiar el mensaje de error, si le parece, llamando de nuevo a C<die>.  Ver L<perlvar/%SIG> para los detalles sobre cómo colocar entradas C<%SIG> y L<"eval BLOQUE"> para algunos ejemplos.  Aunque esta característica está preparada para ser ejecutada sólo antes de que el programa termine, así no es cómo se hace ahora: el enganche C<$SIG{__DIE__}>, ¡se llama incluso desde dentro de cadenas y bloques eval()uados!  Si uno quiere que el enganche no haga nada en estas situaciones, ponga
 
     die @_ if $^S;
 
@@ -1321,7 +1321,7 @@ La primera versión, sin el objeto indirecto, ejecuta el programa I<echo>, pasá
 En Windows, solo la sintaxis de objetos indirecto en C<exec PROGRAMA LISTA> evitará, de forma efectiva, evitar usar la shell; C<exec LISTA>, incluso con más de un elemento, volverá a usar la shell si falla el primer intento de lanzamiento.
 
 Perl intenta vaciar todos los archivos abiertos para salida antes de ejecutar exec, pero esto puede no estar soportado en algunas plataformas (vea L<perlport>).
-Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en el módulo English) o llamar al método C<autoflush()> de C<IO::Handle> en cualquiera de los gestores de archivo abiertos para evitar la pérdida de datos en la salida.
+Para estar seguros, puede necesitar poner C<$|> ($AUTOFLUSH en el módulo English) o llamar al método C<autoflush()> de C<IO::Handle> en cualquiera de los identificadores de archivo abiertos para evitar la pérdida de datos en la salida.
 
 Note que C<exec> no llamará a sus bloques C<END>, ni llamará a ningún método C<DESTROY> de sus objetos.
 
@@ -1509,7 +1509,7 @@ Puede usar esto para encontrar cuándo dos identificadores de archivos se refier
             "no tienen un descriptor a un archivo real\n";
     }
 
-El comportamiento de C<fileno> en un gestor de directorio depende del sistema operativo.  En un sistema con dirfd(3) o similar, C<fileno> en un gestor de directorio devuelve el descriptor de archivo subyacente asociados con el gestor; en sistemas que no lo soportan, devuelve el valor indefinido, y establece C<$!> (errno).
+El comportamiento de C<fileno> en un identificador de directorio depende del sistema operativo.  En un sistema con dirfd(3) o similar, C<fileno> en un identificador de directorio devuelve el descriptor de archivo subyacente asociados con el identificador; en sistemas que no lo soportan, devuelve el valor indefinido, y establece C<$!> (errno).
 
 =item flock IDENTIFICADOR_ARCHIVO,OPERACIÓN
 X<flock> X<lock> X<locking>
@@ -2575,7 +2575,7 @@ X<my>
 
 Un C<my> declara las variables enumeradas como locales (léxicamente) en el bloque, archivo, o C<eval>.  Si se lista más de una variable, la lista debe ser puesta entre paréntesis.
 
-La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO puede ser una palabra simple, una constante declarada con C<use constant>, o C<__PACKAGE__>.  Está vinculado al uso del pragma C<fields>, y los atributos se manejan con el pragma C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
+La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO puede ser una palabra simple, una constante declarada con C<use constant>, o C<__PACKAGE__>.  Está vinculado al uso del pragma C<fields>, y los atributos se gestionan con el pragma C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
 
 Note que con una lista entre paréntesis, se puede utilizar C<undef> como un marcador de posición, por ejemplo para saltar la asignación de valores iniciales:
 
@@ -2642,7 +2642,7 @@ Si se omite EXPR, se usa C<$_>.   Para hacer lo contrario (producir un número e
 
 La función oct() es de uso común cuando una cadena como C<644> tiene que ser convertida en un modo de archivo, por ejemplo.  Aunque Perl convierte automáticamente las cadenas en números según sea necesario, esta conversión automática asume que es en base 10.
 
-El espacio en blanco que le rodea es ignorado sin avisar, como también cualquier otro carácter que no sea un dígito, como un punto decimal (C<oct> sólo maneja números enteros no negativos, no enteros negativos o en punto flotante).
+El espacio en blanco que le rodea es ignorado sin avisar, como también cualquier otro carácter que no sea un dígito, como un punto decimal (C<oct> sólo gestiona números enteros no negativos, no enteros negativos o en punto flotante).
 
 =item open IDENTIFICADOR_ARCHIVO,EXPR
 X<open> X<pipe> X<file, open> X<fopen> X<archivo, open>
@@ -2705,20 +2705,20 @@ Si está usando Perl en un sistema que distingue entre archivos de texto y archi
 
 Al abrir un archivo, es difícil que sea una buena idea seguir si la solicitud ha fallado, por lo que C<open> se utiliza con frecuencia con C<die>.  Incluso si C<die> no hace lo que usted quiere (por ejemplo, en un script CGI, en la que desea dar formato a un mensaje de error apropiado (aunque existen módulos que pueden ayudar con ese problema)) controle siempre el valor de retorno de la apertura de un archivo.  
 
-Se cerrará el gestor de archivo cuando su contador de referencias llegue a cero.
-Si es una variable declarada en un ámbito léxico con C<my>, normalmente significa el final del ámbito que la encierra.  Sin embargo, este cierre automático no comprueba errores, así que es mejor cerrar explícitamente los gestores de archivo, especialmente aquellos que se usaron para escribir:
+Se cerrará el identificador de archivo cuando su contador de referencias llegue a cero.
+Si es una variable declarada en un ámbito léxico con C<my>, normalmente significa el final del ámbito que la encierra.  Sin embargo, este cierre automático no comprueba errores, así que es mejor cerrar explícitamente los identificadores de archivo, especialmente aquellos que se usaron para escribir:
 
     close($handle)
        || warn "close falló: $!";
 
-Un estilo más viejo es utilizar una palabra simple como gestor de archivo, así
+Un estilo más viejo es utilizar una palabra simple como identificador de archivo, así
 
     open(FH, "<", "input.txt")
        or die "cannot open < input.txt: $!";
 
-Entonces puedes usar C<FH> como gestor de archivo, en C<< close FH >> y C<< <FH> >> y demás.  Note que es una variable global, así que esta forma no es la recomendada en código nuevo.
+Entonces puedes usar C<FH> como identificador de archivo, en C<< close FH >> y C<< <FH> >> y demás.  Note que es una variable global, así que esta forma no es la recomendada en código nuevo.
 
-Como atajo, la llamada con un solo argumento toma el nombre del archivo de la variable escalar global del mismo nombre que el gestor de archivo:
+Como atajo, la llamada con un solo argumento toma el nombre del archivo de la variable escalar global del mismo nombre que el identificador de archivo:
 
     $ARTICULO = 100;
     open(ARTICULO) or die "No puedo encontrar el artículo $ARTICULO: $!\n";
@@ -3037,7 +3037,7 @@ Múltiples declaraciones C<our> con el mismo nombre en el mismo ámbito léxico 
 
 Una declaración C<our> también puede tener una lista de atributos asociados a ella.
 
-La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO está vinculado al uso del pragma C<fields>, y los atributos se manejan con el pragma C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
+La semántica exacta e interfaz de TIPO y ATRIBUTOS están aún en evolución.  TIPO está vinculado al uso del pragma C<fields>, y los atributos se gestionan con el pragma C<attributes>, o a partir de Perl 5.8.0 también a través del módulo C<Attribute::Handlers>.  Ver L<perlsub/"Variables privadas vía my()"> para más detalles, y L<fields>, L<attributes>, y L<Attribute::Handlers>.
 
 Note que con una lista entre paréntesis, se puede utilizar C<undef> como un marcador de posición, por ejemplo para saltar la asignación de valores iniciales:
 
@@ -3310,7 +3310,7 @@ C<$Config{longlongsize}> es indefinido en sistemas sin soporte de long largo.
 
 =item *
 
-Los formatos enteros C<s>, C<S>, C<i>, C<I>, C<l>, C<L>, C<j>, y C<J> inherentemente no portátiles entre procesadores y sistemas operativos porque siguen el orden nativo de los bytes.  Por ejemplo, un entero de 4 bytes 0x12345678 (305419896 en decimal) se ordenaría nativamente (dispuesto en y manejado por los registros de la CPU) en bytes como
+Los formatos enteros C<s>, C<S>, C<i>, C<I>, C<l>, C<L>, C<j>, y C<J> inherentemente no portátiles entre procesadores y sistemas operativos porque siguen el orden nativo de los bytes.  Por ejemplo, un entero de 4 bytes 0x12345678 (305419896 en decimal) se ordenaría nativamente (dispuesto en y gestionado por los registros de la CPU) en bytes como
 
     0x12 0x34 0x56 0x78  # big-endian    (byte superior antes)
     0x78 0x56 0x34 0x12  # little-endian (byte inferior antes
@@ -3842,7 +3842,7 @@ Si C<readline> encuentra un error del sistema operativo, C<$!> será puesto al c
         ...
     }
 
-Note que no puede manejar errores de C<readline> de esta manera con el identificador de archivo C<ARGV>.  En este caso, tiene que abrir cada elemento de C<@ARGV> debido a que C<eof> maneja C<ARGV> de otra manera.
+Note que no puede gestionar errores de C<readline> de esta manera con el identificador de archivo C<ARGV>.  En este caso, tiene que abrir cada elemento de C<@ARGV> debido a que C<eof> gestiona C<ARGV> de otra manera.
 
     foreach my $arg (@ARGV) {
         open(my $fh, $arg) or warn "No puedo abrir $arg: $!";
@@ -5533,7 +5533,7 @@ Tenga en cuenta que Perl soporta pasar sólo hasta 14 argumentos a su syscall, q
 
 Syscall devuelve cualquier valor devuelto por la llamada al sistema que llama.
 Si la llamada al sistema falla, C<syscall> devuelve C<-1> y establece C<$!> (errno).
-Tenga en cuenta que algunas llamadas al sistema I<pueden> legalmente devolver C<-1>.  La forma correcta de manejar llamadas de ese tipo es el de asignar C<$!=0> antes de la llamada, y comprobar el valor de C<$!> si C<syscall> devuelve C<-1>.
+Tenga en cuenta que algunas llamadas al sistema I<pueden> legalmente devolver C<-1>.  La forma correcta de gestionar llamadas de ese tipo es el de asignar C<$!=0> antes de la llamada, y comprobar el valor de C<$!> si C<syscall> devuelve C<-1>.
 
 Hay un problema con C<syscall(&SYS_pipe)>: devuelve el número de archivo de la lectura final de la tubería que crea, pero no hay manera de recuperar el número de archivo del otro extremo.  Puede evitar este problema mediante el uso, en su lugar, de C<pipe>.
 
@@ -6450,7 +6450,7 @@ X<write>
 
 Escribe un registro formateado (posiblemente de varias líneas) al IDENTIFICADOR_ARCHIVO especificado, utilizando el formato asociado con ese archivo.  Por defecto el formato de un archivo es el que tiene el mismo nombre que el identificador de archivo, pero el formato para el canal de salida (vea la función C<select>) se puede establecer de forma explícita mediante la asignación del nombre del formato a la variable C<$~>.
 
-El procesado del comienzo del formulario se maneja de forma automática: si no hay suficiente espacio en la página actual para el registro formateado, la página se desplaza escribiendo un avance de página y se utiliza un formato especial de principio de página para dar formato al encabezado de la nueva página antes de que el registro sea escrito.  De manera predeterminada, el formato de la parte superior de la página es el nombre del identificador de archivo con el sufijo "_TOP" añadido, o "top" en el paquete actual si lo primero no existe.  Esto podría ser un problema con identificadores de archivo autovivificados, pero puede ser configurado de forma dinámico con el formato de su elección mediante la asignación del nombre a la variable C<$^> mientras esté seleccionado el identificador de archivo.  El número de líneas restantes de la página actual está en la variable C<$->, que se puede fijar a C<0> para forzar una nueva página.
+El procesado del comienzo del formulario se gestiona de forma automática: si no hay suficiente espacio en la página actual para el registro formateado, la página se desplaza escribiendo un avance de página y se utiliza un formato especial de principio de página para dar formato al encabezado de la nueva página antes de que el registro sea escrito.  De manera predeterminada, el formato de la parte superior de la página es el nombre del identificador de archivo con el sufijo "_TOP" añadido, o "top" en el paquete actual si lo primero no existe.  Esto podría ser un problema con identificadores de archivo autovivificados, pero puede ser configurado de forma dinámico con el formato de su elección mediante la asignación del nombre a la variable C<$^> mientras esté seleccionado el identificador de archivo.  El número de líneas restantes de la página actual está en la variable C<$->, que se puede fijar a C<0> para forzar una nueva página.
 
 Si IDENTIFICADOR_ARCHIVO no está especificado, la salida va al canal predeterminado de salida actual, que suele ser STDOUT, pero puede ser modificado por el operador C<select>.  Si el IDENTIFICADOR_ARCHIVO es una EXPR, entonces la expresión se evalúa y la cadena resultante se utiliza para buscar el nombre del IDENTIFICADOR_ARCHIVO en tiempo de ejecución.  Para más información sobre formatos, vea L<perlform>.
 

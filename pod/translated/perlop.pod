@@ -316,7 +316,7 @@ X<spaceship> X<nave espacial>
     $ perl -le '$x = "NaN"; print "No hay soporte para NaN" if $x == $x'
     $ perl -le '$x = "NaN"; print "No hay soporte para NaN" if $x != $x'
 
-(Tenga en cuenta que los I<pragmas> L<bigint>, L<bigrat> y L<bignum> soportan C<"NaN">).
+(Tenga en cuenta que los pragmas L<bigint>, L<bigrat> y L<bignum> soportan C<"NaN">).
 
 El binario C<"eq"> devuelve verdadero si el argumento de la izquierda es alfanuméricamente igual que el argumento de la derecha.
 X<eq>
@@ -565,12 +565,12 @@ En lugar de eso, se consulta la tabla anterior de forma normal, y en función de
     $objeto ~~ $numero          ref($objeto) == $numero
     $objeto ~~ $cadena          ref($objeto) eq $cadena 
 
-Por ejemplo, lo siguiente informa que el gestor huele a IO (pero, por favor, ¡no haga esto!):
+Por ejemplo, lo siguiente informa que el identificador huele a IO (pero, por favor, ¡no haga esto!):
 
     use IO::Handle;
     my $fh = IO::Handle->new();
     if ($fh ~~ /\bIO\b/) {
-        say "el manejador huele a IO";
+        say "el identificador huele a IO";
     } 
 
 Esto se debe a que trata C<$fh> como una cadena como C<"IO::Handle=glob(0x8039e0)">, que es contra lo que el patrón coincidirá.
@@ -1222,7 +1222,7 @@ Opciones (especificado por los siguientes modificadores) son:
 
 Si un patrón precompilado se incrusta en un patrón más grande entonces los efectos de C<"msixpluadn"> se propagarán apropiadamente.  El efecto del modificador C</o> no se propaga; se limita a los patrones que lo utilicen de forma explícita.
 
-Los últimos cuatro modificadores enumerados anteriormente, agregados en Perl 5.14, controlan las reglas del juego de caracteres, pero C</a> es el único que querrá especificar explícitamente; los otros tres se seleccionan automáticamente por medio de diversos I<pragmas>.
+Los últimos cuatro modificadores enumerados anteriormente, agregados en Perl 5.14, controlan las reglas del juego de caracteres, pero C</a> es el único que querrá especificar explícitamente; los otros tres se seleccionan automáticamente por medio de diversos pragmas.
 
 Vea L<perlre> para obtener información adicional sobre la sintaxis válida para I<CADENA>, y para una vista detallada de la semántica de las expresiones regulares.  En particular, todos los modificadores, excepto el largamente obsoleto C</o> se explican más adelante en L<perlre/Modificadores>.  C</o> se describe en la sección siguiente.
 
@@ -1612,7 +1612,7 @@ Vea L<perlsec> para un ejemplo seguro y limpio de un C<fork()> y C<exec()> manua
 
 En algunas plataformas (especialmente las de tipo DOS), el shell quizás no pueda ser capaz de tratar con los comandos de múltiples líneas, así que poner saltos de línea quizás no le permita obtener lo que quiere.  Quizás sea capaz de evaluar múltiples comandos en una sola línea, separándoles con el carácter separador de comandos, si el shell lo soporta (por ejemplo, C<;> en muchos shell Unix, y C<&> en el shell C<cmd> de Windows NT).
 
-Perl intentará vaciar todos los archivos abiertos para salida antes de iniciar un proceso hijo, pero esto puede no estar soportado en todas las plataformas (vea L<perlport>).  Para estar seguro, es posible que necesite establecer C<$|> (C<$AUTOFLUSH> en C<L<English>>) o llamar al método C<autoflush()> de C<L<IO::Handle>> en cualquier gestor de archivo abierto.
+Perl intentará vaciar todos los archivos abiertos para salida antes de iniciar un proceso hijo, pero esto puede no estar soportado en todas las plataformas (vea L<perlport>).  Para estar seguro, es posible que necesite establecer C<$|> (C<$AUTOFLUSH> en C<L<English>>) o llamar al método C<autoflush()> de C<L<IO::Handle>> en cualquier identificador de archivo abierto.
 
 Tenga en cuenta que algunos shell de comandos pueden imponer restricciones a la longitud de la línea de comandos.  Debe asegurarse de que sus cadenas de texto no superan ese límite después de cualquier interpolación necesaria.  Vea las notas específicas de la plataforma para obtener más detalles acerca de su entorno particular.
 
@@ -1839,7 +1839,7 @@ X<quote, gory details> X<entrecomillado, detalles sangrientos>
 
 Cuando se le presenta algo que podría tener varias interpretaciones diferentes, Perl utiliza el B<DWIM> ("I<Do What I Mean>", es decir, "hacer lo que quiero decir") para escoger la interpretación más probable.  Esta estrategia es tan exitosa que los programadores de Perl a menudo no sospechan de la ambivalencia de lo que escriben.  Pero de vez en cuando, las nociones de Perl difieren sustancialmente de lo que el autor, honestamente, quería decir.
 
-Esta sección pretende aclarar la manera en que Perl maneja las construcciones entrecomilladas.
+Esta sección pretende aclarar la manera en que Perl gestiona las construcciones entrecomilladas.
 Aunque la razón más común para aprender esto es desentrañar laberínticas expresiones regulares, ya que los pasos iniciales del análisis son los mismos para todos los operadores de entrecomillado, todos ellos son explicados en conjunto.
 
 La más importante regla de análisis de Perl es la primera que se explica a continuación: cuando se procesa una construcción entrecomillada, Perl primero busca el final de esa construcción; a continuación, interpreta su contenido.  Si usted entiende esta regla, puede omitir la primera lectura del resto de esta sección.  Las demás normas es probable que contradigan las expectativas del usuario con mucha menos frecuencia que ésta primera.
@@ -1948,7 +1948,7 @@ Afortunadamente, y por lo general, es correcto para los casos ambiguos.
 
 El procesamiento de C<\Q>, C<\U>, C<\u>, C<\L>, C<\l>, C<\F> y su interpolación ocurren como en las construcciones C<qq//>.
 
-Es en este paso que C<\1> se convierte, de mala gana, en C<$1> en el texto de reemplazo de C<s///>, con el fin de corregir a los incorregibles I<hackers> de I<sed> que todavía no han aprendido la correcta forma de indicar esta expresión.  Se emite una advertencia si están activos el I<pragma> S<C<use warnings>> o la opción en línea de comandos B<-w> (es decir, la variable C<$^W>).
+Es en este paso que C<\1> se convierte, de mala gana, en C<$1> en el texto de reemplazo de C<s///>, con el fin de corregir a los incorregibles I<hackers> de I<sed> que todavía no han aprendido la correcta forma de indicar esta expresión.  Se emite una advertencia si están activos el pragma S<C<use warnings>> o la opción en línea de comandos B<-w> (es decir, la variable C<$^W>).
 
 =item C<RE> en C<?RE?>, C</RE/>, C<m/RE/>, C<s/RE/foo/>,
 
@@ -1959,7 +1959,7 @@ El procesamiento de C<\N{...}> también se hace aquí, y compilado en una forma 
 No obstante, cualquier otra combinación de C<\> seguida de un carácter no va a ser sustituida, sino sólo obviada, con el fin de analizarlas como expresiones regulares en el paso siguiente.
 Como C<\c> se omite en este paso, C<@> de C<\c@> en RE se trata, posiblemente, como un símbolo de array (por ejemplo C<@foo>), incluso aunque el mismo texto en C<qq//> sí da la interpolación de C<\c@>.
 
-Bloques de código como C<(?{BLOQUE})> se manejan devolviendo temporalmente el control al intérprete de perl, de una forma similar a lo que sería la expresión con subíndices interpolados en un array, como lo sería en C<"foo$array[1+f("[xyz")]bar">.
+Los bloques de código como C<(?{BLOQUE})> se gestionan devolviendo temporalmente el control al intérprete de perl, de una forma similar a lo que sería la expresión con subíndices interpolados en un array, como lo sería en C<"foo$array[1+f("[xyz")]bar">.
 
 Además, dentro de C<(?{BLOQUE})>, S<C<(?# comentario )>>, y un C<#>-comentario en una C</x>-expresión regular, no se realiza ningún tipo de procesamiento.  Este es el primer paso en el que la presencia del modificador C</x> es relevante.
 
@@ -1991,7 +1991,7 @@ El terminador de esta construcción es encontrado usando las mismas reglas que p
 
 El finalizador en tiempo de ejecución de C<(?{...})> se encuentra cambiando temporalmente el control al intérprete de perl, que tendría parar en el punto donde se encuentra la C<}> que balancea la terminación lógica.
 
-Es posible inspeccionar tanto la cadena dada al motor RE y el autómata finito que resulta.  Ver los argumentos C<debug>/C<debugcolor> en el I<pragma> S<C<use L<re>>>, así como la opción en línea de comandos de Perl B<-Dr> documentado en L<perlrun/"Opciones de comando">.
+Es posible inspeccionar tanto la cadena dada al motor RE y el autómata finito que resulta.  Ver los argumentos C<debug>/C<debugcolor> en el pragma S<C<use L<re>>>, así como la opción en línea de comandos de Perl B<-Dr> documentado en L<perlrun/"Opciones de comando">.
 
 =item Optimización de expresiones regulares
 X<regexp, optimization> X<regex, optimización>
@@ -2036,7 +2036,7 @@ En estas construcciones de bucle, el valor asignado (tanto si la asignación es 
     while (($_ = <STDIN>) ne '0') { ... }
     while (<STDIN>) { last unless $_; ... }
 
-En otros contextos booleanos, C<< <I<IDENTIFICADOR_ARCHIVO>> >> sin una prueba explícita de C<defined> o comparación, provoca una advertencia si está en vigor el I<pragma> C<use warnings> o la opción B<-w> en la línea de comandos (la variable C<$^W>).
+En otros contextos booleanos, C<< <I<IDENTIFICADOR_ARCHIVO>> >> sin una prueba explícita de C<defined> o comparación, provoca una advertencia si está en vigor el pragma C<use warnings> o la opción B<-w> en la línea de comandos (la variable C<$^W>).
 
 Los identificadores de archivo STDIN, STDOUT y STDERR están predefinidos.  (Los identificadores de archivo C<stdin>, C<stdout>, y C<stderr> también funcionarán, excepto en paquetes en los que podrían ser interpretados como identificadores locales en lugar de globales).  Se pueden crear identificadores de archivo adicionales con la función C<open()>, entre otros.  Vea L<perlopentut> y L<perlfunc/open> para más detalles sobre esto.
 X<stdin> X<stdout> X<sterr>
@@ -2265,7 +2265,7 @@ El redondeo en las aplicaciones financieras puede tener consecuencias graves, y 
 =head2 Grandes números
 X<number, arbitrary precision> X<número, precisión arbitraria>
 
-Los módulos estándares C<L<Math::BigInt>>, C<L<Math::BigRat>>, y C<L<Math::BigFloat>>, junto con los I<pragmas> C<bignum>, C<bigint> y C<bigrat>, proporcionan aritmética de precisión variable y sobrecarga de operadores, aunque en la actualidad, son bastante lentos.  A costa de algún espacio y velocidad, evitan los peligros asociados a la limitada precisión de las representaciones.
+Los módulos estándares C<L<Math::BigInt>>, C<L<Math::BigRat>>, y C<L<Math::BigFloat>>, junto con los pragmas C<bignum>, C<bigint> y C<bigrat>, proporcionan aritmética de precisión variable y sobrecarga de operadores, aunque en la actualidad, son bastante lentos.  A costa de algún espacio y velocidad, evitan los peligros asociados a la limitada precisión de las representaciones.
 
 	use 5.010;
 	use bigint;  # interfaz sencillo para Math::BigInt

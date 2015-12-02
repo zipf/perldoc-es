@@ -234,7 +234,7 @@ Vea L<< UNIVERSAL/"$obj->DOES( ROL )" >>.
 
 =head2 Formatos
 
-Los formatos se han mejorado en varios aspectos. Un nuevo campo, C<^*>, se puede utilizar como ancho variable, en el texto una-línea-cada-vez. Caracteres nulos son ahora manejados correctamente en líneas de la imagen. Usando C<@#> y C<~~> juntos ahora producirán un error en tiempo de compilación, ya que esos campos de formato son incompatibles.
+Los formatos se han mejorado en varios aspectos. Un nuevo campo, C<^*>, se puede utilizar como ancho variable, en el texto una-línea-cada-vez. Los caracteres nulos se gestionan ahora correctamente en líneas de la imagen. Usando C<@#> y C<~~> juntos ahora producirán un error en tiempo de compilación, ya que esos campos de formato son incompatibles.
 L<perlform> ha sido mejorado, y diversos errores, corregidos.
 
 =head2 Modificadores de orden de bytes, para pack() y unpack()
@@ -260,7 +260,7 @@ Ahora puede utilizar subrutinas recursivas con sort(), gracias a Robin Houston.
 
 =head2 Excepciones en el plegado de constantes
 
-La rutina de plegado de constantes está ahora envuelta por un manejador de excepciones, y si el plegado produce una excepción (por ejemplo, al intentar evaluar 0/0), perl ahora conserva el árbol de operaciones actual, en lugar de abortar todo el programa.
+La rutina de plegado de constantes está ahora recubierta por un controlador de excepciones, y si el plegado produce una excepción (por ejemplo, al intentar evaluar 0/0), perl ahora conserva el árbol de operaciones actual, en lugar de abortar todo el programa.
 Sin este cambio, los programas no se compilarán si tenían expresiones que generaban excepciones, incluso si esas expresiones estuvieran en un código que nunca fuera alcanzado en tiempo de ejecución. (Nicholas Clark, Dave Mitchell)
 
 =head2 Filtros de código fuente en @INC
@@ -390,7 +390,7 @@ Si llama a una subrutina con un nombre contaminado, y ella remite a una función
 
 Cuando perl se ejecuta bajo el modo contaminado, C<printf()> y C<sprintf()> rechazarán cualquier argumento de formato que esté contaminado. (Rafael Garcia-Suarez)
 
-=head2 manejadores de señales y su indefinición
+=head2 Gestores de señales y su indefinición
 
 Indefiniendo o borrando un controlador de señales con C<undef $SIG{FOO}> es ahora equivalente a ponerlo a C<'DEFAULT'>. (Rafael Garcia-Suarez)
 
@@ -988,7 +988,7 @@ Las señales SIGILL, SIGBUS y SIGSEGV ahora siempre se entregan en una forma "in
 
 =item Arreglado el enganche con @INC
 
-Cuando un módulo o un archivo se carga a través de un gancho en @INC, y cuando este gancho ha fijado una entrada de nombre de archivo en %INC, __FILE__ está ahora preparado para este módulo de acuerdo con el contenido de esa entrada %INC. (Rafael)
+Cuando un módulo o un archivo se carga a través de un enganche en @INC, y cuando este enganche ha fijado una entrada de nombre de archivo en %INC, __FILE__ está ahora preparado para este módulo de acuerdo con el contenido de esa entrada %INC. (Rafael)
 
 =item Arreglada opción C<-t>
 

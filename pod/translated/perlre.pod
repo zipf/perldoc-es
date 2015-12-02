@@ -185,7 +185,7 @@ La única configuración regional de byte múltiple que Perl soporta (empezando 
 
 Según las normas de Unicode, hay unos pocos casos de coincidencias que no distinguen mayúsculas de minúsculas y cruzan el límite 255/256.  Excepto para configuraciones regionales UTF-8 en Perl v5.20 y superiores, quedan desactivadas bajo C</l>.  Por ejemplo, 0xFF (en plataformas ASCII) no coincide con el carácter 0x178, C<LATIN CAPITAL LETTER Y WITH DIAERESIS> sin distinguir mayúsculas de minúsculas, ya que 0xFF quizás no sea C<LATIN SMALL LETTER Y WITH DIAERESIS> en la configuración regional actual, y Perl no puede determinar si ese carácter existe en la configuración regional, y mucho menos a qué código de carácter corresponde.
 
-En una configuración regional UTF-8 en v5.20 y superiores, la única diferencia visible entre configuración regional y no regional en expresiones regulares debería ser entintada (vea L<perlsec>).
+En una configuración regional UTF-8 en v5.20 y superiores, la única diferencia visible entre configuración regional y no regional en expresiones regulares debería ser la contaminación (vea L<perlsec>).
 
 Se puede especificar este modificador como el predeterminado mediante C<use locale>, pero vea L</¿Qué modificador de juego de caracteres está en vigor?>.
 X</l>
@@ -866,7 +866,7 @@ B<ADVERTENCIA:> Usar esta característica de forma segura requiere que entienda 
 
 Esta aserción de ancho cero ejecuta código Perl incrustado.  Siempre devuelve éxito, y su valor de retorno se guarda en C<$^R>.
 
-En patrones literales, el código se analiza al mismo tiempo que el código que le rodea. Mientras tanto, dentro del patrón, el control se pasa temporalmente al intérprete de perl, hasta que se encuentre la llave que cierra el código de forma lógica. Esto es similar a la forma en que se maneja una expresión de índice de array en una cadena literal, por ejemplo
+En patrones literales, el código se analiza al mismo tiempo que el código que le rodea. Mientras tanto, dentro del patrón, el control se pasa temporalmente al intérprete de perl, hasta que se encuentre la llave que cierra el código de forma lógica. Esto es similar a la forma en que se gestiona una expresión de índice de array en una cadena literal, por ejemplo
 
     "abc$array[ 1 + f('[') + g()]def"
 
@@ -884,7 +884,7 @@ Incluso en un patrón que se interpola y compila en tiempo de ejecución, los bl
 
 En patrones donde el texto del código se deriva de la información en tiempo de ejecución en lugar de aparecer literalmente en el código fuente de un /patrón/, el código se compila al mismo tiempo que se compila el patrón, y por razones de seguridad, C<use re 'eval'> debe estar en activo. Esto es para detener patrones suministrados por el usuario que contenga trozos de código que puedan ejecutarse.
 
-En situaciones donde necesite activarlo con C<use re 'eval'>, debe también activar la comprobación de entintado.  Una alternativa mejor es usar la evaluación minuciosamente limitada dentro de un compartimento de seguridad.  Vea L<perlsec> para obtener más detalles sobre estos dos mecanismos.
+En situaciones donde necesite activarlo con C<use re 'eval'>, debe también activar la comprobación de contaminación.  Una alternativa mejor es usar la evaluación minuciosamente limitada dentro de un compartimento de seguridad.  Vea L<perlsec> para obtener más detalles sobre estos dos mecanismos.
 
 Desde el punto de vista de la interpretación, ámbito de variables léxicas, y clausuras,
 
@@ -1510,7 +1510,7 @@ Una serie de caracteres coincide con la serie de caracteres en la cadena usada p
 
 Para especificar una clase de caracteres, se escribe la lista de caracteres entre corchetes (C<[]>). La clase de caracteres permite detectar cualquier carácter de la lista.  Si el primer carácter después de "[" es "^", la clase detectará cualquier carácter que no esté en la lista.  Dentro de una lista, el carácter "-" indica un intervalo, de modo que C<a-z> representa todos los caracteres entre "a" y "z", ambos incluidos.  Si desea incluir el carácter "-" o "]" en una clase, debe ponerlos al principio de la lista (o a continuación de un signo "^"), o marcarlos con una barra diagonal inversa de escape.  "-" también se trata literalmente cuando se encuentra al final de la lista, justo antes del carácter "]" final.  (Los siguientes ejemplos especifican la misma clase de tres caracteres: C<[-az]>, C<[az-]> y C>[a\-z]>.  Todas son diferentes de C<[a-z]>, que especifica una clase que contiene veintiséis caracteres, incluso en los juegos de caracteres basados en EBCDIC).  Además, si intenta utilizar las clases de caracteres C<\w>, C<\W>, C<\s>, C<\S>, C<\d> o C<\D> como valores finales de un rango, se trata el carácter "-" de forma literal.
 
-Tenga en cuenta también que la idea de rango es poco transportable entre juegos de caracteres, excepto para cuatro situaciones que Perl maneja específicamente.
+Tenga en cuenta también que la idea de rango es poco transportable entre juegos de caracteres, excepto para cuatro situaciones que Perl gestiona específicamente.
 De cualquiera de los subconjuntos de los rangos C<[A-Z]>, C<[a-z]> y C<[0-9]>, se garantiza que coinciden con el esperado subconjunto de caracteres ASCII, sin importar qué conjunto de caracteres se está corriendo en la plataforma.  La cuarta forma portable de especificar rangos es usar la sintaxis C<\N{...}> para especificar cualquier punto final del rango.  Por ejemplo, C<[\N{U+04}-\N{U+07}]> significa coincidir con los códigos de carácter C<\N{U+04}>, C<\N{U+05}>, C<\N{U+06}> y C<\N{U+07}>, cualesquiera que sean los valores nativos de la plataforma.  Bajo L<use re 'strict'|re/'strict' mode> o dentro de un L</C<(?[ ])>>, se lanza una advertencia, si están activadas, y si el punto final de un rango escrito en la forma C<\N{...}> no se ha especificado de forma portable.  Por ejemplo,
 
  [\N{U+00}-\x06]    # Lanza una advertencia bajo "use re 'strict'".

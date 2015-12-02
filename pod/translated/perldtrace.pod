@@ -82,7 +82,7 @@ Traza los cambios en el estado del intérprete de Perl. Puede interiorizar esto 
 
 =item op-entry(NOMBRE_OPERACIÓN)
 
-Traza la ejecución de cada código de operación en el bucle de ejecución de Perl. Esta sonda se dispara antes de que se ejecute el código de operación. Cuando se activa el depurador de Perl, se dispara la sonda DTrace I<después> del gancho del depurador (pero antes de que se ejecute el propio código de operación).
+Traza la ejecución de cada código de operación en el bucle de ejecución de Perl. Esta sonda se dispara antes de que se ejecute el código de operación. Cuando se activa el depurador de Perl, se dispara la sonda DTrace I<después> del enganche del depurador (pero antes de que se ejecute el propio código de operación).
 
     :*perl*::op-entry {
         printf("A punto de ejecutar la operación %s\n", copyinstr(arg0));

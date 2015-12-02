@@ -382,15 +382,15 @@ X<%SIG>
 
 El hash C<%SIG> contiene los identificadores de señal para el procesamiento de señales.  Por ejemplo:
 
-    sub manejador {   # el primer argumento es el nombre de la señal
+    sub gestor {   # el primer argumento es el nombre de la señal
 	my($sig) = @_;
 	print "Cazada una señal SIG$sig: apagando\n";
 	close(LOG);
 	exit(0);
 	}
 
-    $SIG{'INT'}  = \&gestor;
-    $SIG{'QUIT'} = \&gestor;
+    $SIG{'INT'}  = \&identificador;
+    $SIG{'QUIT'} = \&identificador;
     ...
     $SIG{'INT'}  = 'DEFAULT';   # restaura la acción por defecto
     $SIG{'QUIT'} = 'IGNORE';    # ignorar SIGQUIT
@@ -409,7 +409,7 @@ Aquí hay algunos otros ejemplos:
 
 Asegúrese de no utilizar una palabra suelta como nombre de un controlador de señal, no sea que sin querer lo llame.
 
-Si su sistema tiene la función C<sigaction()>, entonces los manejadores de señales instalados la usarán.  Esto significa que obtiene un manejo de señales fiable.
+Si su sistema tiene la función C<sigaction()>, entonces los gestores de señales instalados la usarán.  Esto significa que obtiene un manejo de señales fiable.
 
 La política predeterminada de entrega de señales cambió en Perl v5.8.0, de "inmediato" (también conocido como "inseguro") a "diferido", también conocido como "señales seguras".  Vea L<perlipc> para más información.
 
@@ -422,11 +422,11 @@ Como el enganche C<'IGNORE'> no está soportado por C<__WARN__>, puede deshabili
 
     local $SIG{__WARN__} = sub {};
 
-La rutina indicada por C<$SIG{__DIE__}> se llama cuando una excepción grave está a punto de ser lanzada.  El mensaje de error se pasa como primer argumento.  Cuando una rutina enganchada en C<__DIE__> regresa, el procesamiento de la excepción continúa como si no existiera el enganche, a menos que la rutina enganchada termine a través de un C<goto &sub>, la salida de un bucle, o un C<die()>.  El manejador de C<__DIE__> está explícitamente inhabilitado durante la llamada, para que pueda morir desde un controlador C<__DIE__>.  Lo mismo para C<__WARN__>.
+La rutina indicada por C<$SIG{__DIE__}> se llama cuando una excepción grave está a punto de ser lanzada.  El mensaje de error se pasa como primer argumento.  Cuando una rutina enganchada en C<__DIE__> regresa, el procesamiento de la excepción continúa como si no existiera el enganche, a menos que la rutina enganchada termine a través de un C<goto &sub>, la salida de un bucle, o un C<die()>.  El gestor de C<__DIE__> está explícitamente inhabilitado durante la llamada, para que pueda morir desde un controlador C<__DIE__>.  Lo mismo para C<__WARN__>.
 
 Debido a un fallo de implementación, el enganche C<$SIG{__DIE__}> se llama incluso dentro de un C<eval()>.  No lo utilice para volver a reescribir una excepción pendiente en C<$@>, o como un sustituto extraño para sobreescribir C<CORE::GLOBAL::die()>.  Esta acción extraña se arreglará en una futura versión de manera que C<$SIG{__DIE__}> sólamente se llamará si el programa está a punto de terminar, como era la intención original.  Cualquier otro uso es obsoleto.
 
-Los manejadores C<__DIE__>/C<__WARN__> son muy especiales, en un aspecto: pueden llamarse para informar de (posibles) errores encontrados por el analizador léxico.  En tal caso, el analizador léxico puede estar en estado de incoherencia, por lo que cualquier intento de evaluar código Perl desde tales manejadores probablemente resultará en una violación de segmento.  Esto significa que las advertencias o errores que se deriven del análisis léxico de Perl se deberían usar con extrema precaución, por ejemplo:
+Los gestores C<__DIE__>/C<__WARN__> son muy especiales, en un aspecto: pueden llamarse para informar de (posibles) errores encontrados por el analizador léxico.  En tal caso, el analizador léxico puede estar en estado de incoherencia, por lo que cualquier intento de evaluar código Perl desde tales gestores probablemente resultará en una violación de segmento.  Esto significa que las advertencias o errores que se deriven del análisis léxico de Perl se deberían usar con extrema precaución, por ejemplo:
 
     require Carp if defined $^S;
     Carp::confess("Algo va mal") if defined &Carp::confess;
@@ -434,9 +434,9 @@ Los manejadores C<__DIE__>/C<__WARN__> son muy especiales, en un aspecto: pueden
       . "la pila de llamadas...\n\t"
       . "Para verla, intente arrancar Perl con la opción -MCarp";
 
-Aquí, la primera línea cargará C<Carp> I<excepto> si es el analizador léxico quien llama al manejador.  La segunda línea imprimirá la traza de llamadas y morirá si C<Carp> estaba disponible.  La tercera línea se ejecutará sólo si C<Carp> no estuviera disponible.
+Aquí, la primera línea cargará C<Carp> I<excepto> si es el analizador léxico quien llama al gestor.  La segunda línea imprimirá la traza de llamadas y morirá si C<Carp> estaba disponible.  La tercera línea se ejecutará sólo si C<Carp> no estuviera disponible.
 
-El tener que pensar ni siquiera en la variable C<$^S> en sus manejadores de excepción es, simplemente, erróneo.  C<$SIG{__DIE__}>, tal como está actualmente implementado, es una dolorosa y difícil solución para localizar errores.  Evítelo y use en su lugar un C<END{}> o sobreescriba un Core::GLOBAL::die.
+El tener que pensar ni siquiera en la variable C<$^S> en sus gestores de excepción es, simplemente, erróneo.  C<$SIG{__DIE__}>, tal como está actualmente implementado, es una dolorosa y difícil solución para localizar errores.  Evítelo y use en su lugar un C<END{}> o sobreescriba un Core::GLOBAL::die.
 
 Vea L<perlfunc/die>, L<perlfunc/warn>, L<perlfunc/eval> y L<warnings> para obtener información adicional.
 
@@ -946,7 +946,7 @@ X<$,> X<$OFS> X<$OUTPUT_FIELD_SEPARATOR>
 
 El separador de campos a la salida para el operador print.  Si se define, este valor se imprime entre cada uno de los argumentos de print.  El valor predeterminado C<undef>.
 
-No puede llamar a C<output_field_separator()> en un gestor, sólo como método estático.  Vea L<IO::Handle|IO::Handle>.
+No puede llamar a C<output_field_separator()> en un identificador, sólo como método estático.  Vea L<IO::Handle|IO::Handle>.
 
 Mnemónico: lo que se imprime cuando hay un "," en su instrucción print.
 
@@ -967,7 +967,7 @@ Se puede ajustar el contador mediante la asignación a C<$.>, pero esto realment
 
 C<$.> se reinicia cuando el identificador de archivo se cierra, pero B<no> cuando un identificador de archivo abierto se reabre sin intervención de C<close()>.  Para más detalles, vea L<perlop/"Operadores E/S">.  Debido a que C<< <> >> nunca hace un cierre explícito, los números de línea aumentan a lo largo de los archivos C<ARGV> (pero vea los ejemplos en L<perlfunc/eof>).
 
-También puede utilizar C<< GESTOR->input_line_number(EXPR) >> para acceder al contador de líneas de un identificador de archivo determinado sin tener que preocuparse de qué identificador fue accedido por última vez.
+También puede utilizar C<< IDENTIFICADOR->input_line_number(EXPR) >> para acceder al contador de líneas de un identificador de archivo determinado sin tener que preocuparse con qué identificador accedió por última vez.
 
 Mnemónico: muchos programas usan "." como el actual número de línea.
 
@@ -1000,7 +1000,7 @@ A partir de 5.19.9, establecer C<$/> a cualquier otra forma de referencia levant
 
 Solo en VMS, el registro pasa por alto las capas PerlIO y cualquier búfer asociado, por lo que no debe mezclar las lecturas de registros y no registros con el mismo identificador de archivos.  El modo de acceso por registro se puede mezclar con el modo línea sólo cuando la capa de almacenamiento en búfer está en uso para ambos modos.
 
-No puede llamar a C<input_field_separator()> en un gestor, sólo como método estático.  Vea L<IO::Handle|IO::Handle>.
+No puede llamar a C<input_field_separator()> en un identificador, sólo como método estático.  Vea L<IO::Handle|IO::Handle>.
 
 Vea también L<perlport/"Caracteres de nueva línea">.  Consulte también L</$.>.
 
@@ -1017,7 +1017,7 @@ X<$\> X<$ORS> X<$OUTPUT_RECORD_SEPARATOR>
 
 El separador de registros a la salida para el operador print.  Si se define, este valor se imprime después del último argumento de print.  El valor predeterminado C<undef>.
 
-No puede llamar a C<output_record_separator()> en un gestor, sólo como método estático.  Vea L<IO::Handle|IO::Handle>.
+No puede llamar a C<output_record_separator()> en un identificador, sólo como método estático.  Vea L<IO::Handle|IO::Handle>.
 
 Mnemónico: establece C<$\> en lugar de añadir "\n" al final del print.
 Además, es igual que C<$/>, pero es lo que obtiene "de vuelta" desde Perl.
@@ -1039,7 +1039,7 @@ X<${^LAST_FH}>
 
 Esto variable de sólo lectura contiene una referencia al último identificador de archivo usado en lectura.
 Se establece con C<< <HANDLE> >>, C<readline>, C<tell>, C<eof> y C<seek>.
-Es el mismo gestor que usan C<$.>, C<tell> y C<eof> si no se les pasa ningún argumento.  Es también el gestor que se usa cuando Perl añade ", <STDIN> line 1" a un mensaje de error o advertencia.
+Es el mismo identificador que usan C<$.>, C<tell> y C<eof> si no se les pasa ningún argumento.  Es también el identificador que se usa cuando Perl añade ", <STDIN> line 1" a un mensaje de error o advertencia.
 
 Esta variable se incorporó en Perl 5.18.0.
 
@@ -1068,7 +1068,7 @@ X<$^L> X<$FORMAT_FORMFEED>
 
 Qué es lo que sacan los formatos como avance de página.  El valor por defecto es C<\f>.
 
-No puede llamar a C<format_formfeed()> en un gestor, sólo como método estático.  Vea L<IO::Handle|IO::Handle>.
+No puede llamar a C<format_formfeed()> en un identificador, sólo como método estático.  Vea L<IO::Handle|IO::Handle>.
 
 =item IDENTIFICADOR->format_page_number(EXPR)
 
@@ -1101,7 +1101,7 @@ X<$:> X<FORMAT_LINE_BREAK_CHARACTERS>
 
 El actual conjunto de caracteres después del cual puede una cadena ser partida para llenar los campos de continuación (comenzando con C<^>) en un formato.  El valor predeterminado es S<" \n-">, para partir por un espacio, nueva línea o un guión.
 
-No puede llamar a C<format_line_break_characters()> en un gestor, sólo como método estático.  Vea L<IO::Handle|IO::Handle>.
+No puede llamar a C<format_line_break_characters()> en un identificador, sólo como método estático.  Vea L<IO::Handle|IO::Handle>.
 
 Mnemónico: un "dos puntos" en poesía es una parte de una línea.
 
@@ -1482,7 +1482,7 @@ Esta variable se incorporó en Perl 5.003.
 =item %^H
 X<%^H>
 
-El hash C<%^H> proporciona el mismo ámbito semántico que C<$^H>.  Esto lo hace útil para la implementación de I<pragmas> en ámbito léxico.  Vea L<perlpragma>.   Todas las entradas se convierten a cadenas cuando son accedidas en tiempo de ejecución, por lo que solo se almacenan valores sencillos.  Quiere decir que no se admiten punteros a objetos, por ejemplo.
+El hash C<%^H> proporciona el mismo ámbito semántico que C<$^H>.  Esto lo hace útil para la implementación de pragmas en ámbito léxico.  Vea L<perlpragma>.   Todas las entradas se convierten a cadenas cuando son accedidas en tiempo de ejecución, por lo que solo se almacenan valores sencillos.  Quiere decir que no se admiten punteros a objetos, por ejemplo.
 
 Al poner elementos en C<%^H>, para evitar conflictos con otros usuarios del hash hay una convención con respecto a qué llaves usar.
 Un módulo tendría que utilizar llaves únicas que empiecen con el nombre del módulo (el nombre de su paquete principal) y un carácter "/".  Por ejemplo, un módulo C<Foo::Bar> tendría que utilizar llaves como C<Foo::Bar/baz>.
