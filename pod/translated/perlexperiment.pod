@@ -1,0 +1,312 @@
+=head1 NOMBRE
+
+perlexperiment - Lista de funcionalidades experimentales de Perl
+
+=head1 DESCRIPCIÓN
+
+En este documento se muestran las funcionalidades experimentales actuales y anteriores del núcleo de perl. Aunque están documentadas en los temas correspondientes de la documentación, esta lista abreviada presenta una introducción y datos básicos sobre su estado de desarrollo actual.
+
+De momento solo hemos intentado recopilar las funcionalidades experimentales y establecer su origen, versiones, etc. En gran parte nos hemos basado en especulaciones.
+
+=head2 Experimentos actuales
+
+=over 8
+
+=item Atributo opcional experimental C<unique> para C<our>
+
+Se incluyó en Perl 5.8.0
+
+Obsoleta en Perl 5.10.0
+
+El tique para esta característica es L<[perl #119313]|https://rt.perl.org/rt3/Ticket/Display.html?id=119313>.
+
+=item Coincidencia inteligente (C<~~>)
+
+Se incluyó en Perl 5.10.0
+
+Modificado en Perl 5.10.1, 5.12.0
+
+Usar esta característica dispara advertencias en la categoría C<experimental::smartmatch>.
+
+El tique para esta característica es L<[perl #119317]|https://rt.perl.org/rt3/Ticket/Display.html?id=119317>.
+
+=item C<$_> léxica
+
+Se incluyó en Perl 5.10.0
+
+Usar esta característica dispara advertencias en la categoría C<experimental::lexical_topic>.
+
+El tique para esta característica es L<[perl #119315]|https://rt.perl.org/rt3/Ticket/Display.html?id=119315>.
+
+=item Capacidad de agregar palabras clave
+
+El tique para esta característica es L<[perl #119455]|https://rt.perl.org/rt3/Ticket/Display.html?id=119455>.
+
+Vea L<perlapi/PL_keyword_plugin> para obtener más información sobre el mecanismo.
+
+Se incluyó en Perl 5.11.2
+
+=item Las funciones de contenedores array y hash aceptan referencias
+
+Se incluyó en Perl 5.14.0
+
+El tique para esta característica es L<[perl #119437]|https://rt.perl.org/rt3/Ticket/Display.html?id=119437>.
+
+=item Subrutinas léxicas
+
+Se incluyó en Perl 5.18
+
+Vea también: L<perlsub/Subrutinas léxicas>
+
+Usar esta característica dispara advertencias en la categoría C<experimental::lexical_subs>.
+
+El tique para esta característica es L<[perl #120085]|https://rt.perl.org/rt3/Ticket/Display.html?id=120085>.
+
+=item Operaciones de conjunto en expresiones regulares
+
+Se incluyó en Perl 5.18
+
+El tique para esta característica es L<[perl #119451]|https://rt.perl.org/rt3/Ticket/Display.html?id=119451>.
+
+Vea también L<perlrecharclass/Clases de carácter extendidas entre corchetes>.
+
+Usar esta característica dispara advertencias en la categoría C<experimental::regex_sets>.
+
+=item Firmas de subrutinas
+
+Se incluyó en Perl 5.20.0
+
+Usar esta característica dispara advertencias en la categoría C<experimental::signatures>.
+
+El tique para esta característica es L<[perl #121481]|https://rt.perl.org/Ticket/Display.html?id=121481>.
+
+=item Sintaxis de desreferencia postfija
+
+Se incluyó en Perl 5.20.0
+
+Usar esta característica dispara advertencias en la categoría C<experimental::postderef>.
+
+El tique para esta característica es L<[perl #120162]|https://rt.perl.org:443/rt3/Ticket/Display.html?id=120162>.
+
+=item Creación de alias a través de referencia
+
+Se incluyó en Perl 5.22.0
+
+Usar esta característica dispara advertencias en la categoría C<experimental::refaliasing>.
+
+El tique para esta característica es L<[perl #122947]|https://rt.perl.org/rt3/Ticket/Display.html?id=122947>.
+
+Vea también L<perlref/Asignación a referencias>).
+
+=item El atributo "const"
+
+Se incluyó en Perl 5.22.0
+
+Usar esta característica dispara advertencias en la categoría C<experimental::const_attr>.
+
+El tique para esta característica es L<[perl #123630]|https://rt.perl.org/rt3/Ticket/Display.html?id=123630>.
+
+Vea también L<perlsub/Funciones constantes>
+
+=item use re 'strict';
+
+Se incluyó en Perl 5.22.0
+
+Usar esta característica dispara advertencias en la categoría C<experimental::re_strict>.
+
+Vea L<re/'strict' mode>
+
+=item Operadores de bit específicos para cadenas y números
+
+Se incluyó en Perl 5.22.0
+
+Vea también L<perlop/Operadores de bit en cadenas>
+
+Usar esta característica dispara advertencias en la categoría C<experimental::bitwise>.
+
+El tique para esta característica es L<[perl #123707]|https://rt.perl.org/rt3/Ticket/Display.html?id=123707>.
+
+=item la seudocapa de E/S <:win32>
+
+El tique para esta característica es L<[perl #119453]|https://rt.perl.org/rt3/Ticket/Display.html?id=119453>.
+
+Vea también L<perlrun>
+
+=item Destino C<installhtml> en Makefile.
+
+El tique para esta característica es L<[perl #116487]|https://rt.perl.org/rt3/Ticket/Display.html?id=116487>.
+
+=item Unicode en Perl para EBCDIC
+
+=back
+
+=head2 Funcionalidades aprobadas
+
+Estas funcionalidades han tenido tanto éxito e interactúan tan bien con otros componentes que hemos decido dejar de considerarlas experimentales y aprobarlas como funcionalidades completas y estables en Perl, con todas las ventajas y regalías que eso conlleva.
+También les hemos concedido 5 puntos por Estabilidad y 3 por Carisma.
+
+=over 8
+
+=item Compatibilidad con 64 bits
+
+Se incluyó en Perl 5.005
+
+=item die acepta una referencia
+
+Se incluyó en Perl 5.005
+
+=item Módulo DB
+
+Se incluyó en Perl 5.6.0
+
+Vea también L<perldebug>, L<perldebtut>
+
+=item Referencias débiles
+
+Se incluyó en Perl 5.6.0
+
+=item Implementación interna de expansión de patrones de archivos
+
+Se incluyó en Perl 5.6.0
+
+=item Emulación de fork()
+
+Se incluyó en Perl 5.6.1
+
+Vea también L<perlfork>
+
+=item -Dusemultiplicity -Duseithreads
+
+Se incluyó en Perl 5.6.0
+
+Aceptado en Perl 5.8.0
+
+=item Soporte para dobles largos
+
+Se incluyó en Perl 5.6.0
+
+Aceptado en Perl 5.8.1
+
+=item La clase de caracteres C<\N> para expresiones regulares
+
+La clase de caracteres C<\N>, que no debe confundirse con la secuencia de caracteres con nombre C<\N{NAME}>, se usa en expresiones regulares para denotar cualquier carácter que no sea de nueva línea.
+
+Se incluyó en Perl 5.12
+
+No está claro en qué versión se aceptó, pero no antes de Perl 5.18.
+
+=item C<(?{código})> y C<(??{ código })>
+
+Se incluyó en Perl 5.6.0
+
+Aceptado en Perl 5.20.0
+
+Vea también L<perlre>
+
+=item Sockets Linux abstractos en el dominio Unix
+
+Se incluyó en Perl 5.9.2
+
+Aceptado antes de Perl 5.20.0.  La biblioteca Socket ahora se mantiene primeramente en CPAN, en vez de en la distribución principal de perl.
+
+Vea también L<Socket>
+
+=item Subrutinas en el lado izquierdo de una asignación
+
+Se incluyó en Perl 5.6.0
+
+Aceptado en Perl 5.20.0
+
+Vea también L<perlsub>
+
+=item Verbos de control de vuelta atrás
+
+C<(*ACCEPT)>
+
+Se incluyó en Perl 5.10
+
+Aceptado en Perl 5.20.0
+
+=item La seudocapa de E/S <:pop>
+
+Vea también L<perlrun>
+
+Aceptado en Perl 5.20.0
+
+=item C<\s> en I<regex> coincide con el tabulador vertical
+
+Aceptado en Perl 5.22.0
+
+=back
+
+=head2 Funcionalidades suprimidas
+
+Estas funcionalidades ya no se consideran experimentales y se han suprimido. Si después de que le indicáramos explícitamente que estas funcionalidades no se deben usar en programas de producción y decidió hacerlo, la responsabilidad es suya (vea L<perlpolicy>).
+
+=over 8
+
+=item Hilos de ejecución de tipo 5.005
+
+Se incluyó en Perl 5.005
+
+Retirado en Perl 5.10.
+
+=item perlcc
+
+Se incluyó en Perl 5.005
+
+Movido de Perl 5.9.0 a CPAN
+
+=item El tipo de datos seudohash
+
+Se incluyó en Perl 5.6.0
+
+Se eliminó en Perl 5.9.0
+
+=item Capacidad de las opciones de GetOpt::Long para consumir varios valores a la vez (experimental)
+
+Se actualizó C<Getopt::Long> a la versión 2.35
+
+Se eliminó en Perl 5.8.8
+
+=item Aserciones
+
+El modificador de línea de comandos C<-A>
+
+Se incluyó en Perl 5.9.0
+
+Se eliminó en Perl 5.9.5
+
+=item Test::Harness::Straps
+
+Movido de Perl 5.10.1 a CPAN
+
+=item C<legacy>
+
+El pragma C<legacy> experimental fue absorbido por el pragma C<feature>.
+
+Se incluyó en 5.11.2
+
+Se eliminó en 5.11.3
+
+=back
+
+=head1 VEA TAMBIÉN
+
+Encontrará una lista completa de características en L<feature>.
+
+=head1 AUTORES
+
+brian d foy C<< <brian.d.foy@gmail.com> >>
+
+SE<eacute>bastien Aperghis-Tramoni C<< <saper@cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2010, brian d foy C<< <brian.d.foy@gmail.com> >>
+
+=head1 LICENCIA
+
+Puede usar y redistribuir este documento en los mismos términos que Perl.
+
+=cut
