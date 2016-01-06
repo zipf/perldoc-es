@@ -1,0 +1,442 @@
+=encoding utf8
+
+=for comment
+Para aplicar un formato uniforme a este archivo, use:
+  perl ./Porting/podtidy pod/perlinterp.pod
+
+=head1 NOMBRE
+
+perlinterp - Funcionamiento del intérprete Perl
+
+=head1 DESCRIPCIÓN
+
+Este documento muestra una visión general de cómo funciona el intérprete de Perl a nivel del código C, junto con enlaces a los códigos fuente en C más relevantes.
+
+=head1 ELEMENTOS DEL INTÉRPRETE
+
+La función del intérprete se realiza en dos fases: compilar el código a la representación interna, denominada I<bytecode>, y después ejecutarlo.
+L<perlguts/Código compilado> explica exactamente cómo sucede la etapa de compilación.
+
+Aquí hay un pequeño desglose de cómo opera perl:
+
+=head2 Puesta en marcha
+
+La acción empieza en F<perlmain.c>. (O F<miniperlmain.c> para miniperl). Este es código de muy alto nivel, suficiente para caber en una sola pantalla, recuerda el código que se encuentra en L<perlembed>; la mayor parte de la acción real toma lugar en F<perl.c>
+
+F<perlmain.c> se genera por C<ExtUtils::Miniperl> desde F<miniperlmain.c> en el momento de hacer C<make>, así que debería hacer C<make perl> para que siga siendo así.
+
+Primero, F<perlmain.c> reserva algo de memoria y construye un intérprete de Perl, a lo largo de estas líneas:
+
+    1 PERL_SYS_INIT3(&argc,&argv,&env);
+    2
+    3 if (!PL_do_undump) {
+    4     mi_perl = perl_alloc();
+    5     if (!mi_perl)
+    6         exit(1);
+    7     perl_construct(mi_perl);
+    8     PL_perl_destruct_level = 0;
+    9 }
+
+La línea 1 es una macro, y su definición depende del sistema operativo. La línea 3 hace referencia a C<PL_do_undump>, una variable global (en Perl, los nombres de todas las variables globales empiezan por C<PL_>. Esto le indica si el programa que se está ejecutando actualmente se creó con la marca C<-u> de perl y después F<undump>, lo que significa que su valor va a ser falso en cualquier contexto normal.
+
+La línea 4 llama a una función de F<perl.c> para asignar memoria a un intérprete de Perl. Es una función muy sencilla, y sus tripas se parecen a esto:
+
+ mi_perl = (PerlInterpreter*)PerlMem_malloc(sizeof(PerlInterpreter));
+
+Aquí ve un ejemplo del sistema de abstracción de Perl, que veremos más adelante: C<PerlMem_malloc> puede ser, el C<malloc> de su sistema, o el C<malloc> del propio Perl, tal como se define en F<malloc.c>, si selecciona esa opción en tiempo de compilación.
+
+Luego, en la línea 7, construimos el intérprete usando perl_construct, también en F<perl.c>; esto inicializa todas las variables especiales que Perl necesita, las pilas, y así.
+
+Ahora pasamos a Perl las opciones de la línea de comandos, y le decimos que arranque:
+
+ exitstatus = perl_parse(mi_perl, xs_init, argc, argv, (char **)NULL);
+ if (!exitstatus)
+     perl_run(mi_perl);
+
+ exitstatus = perl_destruct(mi_perl);
+
+ perl_free(mi_perl);
+
+C<perl_parse> es, realmente, un envoltorio alrededor de C<S_parse_body>, tal como se define en F<perl.c>, que procesa las opciones de la línea de comandos, inicializa cualquier módulo estáticamente enlazado con XS, abre el programa y llama a C<yyparse> para interpretarlo.
+
+=head2 Análisis
+
+El objetivo de esta fase es convertir el código fuente de Perl en un árbol sintáctico de I<op> (operaciones básicas). Luego veremos que aspecto tienen. Estrictamente hablando, hay tres cosas que ocurren aquí.
+
+C<yyparse>, el intérprete, reside en F<perly.c>, a pesar de que sea mejor que leyera la entrada YACC original en F<perly.y>. (Sí, Virginia, ¡B<existe> una gramática YACC para Perl!) El trabajo del intérprete es tomar su código y "entenderlo", dividiéndolo en sentencias, decidiendo qué operandos van con qué operadores, y así.
+
+El intérprete está asistido noblemente por el identificador léxico, que trocea su entrada en identidades, y decide qué tipo de cosa es cada identidad: un nombre de variable, un operador, una palabra simple, una subrutina, una función principal, y así. El punto principal de entrada al identificador léxico es C<yylex>, y éste y sus rutinas asociadas se pueden encontrar en F<toke.c>. Perl no se parece a otros lenguajes de ordenador; a veces es extremadamente sensible al contexto, puede ser complicado saber qué clase de identificador es algo, o dónde termina un identificador. Así, hay mucha interacción entre el identificador y el intérprete, que puede espantar si no lo ha usado antes.
+
+A medida que el intérprete entiende un programa Perl, genera un árbol de operaciones para el intérprete para ejecutarlas durante la ejecución. Las rutinas que construyen y enlazan juntas las diversas operaciones se encuentran en F<op.c>, y se examinarán más tarde.
+
+=head2 Optimización
+
+Ahora que ha finalizado la fase de análisis, el árbol completado representa las operaciones que el intérprete de Perl necesita realizar para ejecutar el programa. Luego, Perl hace una ejecución sencilla sobre el árbol para realizar optimizaciones: expresiones constantes como C<3 + 4> serán calculadas en ese momento, y el optimizador también verá si existen operaciones múltiples que se pueden reemplazar por una sola. Por ejemplo, para obtener la variable C<$foo>, en vez de acceder al glob C<*foo> y mirar por el componente escalar, el optimizador trampea el árbol de operaciones para usar una función que mire directamente al escalar en cuestión. El optimizador principal es C<peep>, que se encuentra en F<op.c>, y muchas operaciones tienen sus propias funciones de optimización.
+
+=head2 Ejecución
+
+Ahora estamos preparados, finalmente, para ejecutar: se ha compilado a código byte formato Perl, y lo que queda es ejecutarlo. De la ejecución real se encarga la función C<runops_standard> de F<run.c>; en concreto, estas tres líneas, aparentemente inocentes:
+
+    while ((PL_op = PL_op->op_ppaddr(aTHX))) {
+        PERL_ASYNC_CHECK();
+    }
+
+Puede que le resulte más comprensible la versión Perl del código anterior:
+
+    PERL_ASYNC_CHECK() while $Perl::op = &{$Perl::op->{function}};
+
+Bueno, tal vez no. En cualquier caso, cada operación contiene un puntero de función que estipula la función que se encargará de realizar la operación.
+Esta función devolverá la siguiente I<op> en la secuencia. Esto permite que cosas como el C<if> elija dinámicamente la siguiente I<op> en tiempo de ejecución. C<PERL_ASYNC_CHECK> se asegura de que cosas como las señales interrumpan la ejecución, si es necesario.
+
+Las funciones que realmente se llaman, se conocen como código PP, y se dispersan por cuatro archivos: F<pp_hot.c> contiene el código "caliente", que es el más usado y altamente optimizado, F<pp_sys.c> contiene todas las funciones específicas del sistema, F<pp_ctl.c> contiene las funciones que implementan las estructuras de control (C<if>, C<while> y parecidas) y F<pp.c> contiene todo lo demás. Son, si lo prefiere, el código en C de las funciones y operadores integrados de Perl.
+
+Tenga en cuenta que se espera que cada función C<pp_> devuelva un puntero a la siguiente operación. Las llamadas a subrutinas perl (y bloques eval) se gestionan dentro del mismo bucle de ejecución de las primitivas, y no consumen espacio extra en la pila C. Por ejemplo, C<pp_entersub> y C<pp_entertry> solo ponen un bloque C<CxSUB> o C<CxEVAL> en la pila de contexto que contiene la dirección de la primitiva siguiente a la llamada a la subrutina o eval. Devuelven entonces la primera primitiva de esa subrutina o bloque eval, y así la ejecución continúa en esa subrutina o bloque. Después, una primitiva C<pp_leavesub> o C<pp_leavetry> devuelve C<CxSUB> o C<CxEVAL>, recupera a partir de ella la primitiva de retorno, y la devuelve.
+
+=head2 Control de excepciones
+
+El manejo de la excepción de Perl (p. e. C<die>, etc.) se construye apoyándose en las funciones de la biblioteca de bajo nivel de C C<setjmp()>/C<longjmp()>. Ellas, básicamente, ofrecen una forma de capturar los registros actuales del PC y SP, y luego recuperarlos; es decir, un C<longjmp()> continúa en el punto del código donde se realizó un C<setjmp()>, perdiéndose todo lo almacenado en ese momento en la pila del C. Así es el porqué el código debería siempre guardar valores usando C<SAVE_FOO> en lugar de variables automáticas.
+
+El núcleo de perl envuelve C<setjmp()> y demás, en las macros C<JMPENV_PUSH> y C<JMPENV_JUMP>. La regla básica de las excepciones perl es que C<exit> y C<die> (en ausencia de C<eval>) realiza un C<JMPENV_JUMP(2)>, mientras que C<die> dentro de C<eval> hace un C<JMPENV_JUMP(3)>.
+
+En los puntos de entrada a perl, tales como C<perl_parse()>, C<perl_run()> y C<call_sv(cv, G_EVAL)> cada una de ellas hace un C<JMPENV_PUSH>, y entonces entra en un bucle de ejecución de primitivas, o lo que sea, y gestiona los posibles retornos desde las excepciones. Para un segundo retorno, se realiza una limpieza final, tal como vaciar las pilas y llamar a los bloques C<CHECK> o C<END>. Entre otras cosas, esto es cómo funciona la limpieza del ámbito durante un C<exit>.
+
+Si el C<die> encuentra un bloque C<CxEVAL> en la pila de contexto, entonces la pila se despeja hasta ese nivel, y la operación de retorno en ese bloque se asigna a C<PL_restartop>; entonces es cuando se ejecuta un C<JMPENV_JUMP(3)>.
+Esto normalmente pasa el control de vuelta al guardia. En el caso de C<perl_run> y C<call_sv>, un disparador C<PL_restartop> no nulo vuelve a entrar al bucle de I<op> en ejecución. Esta es la forma normal en que un C<die> o C<croak> se gestionan dentro de un C<eval>.
+
+Algunas veces, las operaciones se ejecutan dentro de los bucles internos de ejecución, como en un tie, sort o código sobrecargado. En este caso, algo como
+
+    sub FETCH { eval { die } }
+
+podría causar un longjmp que regresara al guarda en C<perl_run>, extrayendo tanto las operaciones de los bucles, que es claramente algo incorrecto. Una forma de evitarlo es, para el código enlazado, hacer un C<JMPENV_PUSH> antes de ejecutar C<FETCH> en el interior de los bucles, pero por razones de eficiencia, perl, de hecho, solo activa un indicador, usando C<CATCH_SET(TRUE)>. Las operaciones C<pp_require>, C<pp_entereval> y C<pp_entertry> comprueban este indicador, y si es verdad, llaman a C<docatch>, que hace un C<JMPENV_PUSH> e inician un nuevo nivel de operaciones de ejecución para ejecutar el código, en lugar de hacerlo en el bucle actual.
+
+Como una optimización posterior, en la salida del bloque eval en el C<FETCH>, la ejecución del código que sigue al bloque se sigue transportando en el bucle interior. Cuando una ejecución se levanta, C<docatch> compara el nivel de C<JMPENV> de C<CxEVAL> con C<PL_top_env>, y si difieren, simplemente relanzan la excepción. De esta forma cualquier bucle interno se descarta.
+
+Veamos un ejemplo.
+
+    1: eval { tie @a, 'A' };
+    2: sub A::TIEARRAY {
+    3:     eval { die };
+    4:     die;
+    5: }
+
+Para ejecutar este código se llama a C<perl_run>, que ejecuta C<JMPENV_PUSH>
+y después entra en un bucle ///runops. Este bucle ejecuta las operaciones eval y tie en la línea 1, con el eval poniendo un C<CxEVAL> en el contexto de la pila.
+
+C<pp_tie> hace un C<CATCH_SET(TRUE)>, y luego inicia un segundo bucle de I<op> para ejecutar el cuerpo de C<TIEARRAY>. Cuando ejecuta la I<op> I<entertry> en la línea 3, C<CATCH_GET> es verdadero, así que C<pp_entertry> llama a C<docatch> que hace un C<JMPENV_PUSH> e inicia un tercer bucle de I<op>, que entonces ejecuta la I<op> die. En este punto, la pila de llamadas C se parece a esto:
+
+    Perl_pp_die
+    Perl_runops      # tercer bucle
+    S_docatch_body
+    S_docatch
+    Perl_pp_entertry
+    Perl_runops      # segundo bucle
+    S_call_body
+    Perl_call_sv
+    Perl_pp_tie
+    Perl_runops      # primer bucle
+    S_run_body
+    perl_run
+    main
+
+y el contexto y las pilas de datos, como se muestran con C<-Dstv>, se parecen a:
+
+    STACK 0: MAIN
+      CX 0: BLOCK  =>
+      CX 1: EVAL   => AV()  PV("A"\0)
+      retop=leave
+    STACK 1: MAGIC
+      CX 0: SUB    =>
+      retop=(null)
+      CX 1: EVAL   => *
+    retop=nextstate
+
+El die extrae el primer C<CxEVAL> fuera del contexto de la pila, activa C<PL_restartop> desde él, hace un C<JMPENV_JUMP(3)> y el control devuelve al inicial C<docatch>. Esto entonces inicia otro tercer nivel de I<op>, que ejecuta las I<op> nextstate, pushmark y die en la línea 4. En este punto se llama al segundo C<pp_die>, la pila de llamadas C aparenta exactamente como antes, incluso aunque ya no estemos dentro del eval interno; esto es así por la optimización mencionada antes. Sin embargo, la pila de contexto ahora se parece a esto, es decir, con el CxEVAL inicial descartado:
+
+    STACK 0: MAIN
+      CX 0: BLOCK  =>
+      CX 1: EVAL   => AV()  PV("A"\0)
+      retop=leave
+    STACK 1: MAGIC
+      CX 0: SUB    =>
+      retop=(null)
+
+El die en la línea 4 descarta la pila de contexto hasta el CxEVAL, dejándolo así:
+
+    STACK 0: MAIN
+      CX 0: BLOCK  =>
+
+Como es normal, C<PL_restartop> se extrae de C<CxEVAL>, y se hace un C<JMPENV_JUMP(3)>, que devuelve la pila C a docatch:
+
+    S_docatch
+    Perl_pp_entertry
+    Perl_runops      # segundo bucle
+    S_call_body
+    Perl_call_sv
+    Perl_pp_tie
+    Perl_runops      # primer bucle
+    S_run_body
+    perl_run
+    main
+
+En este caso, ya que el nivel C<JMPENV> grabado en el C<CxEVAL> difiere del actual, C<docatch> hace justo un C<JMPENV_JUMP(3)> y la pila C se vuelve en un:
+
+    perl_run
+    main
+
+Ya que C<PL_restartop> no es un nulo, C<run_body> inicia un nuevo bucle de I<op> y la ejecución continúa.
+
+=head2 TIPOS DE VARIABLES INTERNOS
+
+Debería haber mirado antes L<perlguts>, que le contará sobre los tipos de variables internas de Perl: SV, HV, AV y el resto. Si no es así, hágalo ahora.
+
+Estas variables no solo se usan para representar variables en el espacio Perl, sino también cualquier constante en el código, así como algunas estructuras completamente internas de Perl. La tabla de símbolos, por ejemplo, es un hash Perl normal. Su código se representa por un SV tal como se lee del intérprete; cualquier archivo de programa que llame se abre usando identificadores de archivo Perl normales; y así.
+
+El módulo principal L<Devel::Peek|Devel::Peek> module nos permite examinar los SV de un programa Perl. Veamos, por ejemplo, cómo Perl trata a la constante C<"hola">.
+
+      % perl -MDevel::Peek -e 'Dump("hello")'
+    1 SV = PV(0xa041450) at 0xa04ecbc
+    2   REFCNT = 1
+    3   FLAGS = (POK,READONLY,pPOK)
+    4   PV = 0xa0484e0 "hello"\0
+    5   CUR = 5
+    6   LEN = 6
+
+Leer la salida de C<Devel::Peek> lleva un tiempo de práctica, así que la analizaremos línea a línea.
+
+La línea 1 nos dice que estamos mirando en un SV que reside en la dirección de memoria C<0xa04ecbc>. Los mismos SV son estructuras muy simples, pero contienen un puntero a una estructura más compleja. En este caso, es un PV, una estructura que almacena el valor de una cadena, en la posición C<0xa041450>. La línea 2 es el contador de referencias; no hay otras referencias a estos datos, así que es 1.
+
+La línea 3 son indicadores para este SV. Está bien usarlo como un PV, ya que es un SV de solo lectura (porque es una constante) y los datos son, internamente, un PV.
+Después tenemos los contenidos de la cadena, comenzando en la posición C<0xa0484e0>.
+
+La línea 5 nos da la longitud actual de la cadena. Note que B<no> incluye el terminador nulo. La línea 6 no es la longitud de la cadena, sino la longitud del búfer reservado en este momento; ya que la cadena crece, Perl extiende, automáticamente el almacenamiento por medio de la rutina llamada C<SvGROW>.
+
+Puede obtener cualquiera de estas cantidades desde C muy fácilmente; solo añada C<Sv> al nombre del campo en el trozo de código, y obtiene una macro que devolverá un valor: C<SvCUR(sv)> devuelve la longitud actual de la cadena; C<SvREFCOUNT(sv)> devuelve el contador de referencias; C<SvPV(sv, len)> devuelve la propia cadena con su longitud; y así.
+Se pueden encontrar más macros para manipular estas propiedades en L<perlguts>.
+
+Tomemos un ejemplo de manipulación de un PV, desde C<sv_catpvn>, en F<sv.c>
+
+     1  void
+     2  Perl_sv_catpvn(pTHX_ SV *sv, const char *ptr, STRLEN len)
+     3  {
+     4      STRLEN tlen;
+     5      char *junk;
+
+     6      junk = SvPV_force(sv, tlen);
+     7      SvGROW(sv, tlen + len + 1);
+     8      if (ptr == junk)
+     9          ptr = SvPVX(sv);
+    10      Move(ptr,SvPVX(sv)+tlen,len,char);
+    11      SvCUR(sv) += len;
+    12      *SvEND(sv) = '\0';
+    13      (void)SvPOK_only_UTF8(sv);          /* validar puntero /
+    14      SvTAINT(sv);
+    15  }
+
+Esta función agrega una cadena, C<ptr>, de longitud C<len>, al final del PV almacenado en C<sv>. Lo primero que hacemos en la línea 6 es asegurarnos de que el SV B<has> tiene un PV válido llamando a la macro C<SvPV_force> para forzar un PV. Como efecto colateral, C<tlen> se ajusta al valor actual del PV, y el propio PV se devuelve a C<junk>.
+
+En la línea 7, nos aseguramos que el SV tendrá suficiente espacio para acomodar la anterior cadena, la nueva cadena y el terminador nulo. Si C<LEN> no es suficiente, C<SvGROW> reasignará espacio por nosotros.
+
+Ahora, si C<junk> es lo mismo que la cadena que estamos intentando añadir, podemos tomar la cadena directamente del SV; C<SvPVX> es la dirección del PV en el SV.
+
+La línea 10 hace la concatenación real: la macro C<Move> mueve un trozo de memoria: movemos la cadena C<ptr> al final del PV, que es el inicio del PV más su longitud actual. Estamos moviendo C<len> bytes del tipo C<char>. Después de hacer esto, necesitamos decirle a Perl que hemos extendido la cadena, alterando C<CUR> para reflejar la nueva longitud. C<SvEND> es una macro que nos da el final de la cadena, así que necesita que sea un C<"\0">.
+
+La línea 13 manipula los indicadores; desde que hemos cambiado el PV, cualquier valor IV o NV ya no serán válidos: si tenemos C<$a=10; $a.="6";> no queremos usar el anterior IV de 10. C<SvPOK_only_utf8> es una versión especial de C<SvPOK_only> conforme a UTF-8, una macro que apaga los indicadores IOK y NOK enciende la POK. La última C<SvTAINT> es una macro que limpia los datos contaminados, si está activo el modo de contaminación.
+
+AV y HV son más complicadas, pero SV es, de lejos, el tipo de variable más común que podemos encontrar. Después de mirar cómo los hemos manipulado, vamos a ver cómo se construye el árbol de I<op>.
+
+=head1 ÁRBOLES I<OP>
+
+Primero, ¿qué es, de todos modos, el árbol de I<op>? El árbol de I<op> es la representación interpretada de su programa, como hemos visto en nuestra sección de análisis, y es la secuencia de operaciones por las que Perl pasa para ejecutar nuestro programa, como hemos visto en L</Ejecutar>.
+
+Una I<op> es una operación fundamental que Perl puede realizar: todas las funciones incorporadas y operadores son I<op>, y existen una serie de I<op> que tratan con conceptos que el intérprete necesita internamente: entrar y salir de un bloque, terminar una sentencia, acceder a una variable, y así.
+
+El árbol de I<op> se conecta de dos formas: puede imaginar que hay dos "rutas" a través de él, dos órdenes por los que puede atravesarlo.
+Primero, el orden de análisis refleja cómo el analizador entiende el código, y segundo, el orden de ejecución le dice a perl en qué orden debe realizar las operaciones que hay en él.
+
+La forma más sencilla de examinar el árbol I<op> es para Perl después de que ha terminado el análisis, y que vuelque el árbol. Esto es exactamente lo que los soportes para el compilador hacen: L<B::Terse|B::Terse>, L<B::Concise|B::Concise> y L<B::Debug|B::Debug>.
+
+Perl ve C<$a = $b + $c> así:
+
+     % perl -MO=Terse -e '$a=$b+$c'
+     1  LISTOP (0x8179888) leave
+     2      OP (0x81798b0) enter
+     3      COP (0x8179850) nextstate
+     4      BINOP (0x8179828) sassign
+     5          BINOP (0x8179800) add [1]
+     6              UNOP (0x81796e0) null [15]
+     7                  SVOP (0x80fafe0) gvsv  GV (0x80fa4cc) *b
+     8              UNOP (0x81797e0) null [15]
+     9                  SVOP (0x8179700) gvsv  GV (0x80efeb0) *c
+    10          UNOP (0x816b4f0) null [15]
+    11              SVOP (0x816dcf0) gvsv  GV (0x80fa460) *a
+
+Comencemos en la mitad, en la línea 4. Es BINOP, un operador binario, que está en la posición C<0x8179828>. El operador específico en cuestión es C<sassign> -asignación escalar- y puede encontrar el código que lo implementa en la función C<pp_sassign> en F<pp_hot.c>. Como operador binario, tiene dos hijos: el operador I<add>, ofreciendo el resultado de C<$b+$c>, está encima de la línea 5, y la parte izquierda está en la línea 10.
+
+La línea 10 es el I<op> I<null>: exactamente no hace nada. ¿Qué está haciendo allí? Si ve el I<op> I<null>, es un signo de que algo se ha optimizado después del análisis. Como hemos mencionado en L</Optimización>, la etapa de optimización algunas veces convierte dos operaciones en una, por ejemplo cuando se accede a una variable escalar. Cuando esto sucede, en lugar de reescribir el árbol I<op> y limpiar los punteros danzantes, es más fácil solo reemplazar las operaciones redundantes con el I<op> I<null>.
+Originalmente, el árbol se habría parecido a esto:
+
+    10          SVOP (0x816b4f0) rv2sv [15]
+    11              SVOP (0x816dcf0) gv  GV (0x80fa460) *a
+
+Es decir, acceder a la entrada C<a> desde la tabla de símbolos principal, y entonces mirar en su componente escalar: C<gvsv> (C<pp_gvsv> en F<pp_hot.c>) lo que sucede son ambas cosas.
+
+El lado derecho, comenzando en la línea 5 es similar a lo que acabamos de ver: tenemos el I<op> I<add> (C<pp_add> también en F<pp_hot.c>) suma juntos los dos C<gvsv>.
+
+Ahora, ¿de qué va todo esto?
+
+     1  LISTOP (0x8179888) leave
+     2      OP (0x81798b0) enter
+     3      COP (0x8179850) nextstate
+
+C<enter> y C<leave> son I<op> de ámbito, y su trabajo es realizar cualquier labor casera cada vez que entre o salga de un bloque: las variables léxicas son desenlazadas, las variables no referenciadas son destruidas, y así. Cada programa tendrá estas tres primeras líneas: C<leave> es una lista, y sus hijos son todas las sentencias en el bloque. Las sentencias se delimitan por C<nextstate>, así que un bloque es una colección de I<op> C<nextstate>, con las I<op> que se deben realizar por cada sentencia como hijos de C<nextstate>. C<enter> es una única I<op> que funciona como un marcador.
+
+Es así cómo Perl analiza el programa, de arriba a abajo:
+
+                        Programa
+                           |
+                       Sentencia
+                           |
+                           =
+                          / \
+                         /   \
+                        $a   +
+                            / \
+                          $b   $c
+
+Sin embargo, es imposible B<realizar> las operaciones en este orden:
+hay que encontrar los valores de C<$b> y C<$c> antes de sumarlos, por ejemplo. Así, el otro hilo que ejecuta a través del árbol de I<op> es el orden de ejecución: cada I<op> tiene un campo C<op_next> que apunta al siguiente I<op> a ejecutar, así que los siguientes punteros nos dicen cómo perl ejecuta el código. Podemos recorrer el árbol en este orden con la opción C<exec> de C<B::Terse>:
+
+     % perl -MO=Terse,exec -e '$a=$b+$c'
+     1  OP (0x8179928) enter
+     2  COP (0x81798c8) nextstate
+     3  SVOP (0x81796c8) gvsv  GV (0x80fa4d4) *b
+     4  SVOP (0x8179798) gvsv  GV (0x80efeb0) *c
+     5  BINOP (0x8179878) add [1]
+     6  SVOP (0x816dd38) gvsv  GV (0x80fa468) *a
+     7  BINOP (0x81798a0) sassign
+     8  LISTOP (0x8179900) leave
+
+Esto probablemente tenga más sentido para un humano: entrar en un bloque, iniciar un sentencia. Obtener los valores de C<$b> y C<$c>, y sumarlos.
+Busca C<$a>, y asigna una a la otra. A continuación, salir.
+
+La forma en que Perl construye estos árboles I<op> en el proceso de análisis puede desenredarse examinando F<perly.y>, el analizador gramático YACC. Tomemos la parte que necesitamos para construir el árbol de C<$a = $b + $c>
+
+    1 term    :   term ASSIGNOP term
+    2                { $$ = newASSIGNOP(OPf_STACKED, $1, $2, $3); }
+    3         |   term ADDOP term
+    4                { $$ = newBINOP($2, 0, scalar($1), scalar($3)); }
+
+Si no está preparado para leer gramáticas BNF, así es cómo funciona: recibe ciertas cosas desde el I<tokenizador>, que generalmente acaba en mayúscula. Aquí, C<ADDOP>, aparece cuando el I<tokenizador> ve un C<+> en tu código. Se proporciona C<ASSIGNOP> cuando se usa C<=> para asignar.
+Estos son "símbolos terminales", porque usted no puede obtener nada más simple que ellos.
+
+El analizador gramático, en las líneas uno y tres del trozo de código anterior, nos dice cómo construir formas más complejas. Estas formas complejas, "símbolos no-terminales" se escriben generalmente en minúscula. C<term> aquí es un símbolo no-terminal, representando una única expresión.
+
+El analizador gramático le da la siguiente regla: puede hacer lo que está a la izquierda del carácter de dos puntos si ve todas las cosas que están a la derecha en la secuencia.
+Esto es lo que se llama una "reducción", y el objetivo del análisis es reducir completamente la entrada. Existen diferentes formas en las que se puede realizar una reducción, separadas por barras verticales; así, C<term> seguido por un C<=> seguido por un C<term> crea un C<term>, y C<term> seguido por un C<+> seguido por un C<term> también crea un C<term>.
+
+Así, si ve dos términos con un C<=> o C<+>, entre ellos, puede convertirlos a una sola expresión. Cuando hace esto, está ejecutando el código en el bloque en la línea siguiente: si ve un C<=>, hará el código en la línea 2. Si ve un C<+>, hará el código de la línea 4. Es este código el que contribuye al árbol I<op>.
+
+            |   term ADDOP term
+            { $$ = newBINOP($2, 0, scalar($1), scalar($3)); }
+
+Lo que hace esto es crear un nuevo binario I<op>, y le alimenta con un número de variables. Las variables se refieren a los I<tokens>: C<$1> es el primer I<token> en la entrada, C<$2> al segundo, y así -piense en las retrorreferencia de las expresiones regulares. C<$$> es la I<op> devuelta de esta reducción. Así, llamamos a C<newBINOP> para crear un nuevo operador binario. El primer parámetro a C<newBINOP>, una función en F<op.c>, es el tipo de I<op>. Es un operador suma, por lo que queremos que sea de tipo C<ADDOP>. Podríamos especificarlo directamente, pero justamente está aquí como el segundo token de la entrada así que usamos C<$2>. El segundo parámetro son los indicadores del I<op>: o significa "nada especial". Luego el resto de cosas que se añaden: las partes izquierda y derecha de nuestra expresión, en contexto escalar.
+
+=head1 PILAS
+
+Cuando perl ejecuta algo como C<addop>, ¿cómo pasa sus resultados al siguiente I<op>? La respuesta es, por medio del uso de pilas. Perl tiene unas cuantas pilas para almacenar cosas en las que está trabajando actualmente, y aquí examinaremos las tres más importantes.
+
+=head2 Pila de argumentos
+
+Los argumentos se pasan al código PP y vuelven del código PP usando la pila de argumentos C<ST>. La forma típica de manejar argumentos es la de sacarlos de la pila, tratarlos como deseemos, y luego ponerlos de nuevo en la pila. Así es como, por ejemplo, funciona el operador coseno:
+
+      NV value;
+      value = POPn;
+      value = Perl_cos(value);
+      XPUSHn(value);
+
+Veremos un ejemplo más ingenioso de esto cuando consideremos las macros de Perl, más abajo. C<POPn> le devuelve el (valor de punto flotante) NV de la cima de la pila SV: el C<$x> de C<cos($x)>. Entonces computamos el coseno, y ponemos el resultado de regreso como un NV. El C<X> en C<XPUSHn> significa que la pila debería extenderse si fuera necesario -no lo es aquí, porque sabemos que hay espacio para un elemento más en la pila, ya que ¡hemos quitado uno!- Las macros C<XPUSH*> garantizan, al menos, seguridad.
+
+De forma alternativa, puede jugar con la pila directamente: C<SP> le da el primer elemento en su porción de la pila, y C<TOP*> le da el SV/IV/NV/etc. de la parte superior de la pila. Así, por ejemplo, para hacer la negación unaria de un entero:
+
+     SETi(-TOPi);
+
+Solo establece al valor negado el valor entero de la entrada de la parte superior de la pila.
+
+La manipulación de la pila de argumentos en el núcleo es exactamente lo mismo como ocurre en XSUBs -vea L<perlxstut>, L<perlxs> y L<perlguts> para una larga descripción de las macros utilizadas en la manipulación de pilas-.
+
+=head2 Pila de marcas
+
+Dijimos antes "su porción de la pila" porque el código PP no necesariamente obtiene toda la pila para sí mismo: si su función llama a otra función, solo querrá exponerle los argumentos que le interesan, y no (necesariamente) permitirle tener acceso a sus propios datos.
+La forma en que hacemos esto es tener un fondo-de-pila "virtual", expuesto a cada función. La pila de marcas mantiene unos marcapáginas a las posiciones en la pila de argumentos, que puede usar cada función. Por ejemplo, cuando tratamos con una variable enlazada, (internamente, algo con magia "P") Perl tiene que llamar a métodos para acceder a la variable enlazada. Sin embargo, necesitamos separar los argumentos expuestos al método de los argumentos expuestos a la función original -el almacenamiento o recuperación o lo que sea-.
+Aquí, de forma brusca, es como se implementa el enlazado C<push>; vea C<av_push> en
+F<av.c>:
+
+     1	PUSHMARK(SP);
+     2	EXTEND(SP,2);
+     3	PUSHs(SvTIED_obj((SV*)av, mg));
+     4	PUSHs(val);
+     5	PUTBACK;
+     6	ENTER;
+     7	call_method("PUSH", G_SCALAR|G_DISCARD);
+     8	LEAVE;
+
+Examinemos toda la implementación, como práctica:
+
+     1	PUSHMARK(SP);
+
+Mete el estado actual del puntero de pila en la pila de marcas. Así es como, cuando terminemos de añadir elementos a la pila de argumentos, Perl sabe cuántas cosas hemos añadido recientemente.
+
+     2	EXTEND(SP,2);
+     3	PUSHs(SvTIED_obj((SV*)av, mg));
+     4	PUSHs(val);
+
+Vamos a añadir dos elementos más en la pila de argumentos: cuando usted tiene un array enlazado, la subrutina C<PUSH> recibe el objeto y el valor a meter, y eso es exactamente lo que tenemos aquí -el objeto enlazado, recuperado con C<SvTIED_obj>, y el valor, el C<val> SV.
+
+     5	PUTBACK;
+
+Luego le decimos a Perl que actualice el puntero de pila global desde nuestra variable interna: C<dSP> solo nos dio una copia local, no una referencia a la global.
+
+     6	ENTER;
+     7	call_method("PUSH", G_SCALAR|G_DISCARD);
+     8	LEAVE;
+
+C<ENTER> y C<LEAVE> localizan un código de bloque -ellos se aseguran que todas las variables serán desenlazadas, todo lo que se localizó obtiene su valor anterior, y así. Piense en ellos com en las C<{> y C<}> de un bloque Perl.
+
+Para hacer la llamada al método mágico, tenemos que llamar a una subrutina en el espacio Perl: C<call_method> toma cuidado de esto, y se describe en L<perlcall>. Llamamos al método C<PUSH> en contexto escalar, y vamos a descartar su valor de retorno. La función  call_method() saca el elemento superior de la pila de marcas, así que no hay nada que tenga que limpiar el llamador.
+
+=head2 Pila de guardado
+
+C no tiene el concepto de ámbito local, así que perl ofrece uno. Hemos visto que C<ENTER> y C<LEAVE> se usan como llaves de ámbito; la pila de guardado implementa el equivalente C de, por ejemplo:
+
+    {
+        local $foo = 42;
+        ...
+    }
+
+Vea L<perlguts/"Localizando cambios"> para comprobar cómo usar la pila de guardado.
+
+=head1 MILLONES DE MACROS
+
+Una cosa que notará sobre el código de Perl es que está lleno de macros. Algunos han dicho que el uso dominante de macros es la cosa más difícil de entender; otros encuentran que añade claridad. Tomemos un ejemplo, el código que implementa el operador de adición:
+
+   1  PP(pp_add)
+   2  {
+   3      dSP; dATARGET; tryAMAGICbin(add,opASSIGN);
+   4      {
+   5        dPOPTOPnnrl_ul;
+   6        SETn( left + right );
+   7        RETURN;
+   8      }
+   9  }
+
+Cada línea (aparte de las llaves, claro) contiene una macro.
+La primera línea inicia la declaración de función como lo espera Perl para el código PP; la línea 3 inicia las declaraciones de variables para la pila de argumentos; y el objetivo el valor de retorno de la operación. Finalmente, intenta ver si la operación de adición está sobrecargada; si es así, se llama a la subrutina apropiada.
+
+La línea 5 es otra declaración de variables -todas las declaraciones de variables empiezan con C<d>- que saca de la cima de la pila de argumentos dos NV (aquí C<nn>) y los pone en las variables C<right> y C<left>, de ahí lo de C<rl>. El operador suma consume dos operandos.
+Lo siguiente, llamamos a C<SETn> para establecer NV al valor del resultado de sumar los dos valores. Hecho esto, regresamos -la macro C<RETURN> nos asegura que se gestiona apropiadamente nuestro valor de retorno, y que de regreso pasamos al siguiente operador en el bucle de ejecución principal-.
+
+La mayoría de estas macros se describen en L<perlapi> y algunas de las más importantes también se explican en L<perlxs>. Ponga especial atención a L<perlguts/Trasfondo y PERL_IMPLICIT_CONTEXT> para más información sobre las macros C<[pad]THX_?>.
+
+=head1 VEA TAMBIÉN
+
+Para más información sobre los componentes de Perl, por favor, vea los documentos listados en L<perl/Componentes e interfaz con el lenguaje C>.

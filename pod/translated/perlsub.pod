@@ -1,0 +1,1416 @@
+=head1 NOMBRE
+X<subroutine> X<function> X<subrutina> X<función>
+
+perlsub - Subrutinas en Perl
+
+=head1 SINOPSIS
+
+Para declarar subrutinas:
+X<subrutina, declaración> X<sub>
+
+    sub NOMBRE;                       # una declaración "adelantada".
+    sub NOMBRE(PROTO);                #  ídem, pero con prototipos
+    sub NOMBRE : ATTRS;               #  con atributos
+    sub NOMBRE(PROTO) : ATRIBS;       #  con atributos y prototipos 
+
+    sub NOMBRE BLOQUE                 # una declaración y una definición.
+    sub NOMBRE(PROTO) BLOQUE;         #  ídem, pero con prototipos
+    sub NAME(SIG) BLOQUE              #  usando una firma 
+    sub NOMBRE : ATRIBS BLOQUE;       #  con atributos
+    sub NAME(PROTO) : ATRIBS BLOQUE   #  con prototipos y atributos
+    sub NAME(SIG) : ATRIBS BLOQUE     #  con una firma y atributos
+
+Para definir una subrutina anónima en tiempo de ejecución:
+X<subrutina, anónima>
+
+    $subref = sub BLOQUE;                  # sin prototipo
+    $subref = sub (PROTO) BLOQUE;          # con prototipo
+    $subref = sub (SIG) BLOQUE;            # con firma
+    $subref = sub : ATRIBS BLOQUE;         # con atributos
+    $subref = sub (PROTO) : ATRIBS BLOQUE; # con prototipo y atributos
+    $subref = sub (SIG) : ATRIBS BLOQUE;   # con firma y atributos
+
+Para importar subrutinas:
+X<importar>
+
+    use MÓDULO qw(NOMBRE1 NOMBRE2 NOMBRE3);
+
+Para invocar subrutinas:
+X<subrutina, llamada> X<llamada>
+
+    NOMBRE(LISTA);    # & es opcional con los paréntesis.
+    NOMBRE LISTA;     # Los paréntesis son opcionales si se predeclaró o importó.
+    &NOMBRE(LISTA);   # se salta los prototipos.
+    &NOMBRE;          # Hace visible la variable @_ para la subrutina invocada.
+
+=head1 DESCRIPCIÓN
+
+Como muchos lenguajes, Perl proporciona subrutinas definas por el usuario.
+Estas pueden ubicarse en cualquier parte del programa principal, cargadas desde otros archivos a través de las palabras claves C<do>, C<require> o C<use>, o
+generadas en tiempo de ejecución usando C<eval> o subrutinas anónimas.
+Puede incluso invocar indirectamente a una función mediante una variable que contenga su nombre o una referencia a un CÓDIGO.
+
+El modelo de perl para invocar una función y retornar valores es simple: todas las funciones reciben como parámetros una lista plana de escalares, e igualmente para todas las funciones se retorna a su invocador una lista plana de escalares.  Cualquier array o hash en estas llamadas y listas de retorno se colapsarán, perdiendo su identidad -pero siempre puede usar en su lugar el paso-por-referencia- para evitarlo-.  Tanto las listas al invocar y las listas que retornan pueden contener muchos o pocos elementos escalares como desee.  (A menudo, a una función sin sentencia return explícita se le llama subrutina, pero realmente no hay ninguna diferencia desde la perspectiva de Perl). 
+X<subrutina, parámetro> X<parámetro>
+
+Cualquier argumento pasado como parámetro de entrada se muestra en el array C<@_>.
+(Pueden también aparecer en variables léxicas introducidas por una firma;
+véase L</Firmas> más abajo).  Entonces, si invocó una función con dos argumentos, estos podrían almacenarse en
+C<$_[0]> y C<$_[1]>.  El array C<@_> es un array local, pero sus elementos son alias de los parámetros escalares reales.  En particular, si se actualiza el elemento C<$_[0]>, el argumento correspondiente es actualizado (o puede ocurrir un error si no es actualizable).  Si un argumento es un array o un elemento de un hash, que no existía cuando la función se invocó, ese elemento se crea solo cuando se le modifica o se toma una referencia a él.  (Algunas versiones anteriores de Perl crean el elemento así tenga o no valor asignado).
+Asignando por completo al array C<@_>, se eliminan estos alias, y no actualizará ningún argumento.
+X<subrutina, argumento> X<argumento> X<@_>
+
+Se puede usar una sentencia C<return> para salir de una subrutina, especificando opcionalmente el valor de retorno, que se evaluará en el contexto apropiado (lista, escalar, o vacío) dependiendo del contexto donde se realice la llamada a la subrutina.  Si no especifica ningún valor de retorno, la subrutina devuelve una lista vacía en contexto de lista, el valor indefinido en contexto escalar, o nada en el contexto vacío.  Si usted devuelve uno o más agregados (arrays y hashes), estos se desplegarán de forma indistinguible en una gran lista.
+
+Si no se encuentra C<return> y la última sentencia es una expresión, se
+devuelve su valor.  Si la última sentencia es una estructura de control de bucle como un C<foreach> o un C<while>, el valor que se devuelve no está especificado.  Una subrutina vacía retorna una lista vacía.
+X<subrutina, valor de retorno> X<valor de retorno> X<return>
+
+Aparte de una característica experimental (véase L</Firmas> más abajo),
+Perl no tiene parámetros formales con nombre.  En la práctica todo lo que usted hace es asignarles a una lista C<my()>.  Las variables que no se declaren como privadas serán variables globales.  Para más detalles escabrosos sobre la creación de variables privadas, vea L<"Variables privadas vía my()"> y L<"Valores temporales vía local()">.  Para crear ambientes protegidos para un conjunto de funciones en un paquete separado (y probablemente en un archivo separado), vea L<perlmod/"Paquetes">.
+X<parámetro formal> X<parámetro, formal>
+
+Ejemplo:
+
+    sub max {
+	my $max = shift(@_);
+	foreach $foo (@_) {
+	    $max = $foo if $max < $foo;
+	}
+	return $max;
+    }
+    $mejordia = max($lun,$mar,$mie,$jue,$vie);
+
+Ejemplo:
+
+    # obtén una línea, combinando líneas de continuación
+    #  que comienzan con espacios en blanco
+
+    sub obten_linea {
+	$estalinea = $miraadelante;  # ¡variables globales!
+	LINE: while (defined($miraadelante = <STDIN>)) {
+	    if ($miraadelante =~ /^[ \t]/) {
+		$estalinea .= $miraadelante;
+	    }
+	    else {
+		last LINE;
+	    }
+	}
+	return $estalinea;
+    }
+
+    $miraadelante = <STDIN>;     # obtén la primera línea
+    while (defined($linea = obten_linea())) {
+	...
+    }
+
+Asignar a una lista de variables privadas para nombrar sus argumentos:
+
+    sub quizasesta {
+	my($clave, $valor) = @_;
+	$Foo{$clave} = $valor unless $Foo{$clave};
+    }
+
+Debido a que la asignación copia los valores, esto también puede tener el efecto
+de convertir una llamada-por-referencia en una llamada-por-valor.  De lo contrario una función es libre de hacer modificaciones en C<@_> y cambiar los valores del invocador.
+X<llamada-por-referencia> X<llamada-por-valor>
+
+    a_mayusculas($v1, $v2);  # esto cambia $v1 y $v2
+    sub a_mayusculas {
+	for (@_) { tr/a-z/A-Z/ }
+    }
+
+Por supuesto, no le está permitido modificar constantes.  Si un argumento era en realidad un literal y trató de cambiarlo, debería obtener una (presumiblemente fatal) excepción.   Por ejemplo, esto no funcionará:
+X<llamada-por-referencia> X<llamada-por-valor>
+
+    a_mayusculas("frederick");
+
+Sería mucho más seguro si la función C<a_mayusculas()> se escribiera para devolver una copia de sus parámetros en lugar de cambiarlos en sí mismos:
+
+    ($v3, $v4) = mayuscula($v1, $v2);  # esto no cambia $v1 y $v2
+    sub mayuscula {
+	return unless defined wantarray;  # contexto vacío, nada que hacer
+	my @parametros = @_;
+	for (@parametros) { tr/a-z/A-Z/ }
+  	return wantarray ? @parametros : $parametros[0];
+    }
+
+Observe cómo a esta función (sin prototipo) no le importa si se le pasaron escalares reales o arrays.  Perl considera todos los argumentos como una gran y larga desplegada lista de parámetros en C<@_>.  Esta es un área donde brilla la simplicidad de Perl en el estilo de paso de argumentos.  La función C<mayuscula()> podría funcionar perfectamente bien sin cambiar la definición de C<mayuscula()> incluso si la alimentamos de cosas como estas:
+
+    @nuevalista = mayuscula(@list1, @list2);
+    @nuevalista = mayuscula( split /:/, $var );
+
+No tenga, sin embargo, la tentación de hacer esto:
+
+    (@a, @b)    = mayuscula(@lista1, @lista2);
+
+Al igual que la lista desplegada de parámetros de entrada, la lista de retorno también está desplegada.  Así que todo lo que ha logrado hacer aquí es almacenar todo en C<@a> y dejar C<@b> vacío.  Vea L<Paso por referencia> para más alternativas.
+
+Una subrutina se puede llamar usando un prefijo C<&> explícito.  El C<&> es opcional en Perl moderno, así como los paréntesis si la subrutina se ha predeclarado.  El C<&> I<no> es opcional cuando sólo se está nombrando a la subrutina, como cuando se usa como argumento para defined() o undef().  Tampoco es opcional cuando quiere hacer una llamada indirecta a una subrutina con un nombre de subrutina o usando una referencia mediante las construcciones C<&$subref()> o C<&{$subref}()>, aunque la notación de la expresión C<< $subref->() >> resuelve este problema.
+Vea L<perlref> para más información sobre todo esto.
+X<&>
+
+Las subrutinas se pueden llamar de forma recursiva.  Si una subrutina se llama usando la forma C<&>, la lista de argumentos es opcional, y si se omite, no se crea el array C<@_> para la subrutina: en su lugar, el array C<@_> es visible en el momento de la llamada a la subrutina.  Este es un mecanismo eficiente que los nuevos usuarios pueden desear evitar.
+X<recursión>
+
+    &foo(1,2,3);    # se pasan tres argumentos
+    foo(1,2,3);     # lo mismo
+
+    foo();          # se pasa una lista vacía
+    &foo();         # igual que lo anterior
+
+    &foo;           # foo() recibe los argumentos actuales, ¡¡igual que foo(@_)!!
+    foo;            # igual que foo() SI sub foo se predeclaró; sino, "foo"
+
+No sólo la forma C<&> hace que la lista de argumentos sea opcional, también deshabilita cualquier validación del prototipo sobre los argumentos que proporcione.  Esto es en parte por razones históricas, y en parte para tener una manera conveniente de hacer trampa si sabe lo que está haciendo.  Vea L</Prototipos> a continuación.
+X<&>
+
+Desde Perl 5.16.0, el I<token> C<__SUB__> esta disponible bajo la sentencia C<use feature 'current_sub'> y C<use 5.16.0>.  Esto evaluará a una referencia a la subrutina actualmente en ejecución, lo que permite hacer llamadas recursivas sin tener que conocer el nombre de la subrutina.
+
+    use 5.16.0;
+    my $factorial = sub {
+      my ($x) = @_;
+      return 1 if $x == 1;
+      return($x * __SUB__->( $x - 1 ) );
+    };
+
+El comportamiento de C<__SUB__> dentro de un bloque de código de una expresión regular (como en C</(?{...})/>) está sujeto a cambio.
+
+Las subrutinas cuyos nombres están en mayúsculas se reservan para el núcleo de Perl, así como los módulos cuyos nombres están completamente en minúsculas.  Una subrutina en mayúsculas es una convención heredada que indica que se invocará indirectamente por el propio sistema en tiempo de ejecución, por lo general debido a la activación de un evento.
+De la misma forma, las subrutinas cuyo nombre comience con un paréntesis izquierdo también están reservadas.  Lo que sigue es una lista de algunas subrutinas que actualmente hacen cosas especiales o predeterminadas.
+
+=over
+
+=item documentado más adelante en este mismo archivo
+
+C<AUTOLOAD>
+
+=item se describe en L<perlmod>
+
+C<CLONE>, C<CLONE_SKIP>, 
+
+=item se describen en L<perlobj>
+
+C<DESTROY>
+
+=item se describe en L<perltie>
+
+C<BINMODE>, C<CLEAR>, C<CLOSE>, C<DELETE>, C<DESTROY>, C<EOF>, C<EXISTS>, 
+C<EXTEND>, C<FETCH>, C<FETCHSIZE>, C<FILENO>, C<FIRSTKEY>, C<GETC>, 
+C<NEXTKEY>, C<OPEN>, C<POP>, C<PRINT>, C<PRINTF>, C<PUSH>, C<READ>, 
+C<READLINE>, C<SCALAR>, C<SEEK>, C<SHIFT>, C<SPLICE>, C<STORE>, 
+C<STORESIZE>, C<TELL>, C<TIEARRAY>, C<TIEHANDLE>, C<TIEHASH>, 
+C<TIESCALAR>, C<UNSHIFT>, C<UNTIE>, C<WRITE>
+
+=item se describen en L<PerlIO::via>
+
+C<BINMODE>, C<CLEARERR>, C<CLOSE>, C<EOF>, C<ERROR>, C<FDOPEN>, C<FILENO>, 
+C<FILL>, C<FLUSH>, C<OPEN>, C<POPPED>, C<PUSHED>, C<READ>, C<SEEK>, 
+C<SETLINEBUF>, C<SYSOPEN>, C<TELL>, C<UNREAD>, C<UTF8>, C<WRITE>
+
+=item se describen en L<perlfunc>
+
+L<< C<import> | perlfunc/use >>, L<< C<unimport> | perlfunc/use >>,
+L<< C<INC> | perlfunc/require >>
+
+=item se describen en L<UNIVERSAL>
+
+C<VERSION>
+
+=item se describe en L<perldebguts>
+
+C<DB::DB>, C<DB::sub>, C<DB::lsub>, C<DB::goto>, C<DB::postponed>
+
+=item indocumentada, se usa internamente por la característica L<overload>
+
+cualquiera que comience por C<(>
+
+=back
+
+Las subrutinas C<BEGIN>, C<UNITCHECK>, C<CHECK>, C<INIT> y C<END> no son enteramente subrutinas aunque se nombran como bloques de código especial, de los
+cuales puede tener más de uno en un paquete, y B<no> los puede invocar explícitamente.  Vea L<perlmod/"BEGIN, UNITCHECK, CHECK, INIT y END">
+
+=head2 Firmas
+
+B<ADVERTENCIA>: Las firmas de subrutinas son experimentales.  Esta característica se puede modificar o eliminar en futuras versiones de Perl.
+
+Perl tiene una característica experimental que permite que los parámetros formales de una subrutina se introduzcan con una sintaxis especial, separada del código procedural del cuerpo de la subrutina.  La lista de parámetros formales se denomina I<firma>.  Esta característica se debe activar primero por la declaración de un pragma, C<use feature 'signatures'>, y producirá una advertencia a menos que esté desactivada la categoría de advertencias "experimental::signatures".
+
+La firma es parte del cuerpo de una subrutina.  Normalmente el cuerpo de una subrutina es simplemente un bloque de código puesto entre llaves.  Cuando se use una firma, esta se crea como una lista entre paréntesis que va justo detrás del nombre de la subrutina.  La firma declara variables léxicas cuyo ámbito es el bloque.  Cuando se llama la subrutina, la firma es la primera que toma el control.  Puebla las variables en la firma desde la lista de argumentos que se le pasaron.  Si la lista de argumentos no cumple los requisitos de la firma, lanzará una excepción.
+Cuando el proceso de la firma se ha completado, el control pasa al bloque.
+
+Los parámetros posicionales se gestionan simplemente nombrando las variables escalares en la firma.  Por ejemplo,
+
+    sub foo ($izquierda, $derecha) {
+	return $izquierda + $derecha;
+    }
+
+toma dos parámetros posicionales, que deben rellenarse en tiempo de ejecución por dos argumentos.  Por omisión, los parámetros son obligatorios, y no se permite pasar más argumentos que los que la subrutina espera.  Así que el código de arriba es equivalente a
+
+    sub foo {
+	die "Demasiados argumentos para la subrutina" unless @_ <= 2;
+	die "Demasiados pocos argumentos para la subrutina" unless @_ >= 2;
+	my $izquierda = $_[0];
+	my $derecha = $_[1];
+	return $izquierda + $derecha;
+    }
+
+Se puede ignorar un argumento omitiendo la parte principal del nombre de la declaración de parámetros, dejando un simple sigilo C<$>.  Por ejemplo,
+
+    sub foo ($primero, $, $tercero) {
+	return "primero=$primero, tercero=$tercero";
+    }
+
+Aunque el argumento ignorado no va en una variable, sigue siendo obligatorio para el que llame a la subrutina.
+
+Un parámetro posicional se convierte en opcional cuando se le da un valor por omisión, separado del nombre del parámetro por C<=>:
+
+    sub foo ($izquierda, $derecha = 0) {
+	return $izquierda + $derecha;
+    }
+
+La subrutina anterior se puede llamar tanto con uno como con dos argumentos.
+La expresión del valor por omisión se evalúa cuando se llama a la subrutina, de forma que da diferentes valores por defecto para diferentes invocaciones.  Sólo se evalúa si el argumento se ha omitido realmente de la invocación.
+Por ejemplo,
+
+    my $auto_id = 0;
+    sub foo ($cosa, $id = $auto_id++) {
+	print "La $cosa tiene el ID $id";
+    }
+
+automáticamente asigna distintas ID secuenciales a cosas a las que el que llama a la subrutina no asignó ningún ID.  Una expresión para valores por omisión se puede referir también a parámetros que hayan aparecido antes en la firma, haciendo que el valor por omisión de un parámetro varíe según los parámetros anteriores.  Por ejemplo,
+
+    sub foo ($nombre, $apellido, $apodo = $nombre) {
+	print "A $nombre $apellido se le conoce por \"$apodo\"";
+    }
+
+Un parámetro opcional puede ser anónimo, exactamente igual que un parámetro obligatorio.
+Por ejemplo,
+
+    sub foo ($cosa, $ = 1) {
+	print $cosa;
+    }
+
+El valor por defecto del parámetro seguirá evaluándose si el correspondiente argumento no se suministra, incluso aunque el valor no se vaya a almacenar en ninguna parte.
+Esto se hace para el caso de que la evaluación tenga importantes efectos colaterales.  Sin embargo, se evaluará en contexto vacío, así que si no tiene efectos colaterales y no es trivial, generará una advertencia si está activada la categoría de advertencias "void".  Si un valor por defecto en un parámetro opcional sin nombre, puede omitirse igual con los parámetros con nombre:
+
+    sub foo ($cosa, $=) {
+	print $cosa;
+    }
+
+Parámetros posicionales opcionales deben ir después de los parámetros posicionales obligatorios.  (Si no hay parámetros posicionales obligatorios entonces un parámetro posicional opcional puede ser el primero en la firma).
+Si hay múltiples parámetros posicionales opcionales y no hay suficientes argumentos para rellenarlos, se rellenarán de izquierda a derecha.
+
+Después de los parámetros posicionales, los argumentos adicionales pueden capturarse en un parámetro sorbedor.  La forma más simple de esto es justo una variable de array:
+
+    sub foo ($filtro, @entradas) {
+	print $filtro->($_) foreach @entradas;
+    }
+
+Con un parámetro sorbedor en la firma, no existe límite superior en cuántos argumentos se pueden pasar.  Un parámetro sorbedor puede no tener nombre igual que un parámetro posicional, en cuyo caso su único efecto es desactivar el límite de argumentos, que de otra manera sí se aplicaría:
+
+    sub foo ($cosa, @) {
+	print $cosa;
+    }
+
+Un parámetro sorbedor puede, en cambio, ser un hash, en cuyo caso los argumentos disponibles se interpretan como claves y valores alternados.
+Tiene que haber tantas claves como valores: si hay un argumento impar entonces se lanzará una excepción.  Las claves se convertirán en cadenas, y si hay duplicados entonces la última instancia toma precedencia sobre la primera, igual que en la construcción estándar de hash.
+
+    sub foo ($filtro, %entrada) {
+	print $filtro->($_, $entradas{$_}) foreach sort keys %entradas;
+    }
+
+Un parámetro sorbedor hash puede no llevar nombre, igual que otras clases de parámetros.  Insistirá en que el número de argumentos disponible sea par, incluso aunque no vayan a ser almacenados en la variable.
+
+    sub foo ($cosa, %) {
+	print $cosa;
+    }
+
+Un parámetro sorbedor, tanto array como hash, debe ser el último elemento en la firma.  Puede seguir a parámetros posicionales obligatorios y opcionales; también puede ser el único elemento de la firma.  Los parámetros sorbedores no pueden tener valores por defecto: si no indican argumentos para ellos entonces usted obtiene un array o un hash vacíos.
+
+Una firma puede estar completamente vacía, en cuyo caso todo lo que hace es comprobar que el llamador no pasa ningún argumento:
+
+    sub foo () {
+	return 123;
+    }
+
+Cuando se usa una firma, los argumentos siguen estando disponibles en la variable array especial C<@_>, además de en las variables léxicas de la firma.  Hay una diferencia entre las dos formas de acceder a los argumentos: C<@_> crea I<alias> a los argumentos pero las variables de la firma crea I<copias> de los argumentos.  Así que escribir en una variable de firma solo cambia esa variable, y no tiene efecto en las variables del llamador, pero escribiendo en un elemento de C<@_> modifica lo que el llamador hubiera usado para suplir ese argumento.
+
+Existe una potencia ambigüedad sintáctica entre las firmas y los prototipos (vea L</Prototipos>), porque los dos comienzan con un paréntesis de apertura y los dos pueden aparecer en algunos lugares, como justo después del nombre en la declaración de una subrutina.  Por razones históricas, cuando no se activen las firmas, cualquier paréntesis de apertura en tal contexto olvidará la interpretación de prototipos.  La mayor parte de las firmas se interpretarán en esas circunstancias como prototipos, pero no serán prototipos válidos.
+(Un prototipo válido no puede contener ningún carácter alfabético).  Esto puede llevarle a algunos mensajes de error un poco confusos.
+
+Para evitar la ambigüedad, cuando estén activadas las firmas, se desactiva la sintaxis especial para los prototipos.  No hay ningún intento de adivinar si un grupo de paréntesis tenía la intención de ser un prototipo o una firma.
+Bajo estas circunstancias, para darle un prototipo a una subrutina, use el L<atributo prototype|atributos/Atributos incorporados>.  Por ejemplo,
+
+    sub foo :prototype($) { $_[0] }
+
+Es enteramente posible, para una subrutina tener a la vez un prototipo y una firma.  Hacen diferentes trabajos: el prototipo afecta a la compilación de llamadas a la subrutina, y la firma pone los valores de los argumentos en variables léxicas, en tiempo de ejecución.  Por lo tanto, puede escribir
+
+    sub foo ($izquierda, $derecha) : prototype($$) {
+	return $izquierda + $derecha;
+    }
+
+El atributo I<prototype>, y cualquier otro atributo, se pone después de la firma.
+
+=head2 Variables Privadas a través de my()
+X<my> X<variable, lexical> X<lexical> X<lexical variable> X<scope, lexical>
+X<lexical scope> X<attributes, my>
+
+Sinopsis:
+
+    my $foo;	    	# declara $foo localmente
+    my (@wid, %get); 	# declara una lista de variables con ámbito local
+    my $foo = "flurp";	# declara $foo localmente, y la inicializa
+    my @oof = @bar;	# declara @oof localmente, y la inicializa
+    my $x : Foo = $y;	# similar, con un atributo aplicado
+
+B<ADVERTENCIA>: El uso de listas de atributos sobre la declaración C<my> todavía está evolucionando.  La semántica actual e interfaces están sujetas a cambios.
+Ver L<atributos> y L<Attribute::Handlers>.
+
+El operador C<my> declara las variables listadas como léxicas dentro del bloque que las contiene, los condicionales (C<if/unless/elsif/else>),
+bucles (C<for/foreach/while/until/continue>), subrutinas, C<eval>,
+o archivos C<do/require/use>.  Si se indica más de un valor, esa lista debe ser puesta entre paréntesis.  Todos los elementos mencionados deben ser valores-izquierda legales.  Solo los identificadores alfanuméricos pueden ser de ámbito léxico -en su lugar los operadores mágicos predefinidos como C<$/> deben ser C<local>izados con C<local>-.
+
+A diferencia de las variables dinámicas creadas por el operador C<local>, las variables léxicas declaradas con C<my> están totalmente escondidas del mundo exterior, incluyendo cualquier subrutina a la que llamemos.  Esto es incluso cierto si es la misma subrutina la que se llama a sí misma o desde cualquier otro sitio -cada llamada obtiene su propia copia-.
+X<local>
+
+Esto no significa que una variable C<my> declarada en un ámbito léxico encerrada estáticamente sea invisible.  Solo están descartados los ámbitos dinámicos.   Por ejemplo, la función C<bumpx()> que sigue a continuación tiene acceso a la variable léxica $x porque tanto el C<my> como la C<sub> ocurren en el mismo ámbito, presumiblemente en un ámbito de archivo.
+
+    my $x = 10;
+    sub bumpx { $x++ } 
+
+Un C<eval()>, sin embargo, puede ver variables léxicas del ámbito en que está evaluando, mientras que los nombres no estén escondidos por declaraciones que estén dentro del propio C<eval()>.  Vea L<perlref>.
+X<eval, ámbito de>
+
+La lista de parámetros a my() puede recibir una asignación, si así lo desea, y de esa manera le permite inicializar sus variables.  (Si no se le da un inicializador a una variable en particular, se crea con un valor indefinido).  Generalmente, esto es lo que se usa para darle nombre a los parámetros de una subrutina.  Ejemplos:
+
+    $arg = "fred";	  # variable "global"
+    $n = cube_root(27);
+    print "$arg cree que la raíz es $n\n";
+ fred cree que el root es 3
+
+    sub cube_root {
+	my $arg = shift;  # el nombre no importa
+	$arg **= 1/3;
+	return $arg;
+    }
+
+El C<my> es simplemente un modificador de algo a lo que puedes asignar.  Así, cuando usted asigna a variables en su lista de argumentos, C<my> no cambia si esas variables se ven como escalares o un array.  Así que
+
+    my ($foo) = <STDIN>;		# ¿ERROR?
+    my @FOO = <STDIN>;
+
+ambas ofrecen un contexto de lista al lado derecho, mientras que
+
+    my $foo = <STDIN>;
+
+ofrece un contexto escalar.  Pero lo siguiente declara solo una variable:
+
+    my $foo, $bar = 1;			# ERROR
+
+Tiene el mismo efecto que
+
+    my $foo;
+    $bar = 1;
+
+La variable que se declara no se presenta (no es visible) hasta después de la sentencia actual.  Por lo tanto,
+
+    my $x = $x;
+
+se puede usar para inicializar un nuevo $x con el valor del anterior $x, y la expresión
+
+    my $x = 123 and $x == 123
+
+es falsa a menos que suceda que el anterior $x tenga el valor C<123>.
+
+Los ámbitos léxicos del control de estructuras no están delimitados de forma precisa por las llaves que delimitan los bloques que controlan; las expresiones de control también forman parte del ámbito.  Entonces, en el bucle
+
+    while (my $linea = <>) {
+        $linea = lc $linea;
+    } continue {
+        print $linea;
+    }
+
+el ámbito de la $linea se extiende desde su declaración a lo largo del resto de la estructura del bucle (incluyendo la cláusula C<continue>), pero no más allá.  De forma similar, en la condición
+
+    if ((my $respuesta = <STDIN>) =~ /^si$/i) {
+        usuario_de_acuerdo();
+    } elsif ($respuesta =~ /^no$/i) {
+        usuario_no_de_acuerdo();
+    } else {
+	chomp $respuesta;
+        die "'$respuesta' no es ni 'si' ni 'no'";
+    }
+
+el ámbito de $respuesta extiende desde su declaración a lo largo del resto de la condición, incluyendo cualquier cláusula C<elsif> y C<else>, pero no más allá.  Vea L<perlsyn/"Sentencias simples"> para más información sobre el ámbito de las variables en sentencias con modificadores.
+
+El bucle C<foreach>, por defecto, crea dinámicamente un ámbito para la variable índice de la misma manera que C<local>.  Sin embargo, si la variable índice se prefija con la palabra clave C<my>, o si ya existe una lexica en ese ámbito, entonces se crea una nueva léxica.  Así, en el bucle
+X<foreach> X<for>
+
+    for my $i (1, 2, 3) {
+        alguna_funcion();
+    }
+
+el ámbito de $i se extiende hasta el final del bucle, pero no más allá, dejando inaccesible el valor de $i dentro de C<alguna_funcion()>.
+X<foreach> X<for>
+
+Algunos usuarios podrían desear animarse a usar variables encerradas en ámbitos léxicos.
+Como ayuda para cazar usos implícitos de variables de paquete, que siempre son globales, si dice
+
+    use strict 'vars';
+
+entonces cualquier mención a cualquier variable de aquí hasta el final del bloque envolvente debe tanto referirse a una variable léxica, predeclaradas con C<our> o C<use vars>, o sino se debe calificar de forma completa con el nombre del paquete.
+Si no, resulta en un error de compilación.  Un bloque interior puede desactivar esta orden con C<no strict 'vars'>.
+
+Un C<my> tiene efecto tanto en tiempo de compilación como en tiempo de ejecución.  En tiempo de compilación, el compilador toma nota de él.  La principal utilidad de esto es la de silenciar C<use strict 'vars'>, pero también es esencial para la generación de clausuras, como se detalla en L<perlref>.  Aún así, la inicialización real se retrasa hasta el tiempo de ejecución, así que se ejecuta en el momento adecuado, como por ejemplo cada vez que atraviesa un bucle.
+
+Las variables declaradas con C<my> no son parte de ningún paquete y por ello nunca se les califica de forma completa con el nombre del paquete.  En particular, no tiene permiso para intentar crear una variable de paquete (u otra global) léxica:
+
+    my $pack::var;	# ¡ERROR!  Sintaxis ilegal
+
+De hecho, una variable dinámica (también conocida como de paquete o variable global) siguen siendo accesible usando la notación C<::> de calificación completa incluso mientras sea visible una léxica con el mismo nombre:
+
+    package main;
+    local $x = 10;
+    my    $x = 20;
+    print "$x y $::x\n";
+
+Imprimirá C<20> y C<10>.
+
+Puede declarar variables C<my> en el ámbito más extremo de un archivo para esconder cualquier identificador del mundo exterior a ese archivo.  Esto es similar al espíritu de las variables estáticas de C cuando se usan a nivel de archivo.  Para hacer esto con una subrutina se requiere el uso de una clausura (una función anónima que accede a léxicas encerradas en el ámbito).
+Si quiere crear una subrutina privada que no pueda llamarse desde el exterior de ese bloque, puede declarar una variable léxica que contenga una referencia a una subrutina anónima:
+
+    my $version_secreta = '1.001-beta';
+    my $sub_secreta = sub { print $version_secreta };
+    &$sub_secreta();
+
+Mientras la referencia nunca se devuelva a ninguna otra función dentro del módulo, ningún módulo externo puede ver la subrutina, porque su nombre no está en la tabla de símbolos de ningún paquete.  Recuerde que, I<verdaderamente>, no se le llama C<$algun_paquete::version_secreta> o cualquier otra cosa; solo es $version_secreta, sin calificar y no calificable.
+
+Esto no funciona, sin embargo, con los métodos de objeto; para encontrarlos, todos los métodos de objeto tienen que estar en la tabla de símbolo de algún paquete.  Vea L<perlref/"Plantillas de función"> para estudiar una alternativa para esto.
+
+=head2 Variables privadas persistentes
+X<state> X<state variable> X<estática> X<variable, persistente> X<variable, estática> X<clausura>
+
+Existen dos formas de construir variables privadas persistentes en Perl 5.10.
+Primero, puede simplemente usar la característica C<state>.  O, puede usar clausuras, si quiere seguir siendo compatible con las versiones anteriores a 5.10.
+
+=head3 Variables persistentes con state()
+
+Comenzando con Perl 5.10.0, puede declarar variables con la palabra clave C<state> en lugar de C<my>.  Para que esto funcione, sin embargo, debe activar de antemano la característica, bien usando el pragma C<feature>, o usando C<-E> en los programas de una línea (vea L<feature>).  A partir de Perl 5.16, la forma C<CORE::state> ya no requiere el pragma C<feature>.
+
+La palabra clave C<state> crea una variable léxica (siguiendo las mismas reglas de ámbito que C<my>) que persiste de una llamada a la subrutina a la siguiente.  Si una variable state reside en el interior de una subrutina anónima, entonces cada copia de la subrutina tiene su propia copia de la variable state.  Sin embargo, el valor de la variable state persistirá entre las llamadas a la misma copia de la subrutina anónima.  (No olvide que C<sub { ... }> crea una nueva subrutina cada vez que se ejecuta).
+
+Por ejemplo, el código siguiente mantiene un contador privado, que se incrementa cada vez que se llama a la función dame_otro():
+
+    use feature "state";
+    sub dame_otro { state $x; return ++$x }
+
+Y este ejemplo usa subrutinas anónimas para crear contadores separados:
+
+    use feature "state";
+    sub crea_contador {
+	return sub { state $x; return ++$x }
+    }
+
+También, ya que C<$x> es léxica, no se puede leer o modificar por ningún código Perl externo.
+
+Cuando se combina con una declaración de variable, las asignaciones de escalares sencillos a variables C<state> (como en C<state $x = 42>) solo se ejecutan la primera vez.  Cuando tales sentencias se evalúan en siguientes ocasiones, la asignación se ignora.  No está definido el comportamiento de esta suerte de asignación a variables no escalares.
+
+=head3 Variables persistentes con clausuras
+
+Solo porque una variable léxica esté léxicamente (también llamada estáticamente) encerrada en el ámbito de su bloque envolvente, C<eval>, o C<do> ARCHIVO, no significa que dentro de una función trabaje como una variable estática de C.  Normalmente trabaja más como las auto de C, pero con una recolección de basura implícita.  
+
+A diferencia de las variables locales en C o C++, las variables léxicas de Perl no se reciclan necesariamente solo porque se haya salido de su ámbito.
+Si existe algo más permanente que sigue haciendo referencia a lo léxico, seguirá existiendo.  Siempre y cuando alguna cosa referencia a una léxica, no se liberará -como debe ser-.  No querrá que se libere la memoria hasta que termine de usarla, o mantenerla una vez que termine.  La recolección automática de basura se ocupa de esto, por usted.
+
+Eso significa que puede pasarla o salvar referencias a variables léxicas, mientras que devolver un puntero a una auto de C es un error grave.
+También nos da una forma de simular las estáticas de las funciones de C.  Aquí existe un mecanismo para darle a las variables privadas de una función tanto un ámbito léxico como un tiempo de vida estático.  Si quiere crear algo como variables estáticas del C, solo tiene que encerrar toda la función en un bloque extra, y poner la variable estática fuera de la función, pero dentro del bloque.
+
+    {
+	my $valor_secreto = 0;
+	sub dame_otro {
+	    return ++$valor_secreto;
+	}
+    }
+    # $valor_secreto se vuelve ahora inalcanzable, desde el mundo
+    # exterior, pero retiene su valor entre llamadas a dame_otro()
+
+Si esta función se interpreta desde un archivo separado vía C<require> o C<use>, entonces esto, probablemente, sea lo correcto.  Si todo está en el programa principal, necesitará colocarlo de tal manera que el C<my> se ejecute lo antes posible, tanto poniendo todo el bloque en la parte superior del programa principal, o más probablemente, metiéndolo en un bloque de código C<BEGIN>, para asegurarse de que se ejecuta antes de que arranque su programa:
+
+    BEGIN {
+	my $valor_secreto = 0;
+	sub dame_otro {
+	    return ++$valor_secreto;
+	}
+    }
+
+Vea L<perlmod/"BEGIN, UNITCHECK, CHECK, INIT y END"> sobre los bloques de código especiales que se lanzan en determinados momentos, C<BEGIN>, C<UNITCHECK>, C<CHECK>, C<INIT> y C<END>.
+
+Si se declara en el ámbito más externo (el ámbito de archivo), entonces las léxicas trabajan de forma parecida a las estáticas de los archivos C.  Están disponibles para todas las funciones que siguen en el mismo archivo donde se han declarado, pero son inaccesibles fuera de ese archivo.  Esta estrategia se usa algunas veces en los módulos para crear variables privadas que todo el módulo pueda ver.
+
+=head2 Valores temporales vía local()
+X<local> X<ámbito, dinámico> X<ámbito dinámico> X<variable, local> X<variable, temporal>
+
+B<ADVERTENCIA>: En general, debería usar C<my> en lugar de C<local>, porque es más rápido y seguro.  Excepciones a esto incluyen las variables de puntuación globales, los identificadores de archivo globales y los formatos, y la manipulación directa de la propia tabla de símbolos de Perl.  C<local> se usa mayoritariamente cuando el valor actual de una variable debe ser visible a las subrutinas que se han llamado.
+
+Sinopsis:
+
+    # localización de valores
+
+    local $foo;                     # hace que $foo sea una local, de forma dinámica
+    local (@wid, %get);             # crea una lista de variables locales
+    local $foo = "flurp";           # hace que $foo sea dinámica, y la inicializa
+    local @oof = @bar;              # hace que @oof sea dinámica, y la inicializa
+
+    local $hash{clave} = "valor";   # establece un valor local para esa entrada del hash
+    delete local $hash{clave};      # elimina esa entrada para el bloque actual
+    local ($condicion ? $v1 : $v2); # diversos tipos de valores a la izquierda soportan
+			            # localización
+
+    # localización de símbolos
+
+    local *FH;                      # localiza $FH, @FH, %FH, &FH...
+    local *merlyn = *randal;        # ahora $merlyn realmente es $randal, y
+                                    #  @merlyn realmente es @randal, etc.
+    local *merlyn = 'randal';       # LO MISMO: promociona 'randal' a *randal
+    local *merlyn = \$randal;       # solo crea un alias en $merlyn, no a @merlyn, etc.
+
+Un C<local> modifica su lista de variables para que sean "locales" dentro del bloque que la contiene, C<eval> o C<do FILE> -y a I<cualquier subrutina que se llame desde el interior de ese bloque>-.  Una C<local> solo da valores temporales a variables globales (es decir, de paquete).  I<No> crea una variable local.  Esto se conoce como ámbito dinámico.  El ámbito léxico se hace con C<my>, que trabaja más como las declaraciones auto del C.
+
+Algunos tipos de valores a la izquierda también se pueden localizar: elementos de hash, array y porciones, condicionales (siempre que su resultado sea siempre localizable), y referencias simbólicas.  Para variables sencillas, crea nuevos valores en ámbito dinámico.
+
+Si se da más de una variable o expresión a C<local>, se deben poner entre paréntesis.  Este operador trabaja guardando los valores actuales de las variables indicadas en su lista de argumentos en una pila oculta y las recupera a la salida del bloque, subrutina o eval.  Esto significa que las subrutinas que se llamen también pueden referirse a la variable local, pero no a la global.  La lista de argumentos puede recibir una asignación, si se desea, permitiéndole inicializar sus variables locales.  (Si no se da un valor inicial a una variable en particular, se crea con un valor indefinido).
+
+Ya que C<local> es un operador en tiempo de ejecución, se ejecuta cada vez que atraviesa un bucle.  Consiguientemente, es más eficiente localizar sus variables fuera del bucle.
+
+=head3 Nota gramatical sobre local()
+X<local, context>
+
+Un C<local> es, simplemente, un modificador sobre una expresión de valor a la izquierda.  Cuando usted asigna a una variable C<local>izada, el C<local> no cambia si su lista se ve como un escalar o un array.  Así que
+
+    local($foo) = <STDIN>;
+    local @FOO = <STDIN>;
+
+ambas ofrecen un contexto de lista al lado derecho, mientras que
+
+    local $foo = <STDIN>;
+
+ofrece un contexto escalar.
+
+=head3 Localización de variables especiales
+X<local, variable especial>
+
+Si localiza una variable especial, le estará dando un nuevo valor, pero su magia no desaparece.  Quiere decir que los efectos colaterales relacionados con esta magia siguen funcionando con el valor localizado.
+
+Esta característica le permite hacer funcionar código como este:
+
+    # Leer todo el contenido de ARCHIVO en $slurp
+    { local $/ = undef; $slurp = <ARCHIVO>; }
+
+Note, sin embargo, que esto restringe la localización de algunos valores; por ejemplo, la siguiente sentencia muere, en perl 5.10.0, con un error de I<Modification of a read-only value attempted> ("Se intentó la modificación de un valor de solo lectura"), porque la variable $1 es mágica, y de solo lectura:
+
+    local $1 = 2;
+
+Una excepción es la variable escalar por defecto: a partir de perl 5.14 C<local($_)> siempre le quitará toda la magia de $_, para hacer que sea posible, de forma segura, reusar $_ en una subrutina.
+
+B<ADVERTENCIA>: La localización de arrays y hashes enlazados no funciona actualmente como se ha descrito.
+Esto se arreglará en un próximo lanzamiento de Perl; mientras tanto, evite código que confíe de cualquier comportamiento particular de la localización de arrays y hashes enlazados (localizar elementos individuales funciona bien).
+Vea L<perl58delta/"Localizar arrays y hashes enlazados está roto"> para más detalles.
+X<local, tie>
+
+=head3 Localización de variables de expansión
+X<local, glob> X<glob>
+
+La construcción
+
+    local *nombre;
+
+crea una nueva entrada completa en la tabla de símbolos para la variable de expansión C<nombre> en el paquete actual.  Eso significa que todas las variables en su espacio de expansión ($nombre, @nombre, %nombre, &nombre, y el gestor dr archivo C<nombre>) se reinicializan dinámicamente.
+
+Esto implica, aparte de otras cosas, que se perdería cualquier magia que portasen estas variables.  En otras palabras, el decir C<local */> no tendrá ningún efecto en el valor interno del separador del registro de entrada.
+
+=head3 Localización de elementos de tipos compuestos
+X<local, elemento de tipo compuesto> X<local, elemento array> X<local, elemento hash>
+
+Merece la pena tomar un momento para explicar qué sucede cuando C<local>iza un miembro de un tipo compuesto (es decir, un elemento de un array o hash).
+En este caso, el elemento se C<local>iza I<por nombre>.  Esto significa que cuando el ámbito de C<local()> termina, el valor guardado se recuperará al elemento hash cuya clave se nombró en el C<local()>, o el elemento array cuyo índice se indicó en el C<local()>.  Si ese elemento se borró mientras C<local()> estaba activo (p.e. con un C<delete()> de un hash o un C<shift()> de un array), volverá a la existencia extendiendo, posiblemente, un array y rellenando los elementos intermedios con C<undef>.  Por ejemplo, si escribe:
+
+    %hash = ( 'Este' => 'es', 'un' => 'test' );
+    @ary  = ( 0..5 );
+    {
+         local($ary[5]) = 6;
+         local($hash{'un'}) = 'perforar';
+         while (my $e = pop(@ary)) {
+             print "$e . . .\n";
+             last unless $e > 3;
+         }
+         if (@ary) {
+             $hash{'solo un'} = 'test';
+             delete $hash{'un'};
+         }
+    }
+    print join(' ', map { "$_ $hash{$_}" } sort keys %hash),".\n";
+    print "El array tiene ",scalar(@ary)," elementos: ",
+          join(', ', map { defined $_ ? $_ : 'undef' } @ary),"\n";
+
+Perl imprimirá
+
+    6 . . .
+    4 . . .
+    3 . . .
+    Este es solo un test un test.
+    El array tiene 6 elementos: 0, 1, 2, undef, undef, 5
+
+Este comportamiento de local() sobre miembros inexistentes de tipos compuestos está sujeto a cambio en el futuro.
+
+=head3 Borrado localizado de elementos de tipos compuestos
+X<delete> X<local, elemento de tipos compuestos> X<local, elemento array> X<local, elemento hash>
+
+Puede usar las construcciones C<delete local $array[$ind]> y C<delete local $hash{clave}> para borrar una entrada de tipo compuesto para el bloque actual y recuperarlo cuando termine.  Regresan el valor del array/hash antes de la localización, que significa que son respectivamente equivalentes a
+
+    do {
+        my $val = $array[$ind];
+        local  $array[$ind];
+        delete $array[$ind];
+        $val
+    }
+
+y
+
+    do {
+        my $val = $hash{clave};
+        local  $hash{clave};
+        delete $hash{clave};
+        $val
+    }
+
+excepto que para ellos, el C<local> tiene el ámbito del bloque C<do>.  También se aceptan porciones.
+
+    my %hash = (
+     a => [ 7, 8, 9 ],
+     b => 1,
+    )
+
+    {
+     my $a = delete local $hash{a};
+     # $a es [ 7, 8, 9 ]
+     # %hash es (b => 1)
+
+     {
+      my @nums = delete local @$a[0, 2]
+      # @nums es (7, 9)
+      # $a es [ undef, 8 ]
+
+      $a[0] = 999; # se borrará cuando acabe el ámbito
+     }
+     # $a vuelve a ser [ 7, 8, 9 ]
+
+    }
+    # %hash vuelve a su estado original
+
+=head2 Subrutinas al lado izquierdo
+X<lvalue> X<subrutina, valor a la izquierda>
+
+Es posible devolver un valor modificable desde una subrutina.
+Para hacer esto, tiene que declarar la subrutina para que devuelva un valor a la izquierda.
+
+    my $val;
+    sub canmod : lvalue {
+	$val;  # o:  return $val;
+    }
+    sub nomod {
+	$val;
+    }
+
+    canmod() = 5;   # asigna a $val
+    nomod()  = 5;   # ERROR
+
+El contexto escalar/lista para la subrutina y para el lado derecho de la asignación se determina como si la llamada de la subrutina se reemplazase por un escalar.  Por ejemplo, considere:
+
+    data(2,3) = get_data(3,4);
+
+Las dos subrutinas se llaman en contexto escalar, mientras que en
+
+    (data(2,3)) = get_data(3,4);
+
+y en
+
+    (data(2),data(3)) = get_data(3,4);
+
+se llaman en contexto de lista.
+
+Las subrutinas en el lado izquierdo son convenientes, pero debe tener en mente que, cuando se usan con objetos, pueden violar la encapsulación.  Un mutador normal puede comprobar el argumento suministrado antes de establecer el atributo que está protegiendo, mientras que una subrutina a la izquierda, no.  Si requiere cualquier procesado especial cuando almacena o recupera valores, considere el usar el módulo de CPAN Sentinel, o algo similar.
+
+=head2 Subrutinas léxicas
+X<my sub> X<state sub> X<our sub> X<subrutina, léxica>
+
+B<ADVERTENCIA>: las subrutinas léxicas siguen siendo experimentales.  Esta característica se puede modificar o eliminar en futuras versiones de Perl.
+
+Las subrutinas léxicas solo están disponibles bajo el pragma C<use feature 'lexical_subs'>, que produce una advertencia a menos que la categoría de advertencias "experimental::lexical_subs" esté desactivada.
+
+A partir de Perl 5.18, puede declarar una subrutina privada con C<my> o C<state>.  Igual que con las variables state, la palabra clave C<state> solo está disponible bajo C<use feature 'state'> o C<use 5.010> o superior.
+
+Estas subrutinas solo son visibles dentro del bloque en que se declaran, y solo después de esa declaración:
+
+    no warnings "experimental::lexical_subs";
+    use feature 'lexical_subs';
+
+    foo();		# llama a la subrutina del paquete/global
+    state sub foo {
+	foo();		# también llama a la subrutina del paquete
+    }
+    foo();		# llama a la sub. "state"
+    my $ref = \&foo;	# toma una referencia a la sub. "state"
+
+    my sub bar { ... }
+    bar();		# llama a "my" sub.
+
+Para usar una subrutina léxica desde el interior de la propia subrutina, debe predeclararla.  La sintaxis de la definición de subrutina C<sub foo {...}> respeta cualquier declaración previa de C<my sub;> o C<state sub;>.
+
+    my sub baz;		# predeclaración
+    sub baz {		# define "my" sub.
+	baz();		# llamada recursiva
+    }
+
+=head3 C<state sub> vs. C<my sub>
+
+¿Cuál es la diferencia entre las sub. "state" y "my"?  Cada vez que la ejecución entra en un bloque en que se han declarado sub. "my", se crea una nueva copia de cada sub.  Las subrutinas "state" persisten de una ejecución del bloque que las contienen al siguiente.
+
+Así, de forma general, las subrutinas "state" son más rápidas.  Pero las sub. "my" son necesarias si lo que quiere es crear clausuras:
+
+    no warnings "experimental::lexical_subs";
+    use feature 'lexical_subs';
+
+    sub lo_que_sea {
+	my $x = shift;
+	my sub interior {
+	    ... hacer algo con $x ...
+	}
+	interior();
+    }
+
+En este ejemplo, se crea un nuevo C<$x> cuando se llama a C<lo_que_sea> y, también un nuevo C<interior>, que puede ver al nuevo C<$x>.  Una sub. "state" solo verá el C<$x> de la primera llamada a C<lo_que_sea>.
+
+=head3 Subrutinas C<our>
+
+Igual que C<our $variable>, C<our sub> crea un alias léxico a la subrutina del mismo nombre, dentro del paquete.
+
+Los dos principales usos son volver a usar la sub. de paquete dentro de un ámbito interior:
+
+    no warnings "experimental::lexical_subs";
+    use feature 'lexical_subs';
+
+    sub foo { ... }
+
+    sub bar {
+	my sub foo { ... }
+	{
+	    # aquí necesita usar el foo exterior
+	    our sub foo;
+	    foo();
+	}
+    }
+
+y hacer visible una subrutina a otros paquetes, en el mismo ámbito:
+
+    package MySneakyModule;
+
+    no warnings "experimental::lexical_subs";
+    use feature 'lexical_subs';
+
+    our sub hacer_algo { ... }
+
+    sub hacer_algo_con_el_llamante {
+	package DB;
+	() = caller 1;		# establece @DB::args
+	hacer_algo(@args);	# usa MySneakyModule::hacer_algo
+    }
+
+=head2 Pasar entradas de la tabla de símbolos (typeglobs)
+X<typeglob> X<*>
+
+B<ADVERTENCIA>: el mecanismo descrito en esta sección fue originalmente la única manera de simular el paso por referencia en versiones anteriores de Perl.  Mientras que sigue funcionando bien en versiones modernas, el nuevo mecanismo de referenciado es, generalmente, más sencillo para trabajar con él.  Vea más abajo.
+
+Algunas veces no querrá pasar el valor de un array a una subrutina, sino su nombre, para que la subrutina pueda modificar la copia global en lugar de trabajar con una copia local.  En perl puede referirse a todos los objetos de un nombre en particular prefijando el nombre con un asterisco: C<*foo>.  Esto se conoce a menudo como un "typeglob", porque se puede pensar en el asterisco delantero como un comodín que coincide con todos los caracteres curiosos que las variables y las subrutinas tienen.
+
+Cuando se evalúa, el typeglob produce un valor escalar que representa todos los objetos de ese nombre, incluyendo cualquier identificador de archivo, formato, o subrutina.  Cuando se le asigna, hace que el nombre mencionado se refiera a
+cualesquiera valor que C<*> haya recibido.  Ejemplo:
+
+    sub doble_aridad {
+	local(*alguna_aridad) = @_;
+	foreach $elemento (@alguna_aridad) {
+	    $elemento *= 2;
+	}
+    }
+    doble_aridad(*foo);
+    doble_aridad(*bar);
+
+Los escalares realmente se pasan por referencia, así que puede modificar los argumentos escalares sin usar este mecanismo referenciandolos explícitamente como C<$_[0]>, etc. Puede modificar todos los elementos de un array pasando todos los elementos como escalares, pero tiene que usar el mecanismo C<*> (o el mecanismo equivalente de referencias) a C<push>, C<pop>, o cambiar el tamaño de un array.  Será, ciertamente, mucho más rápido pasar el typeglob (o la referencia).
+
+Incluso si no quiere modificar un array, este mecanismo es útil para pasar múltiples array en una única LISTA, porque normalmente el mecanismo de LISTA mezclará todos los valores de array, así que no podrá extraer los arrays individuales.  Para más información sobre los typeglob, vea L<perldata/"Typeglobs e identificadores de archivo">.
+
+=head2 Cuándo seguir usando local()
+X<local> X<variable, local>
+
+A pesar de la existencia de C<my>, siguen existiendo tres lugares donde el operador C<local> sigue brillando.  De hecho, en estos tres lugares usted I<debe> usar C<local> en lugar de C<my>.
+
+=over 4
+
+=item 1.
+
+Necesita dar un valor temporal a una variable global, especialmente $_.
+
+Las variables globales, como C<@ARGV> o las variables de puntuación, se deben C<local>izar con C<local()>.  Este bloque lee F</etc/motd>, y lo divide en trozos separados por líneas de signos igual, que se colocan en C<@Fields>.
+
+    {
+	local @ARGV = ("/etc/motd");
+        local $/ = undef;
+        local $_ = <>;	
+	@Fields = split /^\s*=+\s*$/;
+    } 
+
+En particular, es importante C<local>izar $_ en cualquier subrutina que establezca algún valor para ella.  Fíjese sobretodo en las asignaciones implícitas en las condiciones de los C<while>.
+
+=item 2.
+
+Necesita crear un archivo local o indicador de directorio o una función local.
+
+Una función que necesita un identificador de archivo propio deber usar C<local()> sobre un typeglob completo.   Esto se puede usar para crear nuevas entradas en la tabla de símbolos:
+
+    sub ioqueue {
+        local  (*READER, *WRITER);    # ¡no my!
+        pipe    (READER,  WRITER)     or die "pipe: $!";
+        return (*READER, *WRITER);
+    }
+    ($cabeza, $cola) = ioqueue();
+
+Vea el módulo Symbol para aprender una forma de crear entradas en la tabla de símbolos.
+
+Debido a que la asignación de una referencia a un typeglob crea un alias, esto se puede usar para crear lo que es de forma efectiva una función local, o al menos, un alias local.
+
+    {
+        local *crece = \&encoge; # solo hasta que el bloque sale
+        crece();                 # realmente llama a encoge()
+	mueve();                 # si mueve() crece(), también encoge()
+    }
+    crece();                 # volvemos de nuevo al crece() real
+
+Vea L<perlref/"Plantillas de función"> para más información sobre la manipulación de las funciones con nombre.
+
+=item 3.
+
+Quiere, temporalmente, cambiar solo un elemento de un array o hash.
+
+Puede C<local>izar solo un elemento de un agregado.  Normalmente esto se hace de forma dinámica:
+
+    {
+	local $SIG{INT} = 'IGNORE';
+	funct();                            # ininterrumpible
+    } 
+    # la interrumpibilidad recuperada aquí automáticamente
+
+Pero también funciona en agregados declarados léxicamente.
+
+=back
+
+=head2 Paso por referencia
+X<paso por referencia> X<paso-por-referencia> X<referencia>
+
+Si quiere pasar más de un array o hash a una función -o devolverlos de ella- y que sigan manteniendo su integridad, entonces debe usar un paso-por-referencia explícito.  Antes de hacer esto, necesita entender las referencias, tal como se detalla en L<perlref>.
+De otra forma, esta sección puede tener poco sentido para usted.
+
+Aquí hay unos pocos ejemplos sencillos.  Primero, permita pasar varios array a una función y hacer un C<pop> a todos ellos, devolviendo una nueva lista con todos sus anteriores elementos:
+
+    @rabos = popmuchos ( \@a, \@b, \@c, \@d );
+
+    sub popmuchos {
+	my $aref;
+	my @retlist = ();
+	foreach $aref ( @_ ) {
+	    push @retlist, pop @$aref;
+	}
+	return @retlist;
+    }
+
+Este es un ejemplo de cómo podría escribir una función que devuelva una lista de las claves que aparezcan en todos los hashes que se le pasen:
+
+    @comunes = inter( \%foo, \%bar, \%joe );
+    sub inter {
+	my ($k, $href, %seen); # locales
+	foreach $href (@_) {
+	    while ( $k = each %$href ) {
+		$visto{$k}++;
+	    }
+	}
+	return grep { $visto{$_} == @_ } keys %visto;
+    }
+
+Solo estamos usando el mecanismo normal de retorno de lista.
+¿Qué sucede si quiere pasar o devolver un hash?  Bien, si va a usar solo uno de ellos, o si no le preocupa concatenarlos, entonces la convención normal de llamada está bien, aunque es un poco cara.
+
+Cuando la gente se encuentra con problemas es aquí:
+
+    (@a, @b) = func(@c, @d);
+o
+    (%a, %b) = func(%c, %d);
+
+Esa sintaxis, simplemente, no funciona.  Establece solo C<@a> y C<%a> y borra C<@b> y C<%b>.  Además a la función no se le han pasado dos array o hashes separados, sino una larga lista en C<@_>, como siempre.
+
+Se puede arreglar esto para que todo el mundo lo trate a través de referencias, con código más limpio, aunque no tan bonito a primera vista.  Aquí hay una función que toma como argumentos dos referencias a array, devolviendo los elementos de los dos array según el orden de cuántos elementos tienen dentro:
+
+    ($aref, $bref) = func(\@c, \@d);
+    print "@$aref tiene más que @$bref\n";
+    sub func {
+	my ($cref, $dref) = @_;
+	if (@$cref > @$dref) {
+	    return ($cref, $dref);
+	} else {
+	    return ($dref, $cref);
+	}
+    }
+
+Resulta que, de hecho, puede también hacerlo así:
+
+    (*a, *b) = func(\@c, \@d);
+    print "@a tiene más que @b\n";
+    sub func {
+	local (*c, *d) = @_;
+	if (@c > @d) {
+	    return (\@c, \@d);
+	} else {
+	    return (\@d, \@c);
+	}
+    }
+
+Aquí estamos usando typeglobs para crear alias a la tabla de símbolos.  Aún así, es algo sutil, y también podría no funcionar si está usando variables C<my>, porque solo las variables globales (incluso las disfrazadas en C<local>) están en la tabla de símbolos.
+
+Si está pasando identificadores de archivos, puede, de forma normal, usar el typeglob, como C<*STDOUT>, pero también funcionan las referencias a typeglob.
+Por ejemplo:
+
+    splutter(\*STDOUT);
+    sub splutter {
+	my $fh = shift;
+	print $fh "her um well a hmmm\n";
+    }
+
+    $rec = get_rec(\*STDIN);
+    sub get_rec {
+	my $fh = shift;
+	return scalar <$fh>;
+    }
+
+Si está planeando generar nuevos identificadores de archivos, podría hacerlo.
+Note que está pasando solo *FH, no su referencia.
+
+    sub abrelo {
+	my $ruta = shift;
+	local *FH;
+	return open (FH, $ruta) ? *FH : undef;
+    }
+
+=head2 Prototipos
+X<prototipo> X<subrutina, prototipo>
+
+Perl soporta una clase muy limitada de comprobación de argumentos en tiempo de compilación, usando el prototipado de funciones.  Se puede declarar tanto en la sección PROTO o con un L<atributo prototype|atributos/Atributos incorporados>.
+Si declara de estas formas
+
+    sub mypush (+@)
+    sub mypush :prototype(+@)
+
+entonces C<mypush()> toma argumentos exactamente como lo hace C<push()>.
+
+Si están activadas las firmas de subrutinas (vea L</Firmas>), entonces la sintaxis más corta de PROTO no está disponible, porque podría chocar con las firmas.  En este caso, un prototipo se puede declarar en la forma de un atributo.
+
+La declaración de función debe ser visible en tiempo de compilación.  El prototipo afecta solo a la interpretación de las llamadas con nuevo estilo a la función, donde nuevo estilo se define como no usar el carácter C<&>.  En otras palabras, si la llama como una función incorporada, entonces se comporta como una función incorporada.  Si la llama como una subrutina de la forma tradicional, entonces se comporta como una subrutina tradicional.  Naturalmente cae fuera de esta regla que los prototipos no tienen influencia sobre las referencias a subrutinas como C<\&foo> o sobre llamadas indirectas a subrutinas como C<&{$subref}> o C<< $subref->() >>.
+
+Los prototipos tampoco influyen en las llamadas a métodos, porque la función que se va a llamar está indeterminada en tiempo de compilación, ya que el código exacto que se va a llamar depende de la herencia.
+
+Debido a que el intento de esta característica es, primeramente, permitirle definir subrutinas que funcionen como funciones incorporadas, aquí hay prototipos para algunas funciones que se interpretan casi exactamente como las correspondientes incorporadas.
+
+   Declarada como             Llamada como
+
+   sub mylink ($$)            mylink $viejo, $nuevo
+   sub myvec ($$$)            myvec $var, $desplazamiento, 1
+   sub myindex ($$;$)         myindex &obtenercadena, "substr"
+   sub mysyswrite ($$$;$)     mysyswrite $bufer, 0, length($bufer) - $des, $des
+   sub myreverse (@)          myreverse $a, $b, $c
+   sub myjoin ($@)            myjoin ":", $a, $b, $c
+   sub mypop (+)              mypop @array
+   sub mysplice (+$$@)        mysplice @array, 0, 2, @meteme
+   sub mykeys (+)             mykeys %{$hashref}
+   sub myopen (*;$)           myopen HANDLE, $nombre
+   sub mypipe (**)            mypipe READHANDLE, WRITEHANDLE
+   sub mygrep (&@)            mygrep { /foo/ } $a, $b, $c
+   sub myrand (;$)            myrand 42
+   sub mytime ()              mytime
+
+Cualquier carácter de prototipo escapado con una barra diagonal inversa representa un argumento real que debe comenzar con ese carácter (opcionalmente precedido por C<my>, C<our> o C<local>), con la excepción de C<$>, que aceptará cualquier expresión escalar de lado izquierdo, como C<$foo = 7> o C<< mi_funcion()->[0] >>.  El valor que se pasa como parte de C<@_> será una referencia al argumento real pasado en la llamada a la subrutina, obtenida al aplicar C<\> al argumento.
+
+Puede usar la notación de grupo de barra diagonal inversa C<\[]> para especificar que se permite más de un tipo de argumento.  Por ejemplo:
+
+    sub myref (\[$@%&*])
+
+que permite llamar a myref() como
+
+    myref $var
+    myref @array
+    myref %hash
+    myref &sub
+    myref *glob
+
+y el primer argumento de myref() será una referencia a un escalar, un array, un hash, un código o una expansión.
+
+Los caracteres de prototipo no escapados tienen significados especiales.  Cualquier C<@> o C<%> sin escapar se come el resto de argumentos, y fuerza un contexto de lista.  Un argumento que se representa por C<$> fuerza a contexto escalar.  Un C<&> requiere una subrutina anónima, que, si se pasa como primer argumento, no se requerirá la palabra clave C<sub> o una coma subsiguiente.
+
+Un C<*> permite que la subrutina acepte una palabra simple, constante, expresión escalar, typeglob, o una referencia a un typeglob, en esa posición.  El valor estará disponible a la subrutina tanto como un simple escalar, o (en los dos últimos casos) como una referencia a un typeglob.  Si desea convertir siempre tales argumentos a una referencia a un typeglob, use Symbol::qualify_to_ref(), como por ejemplo:
+
+    use Symbol 'qualify_to_ref';
+
+    sub foo (*) {
+	my $fh = qualify_to_ref(shift, caller);
+	...
+    }
+
+El prototipo C<+> es una alternativa especial a C<$> que actuará como C<\[@%]> cuando se le da una variable array o hash literal, pero que, en cambio, forzará a usar el argumento en contexto escalar.  Esto es útil para las funciones que aceptarían como argumento tanto un array literal o una referencia a un array.
+
+    sub mypush (+@) {
+        my $aref = shift;
+        die "No es un array ni una ref a un array" unless ref $aref eq 'ARRAY';
+        push @$aref, @_;
+    }
+
+Cuando use el prototipo C<+>, su función debe comprobar que el argumento es de un tipo aceptable.
+
+Un punto y coma (C<;>) separa los argumentos obligatorios de los opcionales.
+Es redundante antes de C<@> o C<%>, ya que abarcan todo lo demás.
+
+Como último carácter de un prototipo, o justo antes de un punto y coma, un C<@> o un C<%>, puede usar C<_> en lugar de C<$>: si este argumento no se proporciona, se usará en su lugar C<$_>.
+
+Note cómo los tres últimos ejemplos en la tabla de arriba se tratan de forma especial por el analizador.  C<mygrep()> se interpreta como un verdadero operador de lista; C<myrand()> se interpreta como un verdadero operador unario con la misma precedencia unaria que C<rand()>; y C<mytime()> realmente no tiene argumentos, exactamente igual que C<time()>.  Es decir, que si escribe
+
+    mytime +2;
+
+obtendrá C<mytime() + 2>, no C<mytime(2)>, que es como debería haberse interpretado si no se tuviese un prototipo.  Si quiere forzar a una función unaria a que tenga la misma precedencia que un operador de lista, añada C<;> al final del prototipo:
+
+    sub mygetprotobynumber($;);
+    mygetprotobynumber $a > $b; # interpretado como mygetprotobynumber($a > $b)
+
+El detalle interesante sobre C<&> es que con él puede generar nueva sintaxis, si se proporciona en la posición inicial:
+X<&>
+
+    sub try (&@) {
+	my($try,$catch) = @_;
+	eval { &$try };
+	if ($@) {
+	    local $_ = $@;
+	    &$catch;
+	}
+    }
+    sub catch (&) { $_[0] }
+
+    try {
+	die "phooey";
+    } catch {
+	/phooey/ and print "unphooey\n";
+    };
+
+Esto imprime C<"unphooey">.  (Sí, siguen existiendo problemas aún no resueltos con la visibilidad de C<@_>.  Por el momento, estoy ignorando esa cuestión.  (Pero note que si nosotros hacemos a C<@_> léxica en un ámbito, esas subrutinas anónimas pueden actuar como clausuras... (¡Eh!, ¿no suena esto a algo parecido a algo Lispsiano?  (No importa.))))
+
+Y aquí hay una reimplementación del operador C<grep> de Perl:
+X<grep>
+
+    sub mygrep (&@) {
+	my $code = shift;
+	my @result;
+	foreach $_ (@_) {
+	    push(@result, $_) if &$code;
+	}
+	@result;
+    }
+
+Alguna gente preferiría prototipos completamente alfanuméricos.  Los alfanuméricos se han dejado fuera intencionadamente por el propósito expreso de que algún día, en el futuro, se añadan parámetros formales, con nombres.  El objetivo principal del mecanismo actual es permitir a los autores de módulos ofrecer mejores diagnósticos a los usuarios de los módulos.  Larry siente que la notación es, realmente, comprensible para los programadores de Perl, y que no estorbará grandemente en el meollo del módulo, ni que sea más difícil de leer.  El ruido de línea está visualmente encapsulada en una pequeña píldora que es fácil de tragar.
+
+Si intenta usar una secuencia alfanumérica en un prototipo generará una advertencia opcional -"Illegal character in prototype..." ("Carácter ilegal en prototipo...")-.
+Desafortunadamente, las versiones anteriores de Perl permitían que el prototipo que fuera tan largo como su prefijo, fuera un prototipo válido.  La advertencia se puede actualizar a un error fatal en una futura versión de Perl una vez que la mayor parte del código sea arreglado.
+
+Probablemente sea mejor prototipar nuevas funciones, en lugar de reajustar el prototipado a las viejas.  Esto es porque debería ser especialmente cuidadoso sobre las imposiciones silenciosas de los contextos escalar versus lista.  Por ejemplo, si decide que una función debería tomar un parámetro, como esta:
+
+    sub func ($) {
+	my $n = shift;
+	print "me ha dado $n\n";
+    }
+
+y alguien lo llama con un array o una expresión que devuelve una lista:
+
+    func(@foo);
+    func( split /:/ );
+
+Entonces es como si hubiera puesto un C<scalar> automático delante del argumento, que puede sorprender a más de uno.  No se pasa el C<@foo> que usó para guardar algo.  En lugar de eso, C<func()> ahora recibe un C<1>; esto es: el número de elementos en C<@foo>.  Y al C<split> se le llama en contexto escalar, así que comienza garabateando en su lista de parámetros C<@_>.  ¡Auch!
+
+Si una sub. tiene tanto un PROTO como un BLOQUE, el prototipo no se aplica hasta después de definirse completamente el BLOQUE.  Esto significa que una función recursiva con un prototipo tiene que predeclararse para que el prototipo pueda tomar efecto, como aquí:
+
+	sub foo($$);
+	sub foo($$) {
+		foo 1, 2;
+	}
+
+Todo esto es muy potente, de acuerdo, y debería usarse solo de forma moderada para hacer del mundo un lugar mejor.
+
+=head2 Funciones constantes
+X<constant>
+
+Las funciones con un prototipo de C<()> son potenciales candidatos para convertirse en funciones en línea.  Si el resultado, después de la optimización y plegado de código, es o bien una constante o un escalar en un ámbito léxico que no tiene más referencias, entonces se usará en lugar de las llamadas a la función que no tengan un C<&>.  Llamadas que usen C<&> nunca se ponen en línea.  (Vea F<constant.pm> para una forma fácil de declarar más constantes).
+
+Todas las siguientes funciones se convertirán a funciones en línea:
+
+    sub pi ()		{ 3.14159 }		# No es exacto, pero está muy cercano.
+    sub PI ()		{ 4 * atan2 1, 1 }	# Tan bueno que lo consigue,
+						# ¡y también está en línea!
+    sub ST_DEV ()	{ 0 }
+    sub ST_INO ()	{ 1 }
+
+    sub FLAG_FOO ()	{ 1 << 8 }
+    sub FLAG_BAR ()	{ 1 << 9 }
+    sub FLAG_MASK ()	{ FLAG_FOO | FLAG_BAR }
+
+    sub OPT_BAZ ()	{ not (0x1B58 & FLAG_MASK) }
+
+    sub N () { int(OPT_BAZ) / 3 }
+
+    sub FOO_SET () { 1 if FLAG_MASK & FLAG_FOO }
+    sub FOO_SET2 () { if (FLAG_MASK & FLAG_FOO) { 1 } }
+
+(Sea consciente de que el último ejemplo no siempre se pondrá en línea en Perl 5.20 y anteriores, ya que no se comporta consistentemente con subrutinas que contienen ámbitos internos).  Puede evitar la puesta en línea usando un C<return> explícito:
+
+    sub baz_val () {
+	if (OPT_BAZ) {
+	    return 23;
+	}
+	else {
+	    return 42;
+	}
+    }
+    sub bonk_val () { return 12345 }
+
+Como se ha aludido antes, puede declarar también sub. en línea de forma dinámica en tiempo del BEGIN si su cuerpo consiste de un escalar en ámbito léxico que no tenga otras referencias.  Solo el primer ejemplo de los siguientes será puesto en línea:
+
+    BEGIN {
+        my $var = 1;
+        no strict 'refs';
+        *INLINED = sub () { $var };
+    }
+
+    BEGIN {
+        my $var = 1;
+        my $ref = \$var;
+        no strict 'refs';
+        *NOT_INLINED = sub () { $var };
+    }
+
+Una cuestión no tan obvia con esto (vea [RT #79908]) es que esa variable será inmediatamente puesta en línea, y dejará de comportarse como una variable léxica normal; p. e. esto imprimirá C<79907>, no C<79908>:
+
+    BEGIN {
+        my $x = 79907;
+        *RT_79908 = sub () { $x };
+        $x++;
+    }
+    print RT_79908(); # imprime 79907
+
+A partir de Perl 5.22, este comportamiento erróneo se detecta y se emite un aviso de obsolescencia pero se conserva para mantener la compatibilidad.  Si quiere que la subrutina se ponga en línea (sin generar advertencia), asegúrese que la variable no se usa en un contexto donde podría modificarse aparte del lugar donde se declara.
+
+    # Bien, ningún aviso
+    BEGIN {
+        my $x = 54321;
+        *INLINED = sub () { $x };
+    }
+    # Advierte.  Futuras versiones de Perl pararán la puesta en línea.
+    BEGIN {
+        my $x;
+        $x = 54321;
+        *ALSO_INLINED = sub () { $x };
+    }
+
+Perl 5.22 introduce también el atributo experimental "const" como alternativa.  (Desactive las advertencias "experimental::const_attr" si quiere usarlo).  Cuando se aplica a una subrutina anónima, fuerza a que se llame a la sub. cuando se evalúa la subexpresión C<sub>.  Se captura el valor de retorno y se convierte a una subrutina constante:
+
+    my $x = 54321;
+    *INLINED = sub : const { $x };
+    $x++;
+
+El valor de retorno de C<INLINED>, en este ejemplo, siempre será 54321, sin importar futuras modificaciones de $x.  Puede también poner cualquier código arbitrario dentro de la sub., y se ejecutará inmediatamente, y su resultado se capturará de la misma manera.
+
+Si realmente quiere una subrutina con un prototipo C<()> que devuelva una variable léxica, puede forzar, de forma sencilla, a que no se ponga en línea añadiendo un C<return> explícito:
+
+    BEGIN {
+        my $x = 79907;
+        *RT_79908 = sub () { return $x };
+        $x++;
+    }
+    print RT_79908(); # imprime 79908
+
+La forma más fácil para saber si una subrutina se ha puesto en línea es usando L<B::Deparse>.  Considere este ejemplo de dos subrutinas que devuelven C<1>, una con un prototipo C<()>, provocando que sea puesta en línea, y la otra sin él (la salida del decompilador está truncada, para que sea más clara):
+
+ $ perl -MO=Deparse -le 'sub ONE { 1 } if (ONE) { print ONE if ONE }'
+ sub ONE {
+     1;
+ }
+ if (ONE ) {
+     print ONE() if ONE ;
+ }
+ $ perl -MO=Deparse -le 'sub ONE () { 1 } if (ONE) { print ONE if ONE }'
+ sub ONE () { 1 }
+ do {
+     print 1
+ };
+
+Si redefine una subrutina que fue elegible para ser puesta en línea, obtendrá, por defecto, una advertencia.  Puede usar esta advertencia para decir si sí o no se considera capaz de ponerse en línea a una subrutina en particular, ya que es diferente de la advertencia de sobrecargar subrutinas no puestas en línea:
+
+    $ perl -e 'sub one () {1} sub one () {2}'
+    Constant subroutine one redefined at -e line 1. (Subrutina constante one redefinida en la línea 1 de -e)
+    $ perl -we 'sub one {1} sub one {2}'
+    Subroutine one redefined at -e line 1. (Subrutina one redefinida en la línea 1 de -e)
+
+La advertencia se considera lo suficientemente severa como para no resultar afectada por la opción B<-w> (o su ausencia) porque las invocaciones previas de la función compilada seguirán usando el valor anterior de la función.  Si necesita ser capaz de redefinir la subrutina, necesita asegurarse que no está puesta en línea, bien sea quitando el prototipo C<()> (que cambia la semántica de la llamada, así que tenga cuidado) o frustre el mecanismo de puesta en línea de alguna manera, p. e. añadiendo un C<return> explícito, como se ha mencionado antes:
+
+    sub not_inlined () { return 23 }
+
+=head2 Reescribiendo funciones incorporadas
+X<incorporado> X<sobrecarga> X<CORE> X<CORE::GLOBAL>
+
+Se pueden reescribir muchas funciones incorporadas, aunque esto solo debería intentarse de forma ocasional y por una muy buena razón.  Típicamente, esto se podría usar por un paquete que intente la emulación de funcionalidad incorporada que falte en un sistema diferente a Unix.
+
+La reescritura se puede hacer solo importando el nombre desde un módulo en tiempo de compilación -la predeclaración ordinaria no es suficiente-.  Sin embargo, el pragma C<use subs> le permite, en efecto, predeclarar subrutinas a través de la sintaxis de importación, y estos nombres pueden entonces reescribir las incorporadas:
+
+    use subs 'chdir', 'chroot', 'chmod', 'chown';
+    chdir $algunsitio;
+    sub chdir { ... }
+
+Para referirse inequívocamente a la forma incorporada, preceda el nombre incorporado con el calificador especial de paquete C<CORE::>.  Por ejemplo, decir C<CORE::open()> siempre se refiere al C<open()> incorporado, incluso si el paquete actual ha importado alguna subrutina llamada C<&open()> de cualquier otro sitio.  Incluso aunque se parezca a una llamada de función normal, no lo es: el prefijo CORE::, en este caso, es parte de la sintaxis de Perl, y funciona para cualquier palabra clave, sin importar lo que haya en el paquete CORE.  Tomar una referencia a él, es decir, C<\&CORE::open>, solo funciona para algunas palabras clave.  Vea L<CORE>.
+
+La biblioteca de módulos no debería, en general, exportar nombres incorporados como C<open> o C<chdir> como parte de su lista por defecto C<@EXPORT>, porque estas podrían colarse en el espacio de nombres de otro módulo y cambiar inesperadamente la semántica.
+En cambio, si el módulo añade el nombre a C<@EXPORT_OK>, entonces es posible, para un usuario, importar el nombre de forma explícita, pero no implícita.
+Por ejemplo, podrían decir
+
+    use Module 'open';
+
+e importarían la reescritura de C<open>.  Pero si dicen
+
+    use Modulo;
+
+obtendrían las importaciones por defecto, sin las reescrituras.
+
+El mecanismo anterior para reescribir las funciones incorporadas está restringido, de forma muy deliberada, al paquete que solicita la importación.  Hay un segundo método que algunas veces es aplicable cuando desea reescribir una incorporada en todos los sitios, sin considerar las fronteras de los espacios de nombres.  Esto se consigue importando una sub. en el espacio de nombres especial C<CORE::GLOBAL::>.  Aquí hay un ejemplo que reemplaza el operador C<glob> con algo que entiende las expresiones regulares.
+
+    package REGlob;
+    require Exporter;
+    @ISA = 'Exporter';
+    @EXPORT_OK = 'glob';
+
+    sub import {
+	my $pkg = shift;
+	return unless @_;
+	my $sym = shift;
+	my $where = ($sym =~ s/^GLOBAL_// ? 'CORE::GLOBAL' : caller(0));
+	$pkg->export($where, $sym, @_);
+    }
+
+    sub glob {
+	my $pat = shift;
+	my @got;
+	if (opendir my $d, '.') { 
+	    @got = grep /$pat/, readdir $d; 
+	    closedir $d;   
+	}
+	return @got;
+    }
+    1;
+
+Y aquí está la manera de como podría (ab)usarse:
+
+    #use REGlob 'GLOBAL_glob';	    # reescribir glob() en TODOS los espacios de nombres
+    package Foo;
+    use REGlob 'glob';		    # reescribir glob() solo en Foo::
+    print for <^[a-z_]+\.pm\$>;	    # muestra todos los módulos pragmáticos
+
+El comentario inicial muestra un ingenioso, pero peligroso ejemplo.
+Reescribir C<glob> de forma global podría forzar a un nuevo (y subversivo) comportamiento para el operador C<glob> para I<todo> espacio de nombres, sin el conocimiento completo o cooperación de los módulos que tienen sus propios espacios de nombres.  Naturalmente, esto debería hacerse con extrema atención -si se tiene que hacer de todas formas-.
+
+El anterior ejemplo C<REGlob> no implementa todo el soporte necesario para reescribir limpiamente el operador C<glob> de perl.  El C<glob> incorporado tiene diferentes comportamientos dependiendo de cuando aparece en contexto escalar o de lista, pero nuestro C<REGlob>, no los tiene.  De hecho, muchas funciones incorporadas de perl tienen tales comportamientos sensibles al contexto, y deben estar soportados adecuadamente por una reescritura correcta.  Para un ejemplo completamente funcionar de la reescritura C<glob>, estudie la implementación de C<File::DosGlob> en la biblioteca estándar.
+
+Cuando reescribe una incorporada, su reemplazo debe ser consistente (si es posible) con la sintaxis nativa de la incorporada.  Puede conseguirlo usando un prototipo adecuado.  Para ver el prototipo de una incorporada reescribible, use la función C<prototype> con un argumento C<"CORE::builtin_name"> (vea L<perlfunc/prototype>).
+
+Note que, sin embargo, algunas incorporadas no tienen su sintaxis expresada por un prototipo (como C<system> o C<chomp>).  Si las reescribe no será capaz de imitar completamente su sintaxis original.
+
+Las incorporadas C<do>, C<require> y C<glob> se pueden reescribir, pero debido a algo de magia especial, su sintaxis original se preserva, y no tiene por qué definir un prototipo para sus reemplazos.  (Aún así, no puede reescribir la sintaxis de C<do BLOQUE>).
+
+C<require> tiene una magia negra adicional: si invoca su reemplazo de C<require> como C<require Foo::Bar>, recibirá realmente el argumento C<"Foo/Bar.pm"> en @_.  Vea L<perlfunc/require>.
+
+Y, como habrá notado del ejemplo anterior, si reescribe C<glob>, el operador de expansión C<< <*> >> también queda reescrito.
+
+De una forma similar, reescribir la función C<readline> también reescribe el operador equivalente de E/S C<< <IDENTIFICADOR_DE_ARCHIVO> >>.  También, reescribir C<readpipe> también reescribe los operadores C<``> y C<qx//>.
+
+Finalmente, algunas incorporadas (p. e. C<exists> o C<grep>) no se pueden reescribir.
+
+=head2 Autocarga
+X<autocarga> X<AUTOLOAD>
+
+Si llama a una subrutina que no está definida, podría obtener, normalmente, un error fatal indicando que la subrutina no existe.  (Así mismo, para subrutinas que se van a usar como métodos, cuando el método no existe en ninguna clase base de la clase del paquete).
+Sin embargo, si está definida una subrutina C<AUTOLOAD> en el paquete o paquetes utilizados para encontrar a la subrutina original, entonces se llama a la subrutina C<AUTOLOAD> con los argumentos que se le hubieran pasado a la subrutina original.  El nombre completamente calificado de la subrutina original aparece en la variable global $AUTOLOAD del mismo paquete que en la rutina C<AUTOLOAD>.  El nombre no se pasa como un argumento ordinario porque, er, bien, porque... es así.  (Como excepción, se salta la llamada a un método C<import> o C<unimport> inexistentes.  También, si la subrutina AUTOLOAD es un XSUB, existen otras formas de recuperar el nombre de la subrutina.  Vea L<perlguts/Autocarga con XSUB> para más detalles).
+
+
+Muchas rutinas C<AUTOLOAD> cargan una definición de la subrutina solicitada usando eval(), y luego ejecutan esa subrutina usando una forma especial de goto() que borra el marco de la pila de la rutina C<AUTOLOAD> sin dejar rastro.  (Vea el código fuente del módulo estándar documentado en L<AutoLoader>, por ejemplo).  Pero una rutina C<AUTOLOAD> también puede, simplemente, emular la rutina sin definirla.   Por ejemplo, vamos a prentender que una función que no estaba definida debería solo invocar a C<system> con aquellos argumentos.  Todo lo que haría sería esto:
+
+    sub AUTOLOAD {
+	my $programa = $AUTOLOAD;
+	$programa =~ s/.*:://;
+	system($programa, @_);
+    }
+    date();
+    who('am', 'i');
+    ls('-l');
+
+De hecho, su predeclara funciones que quiera llamar de esa manera, ni siquiera necesita paréntesis:
+
+    use subs qw(date who ls);
+    date;
+    who "am", "i";
+    ls '-l';
+
+Un ejemplo más completo de esto es el módulo Shell de CPAN, que trata cada llamada a las subrutinas indefinidas como llamadas a programas externos.
+
+Hay mecanismos disponibles para ayudar los autores de módulos para dividir sus módulos en archivos autocargables.  Vea el módulo estándar AutoLoader descrito en L<AutoLoader> y en L<AutoSplit>, los módulos estándares SelfLoader en L<SelfLoader>, y el documento sobre añadir funciones al código Perl en L<perlxs>.
+
+=head2 Atributos de subrutinas
+X<attribute> X<subrutina, atributo> X<attrs>
+
+Una declaración o definición de subrutina puede tener una lista de atributos asociados con ella.  Si está presente tal lista de atributos, se limita por los espacios y por el carácter de dos puntos, se trata como se ha visto en C<use attributes>.  Vea L<attributes> para más detalles sobre qué atributos están actualmente soportados.
+A diferencia de la limitación con el obsoleto C<use attrs>, la sintaxis C<sub : ATTRLIST> trabaja para asociar los atributos con una predeclaración, y no solo con una definición de subrutina.
+
+Los atributos deben ser tan válidos como los nombres de los identificadores (sin ningún carácter de puntuación excepto '_').  Puede tener una lista de parámetros unida a ellos, de la que solo se comprueba el correcto anidamiento de los paréntesis ('(', ')').
+
+Ejemplos de una sintaxis válida (incluso aunque los atributos sean desconocidos):
+
+    sub fnord (&\%) : switch(10,foo(7,3))  :  expensive;
+    sub plugh () : Ugly('\(") :Bad;
+    sub xyzzy : _5x5 { ... }
+
+Ejemplos de sintaxis inválida:
+
+    sub fnord : switch(10,foo();  # ()-cadena no balanceada
+    sub snoid : Ugly('(');        # ()-cadena no balanceada
+    sub xyzzy : 5x5;              # "5x5" no es un identificador válido
+    sub plugh : Y2::north;        # "Y2::north" no es un identificador simple
+    sub snurt : foo + bar;        # "+" no es un dos puntos o un espacio
+
+La lista de atributos se pasa como una lista de cadenas constantes al código que los asocia con la subrutina.  En particular, el segundo ejemplo de sintaxis válida anterior se parece actualmente a esto en términos de cómo se interpreta e invoca:
+
+    use attributes __PACKAGE__, \&plugh, q[Ugly('\(")], 'Bad';
+
+Para más detalles sobre la lista de atributos y su manipulación, vea L<attributes> y L<Attribute::Handlers>.
+
+=head1 VEA TAMBIÉN
+
+Vea L<perlref/"Plantillas de funciones"> para más información sobre referencias y clausuras.
+Vea L<perlxs> si quiere aprender sobre la forma de llamar las subrutinas C desde Perl.  
+Vea L<perlembed> si quiere aprender sobre la forma de llamar a las subrutinas Perl desde C. Vea L<perlmod> para aprender sobre cómo empaquetar sus funciones en archivos separados.
+Vea L<perlmodlib> para aprender qué módulos de biblioteca vienen como estándares en su sistema.
+Vea L<perlootut> para aprender cómo hacer llamadas a métodos de objeto.
