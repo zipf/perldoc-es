@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #
 # Compare versions of pod documents.
 # Joaquin Ferrero. 2012.07.25
@@ -14,12 +14,14 @@
 
 ### Config
 # Project directory
-DIR=/home/explorer/perlspanish
+DIR=/home/explorer/Documentos/Desarrollo/perlspanish-work
 ### End config
 
 ### Arguments
 POD=$1
 
+### Si encontramos el archivo en el directorio donde estamos,
+### esperamos que el segundo archivo esté indicado como segundo argumento.
 if [ -f $POD ]
 then
 	POD_SOURCE=$POD
@@ -50,13 +52,18 @@ echo "ES:       $W_ES"
 #exit
 
 ### Format pod with MANWIDTH width
-MANWIDTH=$W_EN PERLDOC_POD2="" perldoc -d $POD.en $POD_SOURCE
+MANWIDTH=$W_EN PERLDOC_POD2="" perldoc -t -d $POD.en $POD_SOURCE
 
 ### This encoding line is required because target/ pods
 # don't go through the postprocess program, yet
-echo -e "=encoding utf-8\n\n" > $POD.es.org
+$(egrep -q '^=encoding' $POD_TARGET)
+if [ $? -eq 1 ]
+then
+	echo -e "=encoding utf-8\n\n" > $POD.es.org
+fi
 cat $POD_TARGET >> $POD.es.org
-MANWIDTH=$W_ES PERLDOC_POD2="" perldoc -d $POD.es $POD.es.org
+
+MANWIDTH=$W_ES PERLDOC_POD2="" perldoc -t -d $POD.es $POD.es.org
 
 ### Show side-by-side
 diff -d -y -W $COLS $POD.{en,es} |less
