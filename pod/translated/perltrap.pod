@@ -1,0 +1,368 @@
+=head1 NOMBRE
+
+perltrap - Trampas para los incautos
+
+=head1 DESCRIPCIÓN
+
+La mayor trampa de todas es olvidar usar C<use warnings> o la opción B<-w>; vea L<warnings> y L<perlrun>. La segunda mayor trampa es no hacer que su programa se ejecute bajo C<use strict>.  La tercera mayor trampa es no leer la lista de cambios en esta versión de Perl; vea L<perldelta>.
+
+=head2 Trampas de Awk
+
+Los usuarios acostumbrados a B<awk> deberían tomar nota especial de lo siguiente:
+
+=over 4
+
+=item *
+
+Un programa Perl se ejecuta solo una vez, no una vez por cada línea de entrada.  Puede crear un bucle implícito con C<-n> o C<-p>.
+
+=item *
+
+El módulo English, cargado a través de
+
+    use English;
+
+permite que se refiera a las variables especiales (como C<$/>) con nombres (como $RS), como si se estuviera en B<awk>; vea L<perlvar> para más detalles.
+
+=item *
+
+Los caracteres de puntos y comas son necesarios después de todas las sentencias simples en Perl (excepto al final de un bloque).  El carácter de nueva línea no es un delimitador de sentencias.
+
+=item *
+
+Se requieren llaves en los C<if> y C<while>.
+
+=item *
+
+Las variables comienzan en Perl con "$", "@" o "%".
+
+=item *
+
+Los índices de los arrays, desde 0.  De igual forma, las posiciones dentro de las cadenas de texto en substr() y en index().
+
+=item *
+
+Tiene que decidir si su array tiene índices numéricos o de cadena.
+
+=item *
+
+Los valores de Hash no hacen su aparición hasta que son referenciados.
+
+=item *
+
+Tiene que decidir si quiere usar comparaciones numéricas o de cadena.
+
+=item *
+
+Leer una línea de entrada no la divide.  Usted mismo debe dividir y guardarla en un array.  Y el operador split() tiene diferentes argumentos que el de B<awk>.
+
+=item *
+
+La línea actual está normalmente en $_, no en $0.  Generalmente, no se ha eliminado el carácter de nueva línea.  ($0 es el nombre del programa que se está ejecutando).  Vea L<perlvar>.
+
+=item *
+
+$<I<dígito>> no se refiere a los campos; se refiere a las subcadenas que coinciden con el último patrón coincidente.
+
+=item *
+
+La sentencia print() no añade separadores de campo y de registro, a menos que establezca C<$,> y C<$\>.  Puede establecer $OFS y $ORS si está usando el módulo English.
+
+=item *
+
+Debe abrir sus archivos antes de imprimir en ellos.
+
+=item *
+
+El operador rango es "..", no coma.  El operador coma funciona como en C.
+
+=item *
+
+El operador de coincidencia es "=~", no "~".  ("~" es el operador de complemento a uno, como en C).
+
+=item *
+
+El operador de exponenciación es "**", no "^".  "^" es el operador de XOR, como en C. (Ya sabe, uno podría sentir el presentimiento de que B<awk> es, básicamente, incompatible con C).
+
+=item *
+
+El operador concatenación es ".", no la cadena nula.  (Usar la cadena nula podría hacer imposible interpretar C</patrón/ /patrón/>, porque la tercera barra inclinada sería interpretada como un operador de división; el I<tokenizador> es, de hecho, ligeramente sensible al contexto para operadores como "/", "?" y ">".
+Y, de hecho, el propio "." puede ser el comienzo de un número).
+
+=item *
+
+Las palabras clave C<next>, C<exit> y C<continue> funcionan de forma diferente.
+
+=item *
+
+
+Las siguientes variables funcionan de forma diferente:
+
+      Awk	Perl
+      ARGC	scalar @ARGV (compare con $#ARGV)
+      ARGV[0]	$0
+      FILENAME	$ARGV
+      FNR	$. - algo
+      FS	(cualquier cosa)
+      NF	$#Campo, o algo así
+      NR	$.
+      OFMT	$#
+      OFS	$,
+      ORS	$\
+      RLENGTH	length($&)
+      RS	$/
+      RSTART	length($`)
+      SUBSEP	$;
+
+=item *
+
+No puede establecer $RS a un patrón, solo a una cadena.
+
+=item *
+
+Cuando dude, ejecute la construcción B<awk> con B<a2p> y vea qué le ofrece.
+
+=back
+
+=head2 Trampas C/C++
+
+Los cerebrales programadores de C y C++ deberían tomar nota de lo siguiente:
+
+=over 4
+
+=item *
+
+Se requieren llaves en los C<if> y C<while>.
+
+=item *
+
+Debe usar C<elsif> en lugar de C<else if>.
+
+=item *
+
+Las palabras clave C<break> y C<continue> del C se convierten en el C<last> y C<next> del Perl, respectivamente.  A diferencia de C, estas I<no> funcionan dentro de una construcción C<do { } while>.  Vea L<perlsyn/"Control de bucles">.
+
+=item *
+
+La sentencia switch se llama C<given/when> y solo está disponible en perl 5.10 o superior.  Vea L<perlsyn/"Instrucciones Switch">.
+
+=item *
+
+Las variables comienzan en Perl con "$", "@" o "%".
+
+=item *
+
+Los comentarios comienzan por "#", no "/*" o "//".  Perl puede interpretar los comentarios de C/C++ como operadores de división, expresiones regulares no cerradas, o el operador definido-o.
+
+=item *
+
+No puede tomar la dirección de nada, aunque sea similar el operador en Perl, la barra diagonal inversa, que crea una referencia.
+
+=item *
+
+C<ARGV> debe estar en mayúsculas.  C<$ARGV[0]> es el C<argv[1]> del C, y C<argv[0]> termina en C<$0>.
+
+=item *
+
+Las llamadas al sistema como link(), unlink(), rename(), etc., regresan un valor distinto de 0 en caso de éxito, no 0. (system(), sin embargo, regresa cero en caso de éxito).
+
+=item *
+
+Los gestores de señales tratan con nombres de señales, no con sus números.  Use C<kill -l> para ver esos nombres de su sistema.
+
+=back
+
+=head2 Trampas JavaScript
+
+Los juiciosos programadores de JavaScript deberían tomar nota de lo siguiente:
+
+=over 4
+
+=item *
+
+En Perl, el C<+> binario siempre es la adición.  C<$cadena1 + $cadena2> convierte ambas cadenas a números, y luego los suma.  Para concatenar dos cadenas, use el operador C<.>.
+
+=item *
+
+El operador unario C<+> no hace nada en Perl.  Existe para evitar ambigüedades sintácticas.
+
+=item *
+
+A diferencia de C<for...in>, el C<for> del Perl (también deletreado como C<foreach>) no permite que el lado izquierdo sea una expresión arbitraria.  Debe ser una variable:
+
+   for my $variable (keys %hash) {
+	...
+   }
+
+Además, no olvide el C<keys>, ya que C<foreach my $kv (%hash) {}> itera sobre las claves y valores y, generalmente, no es útil ($kv podría ser una clave, luego un valor, y así).
+
+=item *
+
+Para iterar sobre los índices de un array, use C<foreach my $i (0 .. $#array)
+{}>.  C<foreach my $v (@array) {}> itera sobre los valores.
+
+=item *
+
+Perl requiere que existan llaves que sigan a C<if>, C<while>, C<foreach>, etc.
+
+=item *
+
+En Perl, C<else if> se deletrea como C<elsif>.
+
+=item *
+
+C<? :> tiene una mayor precedencia que la asignación.  En JavaScript, puede escribir:
+
+    condición ? hacer_algo() : variable = 3
+
+y la variable solo se asigna si la condición es falsa.  En Perl, necesita paréntesis:
+
+    $condición ? hacer_algo() : ($variable = 3);
+
+O simplemente use C<if>.
+
+=item *
+
+Perl requiere puntos y comas para separar sentencias.
+
+=item *
+
+Las variables declaradas con C<my> solo afectan al código I<que sigue> a la declaración.
+No puede escribir C<$x = 1; my $x;> y esperar que la primera asignación afecte a la misma variable.  En lugar de eso, asignará a una C<$x> declarada antes en un ámbito externo, o a una variable global.
+
+Note también que la variable no es visible hasta la siguiente I<sentencia>.  Esto significa que en C<my $x = 1 + $x> la segunda $x se refiere a una declarada anteriormente.
+
+=item *
+
+Las variables C<my> están encerradas en el ámbito del bloque actual, no al de la función actual.  Si escribe C<{my $x;} $x;>, la segunda C<$x> no se refiere a la declarada dentro del bloque.
+
+=item *
+
+Los miembros de los objetos no se pueden hacer accesibles como variables.  El equivalente Perl más cercano a C<with(objeto) { método() }> es C<for>, que puede crear un alias en C<$_>, al objeto:
+
+    for ($objeto) {
+	$_->método;
+    }
+
+=item *
+
+El objeto o clase del método que se llama se pasa como uno de los argumentos del método, no como un valor C<this> aparte.
+
+=back
+
+=head2 Trampas Sed
+
+Los condimentados programadores de B<sed> deberían tomar nota de lo siguiente:
+
+=over 4
+
+=item *
+
+Un programa Perl se ejecuta solo una vez, no una vez por cada línea de entrada.  Puede crear un bucle implícito con C<-n> o C<-p>.
+
+=item *
+
+Las retrorreferencias en sustituciones usan "$" en lugar de "\".
+
+=item *
+
+Los metacaracteres de coincidencia de patrones "(", ")" y "|" no tienen delante barras diagonales inversas.
+
+=item *
+
+El operador rango es C<...>, en lugar de la coma.
+
+=back
+
+=head2 Trampas Shell
+
+Los agudos programadores de shell deberían tomar de lo siguiente:
+
+=over 4
+
+=item *
+
+El operador comilla inversa hace interpolación de variables sin tener en cuenta la presencia de comillas simples en el comando.
+
+=item *
+
+El operador comilla inversa no traduce el valor de retorno, a diferencia de B<csh>.
+
+=item *
+
+Los shells (especialmente B<csh>) hacen diversos niveles de sustitución en cada línea de comando.  Perl hace sustitución en solo ciertas construcciones, como las comillas dobles, comillas inversas, ángulos, y patrones de búsqueda.
+
+=item *
+
+Los shells interpretan los scripts poco a poco.  Perl compila el programa entero antes de ejecutarlo (excepto para los bloques C<BEGIN>, que se ejecutan en tiempo de compilación).
+
+=item *
+
+Los argumentos están disponibles a través de @ARGV, no $1, $2, etc.
+
+=item *
+
+El entorno no está disponible de forma automática como variables escalares separadas.
+
+=item *
+
+El C<test> del shell usa "=", "!=", "<", etc. para la comparación de cadena, y "-eq", "-ne", "-lt", etc. para comparaciones numéricas. Es lo contrario de Perl, que usa C<eq>, C<ne>, C<lt> para comparaciones de cadena, y C<==>, C<!=> C<< < >>, etc. para comparaciones numéricas.
+
+=back
+
+=head2 Trampas Perl
+
+Los prácticos programadores de Perl deberían notar de lo siguiente:
+
+=over 4
+
+=item *
+
+Recuerde que muchas operaciones se comportan de forma diferente en contexto de lista que cuando lo hacen en contexto escalar.  Vea L<perldata> para más detalles.
+
+=item *
+
+Evite las palabras sueltas mientras pueda, especialmente las que están todas en minúsculas.
+No puede decir, simplemente mirándola, si una palabra suelta es una función o una cadena.  No habrá confusión si usa comillas en las cadenas y paréntesis en las llamadas de función.
+
+=item *
+
+No puede discernir con una simple inspección qué funciones incorporadas son operadores unarios (como chop() y chdir()) y cuáles son operadores de lista(como print() y unlink()).
+(A menos que se usen prototipos, las subrutinas definidas por el usuario B<solo> pueden ser operadores de lista, nunca unarios).  Vea L<perlop> y L<perlsub>.
+
+=item *
+
+A la gente le cuesta mucho recordar que algunas funciones tienen por defecto a $_, o @ARGV, o lo que sea, pero es lo mismo que esperaríamos para otras cosas.
+
+=item *
+
+La construcción <FH> no es el nombre del gestor de archivo; es la operación readline (leer una línea) sobre ese gestor.  Los datos leídos se asignan a $_ solo si la operación de lectura del archivo es la única condición en el bucle while:
+
+    while (<FH>)      { }
+    while (defined($_ = <FH>)) { }..
+    <FH>;  # ¡datos descartados!
+
+=item *
+
+Recuerde no usar C<=> cuando necesite C<=~>; estas dos construcciones son muy diferentes:
+
+    $x =  /foo/;
+    $x =~ /foo/;
+
+=item *
+
+La construcción C<do {}> no es un bucle real en el que pueda usar control de bucle.
+
+=item *
+
+Use C<my()> para variables locales siempre que quiera recuperarla más tarde (pero vea L<perlform> por cuando no pueda).
+Usar C<local()> da, de hecho, un valor local a una variable global, que le deja abierto a una imprevisible cantidad de efectos colaterales del ámbito dinámico.
+
+=item *
+
+Si localiza una variable exportada en un módulo, su valor exportado no cambiará.  El nombre local se convierte en un alias a un nuevo valor pero el nombre externo sigue siendo un alias para el original.
+
+=back
+
+Como siempre, si algunos de estos se consideran oficialmente como errores, serán arreglados y eliminados.
+
