@@ -1,0 +1,958 @@
+=head1 NOMBRE
+
+perlperf - Rendimiento y técnicas de optimización
+
+=head1 DESCRIPCIÓN
+
+Esta es una introducción al uso del rendimiento y técnicas de optimización que se pueden usar, con énfasis particular en los programas de perl.  Mientras que muchos desarrolladores perl vienen de otros lenguajes, y pueden usar su conocimiento previo donde sea apropiado, existen muchas otras personas que podrían beneficiarse de unos pocos apuntes perl.  Si quiere la versión condensada, quizás el mejor consejo venga del renombrado Samurai japonés, Miyamoto Musashi, que dijo:
+
+    "No te comprometas en actividades inútiles"
+
+en 1645.
+
+=head1 INTRODUCCIÓN
+
+Quizás la equivocación más común entre los programadores es intentar optimizar su código antes de que el código haga algo realmente útil: es una mala idea.
+No tiene sentido tener un programa extremadamente rápido, que no funcione.  El primer trabajo es obtener un programa que, I<correctamente>, haga algo B<útil>, (sin mencionar que debe asegurarse de que el conjunto de pruebas funcione completamente), y solo entonces, considerar optimizarlo.  Al decidir optimizar un código actual, existen unos simples, pero esenciales pasos a considerar que son intrínsecos a cualquier proceso de optimización.
+
+=head2 UN PASO AL LADO
+
+Lo primero, necesita establecer un tiempo base para el código actual, el cual sea fiable y repetible.  Probablemente querrá usar los módulos C<Benchmark> o C<Devel::NYTProf>, o algo similar, para este paso, o quizás la utilidad del sistema Unix C<time>, lo que sea más apropiado.  Vaya al final de este documento para ver una larga lista de módulos de perfilado y medición del tiempo, y posteriores lecturas recomendadas.
+
+=head2 UN PASO ADELANTE
+
+Después, una vez examinado el programa en aquellos I<puntos calientes>, (lugares donde el código parece que corre más lentamente), cambie el código con la intención de hacerlo más rápido.  Usando software de control de versiones, como C<subversion>, estará seguro de que no hará cambios irreversibles.  Es demasiado fácil hacer trampa aquí y allí: no haga demasiados cambios cada vez, o no podría descubrir qué pieza de código era B<realmente> la más lenta.
+
+=head2 OTRO PASO AL LADO
+
+No es suficiente con decir: "aquello lo hará más rápido"; debe comprobarlo.
+Vuelva a ejecutar el código bajo el control de los módulos de perfilado y medición del paso anterior, y compruebe que el nuevo código ejecuta la B<misma tarea> en I<menos tiempo>.  Guarde su trabajo, y repita...
+
+=head1 DIRECTRICES GENERALES
+
+El tema crítico que se debe considerar en el rendimiento es recordar que no existe algo como una C<bala de plata>, por lo cual no existen reglas, solo directrices.
+
+Está claro que el código en línea es mucho más rápido que las llamadas a subrutinas o métodos, porque existe menor sobrecarga, pero esta aproximación tiene la desventaja de ser menos mantenible y trae el coste de un mayor uso de memoria: no existe la comida gratis.  Si está buscando por un elemento en una lista, puede ser más eficiente almacenar los datos en una estructura hash y entonces, simplemente, mire a ver si la clave está definida, en lugar de hacer un bucle a través del array entero usando grep(), por ejemplo.  substr() puede ser (bastante) más rápido que grep() pero no es tan flexible, así que aquí tiene otro término a considerar.  Su código puede contener una línea que tome 0.01 de segundo en ejecutarse, que si lo llama 1000 veces, que, muy probablemente en un programa que interprete, por ejemplo, archivos de tamaño medio, tendrá un retraso de 10 segundos, en una única posición del código, y si llama a esa línea 100 000 veces, su programa entero se enlentecerá, arrastrándose de forma insufrible.
+
+Usar una subrutina como parte de su ordenación es una forma poderosa para obtener exactamente lo que quiere, pero normalmente será más lento que los operadores de ordenación incorporados (el I<alfabético> C<cmp> y el I<numérico> C<E<lt>=E<gt>>).  Es posible hacer múltiples pases sobre sus datos, construyendo índices para hacer la siguiente ordenación más eficiente, y usar lo que se conoce como C<MO> (Maniobra Orcish) para cachear por adelantado las claves ordenadas.  El cacheo de la búsqueda, mientras que es una buena idea, puede ser, en sí mismo, fuente de un enlentecimiento al forzar un doble pase sobre los datos: una vez para inicializar la caché, y otra para ordenar los datos.  Usar C<pack()> para extraer la clave ordenada en una cadena consistente puede ser una forma eficiente para construir una única cadena para la comparación, en lugar de usar múltiples claves de ordenación, que hace posible usar la estándar, escrita en C<c> y rápida, función C<sort()> en la salida, y es la base de la C<GRT> (I<Guttman Rossler Transform>).  Algunas combinaciones de cadena pueden enlentecer la C<GRT>, siendo demasiado complejo por si solo.
+
+Para aplicaciones que usan motores de bases de datos, el espacio de nombres estándar C<DBIx> intenta ayudar manteniendo las cosas frescas, sin dudar, porque intenta I<no> consultar la base de datos hasta el último momento que sea posible, pero siempre lea los documentos que acompaña su elección de bibliotecas.  Entre los muchos asuntos a los que se enfrentan los desarrolladores que gestionan bases de datos deben ser conscientes de las ventajas de usar los parámetros de sustitución del C<SQL> y considerar la pre-recuperación de conjuntos de datos.  Dividir un archivo mayor asignando múltiples procesos para interpretar un único archivo, usando algo como C<POE>, C<threads> o C<fork> también puede ser una forma útil de optimizar su uso de los recursos de C<CPU> disponibles, aunque esta técnica se carga con problemas de concurrencia y demanda una alta atención a los detalles.
+
+Cada caso tiene una aplicación específica y una o más excepciones, y no hay sustituto en la ejecución de unas pocas pruebas para encontrar qué método funciona mejor para su entorno particular, por lo que escribir código óptimo no es una ciencia exacta, y el porqué amamos tanto usar Perl -¡TMTOWTDI!-.
+
+=head1 MEDICIONES DE RENDIMIENTO
+
+Aquí hay algunos ejemplos para demostrar el uso de las herramientas de medición de rendimiento de Perl.
+
+=head2  Asignando y desreferenciando variables.
+
+Estoy seguro de que la mayoría de nosotros ha visto código que se parece a (o es peor que) esto:
+
+    if ( $obj->{_ref}->{_mipuntacion} >= $obj->{_ref}->{_tupuntuacion} ) {
+        ...
+
+Esta clase de código puede ser un auténtico mareo el leerlo, así como ser muy propenso a cometer errores, y es mucho más claro desreferenciar la variable explícitamente.  Damos un paso en el problema de trabajar con técnicas de programación orientada a objetos para encapsular el acceso a variables a través de métodos, solo accesible a través de un objeto.  Aquí solo hablamos de la implementación técnica elegida, y cuándo esto tiene efectos en las prestaciones.  Podemos ver si esta operación de desreferencia, tiene alguna sobrecarga poniendo código comparado en un archivo y ejecutando una prueba de C<Benchmark>.
+
+# desreferencia
+
+    #!/usr/bin/perl
+
+    use strict;
+    use warnings;
+
+    use Benchmark;
+
+    my $ref = {
+            'ref'   => {
+                _mipuntuacion => '100 + 1',
+                _tupuntuacion => '102 - 1',
+            },
+    };
+
+    timethese(1000000, {
+            'directo'      => sub {
+                my $x = $ref->{ref}->{_mipuntuacion} . $ref->{ref}->{_tupuntuacion} ;
+            },
+            'desreferencia' => sub {
+                my $ref  = $ref->{ref};
+                my $mipuntuacion = $ref->{_mipuntuacion};
+                my $tupuntuacion = $ref->{_tupuntuacion};
+                my $x = $mipuntuacion . $tupuntuacion;
+            },
+    });
+
+Es esencial ejecutar cualquier medida de tiempos un número suficiente de veces para que los números acaben en una media numérica. De otra forma, en cada ejecución, fluctuará debido a las variaciones del entorno, para reducir el efecto de contención de los recursos de C<CPU> y ancho de banda, por ejemplo.  Después de ejecutar el código anterior un millón de iteraciones, podemos mirar el informe del módulo C<Benchmark>, y ver qué aproximación es la más efectiva.
+
+    $> perl desreferencia
+
+    Benchmark: timing 1000000 iterations of desreferencia, directo...
+    desreferencia:  2 wallclock secs ( 1.59 usr +  0.00 sys =  1.59 CPU) @ 628930.82/s (n=1000000)
+        directo:  1 wallclock secs ( 1.20 usr +  0.00 sys =  1.20 CPU) @ 833333.33/s (n=1000000)
+
+La diferencia es fácil de ver y la solución de la desreferencia es más lenta.  Mientras que se ha ejecutado una media de 628 930 veces por segundo durante nuestra prueba, la solución directa se ha ejecutado 204 403 veces más, desafortunadamente.
+Desafortunadamente, porque existen muchos ejemplos de código escrito usando accesos a variables multinivel de forma directa, y normalmente, es horrible.  Es, sin embargo, mínimamente más rápido.  La cuestión que queda es si el minuto de ganancia realmente importa, o la pérdida de la mantenibilidad.
+
+=head2  Buscar y reemplazar, o tr
+
+Si tenemos una cadena que necesita modificarse, mientras que con una I<regexp> siempre será mucho más flexible, C<tr>, una herramienta a menudo infravalorada, puede seguir siendo útil.  Un escenario podría ser reemplazar todas las vocales con otro carácter.  La solución con la I<regexp> podría parecerse a esto:
+
+    $str =~ s/[aeiou]/x/g
+
+La alternativa con C<tr> podría parecerse a esto:
+
+    $str =~ tr/aeiou/xxxxx/
+
+Ahora podemos poner esto en un archivo de prueba que podemos ejecutar para comprobar qué aproximación es la más rápida, usando la variable global C<$STR> para asignarla a la variable C<my $str>, y así evitamos que perl intente optimizar cualquiera de los trabajos al notar que se asigna una sola vez.
+
+# regex-transliteración
+
+    #!/usr/bin/perl
+
+    use strict;
+    use warnings;
+
+    use Benchmark;
+
+    my $STR = "$$-esto y aquello";
+
+    timethese( 1000000, {
+            'sr'  => sub { my $str = $STR; $str =~ s/[aeiou]/x/g; return $str; },
+            'tr'  => sub { my $str = $STR; $str =~ tr/aeiou/xxxxx/; return $str; },
+    });
+
+Ejecutando el código nos da nuestros resultados:
+
+    $> perl regex-transliteracion
+
+    Benchmark: timing 1000000 iterations of sr, tr...
+            sr:  2 wallclock secs ( 1.19 usr +  0.00 sys =  1.19 CPU) @ 840336.13/s (n=1000000)
+            tr:  0 wallclock secs ( 0.49 usr +  0.00 sys =  0.49 CPU) @ 2040816.33/s (n=1000000)
+
+La versión con C<tr> es la clara vencedora.  Una solución es flexible, la otra es rápida -y es la elección apropiada que debe usar el programador.
+
+Compruebe los documentos de C<Benchmark> para más técnicas útiles:
+
+=head1 HERRAMIENTAS DE PERFILADO
+
+Una pieza ligeramente más grande de código ofrecerá algo que un perfilador puede convertir en estadísticas de informes más extensos.  Este ejemplo usa el programa sencillo C<wordmatch> que interpreta un archivo de entrada y escupe un corto informe sobre los contenidos.
+
+# wordmatch
+
+    #!/usr/bin/perl
+
+    use strict;
+    use warnings;
+
+    =head1 NOMBRE
+
+    wordmatch - análisis de palabras del archivo de entrada
+
+    =head1 SINOPSIS
+
+        wordmatch -f archivodeentrada [-d]
+
+    =head1 DESCRIPCIÓN
+
+    Este programa interpreta el archivo indicado, especificado con C<-f> y muestra un
+    análisis sencillo de las palabras que se encuentran en él.  Use la opción C<-d> para activar
+    los mensajes de depuración.
+
+    =cut
+
+    use FileHandle;
+    use Getopt::Long;
+
+    my $debug   =  0;
+    my $file    = '';
+
+    my $result = GetOptions (
+        'debug'         => \$debug,
+        'file=s'        => \$file,
+    );
+    die("args. inválidos") unless $result;
+
+    unless ( -f $file ) {
+        die("Usage: $0 -f nombredearchivo [-d]");
+    }
+    my $FH = FileHandle->new("< $file") or die("incapaz de abrir el archivo($file): $!");
+
+    my $i_LINES = 0;
+    my $i_WORDS = 0;
+    my %count   = ();
+
+    my @lines = <$FH>;
+    foreach my $line ( @lines ) {
+        $i_LINES++;
+        $line =~ s/\n//;
+        my @words = split(/ +/, $line);
+        my $i_words = scalar(@words);
+        $i_WORDS = $i_WORDS + $i_words;
+        debug("línea: $i_LINES suministrando $i_words palabras: @words");
+        my $i_word = 0;
+        foreach my $word ( @words ) {
+            $i_word++;
+            $count{$i_LINES}{spec} += matches($i_word, $word, '[^a-zA-Z0-9]');
+            $count{$i_LINES}{only} += matches($i_word, $word, '^[^a-zA-Z0-9]+$');
+            $count{$i_LINES}{cons} += matches($i_word, $word, '^[(?i:bcdfghjklmnpqrstvwxyz)]+$');
+            $count{$i_LINES}{vows} += matches($i_word, $word, '^[(?i:aeiou)]+$');
+            $count{$i_LINES}{caps} += matches($i_word, $word, '^[(A-Z)]+$');
+        }
+    }
+
+    print report( %count );
+
+    sub matches {
+        my $i_wd  = shift;
+        my $word  = shift;
+        my $regex = shift;
+        my $has = 0;
+
+        if ( $word =~ /($regex)/ ) {
+            $has++ if $1;
+        }
+
+        debug("palabra: $i_wd ".($has ? 'coincide' : 'no coincide')." caracteres: /$regex/");
+
+        return $has;
+    }
+
+    sub report {
+        my %report = @_;
+        my %rep;
+
+        foreach my $line ( keys %report ) {
+            foreach my $key ( keys %{ $report{$line} } ) {
+                $rep{$key} += $report{$line}{$key};
+            }
+        }
+
+        my $report = qq|
+    $0 informa para $file:
+    líneas en archivo: $i_LINES
+    palabras en archivo: $i_WORDS
+    palabras con caracteres especiales (no-palabra): $i_spec
+    palabras con solo caracteres especiales (no-palabra): $i_only
+    palabras con solo consonantes: $i_cons
+    palabras con solo letras en mayúsculas: $i_caps
+    palabras con solo vocales: $i_vows
+    |;
+
+        return $report;
+    }
+
+    sub debug {
+        my $message = shift;
+
+        if ( $debug ) {
+            print STDERR "DBG: $message\n";
+        }
+    }
+
+    exit 0;
+
+=head2 Devel::DProf
+
+Este venerable módulo ha sido el estándar de-facto para el perfilado de código Perl durante más de una década, pero se ha reemplazado por otros módulos que nos han llevado al siglo 21.  Aunque se le recomienda evaluar su herramienta con las mencionadas aquí y de la lista de CPAN al final de este documento (y, actualmente, L<Devel::NYTProf> parece ser el arma a elegir -vea más abajo-), echaremos primero un vistazo rápido a la salida de L<Devel::DProf>,  como línea base de las herramientas de perfilado de Perl.  Ejecute el programa anterior bajo el control de C<Devel::DProf> usando la opción C<-d> en la línea de comandos.
+
+    $> perl -d:DProf wordmatch -f perl5db.pl
+
+    <...múltiples líneas borradas...>
+
+    wordmatch informa para perl5db.pl:
+    líneas en archivo: 9428
+    palabras en archivo: 50243
+    palabras con caracteres especiales (no-palabra): 20480
+    palabras con solo caracteres especiales (no-palabra): 7790
+    palabras con solo consonantes: 4801
+    palabras con solo letras en mayúscula: 1316
+    palabras con solo vocales: 1701
+
+C<Devel::DProf> produce un archivo especial, llamado por defecto F<tmon.out>, y este archivo se lee por el programa C<dprofpp>, que realmente ya está instalado como parte de la distribución de C<Devel::DProf>.  Si llama a C<dprofpp> sin opciones, leerá el archivo F<tmon.out> en el directorio actual y producirá un informe de estadísticas legible para los humanos, de la ejecución de su programa.  Note que esto puede llevar un poco de tiempo.
+
+    $> dprofpp
+
+    Total Elapsed Time = 2.951677 Seconds
+      User+System Time = 2.871677 Seconds
+    Exclusive Times
+    %Time ExclSec CumulS #Calls sec/call Csec/c  Name
+     102.   2.945  3.003 251215   0.0000 0.0000  main::matches
+     2.40   0.069  0.069 260643   0.0000 0.0000  main::debug
+     1.74   0.050  0.050      1   0.0500 0.0500  main::report
+     1.04   0.030  0.049      4   0.0075 0.0123  main::BEGIN
+     0.35   0.010  0.010      3   0.0033 0.0033  Exporter::as_heavy
+     0.35   0.010  0.010      7   0.0014 0.0014  IO::File::BEGIN
+     0.00       - -0.000      1        -      -  Getopt::Long::FindOption
+     0.00       - -0.000      1        -      -  Symbol::BEGIN
+     0.00       - -0.000      1        -      -  Fcntl::BEGIN
+     0.00       - -0.000      1        -      -  Fcntl::bootstrap
+     0.00       - -0.000      1        -      -  warnings::BEGIN
+     0.00       - -0.000      1        -      -  IO::bootstrap
+     0.00       - -0.000      1        -      -  Getopt::Long::ConfigDefaults
+     0.00       - -0.000      1        -      -  Getopt::Long::Configure
+     0.00       - -0.000      1        -      -  Symbol::gensym
+
+C<dprofpp> producirá algunos informes muy detallados sobre la actividad del programa C<filewords>.  Los tiempos totales, de usuario y de sistema están al principio del análisis, y luego están las columnas principales que definen el informe.  Compruebe los documentos de C<dprofpp> para más detalles de las muchas opciones que soporta.
+
+Vea también C<Apache::DProf> que engancha C<Devel::DProf> en C<mod_perl>.
+
+=head2 Devel::Profiler
+
+Echaremos un vistazo al mismo programa usando un perfilador diferente: C<Devel::Profiler>, un reemplazo hecho en puro Perl de C<Devel::DProf>.  El uso es ligeramente diferente, en que en lugar de usar el indicador especial C<-d:>, se inserta C<Devel::Profiler> como un módulo usando C<-M>.
+
+    $> perl -MDevel::Profiler wordmatch -f perl5db.pl
+
+    <...múltiples líneas borradas...>
+
+    wordmatch informa para perl5db.pl:
+    líneas en archivo: 9428
+    palabras en archivo: 50243
+    palabras con caracteres especiales (no-palabra): 20480
+    palabras con solo caracteres especiales (no-palabra): 7790
+    palabras con solo consonantes: 4801
+    palabras con solo letras en mayúscula: 1316
+    palabras con solo vocales: 1701
+
+
+C<Devel::Profiler> genera un archivo tmon.out que es compatible con el programa C<dprofpp>, ahorrando entonces la construcción de un programa lector dedicado para las estadísticas.  El uso de C<dprofpp> es entonces idéntico al anterior ejemplo.
+
+    $> dprofpp
+
+    Total Elapsed Time =   20.984 Seconds
+      User+System Time =   19.981 Seconds
+    Exclusive Times
+    %Time ExclSec CumulS #Calls sec/call Csec/c  Name
+     49.0   9.792 14.509 251215   0.0000 0.0001  main::matches
+     24.4   4.887  4.887 260643   0.0000 0.0000  main::debug
+     0.25   0.049  0.049      1   0.0490 0.0490  main::report
+     0.00   0.000  0.000      1   0.0000 0.0000  Getopt::Long::GetOptions
+     0.00   0.000  0.000      2   0.0000 0.0000  Getopt::Long::ParseOptionSpec
+     0.00   0.000  0.000      1   0.0000 0.0000  Getopt::Long::FindOption
+     0.00   0.000  0.000      1   0.0000 0.0000  IO::File::new
+     0.00   0.000  0.000      1   0.0000 0.0000  IO::Handle::new
+     0.00   0.000  0.000      1   0.0000 0.0000  Symbol::gensym
+     0.00   0.000  0.000      1   0.0000 0.0000  IO::File::open
+
+Esto es interesante: obtenemos resultados ligeramente diferentes, que es debido, en su mayor parte, a que el algoritmo que genera el informe es diferente, incluso aunque el formato del archivo de salida es, presuntamente, idéntico.  Los tiempos totales, de usuario y de sistema muestran claramente el tiempo que le lleva a C<Devel::Profiler> ejecutarse, pero las columnas listadas parecen más precisas que las que tuvimos antes con C<Devel::DProf>.  La cifra de 102 % ha desaparecido, por ejemplo.  Así es cómo usamos las herramientas que tenemos a nuestra disposición, y reconocemos los pros y las contras, antes de usarlas.  Curiosamente, los números de llamadas por cada subrutina son idénticas en los dos informes, es en los porcentajes en que difieren.
+Como escribe el autor de C<Devel::Proviler>:
+
+    ... ejecutar el juego de test de HTML::Template bajo Devel::DProf muestra que output()
+    NO toma tiempo, pero Devel::Profiler muestra que alrededor de un 10 % del tiempo ocurre en output().
+    No sé en qué confiar pero mis tripas me dicen que algo está mal con
+    Devel::DProf. HTML::Template::output() es una gran rutina que se llama desde
+    todos los test. De cualquier forma, algo necesita arreglarse.
+
+Los resultados pueden variar.
+
+Vea también C<Devel::Apache::Profiler> que engancha C<Devel::Profiler> en C<mod_perl>.
+
+=head2 Devel::SmallProf
+
+El perfilador C<Devel::SmallProf> examina el tiempo de ejecución de su programa Perl y produce un listado línea a línea para mostrar cuántas veces se llama a cada línea, y cuánto tiempo llevó ejecutarse.  Se le llama suministrando el conocido indicador C<-d> a Perl, en tiempo de ejecución.
+
+    $> perl -d:SmallProf wordmatch -f perl5db.pl
+
+    <...múltiples líneas borradas...>
+
+    wordmatch informa para perl5db.pl:
+    líneas en archivo: 9428
+    palabras en archivo: 50243
+    palabras con caracteres especiales (no-palabra): 20480
+    palabras con solo caracteres especiales (no-palabra): 7790
+    palabras con solo consonantes: 4801
+    palabras con solo letras en mayúscula: 1316
+    palabras con solo vocales: 1701
+
+C<Devel::SmallProf> escribe su salida en un archivo que se llama F<smallprof.out>, por defecto.  El formato del archivo se parece a esto:
+
+    <número> <tiempo> <ctime> <línea>:<texto>
+
+Cuando el programa termina, la salida se puede examinar y ordenar usando cualquier utilidad estándar de filtrado de texto.  Algo como lo siguiente puede ser suficiente:
+
+    $> cat smallprof.out | grep \d*: | sort -k3 | tac | head -n20
+
+    251215   1.65674   7.68000    75: if ( $palabra =~ /($regex)/ ) {
+    251215   0.03264   4.40000    79: debug("palabra: $i_wd ".($tiene ? 'coincidencias' :
+    251215   0.02693   4.10000    81: return $tiene;
+    260643   0.02841   4.07000   128: if ( $debug ) {
+    260643   0.02601   4.04000   126: my $mensaje = shift;
+    251215   0.02641   3.91000    73: my $tiene = 0;
+    251215   0.03311   3.71000    70: my $i_wd  = shift;
+    251215   0.02699   3.69000    72: my $regex = shift;
+    251215   0.02766   3.68000    71: my $palabra  = shift;
+     50243   0.59726   1.00000    59:  $count{$i_LINES}{cons} =
+     50243   0.48175   0.92000    61:  $count{$i_LINES}{spec} =
+     50243   0.00644   0.89000    56:  my $i_cons = matches($i_word, $palabra,
+     50243   0.48837   0.88000    63:  $count{$i_LINES}{caps} =
+     50243   0.00516   0.88000    58:  my $i_caps = matches($i_word, $palabra, '^[(A-
+     50243   0.00631   0.81000    54:  my $i_spec = matches($i_word, $palabra, '[^a-
+     50243   0.00496   0.80000    57:  my $i_vows = matches($i_word, $palabra,
+     50243   0.00688   0.80000    53:  $i_word++;
+     50243   0.48469   0.79000    62:  $count{$i_LINES}{only} =
+     50243   0.48928   0.77000    60:  $count{$i_LINES}{vows} =
+     50243   0.00683   0.75000    55:  my $i_only = matches($i_word, $palabra, '^[^a-
+
+Puede ver inmediatamente un enfoque ligeramente diferente a los módulos de perfilado de subrutinas, y empezamos a ver exactamente qué línea de código toma más tiempo.  La línea de la I<regexp> parece un poco sospechosa, por ejemplo.  Recuerde que estas herramientas se suponen que deben usarse juntas, no existe un mejor camino de perfilar su código, necesita usar las mejores herramientas para su trabajo.
+
+Vea también C<Apache::SmallProf> que engancha C<Devel::SmallProf> en C<mod_perl>.
+
+=head2 Devel::FastProf
+
+C<Devel::FastProf> es otro perfilador por líneas, para Perl.  Se escribió con la vista puesta en obtener un perfilador de líneas rápido, que es posible con, por ejemplo, C<Devel::SmallProf>, porque está escrito en C<C>.  Para usar C<Devel::FastProf>, suministre el argumento C<-d> a Perl:
+
+    $> perl -d:FastProf wordmatch -f perl5db.pl
+
+    <...múltiples líneas borradas...>
+
+    wordmatch informa para perl5db.pl:
+    líneas en archivo: 9428
+    palabras en archivo: 50243
+    palabras con caracteres especiales (no-palabra): 20480
+    palabras con solo caracteres especiales (no-palabra): 7790
+    palabras con solo consonantes: 4801
+    palabras con solo letras en mayúscula: 1316
+    palabras con solo vocales: 1701
+
+C<Devel::FastProf> escribe estadísticas al archivo F<fastprof.out> en el directorio actual.  El archivo de salida, que se puede especificar, se puede interpretar usando el programa de línea de comandos C<fprofpp>.
+
+    $> fprofpp | head -n20
+
+    # el formato de la salida de fprofpp:
+    # archivo:línea veces tiempo: fuente
+    wordmatch:75 3.93338 251215: if ( $palabra =~ /($regex)/ ) {
+    wordmatch:79 1.77774 251215: debug("palabra: $i_wd ".($tiene ? 'coincide' : 'no coincide')." caracteres: /$regex/");
+    wordmatch:81 1.47604 251215: return $tiene;
+    wordmatch:126 1.43441 260643: my $mensaje = shift;
+    wordmatch:128 1.42156 260643: if ( $debug ) {
+    wordmatch:70 1.36824 251215: my $i_wd  = shift;
+    wordmatch:71 1.36739 251215: my $palabra  = shift;
+    wordmatch:72 1.35939 251215: my $regex = shift;
+
+Revisándolo, podemos ver que el número de veces que cada línea se ha llamado es idéntica a la salida de C<Devel::SmallProf>, y la secuencia es ligeramente diferente basada en la ordenación de la cantidad de tiempo que cada línea ha tardado en ejecutarse; C<if ( $debug ) { > y C<my $message = shift;>, por ejemplo.  Las diferencias en los tiempos registrados ahora podrían ser resultado del algoritmo usado internamente, o se puede deber a las limitaciones o contención de los recursos del sistema.
+
+Vea también L<DBIx::Profile> que perfilará las consultas a bases de datos ejecutándose bajo el espacio de nombres C<DBIx::*>.
+
+=head2 Devel::NYTProf
+
+C<Devel::NYTProf> es la B<siguiente generación> del perfilado de Perl, arreglando muchas limitaciones en otras herramientas e implementando muchas características chulas.  Lo primero de todo, es que se puede usar tanto como un perfilador de una I<línea>, un I<bloque> o una I<subrutina>, todo a la vez.  También puede usar resolución inferior al microsegundo (100 ns) en sistemas que ofrezcan C<clock_gettime()>.  Puede iniciarse y pararse incluso por el programa que va a ser perfilado.  Solo necesita una línea para perfilar aplicaciones C<mod_perl>.  Está escrito en C<c> y es, probablemente, el perfilador más rápido disponible para Perl.  Y esto solo es una pizca de la lista de cosas chulas.  Aparte de eso, veamos cómo trabaja: solo use la conocida opción C<-d> para enchufarle y ejecutar el código.
+
+    $> perl -d:NYTProf wordmatch -f perl5db.pl
+
+    wordmatch informa para perl5db.pl:
+    líneas en archivo: 9427
+    palabras en archivo: 50243
+    palabras con caracteres especiales (no-palabra): 20480
+    palabras con solo caracteres especiales (no-palabra): 7790
+    palabras con solo consonantes: 4801
+    palabras con solo letras en mayúscula: 1316
+    palabras con solo vocales: 1701
+
+C<NYTProf> generará un informe de datos en el archivo F<nytprof.out>, por defecto.  Los informes legibles para los humanos se pueden generar a partir de ahí usando los programas suministrados C<nytprofhtml> (salida HTML) y C<nytprofcsv> (salida CSV).
+Hemos usado la utilidad C<html2text> del sistema Unix para convertir el archivo F<nytprof/index.html> para acomodarlo aquí.
+
+    $> html2text nytprof/index.html
+
+    Performance Profile Index
+    For wordmatch
+      Run on Fri Sep 26 13:46:39 2008
+    Reported on Fri Sep 26 13:47:23 2008
+
+             Top 15 Subroutines -- ordered by exclusive time
+    |Calls |P |F |Inclusive|Exclusive|Subroutine                          |
+    |      |  |  |Time     |Time     |                                    |
+    |251215|5 |1 |13.09263 |10.47692 |main::              |matches        |
+    |260642|2 |1 |2.71199  |2.71199  |main::              |debug          |
+    |1     |1 |1 |0.21404  |0.21404  |main::              |report         |
+    |2     |2 |2 |0.00511  |0.00511  |XSLoader::          |load (xsub)    |
+    |14    |14|7 |0.00304  |0.00298  |Exporter::          |import         |
+    |3     |1 |1 |0.00265  |0.00254  |Exporter::          |as_heavy       |
+    |10    |10|4 |0.00140  |0.00140  |vars::              |import         |
+    |13    |13|1 |0.00129  |0.00109  |constant::          |import         |
+    |1     |1 |1 |0.00360  |0.00096  |FileHandle::        |import         |
+    |3     |3 |3 |0.00086  |0.00074  |warnings::register::|import         |
+    |9     |3 |1 |0.00036  |0.00036  |strict::            |bits           |
+    |13    |13|13|0.00032  |0.00029  |strict::            |import         |
+    |2     |2 |2 |0.00020  |0.00020  |warnings::          |import         |
+    |2     |1 |1 |0.00020  |0.00020  |Getopt::Long::      |ParseOptionSpec|
+    |7     |7 |6 |0.00043  |0.00020  |strict::            |unimport       |
+
+    For more information see the full list of 189 subroutines.
+
+La primera parte del informe ya muestra la información crítica con respecto a qué subrutinas están usando la mayor parte del tiempo.  Lo siguiente ofrece algunas estadísticas sobre los archivos de código fuente perfilados.
+
+            Source Code Files -- ordered by exclusive time then name
+    |Stmts  |Exclusive|Avg.   |Reports                     |Source File         |
+    |       |Time     |       |                            |                    |
+    |2699761|15.66654 |6e-06  |line   .    block   .    sub|wordmatch           |
+    |35     |0.02187  |0.00062|line   .    block   .    sub|IO/Handle.pm        |
+    |274    |0.01525  |0.00006|line   .    block   .    sub|Getopt/Long.pm      |
+    |20     |0.00585  |0.00029|line   .    block   .    sub|Fcntl.pm            |
+    |128    |0.00340  |0.00003|line   .    block   .    sub|Exporter/Heavy.pm   |
+    |42     |0.00332  |0.00008|line   .    block   .    sub|IO/File.pm          |
+    |261    |0.00308  |0.00001|line   .    block   .    sub|Exporter.pm         |
+    |323    |0.00248  |8e-06  |line   .    block   .    sub|constant.pm         |
+    |12     |0.00246  |0.00021|line   .    block   .    sub|File/Spec/Unix.pm   |
+    |191    |0.00240  |0.00001|line   .    block   .    sub|vars.pm             |
+    |77     |0.00201  |0.00003|line   .    block   .    sub|FileHandle.pm       |
+    |12     |0.00198  |0.00016|line   .    block   .    sub|Carp.pm             |
+    |14     |0.00175  |0.00013|line   .    block   .    sub|Symbol.pm           |
+    |15     |0.00130  |0.00009|line   .    block   .    sub|IO.pm               |
+    |22     |0.00120  |0.00005|line   .    block   .    sub|IO/Seekable.pm      |
+    |198    |0.00085  |4e-06  |line   .    block   .    sub|warnings/register.pm|
+    |114    |0.00080  |7e-06  |line   .    block   .    sub|strict.pm           |
+    |47     |0.00068  |0.00001|line   .    block   .    sub|warnings.pm         |
+    |27     |0.00054  |0.00002|line   .    block   .    sub|overload.pm         |
+    |9      |0.00047  |0.00005|line   .    block   .    sub|SelectSaver.pm      |
+    |13     |0.00045  |0.00003|line   .    block   .    sub|File/Spec.pm        |
+    |2701595|15.73869 |       |Total                       |
+    |128647 |0.74946  |       |Average                     |
+    |       |0.00201  |0.00003|Median                      |
+    |       |0.00121  |0.00003|Deviation                   |
+
+    Report produced by the NYTProf 2.03 Perl profiler, developed by Tim Bunce and
+    Adam Kaplan.
+
+En este punto, si está usando el informe I<html>, puede pulsar en varios enlaces para analizar cada subrutina y cada línea de código.  Ya que estamos viendo aquí el informe en formato de texto, y existe un directorio completo lleno de informes por cada archivo fuente, solo mostraremos una parte del archivo correspondiente F<wordmatch-line.html>, suficiente para darnos una idea de la suerte de salida que esperaría de esta herramienta tan chula.
+
+    $> html2text nytprof/wordmatch-line.html
+
+    Performance Profile -- -block view-.-line view-.-sub view-
+    For wordmatch
+    Run on Fri Sep 26 13:46:39 2008
+    Reported on Fri Sep 26 13:47:22 2008
+
+    File wordmatch
+
+     Subroutines -- ordered by exclusive time
+    |Calls |P|F|Inclusive|Exclusive|Subroutine    |
+    |      | | |Time     |Time     |              |
+    |251215|5|1|13.09263 |10.47692 |main::|matches|
+    |260642|2|1|2.71199  |2.71199  |main::|debug  |
+    |1     |1|1|0.21404  |0.21404  |main::|report |
+    |0     |0|0|0        |0        |main::|BEGIN  |
+
+
+    |Line|Stmts.|Exclusive|Avg.   |Code                                           |
+    |    |      |Time     |       |                                               |
+    |1   |      |         |       |#!/usr/bin/perl                                |
+    |2   |      |         |       |                                               |
+    |    |      |         |       |use strict;                                    |
+    |3   |3     |0.00086  |0.00029|# spent 0.00003s making 1 calls to strict::    |
+    |    |      |         |       |import                                         |
+    |    |      |         |       |use warnings;                                  |
+    |4   |3     |0.01563  |0.00521|# spent 0.00012s making 1 calls to warnings::  |
+    |    |      |         |       |import                                         |
+    |5   |      |         |       |                                               |
+    |6   |      |         |       |=head1 NAME                                    |
+    |7   |      |         |       |                                               |
+    |8   |      |         |       |filewords - word analysis of input file        |
+    <...snip...>
+    |62  |1     |0.00445  |0.00445|print report( %count );                        |
+    |    |      |         |       |# spent 0.21404s making 1 calls to main::report|
+    |63  |      |         |       |                                               |
+    |    |      |         |       |# spent 23.56955s (10.47692+2.61571) within    |
+    |    |      |         |       |main::matches which was called 251215 times,   |
+    |    |      |         |       |avg 0.00005s/call: # 50243 times               |
+    |    |      |         |       |(2.12134+0.51939s) at line 57 of wordmatch, avg|
+    |    |      |         |       |0.00005s/call # 50243 times (2.17735+0.54550s) |
+    |64  |      |         |       |at line 56 of wordmatch, avg 0.00005s/call #   |
+    |    |      |         |       |50243 times (2.10992+0.51797s) at line 58 of   |
+    |    |      |         |       |wordmatch, avg 0.00005s/call # 50243 times     |
+    |    |      |         |       |(2.12696+0.51598s) at line 55 of wordmatch, avg|
+    |    |      |         |       |0.00005s/call # 50243 times (1.94134+0.51687s) |
+    |    |      |         |       |at line 54 of wordmatch, avg 0.00005s/call     |
+    |    |      |         |       |sub matches {                                  |
+    <...snip...>
+    |102 |      |         |       |                                               |
+    |    |      |         |       |# spent 2.71199s within main::debug which was  |
+    |    |      |         |       |called 260642 times, avg 0.00001s/call: #      |
+    |    |      |         |       |251215 times (2.61571+0s) by main::matches at  |
+    |103 |      |         |       |line 74 of wordmatch, avg 0.00001s/call # 9427 |
+    |    |      |         |       |times (0.09628+0s) at line 50 of wordmatch, avg|
+    |    |      |         |       |0.00001s/call                                  |
+    |    |      |         |       |sub debug {                                    |
+    |104 |260642|0.58496  |2e-06  |my $message = shift;                           |
+    |105 |      |         |       |                                               |
+    |106 |260642|1.09917  |4e-06  |if ( $debug ) {                                |
+    |107 |      |         |       |print STDERR "DBG: $message\n";                |
+    |108 |      |         |       |}                                              |
+    |109 |      |         |       |}                                              |
+    |110 |      |         |       |                                               |
+    |111 |1     |0.01501  |0.01501|exit 0;                                        |
+    |112 |      |         |       |                                               |
+
+Un montón de información. Parece que será así a partir de ahora.
+
+Vea también C<Devel::NYTProf::Apache> que engancha C<Devel::NYTProf> en C<mod_perl>.
+
+=head1  ORDENACIÓN
+
+Los módulos Perl no son las únicas herramientas que un analista de prestaciones tiene a su disposición: herramientas del sistema como C<time> no deberían ser pasadas por alto, como muestra el siguiente ejemplo, donde echamos una mirada rápida a la ordenación.  Muchos libros, tesis y artículos se han escrito sobre la eficiencia de los algoritmos de ordenación, y este no es el lugar para repetir tal trabajo. También existen muchos buenos módulos que merecen tomarse en cuenta: vienen a la memoria C<Sort::Maker> y C<Sort::Key>.
+Sin embargo, sigue siendo posible hacer algunas observaciones en ciertas interpretaciones específicas de Perl relativas a la ordenación de conjuntos de datos y ofrecer un ejemplo o dos respecto a cómo afecta el rendimiento la ordenación de grandes volúmenes de datos.
+Primeramente, un punto a menudo pasado por alto cuando se ordenan grandes cantidades de datos, es que uno se ve tentado en reducir el conjunto de datos para poder tratarlo, y en muchos casos C<grep()> puede ser muy útil como filtro sencillo:
+
+    @datos = sort grep { /$filtro/ } @entrada
+
+Primeramente, un comando como ese puede reducir inmensamente el volumen del material a ordenar, y no debería despreciarse a la ligera basándonos en su simplicidad.  El principio C<KISS> también, a menudo, olvidado: El siguiente ejemplo usa la sencilla utilidad del sistema C<time> para demostrarlo.  Echemos un vistazo a un ejemplo real de la ordenación de los contenidos de un archivo grande, como sería un registro de actividad apache.  Este tiene más de un cuarto de millón de líneas y 50 MB de tamaño, y un extracto de él tendría este aspecto:
+
+# logfile
+
+    188.209-65-87.adsl-dyn.isp.belgacom.be - - [08/Feb/2007:12:57:16 +0000] "GET /favicon.ico HTTP/1.1" 404 209 "-" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)"
+    188.209-65-87.adsl-dyn.isp.belgacom.be - - [08/Feb/2007:12:57:16 +0000] "GET /favicon.ico HTTP/1.1" 404 209 "-" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)"
+    151.56.71.198 - - [08/Feb/2007:12:57:41 +0000] "GET /suse-on-vaio.html HTTP/1.1" 200 2858 "http://www.linux-on-laptops.com/sony.html" "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1"
+    151.56.71.198 - - [08/Feb/2007:12:57:42 +0000] "GET /data/css HTTP/1.1" 404 206 "http://www.rfi.net/suse-on-vaio.html" "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1"
+    151.56.71.198 - - [08/Feb/2007:12:57:43 +0000] "GET /favicon.ico HTTP/1.1" 404 209 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1"
+    217.113.68.60 - - [08/Feb/2007:13:02:15 +0000] "GET / HTTP/1.1" 304 - "-" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)"
+    217.113.68.60 - - [08/Feb/2007:13:02:16 +0000] "GET /data/css HTTP/1.1" 404 206 "http://www.rfi.net/" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)"
+    debora.to.isac.cnr.it - - [08/Feb/2007:13:03:58 +0000] "GET /suse-on-vaio.html HTTP/1.1" 200 2858 "http://www.linux-on-laptops.com/sony.html" "Mozilla/5.0 (compatible; Konqueror/3.4; Linux) KHTML/3.4.0 (like Gecko)"
+    debora.to.isac.cnr.it - - [08/Feb/2007:13:03:58 +0000] "GET /data/css HTTP/1.1" 404 206 "http://www.rfi.net/suse-on-vaio.html" "Mozilla/5.0 (compatible; Konqueror/3.4; Linux) KHTML/3.4.0 (like Gecko)"
+    debora.to.isac.cnr.it - - [08/Feb/2007:13:03:58 +0000] "GET /favicon.ico HTTP/1.1" 404 209 "-" "Mozilla/5.0 (compatible; Konqueror/3.4; Linux) KHTML/3.4.0 (like Gecko)"
+    195.24.196.99 - - [08/Feb/2007:13:26:48 +0000] "GET / HTTP/1.0" 200 3309 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.8.0.9) Gecko/20061206 Firefox/1.5.0.9"
+    195.24.196.99 - - [08/Feb/2007:13:26:58 +0000] "GET /data/css HTTP/1.0" 404 206 "http://www.rfi.net/" "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.8.0.9) Gecko/20061206 Firefox/1.5.0.9"
+    195.24.196.99 - - [08/Feb/2007:13:26:59 +0000] "GET /favicon.ico HTTP/1.0" 404 209 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.8.0.9) Gecko/20061206 Firefox/1.5.0.9"
+    crawl1.cosmixcorp.com - - [08/Feb/2007:13:27:57 +0000] "GET /robots.txt HTTP/1.0" 200 179 "-" "voyager/1.0"
+    crawl1.cosmixcorp.com - - [08/Feb/2007:13:28:25 +0000] "GET /links.html HTTP/1.0" 200 3413 "-" "voyager/1.0"
+    fhm226.internetdsl.tpnet.pl - - [08/Feb/2007:13:37:32 +0000] "GET /suse-on-vaio.html HTTP/1.1" 200 2858 "http://www.linux-on-laptops.com/sony.html" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)"
+    fhm226.internetdsl.tpnet.pl - - [08/Feb/2007:13:37:34 +0000] "GET /data/css HTTP/1.1" 404 206 "http://www.rfi.net/suse-on-vaio.html" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)"
+    80.247.140.134 - - [08/Feb/2007:13:57:35 +0000] "GET / HTTP/1.1" 200 3309 "-" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)"
+    80.247.140.134 - - [08/Feb/2007:13:57:37 +0000] "GET /data/css HTTP/1.1" 404 206 "http://www.rfi.net" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)"
+    pop.compuscan.co.za - - [08/Feb/2007:14:10:43 +0000] "GET / HTTP/1.1" 200 3309 "-" "www.clamav.net"
+    livebot-207-46-98-57.search.live.com - - [08/Feb/2007:14:12:04 +0000] "GET /robots.txt HTTP/1.0" 200 179 "-" "msnbot/1.0 (+http://search.msn.com/msnbot.htm)"
+    livebot-207-46-98-57.search.live.com - - [08/Feb/2007:14:12:04 +0000] "GET /html/oracle.html HTTP/1.0" 404 214 "-" "msnbot/1.0 (+http://search.msn.com/msnbot.htm)"
+    dslb-088-064-005-154.pools.arcor-ip.net - - [08/Feb/2007:14:12:15 +0000] "GET / HTTP/1.1" 200 3309 "-" "www.clamav.net"
+    196.201.92.41 - - [08/Feb/2007:14:15:01 +0000] "GET / HTTP/1.1" 200 3309 "-" "MOT-L7/08.B7.DCR MIB/2.2.1 Profile/MIDP-2.0 Configuration/CLDC-1.1"
+
+Aquí, la tarea específica es la de ordenar las 286 525 líneas de este archivo por código de respuesta, consulta, navegador, URL de donde parte y, finalmente, fecha.  Una solución podría ser usar el siguiente código, que itera sobre los archivos indicados en la línea de comandos.
+
+# sort-apache-log
+
+    #!/usr/bin/perl -n
+
+    use strict;
+    use warnings;
+
+    my @datos;
+
+    LINEA:
+    while ( <> ) {
+        my $linea = $_;
+        if (
+            $linea =~ m/^(
+                ([\w\.\-]+)             # cliente
+                \s*-\s*-\s*\[
+                ([^]]+)                 # fecha
+                \]\s*"\w+\s*
+                (\S+)                   # consulta
+                [^"]+"\s*
+                (\d+)                   # estado
+                \s+\S+\s+"[^"]*"\s+"
+                ([^"]*)                 # navegador
+                "
+                .*
+            )$/x
+        ) {
+            my @trozos = split(/ +/, $linea);
+            my $ip        = $1;
+            my $fecha     = $2;
+            my $consulta  = $3;
+            my $estado    = $4;
+            my $navegador = $5;
+
+            push(@datos, [$ip, $fecha, $consulta, $estado, $navegador, $linea]);
+        }
+    }
+
+    my @ordenado = sort {
+        $a->[3] cmp $b->[3]
+                ||
+        $a->[2] cmp $b->[2]
+                ||
+        $a->[0] cmp $b->[0]
+                ||
+        $a->[1] cmp $b->[1]
+                ||
+        $a->[4] cmp $b->[4]
+    } @data;
+
+    foreach my $datos ( @ordenado ) {
+        print $datos->[5];
+    }
+
+    exit 0;
+
+Cuando se ejecuta este programa, redirija C<STDOUT> para que sea posible comprobar que la salida es correcta al correr el test y use la utilidad del sistema C<time> para comprobar el tiempo que lleva la ejecución.
+
+    $> time ./sort-apache-log logfile > salida-sort
+
+    real    0m17.371s
+    user    0m15.757s
+    sys     0m0.592s
+
+Este programa tomó un poco más de 17 segundos reales en ejecutarse.  Note los diferentes valores en la salida de C<time>; es importante siempre usar el mismo y no confundir lo que significa cada uno.
+
+=over 4
+
+=item Tiempo real transcurrido
+
+El tiempo real que ha transcurrido entre el momento en que se llama a C<time> y cuando termina.  El tiempo transcurrido incluye tanto a los tiempos de usuario y de sistema, y el tiempo gastado esperando por otros usuarios y procesos en el sistema.  De forma inevitable, esta es la más aproximada de las medidas indicadas.
+
+=item Tiempo de CPU del usuario
+
+El tiempo de usuario es la cantidad de tiempo que el proceso entero gasta en nombre del usuario en el sistema ejecutando este programa.
+
+=item Tiempo de CPU del sistema
+
+El tiempo del sistema es la cantidad de tiempo que el propio kernel gasta ejecutando sutinas, o llamadas del sistema, en nombre de este proceso de usuario.
+
+=back
+
+Al ejecutar este mismo proceso con una C<transformada Schwarziana>, es posible eliminar la necesidad de almacenar los array de entrada y salida para el almacenamiento de todos los datos, y trabajar directamente con la entrada a medida de que se recibe.  Dicho de otro modo, el código sería algo similar a lo siguiente:
+
+# sort-apache-log-schwarzian
+
+    #!/usr/bin/perl -n
+
+    use strict;
+    use warnings;
+
+    print
+
+        map $_->[0] =>
+
+        sort {
+            $a->[4] cmp $b->[4]
+                    ||
+            $a->[3] cmp $b->[3]
+                    ||
+            $a->[1] cmp $b->[1]
+                    ||
+            $a->[2] cmp $b->[2]
+                    ||
+            $a->[5] cmp $b->[5]
+        }
+        map  [ $_, m/^(
+            ([\w\.\-]+)             # cliente
+            \s*-\s*-\s*\[
+            ([^]]+)                 # fecha
+            \]\s*"\w+\s*
+            (\S+)                   # consulta
+            [^"]+"\s*
+            (\d+)                   # estado
+            \s+\S+\s+"[^"]*"\s+"
+            ([^"]*)                 # navegador
+            "
+            .*
+        )$/xo ]
+
+        => <>;
+
+    exit 0;
+
+Corra el nuevo código contra el mismo registro de actividad, como antes, para comprobar el nuevo tiempo.
+
+    $> time ./sort-apache-log-schwarzian logfile > salida-schwarz
+
+    real    0m9.664s
+    user    0m8.873s
+    sys     0m0.704s
+
+El tiempo se ha reducido a la mitad, que es una respetable mejora de velocidad para cualquier estándar.  Naturalmente, es importante comprobar que la salida es consistente con la ejecución del primer programa; y aquí es donde aparece la utilidad del sistema Unix C<cksum>.
+
+    $> cksum salida-sort salida-schwarz
+    3044173777 52029194 salida-sort
+    3044173777 52029194 salida-schwarz
+
+CQD. Cuidado también con la presión de los jefes cuando le vean aumentar la velocidad de ejecución de un programa en un 50 %, ya que le pedirán hacer lo mismo un mes más tarde (historia real). Deberá indicar que usted solo es un ser humano, aunque sea un programador Perl, y que verá qué puede hacer...
+
+=head1 REGISTRO DE LA ACTIVIDAD
+
+Una parte esencial de cualquier buen proceso de desarrollo es el manejo apropiado de los errores, con apropiados mensajes informativos. Sin embargo, existe una escuela de pensamiento que sugiere que los archivos de registro deberían ser I<locuaces>, como si la imparable y encadenada salida asegurara la supervivencia del programa.  Si la velocidad es, de cualquier manera, un problema, esta aproximación está equivocada.
+
+Algo muy común es el código que se parece a algo como esto:
+
+    logger->debug( "Un mensaje de registro del proceso con id: $$ INC: " . Dumper(\%INC) )
+
+El problema es que este código siempre se interpretará y ejecutará, incluso cuando el nivel de depuración indicado en el archivo de configuración sea cero.  Una vez que se ha entrado en la subrutina debug(), y que se confirme que la variable interna C<$debug> sea un cero, por ejemplo, el mensaje que se le envió será descartado y el programa continuará.  En el ejemplo indicado, el hash C<\%INC> se volcará, y se construirá el mensaje con la cadena de texto. Todo esto podría evitarse con una variable de depuración a nivel de sentencia, como esta:
+
+    logger->debug( "Un mensaje de registro del proceso con id: $$ INC: " . Dumper(\%INC) ) if $DEBUG;
+
+Este efecto se puede demostrar instalando un programa de prueba con ambas formas, incluyendo una subrutina C<debug()> que emule la funcionalidad típica de C<logger()>.
+
+# ifdebug
+
+    #!/usr/bin/perl
+
+    use strict;
+    use warnings;
+
+    use Benchmark;
+    use Data::Dumper;
+    my $DEBUG = 0;
+
+    sub debug {
+        my $msg = shift;
+
+        if ( $DEBUG ) {
+            print "DEBUG: $msg\n";
+        }
+    };
+
+    timethese(100000, {
+            'debug'       => sub {
+                debug( "Un $0 mensaje de registro del proceso con id: $$" . Dumper(\%INC) )
+            },
+            'ifdebug'  => sub {
+                debug( "Un $0 mensaje de registro del proceso con id: $$" . Dumper(\%INC) ) if $DEBUG
+            },
+    });
+
+Veamos lo que hace C<Benchmark> con esto:
+
+    $> perl ifdebug
+    Benchmark: timing 100000 iterations of constant, sub...
+       ifdebug:  0 wallclock secs ( 0.01 usr +  0.00 sys =  0.01 CPU) @ 10000000.00/s (n=100000)
+                (warning: too few iterations for a reliable count)
+         debug: 14 wallclock secs (13.18 usr +  0.04 sys = 13.22 CPU) @ 7564.30/s (n=100000)
+
+En el caso primero, el código, que hace exactamente lo mismo que sacar cualquier información de depuración, en otras palabras, nada, le lleva 14 segundos; y en el otro caso al código le lleva una centésima de segundo.  Parece que, con justicia, es definitivo.  Use una variable C<$DEBUG> ANTES de llamar a la subrutina, en lugar de confiar en la inteligencia funcional de su interior.
+
+=head2 Registrando if DEBUG (constante)
+
+Es posible llevar la idea anterior un poco más lejos, usando una constante C<DEBUG> en tiempo de compilación.
+
+# ifdebug-constant
+
+    #!/usr/bin/perl
+
+    use strict;
+    use warnings;
+
+    use Benchmark;
+    use Data::Dumper;
+    use constant
+        DEBUG => 0
+    ;
+
+    sub debug {
+        if ( DEBUG ) {
+            my $msg = shift;
+            print "DEBUG: $msg\n";
+        }
+    };
+
+    timethese(100000, {
+            'debug'       => sub {
+                debug( "Un $0 mensaje de registro del proceso con id: $$" . Dumper(\%INC) )
+            },
+            'constant'  => sub {
+                debug( "Un $0 mensaje de registro del proceso con id: $$" . Dumper(\%INC) ) if DEBUG
+            },
+    });
+
+Ejecutar este programa produce la siguiente salida:
+
+    $> perl ifdebug-constant
+    Benchmark: timing 100000 iterations of constant, sub...
+      constant:  0 wallclock secs (-0.00 usr +  0.00 sys = -0.00 CPU) @ -7205759403792793600000.00/s (n=100000)
+                (warning: too few iterations for a reliable count)
+           sub: 14 wallclock secs (13.09 usr +  0.00 sys = 13.09 CPU) @ 7639.42/s (n=100000)
+
+La constante C<DEBUG> se cepilla el tiempo que le llevó a la variable C<$debug>, marcando cero segundos, y generando de postre un mensaje de "I<warning: too few iterations for a reliable count>" (atención: muy pocas iteraciones para obtener una cuenta fiable).  Para ver qué está realmente sucediendo, y por qué tenemos muy pocas iteraciones cuando estamos pidiendo que haga 100 000, podemos usar el útil módulo C<B::Deparse> para inspeccionar el nuevo código:
+
+    $> perl -MO=Deparse ifdebug-constant
+
+    use Benchmark;
+    use Data::Dumper;
+    use constant ('DEBUG', 0);
+    sub debug {
+        use warnings;
+        use strict 'refs';
+        0;
+    }
+    use warnings;
+    use strict 'refs';
+    timethese(100000, {'sub', sub {
+        debug "Un $0 mensaje de registro del proceso con id: $$" . Dumper(\%INC);
+    }
+    , 'constant', sub {
+        0;
+    }
+    });
+    ifdebug-constant syntax OK
+
+La salida muestra que la subrutina constant() que estamos comprobando se ha reemplazado con el valor de la constante C<DEBUG>: cero.  La línea que se iba a comprobar se ha optimizado de forma completa, y no podrá obtener nada más eficiente que esto.
+
+=head1 POSTDATA
+
+Este documento ha proporcionado diversas maneras de identificar puntos conflictivos, y comprobar qué modificaciones han mejorado el tiempo de ejecución del código.
+
+Como un razonamiento final, recuerde que no es posible (en el momento de escribir esto) producir un programa útil que se ejecute en un tiempo cero o negativo, y que este principio básico se puede escribir como: I<los programas útiles son lentos>, por su propio definición.  Es posible, naturalmente, escribir un programa casi instantáneo, pero no hará mucho. Aquí hay uno muy eficiente:
+
+    $> perl -e 0
+
+Optimizar esto un poco más allá es trabajo para el C<p5p>.
+
+=head1 VEA TAMBIÉN
+
+Lecturas recomendadas se pueden encontrar en los módulos y enlaces a continuación.
+
+=head2 PERLDOCS
+
+Por ejemplo: C<perldoc -f sort>.
+
+L<perlfaq4>.
+
+L<perlfork>, L<perlfunc>, L<perlretut>, L<perlthrtut>.
+
+L<threads>.
+
+=head2 PÁGINAS DE MANUAL
+
+C<time>.
+
+=head2 MÓDULOS
+
+No es posible indicar aquí, individualmente, todo el código relacionado con el rendimiento en Perl, naturalmente, pero aquí hay una lista breve de los módulos que hay en CPAN que merecen cierta atención.
+
+    Apache::DProf
+    Apache::SmallProf
+    Benchmark
+    DBIx::Profile
+    Devel::AutoProfiler
+    Devel::DProf
+    Devel::DProfLB
+    Devel::FastProf
+    Devel::GraphVizProf
+    Devel::NYTProf
+    Devel::NYTProf::Apache
+    Devel::Profiler
+    Devel::Profile
+    Devel::Profit
+    Devel::SmallProf
+    Devel::WxProf
+    POE::Devel::Profiler
+    Sort::Key
+    Sort::Maker
+
+=head2 DIRECCIONES URL
+
+Material de referencia en línea, muy útil:
+
+    http://www.ccl4.org/~nick/P/Fast_Enough/
+
+    http://www-128.ibm.com/developerworks/library/l-optperl.html
+
+    http://perlbuzz.com/2007/11/bind-output-variables-in-dbi-for-speed-and-safety.html
+
+    http://en.wikipedia.org/wiki/Performance_analysis
+
+    http://apache.perl.org/docs/1.0/guide/performance.html
+
+    http://perlgolf.sourceforge.net/
+
+    http://www.sysarch.com/Perl/sort_paper.html
+
+=head1 AUTOR
+
+Richard Foley <richard.foley@rfi.net> Copyright (c) 2008
+
+=cut
