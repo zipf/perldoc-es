@@ -1,0 +1,854 @@
+=head1 NOMBRE
+
+perlpacktut - tutorial sobre C<pack> y C<unpack>
+
+=head1 DESCRIPCIÓN
+
+C<pack> y C<unpack> son dos funciones que transforman datos de acuerdo a una plantilla definida por el usuario, entre la forma en que Perl almacena valores de forma segura y las representaciones bien definidas que se podrían requerir en el entorno de un programa Perl. Desafortunadamente, también son dos de las funciones menos comprendidas y descuidadas que ofrece Perl. Este tutorial las desmitificará.
+
+
+=head1 El principio básico
+
+La mayor parte de los lenguajes de programación no resguardan la memoria donde se almacenan las variables. En C, por ejemplo, puede tomar la dirección de alguna variable, y el operador C<sizeof> le dirá cuántos bytes están reservados para esa variable. Usando la dirección y el tamaño, puede acceder al corazón de los datos, en ese almacén.
+
+En Perl, no puede acceder aleatoriamente a la memoria, pero la estructura y la conversión de representación ofrecida por C<pack> y C<unpack> es una excelente alternativa. La función C<pack> convierte valores a una secuencia de bytes que contienen una representación de acuerdo a una especificación dada, el llamado argumento "plantilla". C<unpack> es el proceso inverso, derivando valores de los contenidos de una cadena de bytes. (Tenga cuidado, sin embargo, que no todo lo que se ha empaquetado junto puede luego desempaquetarse: una experiencia muy común que los turistas pueden confirmar).
+
+¿Por qué, podría preguntarse, necesitaría que un trozo de memoria contuviese la representación binaria de algunos valores? Una buena razón es que esta representación binaria, le es impuesta o le dará algún beneficio en su procesamiento de la entrada y la salida al acceder a un archivo, dispositivo o conexión de red. Otra razón es pasar datos a alguna llamada del sistema que no está disponible como función Perl: C<syscall> requiere que indique los parámetros de la misma forma en que un programa en C los almacena. Incluso el procesado de texto (como se muestra en la siguiente sección) se puede simplificar con un uso juicioso de estas dos funciones.
+
+Para ver cómo funciona el (des)empaquetamiento, empezaremos con un código con una plantilla sencilla, donde la conversión es lo menos importante: pasar los contenidos de una secuencia de bytes a una cadena de dígitos hexadecimales. Permítanos usar C<unpack>, ya que probablemente le recuerde el programa dump, o el último mensaje desesperado que un programa desafortunado le lanza antes que expire en el azul salvaje. Asumiendo que la variable C<$mem> guarda una secuencia de bytes que nosotros deseamos inspeccionar sin asumir nada sobre su significado, podemos escribir
+
+   my( $hex ) = unpack( 'H*', $mem );
+   print "$hex\n";
+
+después de lo cual podríamos ver algo como esto, en que cada par de dígitos hexadecimales corresponde a un byte:
+
+   41204d414e204120504c414e20412043414e414c2050414e414d41
+
+¿Qué era ese trozo de memoria? ¿Números, caracteres, o una mezcla de ambos? Asumiendo que estamos en un ordenador donde se use una codificación ASCII (o algo similar): valores hexadecimales en el rango C<0x40> - C<0x5A> indican una letra en mayúscula, y el C<0x20> codifica un espacio. Así que podríamos asumir que se trata de una pieza de texto, que alguien es capaz de leer como un tabloide: pero otros tendrán que tener una tabla ASCII y revivirán su primer grado. Sin preocuparnos demasiado sobre cómo leer esto, notamos que C<unpack> con el código de plantilla C<H> convierte los contenidos de la secuencia de bytes en una conocida notación hexadecimal. Ya que "una secuencia de" es una indicación de cantidad bastante imprecisa, se define C<H> para que convierta un único dígito hexadecimal, a menos que le siga un contador de repetición. Un asterisco para el contador de repetición significa usar todo lo que quede.
+
+La operación inversa -empaquetar conjuntos de bytes desde una cadena de dígitos hexadecimales- se escribe igual de fácil. Por ejemplo:
+
+   my $s = pack( 'H2' x 10, 30..39 );
+   print "$s\n";
+
+Ya que alimentamos una lista de 10 parejas de cadenas de dígitos hexadecimales a C<pack>, la plantilla debe contener 10 códigos empaquetados. Si se corre esto en un ordenador con una codificación ASCII, imprimirá C<0123456789>.
+
+=head1 Empaquetando texto
+
+Suponga que ha leído datos desde un archivo, como estos:
+
+    Fecha     |Descripción                | Ingr. |Gastos
+    01/24/2001 El emporio del camello                  1147.99
+    01/28/2001 Espray para pulgas                        24.99
+    01/29/2001 Paseos en camello turístico  235.00
+
+¿Cómo lo manejamos? Podría pensar primero en usar C<split>; sin embargo, ya que C<split> colapsa los espacios en blanco, nunca sabrá cuándo un registro es de ingresos y cuándo de gastos. Oops. Bueno, siempre puede usar C<substr>:
+
+    while (<>) { 
+        my $fecha    = substr($_,  0, 11);
+        my $desc     = substr($_, 12, 27);
+        my $ingresos = substr($_, 40,  7);
+        my $gastos   = substr($_, 52,  7);
+        ...
+    }
+
+¿No es esto, realmente, un barril de risas? De hecho, es peor de lo que parece; el que tiene ojo de águila habrá notado que el primer campo solo debe ser de 10 caracteres de ancho, y el error se propaga hacia la derecha con el resto de los números -que debemos contar a mano-. Así que es propenso a errores, así como ser horriblemente poco amistoso.
+
+O podríamos usar expresiones regulares:
+
+    while (<>) { 
+        my($fecha, $desc, $ingresos, $gastos) = 
+            m|(\d\d/\d\d/\d{4}) (.{27}) (.{7})(.*)|;
+        ...
+    }
+
+Argh. Bueno, es un poco mejor, pero, bueno, ¿usted querría mantener esto?
+
+¡Hey!, ¿no se supone que Perl hace fácil esta suerte de cosas? Bueno, lo hace, si usa las herramientas adecuadas. C<pack> y C<unpack> están diseñadas para ayudarle cuando trata con datos de ancho fijo, como los de arriba. Veamos una solución con C<unpack>:
+
+    while (<>) { 
+        my($fecha, $desc, $ingresos, $gastos) = unpack("A10xA27xA7A*", $_);
+        ...
+    }
+
+Esto tiene un mejor pinta; pero tenemos que analizar esa extraña plantilla.
+¿De dónde he sacado eso? 
+
+I<Ok>, volvamos a mirar a algunos de nuestros datos, otra vez; de hecho, incluiremos las cabeceras, y una regla para que podamos seguir la pista de dónde nos encontramos.
+
+             1         2         3         4         5        
+    1234567890123456789012345678901234567890123456789012345678
+    Fecha     |Descripción                | Ingr. |Gastos
+    01/28/2001 Espray para pulgas                        24.99
+    01/29/2001 Paseos en camello turístico  235.00
+
+A partir de aquí, podemos ver que la columna de fecha abarca desde la columna 1 a la columna 10 -diez caracteres de ancho-. El em-C<pack>-etado de un "carácter" es C<A>, y diez de ellos es C<A10>. Así que si solo queremos extraer las fechas, podríamos decir esto:
+
+    my($fecha) = unpack("A10", $_);
+
+I<Ok>, ¿qué es lo siguiente? Entre la fecha y la descripción hay una columna de un blanco; queremos saltarla. La plantilla C<x> significa "salta hacia adelante", así que queremos una de estas. Lo siguiente, tenemos otro lote de caracteres, del 12 al 38. Son 27 caracteres más, por lo tanto C<A27>. (No cometa el error de contar uno menos: existen 27 caracteres entre 12 y 38, no 26. ¡Cuéntelos!)
+
+Ahora podemos saltar otro carácter y extraer los siguientes 7 caracteres:
+
+    my($fecha,$descrip,$ingresos) = unpack("A10xA27xA7", $_);
+
+Ahora viene el truco. Las líneas de nuestro libro de cuentas que sean solo de ingresos, y no de gastos, podrían terminar en la columna 46. Por ello, no queremos decirle a nuestro patrón C<unpack> que B<necesitamos> encontrar otros 12 caracteres; solo diremos "si hay algo más, tómalo". Como podría adivinar de las expresiones regulares, esto es lo que significa C<*>: "usa todo lo que quede".
+
+=over 3
+
+=item *
+
+Aún así, queda advertido que, a diferencia de las expresiones regulares, si la plantilla C<unpack> no coincide con los datos de entrada, Perl chillará y morirá.
+
+=back
+
+
+Aquí, poniéndolo todo junto:
+
+    my ($fecha, $descripcion, $ingresos, $gastos) =
+        unpack("A10xA27xA7xA*", $_);
+
+Ahora, nuestros datos se pueden leer. Supongo que lo que podríamos querer ahora es sumar nuestros ingresos y nuestros gastos, y añadir otra línea al final de nuestro libro de cuentas -en el mismo formato- indicando cuánto hemos ganado y cuánto hemos gastado:
+
+    while (<>) {
+        my ($fecha, $desc, $ingresos, $gastos) =
+            unpack("A10xA27xA7xA*", $_);
+        $tot_ingresos += $ingresos;
+        $tot_gastos   += $gastos;
+    }
+
+    $tot_ingresos = sprintf("%.2f", $tot_ingresos); # Convertirlos en 
+    $tot_gastos   = sprintf("%.2f", $tot_gastos); # formato "financiero"
+
+    $fecha = POSIX::strftime("%m/%d/%Y", localtime); 
+
+    # Ok, vamos allá:
+
+    print pack("A10xA27xA7xA*", $fecha, "Totales",
+        $tot_ingresos, $tot_gastos);
+
+!Oh! Hummm. Eso no funciona. Veamos qué ha sucedido:
+
+    01/24/2001 El emporio del camello                   1147.99
+    01/28/2001 Espray para pulgas                         24.99
+    01/29/2001 Paseos en camello turístico 1235.00
+    03/23/2001Totales                    1235.001172.98
+
+I<Ok>, es un comienzo, pero ¿qué ha pasado con los espacios? Pusimos C<x>, ¿no es así? ¿No debería saltar hacia adelante? Veamos lo que dice L<perlfunc/pack>:
+
+    x   Un byte nulo.
+
+Argh. Nada maravilloso. Hay una gran diferencia entre "un byte nulo", un carácter cero, y "un espacio", el carácter 32. Perl pone algo entre la fecha y la descripción, pero, desafortunadamente, ¡no podemos verlo! 
+
+Lo que realmente necesitamos es expandir el ancho de los campos. El formato C<A> ajusta con espacios con cualesquiera caracteres inexistentes, así que podemos usar los espacios adicionales para alinear nuestros campos, como esto:
+
+    print pack("A11 A28 A8 A*", $date, "Totales",
+        $tot_ingresos, $tot_gastos);
+
+(Note que puede poner espacios en la plantilla para hacerla más legible, pero no se trasladan a espacios en la salida). Esto es lo que ahora obtenemos:
+
+    01/24/2001 El emporio del camello                   1147.99
+    01/28/2001 Espray para pulgas                         24.99
+    01/29/2001 Paseos en camello turístico 1235.00
+    03/23/2001 Totales                     1235.00 1172.98
+
+Esto es un poco mejor, pero seguimos viendo que la última columna necesita moverse un poco más allá. Hay una forma sencilla de arreglar esto; desafortunadamente, no podemos pedirle a C<pack> que justifique nuestros campos a la derecha, pero podemos pedirle a C<sprintf> que lo haga:
+
+    $tot_ingresos = sprintf("%.2f", $tot_ingresos); 
+    $tot_gastos   = sprintf("%12.2f", $tot_gastos);
+    $fecha = POSIX::strftime("%m/%d/%Y", localtime); 
+    print pack("A11 A28 A8 A*", $date, "Totales",
+        $tot_ingresos, $tot_gastos);
+
+Esta vez obtenemos la respuesta correcta:
+
+    01/28/2001 Espray para pulgas                         24.99
+    01/29/2001 Paseos en camello turístico 1235.00
+    03/23/2001 Totals                      1235.00      1172.98
+
+Así es cómo consumimos y producimos datos de ancho fijo. Recapitulemos lo que hemos visto hasta ahora de C<pack> y C<unpack>:
+
+=over 3
+
+=item *
+
+Use C<pack> para llevar diversos tipos de datos a una versión de ancho fijo; use C<unpack> para convertir una cadena de ancho fijo a diversas piezas de datos. 
+
+=item *
+
+El formato pack C<A> significa "cualquier carácter"; si está empaquetando y se le acaban las cosas a empaquetar, C<pack> rellenará el resto con espacios.
+
+=item *
+
+C<x> significa "salta un byte" cuando está desempaquetando; cuando está empaquetando, significa "introduce un byte nulo" -que es, probablemente no lo que quiere hacer si está tratando con texto plano-.
+
+=item *
+
+Puede revisar los formatos con números para decidir cuántos caracteres quedarán afectados por ese formato: C<A12> significa "toma 23 caracteres"; C<x6> significa "salta 6 bytes" o "carácter 0, 6 veces".
+
+=item *
+
+En lugar de un número, puede usar C<*> que significa "consume todo lo que quede". 
+
+B<Advertencia>: cuando empaquete múltiples piezas de datos, C<*> solo significa "consume todo de la parte de datos actual". Es decir
+
+    pack("A*A*", $uno, $dos)
+
+empaqueta todo C<$uno> en el primer C<A*> y entonces todo el C<$dos> en el segundo. Este es un principio general: cada carácter de formato corresponde a una parte de datos a empaquetar.
+
+=back
+
+
+
+=head1 Empaquetando números
+
+Ya está bien para datos de texto. Vayamos al meollo del asunto en que C<pack> y C<unpack> son mejores: manejo de formatos binarios para números. Existen, naturalmente, varios formatos binarios -la vida sería demasiado sencilla- pero Perl hará todo el trabajo melindroso por usted.
+
+
+=head2 Enteros
+
+Empaquetar y desempaquetar números implica conversión a y desde la misma representación binaria I<específica>. Dejando aparte los números en punto flotante, por un momento, las propiedades sobresalientes de cualquier representación, son:
+
+=over 4
+
+=item *
+
+el número de bytes utilizados para almacenar el entero,
+
+=item *
+
+si los contenidos se interpretan como un número con o sin signo,
+
+=item *
+
+la ordenación de los bytes: si el primer byte es el byte más o menos significativo (o: I<little-endian> o I<big-endian>, respectivamente).
+
+=back
+
+Así, por ejemplo, para empaquetar 20302 a un entero de 16 bits con signo en la representación de su ordenador, puede escribir
+
+   my $ps = pack( 's', 20302 );
+
+De nuevo, el resultado es una cadena, conteniendo ahora 2 bytes. Si imprime esta cadena (que, generalmente, no es lo recomendado) podría ver C<ON> o C<NO> (dependiendo de la ordenación de bytes de su sistema) -o algo completamente diferente si su ordenador no usa la codificación de caracteres ASCII-.
+Desempaquetar C<$ps> con la misma plantilla devuelve el valor entero original:
+
+   my( $s ) = unpack( 's', $ps );
+
+Esto es cierto para todos los códigos de plantilla numéricos. Pero no espere milagros: si el valor empaquetado excede la capacidad de bytes a repartir, los bits de orden superior se descartarán silenciosamente y, ciertamente, unpack será incapaz de sacarles de ninguna chistera. Y, cuando empaquete usando una plantilla de código con signo, como con C<s>, un valor excesivo puede resultar en que se active el bit de signo, y al desempaquetar esto devolverá un valor negativo.
+
+16 bits no le conseguirán ir demasiado lejos con los enteros, pero existen C<l> y C<L>
+para enteros de 32 bit con y sin signo. Y si esto no es suficiente y su sistema soporta enteros de 64 bits, puede llevar los límites mucho más cerca del infinito con códigos de empaquetado C<q> y C<Q>. Una notable excepción es la que ofrecen los códigos de empaquetado C<i> y C<I> para los enteros con y sin signo de la variedad "costumbre local": tal entero tomará tantos bytes como el compilador de C local devuelva de C<sizeof(int)>, usando I<al menos> 32 bit.
+
+Cada uno de los códigos de empaquetado C<sSlLqQ> resulta en un número fijo de bytes, sin importar dónde ejecute su programa. Esto puede ser útil para algunas aplicaciones, pero no ofrece una forma portable de pasar estructuras de datos entre los programas Perl y C (que es lo que sucede cuando llama a extensiones XS o a la función C<syscall> de Perl), o cuando lee o escribe archivos binarios. Lo que necesitará en este caso son códigos de plantilla que dependen de lo que su compilador local de C compila cuando usa un C<short> o C<unsigned long>, por ejemplo. Estos códigos y sus correspondientes longitudes en bytes se muestran en la tabla siguiente.  Ya que el estándar C deja mucha libertad con respecto a los tamaños relativos de estos tipos de datos, los valores actuales pueden variar, y así es por qué los valores se indican como expresiones en C y Perl. (Si quiere usar valores de C<%Config> en su programa tiene que importarlo con C<use Config>).
+
+   signo  sin signo long. bytes en C   long. bytes en Perl       
+     s!     S!      sizeof(short)      $Config{shortsize}
+     i!     I!      sizeof(int)        $Config{intsize}
+     l!     L!      sizeof(long)       $Config{longsize}
+     q!     Q!      sizeof(long long)  $Config{longlongsize}
+
+Los códigos C<i!> y C<I!> son iguales que C<i> y C<I>; se toleran para tener el conjunto completo.
+
+
+=head2 Desempaquetando un volcado de pila
+
+Solicitar una determinada ordenación de byte puede ser necesario cuando trabaja con datos binarios que llegan de una arquitectura específica mientras que su programa podría ejecutarse en un sistema completamente diferente. Como ejemplo, asuma que tiene 24 bytes que contienen un volcado de pila como los que suceden en un Intel 8086:
+
+      +---------+        +----+----+               +---------+
+ TOS: |   IP    |  TOS+4:| FL | FH | FLAGS  TOS+14:|   SI    |
+      +---------+        +----+----+               +---------+
+      |   CS    |        | AL | AH | AX            |   DI    |
+      +---------+        +----+----+               +---------+
+                         | BL | BH | BX            |   BP    |
+                         +----+----+               +---------+
+                         | CL | CH | CX            |   DS    |
+                         +----+----+               +---------+
+                         | DL | DH | DX            |   ES    |
+                         +----+----+               +---------+
+
+Primero, notemos que esta venerable CPU de 16 bit usa orden I<little-endian>, y esto quiere decir que el byte bajo se almacena en la dirección inferior. Para desempaquetar un short (sin signo) usaremos el código C<v>. Un contador de repetición desempaqueta los 12 shorts:
+
+   my( $ip, $cs, $flags, $ax, $bx, $cd, $dx, $si, $di, $bp, $ds, $es ) =
+     unpack( 'v12', $frame );
+
+Alternativamente, podríamos usar C<C> para desempaquetar los bytes individuales de los bytes de los registros FL, FH, AL, AH, etc.:
+
+   my( $fl, $fh, $al, $ah, $bl, $bh, $cl, $ch, $dl, $dh ) =
+     unpack( 'C10', substr( $frame, 4, 10 ) );
+
+Sería agradable si pudiéramos hacer esto en un suspiro: desempaquetar un short, saltar un poco, y desempaquetar 2 bytes. Ya que Perl I<es> agradable, ofrece el código de plantilla C<X> para saltar un byte. Poniendo todo esto junto, podemos escribir ahora:
+
+   my( $ip, $cs,
+       $flags,$fl,$fh,
+       $ax,$al,$ah, $bx,$bl,$bh, $cx,$cl,$ch, $dx,$dl,$dh, 
+       $si, $di, $bp, $ds, $es ) =
+   unpack( 'v2' . ('vXXCC' x 5) . 'v5', $frame );
+
+(Se puede evitar esta torpe construcción de la plantilla. ¡Siga leyendo!)  
+
+Hemos sufrido algún dolor para construir la plantilla para que coincida con los contenidos de nuestro búfer. De lo contrario, o conseguimos valores indefinidos, o C<unpack> no podría desempaquetar nada. Si C<pack> se ejecuta sin más elementos, suministrará cadenas de nulos (que se fuerza a que sean ceros siempre que el código de empaquetado lo indique).
+
+
+=head2 Cómo comer un huevo con una red
+
+El código de empaquetado para el I<big-endian> (byte superior en la dirección inferior) es C<n> para 16 bit y C<N> para enteros de 32 bit. Usted usa esos códigos si sabe que sus datos vienen de una arquitectura compatible, pero, sorprendentemente, también debería usar los códigos de empaquetado si intercambia datos binarios, por la red, con algún otro sistema del que no sepa nada sobre él. La explicación sencilla es que este orden se ha elegido como I<orden de la red>, y todos los programas estándares siguen esa convención. (Esto, naturalmente, es un problema para los partidos Liliputienses e influirá en su desarrollo político). Así, si el protocolo espera que envíe un mensaje enviando primero la longitud, seguido de justo esa longitud en bytes, podría escribir:
+
+   my $buf = pack( 'N', length( $msg ) ) . $msg;
+
+o incluso:
+
+   my $buf = pack( 'NA*', length( $msg ), $msg );
+
+y pasar C<$buf> a su rutina de envío. Algunos protocolos demandan que la cuenta debería incluir la longitud de la propia cuenta: simplemente añada 4 a la longitud de datos. (¡Pero asegúrese que lee L<"Longitud y anchos"> antes de codificar esto!)
+
+
+=head2 Modificadores del orden de bytes
+
+En las secciones anteriores hemos aprendido cómo usar C<n>, C<N>, C<v> y C<V> para empaquetar y desempaquetar enteros con un orden de bytes I<big-> y I<little-endian>.
+Mientras que esto es amable, sigue siendo algo limitado porque deja fuera toda clase de enteros con signo así como enteros de 64 bit. Por ejemplo, si quiere desempaquetar una secuencia de enteros con signo de 16 bit I<big-endian> en una forma independiente de la plataforma, podría escribirlo así:
+
+   my @data = unpack 's*', pack 'S*', unpack 'n*', $buf;
+
+Esto es feo. A partir de Perl 5.9.2, existe una forma mucho más amable para expresar su deseo para un determinado orden de bytes: los modificadores C<E<gt>> y C<E<lt>>.
+C<E<gt>> es el modificador I<big-endian>, mientras C<E<lt>> es el modificador I<little-endian>. Usándolos, podríamos reescribir el código anterior como:
+
+   my @data = unpack 's>*', $buf;
+
+Como puede ver, la "parte grande" de la flecha toca la C<s>, que es una forma amable de recordar que C<E<gt>> es el modificador de I<big-endian>. Obviamente, lo mismo funciona para C<E<lt>>, donde la "parte pequeña" toca el código.
+
+Probablemente encontrará estos modificadores incluso más útiles si tiene que tratar con estructuras C I<big-> o I<little-endian>. Asegúrese de leer L<"Empaquetado y desempaquetado de estructuras C"> para más información sobre esto.
+
+
+=head2 Números en punto flotante
+
+Para empaquetar números en punto flotante tiene que elegir entre los códigos de empaquetado C<f>, C<d>, C<F> y C<D>. C<f> y C<d> empaquetan en (o desempaquetan de) la representación en simple y doble precisión, tal como se ofrece por su sistema. Si su sistema lo soporta, se puede usar C<D> para empaquetar y desempaquetar valores (C<long double>), que puede ofrecer incluso más resolución que C<f> o C<d>.  B<Note que hay diferentes formatos de long double>.
+
+C<F> empaqueta un C<NV>, que es tipo de punto flotante que Perl utiliza internamente.
+
+No existe algo que se llame representación de red para los reales, así que si quiere enviar números reales a través de los ordenadores, es mejor que use la representación textual, posiblemente usando el formato flotante hexadecimal (evitando la pérdida de conversión a decimal), a menos que esté completamente seguro de lo que hay al otro extremo de la línea. Para incluso los más aventureros, puede usar los modificadores de orden de bytes de la sección anterior, también en los códigos de punto flotante.
+
+
+
+=head1 Plantillas exóticas
+
+
+=head2 Cadenas de bit
+
+Los bits son los átomos del mundo de la memoria. Los accesos a los bits individuales se pueden usar como último recurso o por que es lo más conveniente para manejar sus datos. El (des)empaquetado de cadena de bits convierte entre cadenas conteniendo una serie de caracteres C<0> y C<1> y una secuencia de bytes, cada uno de ellos conteniendo un grupo de 8 bits. Esto es casi siempre tan simple como suena, excepto que existen dos formas en que los contenidos de un byte se pueden escribir como una cadena de bits. Veamos un byte anotado:
+
+     7 6 5 4 3 2 1 0
+   +-----------------+
+   | 1 0 0 0 1 1 0 0 |
+   +-----------------+
+    MSB           LSB
+
+Otra vez es un asunto de cómo comer huevos: algunos piensan que como cadena de bits debe escribirse como "10001100", es decir, comenzando con el bit más significativo, pero otros insisten en "00110001". Bien, Perl no tiene nada predispuesto, así que ese es el porqué tenemos dos códigos de cadenas de bits:
+
+   $byte = pack( 'B8', '10001100' ); # empezar con MSB
+   $byte = pack( 'b8', '00110001' ); # empezar con LSB
+
+No es posible empaquetar o desempaquetar campos de bits; solo bytes enteros.
+C<pack> siempre empieza en el siguiente múltiplo de byte y "se redondea" al siguiente múltiplo de 8 añadiendo bits cero, tantos como sea necesario. (Si quiere campos de bits, existe L<perlfunc/vec>. O podría implementar campos de bits manejando a nivel de carácter de cadena, usando split, substr, y concatenación sobre cadenas de bits desempaquetados).
+
+Para ilustrar el desempaquetado de cadenas de bits, descompondremos un único registro de estado (un "-" significa bit "reservado"):
+
+   +-----------------+-----------------+
+   | S Z - A - P - C | - - - - O D I T |
+   +-----------------+-----------------+
+    MSB           LSB MSB           LSB
+
+Convertir estos dos bytes a una cadena se puede realizar con la plantilla de desempaquetado C<'b16'>. Para obtener los valores de los bits individuales desde la cadena de bits, usamos C<split> con el patrón separador "vacío" que disecciona en caracteres individuales. Valores de bits de las posiciones "reservadas" se asignan simplemente a C<undef>, una notación conveniente por "no me preocupa a dónde va esto".
+
+   ($carry, undef, $parity, undef, $auxcarry, undef, $zero, $sign,
+    $trace, $interrupt, $direction, $overflow) =
+      split( //, unpack( 'b16', $status ) );
+
+Podríamos usar una plantilla de desempaquetado C<'b12'> también, ya que los últimos 4 bits se pueden ignorar, de todas formas. 
+
+
+=head2 Uuencodificar
+
+Otra letra en el alfabeto de las plantillas es C<u>, que empaqueta una "cadena uuencodificada". ("uu" es la abreviatura de Unix-a-Unix). Lo más probable es que nunca necesite usar esta técnica de codificación, que fue inventada para bregar con las limitaciones de los viejos medios de transmisión que no soportan otra cosa que simples datos ASCII. La receta, en esencia, es sencilla: toma tres bytes, o 24 bits. Divídalos en 4 paquetes de seis, añadiendo un espacio (0x20) a cada uno. Repetir hasta que todos los datos se mezclen. Pliegue grupos de 4 bytes en líneas no superiores a 60 y póngale de guarnición, en frente, el contador de bytes original (incrementado por 0x20), y un C<"\n"> al final. El chef C<pack> le preparará esto mismo, por usted, al minuto, cuando selecciones el código de empaquetado C<u> del menú:
+
+   my $uubuf = pack( 'u', $bindat );
+
+Un contador de repetición después de C<u> establece el número de bytes a poner en la línea uuencodificada, que tiene, por defecto, un máximo de 45, pero podría establecerse a un entero (más pequeño) múltiplo de tres. C<unpack> simplemente ignora el contador de repetición.
+
+
+=head2 Haciendo sumas
+
+Un código de plantilla incluso más extraño es C<%>E<lt>I<número>E<gt>. Primero, porque se usa como prefijo para otro código de plantilla. Segundo, porque no se puede usar en absoluto en C<pack>, y tercero, en C<unpack>, no devuelve los datos definidos por el código de plantilla que le precede. En lugar de eso, le dará un I<número> entero de bits que se calcula a partir del valor que resulta de la suma de los datos. Para códigos de desempaquetado numérico, no hay que hacer una gran hazaña:
+
+    my $buf = pack( 'iii', 100, 20, 3 );
+    print unpack( '%32i3', $buf ), "\n";  # imprime 123
+
+Para valores de cadena, C<%> devuelve la suma de los valores de los bytes ahorrándole el problema de hacer un bucle de suma con C<substr> y C<ord>:
+
+    print unpack( '%32A*', "\x01\x10" ), "\n";  # imprime 17
+
+A pesar de que el código C<%> se documenta como que devuelve un "I<checksum>" (suma de control): ¡no confíe en esos valores! Incluso cuando los aplique a un pequeño número de bytes, no garantizarán una noticiable distancia de Hamming.
+
+En conexión con C<b> o C<B>, C<%> simplemente añade bits, y esto se puede usar para contar bits de forma eficiente:
+
+    my $bitcont = unpack( '%32b*', $mascara );
+
+E incluso se puede determinar el bit de paridad con algo como esto:
+
+    my $paridadpar = unpack( '%1b*', $mascara );
+
+
+=head2  Unicode
+
+Unicode es un conjunto de caracteres que representa la mayor parte de los caracteres en la mayor parte de lenguas del mundo, proporcionando espacio para más de un millón de caracteres diferentes. Unicode 3.1 especifica 94 140 caracteres: los caracteres latinos básicos (I<Basic Latin>) se asignan a los números 0 a 127. El suplemento 1 al Latin (I<Latin-1 Supplement>), con los caracteres que se usan en varias lenguas Europeas está en el siguiente rango, hasta el 255. Después de otras extensiones latinas, encontramos los conjuntos de caracteres de las lenguas que usan alfabetos no romanos, intercalados con una variedad de conjuntos de símbolos, como los símbolos monetarios, Zapf Dingbats o Braille.
+(Podría querer visitar L<http://www.unicode.org/> para ver algunos de ellos -mis favoritos son el Telugu y el Kannada).
+
+Los conjuntos de caracteres Unicode asocia caracteres con enteros. Codificar estos números en un número igual de bytes podría requerir más del doble que los requerimientos de almacenamiento de textos escritos en alfabetos latinos.
+La codificación UTF-8 evita esto almacenando los caracteres más comunes (desde el punto de vista occidental) en un único byte mientras que codifica los más raros en tres o más bytes.
+
+Perl usa UTF-8, internamente, para la mayor parte de las cadenas Unicode.
+
+¿Qué tiene que ver esto con C<pack>? Bueno, si quiere componer una cadena Unicode (que está codificada internamente como UTF-8), puede hacerlo usando el código de plantilla C<U>. Como ejemplo, vamos a producir el símbolo monetario del Euro (número de código 0x20AC):
+
+   $UTF8{Euro} = pack( 'U', 0x20AC );
+   # Equivalente a: $UTF8{Euro} = "\x{20ac}";
+
+Al inspeccionar C<$UTF8{Euro}> muestra que contiene 3 bytes: "\xe2\x82\xac". Sin embargo, solo contiene un carácter, con número 0x20AC.
+La vuelta se puede completar con C<unpack>:
+
+   $Unicode{Euro} = unpack( 'U', $UTF8{Euro} );
+
+Desempaquetar usando el código de plantilla C<U> también funciona en cadenas de bytes codificadas en UTF-8.
+
+Normalmente querrá empaquetar o desempaquetar cadenas UTF-8:
+
+   # empaquetar y desempaquetar el alfabeto hebreo
+   my $alefbet = pack( 'U*', 0x05d0..0x05ea );
+   my @hebrew = unpack( 'U*', $utf );
+
+Por favor, tenga en cuenta que: en el caso general, es mucho mejor usar Encode::decode_utf8 para decodificar una cadena de bytes codificada en UTF-8 a una cadena Perl Unicode, y Encode::encode_utf8 para codificar una cadena Perl Unicode a bytes UTF-8. Estas funciones ofrecen medios para manejar secuencias inválidas de bytes, y generalmente, tienen un interfaz amigable.
+
+=head2 Otra codificación binaria portable
+
+Se añadió el código de empaquetado C<w> para soportar un esquema de codificación de datos binarios portable que vaya más allá de los simples enteros. (Los detalles se pueden encontrar en L<http://Casbah.org/>, el projecto Scarab).  Un BER (I<Binary Encoded Representation>, representación binaria codificada) comprime almacenes de enteros sin signo en base 128, con el bit más significativo primero, con el menor número posible de dígitos.
+El octavo bit (el bit más alto) es puesto en cada byte excepto en el último. No hay límite de tamaño en la codificación BER, pero Perl no irá a los extremos.
+
+   my $berbuf = pack( 'w*', 1, 128, 128+1, 128*128+127 );
+
+Un volcado hexadecimal de C<$berbuf>, con espacios insertados en los lugares correctos, muestra 01 8100 8101 81807F. Ya que el último byte siempre es menor de 128, C<unpack> sabe dónde parar.
+
+
+=head1 Agrupación de plantillas
+
+Antes de Perl 5.8, las repeticiones de plantillas tuvieron que hacerse con C<x>-multiplicaciones de cadenas de plantilla. Ahora existe una forma mejor cuando podemos utilizar los códigos de empaquetado C<(> y C<)> combinado con un contador de repetición.
+La plantilla de C<unpack> del ejemplo anterior, del volcado de pila, puede, simplemente, escribir así:
+
+   unpack( 'v2 (vXXCC)5 v5', $frame )
+
+Exploremos esta característica un poco más. Comenzaremos con lo equivalente de
+
+   join( '', map( substr( $_, 0, 1 ), @str ) )
+
+que devuelve una cadena consistente del primer carácter de cada cadena.
+Usando pack, podemos escribir
+
+   pack( '(A)'.@str, @str )
+
+o, ya que un contador de repetición C<*> significa "repite tanto como se requiera",
+simplemente
+
+   pack( '(A)*', @str )
+
+(Note que la plantilla C<A*> solo empaquetaría C<$str[0]>).
+
+Para empaquetar fechas almacenadas como tripletas (día, mes, año) en un array C<@dates> en una secuencia de byte, byte y entero short, podemos escribir
+
+   $pd = pack( '(CCS)*', map( @$_, @dates ) );
+
+Para intercambiar pares de caracteres en una cadena (con longitud par) uno podría utilizar diversas técnicas. Primero, usemos C<x> y C<X> para saltar hacia adelante y hacia atrás:
+
+   $s = pack( '(A)*', unpack( '(xAXXAx)*', $s ) );
+
+Podemos usar también C<@> para saltar un desplazamiento, siendo 0 la posición donde estábamos cuando se encontró el último C<(>:
+
+   $s = pack( '(A)*', unpack( '(@1A @0A @2)*', $s ) );
+
+Finalmente, existe también una aproximación enteramente diferente desempaquetando shorts I<big endian>, y empaquetando los bytes en orden inverso:
+
+   $s = pack( '(v)*', unpack( '(n)*', $s );
+
+
+=head1 Longitudes y anchos
+
+=head2 Longitudes de cadenas
+
+En la sección anterior hemos visto un mensaje de red que se construyó prefijando el mensaje en binario con la longitud del mensaje actual. Encontrará que empaquetar una longitud seguido de esa cantidad de bytes de datos es una receta que se usa frecuentemente ya que añadir un byte nulo no funcionará si el byte nulo puede ser parte de los datos. Aquí hay un ejemplo donde se usan ambas técnicas: después de dos cadenas terminadas en caracteres nulos, con direcciones de origen y destino, se envía un mensaje corto (a un teléfono móvil) después de un byte de longitud:
+
+   my $msg = pack( 'Z*Z*CA*', $src, $dst, length( $sm ), $sm );
+
+Desempaquetar este mensaje se puede hacer con la misma plantilla:
+
+   ( $src, $dst, $len, $sm ) = unpack( 'Z*Z*CA*', $msg );
+
+Hay una trampa sutil: añadir otro campo después del mensaje corto (en la variable C<$sm>) está bien cuando se empaqueta, pero esto no se puede desempaquetar ingenuamente:
+
+   # empaqueta un mensaje
+   my $msg = pack( 'Z*Z*CA*C', $src, $dst, length( $sm ), $sm, $prio );
+
+   # unpack falla - ¡$prio queda indefinido!
+   ( $src, $dst, $len, $sm, $prio ) = unpack( 'Z*Z*CA*C', $msg );
+
+El código de empaquetado C<A*> se hace con todos los bytes que resten, ¡y C<$prio> queda indefinido! Antes de que la decepción nos fastidie la moral: Perl saca la tarjeta de triunfo al hacer también este truco, justo un poquito por encima de la manga.
+Mire esto:
+
+   # empaqueta un mensaje: ASCIIZ, ASCIIZ, longitud/cadena, byte
+   my $msg = pack( 'Z* Z* C/A* C', $src, $dst, $sm, $prio );
+
+   # desempaqueta
+   ( $src, $dst, $sm, $prio ) = unpack( 'Z* Z* C/A* C', $msg );
+
+Combinar dos códigos de empaquetado con un barra diagonal (C</>) les asocia con un único valor de la lista de argumentos. En C<pack>, la longitud del argumento se toma y empaqueta de acuerdo al primer código mientras que el propio argumento se añade después de convertirse con la plantilla de código que hay después de la barra diagonal.
+Esto nos ahorra el problema de insertar la llamada a C<length>, pero es justamente con C<unpack> donde hacemos la jugada: el valor del byte con la longitud marca el final de la cadena que se debe tomar del búfer. Ya que esta combinación no tiene sentido excepto cuando el segundo código de empaquetado no sea un C<a*>, C<A*> o C<Z*>, Perl no se lo permitirá.
+
+El código de empaquetado que precede a C</> puede ser cualquier cosa que represente un número: Todos los códigos de empaquetado binario numérico, e incluso códigos de texto tales como C<A4> o C<Z*>:
+
+   # empaquetar/desempaquetar una cadena precedida por su longitud en ASCII
+   my $buf = pack( 'A4/A*', "Humpty-Dumpty" );
+   # $buf desempaquetado: '13  Humpty-Dumpty'
+   my $txt = unpack( 'A4/A*', $buf );
+
+C</> no está implementado en Perl antes de 5.6, así que si su código requiere que funcione en Perl anteriores, necesitará un C<unpack( 'Z* Z* C')> para obtener la longitud, y luego usarla para hacer una nueva cadena empaquetada. Por ejemplo
+
+   # empaqueta un mensaje: ASCIIZ, ASCIIZ, longitud, cadena, byte
+   # (5.005 compatible)
+   my $msg = pack( 'Z* Z* C A* C', $src, $dst, length $sm, $sm, $prio );
+
+   # desempaqueta
+   ( undef, undef, $len) = unpack( 'Z* Z* C', $msg );
+   ($src, $dst, $sm, $prio) = unpack ( "Z* Z* x A$len C", $msg );
+
+Pero el segundo C<unpack> se alarga demasiado. No está usando una única cadena literal, para la plantilla. Así que deberíamos presentar...
+
+=head2 Plantillas dinámicas
+
+Hasta ahora, hemos visto literales que se usan como plantillas. Si la lista de elementos de empaquetado no tienen una longitud fija, se requiere una expresión que construya la plantilla (siempre que, por alguna razón, no se pueda usar C<()*>).
+Aquí hay un ejemplo: Para almacenar valores de cadena con nombre, de una forma que puede interpretarse convenientemente por un programa en C, creamos una secuencia de nombres y cadenas ASCII terminados en nulo, con un C<=> entre el nombre y el valor, seguido por un byte nulo adicional como delimitador. Aquí está el cómo:
+
+   my $env = pack( '(A*A*Z*)' . keys( %Env ) . 'C',
+                   map( { ( $_, '=', $Env{$_} ) } keys( %Env ) ), 0 );
+
+Examinemos los dientes del engranaje de este molino, uno a uno. Existe una llamada C<map>, que crea los elementos que pretendemos embutir en el búfer C<$env>: para cada clave (en C<$_>) añade el separador C<=> y el valor de la entrada hash.
+Cada tripleta se empaqueta con la secuencia de código de plantilla C<A*A*Z*> que se repite de acuerdo al número de claves. (Sí, esto es lo que la función C<keys> devuelve en contexto escalar). Para obtener el último byte nulo, añadimos un C<0> al final de la lista de C<pack>, para empaquetarse con C<C>.
+(Los lectores atentos habrán notado que podríamos omitir el 0).
+
+Para la operación inversa, determinaremos el número de elementos en el búfer antes de que C<unpack> pueda desempaquetarlo aparte:
+
+   my $n = $env =~ tr/\0// - 1;
+   my %env = map( split( /=/, $_ ), unpack( "(Z*)$n", $env ) );
+
+C<tr> cuenta los bytes nulos. La llamada C<unpack> devuelve una lista de pares nombre-valor en que cada uno se lleva al bloque C<map>. 
+
+
+=head2 Repeticiones de contador
+
+En lugar de almacenar un centinela al final de los elementos de datos (o una lista de elementos), podríamos preceder los datos con un contador. Otra vez, empaquetamos las claves y valores de un hash, precediendo cada una con short sin signo de longitud de contador, y al principio almacenamos el número de pares:
+
+   my $env = pack( 'S(S/A* S/A*)*', scalar keys( %Env ), %Env );
+
+Esto simplifica la operación inversa como un número de repeticiones que se pueden empaquetar con el código C</>:
+
+   my %env = unpack( 'S/(S/A* S/A*)', $env );
+
+Note que este es una de los raros casos donde no puedes usar la misma plantilla para C<pack> y C<unpack> porque C<pack> no puede determinar un contador de repetición para un grupo C<()>.
+
+
+=head2 Intel HEX
+
+Intel HEX es un formato de archivo para representar los datos binarios, la mayor parte para programar diversos chips, en un archivo de texto. (Vea L<https://es.wikipedia.org/wiki/Intel_HEX> para una descripción detallada, y L<https://es.wikipedia.org/wiki/SREC> para el formato Motorola S-record, que se pueden desenredar usando la misma técnica).
+Cada línea comienza con un carácter de dos puntos (':') y se sigue por una secuencia de caracteres hexadecimales, especificando un contador de bytes I<n> (8 bit), una dirección (16 bit, I<big endian>), un registro de tipo (8 bit), I<n> bytes de datos y un I<checksum> (8 bit) calculado como el byte menos significado de la suma complemento a dos de los bytes precedentes. Ejemplo: C<:0300300002337A1E>.
+
+El primer paso del procesamiento de tal línea es la conversión, a binario, de los datos hexadecimales, para obtener los cuatro campos, mientras se comprueba la suma de control. Aquí no hay sorpresas: empezaremos con una sencilla llamada C<pack> para convertir todo a binario:
+
+   my $binrec = pack( 'H*', substr( $hexrec, 1 ) );
+
+La secuencia de bytes resultante es más conveniente para comprobar la suma de control.
+No enlentezca su programa con un bucle for que vaya sumando los valores de C<ord> de los bytes de la cadena: el código C<%> de C<unpack> es lo que debe usar para calcular la suma de 8 bit de todos los bytes, que debe ser igual a cero:
+
+   die unless unpack( "%8C*", $binrec ) == 0;
+
+Finalmente, obtenemos esos cuatro campos. Por ahora, no debería tener ningún problema con los primeros tres campos, pero ¿cómo podemos usar el contador de bytes de los datos del primer campo como longitud para el campo de datos? Aquí, los códigos C<x> y C<X> vienen al rescate, ya que ellos permiten volver hacia atrás y adelante en la cadena a desempaquetar.
+
+   my( $addr, $type, $data ) = unpack( "x n C X4 C x3 /a", $bin ); 
+
+El código C<x> salta un byte, ya que aún no necesitamos el contador. El código C<n> toma cuidado de la dirección entera de 16 bit I<big-endian>, y C<C> desempaqueta el tipo de registro. Empezando en el desplazamiento 4, donde comienzan los datos, necesitamos el contador.
+C<X4> nos devuelve a la casilla uno, que es el byte en la posición 0.
+Ahora cogemos el contador, y miramos al desplazamiento 4, done estamos preparados para extraer el número exacto de bytes de datos, dejando solo el byte restante de suma de control.
+
+
+
+=head1 Empaquetar y desempaquetar estructuras de C
+
+En secciones anteriores hemos visto cómo empaquetar números y cadenas de caracteres. Si no fuera por un par de tocones, podríamos concluir esta sección remarcando que las estructuras de C no son diferentes, y por lo tanto usted ya sabe todo lo que comentamos allí.
+Lo siento, pero no: siga leyendo, por favor.
+
+Si tiene que tratar con un montón de estructuras de C, y no quiere I<hackear> manualmente todas las cadenas de plantillas, probablemente querrá echar un vistazo al módulo de CPAN C<Convert::Binary::C>. No solo puede interpretar directamente su código fuente en C, sino que también tiene soporte integrado para todo lo bueno y lo malo descrito a lo largo de esta sección.
+
+=head2 La trampa del alineamiento
+
+En la consideración de requerimientos de velocidad contra memoria, el balance se inclinó a favor de una ejecución más rápida. Esto ha influido la forma en que los compiladores de C alojan memoria para las estructuras: En arquitecturas donde un operando de 16 bit o 32 bit se puede mover más rápido entre posiciones de memoria, hacia o desde un registro de la CPU, si está alineado en una dirección múltiplo de cuatro u ocho, un compilador de C le ofrecerá el beneficio de esta velocidad embutiendo bytes extra en las estructuras.
+Si no cruza la línea de marea del C, no es probable que esto le cause ningún dolor (a pesar de que debería tener cuidado cuando diseñe grandes estructuras de datos, o quiera que su código sea portable entre arquitecturas (que es lo que quiere, ¿verdad?).
+
+Para ver cómo esto afecta C<pack> y C<unpack>, compararemos estas dos estructuras C:
+
+   typedef struct {
+     char     c1;
+     short    s;
+     char     c2;
+     long     l;
+   } gappy_t;
+
+   typedef struct {
+     long     l;
+     short    s;
+     char     c1;
+     char     c2;
+   } dense_t;
+
+Típicamente, un compilador C aloja 12 bytes a una variable C<gappy_t>, pero requiere solo 8 bytes para un C<dense_t>. Después de investigar un poco más allá, podemos dibujar mapas de memoria, mostrando dónde se esconden los 4 bytes extra:
+
+   0           +4          +8          +12
+   +--+--+--+--+--+--+--+--+--+--+--+--+
+   |c1|xx|  s  |c2|xx|xx|xx|     l     |    xx = byte de relleno
+   +--+--+--+--+--+--+--+--+--+--+--+--+
+   gappy_t
+
+   0           +4          +8
+   +--+--+--+--+--+--+--+--+
+   |     l     |  h  |c1|c2|
+   +--+--+--+--+--+--+--+--+
+   dense_t
+
+Y aquí es donde nos golpea la primera rareza: las plantillas de C<pack> y C<unpack> tienen que embutirse con códigos C<x> para obtener estos bytes extra de relleno.
+
+La cuestión natural: "¿Por qué Perl no compensa los espacios vacíos?". Esto garantiza una respuesta. Una buena razón es que los compiladores de C podrían ofrecer extensiones (no ASCII) permitiendo toda suerte de controles elegantes sobre la forma en que se alinean las estructuras, incluso a nivel de los campos individuales de la estructura. Y, si esto no fuera suficiente, existe una cosa insidiosa llamada C<union> donde la cantidad de bytes de relleno no se puede derivar sólo del alineamiento del siguiente elemento.
+
+Vale, así que vayamos a morder la bala. Aquí hay una forma de obtener el alineamiento correcto insertando los códigos de plantilla C<x>, que no toman el correspondiente elemento de la lista:
+
+  my $gappy = pack( 'cxs cxxx l!', $c1, $s, $c2, $l );
+
+Note el C<!> después de C<l>: queremos asegurarnos que empaquetamos un entero largo como si estuviera compilado por nuestro compilador de C. E incluso ahora, solo funcionará para las plataformas donde el compilador alinea los datos como se ha dicho antes.
+Y alguien, en algún lugar, tiene una plataforma donde no se hace así.
+[Probablemente un Cray, donde los C<short>, C<int> y C<long> son todos de 8 bytes. :-)]
+
+Contar bytes y mirar los alineamientos en estructuras grandes es propenso a arrastrar errores. ¿No existe una forma en la que podamos crear la plantilla con un programa sencillo? Aquí hay un programa en C que realiza el truco:
+
+   #include <stdio.h>
+   #include <stddef.h>
+
+   typedef struct {
+     char     fc1;
+     short    fs;
+     char     fc2;
+     long     fl;
+   } gappy_t;
+
+   #define Pt(struct,field,tchar) \
+     printf( "@%d%s ", offsetof(struct,field), # tchar );
+
+   int main() {
+     Pt( gappy_t, fc1, c  );
+     Pt( gappy_t, fs,  s! );
+     Pt( gappy_t, fc2, c  );
+     Pt( gappy_t, fl,  l! );
+     printf( "\n" );
+   }
+
+La línea de salida se puede usar como una plantilla en una llamada C<pack> o C<unpack>:
+
+  my $gappy = pack( '@0c @2s! @4c @8l!', $c1, $s, $c2, $l );
+
+¡Vaya!, otra plantilla de código, como si no tuviéramos bastante. Pero C<@> nos salva el día, permitiéndonos especificar el desplazamiento desde el comienzo del búfer de empaquetado al siguiente elemento: es justo el valor de la macro C<offsetof> (definida en C<E<lt>stddef.hE<gt>>) que devuelve cuando, dado un tipo de C<struct> y uno de los nombres de sus campos ("miembro-designador" en 
+lenguaje C estándar).
+
+Ni usando desplazamientos ni añadiendo C<x> para saltar los vacíos, es satisfactorio.
+(Simplemente imagine qué sucede si la estructura cambia). Lo que realmente necesitamos es una forma de decir "salta tantos bytes como sea necesario para ir al siguiente múltiplo de N".
+En dialecto Plantillesco, lo decimos con C<x!N> donde N se reemplaza por el valor apropiado. Aquí está la siguiente versión de nuestro empaquetado de estructuras:
+
+  my $gappy = pack( 'c x!2 s c x!4 l!', $c1, $s, $c2, $l );
+
+Esto es, ciertamente, mejor, pero seguimos teniendo que saber cómo de largo son todos los enteros, y mantener la portabilidad alejada. En lugar de C<2>, por ejemplo, queremos decir "tanto de largo como sea un short". Pero esto se puede hacer encerrando el apropiado código de empaquetado entre corchetes: C<[s]>. Así, aquí está lo mejor que podemos hacer:
+
+  my $gappy = pack( 'c x![s] s c x![l!] l!', $c1, $s, $c2, $l );
+
+
+=head2 Tratando con Endian-ness
+
+Ahora, imagine que queremos empaquetar los datos para una máquina con un orden diferente de los bytes. Primero, tendremos que representar cómo de grande son realmente los tipos de datos en la máquina destino. Asumamos que los long son de 32 bit, y que los short son de 16 bit de ancho. Entonces puede escribir la plantilla así:
+
+  my $gappy = pack( 'c x![s] s c x![l] l', $c1, $s, $c2, $l );
+
+Si la máquina destino es I<little-endian>, podríamos escribir:
+
+  my $gappy = pack( 'c x![s] s< c x![l] l<', $c1, $s, $c2, $l );
+
+Esto fuerza a que los miembros short y long sean I<little-endian>, y está bien si no tenemos demasiados miembros de estructura. Pero también podríamos usar el modificador de orden de los bytes en un grupo y escribir lo siguiente:
+
+  my $gappy = pack( '( c x![s] s c x![l] l )<', $c1, $s, $c2, $l );
+
+Esto no es tan corto como antes, pero hace más obvio lo que pretendemos para tener un orden de bytes I<little-endian> para todo un grupo, no solo para códigos de plantilla individuales. También puede ser más legible y fácil de mantener.
+
+
+=head2 Alineamiento, toma 2
+
+Me temo que todavía no hemos terminado con el alineamiento. La hidra levanta otra fea cabeza cuando empaqueta array de estructuras:
+
+   typedef struct {
+     short    count;
+     char     glyph;
+   } cell_t;
+
+   typedef cell_t buffer_t[BUFLEN];
+
+¿Cómo lo hacemos? No se requiere rellenar ni antes del primer campo C<count>, ni entre este y el siguiente campo C<glyph>, así no podemos, simplemente, empaquetarlo así:
+
+   # aquí algo va mal:
+   pack( 's!a' x @buffer,
+         map{ ( $_->{count}, $_->{glyph} ) } @buffer );
+
+Esto empaqueta C<3*@buffer> bytes, pero ¡resulta que el tamaño de C<buffer_t> es cuatro veces C<BUFLEN>! La moraleja de la historia es que el alineamiento requerido de una estructura o un array se propaga al siguiente nivel donde tenemos que considerar el rellenar I<hasta el final> cada componente. Por ello, la plantilla correcta es:
+
+   pack( 's!ax' x @buffer,
+         map{ ( $_->{count}, $_->{glyph} ) } @buffer );
+
+=head2 Alineamiento, toma 3
+
+Incluso si tiene en cuenta todo lo anterior, ANSI le permite hacer esto:
+
+   typedef struct {
+     char     foo[2];
+   } foo_t;
+
+varía en tamaño. La restricción de alineamiento de la estructura puede ser mayor que cualquiera de sus elementos. [Y si cree que esto no afecta a nada ordinario, despiece el siguiente teléfono celular que vea. Muchos de los núcleos ARM, y las reglas de la estructura ARM hace que C<sizeof (foo_t)> == 4]
+
+=head2 Punteros y cómo usarlos
+
+El título de esta sección indica el segundo problema que más pronto que tarde tendrá cuando empaquete estructuras C. Si la función que pretende llamar espera un, digamos, valor C<void *>, I<no puede> simplemente tomar una referencia a una variable Perl. (Aunque ese valor, ciertamente, es una dirección de memoria, no es la dirección donde se almacenan los contenidos de la variable).
+
+El código de plantilla C<P> promete empaquetar un "puntero a una cadena de longitud fija".
+¿No es eso lo que queremos? Probemos:
+
+    # reservar algún almacenamiento y empaquetar un puntero dentro de él
+    my $memory = "\x00" x $size;
+    my $memptr = pack( 'P', $memory );
+
+Pero, espere: ¿C<pack> no devuelve, simplemente, una secuencia de bytes? ¿Cómo podemos pasar esta cadena de bytes a algún código C que espera un puntero que, después de todo, no es más que un número? La respuesta es sencilla: Tenemos que obtener la dirección numérica de los bytes devueltos por C<pack>.
+
+    my $ptr = unpack( 'L!', $memptr );
+
+Obviamente, esto asume que es posible transformar un puntero a un largo sin signo y viceversa que, frecuentemente, funciona, pero no debería tomarlo como una regla universal. - Ahora que tenemos el puntero, la siguiente cuestión es: ¿Cómo podemos usarlo de forma correcta? Necesitamos llamar a alguna función C que espere un puntero. Viene a la memoria la llamada del sistema read(2):
+
+    ssize_t read(int fd, void *buf, size_t count);
+
+Después de leer L<perlfunc> que explica cómo usar C<syscall> podemos escribir esta función Perl copiando un archivo a la salida estándar:
+
+    require 'syscall.ph'; # ejecuta h2ph para generar este archivo
+    sub cat($){
+        my $ruta = shift();
+        my $tamano  = -s $ruta;
+        my $memoria = "\x00" x $tamano;  # reserva algo de memoria
+        my $ptr = unpack( 'L', pack( 'P', $memoria ) );
+        open( F, $ruta ) || die( "$ruta: no puedo abrir ($!)\n" );
+        my $fd = fileno(F);
+        my $res = syscall( &SYS_read, fileno(F), $ptr, $tamano );
+        print $memoria;
+        close( F );
+    }
+
+Esto no es un ejemplo ni de simplicidad ni de parangón de la portabilidad, pero ilustra el tema: ¡Somos capaces de colarnos entre bastidores y acceder a la, de otro modo, bien protegida memoria de Perl! (Nota importante: C<syscall> de Perl I<no> requiere que construya puntero de esta manera tan prolija. Simplemente, pase una variable de cadena, y Perl enviará la dirección). 
+
+¿Qué hace C<unpack> con C<P>? Imagine algún puntero en el búfer que vaya a ser empaquetado: si no es el puntero nulo (que, inteligentemente, produce el valor C<undef>) tenemos una dirección de comienzo. Pero, ¿y ahora?
+Perl no tiene forma de saber cómo de largo es esta "cadena de longitud fija", así que es trabajo suyo el especificar el tamaño real como una longitud explícita después de C<P>.
+
+   my $mem = "abcdefghijklmn";
+   print unpack( 'P5', pack( 'P', $mem ) ); # imprime "abcde"
+
+Como consecuencia, C<pack> ignora cualquier número o C<*> después de C<P>.
+
+
+Ahora que hemos visto trabajar a C<P>, también podríamos echarle un vistazo a C<p>.
+¿Por qué necesitamos un segundo código de plantilla para empaquetar punteros? La respuesta reside tras el simple hecho de que un C<unpack> con C<p> promete una cadena terminada en un nulo en la dirección que se toma del búfer, y eso implica una longitud para los datos que se van a devolver:
+
+   my $buf = pack( 'p', "abc\x00efhijklmn" );
+   print unpack( 'p', $buf );    # imprime "abc"
+
+
+
+Aunque esto lleva a la confusión: Como consecuencia de la longitud derivada de la longitud de la cadena, un número después del código de empaquetado C<p> es un contador de repetición, no una longitud después de un C<P>. 
+
+
+Usar C<pack(..., $x)> con C<P> o C<p> para obtener la dirección donde ahora se va a almacenar C<$x>, se debe usar con circunspección. La maquinaria interna de Perl considera la relación entre una variable y esa dirección como un asunto privado y no le preocupa que obtengamos una copia. Por tanto:
+
+=over 4
+
+=item * 
+
+No use C<pack> con C<p> o C<P> para obtener la dirección de una variable que vaya a salir del ámbito (y así, liberar su memoria) antes de que pueda usarla.
+
+=item * 
+
+Tenga cuidado con las operaciones de Perl que cambian el valor de la variable. Añadir algo a la variable, por ejemplo, podría requerir una reasignación de su almacenamiento, dejándole con un puntero en tierra de nadie.
+
+=item * 
+
+¡No crea que puede obtener la dirección de una variable Perl cuando se almacena como un entero o un número double! C<pack('P', $x)> forzará a la representación interna de la cadena, justo como si hubiera escrito algo como C<$x .= ''>.
+
+=back
+
+Es seguro, sin embargo, empaquetar con 'P' o 'p' una cadena literal, porque Perl, simplemente, almacena una variable anónima.
+
+
+
+=head1 Recetas para empaquetar
+
+Aquí hay una colección de (posiblemente) útiles recetas enlatadas para C<pack>
+y C<unpack>:
+
+    # Convierte la dirección IP para las funciones de socket
+    pack( "C4", split /\./, "123.4.5.6" ); 
+
+    # Cuenta los bits en un trozo de memoria (p. e. un vector para select)
+    unpack( '%32b*', $mask );
+
+    # Determina el ordenamiento de bytes de su sistema
+    $is_little_endian = unpack( 'c', pack( 's', 1 ) );
+    $is_big_endian = unpack( 'xc', pack( 's', 1 ) );
+
+    # Determina el número de bits de un entero nativo
+    $bits = unpack( '%32I!', ~0 );
+
+    # Prepara el argumento para la llamada del sistema nanosleep
+    my $timespec = pack( 'L!L!', $secs, $nanosecs );
+
+Para hacer un volcado simple de memoria, desempaquetamos algunos bytes como pares de dígitos hexadecimales, y usamos C<map> para manejar el espaciado tradicional de 16 bytes en una línea:
+
+    my $i;
+    print map( ++$i % 16 ? "$_ " : "$_\n",
+               unpack( 'H2' x length( $mem ), $mem ) ),
+          length( $mem ) % 16 ? "\n" : '';
+
+
+=head1 Sección para la diversión
+
+    # Sacando dígitos de la nada...
+    print unpack( 'C', pack( 'x' ) ),
+          unpack( '%B*', pack( 'A' ) ),
+          unpack( 'H', pack( 'A' ) ),
+          unpack( 'A', unpack( 'C', pack( 'A' ) ) ), "\n";
+
+    # En la carretera ;-)
+    my $consejo = pack( 'all u can in a van' );
+
+
+=head1 Autores
+
+Simon Cozens y Wolfgang Laun.
+
